@@ -1,0 +1,326 @@
+package org.eclipse.kapua.app.console.shared.util;
+
+import java.util.ArrayList;
+import java.util.Properties;
+
+import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
+import org.eclipse.kapua.app.console.shared.model.GwtAccount;
+import org.eclipse.kapua.app.console.shared.model.GwtBrokerCluster;
+import org.eclipse.kapua.app.console.shared.model.GwtBrokerNode;
+import org.eclipse.kapua.app.console.shared.model.GwtBrokerType;
+import org.eclipse.kapua.app.console.shared.model.GwtDevice;
+import org.eclipse.kapua.app.console.shared.model.GwtDeviceEvent;
+import org.eclipse.kapua.app.console.shared.model.GwtHeader;
+import org.eclipse.kapua.app.console.shared.model.GwtHeader.GwtHeaderType;
+import org.eclipse.kapua.app.console.shared.model.GwtOrganization;
+import org.eclipse.kapua.app.console.shared.model.GwtUser;
+import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
+import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.query.predicate.KapuaAndPredicate;
+import org.eclipse.kapua.service.account.Account;
+import org.eclipse.kapua.service.account.Organization;
+import org.eclipse.kapua.service.device.registry.Device;
+import org.eclipse.kapua.service.device.registry.DeviceEvent;
+import org.eclipse.kapua.service.device.registry.connection.DeviceConnection;
+import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory;
+import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionListResult;
+import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionPredicates;
+import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionQuery;
+import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService;
+import org.eclipse.kapua.service.user.User;
+
+import com.eurotech.cloud.service.cluster.BrokerCluster;
+import com.eurotech.cloud.service.cluster.BrokerClusterDeployment;
+import com.eurotech.cloud.service.cluster.BrokerNode;
+import com.eurotech.cloud.service.cluster.BrokerType;
+
+public class KapuaGwtConverter
+{
+
+    public static GwtAccount convert(Account account)
+        throws KapuaException
+    {
+        GwtAccount gwtAccount = new GwtAccount();
+
+        gwtAccount.setId(account.getId().getShortId());
+        gwtAccount.setName(account.getName());
+        gwtAccount.setCreatedOn(account.getCreatedOn());
+        gwtAccount.setCreatedBy(account.getCreatedBy().getShortId());
+        gwtAccount.setModifiedOn(account.getModifiedOn());
+        gwtAccount.setModifiedBy(account.getModifiedBy().getShortId());
+        gwtAccount.setGwtOrganization(convert(account.getOrganization()));
+        gwtAccount.setParentAccountId(account.getScopeId().getShortId());
+        gwtAccount.setOptlock(account.getOptlock());
+
+        Properties accountProperties = account.getEntityProperties();
+        gwtAccount.setDashboardPreferredTopic(accountProperties.getProperty("topic"));
+        gwtAccount.setDashboardPreferredMetric(accountProperties.getProperty("metric"));
+
+        return gwtAccount;
+    }
+
+    public static GwtOrganization convert(Organization organization)
+    {
+        GwtOrganization gwtOrganization = new GwtOrganization();
+
+        gwtOrganization.setName(organization.getName());
+        gwtOrganization.setPersonName(organization.getPersonName());
+        gwtOrganization.setEmailAddress(organization.getEmail());
+        gwtOrganization.setPhoneNumber(organization.getPhoneNumber());
+        gwtOrganization.setAddressLine1(organization.getAddressLine1());
+        gwtOrganization.setAddressLine2(organization.getAddressLine2());
+        gwtOrganization.setAddressLine3(organization.getAddressLine3());
+        gwtOrganization.setZipPostCode(organization.getZipPostCode());
+        gwtOrganization.setCity(organization.getCity());
+        gwtOrganization.setStateProvinceCounty(organization.getStateProvinceCounty());
+        gwtOrganization.setCountry(organization.getCountry());
+
+        return gwtOrganization;
+    }
+
+    public static GwtUser convert(User user)
+        throws KapuaException
+    {
+
+        GwtUser gwtUser = new GwtUser();
+
+        gwtUser.setId(user.getId().getShortId());
+        gwtUser.setScopeId(user.getScopeId().getShortId());
+        gwtUser.setUsername(user.getName());
+        gwtUser.setCreatedOn(user.getCreatedOn());
+        gwtUser.setModifiedOn(user.getModifiedOn());
+        gwtUser.setDisplayName(user.getDisplayName());
+        gwtUser.setEmail(user.getEmail());
+        gwtUser.setPhoneNumber(user.getPhoneNumber());
+        gwtUser.setStatus(user.getStatus().name());
+        gwtUser.setCreatedBy(user.getCreatedBy().getShortId());
+        gwtUser.setModifiedBy(user.getModifiedBy().getShortId());
+        gwtUser.setOptlock(user.getOptlock());
+        return gwtUser;
+    }
+
+    public static GwtDevice convert(Device device)
+        throws KapuaException
+    {
+        GwtDevice gwtDevice = new GwtDevice();
+        gwtDevice.setId(device.getId().toString());
+        gwtDevice.setScopeId(device.getScopeId().getShortId());
+        gwtDevice.setGwtDeviceStatus(device.getStatus().toString());
+        gwtDevice.setClientId(device.getClientId());
+        gwtDevice.setDisplayName(device.getDisplayName());
+        gwtDevice.setModelId(device.getModelId());
+        gwtDevice.setSerialNumber(device.getSerialNumber());
+        gwtDevice.setFirmwareVersion(device.getFirmwareVersion());
+        gwtDevice.setBiosVersion(device.getBiosVersion());
+        gwtDevice.setOsVersion(device.getOsVersion());
+        gwtDevice.setJvmVersion(device.getJvmVersion());
+        gwtDevice.setOsgiVersion(device.getOsgiVersion());
+        gwtDevice.setAcceptEncoding(device.getAcceptEncoding());
+        gwtDevice.setApplicationIdentifiers(device.getApplicationIdentifiers());
+        gwtDevice.setGpsLatitude(device.getGpsLatitude());
+        gwtDevice.setGpsLongitude(device.getGpsLongitude());
+        gwtDevice.setLastEventOn(device.getLastEventOn());
+
+        gwtDevice.setIccid(device.getIccid());
+        gwtDevice.setImei(device.getImei());
+        gwtDevice.setImsi(device.getImsi());
+
+        String lastEventType = device.getLastEventType() != null ? device.getLastEventType().name() : "";
+        gwtDevice.setLastEventType(lastEventType);
+
+        // custom Attributes
+        gwtDevice.setCustomAttribute1(device.getCustomAttribute1());
+        gwtDevice.setCustomAttribute2(device.getCustomAttribute2());
+        gwtDevice.setCustomAttribute3(device.getCustomAttribute3());
+        gwtDevice.setCustomAttribute4(device.getCustomAttribute4());
+        gwtDevice.setCustomAttribute5(device.getCustomAttribute5());
+
+        gwtDevice.setOptlock(device.getOptlock());
+
+        // Device connection
+        KapuaLocator locator = KapuaLocator.getInstance();
+        DeviceConnectionService deviceConnectionService = locator.getService(DeviceConnectionService.class);
+        DeviceConnectionFactory deviceConnectionFactory = locator.getFactory(DeviceConnectionFactory.class);
+
+        DeviceConnectionQuery query = deviceConnectionFactory.newQuery(device.getScopeId());
+        KapuaAndPredicate andPredicate = new AndPredicate();
+        andPredicate = andPredicate.and(new AttributePredicate<String>(DeviceConnectionPredicates.CLIENT_ID, device.getClientId()));
+        // andPredicate = andPredicate.and(new AttributePredicate<DeviceConnectionStatus[]>(DeviceConnectionPredicates.CONNECTION_STATUS,
+        // new DeviceConnectionStatus[] { DeviceConnectionStatus.CONNECTED, DeviceConnectionStatus.MISSING }));
+
+        query.setPredicate(andPredicate);
+
+        DeviceConnectionListResult deviceConnections = deviceConnectionService.query(query);
+
+        if (!deviceConnections.isEmpty()) {
+            DeviceConnection connection = deviceConnections.get(0);
+
+            gwtDevice.setGwtDeviceConnectionStatus(connection.getStatus().toString());
+            gwtDevice.setConnectionIp(connection.getClientIp());
+            gwtDevice.setDeviceUserId(connection.getUserId().getShortId());
+        }
+        return gwtDevice;
+    }
+
+    public static GwtDeviceEvent convert(DeviceEvent deviceEvent)
+    {
+        GwtDeviceEvent gwtDeviceEvent = new GwtDeviceEvent();
+        gwtDeviceEvent.setAccountName(deviceEvent.getAccountName());
+        gwtDeviceEvent.setClientId(deviceEvent.getClientId());
+        gwtDeviceEvent.setSentOn(deviceEvent.getSentOn());
+        gwtDeviceEvent.setReceivedOn(deviceEvent.getReceivedOn());
+        gwtDeviceEvent.setEventType(deviceEvent.getEventType());
+
+        String escapedMessage = EdcSafeHtmlUtils.htmlEscape(deviceEvent.getEventMessage());
+        gwtDeviceEvent.setEventMessage(escapedMessage);
+
+        return gwtDeviceEvent;
+    }
+
+    public static GwtHeader convert(KapuaMetricInfo<?> hd)
+    {
+        GwtHeader gwtHeader = new GwtHeader(hd.getName());
+        if (hd.getType().equals(Float.class)) {
+            gwtHeader.setType(GwtHeaderType.FLOAT.name());
+        }
+        else if (hd.getType().equals(String.class)) {
+            gwtHeader.setType(GwtHeaderType.STRING.name());
+        }
+        else if (hd.getType().equals(Integer.class)) {
+            gwtHeader.setType(GwtHeaderType.INTEGER.name());
+        }
+        else if (hd.getType().equals(Double.class)) {
+            gwtHeader.setType(GwtHeaderType.DOUBLE.name());
+        }
+        else if (hd.getType().equals(Long.class)) {
+            gwtHeader.setType(GwtHeaderType.LONG.name());
+        }
+        else if (hd.getType().equals(Boolean.class)) {
+            gwtHeader.setType(GwtHeaderType.BOOLEAN.name());
+        }
+        else if (hd.getType().equals(byte[].class)) {
+            gwtHeader.setType(GwtHeaderType.BYTE_ARRAY.name());
+        }
+        return gwtHeader;
+    }
+
+    public static GwtBrokerCluster convert(BrokerCluster brokerCluster, BrokerClusterDeployment clusterDeployment)
+    {
+        GwtBrokerCluster gwtBrokerCluster = new GwtBrokerCluster();
+
+        gwtBrokerCluster.setBrokerType(convert(brokerCluster.getBrokerType()));
+        gwtBrokerCluster.setCreatedOn(brokerCluster.getCreatedOn());
+        gwtBrokerCluster.setDeploymentId(brokerCluster.getDeploymentId());
+        gwtBrokerCluster.setDescription(brokerCluster.getDescription());
+        gwtBrokerCluster.setDnsAliases(brokerCluster.getDnsAliasesAsList());
+        gwtBrokerCluster.setDnsName(brokerCluster.getDnsName());
+        gwtBrokerCluster.setId(brokerCluster.getId());
+        gwtBrokerCluster.setIptablesRules(brokerCluster.getIptablesRules());
+        gwtBrokerCluster.setModifiedOn(brokerCluster.getModifiedOn());
+        gwtBrokerCluster.setMqttBrokerUrl(brokerCluster.getMqttBrokerUrl());
+        gwtBrokerCluster.setName(brokerCluster.getName());
+        gwtBrokerCluster.setStatus(brokerCluster.getStatus().name());
+
+        if (clusterDeployment != null) {
+            gwtBrokerCluster.setAutoscaleCooldown(clusterDeployment.getAutoscaleCooldown());
+            gwtBrokerCluster.setAutoscaleMaxInstances(clusterDeployment.getAutoscaleMaxInstances());
+            gwtBrokerCluster.setAutoscaleMinInstances(clusterDeployment.getAutoscaleMinInstances());
+            gwtBrokerCluster.setAvailabilityZones(clusterDeployment.getAvailabilityZones());
+            gwtBrokerCluster.setEnableMqtt(clusterDeployment.getEnableMqtt());
+            gwtBrokerCluster.setEnableMqtts(clusterDeployment.getEnableMqtts());
+            gwtBrokerCluster.setEnableWebSocket(clusterDeployment.getEnableWebSocket());
+            gwtBrokerCluster.setUserData(clusterDeployment.getIaasUserData());
+            gwtBrokerCluster.setIaasInstanceType(clusterDeployment.getIaasInstanceType());
+            gwtBrokerCluster.setIaasKeyName(clusterDeployment.getIaasKeyName());
+            gwtBrokerCluster.setIaasMachineImage(clusterDeployment.getIaasMachineImage());
+            gwtBrokerCluster.setIdleTimeout(clusterDeployment.getIdleTimeout());
+            // gwtBrokerCluster.setSslCertificate(convert(clusterDeployment.getSslCertificate()));
+
+            // convert broker nodes
+            ArrayList<GwtBrokerNode> gwtBrokerNodes = new ArrayList<GwtBrokerNode>();
+            if (clusterDeployment.getBrokerNodes() != null) {
+                for (BrokerNode brokerNode : clusterDeployment.getBrokerNodes()) {
+                    gwtBrokerNodes.add(convert(brokerNode));
+                }
+            }
+            gwtBrokerCluster.setBrokerNodes(gwtBrokerNodes);
+        }
+
+        return gwtBrokerCluster;
+    }
+
+    public static BrokerCluster convert(GwtBrokerCluster gwtBrokerCluster)
+    {
+        BrokerCluster brokerCluster = new BrokerCluster();
+
+        brokerCluster.setBrokerType(convert(gwtBrokerCluster.getBrokerTypeEnum()));
+        brokerCluster.setDeploymentId(gwtBrokerCluster.getDeploymentId());
+        brokerCluster.setDescription(gwtBrokerCluster.getDescription());
+        brokerCluster.setDnsAliases(gwtBrokerCluster.getDnsAliases());
+        brokerCluster.setDnsName(gwtBrokerCluster.getDnsName());
+        brokerCluster.setId(gwtBrokerCluster.getId());
+        brokerCluster.setIptablesRules(gwtBrokerCluster.getIptablesRules());
+        brokerCluster.setName(gwtBrokerCluster.getName());
+        brokerCluster.setStatus(null);
+
+        return brokerCluster;
+    }
+
+    public static BrokerClusterDeployment convertClusterDeployment(GwtBrokerCluster gwtBrokerCluster)
+    {
+        BrokerClusterDeployment clusterDeployment = new BrokerClusterDeployment();
+        clusterDeployment.setAutoscaleCooldown(gwtBrokerCluster.getAutoscaleCooldown());
+        clusterDeployment.setAutoscaleMaxInstances(gwtBrokerCluster.getAutoscaleMaxInstances());
+        clusterDeployment.setAutoscaleMinInstances(gwtBrokerCluster.getAutoscaleMinInstances());
+        clusterDeployment.setAvailabilityZones(gwtBrokerCluster.getAvailabilityZones());
+        clusterDeployment.setClusterId(gwtBrokerCluster.getId());
+        clusterDeployment.setEnableMqtt(gwtBrokerCluster.getEnableMqtt());
+        clusterDeployment.setEnableMqtts(gwtBrokerCluster.getEnableMqtts());
+        clusterDeployment.setEnableWebSocket(gwtBrokerCluster.getEnableWebSocket());
+        clusterDeployment.setIaasUserData(gwtBrokerCluster.getUserData());
+        clusterDeployment.setIaasInstanceType(gwtBrokerCluster.getIaasInstanceType());
+        clusterDeployment.setIaasKeyName(gwtBrokerCluster.getIaasKeyName());
+        clusterDeployment.setIaasMachineImage(gwtBrokerCluster.getIaasMachineImage());
+        clusterDeployment.setId(gwtBrokerCluster.getDeploymentId());
+        clusterDeployment.setIdleTimeout(gwtBrokerCluster.getIdleTimeout());
+        // clusterDeployment.setSslCertificate(convert(gwtBrokerCluster.getSslCertificate()));
+
+        // ignore nodes since they can't be updated
+
+        return clusterDeployment;
+    }
+
+    public static GwtBrokerType convert(BrokerType brokerType)
+    {
+        return GwtBrokerType.valueOf(brokerType.name());
+    }
+
+    public static BrokerType convert(GwtBrokerType gwtBrokerType)
+    {
+        return BrokerType.valueOf(gwtBrokerType.name());
+    }
+
+    public static GwtBrokerNode convert(BrokerNode brokerNode)
+    {
+
+        GwtBrokerNode gwtBrokerNode = new GwtBrokerNode();
+
+        gwtBrokerNode.setAvailabilityZone(brokerNode.getIaasAvailabilityZone());
+        gwtBrokerNode.setBrokerClusterId(brokerNode.getBrokerClusterId());
+        gwtBrokerNode.setBrokerVersion(brokerNode.getBrokerVersion());
+        gwtBrokerNode.setDnsName(brokerNode.getDnsName());
+        gwtBrokerNode.setId(brokerNode.getId());
+        gwtBrokerNode.setInstanceId(brokerNode.getIaasInstanceId());
+        gwtBrokerNode.setInstanceType(brokerNode.getIaasInstanceType());
+        gwtBrokerNode.setKeyName(brokerNode.getIaasKeyName());
+        gwtBrokerNode.setMachineImage(brokerNode.getIaasMachineImage());
+        gwtBrokerNode.setPrivateIp(brokerNode.getPrivateIp());
+        gwtBrokerNode.setPublicIp(brokerNode.getPublicIp());
+        gwtBrokerNode.setStatus(brokerNode.getStatus());
+
+        return gwtBrokerNode;
+    }
+
+}

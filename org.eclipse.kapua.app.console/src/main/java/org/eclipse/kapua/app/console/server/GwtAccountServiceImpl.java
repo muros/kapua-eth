@@ -1,0 +1,345 @@
+package org.eclipse.kapua.app.console.server;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
+import org.eclipse.kapua.app.console.server.util.EdcExceptionHandler;
+import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.shared.model.GwtAccount;
+import org.eclipse.kapua.app.console.shared.model.GwtAccountCreator;
+import org.eclipse.kapua.app.console.shared.model.GwtAccountStringListItem;
+import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
+import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
+import org.eclipse.kapua.app.console.shared.service.GwtAccountService;
+import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
+import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
+import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.account.Account;
+import org.eclipse.kapua.service.account.AccountCreator;
+import org.eclipse.kapua.service.account.AccountFactory;
+import org.eclipse.kapua.service.account.AccountListResult;
+import org.eclipse.kapua.service.account.AccountQuery;
+import org.eclipse.kapua.service.account.AccountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.extjs.gxt.ui.client.data.BaseListLoadResult;
+import com.extjs.gxt.ui.client.data.ListLoadResult;
+
+/**
+ * The server side implementation of the RPC service.
+ */
+public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements GwtAccountService
+{
+
+    @SuppressWarnings("unused")
+    private static final Logger s_logger         = LoggerFactory.getLogger(GwtAccountServiceImpl.class);
+    private static final long   serialVersionUID = 3314502846487119577L;
+
+    public GwtAccount create(GwtXSRFToken xsrfToken, GwtAccountCreator gwtAccountCreator)
+        throws GwtEdcException
+    {
+        //
+        // Checking validity of the given XSRF Token
+        checkXSRFToken(xsrfToken);
+
+        GwtAccount gwtAccount = null;
+        KapuaId parentAccountId = KapuaEid.parseShortId(gwtAccountCreator.getParentAccountId());
+        try {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            AccountFactory accountFactory = locator.getFactory(AccountFactory.class);
+
+            AccountCreator accountCreator = accountFactory.newAccountCreator(parentAccountId,
+                                                                             gwtAccountCreator.getAccountName());
+            accountCreator.setAccountPassword(gwtAccountCreator.getAccountPassword());
+
+            accountCreator.setOrganizationName(gwtAccountCreator.getOrganizationName());
+            accountCreator.setOrganizationPersonName(gwtAccountCreator.getOrganizationPersonName());
+            accountCreator.setOrganizationEmail(gwtAccountCreator.getOrganizationEmail());
+            accountCreator.setOrganizationPhoneNumber(gwtAccountCreator.getOrganizationPhoneNumber());
+            accountCreator.setOrganizationAddressLine1(gwtAccountCreator.getOrganizationAddressLine1());
+            accountCreator.setOrganizationAddressLine2(gwtAccountCreator.getOrganizationAddressLine2());
+            accountCreator.setOrganizationCity(gwtAccountCreator.getOrganizationCity());
+            accountCreator.setOrganizationZipPostCode(gwtAccountCreator.getOrganizationZipPostCode());
+            accountCreator.setOrganizationStateProvinceCounty(gwtAccountCreator.getOrganizationStateProvinceCounty());
+            accountCreator.setOrganizationCountry(gwtAccountCreator.getOrganizationCountry());
+
+            // create the Account
+            AccountService accountService = locator.getService(AccountService.class);
+            Account account = accountService.create(accountCreator);
+
+            // convert to GwtAccount and return
+            gwtAccount = KapuaGwtConverter.convert(account);
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+        return gwtAccount;
+    }
+
+    public GwtAccount find(String accountIdString)
+        throws GwtEdcException
+    {
+        KapuaId accountId = KapuaEid.parseShortId(accountIdString);
+
+        GwtAccount gwtAccount = null;
+        try {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            AccountService accountService = locator.getService(AccountService.class);
+            gwtAccount = KapuaGwtConverter.convert(accountService.find(accountId));
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+
+        return gwtAccount;
+    }
+
+    public ListLoadResult<GwtGroupedNVPair> getAccountInfo(String accountIdString)
+        throws GwtEdcException
+    {
+        KapuaId accountId = KapuaEid.parseShortId(accountIdString);
+
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AccountService accountService = locator.getService(AccountService.class);
+
+        List<GwtGroupedNVPair> accountPropertiesPairs = new ArrayList<GwtGroupedNVPair>();
+        try {
+            Account account = accountService.find(accountId);
+
+            accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountName", account.getName()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountModifiedOn", account.getModifiedOn().toString()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountModifiedBy", account.getModifiedBy().getShortId()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountCreatedOn", account.getCreatedOn().toString()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountCreatedBy", account.getCreatedBy().getShortId()));
+
+            String brokerUrlFormat = "%s://%s:$s";
+            KapuaEnvironmentConfig envConfig = KapuaEnvironmentConfig.getInstance();
+            String brokerURL = String.format(brokerUrlFormat,
+                                             envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_PROTOCOL),
+                                             envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_DNS),
+                                             envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_PORT));
+
+            accountPropertiesPairs.add(new GwtGroupedNVPair("deploymentInfo", "deploymentBrokerURL", brokerURL));
+
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationName", account.getOrganization().getName()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationPersonName", account.getOrganization().getPersonName()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationEmail", account.getOrganization().getEmail()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationPhoneNumber", account.getOrganization().getPhoneNumber()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationAddress1", account.getOrganization().getAddressLine1()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationAddress2", account.getOrganization().getAddressLine2()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationZip", account.getOrganization().getZipPostCode()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationCity", account.getOrganization().getCity()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationState", account.getOrganization().getStateProvinceCounty()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationCountry", account.getOrganization().getCountry()));
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+
+        return new BaseListLoadResult<GwtGroupedNVPair>(accountPropertiesPairs);
+    }
+
+    public GwtAccount updateAccountProperties(GwtXSRFToken xsrfToken, GwtAccount gwtAccount)
+        throws GwtEdcException
+    {
+        //
+        // Checking validity of the given XSRF Token
+        checkXSRFToken(xsrfToken);
+
+        GwtAccount gwtAccountUpdated = null;
+        KapuaId scopeId = KapuaEid.parseShortId(gwtAccount.getId());
+        try {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            AccountService accountService = locator.getService(AccountService.class);
+            Account account = accountService.find(scopeId);
+
+            // update properties
+            Properties property = account.getEntityProperties();
+            if (property == null) {
+                property = new Properties();
+            }
+
+            if (gwtAccount.getUnescapedDashboardPreferredTopic() != null) {
+                property.put("topic", gwtAccount.getUnescapedDashboardPreferredTopic());
+            }
+
+            if (gwtAccount.getUnescapedDashboardPreferredMetric() != null) {
+                property.put("metric", gwtAccount.getUnescapedDashboardPreferredMetric());
+            }
+
+            account.setEntityProperties(property);
+            account = accountService.update(account);
+
+            // convert to GwtAccount and return
+            gwtAccountUpdated = KapuaGwtConverter.convert(account);
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+        return gwtAccountUpdated;
+    }
+
+    public GwtAccount update(GwtXSRFToken xsrfToken, GwtAccount gwtAccount)
+        throws GwtEdcException
+    {
+        //
+        // Checking validity of the given XSRF Token
+        checkXSRFToken(xsrfToken);
+
+        GwtAccount gwtAccountUpdated = null;
+        KapuaId scopeId = KapuaEid.parseShortId(gwtAccount.getId());
+        try {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            AccountService accountService = locator.getService(AccountService.class);
+            Account account = accountService.find(scopeId);
+
+            account.getOrganization().setName(gwtAccount.getGwtOrganization().getName());
+            account.getOrganization().setPersonName(gwtAccount.getGwtOrganization().getPersonName());
+            account.getOrganization().setEmail(gwtAccount.getGwtOrganization().getEmailAddress());
+            account.getOrganization().setPhoneNumber(gwtAccount.getGwtOrganization().getPhoneNumber());
+            account.getOrganization().setAddressLine1(gwtAccount.getGwtOrganization().getAddressLine1());
+            account.getOrganization().setAddressLine2(gwtAccount.getGwtOrganization().getAddressLine2());
+            account.getOrganization().setAddressLine3(gwtAccount.getGwtOrganization().getAddressLine3());
+            account.getOrganization().setZipPostCode(gwtAccount.getGwtOrganization().getZipPostCode());
+            account.getOrganization().setCity(gwtAccount.getGwtOrganization().getCity());
+            account.getOrganization().setStateProvinceCounty(gwtAccount.getGwtOrganization().getStateProvinceCounty());
+            account.getOrganization().setCountry(gwtAccount.getGwtOrganization().getCountry());
+            account.setOptlock(gwtAccount.getOptlock());
+
+            account = accountService.update(account);
+
+            // convert to GwtAccount and return
+            gwtAccountUpdated = KapuaGwtConverter.convert(account);
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+        return gwtAccountUpdated;
+    }
+
+    public void delete(GwtXSRFToken xsrfToken, GwtAccount gwtAccount)
+        throws GwtEdcException
+    {
+        //
+        // Checking validity of the given XSRF Token
+        checkXSRFToken(xsrfToken);
+
+        KapuaId kapuaId = KapuaEid.parseShortId(gwtAccount.getId());
+        try {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            AccountService accountService = locator.getService(AccountService.class);
+            Account account = accountService.find(kapuaId);
+
+            if (account != null) {
+                accountService.delete(account);
+            }
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+    }
+
+    public ListLoadResult<GwtAccount> findAll(String scopeIdString)
+        throws GwtEdcException
+    {
+
+        List<GwtAccount> gwtAccountList = new ArrayList<GwtAccount>();
+        KapuaId scopeId = KapuaEid.parseShortId(scopeIdString);
+        try {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            AccountService accountService = locator.getService(AccountService.class);
+            AccountFactory accountFactory = locator.getFactory(AccountFactory.class);
+            AccountQuery query = accountFactory.newQuery(scopeId);
+
+            AccountListResult list = accountService.query(query);
+            for (Account account : list) {
+                gwtAccountList.add(KapuaGwtConverter.convert(account));
+            }
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+
+        return new BaseListLoadResult<GwtAccount>(gwtAccountList);
+    }
+
+    public ListLoadResult<GwtAccount> findChildren(String parentAccountId, boolean recoursive)
+        throws GwtEdcException
+    {
+        KapuaId scopeId = KapuaEid.parseShortId(parentAccountId);
+
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AccountService accountService = locator.getService(AccountService.class);
+        AccountFactory accountFactory = locator.getFactory(AccountFactory.class);
+
+        List<GwtAccount> gwtAccountList = new ArrayList<GwtAccount>();
+        AccountListResult list;
+        try {
+            AccountQuery query = accountFactory.newQuery(scopeId);
+
+            list = accountService.query(query);
+            for (Account account : list) {
+                gwtAccountList.add(KapuaGwtConverter.convert(account));
+            }
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+
+        return new BaseListLoadResult<GwtAccount>(gwtAccountList);
+    }
+
+    public ListLoadResult<GwtAccountStringListItem> findChildrenAsStrings(String parentAccountId, boolean recoursive)
+        throws GwtEdcException
+    {
+        KapuaId scopeId = KapuaEid.parseShortId(parentAccountId);
+
+        List<GwtAccountStringListItem> gwtAccountStrings = new ArrayList<GwtAccountStringListItem>();
+
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AccountService accountService = locator.getService(AccountService.class);
+        AccountListResult list;
+        try {
+            list = accountService.findChildsRecursively(scopeId);
+            for (Account account : list) {
+                GwtAccountStringListItem item = new GwtAccountStringListItem();
+                item.setId(account.getId().getShortId());
+                item.setValue(account.getName());
+                item.setHasChildAccount(false); // FIXME: add check to see if account has or noe childs
+
+                gwtAccountStrings.add(item);
+            }
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+
+        return new BaseListLoadResult<GwtAccountStringListItem>(gwtAccountStrings);
+    }
+
+    @Override
+    public GwtAccount findByAccountName(String accountName)
+        throws GwtEdcException
+    {
+        GwtAccount gwtAccount = null;
+        try {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            AccountService accountService = locator.getService(AccountService.class);
+            Account account = accountService.findByName(accountName);
+            if (account != null) {
+                gwtAccount = KapuaGwtConverter.convert(account);
+            }
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
+        }
+
+        return gwtAccount;
+    }
+
+}

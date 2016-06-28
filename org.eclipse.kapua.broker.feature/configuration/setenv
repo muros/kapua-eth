@@ -1,0 +1,165 @@
+#!/bin/sh
+#    
+#    Copyright (C) Red Hat, Inc.
+#    http://redhat.com
+#    
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#    
+#       http://www.apache.org/licenses/LICENSE-2.0
+#    
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+#
+
+#
+# handle specific scripts; the SCRIPT_NAME is exactly the name of the Karaf
+# script; for example karaf, start, stop, admin, client, ...
+#
+
+#
+# general settings which should be applied for all scripts go here; please keep
+# in mind that it is possible that scripts might be executed more than once, e.g.
+# in example of the start script where the start script is executed first and the
+# karaf script afterwards.
+#
+
+#
+# The following section shows the possible configuration options for the default
+# karaf scripts
+#
+# export JAVA_MIN_MEM # Minimum memory for the JVM
+# export JAVA_MAX_MEM # Maximum memory for the JVM
+# export JAVA_PERM_MEM # Minimum perm memory for the JVM
+# export JAVA_MAX_PERM_MEM # Maximum memory for the JVM
+# export KARAF_HOME # Karaf home folder
+# export KARAF_DATA # Karaf data folder
+# export KARAF_BASE # Karaf base folder
+# export KARAF_OPTS # Additional available Karaf options
+#JAVA_HOME=/opt/jdk1.8.0_51/
+export KARAF_HOME="/opt/redhat/amq"
+export KARAF_BASE="/opt/redhat/amq"
+export KARAF_DATA="/opt/redhat/amq/data"
+export KARAF_ETC="/opt/redhat/amq/etc"
+export CONF_ACTIVEMQ="/opt/redhat/amq/etc/activemq.xml"
+
+export JAVA_MIN_MEM="256m" # Minimum memory for the JVM in Mb
+export JAVA_MAX_MEM="1024m" # Maximum memory for the JVM in Mb
+
+# AMQMODE=SERVER is set by the init script to avoid having to spawn a large jvm for the amq client
+# JVM Parameters to be used only when in server mode
+if [ "$AMQMODE" == "SERVER" ]; then          
+    # cleanup JVM_ARGS
+    JVM_ARGS=""
+    
+    # memory calculations
+    TOTAL_MEMORY=$(echo "$(cat /proc/meminfo | grep MemTotal | awk '{print $2}')/1024" | bc )
+    METASPACE=512
+    OS_RESERVED=1536
+    AMQ_RESERVED=1024
+    CAP_SIZE=8192
+    JAVA_MAX_MEM=$(echo "$TOTAL_MEMORY - $METASPACE - $OS_RESERVED" | bc)
+    HALF_MEMORY=$(echo "$TOTAL_MEMORY / 2" | bc)
+
+    if [ "$HALF_MEMORY" -gt "$CAP_SIZE" ]; then
+        CAP_SIZE=$HALF_MEMORY
+    fi
+
+    # cap to 8gb or to half mem to avoid gc problems
+    if [ "$JAVA_MAX_MEM" -gt "$CAP_SIZE" ]; then
+        JAVA_MAX_MEM=$CAP_SIZE
+    fi
+
+    JAVA_MIN_MEM=$JAVA_MAX_MEM
+    AMQ_MAX_MEM=$(echo "$JAVA_MAX_MEM - $AMQ_RESERVED" | bc)
+
+    JVM_ARGS="$JVM_ARGS -Dkaraf.home=$KARAF_HOME"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.base=$KARAF_BASE"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.data=$KARAF_DATA"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.etc=$KARAF_ETC"
+    JVM_ARGS="$JVM_ARGS -Dcom.sun.management.jmxremote"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.startLocal"
+    JAVA_MIN_MEM=$JAVA_MAX_MEM
+    AMQ_MAX_MEM=$(echo "$JAVA_MAX_MEM - $AMQ_RESERVED" | bc)
+
+    JVM_ARGS="$JVM_ARGS -Dkaraf.home=$KARAF_HOME"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.base=$KARAF_BASE"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.data=$KARAF_DATA"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.etc=$KARAF_ETC"
+    JVM_ARGS="$JVM_ARGS -Dcom.sun.management.jmxremote"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.startLocalConsole=false"
+    JVM_ARGS="$JVM_ARGS -Dkaraf.startRemoteShell=true"
+    JVM_ARGS="$JVM_ARGS -Djava.endorsed.dirs=$JAVA_HOME/jre/lib/endorsed:$JAVA_HOME/lib/endorsed:$KARAF_HOME/lib/endorsed"
+    JVM_ARGS="$JVM_ARGS -Djava.ext.dirs=$JAVA_HOME/jre/lib/ext:$JAVA_HOME/lib/ext:$KARAF_HOME/lib/ext"
+    JVM_ARGS="$JVM_ARGS -DcertificatesHome=$KARAF_HOME/cert"
+    JVM_ARGS="$JVM_ARGS -DkeystorePassword=ce2etdtCnVyTgHsfWbrKUMBuAtWv33kvyyqMdQNB"
+    JVM_ARGS="$JVM_ARGS -XX:+UseG1GC"
+    JVM_ARGS="$JVM_ARGS -Dorg.apache.activemq.UseDedicatedTaskRunner=false"
+    JVM_ARGS="$JVM_ARGS -Dfile.encoding=UTF-8"
+    # Memory settings
+
+    JVM_ARGS="$JVM_ARGS -Xms${JAVA_MIN_MEM}m"
+    JVM_ARGS="$JVM_ARGS -Xmx${JAVA_MAX_MEM}m"
+    # PermSize and MaxPermSize are used up to jvm 1.7
+    JVM_ARGS="$JVM_ARGS -XX:PermSize=256m"
+    JVM_ARGS="$JVM_ARGS -XX:MaxPermSize=512m"
+    # Metaspace is used in jvm 1.8+
+    JVM_ARGS="$JVM_ARGS -XX:MaxMetaspaceSize=${METASPACE}m"
+    
+    # Alway log gc details
+    JVM_ARGS="$JVM_ARGS -XX:+PrintGCDetails"
+    JVM_ARGS="$JVM_ARGS -Xloggc:$KARAF_DATA/log/gc.log"
+    JVM_ARGS="$JVM_ARGS -XX:+PrintGCTimeStamps"
+    JVM_ARGS="$JVM_ARGS -XX:+PrintGCDateStamps"
+     
+    # Explicit VM Dns cache ttl
+    JVM_ARGS="$JVM_ARGS -Dsun.net.inetaddr.ttl=60"
+    
+    # Uncomment to enable jmx
+    #JVM_ARGS="$JVM_ARGS =-Dcom.sun.management.jmxremote.port=1616"
+    #JVM_ARGS="$JVM_ARGS =-Dcom.sun.management.jmxremote.authenticate=false"
+    #JVM_ARGS="$JVM_ARGS =-Dcom.sun.management.jmxremote.ssl=false"
+
+    # Uncomment to enable YourKit profiling
+    #JVM_ARGS="$JVM_ARGS =-Xrunyjpagent"
+
+    # Uncomment to enable remote debugging
+    #JVM_ARGS="$JVM_ARGS =-Xdebug -Xnoagent -Djava.compiler=NONE"
+    #JVM_ARGS="$JVM_ARGS =-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+    
+    # set memusage in activemq config file
+    sed -i -e "s/<memoryUsage limit=\"[0-9]\+ [gmb]\+\"\/>/<memoryUsage limit=\"${AMQ_MAX_MEM} mb\"\/>/" $CONF_ACTIVEMQ
+    
+    # Amq runtime specific configurations
+    CORES=$(cat /proc/cpuinfo | grep -c "processor")
+    # Number of messages arriving per second
+    PUB_RATE=$(echo "250*$CORES" | bc)
+    
+    # of messages that can be stored to cassandra per second per thread
+    JVM_ARGS="$JVM_ARGS -Damq.broker.queue.data.store.workers=$(echo "$PUB_RATE/5" | bc)"
+    JVM_ARGS="$JVM_ARGS -Damq.broker.queue.device.workers=$(echo "3*$CORES" | bc)"
+    JVM_ARGS="$JVM_ARGS -Damq.broker.queue.service.workers=$(echo "3*$CORES" | bc)"
+    JVM_ARGS="$JVM_ARGS -Damq.broker.queue.application.workers=$(echo "3*$CORES" | bc)"
+    JVM_ARGS="$JVM_ARGS -Damq.broker.queue.configuration.workers=1"
+    JVM_ARGS="$JVM_ARGS -Damq.broker.queue.hourly.usage.workers=1"
+    JVM_ARGS="$JVM_ARGS -Damq.broker.queue.hourly.device.usage.workers=1"
+    JVM_ARGS="$JVM_ARGS -Damq.broker.queue.rule.action.workers=$(echo "2*$CORES+2" | bc)"
+    
+    # cassandra
+    JVM_ARGS="$JVM_ARGS -Dcassandra.maxActive=$(echo "$PUB_RATE/10" | bc)"
+     
+    # sql
+    JVM_ARGS="$JVM_ARGS -Ddb.max_size=$(echo "5*$CORES+5" | bc)"
+    JVM_ARGS="$JVM_ARGS -Ddb.min_size=$(echo "5*$CORES+5" | bc)"
+    
+    # memcached 
+    JVM_ARGS="$JVM_ARGS -Dcache.memcached.pool.min_size=$(echo "25*$CORES" | bc)"
+    JVM_ARGS="$JVM_ARGS -Dcache.memcached.pool.max_size=$(echo "25*$CORES" | bc)"
+    JVM_ARGS="$JVM_ARGS -Dcache.memcached.pool.total_max_size=$(echo "25*$CORES" | bc)"
+    
+    export JAVA_OPTS=$JVM_ARGS
+fi

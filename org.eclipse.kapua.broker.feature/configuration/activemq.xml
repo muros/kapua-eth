@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright (C) Red Hat, Inc.
+    http://redhat.com
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+ -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+ http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+
+    <!-- Allows us to use system properties and fabric as variables in this configuration file -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties">
+            <bean class="io.fabric8.mq.fabric.ConfigurationProperties"/>
+        </property>
+    </bean>
+
+    <!--
+        ACTIVEMQ_OPTS="-Xmx512M -Dorg.apache.activemq.UseDedicatedTaskRunner=false"
+      -->
+    <broker xmlns="http://activemq.apache.org/schema/core"
+            brokerName="${broker-name}"
+            persistent="true"
+            dataDirectory="${data}"
+            schedulePeriodForDestinationPurge="-1"
+            networkConnectorStartAsync="true"
+            start="false" restartAllowed="false" useJmx="false" advisorySupport="true">
+
+<!-- 
+	Removed from broker tag as suggested by Dejan due to a bug in 6.1 version that should be fixed on 6.2
+	see AMQ-5783 - https://issues.apache.org/jira/browse/AMQ-5783
+	
+	offlineDurableSubscriberTimeout="300000"
+    offlineDurableSubscriberTaskSchedule="120000"
+ -->
+
+        <destinationPolicy>
+            <policyMap>
+                <policyEntries>
+                    <!--
+                        TODO:Dejan's check how topic pre-fetch is set  in 6.2
+                    -->
+                    <policyEntry topic=">" 
+                                 producerFlowControl="true" 
+                                 durableTopicPrefetch="32766" 
+                                 topicPrefetch="32766" 
+                                 expireMessagesPeriod="300000" 
+                                 enableAudit="false" 
+                                 minimumMessageSize="256"
+                                 advisoryForSlowConsumers="true" 
+                                 advisoryForFastProducers="true" 
+                                 advisoryWhenFull="true" 
+                                 advisoryForDiscardingMessages="true"
+                                 gcInactiveDestinations="true"
+                                 inactiveTimeoutBeforeGC="300000">
+                        <!--
+                            Fuse MQ Enterprise has another cursor implementation, the VM cursor, which can be significantly faster in some cases. 
+                            With the VM cursor, incoming messages are inserted directly into the cursor, bypassing the message store 
+                            (the messages are also, concurrently, inserted into the message store). 
+                            This works well if the consumers are fast and are able to keep up with the flow of messages.
+                            https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/PersTuning-vmCursor.html
+                            TODO: Wait for Dejan's feedback.
+                        -->
+                        <pendingSubscriberPolicy>
+                            <vmCursor />
+                        </pendingSubscriberPolicy>
+                        <!--
+                            Limit of messages sent to the consumer but not yet acknoledged. 
+                            The settings is per consumer so setting it to 1000. 
+                            http://activemq.apache.org/slow-consumer-handling.html
+                        -->
+                        <pendingMessageLimitStrategy>
+                            <constantPendingMessageLimitStrategy limit="1000"/>
+                        </pendingMessageLimitStrategy>
+                        <subscriptionRecoveryPolicy>
+                            <noSubscriptionRecoveryPolicy/>
+                        </subscriptionRecoveryPolicy>
+                        <deadLetterStrategy>
+                            <sharedDeadLetterStrategy processExpired="false" />
+                        </deadLetterStrategy>
+                    </policyEntry>
+                  
+		    		<policyEntry topic="ActiveMQ.>"
+                                 producerFlowControl="true"
+                                 durableTopicPrefetch="32766"
+                                 topicPrefetch="32766"
+                                 expireMessagesPeriod="300000"
+                                 enableAudit="false"
+                                 minimumMessageSize="256"
+                                 advisoryForSlowConsumers="true"
+                                 advisoryForFastProducers="true"
+                                 advisoryWhenFull="true"
+                                 advisoryForDiscardingMessages="true"
+                                 gcInactiveDestinations="true"
+                                 inactiveTimeoutBeforeGC="300000">
+                        <!--
+                            Fuse MQ Enterprise has another cursor implementation, the VM cursor, which can be significantly faster in some cases.
+                            With the VM cursor, incoming messages are inserted directly into the cursor, bypassing the message store
+                            (the messages are also, concurrently, inserted into the message store).
+                            This works well if the consumers are fast and are able to keep up with the flow of messages.
+                            https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/PersTuning-vmCursor.html
+                            TODO: Wait for Dejan's feedback.
+                        -->
+                        <pendingSubscriberPolicy>
+                            <vmCursor />
+                        </pendingSubscriberPolicy>
+                        <!--
+                            Limit of messages sent to the consumer but not yet acknoledged.
+                            The settings is per consumer so setting it to 1000.
+                            http://activemq.apache.org/slow-consumer-handling.html
+                        -->
+                        <subscriptionRecoveryPolicy>
+                            <noSubscriptionRecoveryPolicy/>
+                        </subscriptionRecoveryPolicy>
+                        <deadLetterStrategy>
+                           <discarding/>
+                       </deadLetterStrategy>
+                    </policyEntry>
+                   
+                    <!--
+                        queuePrefetch: if you have just a single consumer attached to a queue, you can leave the prefetch limit at a fairly large value. 
+                        But if you are using a group of consumers to distribute the workload, it is usually better to restrict the prefetch limit to 
+                        a very small number—for example, 0 or 1.
+                        http://activemq.apache.org/per-destination-policies.html
+                        https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/GenTuning-Consumer-Prefetch.html
+                        TODO: Restest with default prefetch of 1000. Is it better than 2?
+                    -->
+                    <policyEntry queue=">" 
+                                 producerFlowControl="true" 
+                                 optimizedDispatch="true" 
+                                 queuePrefetch="2" 
+                                 expireMessagesPeriod="300000" 
+                                 enableAudit="false" 
+                                 useConsumerPriority="false" 
+                                 minimumMessageSize="256"
+                                 advisoryForSlowConsumers="true" 
+                                 advisoryForFastProducers="true" 
+                                 advisoryWhenFull="true"
+                                 gcInactiveDestinations="true"
+                                 inactiveTimeoutBeforeGC="300000">
+                        <!--
+                            Fuse MQ Enterprise has another cursor implementation, the VM cursor, which can be significantly faster in some cases. 
+                            With the VM cursor, incoming messages are inserted directly into the cursor, bypassing the message store 
+                            (the messages are also, concurrently, inserted into the message store). 
+                            This works well if the consumers are fast and are able to keep up with the flow of messages.
+                            https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/PersTuning-vmCursor.html
+                            TODO: Wait for Dejan's feedback.
+                        -->
+                        <pendingSubscriberPolicy>
+                            <vmCursor />
+                        </pendingSubscriberPolicy>
+                        <deadLetterStrategy>
+                            <sharedDeadLetterStrategy processExpired="false" />
+                        </deadLetterStrategy>
+                    </policyEntry>
+                </policyEntries>
+            </policyMap>
+        </destinationPolicy>
+
+        <!-- commented to remove all jmx management --> 
+        <!--
+        <managementContext>
+            <managementContext createConnector="false"/>
+        </managementContext>
+        -->
+
+        <persistenceAdapter>
+            <!--  
+                indexCacheSize—(default 10000) specifies the size of the cache in units of pages (where one page is 4 KB by default).
+                https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/PersTuning-KahaDB.html
+                TODO:Dejan's check on the index cache size
+            -->
+            <!-- about concurrentStoreAndDispatchTopics="false" see RedHat case 01377085 and https://issues.apache.org/jira/browse/AMQ-2864 -->
+            <kahaDB directory="/storage/amq/kahadb"
+                    journalMaxFileLength="32mb"
+                    concurrentStoreAndDispatchQueues="true"
+                    concurrentStoreAndDispatchTopics="false"
+                    indexWriteBatchSize="10000"
+                    indexCacheSize="100000"
+                    enableJournalDiskSyncs="false"/>
+        </persistenceAdapter>
+
+        <plugins>
+            <bean xmlns="http://www.springframework.org/schema/beans"
+                  id="kapuaSecurityPlugin" 
+                  class="org.eclipse.kapua.broker.core.KapuaBrokerSecurityPlugin" />
+            <discardingDLQBrokerPlugin dropAll="true" 
+                                       dropTemporaryTopics="true" 
+                                       dropTemporaryQueues="true" />
+        </plugins>
+
+        <systemUsage>
+            <systemUsage>
+                <memoryUsage>
+                    <memoryUsage limit="6 gb"/>
+                </memoryUsage>
+                <storeUsage>
+                    <storeUsage limit="10 gb"/>
+                </storeUsage>
+                <tempUsage>
+                    <tempUsage limit="1 gb"/>
+                </tempUsage>
+            </systemUsage>
+        </systemUsage>
+
+        <sslContext>
+            <sslContext keyStore="${certificatesHome}/edc_amq.ks" keyStorePassword="${keystorePassword}"/>
+        </sslContext>
+        
+        <!-- Transport Connectors -->
+        <transportConnectors>
+            <transportConnector name="mqtt"  uri="mqtt+nio://0.0.0.0:1883?transport.maximumConnections=1000&amp;transport.socketBufferSize=131072&amp;transport.ioBufferSize=16384&amp;transport.activeMQSubscriptionPrefetch=32766&amp;transport.publishDollarTopics=true&amp;transport.subscriptionStrategy=mqtt-virtual-topic-subscriptions"/>
+            <transportConnector name="mqtts" uri="mqtt+nio+ssl://0.0.0.0:8883?transport.maximumConnections=1000&amp;transport.socketBufferSize=131072&amp;transport.ioBufferSize=16384&amp;transport.activeMQSubscriptionPrefetch=32766&amp;transport.publishDollarTopics=true&amp;transport.subscriptionStrategy=mqtt-virtual-topic-subscriptions"/>
+            <transportConnector name="tcp"   uri="tcp://0.0.0.0:61616?transport.maximumConnections=1000&amp;transport.socketBufferSize=131072&amp;ioBufferSize=16384&amp;transport.activeMQSubscriptionPrefetch=32766&amp;transport.publishDollarTopics=true&amp;transport.subscriptionStrategy=mqtt-virtual-topic-subscriptions"/>
+        </transportConnectors>
+    </broker>
+</beans>
+

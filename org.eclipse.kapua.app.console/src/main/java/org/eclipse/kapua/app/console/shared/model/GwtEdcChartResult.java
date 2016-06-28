@@ -1,0 +1,52 @@
+package org.eclipse.kapua.app.console.shared.model;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
+public class GwtEdcChartResult implements Serializable {
+
+    private static final long serialVersionUID = 1990747640665608353L;
+
+    private Map<String, List<GwtDataPoint>> dataPoint;
+    private Stack<EdcBasePagingCursor> offsetCursors;
+    private boolean moreData;
+    private int lastOffset;
+
+    public Stack<EdcBasePagingCursor> getOffsetCursors() {
+        return offsetCursors;
+    }
+
+    public void setOffsetCursors(Stack<EdcBasePagingCursor> offsetCursors) {
+        this.offsetCursors = offsetCursors;
+    }
+
+    public Map<String, List<GwtDataPoint>> getDataPoint() {
+        return dataPoint;
+    }
+
+    public void setDataPoint(Map<String, List<GwtDataPoint>> dataPoint) {
+        this.dataPoint = dataPoint;
+    }
+
+
+    public boolean hasMoreData() {
+        return moreData;
+    }
+
+    public void setMoreData(boolean moreData) {
+        this.moreData = moreData;
+    }
+
+    public int getLastOffset() {
+        return lastOffset;
+    }
+
+    public void setLastOffset(int lastOffset) {
+        this.lastOffset = lastOffset;
+    }
+
+
+
+}

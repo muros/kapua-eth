@@ -1,0 +1,78 @@
+package org.eclipse.kapua.service.device.registry.internal;
+
+import javax.persistence.EntityManager;
+
+import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.service.internal.ServiceDAO;
+import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.model.query.KapuaQuery;
+import org.eclipse.kapua.service.device.registry.Device;
+import org.eclipse.kapua.service.device.registry.DeviceCreator;
+import org.eclipse.kapua.service.device.registry.DeviceListResult;
+import org.eclipse.kapua.service.device.registry.DeviceStatus;
+
+public class DeviceDAO extends ServiceDAO
+{
+    public static Device create(EntityManager em, DeviceCreator deviceCreator)
+    {
+        Device device = new DeviceImpl(deviceCreator.getScopeId());
+
+        device.setClientId(deviceCreator.getClientId());
+        device.setStatus(DeviceStatus.ENABLED);
+        device.setDisplayName(deviceCreator.getDisplayName());
+        device.setLastEventOn(null);
+        device.setLastEventType(null);
+        device.setSerialNumber(deviceCreator.getSerialNumber());
+        device.setModelId(deviceCreator.getModelId());
+        device.setImei(deviceCreator.getImei());
+        device.setImsi(deviceCreator.getImsi());
+        device.setIccid(deviceCreator.getIccid());
+        device.setBiosVersion(deviceCreator.getBiosVersion());
+        device.setFirmwareVersion(deviceCreator.getFirmwareVersion());
+        device.setOsVersion(deviceCreator.getOsVersion());
+        device.setJvmVersion(deviceCreator.getJvmVersion());
+        device.setOsgiVersion(deviceCreator.getOsVersion());
+        device.setApplicationFrameworkVersion(deviceCreator.getApplicationFrameworkVersion());
+        device.setApplicationIdentifiers(deviceCreator.getApplicationIdentifiers());
+        device.setAcceptEncoding(deviceCreator.getAcceptEncoding());
+        device.setGpsLongitude(deviceCreator.getGpsLongitude());
+        device.setGpsLatitude(deviceCreator.getGpsLatitude());
+        device.setCustomAttribute1(deviceCreator.getCustomAttribute1());
+        device.setCustomAttribute2(deviceCreator.getCustomAttribute2());
+        device.setCustomAttribute3(deviceCreator.getCustomAttribute3());
+        device.setCustomAttribute4(deviceCreator.getCustomAttribute4());
+        device.setCustomAttribute5(deviceCreator.getCustomAttribute5());
+        device.setCredentialsMode(deviceCreator.getCredentialsMode());
+        device.setPreferredUserId(deviceCreator.getPreferredUserId());
+
+        return ServiceDAO.create(em, device);
+    }
+
+    public static Device update(EntityManager em, Device device)
+    {
+        DeviceImpl deviceImpl = (DeviceImpl) device;
+        return ServiceDAO.update(em, DeviceImpl.class, deviceImpl);
+    }
+
+    public static Device find(EntityManager em, KapuaId deviceId)
+    {
+        return em.find(Device.class, deviceId);
+    }
+
+    public static DeviceListResult query(EntityManager em, KapuaQuery<Device> query)
+        throws KapuaException
+    {
+        return ServiceDAO.query(em, Device.class, DeviceImpl.class, new DeviceListResultImpl(), query);
+    }
+
+    public static long count(EntityManager em, KapuaQuery<Device> query)
+        throws KapuaException
+    {
+        return ServiceDAO.count(em, Device.class, DeviceImpl.class, query);
+    }
+
+    public static void delete(EntityManager em, KapuaId deviceId)
+    {
+        ServiceDAO.delete(em, DeviceImpl.class, deviceId);
+    }
+}

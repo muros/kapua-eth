@@ -1,0 +1,60 @@
+package org.eclipse.kapua.app.console.shared.model;
+
+import java.io.Serializable;
+
+import org.eclipse.kapua.app.console.client.util.HeaderTypeUtils;
+
+public class GwtHeader extends EdcBaseModel implements Serializable {
+    private static final long serialVersionUID = -6683882186670183772L;
+
+    public enum GwtHeaderType {
+        FLOAT,
+        STRING,
+        INTEGER,
+        DOUBLE,
+        LONG,
+        BOOLEAN,
+        BYTE_ARRAY;
+    }
+
+    public GwtHeader() {
+    }
+
+    public GwtHeader(String name) {
+        set("name", name);
+    }
+
+    @Override
+    @SuppressWarnings({"unchecked"})
+    public <X> X get(String property) {
+        if ("typeFormatted".equals(property)) {
+            return (X) HeaderTypeUtils.format(this);
+        } else {
+            return super.get(property);
+        }
+    }
+
+    public String getName() {
+        return (String) get("name");
+    }
+
+    public String getUnescapedName() {
+        return getUnescaped("name");
+    }
+
+    public void setName(String name) {
+        set("name", name);
+    }
+
+    public String getType() {
+        return (String) get("type");
+    }
+
+    public void setType(String type) {
+        set("type", type);
+    }
+
+    public String getTypeFormatted() {
+        return (String) get("typeFormatted");
+    }
+}

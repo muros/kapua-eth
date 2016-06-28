@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<assembly>
+	<id>exe</id>
+	<formats>
+		<format>jar</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <scope>runtime</scope>
+            <includes>
+            	<include>org.hibernate:hibernate-c3p0</include>
+            	<include>com.mchange:c3p0</include>
+            	<include>com.mchange:mchange-commons-java</include>            	
+            	<include>mysql:mysql-connector-java</include>
+                <include>javax.validation:validation-api</include>
+            </includes>
+            <unpack>true</unpack>
+			<unpackOptions>
+				<excludes>
+					<exclude>META-INF/maven/**</exclude>
+                    <exclude>*:jar:log4j.properties</exclude>                   
+				</excludes>
+			</unpackOptions>
+		</dependencySet>
+	</dependencySets>
+</assembly>
+

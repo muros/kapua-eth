@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+  	<parent>
+        <groupId>org.eclipse.kapua</groupId>
+        <artifactId>kapua</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+	<artifactId>org.eclipse.kapua.broker.feature</artifactId>
+    <name>org.eclipse.kapua.broker.feature</name>
+  
+	<build>    
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <targetPath>${basedir}/target/feature</targetPath>
+            <filtering>true</filtering>
+          </resource>
+        </resources>    
+        <plugins>
+            <plugin>
+                <groupId>org.apache.karaf.tooling</groupId>
+                <artifactId>karaf-maven-plugin</artifactId>
+                <version>3.0.3</version>
+                <executions>
+                    <execution>
+                        <id>create-kar-broker</id>
+                        <goals>
+                            <goal>features-create-kar</goal>
+                        </goals>
+                        <configuration>
+                            <featuresFile>${project.build.directory}/feature/features.xml</featuresFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
