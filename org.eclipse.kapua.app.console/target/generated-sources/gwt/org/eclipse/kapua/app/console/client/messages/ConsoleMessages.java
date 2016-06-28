@@ -4299,11 +4299,18 @@ public interface ConsoleMessages extends com.google.gwt.i18n.client.Messages {
   @Key("consoleHeaderUserActionWarningEnable2FATooltip")
   String consoleHeaderUserActionWarningEnable2FATooltip(String arg0);
 
-  /**
-   * Translated "Copyright &copy; 2011-{0} Eurotech and/or its affiliates.  All rights reserved.".
-   * 
-   * @return translated "Copyright &copy; 2011-{0} Eurotech and/or its affiliates.  All rights reserved."
-   */
+/*******************************************************************************
+ * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Eurotech - initial API and implementation
+ *
+ *******************************************************************************/
   @DefaultMessage("Copyright &copy; 2011-{0} Eurotech and/or its affiliates.  All rights reserved.")
   @Key("copyright")
   String copyright(String arg0);

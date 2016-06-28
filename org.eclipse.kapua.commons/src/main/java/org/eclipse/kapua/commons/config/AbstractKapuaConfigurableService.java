@@ -27,7 +27,8 @@ import org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider;
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *      Eurotech - initial API and implementation
+ *     Eurotech - initial API and implementation
+ *
  *******************************************************************************/
 public class AbstractKapuaConfigurableService <E extends KapuaConfigEntity, C extends KapuaConfigEntityCreator<E>, F extends KapuaConfigEntityFactory<E, C>> implements KapuaConfigurableService, Serializable
 {
