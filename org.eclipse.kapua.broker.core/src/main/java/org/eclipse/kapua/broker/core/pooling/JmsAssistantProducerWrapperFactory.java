@@ -21,8 +21,6 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.eurotech.cloud.commons.jms.JmsConnectionFactory;
-
 /**
  * {@link BasePooledObjectFactory} assistant broker wrapper factory implementation.
  *

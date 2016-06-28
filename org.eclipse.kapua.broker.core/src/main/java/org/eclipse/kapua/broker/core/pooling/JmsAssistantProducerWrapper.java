@@ -22,10 +22,10 @@ import javax.jms.JMSException;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
-import org.eclipse.kapua.messages.KapuaInvalidTopicException;
-import org.eclipse.kapua.messages.KapuaMessage;
-import org.eclipse.kapua.messages.KapuaPayload;
-import org.eclipse.kapua.messages.KapuaTopic;
+import org.eclipse.kapua.message.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.message.KapuaTopic;
 import org.eclipse.kapua.service.user.UserStatus;
 
 /**
@@ -59,7 +59,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	//but if we send for default the missing message we will have missing event twice in the most of the cases?)
 	private static final String MISSING_TOPIC      = "$EDC.{0}.{1}.MQTT.MISSING";
 
-	//leave the MQTT format. this topic it's not used for sending message but only to create correctly the EdcTopic object
+	//leave the MQTT format. this topic it's not used for sending message but only to create correctly the KapuaTopic object
 	private static final String ALERT_TOPIC_MQTT   = "{0}/{1}/ALERT";
 	private static final String UPDATE_LOGIN_INFO_TOPIC_MQTT = "$EDC/{0}/{1}/SERVICE/UPDATE_LOGIN_INFO";
 	
@@ -108,16 +108,16 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	 * @return
 	 * @throws JMSException
 	 * @throws KapuaInvalidTopicException 
-	 * @throws EdcInvalidTopicException
+	 * @throws KapuaInvalidTopicException
 	 */
 	private String buildNetworkConnectMessage(BytesMessage byteMessage, String accountName, String userName, Long userId, String clientId, String nodeId, String remoteAddress) throws JMSException, KapuaInvalidTopicException {
         String topic = MessageFormat.format(CONNECT_TOPIC, accountName, clientId);
         
-        KapuaMessage edcMessage = buildNetworkEdcMessage(topic, accountName, userName, userId, clientId, nodeId, remoteAddress);
+        KapuaMessage kapuaMessage = buildNetworkKapuaMessage(topic, accountName, userName, userId, clientId, nodeId, remoteAddress);
 		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, topic);
 		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 
-		byteMessage.writeBytes(edcMessage.getPayload());
+		byteMessage.writeBytes(kapuaMessage.getPayload());
 		return topic;
 	}
 
@@ -129,16 +129,16 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	 * @return
 	 * @throws JMSException
 	 * @throws KapuaInvalidTopicException 
-	 * @throws EdcInvalidTopicException
+	 * @throws KapuaInvalidTopicException
 	 */
 	private String buildNetworkDisconnectMessage(BytesMessage byteMessage, String accountName, String userName, Long userId, String clientId, String remoteAddress) throws JMSException, KapuaInvalidTopicException {
-		KapuaMessage edcMessage = buildNetworkDisconnectMessage(accountName, userName, userId, clientId, remoteAddress);
-		String topic = edcMessage.getTopic();
+		KapuaMessage kapuaMessage = buildNetworkDisconnectMessage(accountName, userName, userId, clientId, remoteAddress);
+		String topic = kapuaMessage.getTopic();
 		
-		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, edcMessage.getTopic());
+		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, kapuaMessage.getTopic());
 		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 
-		byteMessage.writeBytes(edcMessage.getPayload());
+		byteMessage.writeBytes(kapuaMessage.getPayload());
 		return topic;
 	}
 
@@ -151,11 +151,11 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	 * @return
 	 * @throws JMSException
 	 * @throws KapuaInvalidTopicException 
-	 * @throws EdcInvalidTopicException
+	 * @throws KapuaInvalidTopicException
 	 */
 	public KapuaMessage buildNetworkDisconnectMessage(String accountName, String userName, Long userId, String clientId, String remoteAddress) throws JMSException, KapuaInvalidTopicException {
 		String topic = MessageFormat.format(DISCONNECT_TOPIC, accountName, clientId);
-		return buildNetworkEdcMessage(topic, accountName, userName, userId, clientId, null, remoteAddress);
+		return buildNetworkKapuaMessage(topic, accountName, userName, userId, clientId, null, remoteAddress);
 	}
 
 	/**
@@ -166,16 +166,16 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	 * @return
 	 * @throws JMSException
 	 * @throws KapuaInvalidTopicException 
-	 * @throws EdcInvalidTopicException
+	 * @throws KapuaInvalidTopicException
 	 */
 	private String buildNetworkMissingMessage(BytesMessage byteMessage, String accountName, String userName, Long userId, String clientId, String remoteAddress) throws JMSException, KapuaInvalidTopicException {
-		KapuaMessage edcMessage = buildNetworkMissingMessage(accountName, userName, userId, clientId, remoteAddress);
-		String topic = edcMessage.getTopic();
+		KapuaMessage kapuaMessage = buildNetworkMissingMessage(accountName, userName, userId, clientId, remoteAddress);
+		String topic = kapuaMessage.getTopic();
 		
-		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, edcMessage.getTopic());
+		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, kapuaMessage.getTopic());
 		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 
-		byteMessage.writeBytes(edcMessage.getPayload());
+		byteMessage.writeBytes(kapuaMessage.getPayload());
 		return topic;
 	}
 
@@ -187,11 +187,11 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	 * @param ip
 	 * @return
 	 * @throws KapuaInvalidTopicException 
-	 * @throws EdcInvalidTopicException
+	 * @throws KapuaInvalidTopicException
 	 */
 	public KapuaMessage buildNetworkMissingMessage(String accountName, String userName, Long userId, String clientId, String remoteAddress) throws KapuaInvalidTopicException {
 		String topic = MessageFormat.format(MISSING_TOPIC, accountName, clientId);
-		return buildNetworkEdcMessage(topic, accountName, userName, userId, clientId, null, remoteAddress);		
+		return buildNetworkKapuaMessage(topic, accountName, userName, userId, clientId, null, remoteAddress);		
 	}
 	
 	//==========================================================
@@ -200,7 +200,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	
 //	/**
 //	 * Send a message to insert an alert asynchronous (this message will be send to the internal EDC_SERVICE queue)
-//	 * The topic used for the instantiation of the EdcTopic it's different (MQTT wildcards) from the topic used to set the property PROPERTY_TOPIC_ORIG
+//	 * The topic used for the instantiation of the KapuaTopic it's different (MQTT wildcards) from the topic used to set the property PROPERTY_TOPIC_ORIG
 //	 * @param accountName
 //	 * @param accountId
 //	 * @param userName
@@ -208,29 +208,29 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 //	 * @param clientId
 //	 * @param category
 //	 * @param message
-//	 * @throws EdcInvalidTopicException
+//	 * @throws KapuaInvalidTopicException
 //	 * @throws JMSException
 //	 */
-//	public void sendAlertMessage(String accountName, String userName, String clientId, String category, Severity severity, String message) throws EdcInvalidTopicException, JMSException {
+//	public void sendAlertMessage(String accountName, String userName, String clientId, String category, Severity severity, String message) throws KapuaInvalidTopicException, JMSException {
 //		BytesMessage byteMessage = session.createBytesMessage();
 //		
 //		String topic = MessageFormat.format(ALERT_TOPIC_MQTT, accountName, clientId);
 //        
-//        EdcMessage edcMessage = buildNetworkEdcMessage(topic, accountName, userName, null, clientId, null, null);
-//        EdcPayload edcPayload = edcMessage.getEdcPayload();
-//		edcPayload.addMetric(METRIC_ALERT_CATEGORY, category);
-//		edcPayload.addMetric(METRIC_ALERT_MESSAGE, message);
+//        KapuaMessage kapuaMessage = buildNetworkKapuaMessage(topic, accountName, userName, null, clientId, null, null);
+//        KapuaPayload kapuaPayload = kapuaMessage.getKapuaPayload();
+//		kapuaPayload.addMetric(METRIC_ALERT_CATEGORY, category);
+//		kapuaPayload.addMetric(METRIC_ALERT_MESSAGE, message);
 //        if (severity!=null) {
-//        	edcPayload.addMetric(METRIC_ALERT_SEVERITY, severity.name());
+//        	kapuaPayload.addMetric(METRIC_ALERT_SEVERITY, severity.name());
 //        }
 //        else {
-//        	edcPayload.addMetric(METRIC_ALERT_SEVERITY, Severity.INFO);
+//        	kapuaPayload.addMetric(METRIC_ALERT_SEVERITY, Severity.INFO);
 //        }
 //		
 //		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, convertMqttWildCardToJms(topic));
 //		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 //		
-//		byteMessage.writeBytes(edcMessage.getPayload());
+//		byteMessage.writeBytes(kapuaMessage.getPayload());
 //		
 //		producer.send(byteMessage);
 //	}
@@ -249,7 +249,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	 * @param unlockOn
 	 * @throws JMSException
 	 * @throws KapuaInvalidTopicException 
-	 * @throws EdcInvalidTopicException
+	 * @throws KapuaInvalidTopicException
 	 */
 	public void sendUpdateLoginInfo(String accountName, String clientId, long accountId, long userId, UserStatus status,
 			Date loginOn, int loginAttempts, Date loginAttemptsResetOn, Date lockedOn, Date unlockOn) throws JMSException, KapuaInvalidTopicException {
@@ -264,7 +264,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	
 	/**
 	 * Prepare the update login info message (this message will be send to the internal EDC_SERVICE queue)
-	 * The topic used for the instantiation of the EdcTopic it's different (MQTT wildcards) from the topic used to set the property PROPERTY_TOPIC_ORIG
+	 * The topic used for the instantiation of the KapuaTopic it's different (MQTT wildcards) from the topic used to set the property PROPERTY_TOPIC_ORIG
 	 * @param byteMessage
 	 * @param accountName
 	 * @param clientId
@@ -276,7 +276,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	 * @param loginAttemptsResetOn
 	 * @param lockedOn
 	 * @param unlockOn
-	 * @throws EdcInvalidTopicException
+	 * @throws KapuaInvalidTopicException
 	 * @throws JMSException
 	 * @throws KapuaInvalidTopicException 
 	 */
@@ -285,32 +285,32 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		String topic = MessageFormat.format(UPDATE_LOGIN_INFO_TOPIC_MQTT, accountName, clientId);
         
 		String uuid = UUID.randomUUID().toString();
-		KapuaTopic edcTopic = new KapuaTopic(topic);
-		KapuaPayload edcpay = new KapuaPayload();
-		edcpay.addMetric(METRIC_USER_ID, userId);
+		KapuaTopic kapuaTopic = new KapuaTopic(topic);
+		KapuaPayload kapuapay = new KapuaPayload();
+		kapuapay.addMetric(METRIC_USER_ID, userId);
 		if (status!=null) {
-			edcpay.addMetric(METRIC_STATUS, status.name());
+			kapuapay.addMetric(METRIC_STATUS, status.name());
 		}
 		if (loginOn!=null) {
-			edcpay.addMetric(METRIC_LOGIN_ON, loginOn.getTime());
+			kapuapay.addMetric(METRIC_LOGIN_ON, loginOn.getTime());
 		}
-		edcpay.addMetric(METRIC_LOGIN_ATTEMPTS, loginAttempts);
+		kapuapay.addMetric(METRIC_LOGIN_ATTEMPTS, loginAttempts);
 		if (loginAttemptsResetOn!=null) {
-			edcpay.addMetric(METRIC_LOGIN_ATTEMPTS_RESET_ON, loginAttemptsResetOn.getTime());
+			kapuapay.addMetric(METRIC_LOGIN_ATTEMPTS_RESET_ON, loginAttemptsResetOn.getTime());
 		}
 		if (lockedOn!=null) {
-			edcpay.addMetric(METRIC_LOCKED_ON, lockedOn.getTime());
+			kapuapay.addMetric(METRIC_LOCKED_ON, lockedOn.getTime());
 		}
 		if (unlockOn!=null) {
-			edcpay.addMetric(METRIC_UNLOCK_ON, unlockOn.getTime());
+			kapuapay.addMetric(METRIC_UNLOCK_ON, unlockOn.getTime());
 		}
 
-		KapuaMessage edcMessage = new KapuaMessage(edcTopic, new Date(), uuid, edcpay);
+		KapuaMessage kapuaMessage = new KapuaMessage(kapuaTopic, new Date(), uuid, kapuapay);
 		
 		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, convertMqttWildCardToJms(topic));
 		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 
-		byteMessage.writeBytes(edcMessage.getPayload());
+		byteMessage.writeBytes(kapuaMessage.getPayload());
 	}
 	
 	/**
@@ -318,7 +318,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	 * @param messageNotStored
 	 * @param topic
 	 * @throws JMSException
-	 * @throws EdcInvalidTopicException
+	 * @throws KapuaInvalidTopicException
 	 */
 	public void sendDataMessageNotStored(String topic, byte[] messageNotStored) throws JMSException {
 		BytesMessage message = session.createBytesMessage();
@@ -330,24 +330,24 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		producer.send(message);
 	}
 	
-	private KapuaMessage buildNetworkEdcMessage(String topic, String accountName, String userName, Long userId, String clientId, String nodeId, String remoteAddress) throws KapuaInvalidTopicException {
+	private KapuaMessage buildNetworkKapuaMessage(String topic, String accountName, String userName, Long userId, String clientId, String nodeId, String remoteAddress) throws KapuaInvalidTopicException {
 		String uuid = UUID.randomUUID().toString();
-		KapuaTopic edcTopic = new KapuaTopic(topic);
-		KapuaPayload edcpay = new KapuaPayload();
-		edcpay.addMetric(METRIC_USERNAME, userName);
+		KapuaTopic kapuaTopic = new KapuaTopic(topic);
+		KapuaPayload kapuapay = new KapuaPayload();
+		kapuapay.addMetric(METRIC_USERNAME, userName);
 		if (userId!=null) {
-			edcpay.addMetric(METRIC_USER_ID, userId);
+			kapuapay.addMetric(METRIC_USER_ID, userId);
 		}
-		edcpay.addMetric(METRIC_ACCOUNT, accountName);
-		edcpay.addMetric(METRIC_CLIENT_ID, clientId);
+		kapuapay.addMetric(METRIC_ACCOUNT, accountName);
+		kapuapay.addMetric(METRIC_CLIENT_ID, clientId);
 		if (nodeId != null) {
-			edcpay.addMetric(METRIC_NODE_ID, nodeId);
+			kapuapay.addMetric(METRIC_NODE_ID, nodeId);
 		}
 		if (remoteAddress != null) {
-			edcpay.addMetric(METRIC_IP, remoteAddress);
+			kapuapay.addMetric(METRIC_IP, remoteAddress);
 		}
 
-		return new KapuaMessage(edcTopic, new Date(), uuid, edcpay);
+		return new KapuaMessage(kapuaTopic, new Date(), uuid, kapuapay);
 	}
 	
 	// =========================================

@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     Eurotech - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.kapua.broker.core.plugin;
 
 import java.net.URI;
@@ -67,6 +55,7 @@ import org.eclipse.kapua.KapuaIllegalNullArgumentException;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
 import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
 import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool;
+import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerWrapper;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
@@ -74,7 +63,7 @@ import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.util.SubjectUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.messages.KapuaMessage;
+import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.model.id.KapuaId;
 //import org.eclipse.kapua.mqtt.MqttUtils;
 import org.eclipse.kapua.service.account.Account;
@@ -602,6 +591,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
             KapuaId scopeId = accessToken.getScopeId();
             KapuaId userId = accessToken.getUserId();
+            //TODO implement service to get the account name
             String accountName = "";
 //            EdcSession edcSession = authSrv.getCurrentSession();
 //            User currentUser = edcSession.getUser();
@@ -615,12 +605,13 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //            long accountId = edcSession.getSessionAccountId();
 
             // multiple account stealing link fix
-            String fullClientId = MessageFormat.format(MULTI_ACCOUNT_CLIENT_ID, accountName, clientId);
+            String fullClientId = MessageFormat.format(MULTI_ACCOUNT_CLIENT_ID, scopeId.getId().longValue(), clientId);
 
-            KapuaPrincipal principal = new KapuaPrincipal(scopeId.getId().longValue(),
-                                                      clientId,
-                                                      clientIp,
-                                                      connectionId);
+            KapuaPrincipal principal = new KapuaPrincipal(username,
+										            scopeId.getId().longValue(),
+                                                    clientId,
+                                                    clientIp,
+                                                    connectionId);
 
             // 3) check authorization
             DefaultAuthorizationMap authMap = null;
@@ -877,7 +868,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             // 7) logout
         	Context loginShiroLogoutTimeContext = metricLoginShiroLogoutTime.time();
 
-            SubjectUtils.logout();
+        	authenticationService.logout();
 
             loginShiroLogoutTimeContext.stop();
             loginTotalContext.stop();
@@ -897,12 +888,16 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         		
         		KapuaPrincipal edcPrincipal = ((KapuaPrincipal) edcSecurityContext.getMainPrincipal());
         		String clientId = edcPrincipal.getClientId();
-        		long accountId = edcPrincipal.getAccountName();
+        		long accountId = edcPrincipal.getAccountId();
+        		//TODO implement service to get the account name
+        		String accountName = "";
         		String username = edcSecurityContext.getUserName();
         		String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
         		
         		// multiple account stealing link fix
         		String fullClientId = MessageFormat.format(MULTI_ACCOUNT_CLIENT_ID, accountId, clientId);
+        		
+        		DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
         		
         		if (!isAdminUser(username)) {
         			// Stealing link check
@@ -955,14 +950,14 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         						}
         						else {
         							s_logger.warn("@@ can't send disconnect message because the connection is not active... maybe that the broker is shutting down...");
-        							try {
-        								SubjectUtils.loginEdcSys();
+//        							try {
+//        								SubjectUtils.loginEdcSys();
         								KapuaMessage message = producer.buildNetworkDisconnectMessage(accountName, username, null, clientId, remoteAddress);
-        								locator.getDeviceService().disconnect(accountName, clientId, message);
-        							}
-        							finally {
-        								SubjectUtils.logout();
-        							}
+        								deviceRegistryService.disconnect(accountName, clientId, message);
+//        							}
+//        							finally {
+//        								SubjectUtils.logout();
+//        							}
         						}
         					}
         					else if (error instanceof KapuaDuplicateClientIdException) {
@@ -977,14 +972,14 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         						}
         						else {
         							s_logger.warn("@@ can't send missing message because the connection is not active... maybe that the broker is shutting down...");
-        							try {
-        								SubjectUtils.loginEdcSys();
+//        							try {
+//        								SubjectUtils.loginEdcSys();
         								KapuaMessage message = producer.buildNetworkMissingMessage(accountName, username, null, clientId, remoteAddress);
         								locator.getDeviceService().missing(accountName, clientId, message);
-        							}
-        							finally {
-        								SubjectUtils.logout();
-        							}
+//        							}
+//        							finally {
+//        								SubjectUtils.logout();
+//        							}
         						}
         					}
         				}

@@ -25,6 +25,9 @@
 
 	<properties>
 		<camel.version>2.15.1</camel.version>
+		<activemq.version>5.11.0</activemq.version>
+        <shiro.version>1.2.3</shiro.version>
+        <commons.pool.version>2.2</commons.pool.version>
 	</properties>
 
 
@@ -58,7 +61,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.messages</artifactId>
+			<artifactId>org.eclipse.kapua.message</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
