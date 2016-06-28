@@ -12,8 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.model.query;
 
-public enum MessageFetchStyle {
-    METADATA,
-    METADATA_HEADERS,
-    METADATA_HEADERS_PAYLOAD;
+public enum MessageFetchStyle
+{
+    METADATA, METADATA_HEADERS, METADATA_HEADERS_PAYLOAD;
 }

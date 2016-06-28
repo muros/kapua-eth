@@ -21,21 +21,25 @@ public class StorableTopicQueryImpl extends AbstractStorableQuery<TopicInfo> imp
 
     private String prefix;
 
-    public StorableTopicQueryImpl() {
+    public StorableTopicQueryImpl()
+    {
         super();
         this.prefix = null;
     }
 
-    public StorableTopicQueryImpl(String prefix) {
+    public StorableTopicQueryImpl(String prefix)
+    {
         super();
         this.prefix = prefix;
     }
 
-    public String getPrefix() {
+    public String getPrefix()
+    {
         return prefix;
     }
 
-    public TopicInfoQuery setPrefix(String prefix) {
+    public TopicInfoQuery setPrefix(String prefix)
+    {
         this.prefix = prefix;
         return this;
     }

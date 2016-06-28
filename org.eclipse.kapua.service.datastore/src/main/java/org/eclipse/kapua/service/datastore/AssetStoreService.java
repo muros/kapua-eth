@@ -16,9 +16,14 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.KapuaService;
 import org.eclipse.kapua.service.datastore.model.AssetInfo;
 
-public interface AssetStoreService extends KapuaService 
+public interface AssetStoreService extends KapuaService
 {
-    public void delete(String scopeName, String uuid) throws KapuaException;
-    public AssetInfo find(String scopeName, String uuid) throws KapuaException;
-    public StorableResultList<AssetInfo> query(String scopeName, StorableQuery<AssetInfo> query) throws KapuaException;
+    public void delete(String scopeName, String uuid)
+        throws KapuaException;
+
+    public AssetInfo find(String scopeName, String uuid)
+        throws KapuaException;
+
+    public StorableResultList<AssetInfo> query(String scopeName, StorableQuery<AssetInfo> query)
+        throws KapuaException;
 }

@@ -31,180 +31,199 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
 
-public class EsTypeDAO {
-	
-	private Client client;
-	
-	private String indexName;
-	private String typeName;
-	private EsDaoListener eventListener;
-	
-	protected EsTypeDAO() {}
-	
-	protected Client getClient() {
-		return client;
-	}
-	
-	protected String getIndexName() {
-		return indexName;
-	}
-	
-	protected String getTypeName() {
-		return typeName;
-	}
-	
-	public EsTypeDAO setListener(EsDaoListener eventListener) throws EsDatastoreException {
-		
-		if (this.eventListener != null && this.eventListener != eventListener)
-			throw new EsDatastoreException("Listener already set. Use unset to uregister the previuos listener.");
-		
-		this.eventListener = eventListener;
-		return this;
-	}
-		
-	public EsTypeDAO unsetListener(EsDaoListener eventListener) throws EsDatastoreException {
-		
-		if (this.eventListener != null && this.eventListener != eventListener)
-			throw new EsDatastoreException("Listener cannot be unset. The provided listener does not match.");
-		
-		this.eventListener = null;
-		return this;
-	}
+public class EsTypeDAO
+{
 
-	public static EsTypeDAO connection(Client client) {
-		EsTypeDAO esTypeDAO = new EsTypeDAO();
-		esTypeDAO.client = client;
-		return esTypeDAO;
-	}
-	
-	public EsTypeDAO instance(String indexName, String typeName) {
-		this.indexName = indexName;
-		this.typeName = typeName;
-		return this;
-	}
-	
-	public String insert(XContentBuilder esAsset) {
+    private Client        client;
 
-		assert this.client != null : "ES client must be not null";
-		long timeout = EsUtils.getQueryTimeout();
+    private String        indexName;
+    private String        typeName;
+    private EsDaoListener eventListener;
 
-		IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName).source(esAsset);
-		IndexResponse response = this.client.index(idxRequest).actionGet(TimeValue.timeValueMillis(timeout));		
-		return response.getId();
-	}
-	
-	public UpdateResponse update(String id, XContentBuilder esAsset) {
+    protected EsTypeDAO()
+    {
+    }
 
-		assert this.client != null : "ES client must be not null";
-		assert id != null : "ES client must be not null";
-		assert !id.isEmpty() : "Document id must be not empty";
-		
-		long timeout = EsUtils.getQueryTimeout();
-		
-		UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esAsset);
-		UpdateResponse response = this.client.update(updRequest)
-											 .actionGet(TimeValue.timeValueMillis(timeout));
-		return response;
-	}
-	
-	public UpdateRequest getUpsertRequest(String id, Map<String, Object> esAsset) {
+    protected Client getClient()
+    {
+        return client;
+    }
 
-		assert this.client != null : "ES client must be not null";
+    protected String getIndexName()
+    {
+        return indexName;
+    }
 
-		IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName, id).source(esAsset);
-		UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esAsset);
-		updRequest.upsert(idxRequest);
-		return updRequest;
-	}
-	
-	public UpdateRequest getUpsertRequest(String id, XContentBuilder esAsset) {
+    protected String getTypeName()
+    {
+        return typeName;
+    }
 
-		assert this.client != null : "ES client must be not null";
+    public EsTypeDAO setListener(EsDaoListener eventListener)
+        throws EsDatastoreException
+    {
 
-		IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName, id).source(esAsset);
-		UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esAsset);
-		updRequest.upsert(idxRequest);
-		return updRequest;
-	}
-	
-	public UpdateResponse upsert(String id, XContentBuilder esAsset) {
+        if (this.eventListener != null && this.eventListener != eventListener)
+            throw new EsDatastoreException("Listener already set. Use unset to uregister the previuos listener.");
 
-		assert this.client != null : "ES client must be not null";
+        this.eventListener = eventListener;
+        return this;
+    }
 
-		long timeout = EsUtils.getQueryTimeout();
-		
-		IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName, id).source(esAsset);
-		UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esAsset);
-		UpdateResponse response = this.client.update(updRequest.upsert(idxRequest)).actionGet(TimeValue.timeValueMillis(timeout));		
-		return response;
-	}
-	
-	public UpdateResponse upsert(String id, Map<String, Object> esMessage) {
+    public EsTypeDAO unsetListener(EsDaoListener eventListener)
+        throws EsDatastoreException
+    {
 
-		assert this.client != null : "ES client must be not null";
+        if (this.eventListener != null && this.eventListener != eventListener)
+            throw new EsDatastoreException("Listener cannot be unset. The provided listener does not match.");
 
-		long timeout = EsUtils.getQueryTimeout();
+        this.eventListener = null;
+        return this;
+    }
 
-		IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName, id).source(esMessage);
-		UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esMessage);
-		UpdateResponse response = this.client.update(updRequest.upsert(idxRequest)).actionGet(TimeValue.timeValueMillis(timeout));		
-		return response;
-	}
-	
-	public void deleteByQuery(BoolQueryBuilder boolQuery) {
-		
+    public static EsTypeDAO connection(Client client)
+    {
+        EsTypeDAO esTypeDAO = new EsTypeDAO();
+        esTypeDAO.client = client;
+        return esTypeDAO;
+    }
 
-		TimeValue queryTimeout = TimeValue.timeValueMillis(EsUtils.getQueryTimeout());
-		TimeValue scrollTimeout = TimeValue.timeValueMillis(EsUtils.getScrollTimeout());
-		
-		// delete by query API is deprecated, scroll with bulk delete must be used
-		SearchResponse scrollResponse = this.client.prepareSearch(this.getIndexName())
-												   .setTypes(this.getTypeName())
-												   .setFetchSource(false)
-												   .addSort("_doc", SortOrder.ASC)
-												   .setVersion(true)
-												   .setScroll(scrollTimeout)
-												   .setQuery(boolQuery)
-												   .setSize(100)
-												   .get(queryTimeout);
-		
-		//Scroll until no hits are returned
-		while (true) {
-		    
-		    //Break condition: No hits are returned
-		    if (scrollResponse.getHits().getHits().length == 0)
-		        break;
+    public EsTypeDAO instance(String indexName, String typeName)
+    {
+        this.indexName = indexName;
+        this.typeName = typeName;
+        return this;
+    }
+
+    public String insert(XContentBuilder esAsset)
+    {
+
+        assert this.client != null : "ES client must be not null";
+        long timeout = EsUtils.getQueryTimeout();
+
+        IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName).source(esAsset);
+        IndexResponse response = this.client.index(idxRequest).actionGet(TimeValue.timeValueMillis(timeout));
+        return response.getId();
+    }
+
+    public UpdateResponse update(String id, XContentBuilder esAsset)
+    {
+
+        assert this.client != null : "ES client must be not null";
+        assert id != null : "ES client must be not null";
+        assert !id.isEmpty() : "Document id must be not empty";
+
+        long timeout = EsUtils.getQueryTimeout();
+
+        UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esAsset);
+        UpdateResponse response = this.client.update(updRequest)
+                                             .actionGet(TimeValue.timeValueMillis(timeout));
+        return response;
+    }
+
+    public UpdateRequest getUpsertRequest(String id, Map<String, Object> esAsset)
+    {
+
+        assert this.client != null : "ES client must be not null";
+
+        IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName, id).source(esAsset);
+        UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esAsset);
+        updRequest.upsert(idxRequest);
+        return updRequest;
+    }
+
+    public UpdateRequest getUpsertRequest(String id, XContentBuilder esAsset)
+    {
+
+        assert this.client != null : "ES client must be not null";
+
+        IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName, id).source(esAsset);
+        UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esAsset);
+        updRequest.upsert(idxRequest);
+        return updRequest;
+    }
+
+    public UpdateResponse upsert(String id, XContentBuilder esAsset)
+    {
+
+        assert this.client != null : "ES client must be not null";
+
+        long timeout = EsUtils.getQueryTimeout();
+
+        IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName, id).source(esAsset);
+        UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esAsset);
+        UpdateResponse response = this.client.update(updRequest.upsert(idxRequest)).actionGet(TimeValue.timeValueMillis(timeout));
+        return response;
+    }
+
+    public UpdateResponse upsert(String id, Map<String, Object> esMessage)
+    {
+
+        assert this.client != null : "ES client must be not null";
+
+        long timeout = EsUtils.getQueryTimeout();
+
+        IndexRequest idxRequest = new IndexRequest(this.indexName, this.typeName, id).source(esMessage);
+        UpdateRequest updRequest = new UpdateRequest(this.indexName, this.typeName, id).doc(esMessage);
+        UpdateResponse response = this.client.update(updRequest.upsert(idxRequest)).actionGet(TimeValue.timeValueMillis(timeout));
+        return response;
+    }
+
+    public void deleteByQuery(BoolQueryBuilder boolQuery)
+    {
+
+        TimeValue queryTimeout = TimeValue.timeValueMillis(EsUtils.getQueryTimeout());
+        TimeValue scrollTimeout = TimeValue.timeValueMillis(EsUtils.getScrollTimeout());
+
+        // delete by query API is deprecated, scroll with bulk delete must be used
+        SearchResponse scrollResponse = this.client.prepareSearch(this.getIndexName())
+                                                   .setTypes(this.getTypeName())
+                                                   .setFetchSource(false)
+                                                   .addSort("_doc", SortOrder.ASC)
+                                                   .setVersion(true)
+                                                   .setScroll(scrollTimeout)
+                                                   .setQuery(boolQuery)
+                                                   .setSize(100)
+                                                   .get(queryTimeout);
+
+        // Scroll until no hits are returned
+        while (true) {
+
+            // Break condition: No hits are returned
+            if (scrollResponse.getHits().getHits().length == 0)
+                break;
 
             BulkRequest bulkRequest = new BulkRequest();
             for (SearchHit hit : scrollResponse.getHits().hits()) {
                 DeleteRequest delete = new DeleteRequest().index(hit.index())
-                										  .type(hit.type())
-                										  .id(hit.id())
-                										  .version(hit.version());
+                                                          .type(hit.type())
+                                                          .id(hit.id())
+                                                          .version(hit.version());
                 bulkRequest.add(delete);
             }
 
             this.getClient().bulk(bulkRequest).actionGet(queryTimeout);
-            
+
             // TODO manage events
             if (eventListener != null)
-            	eventListener.notify(new EsTypeCrudEvent());
-            
-		    scrollResponse = this.client.prepareSearchScroll(scrollResponse.getScrollId())
-			    					   .setScroll(scrollTimeout)
-			    					   .execute()
-			    					   .actionGet(queryTimeout);
-		}
-	}
-	
-	public BulkResponse bulk(BulkRequest bulkRequest) {
+                eventListener.notify(new EsTypeCrudEvent());
 
-		assert this.client != null : "ES client must be not null";
-		assert bulkRequest != null : "Bulk request list must not be null";
-		
-		long timeout = EsUtils.getQueryTimeout();
+            scrollResponse = this.client.prepareSearchScroll(scrollResponse.getScrollId())
+                                        .setScroll(scrollTimeout)
+                                        .execute()
+                                        .actionGet(queryTimeout);
+        }
+    }
+
+    public BulkResponse bulk(BulkRequest bulkRequest)
+    {
+
+        assert this.client != null : "ES client must be not null";
+        assert bulkRequest != null : "Bulk request list must not be null";
+
+        long timeout = EsUtils.getQueryTimeout();
 
         BulkResponse bulkResponse = this.getClient().bulk(bulkRequest).actionGet(timeout);
-		return bulkResponse;
-	}
+        return bulkResponse;
+    }
 }

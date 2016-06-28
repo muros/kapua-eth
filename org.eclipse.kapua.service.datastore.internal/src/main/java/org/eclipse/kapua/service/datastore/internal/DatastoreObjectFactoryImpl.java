@@ -58,7 +58,7 @@ public class DatastoreObjectFactoryImpl implements DatastoreObjectFactory
 
     @Override
     public Position newPosition()
-    { 
+    {
         return new PositionImpl();
     }
 

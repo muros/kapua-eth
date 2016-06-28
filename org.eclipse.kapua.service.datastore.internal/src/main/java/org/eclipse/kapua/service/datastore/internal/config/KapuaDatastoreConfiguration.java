@@ -29,17 +29,16 @@ import org.slf4j.LoggerFactory;
  */
 public class KapuaDatastoreConfiguration
 {
-	private static final Logger s_logger = LoggerFactory.getLogger(KapuaDatastoreConfiguration.class);
-	
-	private static final String DATASTORE_CONFIG_RESOURCE = "kapua-datastore-config.properties";
+    private static final Logger    s_logger                  = LoggerFactory.getLogger(KapuaDatastoreConfiguration.class);
+    private static final String    DATASTORE_CONFIG_RESOURCE = "kapua-datastore-config.properties";
+    protected static Configuration s_config                  = null;
 
-	protected static Configuration s_config = null;
     static {
-    	
+
         CompositeConfiguration compositeConfig = new CompositeConfiguration();
-        try {        
-        	URL serviceConfigUrl = ResourceUtils.getResource(DATASTORE_CONFIG_RESOURCE);
-        	compositeConfig.addConfiguration(new PropertiesConfiguration(serviceConfigUrl));
+        try {
+            URL serviceConfigUrl = ResourceUtils.getResource(DATASTORE_CONFIG_RESOURCE);
+            compositeConfig.addConfiguration(new PropertiesConfiguration(serviceConfigUrl));
         }
         catch (Exception e) {
             s_logger.error("Error loading PropertiesConfiguration", e);
@@ -49,14 +48,18 @@ public class KapuaDatastoreConfiguration
         compositeConfig.addConfiguration(KapuaEnvironmentConfiguration.getConfiguration());
         s_config = compositeConfig;
     }
-    
-    private KapuaDatastoreConfiguration() {}
-    	
+
+    private KapuaDatastoreConfiguration()
+    {
+    }
+
     /**
      * Returns the Configuration instance used by this KapuaCommonsConfiguration.
+     * 
      * @return
      */
-    public static Configuration getConfiguration() {
+    public static Configuration getConfiguration()
+    {
         return s_config;
     }
 }

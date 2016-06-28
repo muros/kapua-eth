@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.datastore.StorableResultList;
 import org.eclipse.kapua.service.datastore.TopicStoreService;
 import org.eclipse.kapua.service.datastore.model.TopicInfo;
 
-public class TopicStoreServiceImpl  implements TopicStoreService
+public class TopicStoreServiceImpl implements TopicStoreService
 {
 
     @Override
@@ -26,7 +26,7 @@ public class TopicStoreServiceImpl  implements TopicStoreService
         throws KapuaException
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override

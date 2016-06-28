@@ -16,11 +16,11 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.Map;
 
-import org.eclipse.kapua.client.message.KapuaInvalidTopicException;
-import org.eclipse.kapua.client.message.KapuaMessage;
-import org.eclipse.kapua.client.message.KapuaPayload;
-import org.eclipse.kapua.client.message.KapuaPosition;
-import org.eclipse.kapua.client.message.KapuaTopic;
+import org.eclipse.kapua.message.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.message.KapuaPosition;
+import org.eclipse.kapua.message.KapuaTopic;
 import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;

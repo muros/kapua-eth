@@ -13,6 +13,6 @@
 package org.eclipse.kapua.service.datastore.internal;
 
 public interface PermissionAction
-{    
+{
     public String key();
 }

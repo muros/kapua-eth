@@ -19,7 +19,8 @@ public class TopicImpl implements Topic
     private String fullTopic;
 
     @Override
-    public String getTopicName() {
+    public String getTopicName()
+    {
         return fullTopic;
     }
 

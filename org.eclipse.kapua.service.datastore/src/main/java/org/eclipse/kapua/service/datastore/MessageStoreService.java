@@ -20,10 +20,17 @@ import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
 
 public interface MessageStoreService extends KapuaService,
-                                             KapuaConfigurableService
+                                     KapuaConfigurableService
 {
-    public String store(String scopeName, MessageCreator message) throws KapuaException;
-    public void delete(String scopeName, String uuid) throws KapuaException;
-    public Message find(String scopeName, String uuid, MessageFetchStyle fetchStyle) throws KapuaException;
-    public StorableResultList<Message> query(String scopeName, StorableQuery<Message> query) throws KapuaException;
+    public String store(String scopeName, MessageCreator message)
+        throws KapuaException;
+
+    public void delete(String scopeName, String uuid)
+        throws KapuaException;
+
+    public Message find(String scopeName, String uuid, MessageFetchStyle fetchStyle)
+        throws KapuaException;
+
+    public StorableResultList<Message> query(String scopeName, StorableQuery<Message> query)
+        throws KapuaException;
 }

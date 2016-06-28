@@ -15,7 +15,8 @@ package org.eclipse.kapua.service.datastore.internal.model;
 import javax.xml.bind.annotation.XmlEnum;
 
 @XmlEnum
-public enum MetricsIndexBy {
+public enum MetricsIndexBy 
+{
     TIMESTAMP,
     VALUE,
     NONE;

@@ -21,26 +21,31 @@ public abstract class AbstractStorableQuery<E extends Storable> implements Stora
     private Object keyOffset;
     private int    indexOffset;
 
-    public AbstractStorableQuery() {
+    public AbstractStorableQuery()
+    {
         limit = 50;
         keyOffset = null;
         indexOffset = 0;
     }
 
-    public Object getKeyOffset() {
+    public Object getKeyOffset()
+    {
         return keyOffset;
     }
 
-    public StorableQuery<E> setKeyOffset(Object offset) {
+    public StorableQuery<E> setKeyOffset(Object offset)
+    {
         this.keyOffset = offset;
         return this;
     }
 
-    public int getIndexOffset() {
+    public int getIndexOffset()
+    {
         return indexOffset;
     }
 
-    public StorableQuery<E> setIndexOffset(int offset) {
+    public StorableQuery<E> setIndexOffset(int offset)
+    {
         this.indexOffset = offset;
         return this;
     }
@@ -57,7 +62,8 @@ public abstract class AbstractStorableQuery<E extends Storable> implements Stora
         return this;
     }
 
-    public int getLimit() {
+    public int getLimit()
+    {
         return limit;
     }
 }

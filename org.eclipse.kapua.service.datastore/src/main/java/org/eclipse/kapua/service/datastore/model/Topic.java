@@ -15,5 +15,6 @@ package org.eclipse.kapua.service.datastore.model;
 public interface Topic
 {
     public String getTopicName();
+
     public void setTopicName(String topicName);
 }

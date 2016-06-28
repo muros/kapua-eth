@@ -16,7 +16,7 @@ import org.eclipse.kapua.service.datastore.internal.AbstractStorableQuery;
 import org.eclipse.kapua.service.datastore.model.AssetInfo;
 import org.eclipse.kapua.service.datastore.model.query.AssetInfoQuery;
 
-public class StorableAssetQueryImpl extends AbstractStorableQuery<AssetInfo> implements  AssetInfoQuery
+public class StorableAssetQueryImpl extends AbstractStorableQuery<AssetInfo> implements AssetInfoQuery
 {
 
 }

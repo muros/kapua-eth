@@ -15,7 +15,8 @@ package org.eclipse.kapua.service.datastore.internal.model;
 import javax.xml.bind.annotation.XmlEnum;
 
 @XmlEnum
-public enum DataIndexBy {
+public enum DataIndexBy 
+{
     SERVER_TIMESTAMP,
     DEVICE_TIMESTAMP;
 }

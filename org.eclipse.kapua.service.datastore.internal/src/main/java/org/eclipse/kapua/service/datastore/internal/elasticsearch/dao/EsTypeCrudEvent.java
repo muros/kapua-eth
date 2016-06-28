@@ -12,55 +12,66 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.internal.elasticsearch.dao;
 
-public class EsTypeCrudEvent extends EsDaoEvent {
+public class EsTypeCrudEvent extends EsDaoEvent
+{
 
-	public enum Operation {
-		INSERT,
-		UPSERT,
-		DELETE
-	}
+    public enum Operation
+    {
+        INSERT, 
+        UPSERT, 
+        DELETE
+    }
 
-	public enum OperationResult {
-		SUCCESS,
-		FAILURE
-	}
-	
-	private Operation operation;
-	private OperationResult operResult;
-	
-	private String account;
-	private String type;
-	
-	public Operation getOperation() {
-		return operation;
-	}
-	
-	public void setOperation(Operation operation) {
-		this.operation = operation;
-	}
-	
-	public OperationResult getOperResult() {
-		return operResult;
-	}
-	
-	public void setOperResult(OperationResult operResult) {
-		this.operResult = operResult;
-	}
+    public enum OperationResult
+    {
+        SUCCESS, 
+        FAILURE
+    }
 
-	public String getAccount() {
-		return account;
-	}
-	
-	public void setAccount(String account) {
-		this.account = account;
-	}
+    private Operation       operation;
+    private OperationResult operResult;
 
-	public String getType() {
-		return type;
-	}
-	
-	public void setType(String type) {
-		this.type = type;
-	}
-	
+    private String          account;
+    private String          type;
+
+    public Operation getOperation()
+    {
+        return operation;
+    }
+
+    public void setOperation(Operation operation)
+    {
+        this.operation = operation;
+    }
+
+    public OperationResult getOperResult()
+    {
+        return operResult;
+    }
+
+    public void setOperResult(OperationResult operResult)
+    {
+        this.operResult = operResult;
+    }
+
+    public String getAccount()
+    {
+        return account;
+    }
+
+    public void setAccount(String account)
+    {
+        this.account = account;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
 }

@@ -22,53 +22,61 @@ import org.eclipse.kapua.service.datastore.model.Position;
 public class PayloadImpl implements Payload
 {
     private Date                collectedOn;
-    private Position         position;
+    private Position            position;
     private Map<String, Object> metrics;
     private byte[]              body;
 
-    public PayloadImpl() {
-        metrics       = new HashMap<String,Object>();
-        this.body     = null;
+    public PayloadImpl()
+    {
+        metrics = new HashMap<String, Object>();
+        this.body = null;
     }
-    
+
     @Override
-    public Date getCollectedOn() {
+    public Date getCollectedOn()
+    {
         return collectedOn;
     }
 
     @Override
-    public void setCollectedOn(Date collectedOn) {
+    public void setCollectedOn(Date collectedOn)
+    {
         this.collectedOn = collectedOn;
     }
 
     @Override
-    public Position getPosition() {
+    public Position getPosition()
+    {
         return position;
     }
 
     @Override
-    public void setPosition(Position position) {
+    public void setPosition(Position position)
+    {
         this.position = position;
     }
 
     @Override
-    public Map<String,Object> getMetrics() {
+    public Map<String, Object> getMetrics()
+    {
         return metrics;
     }
 
     @Override
     public void setMetrics(Map<String, Object> metrics)
     {
-           this.metrics = metrics;
+        this.metrics = metrics;
     }
 
     @Override
-    public byte[] getBody() {
+    public byte[] getBody()
+    {
         return body;
     }
 
     @Override
-    public void setBody(byte[] body) {
+    public void setBody(byte[] body)
+    {
         this.body = body;
     }
 }

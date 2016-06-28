@@ -21,9 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.kapua.client.message.KapuaMessage;
-import org.eclipse.kapua.client.message.KapuaPayload;
-import org.eclipse.kapua.client.message.KapuaPosition;
+import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.message.KapuaPosition;
 import org.elasticsearch.common.Base64;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;

@@ -19,7 +19,10 @@ import java.util.Map;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 
-public class KapuaMetricValueBuilder {
+import org.eclipse.kapua.service.datastore.internal.elasticsearch.KapuaMetricValue;
+
+public class KapuaMetricValueBuilder 
+{
 	private KapuaMetricValue metricValue;
 	
 	/**

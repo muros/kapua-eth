@@ -34,12 +34,12 @@ import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
 public class MessageStoreServiceImpl implements MessageStoreService
 {
     private EsMessageStoreServiceImpl esMessageStoreService;
-    
-    public MessageStoreServiceImpl() 
+
+    public MessageStoreServiceImpl()
     {
         esMessageStoreService = new EsMessageStoreServiceImpl(this);
     }
-    
+
     @Override
     public String store(String scopeName, MessageCreator messageCreator)
         throws KapuaException
@@ -55,7 +55,7 @@ public class MessageStoreServiceImpl implements MessageStoreService
         throws KapuaException
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -94,7 +94,7 @@ public class MessageStoreServiceImpl implements MessageStoreService
 
         Account account = accountService.findByName(scopeName);
 
-        //TODO add enum for actions
+        // TODO add enum for actions
         Permission permission = permissionFactory.newInstance("data", action.key(), account.getId());
         authorizationService.checkPermission(permission);
     }
@@ -120,6 +120,6 @@ public class MessageStoreServiceImpl implements MessageStoreService
         throws KapuaException
     {
         // TODO Auto-generated method stub
-        
+
     }
 }

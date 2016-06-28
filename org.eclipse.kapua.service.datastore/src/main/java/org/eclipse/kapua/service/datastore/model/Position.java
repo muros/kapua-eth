@@ -20,7 +20,7 @@ public interface Position
 
     public void setLongitude(double longitude);
 
-    public Double getLatitude() ;
+    public Double getLatitude();
 
     public void setLatitude(double latitude);
 
@@ -30,7 +30,7 @@ public interface Position
 
     public Double getPrecision();
 
-    public void setPrecision(double precision) ;
+    public void setPrecision(double precision);
 
     public Double getHeading();
 
@@ -38,7 +38,7 @@ public interface Position
 
     public Double getSpeed();
 
-    public void setSpeed(double speed) ;
+    public void setSpeed(double speed);
 
     public Date getTimestamp();
 

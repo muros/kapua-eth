@@ -16,18 +16,18 @@ import org.eclipse.kapua.service.datastore.internal.PermissionAction;
 
 public enum DatastorePermAction implements PermissionAction
 {
-    CREATE("create"),
-    UPDATE("update"),
-    DELETE("delete"),
+    CREATE("create"), 
+    UPDATE("update"), 
+    DELETE("delete"), 
     READ("read");
-    
+
     private String key;
-    
+
     private DatastorePermAction(String key)
     {
         this.key = key;
     }
-    
+
     public String key()
     {
         return this.key;

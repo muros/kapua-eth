@@ -26,7 +26,7 @@ public class AssetStoreServiceImpl implements AssetStoreService
         throws KapuaException
     {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override

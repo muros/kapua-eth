@@ -18,7 +18,12 @@ import org.eclipse.kapua.service.datastore.model.TopicInfo;
 
 public interface TopicStoreService extends KapuaService
 {
-    public void delete(String scopeName, String uuid) throws KapuaException;
-    public TopicInfo find(String scopeName, String uuid) throws KapuaException;
-    public StorableResultList<TopicInfo> query(String scopeName, StorableQuery<TopicInfo> query) throws KapuaException;
+    public void delete(String scopeName, String uuid)
+        throws KapuaException;
+
+    public TopicInfo find(String scopeName, String uuid)
+        throws KapuaException;
+
+    public StorableResultList<TopicInfo> query(String scopeName, StorableQuery<TopicInfo> query)
+        throws KapuaException;
 }

@@ -24,9 +24,9 @@ public class PositionImpl implements Position
     private double precision;
     private double heading;
     private double speed;
-    private Date timestamp;
-    private int satellites;
-    private int status;
+    private Date   timestamp;
+    private int    satellites;
+    private int    status;
 
     public PositionImpl()
     {

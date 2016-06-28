@@ -18,11 +18,18 @@ import java.util.Map;
 public interface Payload
 {
     public Date getCollectedOn();
+
     public void setCollectedOn(Date collectedOn);
+
     public Position getPosition();
+
     public void setPosition(Position position);
+
     public Map<String, Object> getMetrics();
+
     public void setMetrics(Map<String, Object> metrics);
+
     public byte[] getBody();
+
     public void setBody(byte[] body);
 }

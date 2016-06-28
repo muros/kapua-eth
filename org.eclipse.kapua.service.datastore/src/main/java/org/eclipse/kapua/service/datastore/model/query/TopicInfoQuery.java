@@ -19,5 +19,5 @@ public interface TopicInfoQuery extends StorableQuery<TopicInfo>
 {
     public String getPrefix();
 
-    public TopicInfoQuery setPrefix(String prefix) ;
+    public TopicInfoQuery setPrefix(String prefix);
 }

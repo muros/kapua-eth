@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaIllegalNullArgumentException;
-import org.eclipse.kapua.client.message.KapuaInvalidTopicException;
-import org.eclipse.kapua.client.message.KapuaTopic;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.message.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.KapuaTopic;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 

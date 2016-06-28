@@ -20,20 +20,21 @@ import org.eclipse.kapua.service.datastore.model.Topic;
 
 public class MessageImpl implements Message
 {
-    private String         uuid;
+    private String  uuid;
     private Topic   topic;
-    private Date           timestamp;
-    private Date           receivedOn;
+    private Date    timestamp;
+    private Date    receivedOn;
     private Payload payload;
 
-    public MessageImpl() 
+    public MessageImpl()
     {
     }
 
-    public MessageImpl(String uuid, Date timestamp, Topic topic) {
-        this.uuid      = null;
+    public MessageImpl(String uuid, Date timestamp, Topic topic)
+    {
+        this.uuid = null;
         this.timestamp = timestamp;
-        this.topic  = topic;
+        this.topic = topic;
     }
 
     @Override
@@ -41,53 +42,63 @@ public class MessageImpl implements Message
     {
         return this.uuid;
     }
-    
+
     @Override
-    public Topic getTopic() {
+    public Topic getTopic()
+    {
         return this.topic;
     }
 
     @Override
-    public void setTopic(Topic topic) {
+    public void setTopic(Topic topic)
+    {
         this.topic = topic;
     }
 
     @Override
-    public String getFullTopic() {
+    public String getFullTopic()
+    {
         return this.topic.getTopicName();
     }
 
     @Override
-    public Date getTimestamp() {
+    public Date getTimestamp()
+    {
         return this.timestamp;
     }
 
     @Override
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Date timestamp)
+    {
         this.timestamp = timestamp;
     }
 
     @Override
-    public Date getReceivedOn() {
+    public Date getReceivedOn()
+    {
         return this.receivedOn;
     }
 
     @Override
-    public void setReceivedOn(Date receivedOn) {
+    public void setReceivedOn(Date receivedOn)
+    {
         this.receivedOn = receivedOn;
     }
 
-    public void setUUID(String uuid) {
+    public void setUUID(String uuid)
+    {
         this.uuid = uuid;
     }
 
     @Override
-    public Payload getPayload() {
+    public Payload getPayload()
+    {
         return this.payload;
     }
 
     @Override
-    public void setPayload(Payload payload) {
+    public void setPayload(Payload payload)
+    {
         this.payload = payload;
     }
 }

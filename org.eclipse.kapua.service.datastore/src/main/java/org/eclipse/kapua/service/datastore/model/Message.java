@@ -19,13 +19,22 @@ import org.eclipse.kapua.service.datastore.Storable;
 public interface Message extends Storable
 {
     public String getUuid();
+
     public Date getTimestamp();
+
     public void setTimestamp(Date timestamp);
+
     public Date getReceivedOn();
+
     public void setReceivedOn(Date receivedOn);
+
     public Topic getTopic();
+
     public void setTopic(Topic topic);
+
     public String getFullTopic();
+
     public Payload getPayload();
+
     public void setPayload(Payload payload);
 }

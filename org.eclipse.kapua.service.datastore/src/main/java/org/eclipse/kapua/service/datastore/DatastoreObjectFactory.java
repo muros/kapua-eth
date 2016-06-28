@@ -27,13 +27,22 @@ import org.eclipse.kapua.service.datastore.model.query.TopicInfoQuery;
 public interface DatastoreObjectFactory extends KapuaEntityFactory
 {
     public Message newMessage();
+
     public MessageCreator newMessageCreator();
+
     public MessageQuery newStorableMessageQuery();
+
     public Topic newTopic();
+
     public Payload newPayload();
+
     public Position newPosition();
+
     public AssetInfo newAssetInfo();
+
     public AssetInfoQuery newStorableAssetQuery();
+
     public TopicInfo newTopicInfo();
+
     public TopicInfoQuery newStorableTopicQuery();
 }

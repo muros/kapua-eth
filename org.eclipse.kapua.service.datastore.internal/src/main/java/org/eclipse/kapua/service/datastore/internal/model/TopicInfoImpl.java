@@ -19,10 +19,10 @@ import org.eclipse.kapua.service.datastore.model.TopicInfo;
 
 public class TopicInfoImpl implements TopicInfo
 {
-    private Topic topic;
-    private Date lastMsgTimestamp;
+    private Topic  topic;
+    private Date   lastMsgTimestamp;
     private String fullTopicName;
-    
+
     @Override
     public Topic getMessageTopic()
     {
