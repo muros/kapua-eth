@@ -1,7 +1,8 @@
 #
 # Customs .gitignore
 #
-target/**/*
+target
+target/maven-archiver/pom.properties
 
 #
 # Java .gitignore
