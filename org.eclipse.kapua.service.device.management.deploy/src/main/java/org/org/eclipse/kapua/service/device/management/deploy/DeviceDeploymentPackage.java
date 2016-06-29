@@ -15,4 +15,10 @@ package org.org.eclipse.kapua.service.device.management.deploy;
 public interface DeviceDeploymentPackage
 {
 
+    public String getName();
+
+    public String getVersion();
+
+    public DevicePackageBundleInfoListResult getBundleInfos();
+
 }

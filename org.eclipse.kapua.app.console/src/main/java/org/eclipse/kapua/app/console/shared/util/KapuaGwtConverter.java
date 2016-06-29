@@ -33,8 +33,8 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.query.predicate.KapuaAndPredicate;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.Organization;
+import org.eclipse.kapua.service.device.event.DeviceEvent;
 import org.eclipse.kapua.service.device.registry.Device;
-import org.eclipse.kapua.service.device.registry.DeviceEvent;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnection;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionListResult;
@@ -42,11 +42,6 @@ import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionPred
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionQuery;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService;
 import org.eclipse.kapua.service.user.User;
-
-import com.eurotech.cloud.service.cluster.BrokerCluster;
-import com.eurotech.cloud.service.cluster.BrokerClusterDeployment;
-import com.eurotech.cloud.service.cluster.BrokerNode;
-import com.eurotech.cloud.service.cluster.BrokerType;
 
 public class KapuaGwtConverter
 {
@@ -179,8 +174,7 @@ public class KapuaGwtConverter
     public static GwtDeviceEvent convert(DeviceEvent deviceEvent)
     {
         GwtDeviceEvent gwtDeviceEvent = new GwtDeviceEvent();
-        gwtDeviceEvent.setAccountName(deviceEvent.getAccountName());
-        gwtDeviceEvent.setClientId(deviceEvent.getClientId());
+        gwtDeviceEvent.setDeviceId(deviceEvent.getDeviceId().getShortId());
         gwtDeviceEvent.setSentOn(deviceEvent.getSentOn());
         gwtDeviceEvent.setReceivedOn(deviceEvent.getReceivedOn());
         gwtDeviceEvent.setEventType(deviceEvent.getEventType());

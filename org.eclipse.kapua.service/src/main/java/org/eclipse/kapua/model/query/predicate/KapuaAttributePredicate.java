@@ -18,10 +18,17 @@ public interface KapuaAttributePredicate<T> extends KapuaPredicate
     {
         EQUAL,
         NOT_EQUAL,
+
         IS_NULL,
         NOT_NULL,
+
         STARTS_WITH,
-        LIKE;
+        LIKE,
+
+        GREATER_THAN,
+        GREATER_THAN_OR_EQUAL,
+        LESS_THAN,
+        LESS_THAN_OR_EQUAL;
     }
 
     public String getAttributeName();

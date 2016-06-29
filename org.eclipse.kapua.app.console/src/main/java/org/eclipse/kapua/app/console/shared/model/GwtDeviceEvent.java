@@ -17,81 +17,102 @@ import java.util.Date;
 
 import org.eclipse.kapua.app.console.client.util.DateUtils;
 
-public class GwtDeviceEvent extends EdcBaseModel implements Serializable {
+public class GwtDeviceEvent extends EdcBaseModel implements Serializable
+{
 
     private static final long serialVersionUID = 8453754536105261520L;
 
-    public GwtDeviceEvent() {}
+    public GwtDeviceEvent()
+    {
+    }
 
     @Override
-    @SuppressWarnings({"unchecked"})
-    public <X> X get(String property) {
+    @SuppressWarnings({ "unchecked" })
+    public <X> X get(String property)
+    {
         if ("sentOnFormatted".equals(property)) {
             return (X) (DateUtils.formatDateTime((Date) get("sentOn")));
-        } else if ("receivedOnFormatted".equals(property)) {
+        }
+        else if ("receivedOnFormatted".equals(property)) {
             return (X) (DateUtils.formatDateTime((Date) get("receivedOn")));
-        } else {
+        }
+        else {
             return super.get(property);
         }
     }
 
-    public String getAccountName() {
+    public String getAccountName()
+    {
         return (String) get("accountName");
     }
 
-    public void setAccountName(String accountName) {
+    public void setAccountName(String accountName)
+    {
         set("accountName", accountName);
     }
 
-    public String getClientId() {
-        return (String) get("clientId");
+    public String getDeviceId()
+    {
+        return (String) get("deviceId");
     }
 
-    public void setClientId(String clientId) {
-        set("clientId", clientId);
+    public void setDeviceId(String deviceId)
+    {
+        set("deviceId", deviceId);
     }
 
-    public Date getSentOn() {
+    public Date getSentOn()
+    {
         return (Date) get("sentOn");
     }
 
-    public String getSentOnFormatted() {
+    public String getSentOnFormatted()
+    {
         return (String) get("sentOnFormatted");
     }
 
-    public void setSentOn(Date sentOn) {
+    public void setSentOn(Date sentOn)
+    {
         set("sentOn", sentOn);
     }
 
-    public Date getReceivedOn() {
+    public Date getReceivedOn()
+    {
         return (Date) get("ReceivedOn");
     }
 
-    public String getReceivedOnFormatted() {
+    public String getReceivedOnFormatted()
+    {
         return (String) get("receivedOnFormatted");
     }
 
-    public void setReceivedOn(Date receivedOn) {
+    public void setReceivedOn(Date receivedOn)
+    {
         set("receivedOn", receivedOn);
     }
 
-    public String getEventType() {
+    public String getEventType()
+    {
         return (String) get("eventType");
     }
 
-    public void setEventType(String eventType) {
+    public void setEventType(String eventType)
+    {
         set("eventType", eventType);
     }
 
-    public String getEventMessage() {
+    public String getEventMessage()
+    {
         return (String) get("eventMessage");
     }
 
-    public String getUnescapedEventMessage() {
+    public String getUnescapedEventMessage()
+    {
         return getUnescaped("eventMessage");
     }
 
-    public void setEventMessage(String eventMessage) {
+    public void setEventMessage(String eventMessage)
+    {
         set("eventMessage", eventMessage);
     }
 }

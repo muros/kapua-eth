@@ -15,4 +15,20 @@ package org.org.eclipse.kapua.service.device.management.bundle;
 public interface DeviceBundle
 {
 
+    public long getId();
+
+    public void setId(long id);
+
+    public String getName();
+
+    public void setName(String name);
+
+    public String getState();
+
+    public void setState(String state);
+
+    public String getVersion();
+
+    public void setVersion(String version);
+
 }

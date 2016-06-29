@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.KapuaService;
 
 public interface DeviceDeployManagementService extends KapuaService
 {
-    public DeviceDeplomentPackageListResult get(KapuaId scopeId, KapuaId deviceId)
+    public DeviceDeploymentPackageListResult get(KapuaId scopeId, KapuaId deviceId)
         throws KapuaException;
 
     public void install(KapuaId scopeId, KapuaId deviceId, String name, byte[] deviceDeploymentPackage)

@@ -48,7 +48,7 @@ public interface GwtDeviceService extends RemoteService
      * @return
      * @throws GwtEdcException
      */
-    public long getNumOfDevices(long accountId)
+    public long getNumOfDevices(String accountId)
         throws GwtEdcException;
 
     /**
@@ -202,13 +202,6 @@ public interface GwtDeviceService extends RemoteService
         throws GwtEdcException;
 
     public void stopBundle(GwtXSRFToken xsfrToken, GwtDevice device, GwtGroupedNVPair pair)
-        throws GwtEdcException;
-
-    //
-    // Update certificate device
-    //
-    public void updateDeviceCertificateWithDefault(GwtXSRFToken xsfrToken, String accountName,
-                                                   String clientId, long accountId)
         throws GwtEdcException;
 
 }

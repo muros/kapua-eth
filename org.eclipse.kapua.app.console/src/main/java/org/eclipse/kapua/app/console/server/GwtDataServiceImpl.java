@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.server;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,11 +34,18 @@ import org.eclipse.kapua.app.console.shared.model.GwtMessage;
 import org.eclipse.kapua.app.console.shared.model.GwtTopic;
 import org.eclipse.kapua.app.console.shared.service.GwtDataService;
 import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.service.account.AccountServiceOld;
 import org.eclipse.kapua.service.authorization.AuthorizationServiceOLd;
 import org.eclipse.kapua.service.authorization.Permission.Action;
 import org.eclipse.kapua.service.authorization.Permission.Domain;
 import org.eclipse.kapua.service.datastore.DataStoreService;
+import org.eclipse.kapua.service.datastore.DatastoreObjectFactory;
+import org.eclipse.kapua.service.datastore.TopicStoreService;
+import org.eclipse.kapua.service.datastore.model.Topic;
+import org.eclipse.kapua.service.datastore.model.TopicInfo;
+import org.eclipse.kapua.service.datastore.model.query.TopicInfoQuery;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryServiceOld;
 import org.eclipse.kapua.service.locator.ServiceLocator;
 import org.slf4j.Logger;
@@ -80,13 +86,15 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
         try {
             // build the appropriate topicQuery: <accountName>/+/<semantic_topic>
-            EdcTopicQuery topicQuery = new EdcTopicQuery();
+            KapuaLocator locator = KapuaLocator.getInstance();
+            TopicStoreService topicStoreService = locator.getService(TopicStoreService.class);
+            DatastoreObjectFactory DatastoreObjectFactory = locator.getFactory(DatastoreObjectFactory.class);
+
+            TopicInfoQuery topicQuery = DatastoreObjectFactory.newStorableTopicQuery();
             topicQuery.setLimit(TOPIC_LIMIT);
             topicQuery.setPrefix(accountName + "/+/");
 
-            ServiceLocator locator = ServiceLocator.getInstance();
-            DataStoreService dss = locator.getDataStoreService();
-            EdcListResult<EdcTopicInfo> accountTopicsInfo = dss.findTopicsByAccount(accountName, topicQuery);
+            KapuaListResult<TopicInfo> accountTopicsInfo = topicStoreService.query(scopeName, query);
 
             if (accountTopicsInfo == null) {
                 return root;
@@ -96,11 +104,11 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             // it assumes the topics returned are already sorted
             while (!accountTopicsInfo.isEmpty()) {
 
-                EdcTopicInfo accountTopicInfo = accountTopicsInfo.remove(0);
-                EdcTopic topic = accountTopicInfo.getEdcTopic();
+                TopicInfo accountTopicInfo = accountTopicsInfo.remove(0);
+                Topic topic = accountTopicInfo.getMessageTopic();
 
-//                s_logger.info("Processing topic: {} ts: {}", topic.getSemanticTopic(), accountTopicInfo.getLastMessageTimestamp());
-//                s_logger.info("topic: " + String.format("%040x", new BigInteger(1, topic.getFullTopic().getBytes())));
+                // s_logger.info("Processing topic: {} ts: {}", topic.getSemanticTopic(), accountTopicInfo.getLastMessageTimestamp());
+                // s_logger.info("topic: " + String.format("%040x", new BigInteger(1, topic.getFullTopic().getBytes())));
 
                 if ("#".equals(topic.getLeafName()) && topic.getParentTopic() == null) {
                     // ignore the root topic for the account. Is already added!
@@ -126,7 +134,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
                 if (gwtParentTopic != null) {
                     EdcMessageQuery q = new EdcMessageQuery().setLimit(1);
-                    EdcListResult<EdcMessage> topicMessage = dss.findMessagesByTopic(accountName, accountTopicInfo.getEdcTopic().getFullTopic(), q);
+                    EdcListResult<EdcMessage> topicMessage = topicStoreService.findMessagesByTopic(accountName, accountTopicInfo.getEdcTopic().getFullTopic(), q);
                     Date timestamp;
                     if (topicMessage.size() > 0) {
                         timestamp = topicMessage.get(0).getTimestamp();
@@ -163,7 +171,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             if (baseTopicRoot.equals(parentTopic) || // Same topic root
                 parentTopic == null || // Direct child of topic #
                 (semanticTopic.endsWith("#") && // Only topic that that # at the end can have child
-                (semanticTopic.split("/").length - baseTopicRoot.split("/").length < 3))) {
+                 (semanticTopic.split("/").length - baseTopicRoot.split("/").length < 3))) {
                 gwtParentTopic = root;
             }
         }
@@ -445,7 +453,7 @@ public class GwtDataServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             }
             gwtResults.setCursorOffset(eplc.getOffsetCursors());
             gwtResults.setLastOffset(eplc.getOffset());
-            
+
             s_logger.debug("findMessages - returning {} results", new Object[] { gwtResults.getData().size() });
         }
         catch (Throwable t) {

@@ -14,5 +14,9 @@ package org.eclipse.kapua.service.device.registry;
 
 public class DevicePredicates
 {
-    public static final String CLIENT_ID = "clientId";
+    public static final String CLIENT_ID     = "clientId";
+    public static final String DISPLAY_NAME  = "displayName";
+    public static final String SERIAL_NUMBER = "serialNumber";
+    public static final String STATUS        = "status";
+    public static final String LAST_EVENT_ON = "lastEventOn";
 }

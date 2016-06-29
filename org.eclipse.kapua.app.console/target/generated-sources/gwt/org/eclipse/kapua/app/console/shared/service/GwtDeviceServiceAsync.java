@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
- *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     Eurotech - initial API and implementation
- *
- *******************************************************************************/
 package org.eclipse.kapua.app.console.shared.service;
 
 import com.google.gwt.core.client.GWT;
@@ -23,7 +11,7 @@ public interface GwtDeviceServiceAsync
      * GWT-RPC service  asynchronous (client-side) interface
      * @see org.eclipse.kapua.app.console.shared.service.GwtDeviceService
      */
-    void getNumOfDevices( long accountId, AsyncCallback<java.lang.Long> callback );
+    void getNumOfDevices( java.lang.String accountId, AsyncCallback<java.lang.Long> callback );
 
 
     /**
@@ -150,13 +138,6 @@ public interface GwtDeviceServiceAsync
      * @see org.eclipse.kapua.app.console.shared.service.GwtDeviceService
      */
     void stopBundle( org.eclipse.kapua.app.console.shared.model.GwtXSRFToken xsfrToken, org.eclipse.kapua.app.console.shared.model.GwtDevice device, org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair pair, AsyncCallback<Void> callback );
-
-
-    /**
-     * GWT-RPC service  asynchronous (client-side) interface
-     * @see org.eclipse.kapua.app.console.shared.service.GwtDeviceService
-     */
-    void updateDeviceCertificateWithDefault( org.eclipse.kapua.app.console.shared.model.GwtXSRFToken xsfrToken, java.lang.String accountName, java.lang.String clientId, long accountId, AsyncCallback<Void> callback );
 
 
     /**

@@ -348,14 +348,16 @@ public class ServiceDAO
                     binds.put(psw, attrValue + "%");
                     expr = cb.like((Expression<String>) entityRoot.get(entityType.getSingularAttribute(attrName)), psw);
                     break;
-                case NOT_EQUAL:
-                    expr = cb.notEqual(entityRoot.get(entityType.getSingularAttribute(attrName)), attrValue);
-                    break;
+
                 case IS_NULL:
                     expr = cb.isNull(entityRoot.get(entityType.getSingularAttribute(attrName)));
                     break;
                 case NOT_NULL:
                     expr = cb.isNotNull(entityRoot.get(entityType.getSingularAttribute(attrName)));
+                    break;
+
+                case NOT_EQUAL:
+                    expr = cb.notEqual(entityRoot.get(entityType.getSingularAttribute(attrName)), attrValue);
                     break;
                 default:
                 case EQUAL:

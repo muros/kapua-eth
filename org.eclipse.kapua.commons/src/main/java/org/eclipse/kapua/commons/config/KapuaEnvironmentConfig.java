@@ -17,6 +17,7 @@ import org.apache.commons.configuration.Configuration;
 public class KapuaEnvironmentConfig extends AbstractKapuaConfig<KapuaEnvironmentConfigKeys>
 {
     private static final KapuaEnvironmentConfig instance;
+
     static {
         instance = new KapuaEnvironmentConfig(KapuaEnvironmentConfiguration.getConfiguration());
     }

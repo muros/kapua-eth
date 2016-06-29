@@ -19,4 +19,10 @@ public interface DeviceCommandOutput
     public String getStdout();
 
     public String getExceptionMessage();
+
+    public String getExceptionStack();
+
+    public Integer getExitCode();
+
+    public Boolean hasTimedout();
 }

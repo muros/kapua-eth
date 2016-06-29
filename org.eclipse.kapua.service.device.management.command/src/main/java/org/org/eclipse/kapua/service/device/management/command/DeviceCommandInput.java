@@ -25,4 +25,10 @@ public interface DeviceCommandInput
     public void setWorkingDir(String workingDir);
 
     public void setBytes(byte[] bytes);
+
+    public void setEnvironment(String[] environment);
+
+    public void setRunAsynch(boolean runAsync);
+
+    public void setStdin(String stdin);
 }

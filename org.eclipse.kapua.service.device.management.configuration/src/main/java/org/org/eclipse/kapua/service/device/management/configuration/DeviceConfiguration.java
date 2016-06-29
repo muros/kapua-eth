@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.org.eclipse.kapua.service.device.management.configuration;
 
+import java.util.List;
+
 public interface DeviceConfiguration
 {
-
+    public List<DeviceComponentConfiguration> getComponentConfigurations();
 }

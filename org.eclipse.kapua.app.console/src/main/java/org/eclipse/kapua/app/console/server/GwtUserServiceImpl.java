@@ -62,7 +62,7 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             KapuaId scopeId = KapuaEid.parseShortId(gwtUserCreator.getScopeId());
             UserCreator userCreator = userFactory.newCreator(scopeId,
                                                              gwtUserCreator.getUsername());
-            userCreator.setPassword(gwtUserCreator.getPassword());
+            userCreator.setRawPassword(gwtUserCreator.getPassword());
             userCreator.setDisplayName(gwtUserCreator.getDisplayName());
             userCreator.setEmail(gwtUserCreator.getEmail());
             userCreator.setPhoneNumber(gwtUserCreator.getPhoneNumber());
