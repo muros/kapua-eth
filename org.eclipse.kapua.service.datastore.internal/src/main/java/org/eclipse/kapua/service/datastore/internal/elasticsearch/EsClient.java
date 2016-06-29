@@ -14,7 +14,6 @@ package org.eclipse.kapua.service.datastore.internal.elasticsearch;
 
 import java.net.UnknownHostException;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfig;
 import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfigKeys;

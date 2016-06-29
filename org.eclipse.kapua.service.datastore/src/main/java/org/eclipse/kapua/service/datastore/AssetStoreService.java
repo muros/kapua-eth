@@ -15,13 +15,14 @@ package org.eclipse.kapua.service.datastore;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.KapuaService;
 import org.eclipse.kapua.service.datastore.model.AssetInfo;
+import org.eclipse.kapua.service.datastore.model.StorableId;
 
 public interface AssetStoreService extends KapuaService
 {
-    public void delete(String scopeName, String uuid)
+    public void delete(String scopeName, StorableId id)
         throws KapuaException;
 
-    public AssetInfo find(String scopeName, String uuid)
+    public AssetInfo find(String scopeName, StorableId id)
         throws KapuaException;
 
     public StorableResultList<AssetInfo> query(String scopeName, StorableQuery<AssetInfo> query)

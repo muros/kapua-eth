@@ -74,9 +74,29 @@ public abstract class AbstractKapuaConfig<K extends KapuaConfigKey>
         return config.getInt(key.key());
     }
 
+    public int getInt(K key, int defaultValue)
+    {
+        return config.getInt(key.key(), defaultValue);
+    }
+
+    public int getInt(K key, Integer defaultValue)
+    {
+        return config.getInt(key.key(), defaultValue);
+    }
+
     public boolean getBoolean(K key)
     {
         return config.getBoolean(key.key());
+    }
+
+    public boolean getBoolean(K key, boolean defaultValue)
+    {
+        return config.getBoolean(key.key(), defaultValue);
+    }
+
+    public boolean getBoolean(K key, Boolean defaultValue)
+    {
+        return config.getBoolean(key.key(), defaultValue);
     }
 
     public String getString(K key)
@@ -84,9 +104,24 @@ public abstract class AbstractKapuaConfig<K extends KapuaConfigKey>
         return config.getString(key.key());
     }
 
+    public String getString(K key, String defaultValue)
+    {
+        return config.getString(key.key(), defaultValue);
+    }
+
     public long getLong(K key)
     {
         return config.getLong(key.key());
+    }
+
+    public long getLong(K key, long defaultValue)
+    {
+        return config.getLong(key.key(), defaultValue);
+    }
+
+    public long getLong(K key, Long defaultValue)
+    {
+        return config.getLong(key.key(), defaultValue);
     }
 
     public float getFloat(K key)
@@ -94,8 +129,28 @@ public abstract class AbstractKapuaConfig<K extends KapuaConfigKey>
         return config.getFloat(key.key());
     }
 
+    public float getFloat(K key, float defaultValue)
+    {
+        return config.getFloat(key.key(), defaultValue);
+    }
+
+    public float getFloat(K key, Float defaultValue)
+    {
+        return config.getFloat(key.key(), defaultValue);
+    }
+
     public double getDouble(K key)
     {
         return config.getDouble(key.key());
+    }
+
+    public double getDouble(K key, double defaultValue)
+    {
+        return config.getDouble(key.key(), defaultValue);
+    }
+
+    public double getDouble(K key, Double defaultValue)
+    {
+        return config.getDouble(key.key(), defaultValue);
     }
 }

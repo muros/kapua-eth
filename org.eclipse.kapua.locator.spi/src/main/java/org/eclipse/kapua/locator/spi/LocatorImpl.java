@@ -18,11 +18,7 @@ import java.util.ServiceLoader;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.KapuaEntityFactory;
-import org.eclipse.kapua.model.config.KapuaConfigEntity;
-import org.eclipse.kapua.model.config.KapuaConfigEntityCreator;
 import org.eclipse.kapua.service.KapuaService;
-import org.eclipse.kapua.service.config.KapuaConfigEntityFactory;
-import org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider;
 
 public class LocatorImpl implements KapuaLocator
 {
@@ -63,23 +59,4 @@ public class LocatorImpl implements KapuaLocator
 
         return kapuaEntityFactory;
     }
-
-	@Override
-    public <E extends KapuaConfigEntity, C extends KapuaConfigEntityCreator<E>, F extends KapuaConfigEntityFactory<E, C>, P extends KapuaServiceConfigurationProvider<E,C,F>> P getServiceConfigProvider(Class<P> serviceClass)
-    {
-	    ServiceLoader<P> serviceConfigManagerLoaders = ServiceLoader.load(serviceClass);
-
-        P serviceConfigManager = null;
-        Iterator<P> serviceConfigManagerLoadersIterator = serviceConfigManagerLoaders.iterator();
-        while (serviceConfigManagerLoadersIterator.hasNext()) {
-        	serviceConfigManager = serviceConfigManagerLoadersIterator.next();
-            break;
-        }
-
-        if (serviceConfigManager == null) {
-            throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_CONFIG_SPI_UNAVAILABLE, serviceClass);
-        }
-
-        return serviceConfigManager;
-	}
 }

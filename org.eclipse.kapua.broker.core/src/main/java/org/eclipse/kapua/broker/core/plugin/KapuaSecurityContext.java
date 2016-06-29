@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.apache.activemq.security.AuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
+import org.eclipse.kapua.model.id.KapuaId;
 
 /**
  * Kapua security context implementation of amq broker {@link SecurityContext}
@@ -25,6 +26,7 @@ import org.apache.activemq.security.SecurityContext;
  */
 public class KapuaSecurityContext extends SecurityContext {
     private KapuaPrincipal   principal;
+    private KapuaId          connectionId;
     private Set<Principal>   principals;
 
     private AuthorizationMap authMap;
@@ -34,7 +36,8 @@ public class KapuaSecurityContext extends SecurityContext {
     private boolean          hasDeviceManage;
 
     public KapuaSecurityContext(KapuaPrincipal     principal,
-                              AuthorizationMap authMap) {
+                              AuthorizationMap authMap,
+                              KapuaId connectionId) {
         super(principal.getName());
 
         this.principal  = principal;
@@ -42,6 +45,7 @@ public class KapuaSecurityContext extends SecurityContext {
         principals.add(principal);
 
         this.authMap = authMap;
+        this.connectionId = connectionId;
     }
 
     public Principal getMainPrincipal() {
@@ -56,7 +60,11 @@ public class KapuaSecurityContext extends SecurityContext {
         return authMap;
     }
 
-    public boolean hasDataView() {
+    public KapuaId getConnectionId() {
+		return connectionId;
+	}
+
+	public boolean hasDataView() {
         return hasDataView;
     }
 

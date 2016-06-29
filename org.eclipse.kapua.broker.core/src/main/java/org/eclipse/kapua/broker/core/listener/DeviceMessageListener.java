@@ -12,18 +12,12 @@
  *******************************************************************************/
 package org.eclipse.kapua.broker.core.listener;
 
-import java.text.MessageFormat;
 import java.util.Date;
 
 import javax.jms.JMSException;
 
-import org.apache.activemq.broker.BrokerRegistry;
-import org.apache.activemq.broker.BrokerService;
-import org.apache.activemq.broker.TransportConnection;
-import org.apache.activemq.broker.TransportConnector;
 import org.apache.camel.spi.UriEndpoint;
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
 import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool;
 import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -32,8 +26,7 @@ import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.KapuaTopic;
-import org.eclipse.kapua.service.datastore.MessageStoreService;
-import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +43,7 @@ import com.codahale.metrics.Counter;
 		title="device message processor", 
 		syntax="bean:deviceMessageListener",
 		scheme="bean") 
-public class DeviceMessageListener extends AbstractListener<KapuaMessage> {
+public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 
 	private static final Logger s_logger = LoggerFactory.getLogger(DeviceMessageListener.class);
 	
@@ -67,173 +60,94 @@ public class DeviceMessageListener extends AbstractListener<KapuaMessage> {
 	//metrics
 	private Counter metricDeviceMessage;
 	private Counter metricDeviceDirectMessage;
-	private Counter metricDeviceDirectConnectMessage;
 	private Counter metricDeviceDirectBirthMessage;
-	private Counter metricDeviceDirectDisconnectMessage;
 	private Counter metricDeviceDirectDcMessage;
 	private Counter metricDeviceDirectMissingMessage;
-	private Counter metricDeviceDirectProvisionMessage;
 	private Counter metricDeviceDirectAppsMessage;
 	private Counter metricDeviceDirectUnknownMessage;
 	private Counter metricDeviceDirectErrorMessage;
-	//forwarded
-	private Counter metricDeviceForwardedMessage;
-	private Counter metricDeviceForwardedDisconnctClient;
-	private Counter metricDeviceForwardedDisconnctClientError;
 	
 	public DeviceMessageListener() {
 		super("device");
 		metricDeviceMessage          = registerCounter("messages", "count");
 		//direct
 		metricDeviceDirectMessage            = registerCounter("messages", "direct", "count");
-		metricDeviceDirectConnectMessage     = registerCounter("messages", "direct", "connect", "count");
 		metricDeviceDirectBirthMessage       = registerCounter("messages", "direct", "birth", "count");
-		metricDeviceDirectDisconnectMessage  = registerCounter("messages", "direct", "disconnect", "count");
 		metricDeviceDirectDcMessage          = registerCounter("messages", "direct", "dc", "count");
 		metricDeviceDirectMissingMessage     = registerCounter("messages", "direct", "missing", "count");
-		metricDeviceDirectProvisionMessage   = registerCounter("messages", "direct", "provision", "count");
 		metricDeviceDirectAppsMessage        = registerCounter("messages", "direct", "apps", "count");
 		metricDeviceDirectUnknownMessage     = registerCounter("messages", "direct", "unknown", "count");
 		metricDeviceDirectErrorMessage       = registerCounter("messages", "direct", "error", "count");
-		//forwarded
-		metricDeviceForwardedMessage              = registerCounter("messages", "forwarded", "count");
-		metricDeviceForwardedDisconnctClient      = registerCounter("messages", "forwarded", "disconnect_client", "count");
-		metricDeviceForwardedDisconnctClientError = registerCounter("messages", "forwarded", "disconnect_client_error", "count");
 	}
 	
 	@Override
-	public void processMessage(KapuaMessage message) 
+	public void processMessage(CamelKapuaMessage message) 
 	{
 		metricDeviceMessage.inc();
-		KapuaTopic kapuaTopic = message.getKapuaTopic();
+		KapuaTopic kapuaTopic = message.getMessage().getKapuaTopic();
 		if (kapuaTopic.isKapuaTopic()) {
-//			if (!message.isForwarded()) {
-				metricDeviceDirectMessage.inc();
-				processLifeCycleMessage(message, kapuaTopic);
-//			} 
-//			else {
-//				metricDeviceForwardedMessage.inc();
-//				processForwardedLifeCycleMessage(message, kapuaTopic);
-//			}
+			metricDeviceDirectMessage.inc();
+			processLifeCycleMessage(message.getConnectionId(), message.getMessage(), kapuaTopic);
 		}
 	}
 
-	private void processLifeCycleMessage(KapuaMessage message, KapuaTopic kapuaTopic)
+	private void processLifeCycleMessage(KapuaId connectionId, KapuaMessage message, KapuaTopic kapuaTopic)
     {
 		KapuaPayload kapuaPayload = message.getKapuaPayload();
 		String accountName = kapuaTopic.getAccount();
 		String clientId    = kapuaTopic.getAsset();
 		String semanticTopic = kapuaTopic.getSemanticTopic();
 
-		/*
-		
 		// FIXME: Remove this filtering of the republishes if no longer necessary
 		if(semanticTopic.startsWith("BA/")) {
 			s_logger.debug("Ignoring republish");
 			return;
 		}
 		try {
-			if(message.getKapuaTopic().getFullTopic().contains("PURGE")){
-				String topic = null;
-                KapuaPayload purgePayload = message.getKapuaPayload();
-                if (purgePayload != null) {
-                    topic = (String) message.getKapuaPayload().getMetric("topic");
-                }
-
-                s_logger.info("****** ENTERING PURGE ******");
-                s_logger.info("* On topic: {}", accountName + (topic != null ? topic : "/+/#"));
-
-                MessageStoreService messageStoreService = locator.getService(MessageStoreService.class);
-                //TODO check if it's not necessary with the new datastore
-//                messageStoreService.resetCache(accountName, topic);
-                return;
-			}
-			else{
+//			if(message.getKapuaTopic().getFullTopic().contains("PURGE")){
+//				String topic = null;
+//                KapuaPayload purgePayload = message.getKapuaPayload();
+//                if (purgePayload != null) {
+//                    topic = (String) message.getKapuaPayload().getMetric("topic");
+//                }
+//
+//                s_logger.info("****** ENTERING PURGE ******");
+//                s_logger.info("* On topic: {}", accountName + (topic != null ? topic : "/+/#"));
+//
+//                MessageStoreService messageStoreService = locator.getService(MessageStoreService.class);
+//                //TODO check if it's not necessary with the new datastore
+////                messageStoreService.resetCache(accountName, topic);
+//                return;
+//			}
+//			else{
 				//
 				// send the appropriate signal to the device service
 				DeviceLifeCycleService deviceLifeCycleService = locator.getService(DeviceLifeCycleService.class);
 				if (BIRTH.equals(semanticTopic)) {
-					deviceRegistryService.create(creator);
-					dvcService.birth(accountName, clientId, message);
+					deviceLifeCycleService.birth(connectionId, message);
 					metricDeviceDirectBirthMessage.inc();
 				}
 				else if (DC.equals(semanticTopic)) {
-					dvcService.dc(accountName, clientId, message);
+					deviceLifeCycleService.death(connectionId, message);
 					metricDeviceDirectDcMessage.inc();
 				}
 				else if (LWT.equals(semanticTopic)) {
-					dvcService.missing(accountName, clientId, message);
+					deviceLifeCycleService.missing(connectionId, message);
 					metricDeviceDirectMissingMessage.inc();
 				}
 				else if (APPS.equals(semanticTopic)) {
 					// The APPS message has the same payload as the BIRTH message.
 					// The payload is published on a different topic onlys
 					// to create a different event.
-					dvcService.applications(accountName, clientId, message);
+					deviceLifeCycleService.applications(connectionId, message);
 					metricDeviceDirectAppsMessage.inc();
-				}
-				else if (CONNECT.equals(semanticTopic)) {
-					Long userId = (Long)kapuaPayload.getMetric(JmsAssistantProducerWrapper.METRIC_USER_ID);
-					String username = (String)kapuaPayload.getMetric(JmsAssistantProducerWrapper.METRIC_USERNAME);
-                    dvcService.connect(accountName, clientId, userId, brokerNode, message, true);
-					//tight coupling - refer to "Device Level Authorization - Tight coupling" for the annotations
-					//add alert check
-//					Long accountId = (Long)kapuaPayload.getMetric(JmsUtil.METRIC_ACCOUNT_ID);
-//					DeviceCredentialsTight deviceCredentialsTight = DeviceCredentialsTight.valueOf((String)kapuaPayload.getMetric(JmsUtil.METRIC_DEVICE_CREDENTALS_TIGHT));
-//					switch (deviceCredentialsTight) {
-//					case STRICT:
-//						long deviceCountWithuserId = DeviceRegistryManagerTrusted.getDeviceCountByUserId(accountId, userId);
-//						if (deviceCountWithuserId != 1) {
-//							//create alert
-//							createAlert(accountName, clientId, AlertCategories.SECURITY.toString(), 
-//									MessageFormat.format(AlertMessage.TIGHT_DEVICE_ALERT_NOT_EXCLUSIVELY_VIOLATION, new Object[]{username, clientId, accountName}));
-//							s_logger.warn("User {} is not used exclusively by the device {} (Account {})! (code {})", new Object[]{username, clientId, accountName, "2.b"});
-//						}
-//						break;
-//					case LOOSE:
-//						long deviceStrictCountWithuserId = DeviceRegistryManagerTrusted.getDeviceCountStrictByUserId(accountId, userId);
-//						if (deviceStrictCountWithuserId > 0) {
-//							//create alert
-//							createAlert(accountName, clientId, AlertCategories.SECURITY.toString(), 
-//									MessageFormat.format(AlertMessage.TIGHT_DEVICE_ALERT_USER_USED_BY_MORE_DEV, new Object[]{username, clientId, accountName}));
-//                                s_logger.warn("User {} used by the device {} is used also by one or more strict devices (Account {})! (code {})",
-//                                              new Object[] { username, clientId, accountName, "2.b" });
-//						}
-//						break;
-//					default:
-//						s_logger.warn("Wrong device credential tight attribute {}", deviceCredentialsTight);
-//						break;
-//					}
-					metricDeviceDirectConnectMessage.inc();
-				}
-				else if (DISCONNECT.equals(semanticTopic)) {
-					dvcService.disconnect(accountName, clientId, message);
-					metricDeviceDirectDisconnectMessage.inc();
-				}
-				else if (PROVISION.equals(semanticTopic)) {
-				    
-					s_logger.info("Provision message arrived from: {}", clientId);
-					
-					// The provision message will provision the device with the provided credentials.
-					String mqttUsername = (String) kapuaPayload.getMetric("username");
-					String mqttPassword = (String) kapuaPayload.getMetric("password");
-					String mqttActivationKey = (String) kapuaPayload.getMetric("activationKey");
-					String mqttProvisioningVersion = (String) kapuaPayload.getMetric("provisioningCertificateVersion");
-
-					ProvisionRequestService provisionService = locator.getProvisionService();
-					provisionService.provision(clientId, 
-					                           mqttUsername, 
-					                           mqttPassword, 
-					                           mqttActivationKey, 
-					                           mqttProvisioningVersion);
-					metricDeviceDirectProvisionMessage.inc();
 				}
 				else {
 					metricDeviceDirectUnknownMessage.inc();
 					s_logger.info("Unknown semantic part for $EDC topic: {}", message.getKapuaTopic().getFullTopic());
 					return;
 				}
-			}
+//			}
 		}
 		catch (KapuaException e) {
 			metricDeviceDirectErrorMessage.inc();
@@ -300,8 +214,8 @@ public class DeviceMessageListener extends AbstractListener<KapuaMessage> {
                 return;
             }
 		}
-		*/
-	}
+
+    }
 	
 //	private void processForwardedLifeCycleMessage(KapuaMessage message, KapuaTopic kapuaTopic) {
 //		String accountName = kapuaTopic.getAccount();

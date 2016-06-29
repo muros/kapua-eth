@@ -17,33 +17,27 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.config.model.AbstractKapuaConfigEntity;
-import org.eclipse.kapua.commons.config.model.AbstractKapuaConfigEntityCreator;
 import org.eclipse.kapua.commons.util.JpaUtils;
-import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.config.ComponentConfiguration;
+import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.config.KapuaConfigEntityFactory;
 import org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider;
 
-public class DefaultServiceConfigurationProvider<E extends AbstractKapuaConfigEntity, C extends AbstractKapuaConfigEntityCreator<E>, F extends KapuaConfigEntityFactory<E, C>>
-                                                implements KapuaServiceConfigurationProvider<E, C, F>
+public class DefaultServiceConfigurationProvider implements KapuaServiceConfigurationProvider
 {
     // TODO Implement!
-    public ComponentConfiguration getServiceConfiguration(Class<C> clazz, Class<F> clazzFactory, String pid)
+    public ComponentConfiguration getServiceConfiguration(String pid)
     {
         return null;
     }
 
     // TODO Implement!
-    public void setServiceConfiguration(Class<C> clazz, Class<F> clazzFactory, String pid, Map<String, Object> values)
+    public void setServiceConfiguration(String pid, Map<String, Object> values)
     {
         EntityManager em = null;
         try {
             em = JpaUtils.getEntityManager();
-            F f = KapuaLocator.getInstance().getFactory(clazzFactory);
-            C creator = f.newConfigurationCreator((KapuaId) values.get("scopeId"));
-            E entity = f.newConfiguration(creator);
+            ServiceConfigEntity entity = new ServiceConfigEntity((KapuaId) values.get("scopeId"));
 
             JpaUtils.beginTransaction(em);
             em.persist(entity);
@@ -61,5 +55,13 @@ public class DefaultServiceConfigurationProvider<E extends AbstractKapuaConfigEn
         finally {
             JpaUtils.close(em);
         }
+    }
+
+    @Override
+    public Tocd getConfigMetadata()
+        throws KapuaException
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

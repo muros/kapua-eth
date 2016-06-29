@@ -18,11 +18,7 @@ import java.util.ServiceLoader;
 import org.eclipse.kapua.KapuaRuntimeErrorCodes;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.model.KapuaEntityFactory;
-import org.eclipse.kapua.model.config.KapuaConfigEntity;
-import org.eclipse.kapua.model.config.KapuaConfigEntityCreator;
 import org.eclipse.kapua.service.KapuaService;
-import org.eclipse.kapua.service.config.KapuaConfigEntityFactory;
-import org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider;
 
 /**
  * Interface to load KapuaService instances in a given environment.
@@ -64,12 +60,4 @@ public interface KapuaLocator
      * @return
      */
     public <F extends KapuaEntityFactory> F getFactory(Class<F> factoryClass);
-
-    /**
-     * Returns an instance of a KapuaConfigurableComponent implementing the provided class.
-     * 
-     * @param serviceClass - class of the service whose instance is required.
-     * @return
-     */    
-    public <E extends KapuaConfigEntity, C extends KapuaConfigEntityCreator<E>, F extends KapuaConfigEntityFactory<E, C>, P extends KapuaServiceConfigurationProvider<E,C,F>> P getServiceConfigProvider(Class<P> serviceClass);
 }

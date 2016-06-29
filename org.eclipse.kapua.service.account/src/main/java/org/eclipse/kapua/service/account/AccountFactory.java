@@ -12,16 +12,12 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account;
 
+import org.eclipse.kapua.model.KapuaEntityFactory;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.config.KapuaConfigEntityFactory;
 
-public interface AccountFactory extends KapuaConfigEntityFactory<Configuration, ConfigurationCreator>
+public interface AccountFactory extends KapuaEntityFactory
 {
     public AccountCreator newAccountCreator(KapuaId scopeId, String name);
 
     public AccountQuery newQuery(KapuaId scopeId);
-
-    public Configuration newConfiguration(ConfigurationCreator creator);
-
-    public ConfigurationCreator newConfigurationCreator(KapuaId scopeId);
 }

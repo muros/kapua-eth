@@ -23,14 +23,14 @@ import java.util.UUID;
 
 import org.eclipse.kapua.KapuaErrorCodes;
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.client.message.KapuaInvalidTopicException;
-import org.eclipse.kapua.client.message.KapuaMessage;
-import org.eclipse.kapua.client.message.KapuaPayload;
-import org.eclipse.kapua.client.message.KapuaPosition;
-import org.eclipse.kapua.client.message.KapuaTopic;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.KapuaDateUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.message.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.message.KapuaPosition;
+import org.eclipse.kapua.message.KapuaTopic;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
@@ -38,7 +38,7 @@ import org.eclipse.kapua.service.authorization.Permission;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 import org.eclipse.kapua.service.datastore.StorableQuery;
-import org.eclipse.kapua.service.datastore.internal.DatastorePermAction;
+import org.eclipse.kapua.service.datastore.internal.MessageStoreServiceAction;
 import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfig;
 import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfigKeys;
 import org.eclipse.kapua.service.datastore.internal.model.DataIndexBy;
@@ -74,7 +74,7 @@ public class EsMessageStoreServiceImpl
     private static final long    EUROTECH_TTL_MILLIS      = EUROTECH_TTL_DAYS * DAY_MILLIS;
 
     private KapuaConfigurableService configurationService;
-    private EsMessageAdapter     datastoreAdapter;
+    private EsDatastoreAdapter     datastoreFacade;
     private int                  maxTopicDepth;
     private static int           counter                = 0;
     private static long          timingProfileThreshold = 1000; // in milliseconds
@@ -83,7 +83,7 @@ public class EsMessageStoreServiceImpl
     public EsMessageStoreServiceImpl(KapuaConfigurableService configurationService)
     {
         this.configurationService = configurationService;
-		datastoreAdapter = new EsMessageAdapter();
+		datastoreFacade = new EsDatastoreAdapter();
 		KapuaDatastoreConfig config = KapuaDatastoreConfig.getInstance();
         maxTopicDepth = config.getInt(KapuaDatastoreConfigKeys.CONFIG_TOPIC_MAX_DEPTH);
         enableTimingProfile = config.getBoolean(KapuaDatastoreConfigKeys.CONFIG_DATA_STORAGE_ENABLE_TIMING_PROFILE, false);
@@ -101,7 +101,7 @@ public class EsMessageStoreServiceImpl
         KapuaTopic kapuaTopic = null;
         try 
         {
-            kapuaTopic = messageCreator.getTopic() == null ? null : new KapuaTopic(messageCreator.getTopic().getTopicName());
+            kapuaTopic = MessageConverter.toKapuaTopic(messageCreator.getTopic());
         }
         catch (KapuaInvalidTopicException exc)
         {
@@ -257,7 +257,7 @@ public class EsMessageStoreServiceImpl
         // MessageDAO: query
         try {
         	
-        	this.datastoreAdapter.storeMessage(accountName, 
+        	this.datastoreFacade.storeMessage(accountName, 
         									   message, 
         									   maxTopicDepth, 
         									   indexedOn, 
@@ -311,7 +311,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -347,7 +347,7 @@ public class EsMessageStoreServiceImpl
         
         try {
         	KapuaListResult<KapuaMessage> result = null;
-        	result = this.datastoreAdapter.findMessagesByTopic(accountName,
+        	result = this.datastoreFacade.findMessagesByTopic(accountName,
 	        								  		   topic,
 	        								  		   start,
 	        								  		   end,
@@ -377,7 +377,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -414,7 +414,7 @@ public class EsMessageStoreServiceImpl
         
         try {
         	KapuaListResult<KapuaMessage> result = null;
-        	result = this.datastoreAdapter.findMessagesByAsset(accountName,
+        	result = this.datastoreFacade.findMessagesByAsset(accountName,
 	        								  		   asset,
 	        								  		   start,
 	        								  		   end,
@@ -443,7 +443,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         LocalServicePlan accountServicePlan = getAccountServicePlan(accountName);
         long ttl = accountServicePlan.getDataTimeToLive() * DAY_MILLIS;
@@ -478,7 +478,7 @@ public class EsMessageStoreServiceImpl
         
         try {
         	KapuaListResult<KapuaMessage> result = null;
-        	result = this.datastoreAdapter.findMessagesByAccount(accountName,
+        	result = this.datastoreFacade.findMessagesByAccount(accountName,
 	        								  		   start,
 	        								  		   end,
 	        								  		   query.getIndexOffset(),
@@ -506,7 +506,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         LocalServicePlan accountServicePlan = getAccountServicePlan(accountName);
         long ttl = accountServicePlan.getDataTimeToLive() * DAY_MILLIS;
@@ -518,7 +518,7 @@ public class EsMessageStoreServiceImpl
         
         try {
         	KapuaListResult<KapuaMessage> result = null;
-        	result = this.datastoreAdapter.findMessagesById(accountName,
+        	result = this.datastoreFacade.findMessagesById(accountName,
         											   query.getKeys(),
 	        								  		   query.getLimit(),
 	        								  		   query.getFetchStyle());
@@ -542,7 +542,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -579,7 +579,7 @@ public class EsMessageStoreServiceImpl
         
         try {
         	KapuaListResult<KapuaMessage> result = null;
-        	result = this.datastoreAdapter.findMessagesByMetric(accountName,
+        	result = this.datastoreFacade.findMessagesByMetric(accountName,
         														topic,
         														query.getName(),
         														query.getType(),
@@ -612,7 +612,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         LocalServicePlan accountServicePlan = getAccountServicePlan(accountName);
         long ttl = accountServicePlan.getDataTimeToLive() * DAY_MILLIS;
@@ -629,7 +629,7 @@ public class EsMessageStoreServiceImpl
 
         
         try {
-        	long result = this.datastoreAdapter.findMessagesByAccountCount(accountName);
+        	long result = this.datastoreFacade.findMessagesByAccountCount(accountName);
         	return result;
         } catch (Exception exc) {
         	// TODO manage exeception
@@ -697,7 +697,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check access
-        checkDataAccess(accountName, DatastorePermAction.DELETE);
+        checkDataAccess(accountName, MessageStoreServiceAction.DELETE);
 
         //
         // Do the find
@@ -734,7 +734,7 @@ public class EsMessageStoreServiceImpl
             }
 			*/
         	
-            this.datastoreAdapter.deleteMessageById(accountName,
+            this.datastoreFacade.deleteMessageById(accountName,
             										uuid);
             
         } catch (Exception exc) {
@@ -753,7 +753,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check access
-        checkDataAccess(accountName, DatastorePermAction.DELETE);
+        checkDataAccess(accountName, MessageStoreServiceAction.DELETE);
 
         //
         // Do the find
@@ -778,7 +778,7 @@ public class EsMessageStoreServiceImpl
         try {
         	
         	boolean purgeMetadata = purge;
-        	this.datastoreAdapter.deleteMessages(accountName, topic, 
+        	this.datastoreFacade.deleteMessages(accountName, topic, 
         										 startYear, startWeek,
         										 endYear, endWeek, 
         										 weeksTtl, ttl, purgeMetadata, pl);
@@ -806,7 +806,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -821,7 +821,7 @@ public class EsMessageStoreServiceImpl
         try {
         	
         	KapuaListResult<KapuaMetricInfo<?>> result = null;
-        	result = this.datastoreAdapter.findMetricsByTopic(accountName,
+        	result = this.datastoreFacade.findMetricsByTopic(accountName,
 											                  topic,
 											                  query.getIndexOffset(),
 											                  query.getLimit());
@@ -844,7 +844,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -870,7 +870,7 @@ public class EsMessageStoreServiceImpl
             long startTime = endTime - ttl;
         	
         	KapuaListResult<KapuaMetricValue> result = null;
-        	result = this.datastoreAdapter.findMetricsByValue(accountName,
+        	result = this.datastoreFacade.findMetricsByValue(accountName,
 											                 topic,
 											                 query.getName(),
 											                 query.getType(),
@@ -900,7 +900,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -920,7 +920,7 @@ public class EsMessageStoreServiceImpl
             long startTime = query.getStartDate();
         	
         	KapuaListResult<KapuaMetricValue> result = null;
-        	result = this.datastoreAdapter.findMetricsByTimestamp(accountName,
+        	result = this.datastoreFacade.findMetricsByTimestamp(accountName,
 												                  topic,
 												                  query.getName(),
 												                  query.getType(),
@@ -951,7 +951,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check Access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -999,7 +999,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -1014,7 +1014,7 @@ public class EsMessageStoreServiceImpl
         try {
         	
         	KapuaListResult<KapuaTopicInfo> result = null;
-        	result = this.datastoreAdapter.findTopicsByAccount(accountName,
+        	result = this.datastoreFacade.findTopicsByAccount(accountName,
         													   query.getPrefix(),
 											                   query.getIndexOffset(),
 											                   query.getLimit());
@@ -1038,7 +1038,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -1053,7 +1053,7 @@ public class EsMessageStoreServiceImpl
         try {
         	
         	KapuaListResult<KapuaTopicInfo> result = null;
-        	result = this.datastoreAdapter.findTopicsByAsset(accountName,
+        	result = this.datastoreFacade.findTopicsByAsset(accountName,
         													 asset,
         													 query.getPrefix(),
 											                 query.getIndexOffset(),
@@ -1079,7 +1079,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check access
-        checkDataAccess(accountName, DatastorePermAction.DELETE);
+        checkDataAccess(accountName, MessageStoreServiceAction.DELETE);
 
         //
         // Do the find
@@ -1104,7 +1104,7 @@ public class EsMessageStoreServiceImpl
         try {
 
         	Date endDate = KapuaDateUtils.getEdcSysDate();
-        	this.datastoreAdapter.deleteTopics(accountName, weeksTtl, ttl, endDate.getTime());
+        	this.datastoreFacade.deleteTopics(accountName, weeksTtl, ttl, endDate.getTime());
         	
         } catch (Exception exc) {
         	// TODO manage exeception
@@ -1128,7 +1128,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check access
-        checkDataAccess(accountName, DatastorePermAction.READ);
+        checkDataAccess(accountName, MessageStoreServiceAction.READ);
 
         //
         // Do the find
@@ -1143,7 +1143,7 @@ public class EsMessageStoreServiceImpl
         try {
         	
         	KapuaListResult<KapuaAssetInfo> result = null;
-        	result = this.datastoreAdapter.findAssetsByAccount(accountName,
+        	result = this.datastoreFacade.findAssetsByAccount(accountName,
 											                   query.getIndexOffset(),
 											                   query.getLimit());
         
@@ -1164,7 +1164,7 @@ public class EsMessageStoreServiceImpl
 
         //
         // Check access
-        checkDataAccess(accountName, DatastorePermAction.DELETE);
+        checkDataAccess(accountName, MessageStoreServiceAction.DELETE);
 
         //
         // Do the find
@@ -1179,7 +1179,7 @@ public class EsMessageStoreServiceImpl
         try {
 
         	Date endDate = KapuaDateUtils.getEdcSysDate();
-        	this.datastoreAdapter.deleteAssets(accountName, ttl, endDate.getTime());
+        	this.datastoreFacade.deleteAssets(accountName, ttl, endDate.getTime());
         	
         } catch (Exception exc) {
         	// TODO manage exeception
@@ -1209,7 +1209,7 @@ public class EsMessageStoreServiceImpl
 
         try {
         	
-        	this.datastoreAdapter.resetCache(accountName, topic);
+        	this.datastoreFacade.resetCache(accountName, topic);
         	
         } catch (Exception exc) {
         	// TODO manage exeception
@@ -1225,7 +1225,7 @@ public class EsMessageStoreServiceImpl
     //
     // -----------------------------------------------------------------------------------------
 
-    private void checkDataAccess(String accountName, DatastorePermAction action)
+    private void checkDataAccess(String accountName, MessageStoreServiceAction action)
         throws KapuaException
     {
         //

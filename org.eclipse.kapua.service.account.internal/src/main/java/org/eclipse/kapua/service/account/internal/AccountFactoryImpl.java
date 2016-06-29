@@ -16,8 +16,6 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountQuery;
-import org.eclipse.kapua.service.account.Configuration;
-import org.eclipse.kapua.service.account.ConfigurationCreator;
 
 public class AccountFactoryImpl implements AccountFactory
 {
@@ -32,17 +30,4 @@ public class AccountFactoryImpl implements AccountFactory
     {
         return new AccountQueryImpl(scopeId);
     }
-
-    @Override
-    public Configuration newConfiguration(ConfigurationCreator creator)
-    {
-        return new ConfigurationImpl(creator.getScopeId());
-    }
-
-    @Override
-    public ConfigurationCreator newConfigurationCreator(KapuaId scopeId)
-    {
-        return new ConfigurationCreatorImpl(scopeId);
-    }
-
 }

@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.datastore.Storable;
 
 public interface Message extends Storable
 {
-    public String getUuid();
+    public StorableId getId();
 
     public Date getTimestamp();
 

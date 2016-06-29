@@ -17,12 +17,13 @@ import org.eclipse.kapua.service.datastore.AssetStoreService;
 import org.eclipse.kapua.service.datastore.StorableQuery;
 import org.eclipse.kapua.service.datastore.StorableResultList;
 import org.eclipse.kapua.service.datastore.model.AssetInfo;
+import org.eclipse.kapua.service.datastore.model.StorableId;
 
 public class AssetStoreServiceImpl implements AssetStoreService
 {
 
     @Override
-    public void delete(String scopeName, String uuid)
+    public void delete(String scopeName, StorableId uuid)
         throws KapuaException
     {
         // TODO Auto-generated method stub
@@ -30,7 +31,7 @@ public class AssetStoreServiceImpl implements AssetStoreService
     }
 
     @Override
-    public AssetInfo find(String scopeName, String uuid)
+    public AssetInfo find(String scopeName, StorableId uuid)
         throws KapuaException
     {
         // TODO Auto-generated method stub

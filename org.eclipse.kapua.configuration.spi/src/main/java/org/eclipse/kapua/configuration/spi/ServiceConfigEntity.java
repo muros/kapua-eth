@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.account.internal;
+package org.eclipse.kapua.configuration.spi;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -19,20 +19,29 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.kapua.commons.config.model.AbstractKapuaConfigEntity;
+import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
+import org.eclipse.kapua.model.config.KapuaConfigEntity;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.account.Configuration;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder= {"scopeId","id","name","createdOn","createdBy","modifiedOn","modifiedBy","optlock"})
 @Entity(name = "Configuration")
-@Table(name = "act_configuration")
-public class ConfigurationImpl extends AbstractKapuaConfigEntity implements Configuration
+@Table(name = "sys_configuration")
+public class ServiceConfigEntity extends AbstractKapuaUpdatableEntity implements KapuaConfigEntity
 {
-	private static final long serialVersionUID = -7130150573272544539L;
+    private static final long serialVersionUID = 8699765898092343484L;
+
+    public static final String TYPE = "scfg";
+
+    public String getType()
+    {
+        return TYPE;
+    }
 	
-	public ConfigurationImpl(KapuaId scopeId) {
+	public ServiceConfigEntity(KapuaId scopeId) {
 		super(scopeId);
 	}
+	
+	//TODO Add configuration specific fields
 }
