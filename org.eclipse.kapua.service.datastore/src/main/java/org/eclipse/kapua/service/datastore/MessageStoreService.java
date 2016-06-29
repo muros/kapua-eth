@@ -13,6 +13,7 @@
 package org.eclipse.kapua.service.datastore;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaService;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 import org.eclipse.kapua.service.datastore.model.Message;
@@ -23,15 +24,15 @@ import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
 public interface MessageStoreService extends KapuaService,
                                      KapuaConfigurableService
 {
-    public StorableId store(String scopeName, MessageCreator message)
+    public StorableId store(KapuaId scopeId, MessageCreator message)
         throws KapuaException;
 
-    public void delete(String scopeName, StorableId id)
+    public void delete(KapuaId scopeId, StorableId id)
         throws KapuaException;
 
-    public Message find(String scopeName, StorableId id, MessageFetchStyle fetchStyle)
+    public Message find(KapuaId scopeId, StorableId id, MessageFetchStyle fetchStyle)
         throws KapuaException;
 
-    public StorableResultList<Message> query(String scopeName, StorableQuery<Message> query)
+    public StorableResultList<Message> query(KapuaId scopeId, StorableQuery<Message> query)
         throws KapuaException;
 }

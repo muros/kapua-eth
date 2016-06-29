@@ -48,17 +48,18 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     }
 
     @Override
-    public StorableId store(String scopeName, MessageCreator messageCreator)
+    public StorableId store(KapuaId scopeId, MessageCreator messageCreator)
         throws KapuaException
     {
         //
         // Check Access
-        this.checkDataAccess(scopeName, MessageStoreServiceAction.CREATE);
+        // TODO temporary
+        String scopeName = this.checkDataAccess(scopeId, MessageStoreServiceAction.CREATE);
         return new StorableIdImpl(esMessageStoreService.store(scopeName, messageCreator));
     }
 
     @Override
-    public void delete(String scopeName, StorableId uuid)
+    public void delete(KapuaId scopeId, StorableId uuid)
         throws KapuaException
     {
         // TODO Auto-generated method stub
@@ -66,17 +67,17 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     }
 
     @Override
-    public Message find(String scopeName, StorableId uuid, MessageFetchStyle fetchStyle)
+    public Message find(KapuaId scopeId, StorableId id, MessageFetchStyle fetchStyle)
         throws KapuaException
     {
         //
         // Check Access
-        this.checkDataAccess(scopeName, MessageStoreServiceAction.READ);
-        return esMessageStoreService.find(scopeName, uuid.toString(), fetchStyle);
+        String scopeName = this.checkDataAccess(scopeId, MessageStoreServiceAction.READ);
+        return esMessageStoreService.find(scopeName, id.toString(), fetchStyle);
     }
 
     @Override
-    public StorableResultList<Message> query(String scopeName, StorableQuery<Message> query)
+    public StorableResultList<Message> query(KapuaId scopeId, StorableQuery<Message> query)
         throws KapuaException
     {
         // TODO Auto-generated method stub
@@ -89,7 +90,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     //
     // -----------------------------------------------------------------------------------------
 
-    private void checkDataAccess(String scopeName, AccessAction action)
+    private String checkDataAccess(KapuaId scopeId, AccessAction action)
         throws KapuaException
     {
         //
@@ -99,11 +100,13 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         AuthorizationService authorizationService = serviceLocator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = serviceLocator.getFactory(PermissionFactory.class);
 
-        Account account = accountService.findByName(scopeName);
+        Account account = accountService.find(scopeId);
 
         // TODO add enum for actions
         Permission permission = permissionFactory.newInstance("data", action.key(), account.getId());
         authorizationService.checkPermission(permission);
+        
+        return account.getName();
     }
 
     @Override

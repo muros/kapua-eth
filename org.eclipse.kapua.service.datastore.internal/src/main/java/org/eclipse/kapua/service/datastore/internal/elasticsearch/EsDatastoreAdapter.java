@@ -101,6 +101,8 @@ public class EsDatastoreAdapter {
         int expireAfter = config.getInt(KapuaDatastoreConfigKeys.CONFIG_CACHE_LOCAL_EXPIRE_AFTER);
         int sizeMax = config.getInt(KapuaDatastoreConfigKeys.CONFIG_CACHE_LOCAL_SIZE_MAXIMUM);
 
+        // TODO set expiration to happen frequently because the reset cache method will not get 
+        // called from service clients any more
         topicCache = new LocalCache<String, Boolean>(sizeMax, expireAfter, false);
 		topicMetricCache = new LocalCache<String, Boolean>(sizeMax, expireAfter, false);
 		assetCache = new LocalCache<String, Boolean>(sizeMax, expireAfter, false);

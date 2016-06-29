@@ -13,18 +13,19 @@
 package org.eclipse.kapua.service.datastore;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaService;
 import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.TopicInfo;
 
 public interface TopicStoreService extends KapuaService
 {
-    public void delete(String scopeName, StorableId id)
+    public void delete(KapuaId scopeId, StorableId id)
         throws KapuaException;
 
-    public TopicInfo find(String scopeName, StorableId id)
+    public TopicInfo find(KapuaId scopeId, StorableId id)
         throws KapuaException;
 
-    public StorableResultList<TopicInfo> query(String scopeName, StorableQuery<TopicInfo> query)
+    public StorableResultList<TopicInfo> query(KapuaId scopeId, StorableQuery<TopicInfo> query)
         throws KapuaException;
 }
