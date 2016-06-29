@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.lifecycle;
 
+import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaService;
 
 public interface DeviceLifeCycleService extends KapuaService
@@ -21,30 +24,30 @@ public interface DeviceLifeCycleService extends KapuaService
      * 
      * @throws KapuaException
      */
-    // public void birth(String connectionClientId, String clientId, Message message)
-    // throws KapuaException;
+    public void birth(KapuaId connectionId, KapuaMessage message)
+        throws KapuaException;
 
     /**
      * Processes a death certificate for a device, updating the device footprint with the information supplied.
      * 
      * @throws KapuaException
-     *             public void dc(String accountName, String clientId, EdcMessage message)
-     *             throws KapuaException;
      */
+    public void death(KapuaId connectionId, KapuaMessage message)
+        throws KapuaException;
 
     /**
      * Processes a last-will testament for a device, updating the device footprint with the information supplied.
      * 
      * @throws KapuaException
-     *             public void missing(String accountName, String clientId, EdcMessage message)
-     *             throws KapuaException;
      */
+    public void missing(KapuaId connectionId, KapuaMessage message)
+        throws KapuaException;
 
     /**
      * Processes a birth certificate for a device, creating or updating the device footprint with the information supplied.
      * 
      * @throws KapuaException
-     *             public void applications(String accountName, String clientId, EdcMessage message)
-     *             throws KapuaException;
      */
+    public void applications(KapuaId connectionId, KapuaMessage message)
+        throws KapuaException;
 }
