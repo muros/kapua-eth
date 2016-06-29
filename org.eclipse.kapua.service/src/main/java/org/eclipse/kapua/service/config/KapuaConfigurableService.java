@@ -20,7 +20,7 @@ import org.eclipse.kapua.model.id.KapuaId;
 
 public interface KapuaConfigurableService
 {
-	public Tocd getConfigMetadata(KapuaId scopeId) throws KapuaException;
+	public Tocd getConfigMetadata() throws KapuaException;
 	
 	public Map<String, Object> getConfigValues(KapuaId scopeId) throws KapuaException;
 	

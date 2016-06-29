@@ -10,16 +10,22 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.config;
+package org.eclipse.kapua.configuration.spi;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
-import org.eclipse.kapua.model.config.KapuaConfigEntity;
+import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.model.config.KapuaConfigEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 
-public interface KapuaConfigEntityFactory<E extends KapuaConfigEntity, 
-										  C extends KapuaConfigEntityCreator<E>> extends KapuaEntityFactory 
+public class ServiceConfigEntityCreator extends AbstractKapuaEntityCreator<ServiceConfigEntity>
+                                        implements KapuaConfigEntityCreator<ServiceConfigEntity>
 {
-	public C newConfigurationCreator(KapuaId scopeId);
-	public E newConfiguration(C creator);
+    private static final long serialVersionUID = -1159593426674371485L;
+
+    protected ServiceConfigEntityCreator(KapuaId scopeId)
+    {
+        super(scopeId);
+        // TODO Auto-generated constructor stub
+    }
+
+    // TODO add configuration specific fields
 }

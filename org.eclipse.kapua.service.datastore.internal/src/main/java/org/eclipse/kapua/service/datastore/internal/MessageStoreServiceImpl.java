@@ -15,6 +15,7 @@ package org.eclipse.kapua.service.datastore.internal;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.service.config.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -31,12 +32,16 @@ import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
 
-public class MessageStoreServiceImpl implements MessageStoreService
+public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService implements MessageStoreService
 {
+    private static final long serialVersionUID = 4142282449826005424L;
+    
     private EsMessageStoreServiceImpl esMessageStoreService;
 
     public MessageStoreServiceImpl()
     {
+        // TODO pass a correct pid and a correct domain
+        super("PID", "DOMAIN");
         esMessageStoreService = new EsMessageStoreServiceImpl(this);
     }
 
@@ -100,7 +105,7 @@ public class MessageStoreServiceImpl implements MessageStoreService
     }
 
     @Override
-    public Tocd getConfigMetadata(KapuaId scopeId)
+    public Tocd getConfigMetadata()
         throws KapuaException
     {
         // TODO Auto-generated method stub

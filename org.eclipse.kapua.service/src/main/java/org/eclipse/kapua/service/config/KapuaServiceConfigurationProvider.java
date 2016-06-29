@@ -14,13 +14,16 @@ package org.eclipse.kapua.service.config;
 
 import java.util.Map;
 
+import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.model.config.ComponentConfiguration;
-import org.eclipse.kapua.model.config.KapuaConfigEntity;
-import org.eclipse.kapua.model.config.KapuaConfigEntityCreator;
+import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.service.KapuaService;
 
-public interface KapuaServiceConfigurationProvider<E extends KapuaConfigEntity, C extends KapuaConfigEntityCreator<E>, F extends KapuaConfigEntityFactory<E, C>> 
+public interface KapuaServiceConfigurationProvider extends KapuaService
 {
-	public ComponentConfiguration getServiceConfiguration(Class<C> clazz, Class<F> clazzFactory, String pid);
+    public Tocd getConfigMetadata() throws KapuaException;
+    
+	public ComponentConfiguration getServiceConfiguration(String pid);
 
-	public void setServiceConfiguration(Class<C> clazz, Class<F> clazzFactory, String pid, Map<String, Object> values);
+	public void setServiceConfiguration(String pid, Map<String, Object> values);
 }

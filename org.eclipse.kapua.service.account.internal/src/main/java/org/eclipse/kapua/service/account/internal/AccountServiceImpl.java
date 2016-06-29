@@ -21,9 +21,9 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.KapuaIllegalArgumentException;
-import org.eclipse.kapua.commons.config.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
+import org.eclipse.kapua.commons.service.config.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -31,11 +31,8 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
-import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.account.Configuration;
-import org.eclipse.kapua.service.account.ConfigurationCreator;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.slf4j.Logger;
@@ -44,7 +41,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation class for the AccountService interface.
  */
-public class AccountServiceImpl extends AbstractKapuaConfigurableService<Configuration, ConfigurationCreator, AccountFactory> implements AccountService
+public class AccountServiceImpl extends AbstractKapuaConfigurableService implements AccountService
 {
 
     /**
@@ -59,7 +56,8 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService<Configu
 
     public AccountServiceImpl()
     {
-        super(ConfigurationCreator.class, AccountFactory.class, "account", "pid");
+        // TODO pass a correct pid and domain
+        super("account", "pid");
     }
 
     /**

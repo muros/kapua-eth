@@ -1,4 +1,4 @@
-CREATE TABLE act_configuration (
+CREATE TABLE sys_configuration (
   scope_id          		 BIGINT(21) 	  UNSIGNED,
   id                         BIGINT(21) 	  UNSIGNED NOT NULL,
   created_on                 TIMESTAMP(3) 	  DEFAULT 0,
