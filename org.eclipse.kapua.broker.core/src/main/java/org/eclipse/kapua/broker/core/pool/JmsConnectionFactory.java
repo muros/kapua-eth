@@ -1,4 +1,4 @@
-package org.eclipse.kapua.broker.core.pooling;
+package org.eclipse.kapua.broker.core.pool;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;

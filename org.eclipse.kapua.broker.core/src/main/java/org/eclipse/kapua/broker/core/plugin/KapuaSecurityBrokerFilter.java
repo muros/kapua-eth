@@ -1,5 +1,6 @@
 package org.eclipse.kapua.broker.core.plugin;
 
+import java.math.BigInteger;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -30,14 +31,6 @@ import org.apache.activemq.filter.DestinationMapEntry;
 import org.apache.activemq.security.AuthorizationEntry;
 import org.apache.activemq.security.DefaultAuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.ShiroException;
-import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.ExpiredCredentialsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
 import org.apache.shiro.util.ThreadState;
@@ -54,9 +47,9 @@ import org.eclipse.kapua.KapuaIllegalNullArgumentException;
 //import org.eclipse.kapua.activemq.worker.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
 import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
-import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool;
-import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool.DESTINATIONS;
-import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerWrapper;
+import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool;
+import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerWrapper;
+import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
@@ -141,6 +134,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private static KapuaLocator                 locator               = KapuaLocator.getInstance();
     
     public static final String VT_TOPIC_PREFIX_TEMPLATE    = "VirtualTopic.{0}";
+    public static final String VT_TOPIC_PREFIX             = "VirtualTopic.";
     public static final String HEADER_KAPUA_CONNECTION_ID  = "KAPUA_CONNECTION_ID";
     
     /**
@@ -575,8 +569,8 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
             KapuaId scopeId = accessToken.getScopeId();
             KapuaId userId = accessToken.getId();
-            //TODO implement service to get the account name
-            String accountName = "";
+            Account account = accountService.find(scopeId);
+            String accountName = account.getName();
 //            EdcSession edcSession = authSrv.getCurrentSession();
 //            User currentUser = edcSession.getUser();
             loginShiroLoginTimeContext.stop();
@@ -817,8 +811,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         		KapuaPrincipal edcPrincipal = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal());
         		String clientId = edcPrincipal.getClientId();
         		long accountId = edcPrincipal.getAccountId();
-        		//TODO implement service to get the account name
-        		String accountName = "";
         		String username = kapuaSecurityContext.getUserName();
         		String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
         		

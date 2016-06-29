@@ -30,7 +30,6 @@
         <commons.pool.version>2.2</commons.pool.version>
 	</properties>
 
-
 	<build>
 		<plugins>
 			<plugin>
@@ -41,10 +40,9 @@
 				<configuration>
 					<instructions>
 						<Export-Package>
-						org.eclipse.kapua.broker.core
-						org.eclipse.kapua.broker.core
-						org.eclipse.kapua.broker.core
-							org.eclipse.kapua.broker.core,
+						org.eclipse.kapua.broker.core,
+						org.eclipse.kapua.broker.core.listener,
+						org.eclipse.kapua.broker.core.threadfactory
 						</Export-Package>
 						<Private-Package>org.eclipse.kapua.broker.core.*</Private-Package>
 					</instructions>
@@ -144,11 +142,6 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-core</artifactId>
-			<version>${shiro.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

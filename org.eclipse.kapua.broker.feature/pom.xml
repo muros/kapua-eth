@@ -24,6 +24,7 @@
   
     <properties>
     	<hibernate.version>4.3.5.Final</hibernate.version>
+    	<commons.pool.version>2.2</commons.pool.version>
     </properties>
     
     <dependencies>

@@ -139,10 +139,10 @@
             JDBC CONNECTION
      ==============================================================  -->
     <!--
-    <bean id="edcDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <bean id="kapuaDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/edcdb"/>
-        <property name="username" value="edc"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/kapuadb"/>
+        <property name="username" value="kapua"/>
         <property name="password" value="Welcome1"/>
     </bean>
     -->
@@ -153,8 +153,8 @@
     <!--
     <bean id="springDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" >
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/edcdb"/>
-        <property name="username" value="edc"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/kapuadb"/>
+        <property name="username" value="kapua"/>
         <property name="password" value="Welcome1"/>
         <property name="removeAbandoned" value="true"/>
         <property name="initialSize" value="20" />
@@ -194,7 +194,7 @@
     <!--  create connection pooling!!! -->
     
 	<!-- Converter -->
-	<bean id="edcConverter" class="com.eurotech.cloud.commonsbundle.camel.converter.EdcConverter" />
+	<bean id="kapuaConverter" class="org.eclipse.kapua.broker.core.converter.KapuaConverter" />
 	
 	<!-- Consumer -->
 	<!-- ASSISTANTS -->
@@ -207,25 +207,18 @@
 	<!-- THREADS POOL FACTORY -->
 	<!-- list of start pool name for which the EdcExecutorThreadFactory will replace the ThreadFactory with our implementation -->
 	<util:list id="executorThreadFactoryMatcherList" list-class="java.util.ArrayList" value-type="java.lang.String" >
-       <value>edcExecutorPool</value> <!-- listener for our pojo endpoint -->
+       <value>kapuaExecutorPool</value> <!-- listener for our pojo endpoint -->
        <value>JmsConsumer</value>   <!-- pool used by the camel rout that subscribing amq topics -->
     </util:list>
-    <bean id="edcExecutorThreadFactory" class="com.eurotech.cloud.commonsbundle.camel.pool.EdcExecutorThreadFactory" >
-        <constructor-arg index="0" type="java.lang.String" value="EdcExecutorThreadFactory" />
+    <bean id="kapuaExecutorThreadFactory" class="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadFactory" >
+        <constructor-arg index="0" type="java.lang.String" value="KapuaxecutorThreadFactory" />
         <constructor-arg index="1" type="java.util.List" ref="executorThreadFactoryMatcherList" />
         <constructor-arg index="2" type="boolean" value="true" /> <!-- is rootThreadGroup -->
     </bean>
-    <bean id="edcExecutorThreadPoolFactory" class="com.eurotech.cloud.commonsbundle.camel.pool.EdcExecutorThreadPoolFactory" >
-        <constructor-arg index="0" type="com.eurotech.cloud.commonsbundle.camel.pool.EdcExecutorThreadFactory" ref="edcExecutorThreadFactory" />
+    <bean id="kapuaExecutorThreadPoolFactory" class="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadPoolFactory" >
+        <constructor-arg index="0" type="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadFactory" ref="kapuaExecutorThreadFactory" />
     </bean>
     
-    <!-- It seems to work without this override... To be removed once camel integration is fully tested! Dejan will check for this!
-    <bean id="executorServiceManager" class="com.eurotech.cloud.commonsbundle.camel.pool.EdcExecutorServiceManager">
-        <constructor-arg index="0" type="com.eurotech.cloud.commonsbundle.camel.pool.EdcExecutorThreadPoolFactory" ref="edcExecutorThreadPoolFactory" />
-        <constructor-arg index="1" type="org.apache.camel.CamelContext" ref="camelContext" />
-    </bean>
-    -->
-     
 	<camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring" >
 	    <!-- the beans are defined as spring bean so check if it's possible to remove the package scan at all. Remove also the endpoint annotation from the pojo endpoints and all should works. Otherwise send to Dejan a simplified example -->
 		<packageScan>
@@ -262,7 +255,7 @@
 		Please check the EdcExecutorThreadPoolFactory comments before modify the threadName attributes
 		-->
         <threadPool id="serviceThreads"
-                threadName="edcExecutorPoolServiceProcessor"
+                threadName="kapuaExecutorPoolServiceProcessor"
                 poolSize="3"
                 maxPoolSize="5"
                 maxQueueSize="2" />
@@ -289,7 +282,7 @@
         -->
 		<route id="lifeCycleRoute" errorHandlerRef="lifeCycleMessageErrorHandler" >
 			<from uri="activemq:queue:Consumer.eurotech:systemlisteners:EXACTLY_ONCE.VirtualTopic.$EDC.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=10&amp;maxConcurrentConsumers=20" />
-            <bean ref="edcConverter" method="convertTo"/>
+            <bean ref="kapuaConverter" method="convertTo"/>
 			<choice id="lifeCycleBirthChoice">
 	            <!-- application birth $EDC/+/+/MQTT/BA/BIRTH -->
 	            <when id="lifeCycleBirthFilter">
@@ -305,11 +298,11 @@
 	   </route>
         <!-- service endpoint -->
 		<route id="serviceRoute" errorHandlerRef="serviceMessageErrorHandler" >
-		    <!-- check edc-config file beofre changes this queue name (see amq.broker.queue.service.name) -->
+		    <!-- check kapua-config file beofre changes this queue name (see amq.broker.queue.service.name) -->
 		    <from uri="activemq:queue:EdcService" />
 		    <multicast executorServiceRef="serviceThreads" >
                 <pipeline>
-                    <bean ref="edcConverter" method="convertTo"/>
+                    <bean ref="kapuaConverter" method="convertTo"/>
 		            <to uri="bean:serviceMessageListener?method=processMessage" />
 		        </pipeline>
 		    </multicast>

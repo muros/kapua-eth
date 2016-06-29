@@ -29,6 +29,8 @@
         <c3p0-commons.version>0.2.3.4</c3p0-commons.version>
         <mysql.version>5.1.31</mysql.version>
         <maven-assembly-plugin.version>2.2</maven-assembly-plugin.version>
+        <kapua.version.jdbc.fragment>0.1</kapua.version.jdbc.fragment>
+        <kapua.version>0.1-SNAPSHOT</kapua.version>
     </properties>
 
     <build>
