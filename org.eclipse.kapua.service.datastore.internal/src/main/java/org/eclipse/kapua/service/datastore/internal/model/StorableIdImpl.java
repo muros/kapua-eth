@@ -1,6 +1,5 @@
 package org.eclipse.kapua.service.datastore.internal.model;
 
-import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.service.datastore.model.StorableId;
 
 public class StorableIdImpl implements StorableId

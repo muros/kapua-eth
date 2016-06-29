@@ -33,30 +33,32 @@ import org.eclipse.kapua.service.datastore.MessageStoreService;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.Payload;
 import org.eclipse.kapua.service.datastore.model.Position;
+import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.Topic;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DatastoreServiceTest extends KapuaTest
+public class MessageStoreServiceTest extends KapuaTest
 {
     @SuppressWarnings("unused")
-    private static final Logger s_logger = LoggerFactory.getLogger(DatastoreServiceTest.class);
+    private static final Logger s_logger = LoggerFactory.getLogger(MessageStoreServiceTest.class);
 
     @Test
     public void testStore()
         throws Exception
     {
         // KapuaPeid accountPeid = KapuaEidGenerator.generate();//
-        KapuaId scopeId = new KapuaEid(BigInteger.valueOf(1));
+        KapuaId rootScopeId = new KapuaEid(BigInteger.valueOf(1));
 
         KapuaLocator locator = KapuaLocator.getInstance();
 
         long accountSerial = (new Date()).getTime();
-        AccountCreator accountCreator = this.getTestAccountCreator(scopeId, accountSerial);
+        AccountCreator accountCreator = this.getTestAccountCreator(rootScopeId, accountSerial);
 
         AccountService accountService = locator.getService(AccountService.class);
         Account account = accountService.create(accountCreator);
+        KapuaId scopeId = account.getId();
         String scopeName = account.getName();
 
         MessageStoreService messageStoreService = locator.getService(MessageStoreService.class);
@@ -89,13 +91,13 @@ public class DatastoreServiceTest extends KapuaTest
         messagePayload.setMetrics(metrics);
         messageCreator.setPayload(messagePayload);
         
-        String messageUuid = messageStoreService.store(scopeName, messageCreator);
+        StorableId messageId = messageStoreService.store(scopeId, messageCreator);
         
         
         //
         // Message asserts
-        assertNotNull(messageUuid);
-        assertTrue(!messageUuid.isEmpty());
+        assertNotNull(messageId);
+        assertTrue(!messageId.toString().isEmpty());
     }
 
     private AccountCreator getTestAccountCreator(KapuaId scopeId, long random)
