@@ -23,6 +23,11 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
+import org.eclipse.kapua.commons.cache.LocalCache;
+import org.eclipse.kapua.commons.util.KapuaDateUtils;
+import org.eclipse.kapua.message.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.KapuaTopic;
 import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfig;
 import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfigKeys;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsAssetDAO;
