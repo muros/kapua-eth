@@ -162,24 +162,24 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     											"Consumer.{0}:EXACTLY_ONCE.{1}"};
 
 	// full client id, with account prepended
-	private final static String MULTI_ACCOUNT_CLIENT_ID = "{0}:{1}";
-	
-	/**
-	 * Web socket connector
-	 */
-	private final static String CONNECTOR_NAME_WS = "ws";
-	/**
-	 * Mqtt socket SSL with mutual authentication
-	 */
-	private final static String CONNECTOR_NAME_SSL_MUTUAL = "mutualMqtts";
- 	/**
- 	 * Mqtt socket SSL
- 	 */
-	private final static String CONNECTOR_NAME_SSL = "mqtts";
- 	/**
- 	 * Mqtt socket SSL plain
- 	 */
-	private final static String CONNECTOR_NAME_NO_SSL = "mqtt";
+	public final static String MULTI_ACCOUNT_CLIENT_ID = "{0}:{1}";
+//	
+//	/**
+//	 * Web socket connector
+//	 */
+//	private final static String CONNECTOR_NAME_WS = "ws";
+//	/**
+//	 * Mqtt socket SSL with mutual authentication
+//	 */
+//	private final static String CONNECTOR_NAME_SSL_MUTUAL = "mutualMqtts";
+// 	/**
+// 	 * Mqtt socket SSL
+// 	 */
+//	private final static String CONNECTOR_NAME_SSL = "mqtts";
+// 	/**
+// 	 * Mqtt socket SSL plain
+// 	 */
+//	private final static String CONNECTOR_NAME_NO_SSL = "mqtt";
     
     //rate limiter section
     //TODO read these parameters from the configuration
@@ -200,8 +200,8 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //    private static Account                         s_eurotechAccount;
     private final static Map<String, ConnectionId> connectionMap                       = new ConcurrentHashMap<String, ConnectionId>();
 
-    // network connector client
-    private Pattern                                nc_client_id_pattern;
+//    // network connector client
+//    private Pattern                                nc_client_id_pattern;
     
     //metrics section
     private MetricsService                         metricsService;
@@ -590,7 +590,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             AccessToken accessToken = authenticationService.login(credentials);
 
             KapuaId scopeId = accessToken.getScopeId();
-            KapuaId userId = accessToken.getUserId();
+            KapuaId userId = accessToken.getId();
             //TODO implement service to get the account name
             String accountName = "";
 //            EdcSession edcSession = authSrv.getCurrentSession();
@@ -921,7 +921,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         			}
         			else {
         				
-        				
+        				/*
         				
         				if (deviceConnection==null) {
                         	DeviceConnectionFactory deviceConnectionFactory = locator.getFactory(DeviceConnectionFactory.class);
@@ -986,6 +986,14 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         				finally {
         					pool.returnObject(producer);
         				}
+        			
+        				 */
+
+        			
+        				
+        				
+        			
+        			
         			}
         			metricClientDisconnectionClient.inc();
         		}

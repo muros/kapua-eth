@@ -1,48 +1,18 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright (c) 2011, 2016 Eurotech and/or its affiliates
-   
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
-   
-    Contributors:
-        Eurotech - initial API and implementation
-   
+    /*******************************************************************************
+     * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
+     *
+     * All rights reserved. This program and the accompanying materials
+     * are made available under the terms of the Eclipse Public License v1.0
+     * which accompanies this distribution, and is available at
+     * http://www.eclipse.org/legal/epl-v10.html
+     *
+     * Contributors:
+     *      Eurotech - initial API and implementation
+     *******************************************************************************/
  -->
 
-Skip to content
-This repository
-
-    Pull requests
-    Issues
-    Gist
-    ToDo 
-
-    @riccardomodanese
-
-22
-2
-
-    1
-
-eurotech/edc
-private
-Code
-Issues 83
-Pull requests 24
-Boards
-Burndown
-Wiki
-Pulse
-Graphs
-Settings
-edc/broker-feature/configuration/current_conf/jms-bridge.xml
-0c30344 19 days ago
-@riccardomodanese riccardomodanese added amq-jms connection pooling
-497 lines (461 sloc) 27.6 KB
-<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:util="http://www.springframework.org/schema/util"
@@ -223,21 +193,15 @@ edc/broker-feature/configuration/current_conf/jms-bridge.xml
 	</bean>
     <!--  create connection pooling!!! -->
     
-	<!-- Marshal -->
-	<bean id="marshalKura2xml" class="com.eurotech.cloud.commonsbundle.camel.marshal.Kura2XmlDataFormat" />
-
 	<!-- Converter -->
 	<bean id="edcConverter" class="com.eurotech.cloud.commonsbundle.camel.converter.EdcConverter" />
-	<bean id="edcRuleActionConverter" class="com.eurotech.cloud.assistant.rules.action.listener.RuleActionMessageConverter" />
 	
 	<!-- Consumer -->
 	<!-- ASSISTANTS -->
-	<bean id="deviceMessageListener" class="com.eurotech.cloud.assistant.devicemgt.listener.device.DeviceMessageListener" >
-	   <constructor-arg index="0" type="com.eurotech.cloud.commons.jms.Alerts" ref="alertBeanDeviceListener" />
+	<bean id="deviceMessageListener" class="org.eclipse.kapua.broker.core.listener.DeviceMessageListener" >
 	</bean>
 	<!-- ERROR -->
-	<bean id="errorMessageListener" class="com.eurotech.cloud.assistant.devicemgt.listener.error.ErrorMessageListener" >
-       <constructor-arg index="0" type="com.eurotech.cloud.commons.jms.Alerts" ref="alertBeanErrorListener" />
+	<bean id="errorMessageListener" class="org.eclipse.kapua.broker.core.listener.ErrorMessageListener" >
 	</bean>
 	
 	<!-- THREADS POOL FACTORY -->

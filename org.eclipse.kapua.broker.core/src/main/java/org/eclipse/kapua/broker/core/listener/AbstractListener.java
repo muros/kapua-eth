@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.broker.core.lifecycle;
+package org.eclipse.kapua.broker.core.listener;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
