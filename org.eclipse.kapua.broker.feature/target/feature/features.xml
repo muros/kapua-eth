@@ -40,9 +40,9 @@
 		<bundle>mvn:com.amazonaws/aws-java-sdk-osgi/1.10.10</bundle>
 
         <bundle start-level="45">mvn:org.hibernate.common/hibernate-commons-annotations/4.0.4.Final</bundle>
-        <bundle start-level="45">mvn:org.hibernate/hibernate-core/${hibernate.version}</bundle>
-        <bundle start-level="45">mvn:org.hibernate/hibernate-entitymanager/${hibernate.version}</bundle>
-        <bundle start-level="45">mvn:org.hibernate/hibernate-osgi/${hibernate.version}</bundle>
+        <bundle start-level="45">mvn:org.hibernate/hibernate-core/4.3.5.Final</bundle>
+        <bundle start-level="45">mvn:org.hibernate/hibernate-entitymanager/4.3.5.Final</bundle>
+        <bundle start-level="45">mvn:org.hibernate/hibernate-osgi/4.3.5.Final</bundle>
 
         <bundle start-level="50">mvn:org.eclipse.kapua/org.eclipse.kapua.broker.jdbc/0.1-SNAPSHOT</bundle>
         <bundle start-level="50">mvn:org.eclipse.kapua/org.eclipse.kapua.broker.core/0.1-SNAPSHOT</bundle>

@@ -33,5 +33,13 @@
             <artifactId>org.eclipse.kapua.service</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        
+        <!--  -->
+        <!-- Required service interfaces -->
+         <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.message</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>
