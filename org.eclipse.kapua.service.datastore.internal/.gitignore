@@ -1,10 +1,4 @@
 #
-# Customs .gitignore
-#
-target
-target/maven-archiver/pom.properties
-
-#
 # Java .gitignore
 # https://github.com/github/gitignore/blob/master/Java.gitignore
 #
