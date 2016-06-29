@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.broker.core.lifecycle;
+package org.eclipse.kapua.broker.core.listener;
 
 import java.text.MessageFormat;
 import java.util.Date;
@@ -23,40 +23,22 @@ import org.apache.activemq.broker.TransportConnection;
 import org.apache.activemq.broker.TransportConnector;
 import org.apache.camel.spi.UriEndpoint;
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
+import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool;
+import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool.DESTINATIONS;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerWrapper;
+import org.eclipse.kapua.message.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.service.datastore.MessageStoreService;
+import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
+import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.Counter;
-import com.eurotech.cloud.commons.EdcDuplicateClientIdException;
-import com.eurotech.cloud.commons.EdcException;
-import com.eurotech.cloud.commonsbundle.camel.AbstractListener;
-import com.eurotech.cloud.commons.jms.Alerts.Code;
-import com.eurotech.cloud.commons.jms.AlertMessage;
-import com.eurotech.cloud.commons.jms.Alerts;
-import com.eurotech.cloud.commons.jms.AmqEdcMessage;
-import com.eurotech.cloud.commons.jms.JmsAssistantProducerPool;
-import com.eurotech.cloud.commons.jms.JmsAssistantProducerPool.DESTINATIONS;
-import com.eurotech.cloud.commons.jms.JmsConstants;
-import com.eurotech.cloud.commons.jms.JmsUtil;
-import com.eurotech.cloud.commons.jms.wrapper.JmsAssistantProducerWrapper;
-import com.eurotech.cloud.commons.model.AlertCategories;
-import com.eurotech.cloud.commons.model.AlertCreator;
-import com.eurotech.cloud.commons.model.DeviceCredentialsTight;
-import com.eurotech.cloud.commons.model.LoginSourceType;
-import com.eurotech.cloud.commons.model.Alert.Severity;
-import com.eurotech.cloud.commons.model.cluster.BrokerNode;
-import com.eurotech.cloud.commons.service.DataStoreService;
-import com.eurotech.cloud.commons.service.DeviceService;
-import com.eurotech.cloud.commons.service.ProvisionRequestService;
-import com.eurotech.cloud.commons.service.ServiceLocator;
-import com.eurotech.cloud.commons.service.bean.AlertManagerTrusted;
-import com.eurotech.cloud.commons.service.bean.DeviceRegistryManagerTrusted;
-import com.eurotech.cloud.commons.util.AwsUtils;
-import com.eurotech.cloud.commons.util.EdcConfig;
-import com.eurotech.cloud.message.EdcInvalidTopicException;
-import com.eurotech.cloud.message.EdcMessage;
-import com.eurotech.cloud.message.EdcPayload;
-import com.eurotech.cloud.message.EdcTopic;
 
 /**
  * Device messages listener (device life cycle). Manage:
@@ -68,9 +50,11 @@ import com.eurotech.cloud.message.EdcTopic;
 		title="device message processor", 
 		syntax="bean:deviceMessageListener",
 		scheme="bean") 
-public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
+public class DeviceMessageListener extends AbstractListener<KapuaMessage> {
 
 	private static final Logger s_logger = LoggerFactory.getLogger(DeviceMessageListener.class);
+	
+	private static KapuaLocator                 locator               = KapuaLocator.getInstance();
 
 	private static final String BIRTH 	   = "MQTT/BIRTH";
 	private static final String DC         = "MQTT/DC";
@@ -80,8 +64,6 @@ public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
 	private static final String DISCONNECT = "MQTT/DISCONNECT";
 	private static final String PROVISION  = "MQTT/PROV";
 
-	private static final BrokerNode brokerNode = AwsUtils.getBrokerNode();
-	
 	//metrics
 	private Counter metricDeviceMessage;
 	private Counter metricDeviceDirectMessage;
@@ -120,56 +102,58 @@ public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
 	}
 	
 	@Override
-	public void processMessage(AmqEdcMessage message) 
+	public void processMessage(KapuaMessage message) 
 	{
 		metricDeviceMessage.inc();
-		EdcTopic edcTopic = message.getEdcTopic();
-		if (edcTopic.isEdcTopic()) {
-			if (!message.isForwarded()) {
+		KapuaTopic kapuaTopic = message.getKapuaTopic();
+		if (kapuaTopic.isKapuaTopic()) {
+//			if (!message.isForwarded()) {
 				metricDeviceDirectMessage.inc();
-				processLifeCycleMessage(message, edcTopic);
-			} 
-			else {
-				metricDeviceForwardedMessage.inc();
-				processForwardedLifeCycleMessage(message, edcTopic);
-			}
+				processLifeCycleMessage(message, kapuaTopic);
+//			} 
+//			else {
+//				metricDeviceForwardedMessage.inc();
+//				processForwardedLifeCycleMessage(message, kapuaTopic);
+//			}
 		}
 	}
 
-	private void processLifeCycleMessage(EdcMessage message, EdcTopic edcTopic)
+	private void processLifeCycleMessage(KapuaMessage message, KapuaTopic kapuaTopic)
     {
-		EdcPayload edcPayload = message.getEdcPayload();
-		String accountName = edcTopic.getAccount();
-		String clientId    = edcTopic.getAsset();
-		String semanticTopic = edcTopic.getSemanticTopic();
+		KapuaPayload kapuaPayload = message.getKapuaPayload();
+		String accountName = kapuaTopic.getAccount();
+		String clientId    = kapuaTopic.getAsset();
+		String semanticTopic = kapuaTopic.getSemanticTopic();
 
+		/*
+		
 		// FIXME: Remove this filtering of the republishes if no longer necessary
 		if(semanticTopic.startsWith("BA/")) {
 			s_logger.debug("Ignoring republish");
 			return;
 		}
 		try {
-			if(message.getEdcTopic().getFullTopic().contains("PURGE")){
+			if(message.getKapuaTopic().getFullTopic().contains("PURGE")){
 				String topic = null;
-                EdcPayload purgePayload = message.getEdcPayload();
+                KapuaPayload purgePayload = message.getKapuaPayload();
                 if (purgePayload != null) {
-                    topic = (String) message.getEdcPayload().getMetric("topic");
+                    topic = (String) message.getKapuaPayload().getMetric("topic");
                 }
 
                 s_logger.info("****** ENTERING PURGE ******");
                 s_logger.info("* On topic: {}", accountName + (topic != null ? topic : "/+/#"));
 
-				ServiceLocator locator = ServiceLocator.getInstance();
-				DataStoreService ds = locator.getDataStoreService();
-                ds.resetCache(accountName, topic);
+                MessageStoreService messageStoreService = locator.getService(MessageStoreService.class);
+                //TODO check if it's not necessary with the new datastore
+//                messageStoreService.resetCache(accountName, topic);
                 return;
 			}
 			else{
 				//
 				// send the appropriate signal to the device service
-				ServiceLocator    locator = ServiceLocator.getInstance();
-				DeviceService  dvcService = locator.getDeviceService();
+				DeviceLifeCycleService deviceLifeCycleService = locator.getService(DeviceLifeCycleService.class);
 				if (BIRTH.equals(semanticTopic)) {
+					deviceRegistryService.create(creator);
 					dvcService.birth(accountName, clientId, message);
 					metricDeviceDirectBirthMessage.inc();
 				}
@@ -189,13 +173,13 @@ public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
 					metricDeviceDirectAppsMessage.inc();
 				}
 				else if (CONNECT.equals(semanticTopic)) {
-					Long userId = (Long)edcPayload.getMetric(JmsUtil.METRIC_USER_ID);
-					String username = (String)edcPayload.getMetric(JmsUtil.METRIC_USERNAME);
+					Long userId = (Long)kapuaPayload.getMetric(JmsAssistantProducerWrapper.METRIC_USER_ID);
+					String username = (String)kapuaPayload.getMetric(JmsAssistantProducerWrapper.METRIC_USERNAME);
                     dvcService.connect(accountName, clientId, userId, brokerNode, message, true);
 					//tight coupling - refer to "Device Level Authorization - Tight coupling" for the annotations
 					//add alert check
-//					Long accountId = (Long)edcPayload.getMetric(JmsUtil.METRIC_ACCOUNT_ID);
-//					DeviceCredentialsTight deviceCredentialsTight = DeviceCredentialsTight.valueOf((String)edcPayload.getMetric(JmsUtil.METRIC_DEVICE_CREDENTALS_TIGHT));
+//					Long accountId = (Long)kapuaPayload.getMetric(JmsUtil.METRIC_ACCOUNT_ID);
+//					DeviceCredentialsTight deviceCredentialsTight = DeviceCredentialsTight.valueOf((String)kapuaPayload.getMetric(JmsUtil.METRIC_DEVICE_CREDENTALS_TIGHT));
 //					switch (deviceCredentialsTight) {
 //					case STRICT:
 //						long deviceCountWithuserId = DeviceRegistryManagerTrusted.getDeviceCountByUserId(accountId, userId);
@@ -231,10 +215,10 @@ public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
 					s_logger.info("Provision message arrived from: {}", clientId);
 					
 					// The provision message will provision the device with the provided credentials.
-					String mqttUsername = (String) edcPayload.getMetric("username");
-					String mqttPassword = (String) edcPayload.getMetric("password");
-					String mqttActivationKey = (String) edcPayload.getMetric("activationKey");
-					String mqttProvisioningVersion = (String) edcPayload.getMetric("provisioningCertificateVersion");
+					String mqttUsername = (String) kapuaPayload.getMetric("username");
+					String mqttPassword = (String) kapuaPayload.getMetric("password");
+					String mqttActivationKey = (String) kapuaPayload.getMetric("activationKey");
+					String mqttProvisioningVersion = (String) kapuaPayload.getMetric("provisioningCertificateVersion");
 
 					ProvisionRequestService provisionService = locator.getProvisionService();
 					provisionService.provision(clientId, 
@@ -246,25 +230,25 @@ public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
 				}
 				else {
 					metricDeviceDirectUnknownMessage.inc();
-					s_logger.info("Unknown semantic part for $EDC topic: {}", message.getEdcTopic().getFullTopic());
+					s_logger.info("Unknown semantic part for $EDC topic: {}", message.getKapuaTopic().getFullTopic());
 					return;
 				}
 			}
 		}
 		catch (KapuaException e) {
 			metricDeviceDirectErrorMessage.inc();
-//			alerts.error(message.getEdcTopic().getAccount(), Code.INVALID_EDCTOPIC);
+//			alerts.error(message.getKapuaTopic().getAccount(), Code.INVALID_EDCTOPIC);
 			s_logger.error("Error while processing device life-cycle event", e);
 			return;			    
 		}
 		if (!CONNECT.equals(semanticTopic) && ! DISCONNECT.equals(semanticTopic)) {
 			// FIXME: Remove - Republish Life cycle message to console
 			if(semanticTopic.equals(LWT)) {
-				edcPayload = new EdcPayload();
+				kapuaPayload = new KapuaPayload();
 			}
 
 			Date now = new Date();
-			edcPayload.addMetric("server_event_time", Long.toString(now.getTime()));
+			kapuaPayload.addMetric("server_event_time", Long.toString(now.getTime()));
 			StringBuilder destination = new StringBuilder();
 			destination.append("$EDC/");
 			destination.append(accountName);
@@ -290,12 +274,12 @@ public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
 				destination.append("/BA/PROV");
 			}
 			try {
-                s_logger.debug("MESSAGE: {}", edcPayload);
+                s_logger.debug("MESSAGE: {}", kapuaPayload);
                 JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.NO_DESTINATION);
                 JmsAssistantProducerWrapper producer = null;
                 try {
                     producer = pool.borrowObject();
-                    producer.sendRawMessage(destination.toString(), edcPayload.toDisplayString().getBytes());
+                    producer.sendRawMessage(destination.toString(), kapuaPayload.toDisplayString().getBytes());
                 }
                 finally {
                     pool.returnObject(producer);
@@ -303,62 +287,63 @@ public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
             } 
 			catch (JMSException e) {
                 s_logger.error("An error occurred while publishing device history event: {}", e.getMessage());
-//                alerts.severe(message.getEdcTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, e, e.getErrorCode().toString());
+//                alerts.severe(message.getKapuaTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, e, e.getErrorCode().toString());
                 return;
             }
-            catch (EdcInvalidTopicException e) {
+            catch (KapuaInvalidTopicException e) {
                 s_logger.error("An error occurred while publishing device history event: {}", e.getMessage());
-//                alerts.severe(message.getEdcTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, e, "");
+//                alerts.severe(message.getKapuaTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, e, "");
             }
             catch (Throwable t) {
                 s_logger.warn("Cannot send life cycle message {}! {}", new Object[]{destination.toString(), t.getMessage()}, t);
-//                alerts.severe(message.getEdcTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, t, "");
+//                alerts.severe(message.getKapuaTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, t, "");
                 return;
             }
 		}
+		*/
 	}
 	
-	private void processForwardedLifeCycleMessage(EdcMessage message, EdcTopic edcTopic) {
-		String accountName = edcTopic.getAccount();
-		String clientId	= edcTopic.getAsset();
-		String semanticTopic = edcTopic.getSemanticTopic();
-
-		// If a device with the same client id has connected to another broker
-		// in the cluster, disconnect the connection on this broker.
-		if (CONNECT.equals(semanticTopic)) {
-			disconnectClient("mqtt", accountName, clientId);
-			disconnectClient("mqtts", accountName, clientId);
-		}
-	}
-
-	private void disconnectClient(String transportConnectorName, String accountName, String clientId) {
-		BrokerService brokerService = BrokerRegistry.getInstance().lookup(EdcConfig.getInstance().getAmqBrokerName());
-
-		TransportConnector tc = brokerService.getTransportConnectorByName(transportConnectorName);
-		if(tc == null) {
-			return;
-		}
-		
-		String connectionIdString = MessageFormat.format(JmsConstants.MULTI_ACCOUNT_CLIENT_ID, accountName, clientId);
-		for(TransportConnection conn : tc.getConnections()) {
-			
-			if(connectionIdString.equals(conn.getConnectionId())) {
-				metricDeviceForwardedDisconnctClient.inc();
-				s_logger.info("New connection detected for {} on another broker.  Stopping the current connection on transport connector: {}.", connectionIdString, tc.getName());
-				try {
-					// Include EdcDuplicateClientIdException to notify the security broker filter
-					conn.stopAsync(new EdcDuplicateClientIdException(connectionIdString));;
-				} 
-				catch (Exception e) {
-					metricDeviceForwardedDisconnctClientError.inc();
-					s_logger.error("Could not stop connection: " + conn.getConnectionId(), e);
-				}
-				
-				// assume only one connection since this broker should have already handled any duplicates
-				break;
-			}
-		}
-	}
+//	private void processForwardedLifeCycleMessage(KapuaMessage message, KapuaTopic kapuaTopic) {
+//		String accountName = kapuaTopic.getAccount();
+//		String clientId	= kapuaTopic.getAsset();
+//		String semanticTopic = kapuaTopic.getSemanticTopic();
+//
+//		// If a device with the same client id has connected to another broker
+//		// in the cluster, disconnect the connection on this broker.
+//		if (CONNECT.equals(semanticTopic)) {
+//			disconnectClient("mqtt", accountName, clientId);
+//			disconnectClient("mqtts", accountName, clientId);
+//		}
+//	}
+//
+//	private void disconnectClient(String transportConnectorName, String accountName, String clientId) {
+//		BrokerService brokerService = BrokerRegistry.getInstance().lookup(KapuaConfig.getInstance().getAmqBrokerName());
+//
+//		TransportConnector tc = brokerService.getTransportConnectorByName(transportConnectorName);
+//		if(tc == null) {
+//			return;
+//		}
+//		
+//		String connectionIdString = MessageFormat.format(KapuaSecurityBrokerFilter.MULTI_ACCOUNT_CLIENT_ID, accountName, clientId);
+//		for(TransportConnection conn : tc.getConnections()) {
+//			
+//			if(connectionIdString.equals(conn.getConnectionId())) {
+//				metricDeviceForwardedDisconnctClient.inc();
+//				s_logger.info("New connection detected for {} on another broker.  Stopping the current connection on transport connector: {}.", connectionIdString, tc.getName());
+//				try {
+//					// Include KapuaDuplicateClientIdException to notify the security broker filter
+//					conn.stopAsync(new KapuaDuplicateClientIdException(connectionIdString));;
+//				} 
+//				catch (Exception e) {
+//					metricDeviceForwardedDisconnctClientError.inc();
+//					s_logger.error("Could not stop connection: " + conn.getConnectionId(), e);
+//				}
+//				
+//				// assume only one connection since this broker should have already handled any duplicates
+//				break;
+//			}
+//		}
+//	}
 
 //	private void createAlert(String account, String clientId, String category, String message) 
 //	{
@@ -372,7 +357,7 @@ public class DeviceMessageListener extends AbstractListener<AmqEdcMessage> {
 //		try {
 //			AlertManagerTrusted.create(alertCreator);
 //		} 
-//		catch (EdcException e) {
+//		catch (KapuaException e) {
 //			s_logger.error("Error during ALERT storage ", e);
 //		}	
 //	}

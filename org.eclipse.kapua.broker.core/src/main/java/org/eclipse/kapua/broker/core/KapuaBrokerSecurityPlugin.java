@@ -20,7 +20,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
-import org.eclipse.kapua.util.ResourceUtils;
+import org.eclipse.kapua.commons.util.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
