@@ -28,8 +28,10 @@ import org.eclipse.kapua.service.datastore.MessageStoreService;
 import org.eclipse.kapua.service.datastore.StorableQuery;
 import org.eclipse.kapua.service.datastore.StorableResultList;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsMessageStoreServiceImpl;
+import org.eclipse.kapua.service.datastore.internal.model.StorableIdImpl;
 import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
+import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
 
 public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService implements MessageStoreService
@@ -46,17 +48,17 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     }
 
     @Override
-    public String store(String scopeName, MessageCreator messageCreator)
+    public StorableId store(String scopeName, MessageCreator messageCreator)
         throws KapuaException
     {
         //
         // Check Access
-        this.checkDataAccess(scopeName, DatastorePermAction.CREATE);
-        return esMessageStoreService.store(scopeName, messageCreator);
+        this.checkDataAccess(scopeName, MessageStoreServiceAction.CREATE);
+        return new StorableIdImpl(esMessageStoreService.store(scopeName, messageCreator));
     }
 
     @Override
-    public void delete(String scopeName, String uuid)
+    public void delete(String scopeName, StorableId uuid)
         throws KapuaException
     {
         // TODO Auto-generated method stub
@@ -64,13 +66,13 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     }
 
     @Override
-    public Message find(String scopeName, String uuid, MessageFetchStyle fetchStyle)
+    public Message find(String scopeName, StorableId uuid, MessageFetchStyle fetchStyle)
         throws KapuaException
     {
         //
         // Check Access
-        this.checkDataAccess(scopeName, DatastorePermAction.READ);
-        return esMessageStoreService.find(scopeName, uuid, fetchStyle);
+        this.checkDataAccess(scopeName, MessageStoreServiceAction.READ);
+        return esMessageStoreService.find(scopeName, uuid.toString(), fetchStyle);
     }
 
     @Override
@@ -87,7 +89,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     //
     // -----------------------------------------------------------------------------------------
 
-    private void checkDataAccess(String scopeName, PermissionAction action)
+    private void checkDataAccess(String scopeName, AccessAction action)
         throws KapuaException
     {
         //

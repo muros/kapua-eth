@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.UUID;
 
 import org.eclipse.kapua.commons.cache.LocalCache;
@@ -40,14 +39,12 @@ import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsTopicMet
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsTypeDAO;
 import org.eclipse.kapua.service.datastore.internal.model.MetricsIndexBy;
 import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
-import org.elasticsearch.action.ActionRequest;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.index.engine.DocumentAlreadyExistsException;
-import org.elasticsearch.index.engine.VersionConflictEngineException;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
@@ -59,7 +56,7 @@ import org.slf4j.LoggerFactory;
  * @author stefano.morson
  * This class must be thread safe
  */
-public class EsMessageAdapter {
+public class EsDatastoreAdapter {
 	
 	private class EventDispatcher implements EsDaoListener {
 
@@ -85,7 +82,7 @@ public class EsMessageAdapter {
 		}
 	}
 	
-    private static final Logger s_logger = LoggerFactory.getLogger(EsMessageAdapter.class);
+    private static final Logger s_logger = LoggerFactory.getLogger(EsDatastoreAdapter.class);
 	
 	private final EsSchema esSchema;
 	
@@ -96,7 +93,7 @@ public class EsMessageAdapter {
 	
 	private final Object metadataUpdateSync;
 	
-	public EsMessageAdapter() {	
+	public EsDatastoreAdapter() {	
 
 		esSchema = new EsSchema();
 		

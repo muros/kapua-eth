@@ -16,11 +16,12 @@ import java.util.Date;
 
 import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.Payload;
+import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.Topic;
 
 public class MessageImpl implements Message
 {
-    private String  uuid;
+    private StorableId  id;
     private Topic   topic;
     private Date    timestamp;
     private Date    receivedOn;
@@ -32,15 +33,15 @@ public class MessageImpl implements Message
 
     public MessageImpl(String uuid, Date timestamp, Topic topic)
     {
-        this.uuid = null;
+        this.id = null;
         this.timestamp = timestamp;
         this.topic = topic;
     }
 
     @Override
-    public String getUuid()
+    public StorableId getId()
     {
-        return this.uuid;
+        return this.id;
     }
 
     @Override
@@ -85,9 +86,9 @@ public class MessageImpl implements Message
         this.receivedOn = receivedOn;
     }
 
-    public void setUUID(String uuid)
+    public void setId(StorableId id)
     {
-        this.uuid = uuid;
+        this.id = id;
     }
 
     @Override

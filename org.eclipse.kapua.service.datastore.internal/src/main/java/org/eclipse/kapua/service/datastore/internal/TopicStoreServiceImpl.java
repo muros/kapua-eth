@@ -16,13 +16,14 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.datastore.StorableQuery;
 import org.eclipse.kapua.service.datastore.StorableResultList;
 import org.eclipse.kapua.service.datastore.TopicStoreService;
+import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.TopicInfo;
 
 public class TopicStoreServiceImpl implements TopicStoreService
 {
 
     @Override
-    public void delete(String scopeName, String uuid)
+    public void delete(String scopeName, StorableId uuid)
         throws KapuaException
     {
         // TODO Auto-generated method stub
@@ -30,7 +31,7 @@ public class TopicStoreServiceImpl implements TopicStoreService
     }
 
     @Override
-    public TopicInfo find(String scopeName, String uuid)
+    public TopicInfo find(String scopeName, StorableId uuid)
         throws KapuaException
     {
         // TODO Auto-generated method stub

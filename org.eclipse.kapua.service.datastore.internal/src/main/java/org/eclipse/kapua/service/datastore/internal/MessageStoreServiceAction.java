@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.internal;
 
-import org.eclipse.kapua.service.datastore.internal.PermissionAction;
+import org.eclipse.kapua.service.datastore.internal.AccessAction;
 
-public enum DatastorePermAction implements PermissionAction
+public enum MessageStoreServiceAction implements AccessAction
 {
     CREATE("create"), 
     UPDATE("update"), 
@@ -23,7 +23,7 @@ public enum DatastorePermAction implements PermissionAction
 
     private String key;
 
-    private DatastorePermAction(String key)
+    private MessageStoreServiceAction(String key)
     {
         this.key = key;
     }

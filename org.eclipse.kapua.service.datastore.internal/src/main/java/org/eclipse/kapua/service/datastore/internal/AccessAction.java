@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.internal;
 
-public interface PermissionAction
+public interface AccessAction
 {
     public String key();
 }
