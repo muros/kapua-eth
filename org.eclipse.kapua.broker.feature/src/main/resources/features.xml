@@ -65,15 +65,28 @@
 		
 		<bundle>wrap:mvn:com.google.guava/guava/18.0</bundle>
 		<bundle>wrap:mvn:org.apache.commons/commons-pool2/${commons.pool.version}</bundle>
-		<bundle>wrap:mvn:org.apache.shiro/shiro-core/1.2.3</bundle>
-
+		
+		<bundle>wrap:mvn:org.apache.commons/commons-jexl/2.1.1</bundle>
+		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-digester/1.8_4</bundle>
+		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-jxpath/1.3_1</bundle>
+		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlresolver/1.2_5</bundle>
+		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-configuration/1.9_1</bundle>
+		<bundle>wrap:mvn:org.mindrot/jbcrypt/0.3m</bundle>
+ 
         <bundle start-level="45">mvn:org.hibernate.common/hibernate-commons-annotations/4.0.4.Final</bundle>
         <bundle start-level="45">mvn:org.hibernate/hibernate-core/${hibernate.version}</bundle>
         <bundle start-level="45">mvn:org.hibernate/hibernate-entitymanager/${hibernate.version}</bundle>
         <bundle start-level="45">mvn:org.hibernate/hibernate-osgi/${hibernate.version}</bundle>
 
+		<!-- elasticsearch -->
+		<bundle>wrap:mvn:com.ning/compress-lzf/1.0.3</bundle>
+		<bundle>wrap:mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-smile/2.6.1</bundle>
+		<bundle>wrap:mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.6.1</bundle>
+		<bundle>wrap:mvn:com.fasterxml.jackson.core/jackson-core/2.6.1</bundle>
+		<bundle>wrap:mvn:io.netty/netty/3.10.5.Final</bundle>
+		<bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.elasticsearch/2.1.1_3</bundle>
+   
         <bundle start-level="50">mvn:org.eclipse.kapua/org.eclipse.kapua.broker.jdbc/${project.version}</bundle>
         <bundle start-level="50">mvn:org.eclipse.kapua/org.eclipse.kapua.broker.core/${project.version}</bundle>
-
 	</feature>
 </features>

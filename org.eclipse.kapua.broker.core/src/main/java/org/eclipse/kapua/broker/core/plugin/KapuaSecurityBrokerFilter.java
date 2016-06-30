@@ -1,19 +1,14 @@
 package org.eclipse.kapua.broker.core.plugin;
 
-import java.math.BigInteger;
-import java.net.URI;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
-import javax.jms.InvalidClientIDException;
 import javax.security.auth.login.CredentialException;
 
 import org.apache.activemq.broker.Broker;
@@ -34,84 +29,39 @@ import org.apache.activemq.security.SecurityContext;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
 import org.apache.shiro.util.ThreadState;
-//import org.eclipse.kapua.EdcOperationNotAllowedException;
-import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaErrorCode;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
-import org.eclipse.kapua.KapuaIllegalNullArgumentException;
-//import org.eclipse.kapua.activemq.worker.AlertMessage;
-//import org.eclipse.kapua.activemq.worker.JmsAssistantProducerPool;
-//import org.eclipse.kapua.activemq.worker.JmsAssistantProducerWrapper;
-//import org.eclipse.kapua.activemq.worker.JmsConstants;
-//import org.eclipse.kapua.activemq.worker.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
 import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
-import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool;
-import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerWrapper;
-import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
-import org.eclipse.kapua.commons.model.id.KapuaEid;
-import org.eclipse.kapua.commons.util.SubjectUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.model.id.KapuaId;
-//import org.eclipse.kapua.mqtt.MqttUtils;
 import org.eclipse.kapua.service.account.Account;
-//import org.eclipse.kapua.service.account.AccountDeploymentPlan;
 import org.eclipse.kapua.service.account.AccountService;
-//import org.eclipse.kapua.service.account.DeviceCredentialsMode;
-//import org.eclipse.kapua.service.account.EdcServicePlanLimitException;
-//import org.eclipse.kapua.service.alert.AlertCategories;
-//import org.eclipse.kapua.service.alert.Alert.Severity;
 import org.eclipse.kapua.service.authentication.AccessToken;
 import org.eclipse.kapua.service.authentication.AuthenticationCredentials;
 import org.eclipse.kapua.service.authentication.AuthenticationService;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationErrorCodes;
 import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationException;
-//import org.eclipse.kapua.service.authentication.internal.EdcSession;
-//import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationErrorCodes;
-//import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationException;
-//import org.eclipse.kapua.service.authentication.shiro.UsernamePasswordTokenImpl;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.Permission;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
-import org.eclipse.kapua.service.device.registry.Device;
-import org.eclipse.kapua.service.device.registry.DeviceCreator;
-import org.eclipse.kapua.service.device.registry.DeviceFactory;
-import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
-import org.eclipse.kapua.service.device.registry.DeviceStatus;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnection;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionCreator;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionStatus;
-//import org.eclipse.kapua.service.device.registry.KapuaDuplicateClientIdException;
-//import org.eclipse.kapua.service.device.registry.KapuaInvalidDeviceClientIdException;
-//import org.eclipse.kapua.service.device.registry.internal.DeviceRegistryManagerTrusted;
-//import org.eclipse.kapua.service.locator.ServiceLocator;
-//import org.eclipse.kapua.service.user.EdcInvalidUsernamePasswordException;
-//import org.eclipse.kapua.service.user.EdcLockedUserException;
-import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserService;
-//import org.eclipse.kapua.util.ArgumentValidator;
-//import org.eclipse.kapua.util.AwsUtils;
-//import org.eclipse.kapua.util.SubjectUtils;
-//import org.eclipse.kapua.util.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
-//import com.eurotech.cloud.message.EdcMessage;
-//import com.eurotech.cloud.service.cluster.BrokerClusterDeployment;
-//import com.eurotech.cloud.service.cluster.BrokerNode;
 import com.google.common.util.concurrent.RateLimiter;
 
 /**
@@ -119,7 +69,7 @@ import com.google.common.util.concurrent.RateLimiter;
  * 
  * Filter allow unfiltered connection/disconnection and publishing/subscribe action for pass through connection (embedded broker and filter also). This connection type is used by broker assistant
  * bundle.
- * Otherwise perform all edc authorization/check action
+ * Otherwise perform all kapua authorization/check action
  * 
  * This filter is added inside amq filter chain plugin by {@link KapuaBrokerSecurityPlugin}
  * 
@@ -174,13 +124,8 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private static final int                       DATA_VIEW_IDX                       = 2;
     private static final int                       DATA_MANAGE_IDX                     = 3;
 
-//    private static Long                            s_clusterId;
-//    private static Account                         s_eurotechAccount;
     private final static Map<String, ConnectionId> connectionMap                       = new ConcurrentHashMap<String, ConnectionId>();
 
-//    // network connector client
-//    private Pattern                                nc_client_id_pattern;
-    
     //metrics section
     private MetricsService                         metricsService;
     //login
@@ -189,8 +134,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private Counter                                metricLoginFailure;
     private Counter                                metricLoginInvalidUserPassword;
     private Counter                                metricLoginInvalidClientId;
-    private Counter                                metricLoginEdcsysTokenAttempt;
-    private Counter                                metricLoginProvisionAttempt;
+    private Counter                                metricLoginKapuasysTokenAttempt;
     private Counter                                metricLoginNormalUserAttempt;
     private Counter                                metricLoginStealingLinkConnect;
     private Counter                                metricLoginStealingLinkDisconnect;
@@ -213,47 +157,18 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private Timer                                  subscribeTime;
     //clients
     private Counter                                metricClientConnectedClient;
-    private Counter                                metricClientConnectedEdcsys;
+    private Counter                                metricClientConnectedKapuasys;
     private Counter                                metricClientDisconnectionClient;
-    private Counter                                metricClientDisconnectionEdcsys;
+    private Counter                                metricClientDisconnectionKapuasys;
     //mesage size
     private Histogram                              metricPublishMessageSizeAllowed;
     private Histogram                              metricPublishMessageSizeNotAllowed;
-
-    // network connector user
-//    private String                                 m_ncUser                            = EdcConfig.getInstance().getAmqNetworkConnectorUser();
 
     public KapuaSecurityBrokerFilter(Broker next) throws KapuaException
     {
         super(next);
 
-//        // Get the eurotech account and cluster id for this node
-//        if (s_eurotechAccount == null || s_clusterId == null) {
-//            try {
-//                SubjectUtils.loginEdcSysWithDefaultSecurityManager();
-//
-//                if (s_eurotechAccount == null) {
-//                    s_eurotechAccount = ServiceLocator.getInstance().getAccountService().findByName("eurotech");
-//                }
-//
-//                if (s_clusterId == null) {
-//                    s_clusterId = AwsUtils.getBrokerNode().getBrokerClusterId();
-//                }
-//
-//                // The broker appends a string at the end of the network connector name to create the client id
-//                // For example, if the network name is "i-12345678 => i-98765432", the client id might be "i-12345678 => i-98765432_amq_outbound"
-//                nc_client_id_pattern = Pattern.compile("[\\w-]+ => " + AwsUtils.getBrokerNode().getId() + "_\\w+_outbound");
-//
-//            }
-//            catch (Throwable t) {
-//                s_logger.error("Error in plugin installation.", t);
-//            }
-//            finally {
-//                SubjectUtils.logout();
-//            }
-//        }
-        
-        // Initialize the metrics
+    	// Initialize the metrics
         //TODO get the metric service from the service locator
         metricsService = MetricsServiceBean.getInstance();
         //login
@@ -262,8 +177,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         metricLoginFailure              = metricsService.getCounter("security", "login", "failure", "count");
         metricLoginInvalidUserPassword  = metricsService.getCounter("security", "login", "failure_password", "count");
         metricLoginInvalidClientId      = metricsService.getCounter("security", "login", "failure_client_id", "count");
-        metricLoginEdcsysTokenAttempt   = metricsService.getCounter("security", "login", "edcsys", "count");
-        metricLoginProvisionAttempt     = metricsService.getCounter("security", "login", "provision", "count");
+        metricLoginKapuasysTokenAttempt   = metricsService.getCounter("security", "login", "kapuasys", "count");
         metricLoginNormalUserAttempt    = metricsService.getCounter("security", "login", "normal", "count");
         metricLoginStealingLinkConnect  = metricsService.getCounter("security", "login", "stealing_link", "connect", "count");
         metricLoginStealingLinkDisconnect = metricsService.getCounter("security", "login", "stealing_link", "disconnect", "count");
@@ -287,9 +201,9 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         subscribeTime                     = metricsService.getTimer("security", "subscribe", "time", "s");
         //clients connected
         metricClientConnectedClient       = metricsService.getCounter("security", "login", "clients", "connected", "count");
-        metricClientConnectedEdcsys       = metricsService.getCounter("security", "login", "edcsys", "connected", "count");
+        metricClientConnectedKapuasys       = metricsService.getCounter("security", "login", "kapuasys", "connected", "count");
         metricClientDisconnectionClient   = metricsService.getCounter("security", "login", "clients", "disconnected", "count");
-        metricClientDisconnectionEdcsys   = metricsService.getCounter("security", "login", "edcsys", "disconnected", "count");
+        metricClientDisconnectionKapuasys   = metricsService.getCounter("security", "login", "kapuasys", "disconnected", "count");
         //message size
         metricPublishMessageSizeAllowed   = metricsService.getHistogram("security", "publish", "messages", "allowed", "size", "bytes");
         metricPublishMessageSizeNotAllowed = metricsService.getHistogram("security", "publish", "messages", "not_allowed", "size", "bytes");
@@ -386,7 +300,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
     /**
      * Add connection.
-     * If connection is not a pass through connection check username/password credential and device limits and then register the connection into edc environment
+     * If connection is not a pass through connection check username/password credential and device limits and then register the connection into kapua environment
      * 
      * Return error code is compliant to fix ENTMQ-731
      * Extract of MQTTProtocolConverter.java
@@ -411,107 +325,21 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     {
     	if (!isPassThroughConnection(context)) {
     		if (CONNECTION_RATE_LIMITER.tryAcquire(connectionWaitForToken, TimeUnit.MILLISECONDS)) {
+    			ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+    	    	ClassLoader classClassloader = this.getClass().getClassLoader();
+    	    	Thread.currentThread().setContextClassLoader(classClassloader);
     			addExternalConnection(context, info);
     			metricLoginSuccess.inc();
+    			Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
     		}
     		else {
     			metricLoginRateLimited.inc();
     			throw new KapuaConnectionRateLimitExceededException(info.getClientId(), info.getUserName(), connectionRateLimit);
     		}
         }
-//        else if (context.getConnection().isNetworkConnection()) {
-//            addNetworkConnection(context, info);
-//        }
         super.addConnection(context, info);
     }
 
-//    private void addNetworkConnection(ConnectionContext context, ConnectionInfo info)
-//        throws Exception
-//    {
-//
-//        Subject currentSubject = (new Subject.Builder()).buildSubject();
-//        ThreadState threadState = new SubjectThreadState(currentSubject);
-//        threadState.bind();
-//
-//        String username = info.getUserName();
-//        String password = info.getPassword();
-//        String clientId = info.getClientId();
-//        String clientIp = info.getClientIp();
-//
-//        // Note: A-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc above)
-//
-//        if (!context.getConnection().isNetworkConnection()) {
-//            SecurityException se = new SecurityException("Connection is not a valid network connector");
-//            s_logger.warn("Network connector from {} not authorized", context.getConnection().getRemoteAddress(), se);
-//        }
-//
-//        // Check that the connection's username matches the configured username for network connectors
-//        if (username == null || !username.equals(m_ncUser)) {
-//            SecurityException se = new SecurityException("Network connector has invalid username: " + username);
-//            s_logger.warn("Network connector from {} not authorized", context.getConnection().getRemoteAddress(), se);
-//        }
-//
-//        // Check that the connection's client id matches the expected pattern for network connectors
-//        if (!nc_client_id_pattern.matcher(clientId).matches()) {
-//            SecurityException se = new SecurityException("Network connector has invalid client id: " + clientId);
-//            s_logger.warn("Network connector from {} not authorized", context.getConnection().getRemoteAddress(), se);
-//        }
-//
-//        // Check that the connection's address matches one of the nodes in our cluster
-//        boolean foundAddress = false;
-//        URI remoteUri = new URI(clientIp);
-//        String remoteHost = remoteUri.getHost();
-//
-//        if (remoteHost != null) {
-//            BrokerClusterDeployment myClusterDeployment = null;
-//            try {
-//                SubjectUtils.loginEdcSys();
-//                myClusterDeployment = ServiceLocator.getInstance().getBrokerClusterService().findClusterDeployment(s_clusterId);
-//            }
-//            finally {
-//                SubjectUtils.logout();
-//            }
-//
-//            for (BrokerNode node : myClusterDeployment.getBrokerNodes()) {
-//                if (remoteHost.equals(node.getPrivateIp()) || remoteHost.equals(node.getPublicIp())) {
-//                    s_logger.info("Network connector address matches node " + node.getId());
-//                    foundAddress = true;
-//                    break;
-//                }
-//            }
-//        }
-//        if (!foundAddress) {
-//            SecurityException se = new SecurityException("Network connector does not have an expected address: " + clientIp);
-//            s_logger.warn("Network connector from {} not authorized", context.getConnection().getRemoteAddress(), se);
-//        }
-//
-//        // Check the connection's username and password
-//        ServiceLocator locator = ServiceLocator.getInstance();
-//        AuthorizationService authSrv = locator.getAuthorizationService();
-//
-//        // Build EdcUsername
-//        EdcUsername edcUsername = EdcUsername.parse(username);
-//        edcUsername.setClientId(clientId);
-//        AccountService accountService = locator.getAccountService();
-//        UserService userService = locator.getUserService();
-//        // Get the account id
-//        Long runAsAccountId;
-//        if (edcUsername.getAccountName() == null) {
-//            runAsAccountId = userService.getAccountIdFromUsernameTrusted(edcUsername.getUsername());
-//        }
-//        else {
-//            runAsAccountId = accountService.getAccountId(edcUsername.getAccountName());
-//        }
-//        if (runAsAccountId == null) {
-//            throw new KapuaEntityNotFoundException(Account.class, edcUsername.getAccountName());
-//        }
-//        authSrv.login(edcUsername, password, LoginSourceType.MQTT);
-//        EdcSession edcSession = authSrv.getCurrentSession();
-//        User currentUser = edcSession.getUser();
-//        // TODO: finish implementing
-//    }
-
-    
     public void addExternalConnection(ConnectionContext context, ConnectionInfo info)
         throws Exception
     {
@@ -535,24 +363,12 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             authDestinations = new ArrayList<String>();
         }
         try {
-            // Build EdcUsername
-//            User username = User.parse(username);//EdcUserName
+            // Build KapuaUsername
+//            User username = User.parse(username);//KapuaUserName
             AccountService accountService = locator.getService(AccountService.class);
             UserService userService = locator.getService(UserService.class);
 
             s_logger.info("User name {} - client id {}", new Object[]{username, clientId});
-
-//            // Get the account id
-//            Long runAsAccountId;
-//            if (username.getAccountName() == null) {
-//                runAsAccountId = userService.getAccountIdFromUsernameTrusted(username.getUsername());
-//            }
-//            else {
-//                runAsAccountId = accountService.getAccountId(username.getAccountName());
-//            }
-//            if (runAsAccountId == null) {
-//                throw new KapuaEntityNotFoundException(Account.class, username.getAccountName());
-//            }
 
             Context loginPreCheckTimeContext = metricLoginPreCheckTime.time();
             // 1) validate client id
@@ -571,16 +387,16 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             KapuaId userId = accessToken.getId();
             Account account = accountService.find(scopeId);
             String accountName = account.getName();
-//            EdcSession edcSession = authSrv.getCurrentSession();
-//            User currentUser = edcSession.getUser();
+//            KapuaSession kapuaSession = authSrv.getCurrentSession();
+//            User currentUser = kapuaSession.getUser();
             loginShiroLoginTimeContext.stop();
 
-            // if a user acts as a child MOVED INSIDE EdcAuthorizingRealm otherwise through REST API and console this @accountName won't work
+            // if a user acts as a child MOVED INSIDE KapuaAuthorizingRealm otherwise through REST API and console this @accountName won't work
 
-            // get account id and name from edc session methods that check for the run as
+            // get account id and name from kapua session methods that check for the run as
             //
-//            String accountName = edcSession.getSessionAccountName();
-//            long accountId = edcSession.getSessionAccountId();
+//            String accountName = kapuaSession.getSessionAccountName();
+//            long accountId = kapuaSession.getSessionAccountId();
 
             // multiple account stealing link fix
             String fullClientId = MessageFormat.format(MULTI_ACCOUNT_CLIENT_ID, scopeId.getId().longValue(), clientId);
@@ -594,10 +410,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             // 3) check authorization
             DefaultAuthorizationMap authMap = null;
             if (isAdminUser(username)) {
-            	metricLoginEdcsysTokenAttempt.inc();
+            	metricLoginKapuasysTokenAttempt.inc();
                 // 3-1) admin authMap
                 authMap = buildEurotechAdminAuthMap(authDestinations, principal, fullClientId);
-                metricClientConnectedEdcsys.inc();
+                metricClientConnectedKapuasys.inc();
             }
             else {
                 	Context loginNormalUserTimeContext = metricLoginNormalUserTime.time();
@@ -679,7 +495,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //                            		clientId, 
 //                            		AlertCategories.SECURITY.name(), 
 //                            		Severity.WARNING,
-//                                    MessageFormat.format(AlertMessage.ADMIN_USER_DEVICE_ACCESS, new Object[] { clientId, username, edcSession.getSessionAccountName() }));
+//                                    MessageFormat.format(AlertMessage.ADMIN_USER_DEVICE_ACCESS, new Object[] { clientId, username, kapuaSession.getSessionAccountName() }));
 //                        }
 //                        finally {
 //                            pool.returnObject(producer);
@@ -744,7 +560,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             // Excluded CredentialException, InvalidClientIDException, SecurityException all others exceptions will be mapped by A-MQ to a CONNECTION_REFUSED_SERVER_UNAVAILABLE message (see
             // javadoc on top of this method)
             // Not trapped exception now:
-            // EdcException
+            // KapuaException
             s_logger.info("@@ error", e);
             throw e;
 
@@ -767,11 +583,11 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //                throw icid;
 //            }
 //            else if (e instanceof KapuaIllegalAccessException ||
-//                     e instanceof EdcLockedUserException ||
+//                     e instanceof KapuaLockedUserException ||
 //                     e instanceof KapuaIllegalNullArgumentException ||
 //                     e instanceof SecurityException ||
 //                     e instanceof KapuaEntityNotFoundException ||
-//                     e instanceof EdcServicePlanLimitException) {
+//                     e instanceof KapuaServicePlanLimitException) {
 //                s_logger.warn("User {} not authorized ({})", username, e.getMessage());
 //                // A-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc on top of this method)
 //                SecurityException se = new SecurityException("User not authorized!");
@@ -782,7 +598,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //                // Excluded CredentialException, InvalidClientIDException, SecurityException all others exceptions will be mapped by A-MQ to a CONNECTION_REFUSED_SERVER_UNAVAILABLE message (see
 //                // javadoc on top of this method)
 //                // Not trapped exception now:
-//                // EdcException
+//                // KapuaException
 //                s_logger.info("@@ error", e);
 //
 //                throw e;
@@ -804,13 +620,16 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         throws Exception
     {
         if (!isPassThroughConnection(context)) {
+        	ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+	    	ClassLoader classClassloader = this.getClass().getClassLoader();
+	    	Thread.currentThread().setContextClassLoader(classClassloader);
         	Context loginRemoveConnectionTimeContext = metricLoginRemoveConnectionTime.time();
         	try {
-        		KapuaSecurityContext kapuaSecurityContext = getEdcSecurityContext(context);
+        		KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
         		
-        		KapuaPrincipal edcPrincipal = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal());
-        		String clientId = edcPrincipal.getClientId();
-        		long accountId = edcPrincipal.getAccountId();
+        		KapuaPrincipal kapuaPrincipal = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal());
+        		String clientId = kapuaPrincipal.getClientId();
+        		long accountId = kapuaPrincipal.getAccountId();
         		String username = kapuaSecurityContext.getUserName();
         		String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
         		
@@ -859,7 +678,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         			metricClientDisconnectionClient.inc();
         		}
         		else {
-        			metricClientDisconnectionEdcsys.inc();
+        			metricClientDisconnectionKapuasys.inc();
         		}
         		// multiple account stealing link fix
         		info.setClientId(fullClientId);
@@ -868,6 +687,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         	finally {
         		loginRemoveConnectionTimeContext.stop();
         	}
+        	Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
         }
         super.removeConnection(context, info, error);
         context.setSecurityContext(null);
@@ -903,7 +723,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     {
         if (!isBrokerContext(producerExchange.getConnectionContext()))
         {
-            KapuaSecurityContext kapuaSecurityContext = getEdcSecurityContext(producerExchange.getConnectionContext());
+        	ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+	    	ClassLoader classClassloader = this.getClass().getClassLoader();
+	    	Thread.currentThread().setContextClassLoader(classClassloader);
+            KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(producerExchange.getConnectionContext());
             // if (!kapuaSecurityContext.getAuthorizedWriteDests().contains(messageSend.getDestination()))
             // {
             if (!messageSend.getDestination().isTemporary())
@@ -931,6 +754,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             }
             // }
             messageSend.setProperty(HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
+            Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
         }
         if (messageSend.getContent()!=null) {
         	metricPublishMessageSizeAllowed.update(messageSend.getContent().length);
@@ -967,9 +791,12 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         info.setClientId(context.getClientId());
         if (!isBrokerContext(context))
         {
+        	ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+	    	ClassLoader classClassloader = this.getClass().getClassLoader();
+	    	Thread.currentThread().setContextClassLoader(classClassloader);
             String[] destinationsPath = info.getDestination().getDestinationPaths();
             String destination = info.getDestination().getPhysicalName();
-            KapuaSecurityContext kapuaSecurityContext = getEdcSecurityContext(context);
+            KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
             if (destinationsPath != null && destinationsPath.length >= 2 && destinationsPath[0].equals(VT_CONSUMER_PREFIX)) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(destination.substring(0, destinationsPath[0].length() + 1));
@@ -1012,6 +839,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 }
                 // kapuaSecurityContext.getAuthorizedReadDests().put(info.getDestination(), info.getDestination());
             }
+            Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
             // }
         }
         subscribeAllowedMessages.inc();
@@ -1024,7 +852,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     //
     // ------------------------------------------------------------------
 
-    protected KapuaSecurityContext getEdcSecurityContext(ConnectionContext context)
+    protected KapuaSecurityContext getKapuaSecurityContext(ConnectionContext context)
         throws SecurityException
     {
         SecurityContext securityContext = context.getSecurityContext();
@@ -1283,7 +1111,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //        if (s_clusterId != deploymentPlan.getBrokerCluster().getId()) {
 //            if (clientAccountId != s_eurotechAccount.getId()) {
 //                s_logger.error("Cross cluster login check FAILED for account {}", accountName);
-//                throw new EdcOperationNotAllowedException("Account not authorized for this cluster.");
+//                throw new KapuaOperationNotAllowedException("Account not authorized for this cluster.");
 //            }
 //        }
 //
