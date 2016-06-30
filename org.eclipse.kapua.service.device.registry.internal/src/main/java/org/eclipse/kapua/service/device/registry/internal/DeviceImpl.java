@@ -14,8 +14,11 @@ package org.eclipse.kapua.service.device.registry.internal;
 
 import java.util.Date;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
@@ -90,142 +94,144 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
 {
-    private static final long                  serialVersionUID = 7688047426522474413L;
+    private static final long     serialVersionUID = 7688047426522474413L;
 
     @XmlElement(name = "clientId")
     @Basic
     @Column(name = "client_id", updatable = false)
-    private String                             clientId;
+    private String                clientId;
 
     @XmlElement(name = "status")
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private DeviceStatus                       status;
+    private DeviceStatus          status;
 
     @XmlElement(name = "displayName")
     @Basic
     @Column(name = "display_name")
-    private String                             displayName;
+    private String                displayName;
 
     @XmlElement(name = "lastEventOn")
     @Basic
     @Column(name = "last_event_on")
-    private Date                               lastEventOn;
+    private Date                  lastEventOn;
 
     @XmlElement(name = "lastEventType")
     @Enumerated(EnumType.STRING)
     @Column(name = "last_event_type")
-    private DeviceEventType                    lastEventType;
+    private DeviceEventType       lastEventType;
 
     @XmlElement(name = "serialNumber")
     @Basic
     @Column(name = "serial_number")
-    private String                             serialNumber;
+    private String                serialNumber;
 
     @XmlElement(name = "modelId")
     @Basic
     @Column(name = "model_id")
-    private String                             modelId;
+    private String                modelId;
 
     @XmlElement(name = "imei")
     @Basic
     @Column(name = "imei")
-    private String                             imei;
+    private String                imei;
 
     @XmlElement(name = "imsi")
     @Basic
     @Column(name = "imsi")
-    private String                             imsi;
+    private String                imsi;
 
     @XmlElement(name = "iccid")
     @Basic
     @Column(name = "iccid")
-    private String                             iccid;
+    private String                iccid;
 
     @XmlElement(name = "biosVersion")
     @Basic
     @Column(name = "bios_version")
-    private String                             biosVersion;
+    private String                biosVersion;
 
     @XmlElement(name = "firmwareVersion")
     @Basic
     @Column(name = "firmware_version")
-    private String                             firmwareVersion;
+    private String                firmwareVersion;
 
     @XmlElement(name = "osVersion")
     @Basic
     @Column(name = "os_version")
-    private String                             osVersion;
+    private String                osVersion;
 
     @XmlElement(name = "jvmVersion")
     @Basic
     @Column(name = "jvm_version")
-    private String                             jvmVersion;
+    private String                jvmVersion;
 
     @XmlElement(name = "osgiVersion")
     @Basic
     @Column(name = "osgi_version")
-    private String                             osgiFrameworkVersion;
+    private String                osgiFrameworkVersion;
 
     @XmlElement(name = "applicationFrameworkVersion")
     @Basic
     @Column(name = "app_framework_version")
-    private String                             applicationFrameworkVersion;
+    private String                applicationFrameworkVersion;
 
     @XmlElement(name = "applicationIdentifiers")
     @Basic
     @Column(name = "app_identifiers")
-    private String                             applicationIdentifiers;
+    private String                applicationIdentifiers;
 
     @XmlElement(name = "acceptEncoding")
     @Basic
     @Column(name = "accept_encoging")
-    private String                             acceptEncoding;
+    private String                acceptEncoding;
 
     @XmlElement(name = "gpsLongitude")
     @Basic
     @Column(name = "gps_longitude")
-    private Double                             gpsLongitude;
+    private Double                gpsLongitude;
 
     @XmlElement(name = "gpsLatitude")
     @Basic
     @Column(name = "gps_latitude")
-    private Double                             gpsLatitude;
+    private Double                gpsLatitude;
 
     @XmlElement(name = "customAttribute1")
     @Basic
     @Column(name = "custom_attribute_1")
-    private String                             customAttribute1;
+    private String                customAttribute1;
 
     @XmlElement(name = "customAttribute2")
     @Basic
     @Column(name = "custom_attribute_2")
-    private String                             customAttribute2;
+    private String                customAttribute2;
 
     @XmlElement(name = "customAttribute3")
     @Basic
     @Column(name = "custom_attribute_3")
-    private String                             customAttribute3;
+    private String                customAttribute3;
 
     @XmlElement(name = "customAttribute4")
     @Basic
     @Column(name = "custom_attribute_4")
-    private String                             customAttribute4;
+    private String                customAttribute4;
 
     @XmlElement(name = "customAttribute5")
     @Basic
     @Column(name = "custom_attribute_5")
-    private String                             customAttribute5;
+    private String                customAttribute5;
 
     @XmlElement(name = "devoceCredentialsMode")
     @Enumerated(EnumType.STRING)
     @Column(name = "device_credentials_mde")
-    private DeviceCredentialsMode              deviceCredentialsMode;
+    private DeviceCredentialsMode deviceCredentialsMode;
 
     @XmlElement(name = "preferredUserId")
-    @Basic
-    @Column(name = "preferred_user_id")
-    private org.eclipse.kapua.model.id.KapuaId preferredUserId;
+    @Embedded
+    @AttributeOverrides({
+                          @AttributeOverride(name = "eid", column = @Column(name = "preferred_user_id", nullable = false))
+    })
+    private KapuaEid              preferredUserId;
 
     public DeviceImpl(KapuaId scopeId)
     {
@@ -497,9 +503,9 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
         return preferredUserId;
     }
 
-    public void setPreferredUserId(org.eclipse.kapua.model.id.KapuaId preferredUserId)
+    public void setPreferredUserId(KapuaId preferredUserId)
     {
-        this.preferredUserId = preferredUserId;
+        this.preferredUserId = (KapuaEid) preferredUserId;
     }
 
 }
