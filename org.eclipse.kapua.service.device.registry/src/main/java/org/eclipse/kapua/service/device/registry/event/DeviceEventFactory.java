@@ -1,4 +1,4 @@
-package org.eclipse.kapua.service.device.event;
+package org.eclipse.kapua.service.device.registry.event;
 
 import org.eclipse.kapua.model.KapuaEntityFactory;
 import org.eclipse.kapua.model.id.KapuaId;

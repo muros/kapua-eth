@@ -1,4 +1,4 @@
-package org.eclipse.kapua.service.device.event.internal;
+package org.eclipse.kapua.service.device.registry.event.internal;
 
 import java.util.Date;
 
@@ -18,7 +18,7 @@ import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.device.event.DeviceEvent;
+import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 
 @Entity
 @Table(name = "dvc_device_event")

@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.event.internal;
+package org.eclipse.kapua.service.device.registry.event.internal;
 
 import javax.persistence.EntityManager;
 
@@ -18,9 +18,9 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.service.internal.ServiceDAO;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
-import org.eclipse.kapua.service.device.event.DeviceEvent;
-import org.eclipse.kapua.service.device.event.DeviceEventCreator;
-import org.eclipse.kapua.service.device.event.DeviceEventListResult;
+import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventListResult;
 
 public class DeviceEventDAO extends ServiceDAO
 {
