@@ -1,4 +1,4 @@
-package org.eclipse.kapua.service.device.event.internal;
+package org.eclipse.kapua.service.device.registry.event.internal;
 
 import java.util.Date;
 
@@ -7,8 +7,8 @@ import javax.xml.bind.annotation.XmlElement;
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.device.event.DeviceEvent;
-import org.eclipse.kapua.service.device.event.DeviceEventCreator;
+import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 
 public class DeviceEventCreatorImpl extends AbstractKapuaEntityCreator<DeviceEvent> implements DeviceEventCreator
 {

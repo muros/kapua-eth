@@ -1,9 +1,9 @@
-package org.eclipse.kapua.service.device.event.internal;
+package org.eclipse.kapua.service.device.registry.event.internal;
 
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.device.event.DeviceEventCreator;
-import org.eclipse.kapua.service.device.event.DeviceEventFactory;
-import org.eclipse.kapua.service.device.event.DeviceEventQuery;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventQuery;
 
 public class DeviceEventFactoryImpl implements DeviceEventFactory
 {

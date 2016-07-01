@@ -1,8 +1,8 @@
-package org.eclipse.kapua.service.device.event.internal;
+package org.eclipse.kapua.service.device.registry.event.internal;
 
 import org.eclipse.kapua.commons.model.query.AbstractKapuaListResult;
-import org.eclipse.kapua.service.device.event.DeviceEvent;
-import org.eclipse.kapua.service.device.event.DeviceEventListResult;
+import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventListResult;
 
 public class DeviceEventListResultImpl extends AbstractKapuaListResult<DeviceEvent> implements DeviceEventListResult
 {
