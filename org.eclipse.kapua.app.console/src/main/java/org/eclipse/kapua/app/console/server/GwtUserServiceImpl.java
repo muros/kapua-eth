@@ -86,13 +86,13 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
                 userPermissionCreator.setUserId(scopeId);
 
                 String[] tokens = p.split(":");
-                if (tokens.length == 1) {
+                if (tokens.length > 0) {
                     userPermissionCreator.setDomain(tokens[0]);
                 }
-                if (tokens.length == 2) {
+                if (tokens.length > 1) {
                     userPermissionCreator.setAction(tokens[1]);
                 }
-                if (tokens.length == 3) {
+                if (tokens.length > 2) {
                     userPermissionCreator.setTargetScopeId(KapuaEid.parseShortId(tokens[2]));
                 }
 
@@ -151,22 +151,21 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
                 Set<UserPermissionCreator> newUserPermissions = new HashSet<UserPermissionCreator>();
                 for (String p : newPermissions) {
-                    String[] tokens = p.split(":");
-
                     UserPermissionCreator userPermissionCreator = userPermissionFactory.newCreator(user.getScopeId());
                     userPermissionCreator.setUserId(scopeId);
 
-                    if (tokens.length == 1) {
+                    String[] tokens = p.split(":");
+                    if (tokens.length > 0) {
                         userPermissionCreator.setDomain(tokens[0]);
                     }
-                    if (tokens.length == 2) {
+                    if (tokens.length > 1) {
                         userPermissionCreator.setAction(tokens[1]);
                     }
-                    if (tokens.length == 3) {
+                    if (tokens.length > 2) {
                         userPermissionCreator.setTargetScopeId(KapuaEid.parseShortId(tokens[2]));
                     }
 
-                    newUserPermissions.add(userPermissionCreator);
+                    userPermissionService.create(userPermissionCreator);
                 }
 
                 userPermissionService.merge(newUserPermissions);
