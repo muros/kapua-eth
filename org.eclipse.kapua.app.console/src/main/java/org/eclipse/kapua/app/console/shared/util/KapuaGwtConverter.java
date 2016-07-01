@@ -12,19 +12,13 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.shared.util;
 
-import java.util.ArrayList;
 import java.util.Properties;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
-import org.eclipse.kapua.app.console.shared.model.GwtBrokerCluster;
-import org.eclipse.kapua.app.console.shared.model.GwtBrokerNode;
-import org.eclipse.kapua.app.console.shared.model.GwtBrokerType;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceEvent;
-import org.eclipse.kapua.app.console.shared.model.GwtHeader;
-import org.eclipse.kapua.app.console.shared.model.GwtHeader.GwtHeaderType;
 import org.eclipse.kapua.app.console.shared.model.GwtOrganization;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
 import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
@@ -58,7 +52,7 @@ public class KapuaGwtConverter
         gwtAccount.setModifiedOn(account.getModifiedOn());
         gwtAccount.setModifiedBy(account.getModifiedBy().getShortId());
         gwtAccount.setGwtOrganization(convert(account.getOrganization()));
-        gwtAccount.setParentAccountId(account.getScopeId().getShortId());
+        gwtAccount.setParentAccountId(account.getScopeId() != null ? account.getScopeId().getShortId() : null);
         gwtAccount.setOptlock(account.getOptlock());
 
         Properties accountProperties = account.getEntityProperties();
@@ -183,150 +177,6 @@ public class KapuaGwtConverter
         gwtDeviceEvent.setEventMessage(escapedMessage);
 
         return gwtDeviceEvent;
-    }
-
-    public static GwtHeader convert(KapuaMetricInfo<?> hd)
-    {
-        GwtHeader gwtHeader = new GwtHeader(hd.getName());
-        if (hd.getType().equals(Float.class)) {
-            gwtHeader.setType(GwtHeaderType.FLOAT.name());
-        }
-        else if (hd.getType().equals(String.class)) {
-            gwtHeader.setType(GwtHeaderType.STRING.name());
-        }
-        else if (hd.getType().equals(Integer.class)) {
-            gwtHeader.setType(GwtHeaderType.INTEGER.name());
-        }
-        else if (hd.getType().equals(Double.class)) {
-            gwtHeader.setType(GwtHeaderType.DOUBLE.name());
-        }
-        else if (hd.getType().equals(Long.class)) {
-            gwtHeader.setType(GwtHeaderType.LONG.name());
-        }
-        else if (hd.getType().equals(Boolean.class)) {
-            gwtHeader.setType(GwtHeaderType.BOOLEAN.name());
-        }
-        else if (hd.getType().equals(byte[].class)) {
-            gwtHeader.setType(GwtHeaderType.BYTE_ARRAY.name());
-        }
-        return gwtHeader;
-    }
-
-    public static GwtBrokerCluster convert(BrokerCluster brokerCluster, BrokerClusterDeployment clusterDeployment)
-    {
-        GwtBrokerCluster gwtBrokerCluster = new GwtBrokerCluster();
-
-        gwtBrokerCluster.setBrokerType(convert(brokerCluster.getBrokerType()));
-        gwtBrokerCluster.setCreatedOn(brokerCluster.getCreatedOn());
-        gwtBrokerCluster.setDeploymentId(brokerCluster.getDeploymentId());
-        gwtBrokerCluster.setDescription(brokerCluster.getDescription());
-        gwtBrokerCluster.setDnsAliases(brokerCluster.getDnsAliasesAsList());
-        gwtBrokerCluster.setDnsName(brokerCluster.getDnsName());
-        gwtBrokerCluster.setId(brokerCluster.getId());
-        gwtBrokerCluster.setIptablesRules(brokerCluster.getIptablesRules());
-        gwtBrokerCluster.setModifiedOn(brokerCluster.getModifiedOn());
-        gwtBrokerCluster.setMqttBrokerUrl(brokerCluster.getMqttBrokerUrl());
-        gwtBrokerCluster.setName(brokerCluster.getName());
-        gwtBrokerCluster.setStatus(brokerCluster.getStatus().name());
-
-        if (clusterDeployment != null) {
-            gwtBrokerCluster.setAutoscaleCooldown(clusterDeployment.getAutoscaleCooldown());
-            gwtBrokerCluster.setAutoscaleMaxInstances(clusterDeployment.getAutoscaleMaxInstances());
-            gwtBrokerCluster.setAutoscaleMinInstances(clusterDeployment.getAutoscaleMinInstances());
-            gwtBrokerCluster.setAvailabilityZones(clusterDeployment.getAvailabilityZones());
-            gwtBrokerCluster.setEnableMqtt(clusterDeployment.getEnableMqtt());
-            gwtBrokerCluster.setEnableMqtts(clusterDeployment.getEnableMqtts());
-            gwtBrokerCluster.setEnableWebSocket(clusterDeployment.getEnableWebSocket());
-            gwtBrokerCluster.setUserData(clusterDeployment.getIaasUserData());
-            gwtBrokerCluster.setIaasInstanceType(clusterDeployment.getIaasInstanceType());
-            gwtBrokerCluster.setIaasKeyName(clusterDeployment.getIaasKeyName());
-            gwtBrokerCluster.setIaasMachineImage(clusterDeployment.getIaasMachineImage());
-            gwtBrokerCluster.setIdleTimeout(clusterDeployment.getIdleTimeout());
-            // gwtBrokerCluster.setSslCertificate(convert(clusterDeployment.getSslCertificate()));
-
-            // convert broker nodes
-            ArrayList<GwtBrokerNode> gwtBrokerNodes = new ArrayList<GwtBrokerNode>();
-            if (clusterDeployment.getBrokerNodes() != null) {
-                for (BrokerNode brokerNode : clusterDeployment.getBrokerNodes()) {
-                    gwtBrokerNodes.add(convert(brokerNode));
-                }
-            }
-            gwtBrokerCluster.setBrokerNodes(gwtBrokerNodes);
-        }
-
-        return gwtBrokerCluster;
-    }
-
-    public static BrokerCluster convert(GwtBrokerCluster gwtBrokerCluster)
-    {
-        BrokerCluster brokerCluster = new BrokerCluster();
-
-        brokerCluster.setBrokerType(convert(gwtBrokerCluster.getBrokerTypeEnum()));
-        brokerCluster.setDeploymentId(gwtBrokerCluster.getDeploymentId());
-        brokerCluster.setDescription(gwtBrokerCluster.getDescription());
-        brokerCluster.setDnsAliases(gwtBrokerCluster.getDnsAliases());
-        brokerCluster.setDnsName(gwtBrokerCluster.getDnsName());
-        brokerCluster.setId(gwtBrokerCluster.getId());
-        brokerCluster.setIptablesRules(gwtBrokerCluster.getIptablesRules());
-        brokerCluster.setName(gwtBrokerCluster.getName());
-        brokerCluster.setStatus(null);
-
-        return brokerCluster;
-    }
-
-    public static BrokerClusterDeployment convertClusterDeployment(GwtBrokerCluster gwtBrokerCluster)
-    {
-        BrokerClusterDeployment clusterDeployment = new BrokerClusterDeployment();
-        clusterDeployment.setAutoscaleCooldown(gwtBrokerCluster.getAutoscaleCooldown());
-        clusterDeployment.setAutoscaleMaxInstances(gwtBrokerCluster.getAutoscaleMaxInstances());
-        clusterDeployment.setAutoscaleMinInstances(gwtBrokerCluster.getAutoscaleMinInstances());
-        clusterDeployment.setAvailabilityZones(gwtBrokerCluster.getAvailabilityZones());
-        clusterDeployment.setClusterId(gwtBrokerCluster.getId());
-        clusterDeployment.setEnableMqtt(gwtBrokerCluster.getEnableMqtt());
-        clusterDeployment.setEnableMqtts(gwtBrokerCluster.getEnableMqtts());
-        clusterDeployment.setEnableWebSocket(gwtBrokerCluster.getEnableWebSocket());
-        clusterDeployment.setIaasUserData(gwtBrokerCluster.getUserData());
-        clusterDeployment.setIaasInstanceType(gwtBrokerCluster.getIaasInstanceType());
-        clusterDeployment.setIaasKeyName(gwtBrokerCluster.getIaasKeyName());
-        clusterDeployment.setIaasMachineImage(gwtBrokerCluster.getIaasMachineImage());
-        clusterDeployment.setId(gwtBrokerCluster.getDeploymentId());
-        clusterDeployment.setIdleTimeout(gwtBrokerCluster.getIdleTimeout());
-        // clusterDeployment.setSslCertificate(convert(gwtBrokerCluster.getSslCertificate()));
-
-        // ignore nodes since they can't be updated
-
-        return clusterDeployment;
-    }
-
-    public static GwtBrokerType convert(BrokerType brokerType)
-    {
-        return GwtBrokerType.valueOf(brokerType.name());
-    }
-
-    public static BrokerType convert(GwtBrokerType gwtBrokerType)
-    {
-        return BrokerType.valueOf(gwtBrokerType.name());
-    }
-
-    public static GwtBrokerNode convert(BrokerNode brokerNode)
-    {
-
-        GwtBrokerNode gwtBrokerNode = new GwtBrokerNode();
-
-        gwtBrokerNode.setAvailabilityZone(brokerNode.getIaasAvailabilityZone());
-        gwtBrokerNode.setBrokerClusterId(brokerNode.getBrokerClusterId());
-        gwtBrokerNode.setBrokerVersion(brokerNode.getBrokerVersion());
-        gwtBrokerNode.setDnsName(brokerNode.getDnsName());
-        gwtBrokerNode.setId(brokerNode.getId());
-        gwtBrokerNode.setInstanceId(brokerNode.getIaasInstanceId());
-        gwtBrokerNode.setInstanceType(brokerNode.getIaasInstanceType());
-        gwtBrokerNode.setKeyName(brokerNode.getIaasKeyName());
-        gwtBrokerNode.setMachineImage(brokerNode.getIaasMachineImage());
-        gwtBrokerNode.setPrivateIp(brokerNode.getPrivateIp());
-        gwtBrokerNode.setPublicIp(brokerNode.getPublicIp());
-        gwtBrokerNode.setStatus(brokerNode.getStatus());
-
-        return gwtBrokerNode;
     }
 
 }

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.device;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.util.Constants;
 import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
@@ -20,9 +21,8 @@ import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
+import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtSecurityTokenServiceAsync;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.event.BaseEvent;

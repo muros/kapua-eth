@@ -35,24 +35,15 @@ import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implementation class for the AccountService interface.
  */
 public class AccountServiceImpl extends AbstractKapuaConfigurableService implements AccountService
 {
+    private static final long  serialVersionUID      = -312489270279852500L;
 
-    /**
-     * 
-     */
-    private static final long   serialVersionUID      = -312489270279852500L;
-
-    @SuppressWarnings("unused")
-    private static final Logger s_logger              = LoggerFactory.getLogger(AccountServiceImpl.class);
-
-    public static final String  EDC_PROVISION_ACCOUNT = KapuaEnvironmentConfig.getInstance().getString(KapuaEnvironmentConfigKeys.SYS_PROVISION_ACCOUNT_NAME);
+    public static final String EDC_PROVISION_ACCOUNT = KapuaEnvironmentConfig.getInstance().getString(KapuaEnvironmentConfigKeys.SYS_PROVISION_ACCOUNT_NAME);
 
     public AccountServiceImpl()
     {

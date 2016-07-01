@@ -16,11 +16,10 @@ import org.eclipse.kapua.app.console.client.util.DialogUtils;
 import org.eclipse.kapua.app.console.shared.model.GwtDeploymentPackage;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceServiceAsync;
 
-import com.eurotech.cloud.console.shared.service.GwtDeviceServiceAsync;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-
 
 public class SyncPackageUninstallDialog extends PackageUninstallDialog
 {
@@ -69,9 +68,10 @@ public class SyncPackageUninstallDialog extends PackageUninstallDialog
                                                     });
     }
 
-	@Override
-	protected void addListeners() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    protected void addListeners()
+    {
+        // TODO Auto-generated method stub
+
+    }
 }

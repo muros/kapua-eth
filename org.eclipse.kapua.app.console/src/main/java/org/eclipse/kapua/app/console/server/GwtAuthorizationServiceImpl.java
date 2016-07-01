@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.server;
 
+import java.math.BigInteger;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
@@ -29,9 +31,12 @@ import org.eclipse.kapua.app.console.shared.service.GwtAuthorizationService;
 import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
+import org.eclipse.kapua.service.authentication.AccessToken;
 import org.eclipse.kapua.service.authentication.AuthenticationCredentials;
 import org.eclipse.kapua.service.authentication.AuthenticationService;
 import org.eclipse.kapua.service.authentication.KapuaSession;
@@ -134,7 +139,34 @@ public class GwtAuthorizationServiceImpl extends KapuaRemoteServiceServlet imple
         //
         // Get info from session
         AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-        KapuaSession kapuaSession = authenticationService.getCurrentSession();
+        // KapuaSession kapuaSession = authenticationService.getCurrentSession();
+        KapuaSession kapuaSession = new KapuaSession() {
+
+            @Override
+            public AccessToken getTokenInfo()
+            {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public KapuaId getScopeId()
+            {
+                return new KapuaEid(new BigInteger("1"));
+            }
+
+            @Override
+            public String getCurrentUsername()
+            {
+                return "kapua-sys";
+            }
+
+            @Override
+            public KapuaId getCurrentUserId()
+            {
+                return new KapuaEid(new BigInteger("1"));
+            }
+        };
 
         //
         // Get user info

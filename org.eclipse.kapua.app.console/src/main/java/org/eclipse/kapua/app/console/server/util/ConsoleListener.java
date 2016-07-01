@@ -15,7 +15,7 @@ package org.eclipse.kapua.app.console.server.util;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.eclipse.kapua.util.JpaUtils;
+import org.eclipse.kapua.commons.util.JpaUtils;
 
 public class ConsoleListener implements ServletContextListener
 {

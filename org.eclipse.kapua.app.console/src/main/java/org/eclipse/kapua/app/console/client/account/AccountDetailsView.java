@@ -15,6 +15,7 @@ package org.eclipse.kapua.app.console.client.account;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
@@ -22,9 +23,8 @@ import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.service.GwtAccountService;
+import org.eclipse.kapua.app.console.shared.service.GwtAccountServiceAsync;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtAccountServiceAsync;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.data.BaseListLoader;

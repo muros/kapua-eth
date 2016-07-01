@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.device;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceQueryPredicates;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.Style.Scroll;

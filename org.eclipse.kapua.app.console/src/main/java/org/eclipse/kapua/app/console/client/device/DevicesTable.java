@@ -15,6 +15,7 @@ package org.eclipse.kapua.app.console.client.device;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.mqtt.MqttConsoleCallback;
 import org.eclipse.kapua.app.console.client.mqtt.MqttMessageDispatcher;
 import org.eclipse.kapua.app.console.client.mqtt.MqttMessageDispatcherCreator;
@@ -32,12 +33,11 @@ import org.eclipse.kapua.app.console.shared.model.GwtMqttTopic;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
+import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtDeviceServiceAsync;
-import com.eurotech.cloud.console.shared.service.GwtSecurityTokenServiceAsync;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.Style.SelectionMode;
@@ -603,40 +603,8 @@ public class DevicesTable extends LayoutContainer implements MqttConsoleCallback
             {
                 m_selectedDevice = se.getSelectedItem();
                 if (m_selectedDevice != null) {
-
-                    if (m_selectedDevice.getGpsAddress() == null) {
-
-                        // do reverse geocoding of device address
-                        m_devicesView.getDeviceTabs().mask(MSGS.loading());
-                        gwtDeviceService.findDeviceAddress(m_selectedDevice, new AsyncCallback<String>() {
-                            @Override
-                            public void onFailure(Throwable arg0)
-                            {
-                                m_selectedDevice.setGpsAddress("N/A");
-                                // m_editDeviceButton.setEnabled(true);
-                                m_deleteDeviceButton.setEnabled(true);
-                                m_devicesView.getDeviceTabs().unmask();
-                                m_devicesView.setDevice(m_selectedDevice);
-                            }
-
-                            @Override
-                            public void onSuccess(String gpsAddress)
-                            {
-                                m_selectedDevice.setGpsAddress(gpsAddress);
-                                // m_editDeviceButton.setEnabled(true);
-                                m_deleteDeviceButton.setEnabled(true);
-                                m_devicesView.getDeviceTabs().unmask();
-                                m_devicesView.setDevice(m_selectedDevice);
-                            }
-                        });
-                    }
-                    else {
-
-                        // NO NEED to do reverse geocoding of device address
-                        // m_editDeviceButton.setEnabled(true);
-                        m_deleteDeviceButton.setEnabled(true);
-                        m_devicesView.setDevice(m_selectedDevice);
-                    }
+                    m_deleteDeviceButton.setEnabled(true);
+                    m_devicesView.setDevice(m_selectedDevice);
                 }
                 else {
                     // m_editDeviceButton.setEnabled(false);

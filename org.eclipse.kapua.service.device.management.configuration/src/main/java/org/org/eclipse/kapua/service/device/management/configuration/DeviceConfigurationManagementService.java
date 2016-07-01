@@ -21,7 +21,10 @@ public interface DeviceConfigurationManagementService extends KapuaService
     public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String configurationComponentPid)
         throws KapuaException;
 
-    public void put(KapuaId scopeId, KapuaId deviceId, DeviceComponentConfiguration compConfig)
+    public void put(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration deviceConfig)
+        throws KapuaException;
+
+    public void put(KapuaId scopeId, KapuaId deviceId, DeviceComponentConfiguration deviceComponentConfig)
         throws KapuaException;
 
     public void apply(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration configuration)

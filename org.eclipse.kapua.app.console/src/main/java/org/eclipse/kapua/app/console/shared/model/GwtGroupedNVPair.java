@@ -15,112 +15,137 @@ package org.eclipse.kapua.app.console.shared.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.eclipse.kapua.app.console.client.messages.ValidationMessages;
 import org.eclipse.kapua.app.console.client.util.DateUtils;
 
-import com.eurotech.cloud.console.client.messages.ValidationMessages;
 import com.google.gwt.core.client.GWT;
 
-public class GwtGroupedNVPair extends EdcBaseModel implements Serializable {
+public class GwtGroupedNVPair extends EdcBaseModel implements Serializable
+{
     private static final long serialVersionUID = 6017065568183482351L;
 
-
-    public GwtGroupedNVPair() {
+    public GwtGroupedNVPair()
+    {
     }
 
-    public GwtGroupedNVPair(String group, String name, String value) {
+    public GwtGroupedNVPair(String group, String name, String value)
+    {
         setGroup(group);
         setName(name);
         setValue(value);
     }
 
-    public void setGroup(String group) {
+    public void setGroup(String group)
+    {
         set("group", group);
     }
 
-    public String getGroup() {
+    public String getGroup()
+    {
         return get("group");
     }
 
-    public String getGroupLoc() {
+    public String getGroupLoc()
+    {
         return get("groupLoc");
     }
 
-    public void setId(String id) {
+    public void setId(String id)
+    {
         set("id", id);
     }
 
-    public String getId() {
+    public String getId()
+    {
         return get("id");
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         set("name", name);
     }
 
-    public String getName() {
+    public String getName()
+    {
         return get("name");
     }
 
-    public String getUnescapedName() {
+    public String getUnescapedName()
+    {
         return getUnescaped("name");
     }
 
-    public String getNameLoc() {
+    public String getNameLoc()
+    {
         return get("nameLoc");
     }
 
-    public void setValue(String value) {
+    public void setValue(String value)
+    {
         set("value", value);
     }
 
-    public String getValue() {
+    public String getValue()
+    {
         return get("value");
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status)
+    {
         set("status", status);
     }
 
-    public String getStatus() {
+    public String getStatus()
+    {
         return get("status");
     }
 
-    public String getStatusLoc() {
+    public String getStatusLoc()
+    {
         return get("statusLoc");
     }
 
-    public void setVersion(String version) {
+    public void setVersion(String version)
+    {
         set("version", version);
     }
 
-    public String getVersion() {
+    public String getVersion()
+    {
         return get("version");
     }
 
-    public String getUnescapedVersion() {
+    public String getUnescapedVersion()
+    {
         return getUnescaped("version");
     }
 
-    public String getDevLastEventOn() {
+    public String getDevLastEventOn()
+    {
         return get("devLastEventOn");
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <X> X get(String property) {
+    public <X> X get(String property)
+    {
         if ("groupLoc".equals(property)) {
             ValidationMessages msgs = GWT.create(ValidationMessages.class);
             return (X) msgs.getString(getGroup());
-        } else if ("nameLoc".equals(property)) {
+        }
+        else if ("nameLoc".equals(property)) {
             ValidationMessages msgs = GWT.create(ValidationMessages.class);
             return (X) msgs.getString(getName());
-        } else if ("statusLoc".equals(property)) {
+        }
+        else if ("statusLoc".equals(property)) {
             ValidationMessages msgs = GWT.create(ValidationMessages.class);
             return (X) msgs.getString(getStatus());
-        } else if ("devLastEventOn".equals(property)) {
+        }
+        else if ("devLastEventOn".equals(property)) {
             Date lastEventOn = new Date(Long.valueOf((String) get(property)));
             return (X) DateUtils.formatDateTime(lastEventOn);
-        } else {
+        }
+        else {
             X value = (X) super.get(property);
             if (value == null) {
                 value = (X) "N/A";

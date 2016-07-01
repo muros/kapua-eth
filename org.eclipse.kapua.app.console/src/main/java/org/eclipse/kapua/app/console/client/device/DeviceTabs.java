@@ -12,13 +12,13 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.device;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
-import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice.GwtDeviceApplication;
+import org.eclipse.kapua.app.console.shared.model.GwtSession;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;

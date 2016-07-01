@@ -22,73 +22,9 @@
     </listener>
 
 	<listener>
-        <listener-class>com.eurotech.cloud.console.server.util.ConsoleListener</listener-class>
+        <listener-class>org.eclipse.kapua.app.console.server.util.ConsoleListener</listener-class>
     </listener>
     
-	<!-- Shiro Filter -->
-	<filter>
-    	<filter-name>ELBHttpsFilter</filter-name>
-    	<filter-class>com.eurotech.cloud.commons.filter.ELBHttpsFilter</filter-class>
-    </filter>
-    <filter-mapping>
-		<filter-name>ELBHttpsFilter</filter-name>
-        <url-pattern>*.html</url-pattern>
-        <url-pattern>*.jsp</url-pattern>
-        <url-pattern>*.js</url-pattern>
-        <url-pattern>*.css</url-pattern>
-        <url-pattern>/console/xsrf/*</url-pattern>
-		<url-pattern>/console/wizard/*</url-pattern>        
-		<url-pattern>/console/wizardActivation/*</url-pattern>      		
-        <url-pattern>/console/errroHandler/*</url-pattern>    
-        <url-pattern>/console/account/*</url-pattern>
-        <url-pattern>/console/alert/*</url-pattern>
-        <url-pattern>/console/account_usage/*</url-pattern>
-        <url-pattern>/console/auth/*</url-pattern>
-        <url-pattern>/console/cluster/*</url-pattern>
-        <url-pattern>/console/device/*</url-pattern>
-        <url-pattern>/console/deviceJob/*</url-pattern>
-        <url-pattern>/console/sim/*</url-pattern>
-        <url-pattern>/console/simJob/*</url-pattern>
-        <url-pattern>/console/simProvider/*</url-pattern>
-        <url-pattern>/console/pkiDeviceMgmt/*</url-pattern>
-        <url-pattern>/console/pkiBlockedCertificate/*</url-pattern>
-        <url-pattern>/console/pkiAllowedCertificate/*</url-pattern>
-        <url-pattern>/console/pkiDnssecCertificate/*</url-pattern>
-        <url-pattern>/console/pkiexp/*</url-pattern>        
-        <url-pattern>/console/device_snapshots/*</url-pattern>
-        <url-pattern>/console/provisionRequest/*</url-pattern>
-        <url-pattern>/console/mqtt/*</url-pattern>
-        <url-pattern>/console/rule/*</url-pattern>
-        <url-pattern>/console/healthCheckReport/*</url-pattern>
-        <url-pattern>/console/healthCheckLog/*</url-pattern>
-        <url-pattern>/console/tag/*</url-pattern>
-        <url-pattern>/console/sysmgmt/*</url-pattern>
-        <url-pattern>/console/user/*</url-pattern>
-        <url-pattern>/console/task/*</url-pattern>
-        <url-pattern>/console/data/*</url-pattern>
-        <url-pattern>/console/deviceJobManager/*</url-pattern>
-        <url-pattern>/console/exporter/*</url-pattern>
-        <url-pattern>/console/exporter_usage/*</url-pattern>
-        <url-pattern>/console/exporter_device/*</url-pattern>
-        <url-pattern>/console/exporter_device_event/*</url-pattern>
-        <url-pattern>/console/setting/*</url-pattern>
-        <url-pattern>/console/file/*</url-pattern>
-        <url-pattern>/console/image/*</url-pattern>
-        <url-pattern>/console/provision/*</url-pattern>
-        <url-pattern>/console/SSLfile/*</url-pattern>
-        <url-pattern>/console/gwtComet/*</url-pattern>
-        <url-pattern>/console/vpn_connection</url-pattern>
-        <url-pattern>/console/SimCardGroupMigrationTest</url-pattern>
-        <!-- Every mount point except /console/skin/* should be listed here and below  -->      
-	</filter-mapping>
-    <filter>
-       <filter-name>GwtExpiresFilter</filter-name>
-        <filter-class>com.eurotech.cloud.console.filter.GwtExpiresFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>GwtExpiresFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
 	<filter>
 	   <filter-name>ShiroFilter</filter-name>
         <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
@@ -144,61 +80,6 @@
         <url-pattern>/console/SimCardGroupMigrationTest</url-pattern>
         <!-- Every mount point except /console/skin/* should be listed here and below  -->      
 	</filter-mapping>
-    <filter>
-       <filter-name>LoggerContextFilter</filter-name>
-        <filter-class>com.eurotech.cloud.commons.filter.LoggerContextFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>LoggerContextFilter</filter-name>
-        <url-pattern>*.html</url-pattern>
-        <url-pattern>*.jsp</url-pattern>
-        <url-pattern>*.js</url-pattern>
-        <url-pattern>*.css</url-pattern>
-		<url-pattern>/console/wizard/*</url-pattern>        
-		<url-pattern>/console/wizardActivation/*</url-pattern> 		          
-        <url-pattern>/console/xsrf/*</url-pattern>
-        <url-pattern>/console/errroHandler/*</url-pattern>  
-        <url-pattern>/console/account/*</url-pattern>
-        <url-pattern>/console/alert/*</url-pattern>
-        <url-pattern>/console/account_usage/*</url-pattern>
-        <url-pattern>/console/auth/*</url-pattern>
-        <url-pattern>/console/cluster/*</url-pattern>
-        <url-pattern>/console/device/*</url-pattern>
-        <url-pattern>/console/deviceJob/*</url-pattern>
-        <url-pattern>/console/sim/*</url-pattern>
-        <url-pattern>/console/simJob/*</url-pattern>
-        <url-pattern>/console/simProvider/*</url-pattern>
-        <url-pattern>/console/pkiDeviceMgmt/*</url-pattern>
-        <url-pattern>/console/pkiBlockedCertificate/*</url-pattern>
-        <url-pattern>/console/pkiAllowedCertificate/*</url-pattern>
-        <url-pattern>/console/pkiDnssecCertificate/*</url-pattern>
-        <url-pattern>/console/pkiexp/*</url-pattern>
-        <url-pattern>/console/device_snapshots/*</url-pattern>
-        <url-pattern>/console/provisionRequest/*</url-pattern>
-        <url-pattern>/console/mqtt/*</url-pattern>
-        <url-pattern>/console/rule/*</url-pattern>
-        <url-pattern>/console/healthCheckReport/*</url-pattern>
-        <url-pattern>/console/healthCheckLog/*</url-pattern>
-        <url-pattern>/console/tag/*</url-pattern>
-        <url-pattern>/console/sysmgmt/*</url-pattern>
-        <url-pattern>/console/user/*</url-pattern>
-        <url-pattern>/console/task/*</url-pattern>
-        <url-pattern>/console/data/*</url-pattern>
-        <url-pattern>/console/deviceJobManager/*</url-pattern>
-        <url-pattern>/console/exporter/*</url-pattern>
-        <url-pattern>/console/exporter_usage/*</url-pattern>
-        <url-pattern>/console/exporter_device/*</url-pattern>
-        <url-pattern>/console/exporter_device_event/*</url-pattern>
-        <url-pattern>/console/setting/*</url-pattern>
-        <url-pattern>/console/file/*</url-pattern>
-        <url-pattern>/console/image/*</url-pattern>
-        <url-pattern>/console/provision/*</url-pattern>
-        <url-pattern>/console/SSLfile/*</url-pattern>
-        <url-pattern>/console/gwtComet/*</url-pattern>
-        <url-pattern>/console/vpn_connection</url-pattern>
-        <url-pattern>/console/SimCardGroupMigrationTest</url-pattern>
-        <!-- Every mount point except /console/skin/* should be listed here and above  -->      
-    </filter-mapping>
 	<filter>
 	    <filter-name>jetty-gzip</filter-name>
 	    <filter-class>org.mortbay.servlet.GzipFilter</filter-class>
@@ -342,53 +223,21 @@
 		<url-pattern>/console/gwtComet/*</url-pattern>
 	</servlet-mapping>
 
-<!--  Wizard servlet support -->
-  <!--  <servlet>
-      <servlet-name>GwtWizardServiceImpl</servlet-name>
-      <servlet-class>com.eurotech.cloud.console.server.GwtWizardServiceImpl
-      </servlet-class>
-   </servlet>
-   <servlet-mapping>
-      <servlet-name>GwtWizardServiceImpl</servlet-name>
-      <url-pattern>/console/wizard/*</url-pattern>
-   </servlet-mapping> -->
-   
-   <servlet>
-      <servlet-name>GwtWizardInstantActivationServiceImpl</servlet-name>
-      <servlet-class>com.eurotech.cloud.console.server.GwtWizardInstantActivationServiceImpl
-      </servlet-class>
-   </servlet>
-   <servlet-mapping>
-      <servlet-name>GwtWizardInstantActivationServiceImpl</servlet-name>
-      <url-pattern>/console/wizardActivation/*</url-pattern>
-   </servlet-mapping>   
-
 	<!-- XSRF servlet support -->
 	<servlet>
       <servlet-name>EdcErrorHandlerServlet</servlet-name>
-      <servlet-class>com.eurotech.cloud.console.servlet.EdcErrorHandlerServlet
+      <servlet-class>org.eclipse.kapua.app.console.servlet.EdcErrorHandlerServlet
       </servlet-class>
    	</servlet>
    	<servlet-mapping>
       <servlet-name>EdcErrorHandlerServlet</servlet-name>
       <url-pattern>/console/errorHandler/*</url-pattern>
    	</servlet-mapping>
-
-	<!--  Wizard servlet support -->
-   <servlet>
-      <servlet-name>GwtWizardServiceImpl</servlet-name>
-      <servlet-class>com.eurotech.cloud.console.server.GwtWizardServiceImpl
-      </servlet-class>
-   </servlet>
-   <servlet-mapping>
-      <servlet-name>GwtWizardServiceImpl</servlet-name>
-      <url-pattern>/console/wizard/*</url-pattern>
-   </servlet-mapping>
    
 	<!-- XSRF servlet support -->
    <servlet>
       <servlet-name>GwtSecurityTokenServiceImpl</servlet-name>
-      <servlet-class>com.eurotech.cloud.console.server.GwtSecurityTokenServiceImpl
+      <servlet-class>org.eclipse.kapua.app.console.server.GwtSecurityTokenServiceImpl
       </servlet-class>
    </servlet>
    <servlet-mapping>
@@ -397,71 +246,19 @@
    </servlet-mapping>
 
     <servlet>
-        <servlet-name>dataExporterServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.DataExporterServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>dataExporterServlet</servlet-name>
-        <url-pattern>/console/exporter/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>pkiExporterServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.PkiExporterServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>pkiExporterServlet</servlet-name>
-        <url-pattern>/console/pkiexp/*</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>deviceJobManagerServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.DeviceJobServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>deviceJobManagerServlet</servlet-name>
-        <url-pattern>/console/deviceJobManager/*</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>usageExporterServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.UsageExporterServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>usageExporterServlet</servlet-name>
-        <url-pattern>/console/exporter_usage/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>deviceExporterServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.DeviceExporterServlet</servlet-class>
+        <servlet-class>org.eclipse.kapua.app.console.servlet.DeviceExporterServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>deviceExporterServlet</servlet-name>
         <url-pattern>/console/exporter_device/*</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>deviceEventExporterServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.DeviceEventExporterServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>deviceEventExporterServlet</servlet-name>
-        <url-pattern>/console/exporter_device_event/*</url-pattern>
-    </servlet-mapping>
-
-	<servlet>
-        <servlet-name>settingServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.server.GwtSettingServiceImpl</servlet-class>
-    </servlet>
-	<servlet-mapping>
-		<servlet-name>settingServlet</servlet-name>
-		<url-pattern>/console/setting</url-pattern>
-	</servlet-mapping>
+   
 
 	<servlet>
         <servlet-name>deviceSnapshotsServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.DeviceSnapshotsServlet</servlet-class>
+        <servlet-class>org.eclipse.kapua.app.console.servlet.DeviceSnapshotsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>deviceSnapshotsServlet</servlet-name>
@@ -470,115 +267,16 @@
 
 	<servlet>
 		<servlet-name>accountServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtAccountServiceImpl</servlet-class>
+		<servlet-class>org.eclipse.kapua.app.console.server.GwtAccountServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>accountServlet</servlet-name>
 		<url-pattern>/console/account</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>alertServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtAlertServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>alertServlet</servlet-name>
-		<url-pattern>/console/alert</url-pattern>
-	</servlet-mapping>
 	
-	<servlet>
-		<servlet-name>simServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtSimServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>simServlet</servlet-name>
-		<url-pattern>/console/sim</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-        <servlet-name>simJobServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.server.GwtSimJobServiceImpl</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>simJobServlet</servlet-name>
-        <url-pattern>/console/simJob</url-pattern>
-    </servlet-mapping>
-    
-	<servlet>
-		<servlet-name>simProviderServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtSimProviderServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>simProviderServlet</servlet-name>
-		<url-pattern>/console/simProvider</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-        <servlet-name>pkiBlockedCertificateServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.server.GwtPkiBlockedCertificateServiceImpl</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>pkiBlockedCertificateServlet</servlet-name>
-        <url-pattern>/console/pkiBlockedCertificate</url-pattern>
-    </servlet-mapping>
-	
-	<servlet>
-        <servlet-name>pkiAllowedCertificateServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.server.GwtPkiAllowedCertificateServiceImpl</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>pkiAllowedCertificateServlet</servlet-name>
-        <url-pattern>/console/pkiAllowedCertificate</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>pkiDnssecCertificateServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.server.GwtPkiDnssecCertificateServiceImpl</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>pkiDnssecCertificateServlet</servlet-name>
-        <url-pattern>/console/pkiDnssecCertificate</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>pkiDeviceMgmtServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.server.GwtPkiDeviceMgmtServiceImpl</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>pkiDeviceMgmtServlet</servlet-name>
-        <url-pattern>/console/pkiDeviceMgmt</url-pattern>
-    </servlet-mapping>
-	
-	<servlet>
-		<servlet-name>accountUsageServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtAccountUsageServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>accountUsageServlet</servlet-name>
-		<url-pattern>/console/account_usage</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>brokerClusterServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtBrokerClusterServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>brokerClusterServlet</servlet-name>
-		<url-pattern>/console/cluster</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>tagServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtTagServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>tagServlet</servlet-name>
-		<url-pattern>/console/tag</url-pattern>
-	</servlet-mapping>
-
 	<servlet>
 		<servlet-name>authorizationServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtAuthorizationServiceImpl</servlet-class>
+		<servlet-class>org.eclipse.kapua.app.console.server.GwtAuthorizationServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>authorizationServlet</servlet-name>
@@ -587,7 +285,7 @@
 
 	<servlet>
 		<servlet-name>deviceServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtDeviceServiceImpl</servlet-class>
+		<servlet-class>org.eclipse.kapua.app.console.server.GwtDeviceServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>deviceServlet</servlet-name>
@@ -595,173 +293,31 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>deviceJobServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtDeviceJobServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>deviceJobServlet</servlet-name>
-		<url-pattern>/console/deviceJob</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>provisionRequestServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtProvisionRequestServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>provisionRequestServlet</servlet-name>
-		<url-pattern>/console/provisionRequest</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>mqttServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.mqtt.MqttClientManager</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>mqttServlet</servlet-name>
-		<url-pattern>/console/mqtt</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>ruleServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtRuleServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ruleServlet</servlet-name>
-		<url-pattern>/console/rule</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>healthCheckReportServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtHealthCheckReportServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>healthCheckReportServlet</servlet-name>
-		<url-pattern>/console/healthCheckReport</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>healthCheckLogServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtHealthCheckLogServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>healthCheckLogServlet</servlet-name>
-		<url-pattern>/console/healthCheckLog</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>sysMgmtServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtSystemManagementServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>sysMgmtServlet</servlet-name>
-		<url-pattern>/console/sysmgmt</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
 		<servlet-name>userServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtUserServiceImpl</servlet-class>
+		<servlet-class>org.eclipse.kapua.app.console.server.GwtUserServiceImpl</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>userServlet</servlet-name>
 		<url-pattern>/console/user</url-pattern>
 	</servlet-mapping>
 
-    <servlet>
-        <servlet-name>taskServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.server.GwtTaskServiceImpl</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>taskServlet</servlet-name>
-        <url-pattern>/console/task</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>dataServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.server.GwtDataServiceImpl</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>dataServlet</servlet-name>
-        <url-pattern>/console/data</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>skinServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.SkinServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>skinServlet</servlet-name>
-        <url-pattern>/console/skin/*</url-pattern>
-    </servlet-mapping>
-
     <listener>
       <listener-class>org.apache.commons.fileupload.servlet.FileCleanerCleanup</listener-class>
     </listener>
 
     <servlet>
-        <servlet-name>SSLfileUploadServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.SSLFileUploadServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>SSLfileUploadServlet</servlet-name>
-        <url-pattern>/console/SSLfile/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>fileServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.FileServlet</servlet-class>
+        <servlet-class>org.eclipse.kapua.app.console.servlet.FileServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>fileServlet</servlet-name>
         <url-pattern>/console/file/*</url-pattern>
     </servlet-mapping>
 
-	<servlet>
-        <servlet-name>imageServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.ImageServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>imageServlet</servlet-name>
-        <url-pattern>/console/image/*</url-pattern>
-    </servlet-mapping>
 	
-	<servlet>
-        <servlet-name>provisionServlet</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.ProvisionServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>provisionServlet</servlet-name>
-        <url-pattern>/console/provision/*</url-pattern>
-    </servlet-mapping>
 
-	<servlet>
-		<servlet-name>vpnConnectionServlet</servlet-name>
-		<servlet-class>com.eurotech.cloud.console.server.GwtVpnConnectionServiceImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>vpnConnectionServlet</servlet-name>
-		<url-pattern>/console/vpn_connection</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>Ping</servlet-name>
-		<servlet-class>com.eurotech.cloud.commons.util.servlets.PingServlet</servlet-class>
-	</servlet>	
-	<servlet-mapping>
-		<servlet-name>Ping</servlet-name>
-		<url-pattern>/ping</url-pattern>
-	</servlet-mapping>
 	
 	<!-- Servlet to test sim group migration -->
-	
-	
-	<servlet>
-        <servlet-name>SimCardGroupMigrationTest</servlet-name>
-        <servlet-class>com.eurotech.cloud.console.servlet.SimCardGroupMigrationTestServlet</servlet-class>
-    </servlet>
-	<servlet-mapping>
-        <servlet-name>SimCardGroupMigrationTest</servlet-name>
-        <url-pattern>/console/SimCardGroupMigrationTest</url-pattern>
-    </servlet-mapping>
 
 	    
     <!-- 
@@ -772,21 +328,6 @@
         defined at the top of the file.
     -->          
 
-
-	<!-- Test Servlets -->
-	<servlet>
-		<servlet-name>jUnitHostImpl</servlet-name>
-		<servlet-class>com.google.gwt.junit.server.JUnitHostImpl</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>jUnitHostImpl</servlet-name>
-		<url-pattern>/console/junithost/*</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>jUnitHostImpl</servlet-name>
-		<url-pattern>/com.eurotech.cloud.console.consoleJUnit/junithost/*</url-pattern>
-	</servlet-mapping>
 
 
 	<!-- 

@@ -21,47 +21,56 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.kapua.service.device.management.DeviceManagementService;
-import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.eclipse.kapua.service.locator.ServiceLocator;
-import org.eclipse.kapua.util.XmlUtil;
+import org.eclipse.kapua.app.console.server.util.XmlUtil;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
+import org.org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DeviceSnapshotsServlet extends HttpServlet {
+public class DeviceSnapshotsServlet extends HttpServlet
+{
     private static final long serialVersionUID = -2533869595709953567L;
 
     private static Logger     s_logger         = LoggerFactory.getLogger(DeviceSnapshotsServlet.class);
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+        throws ServletException, IOException
+    {
         response.setCharacterEncoding("UTF-8");
         PrintWriter writer = response.getWriter();
         try {
 
             // parameter extraction
-            String account = request.getParameter("account");
-            String clientId = request.getParameter("clientId");
+            String account = request.getParameter("scopeId");
+            String clientId = request.getParameter("deviceId");
             String snapshotId = request.getParameter("snapshotId");
 
             //
             // get the devices and append them to the exporter
-            ServiceLocator locator = ServiceLocator.getInstance();
-            DeviceManagementService deviceService = locator.getDeviceService();
-            DeviceConfiguration conf = deviceService.findDeviceSnapshot(account,
-                                       clientId,
-                                       snapshotId);
+            KapuaLocator locator = KapuaLocator.getInstance();
+            DeviceSnapshotManagementService deviceSnapshotManagementService = locator.getService(DeviceSnapshotManagementService.class);
+            DeviceConfiguration conf = deviceSnapshotManagementService.get(KapuaEid.parseShortId(account),
+                                                                           KapuaEid.parseShortId(clientId),
+                                                                           snapshotId);
+
+            String contentDispositionFormat = "attachment; filename*=UTF-8''%s_%s_%s.xml; ";
 
             response.setContentType("application/xml; charset=UTF-8");
-            response.setHeader("Content-Disposition", "attachment; "
-                               + "filename*=UTF-8''" + URLEncoder.encode(account, "UTF-8") + "_" + URLEncoder.encode(clientId, "UTF-8") + "_" + snapshotId + ".xml; ");
             response.setHeader("Cache-Control", "no-transform, max-age=0");
+            response.setHeader("Content-Disposition", String.format(contentDispositionFormat,
+                                                                    URLEncoder.encode(account, "UTF-8"),
+                                                                    URLEncoder.encode(clientId, "UTF-8"),
+                                                                    snapshotId));
 
             XmlUtil.marshal(conf, writer);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             s_logger.error("Error creating Excel export", e);
             throw new ServletException(e);
-        } finally {
+        }
+        finally {
             if (writer != null)
                 writer.close();
         }

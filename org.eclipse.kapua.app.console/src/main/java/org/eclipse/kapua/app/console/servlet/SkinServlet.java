@@ -22,24 +22,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.kapua.service.config.EdcConfig;
+import org.eclipse.kapua.app.console.config.ConsoleConfig;
+import org.eclipse.kapua.app.console.config.ConsoleConfigKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SkinServlet extends HttpServlet {
+public class SkinServlet extends HttpServlet
+{
     private static final long serialVersionUID = -5374075152873372059L;
     private static Logger     s_logger         = LoggerFactory.getLogger(SkinServlet.class);
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+        throws ServletException, IOException
+    {
         FileReader fr = null;
         PrintWriter w = response.getWriter();
         String resourceName = request.getPathInfo();
         try {
 
             // check to see if we have an external resource directory configured
-            EdcConfig edcConfig = EdcConfig.getInstance();
-            String resourceDir = edcConfig.getConsoleSkinResourceDirectory();
+            ConsoleConfig edcConfig = ConsoleConfig.getInstance();
+            String resourceDir = edcConfig.getString(ConsoleConfigKeys.SKIN_RESOURCE_DIR);
             if (resourceDir != null && resourceDir.trim().length() != 0) {
 
                 File fResourceDir = new File(resourceDir);
@@ -63,9 +66,11 @@ public class SkinServlet extends HttpServlet {
                     iRead = fr.read(buffer);
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             s_logger.error("Error loading skin resource", e);
-        } finally {
+        }
+        finally {
             if (fr != null)
                 fr.close();
             if (w != null)

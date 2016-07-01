@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.device;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.Listener;
@@ -29,32 +29,36 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
-public class DeviceTabConfiguration extends LayoutContainer {
+public class DeviceTabConfiguration extends LayoutContainer
+{
 
-    private final ConsoleMessages msgs = GWT.create(ConsoleMessages.class);
+    private final ConsoleMessages  msgs = GWT.create(ConsoleMessages.class);
 
     @SuppressWarnings("unused")
-    private GwtSession m_currentSession;
+    private GwtSession             m_currentSession;
 
-    private TabPanel   m_tabsPanel;
-    private TabItem    m_tabComponents;
-    private TabItem    m_tabSnapshots;
+    private TabPanel               m_tabsPanel;
+    private TabItem                m_tabComponents;
+    private TabItem                m_tabSnapshots;
 
     private DeviceConfigComponents m_configComponents;
     private DeviceConfigSnapshots  m_configSnapshots;
 
-    public DeviceTabConfiguration(GwtSession currentSession) {
-        m_currentSession   = currentSession;
+    public DeviceTabConfiguration(GwtSession currentSession)
+    {
+        m_currentSession = currentSession;
         m_configComponents = new DeviceConfigComponents(currentSession, this);
-        m_configSnapshots  = new DeviceConfigSnapshots(currentSession, this);
+        m_configSnapshots = new DeviceConfigSnapshots(currentSession, this);
     }
 
-    public void setDevice(GwtDevice selectedDevice) {
+    public void setDevice(GwtDevice selectedDevice)
+    {
         m_configComponents.setDevice(selectedDevice);
         m_configSnapshots.setDevice(selectedDevice);
     }
 
-    public void refresh() {
+    public void refresh()
+    {
 
         if (m_tabsPanel == null) {
             return;
@@ -62,12 +66,14 @@ public class DeviceTabConfiguration extends LayoutContainer {
 
         if (m_tabsPanel.getSelectedItem() == m_tabComponents) {
             m_configComponents.refresh();
-        } else if (m_tabsPanel.getSelectedItem() == m_tabSnapshots) {
+        }
+        else if (m_tabsPanel.getSelectedItem() == m_tabSnapshots) {
             m_configSnapshots.refresh();
         }
     }
 
-    protected void onRender(Element parent, int index) {
+    protected void onRender(Element parent, int index)
+    {
 
         super.onRender(parent, index);
 
@@ -85,7 +91,8 @@ public class DeviceTabConfiguration extends LayoutContainer {
         m_tabComponents.setLayout(new FitLayout());
         m_tabComponents.add(m_configComponents);
         m_tabComponents.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be) {
+            public void handleEvent(ComponentEvent be)
+            {
                 m_configComponents.refresh();
             }
         });
@@ -97,7 +104,8 @@ public class DeviceTabConfiguration extends LayoutContainer {
         m_tabSnapshots.setLayout(new FitLayout());
         m_tabSnapshots.add(m_configSnapshots);
         m_tabSnapshots.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be) {
+            public void handleEvent(ComponentEvent be)
+            {
                 m_configSnapshots.refresh();
             }
         });

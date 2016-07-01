@@ -32,11 +32,11 @@ import org.eclipse.kapua.app.console.shared.model.GwtMqttTopic;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtMqttClientService;
+import org.eclipse.kapua.app.console.shared.service.GwtMqttClientServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
+import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.eurotech.cloud.console.shared.service.GwtMqttClientServiceAsync;
-import com.eurotech.cloud.console.shared.service.GwtSecurityTokenServiceAsync;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.StatusCodeException;

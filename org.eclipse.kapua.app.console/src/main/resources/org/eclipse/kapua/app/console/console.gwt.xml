@@ -44,13 +44,12 @@
     <inherits name='org.gwtopenmaps.openlayers.OpenLayers' />
 
     <!-- Locales: English language, independent of country              -->
-    <extend-property name="locale" values="it" />
     <extend-property name="locale" values="en" />
 
     <set-property-fallback name="locale" value="en" />
 
     <!-- Target browser GWT permutations                                -->
-    <!-- <set-property name="user.agent" value="gecko1_8"/> -->
+    <set-property name="user.agent" value="gecko1_8"/>
 
     <!-- Specify the app entry point class. -->
     <entry-point class='org.eclipse.kapua.app.console.client.KapuaCloudConsole' />

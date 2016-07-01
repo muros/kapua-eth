@@ -14,8 +14,6 @@ package org.eclipse.kapua.app.console.shared.model;
 
 import java.util.Date;
 
-import org.eclipse.kapua.app.console.client.util.DateUtils;
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class GwtUser extends EdcBaseModel implements IsSerializable
@@ -47,15 +45,6 @@ public class GwtUser extends EdcBaseModel implements IsSerializable
     {
         if ("statusEnum".equals(property)) {
             return (X) (GwtUserStatus.valueOf(getStatus()));
-        }
-        else if ("loginAttemptsResetOnFormatted".equals(property)) {
-            return (X) (getLoginAttemptsResetOnFormatted());
-        }
-        else if ("lockedOnFormatted".equals(property)) {
-            return (X) (getLockedOnFormatted());
-        }
-        else if ("unlockOnFormatted".equals(property)) {
-            return (X) (getUnlockOnFormatted());
         }
         else {
             return super.get(property);
@@ -210,86 +199,6 @@ public class GwtUser extends EdcBaseModel implements IsSerializable
     public void setStatus(String status)
     {
         set("status", status);
-    }
-
-    public Date getLoginOn()
-    {
-        return (Date) get("loginOn");
-    }
-
-    public String getLoginOnFormatted()
-    {
-        return DateUtils.formatDateTime((Date) get("loginOn"));
-    }
-
-    public void setLoginOn(Date loginOn)
-    {
-        set("loginOn", loginOn);
-    }
-
-    public int getLoginAttempts()
-    {
-        return (Integer) get("loginAttempts");
-    }
-
-    public void setLoginAttempts(int loginAttempts)
-    {
-        set("loginAttempts", loginAttempts);
-    }
-
-    public Date getLoginAttemptsResetOn()
-    {
-        return (Date) get("loginAttemptsResetOn");
-    }
-
-    public String getLoginAttemptsResetOnFormatted()
-    {
-        return DateUtils.formatDateTime((Date) get("loginAttemptsResetOn"));
-    }
-
-    public void setLoginAttemptsResetOn(Date loginAttemptsResetOn)
-    {
-        set("loginAttemptsResetOn", loginAttemptsResetOn);
-    }
-
-    public boolean isLocked()
-    {
-        return (Boolean) get("isLocked");
-    }
-
-    public void setIsLocked(boolean isLocked)
-    {
-        set("isLocked", isLocked);
-    }
-
-    public Date getLockedOn()
-    {
-        return (Date) get("lockedOn");
-    }
-
-    public String getLockedOnFormatted()
-    {
-        return DateUtils.formatDateTime((Date) get("lockedOn"));
-    }
-
-    public void setLockedOn(Date lockedOn)
-    {
-        set("lockedOn", lockedOn);
-    }
-
-    public Date getUnlockOn()
-    {
-        return (Date) get("unlockOn");
-    }
-
-    public String getUnlockOnFormatted()
-    {
-        return DateUtils.formatDateTime((Date) get("unlockOn"));
-    }
-
-    public void setUnlockOn(Date unlockOn)
-    {
-        set("unlockOn", unlockOn);
     }
 
     public String getPermissions()

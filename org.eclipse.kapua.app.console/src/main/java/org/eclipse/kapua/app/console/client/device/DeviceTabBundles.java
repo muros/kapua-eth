@@ -15,6 +15,7 @@ package org.eclipse.kapua.app.console.client.device;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
@@ -24,11 +25,10 @@ import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
+import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtDeviceServiceAsync;
-import com.eurotech.cloud.console.shared.service.GwtSecurityTokenServiceAsync;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.Style.SelectionMode;
 import com.extjs.gxt.ui.client.data.BaseListLoader;
@@ -60,50 +60,50 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
+public class DeviceTabBundles extends LayoutContainer
+{
+    private static final ConsoleMessages                     MSGS             = GWT.create(ConsoleMessages.class);
 
-public class DeviceTabBundles extends LayoutContainer {
-    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
-
-    private final GwtDeviceServiceAsync gwtDeviceService = GWT.create(GwtDeviceService.class);
-    private final GwtSecurityTokenServiceAsync    gwtXSRFService    = GWT.create(GwtSecurityTokenService.class);
+    private final GwtDeviceServiceAsync                      gwtDeviceService = GWT.create(GwtDeviceService.class);
+    private final GwtSecurityTokenServiceAsync               gwtXSRFService   = GWT.create(GwtSecurityTokenService.class);
 
     @SuppressWarnings("unused")
-    private GwtSession      m_currentSession;
-    private DeviceTabs      m_deviceTabs;
+    private GwtSession                                       m_currentSession;
+    private DeviceTabs                                       m_deviceTabs;
 
-    private boolean         m_dirty;
-    private boolean         m_initialized;
-    private GwtDevice       m_selectedDevice;
+    private boolean                                          m_dirty;
+    private boolean                                          m_initialized;
+    private GwtDevice                                        m_selectedDevice;
 
-    private ToolBar         m_toolBar;
+    private ToolBar                                          m_toolBar;
 
-    private Button          m_refreshButton;
-    private Button          m_startButton;
-    private Button          m_stopButton;
+    private Button                                           m_refreshButton;
+    private Button                                           m_startButton;
+    private Button                                           m_stopButton;
 
-    private Grid<GwtGroupedNVPair>      m_grid;
-    private ListStore<GwtGroupedNVPair> m_store;
+    private Grid<GwtGroupedNVPair>                           m_grid;
+    private ListStore<GwtGroupedNVPair>                      m_store;
     private BaseListLoader<ListLoadResult<GwtGroupedNVPair>> m_loader;
 
-    protected boolean refreshProcess;
-
+    protected boolean                                        refreshProcess;
 
     public DeviceTabBundles(GwtSession currentSession,
-                            DeviceTabs deviceTabs) {
+                            DeviceTabs deviceTabs)
+    {
         m_currentSession = currentSession;
-        m_deviceTabs     = deviceTabs;
-        m_dirty          = true;
-        m_initialized    = false;
+        m_deviceTabs = deviceTabs;
+        m_dirty = true;
+        m_initialized = false;
     }
 
-
-    public void setDevice(GwtDevice selectedDevice) {
+    public void setDevice(GwtDevice selectedDevice)
+    {
         m_dirty = true;
         m_selectedDevice = selectedDevice;
     }
 
-
-    protected void onRender(Element parent, int index) {
+    protected void onRender(Element parent, int index)
+    {
         super.onRender(parent, index);
         setLayout(new FitLayout());
 
@@ -115,7 +115,7 @@ public class DeviceTabBundles extends LayoutContainer {
         devicesBundlesPanel.setBorders(false);
         devicesBundlesPanel.setBodyBorder(false);
         devicesBundlesPanel.setHeaderVisible(false);
-        devicesBundlesPanel.setLayout( new FitLayout());
+        devicesBundlesPanel.setLayout(new FitLayout());
         devicesBundlesPanel.setScrollMode(Scroll.AUTO);
         devicesBundlesPanel.setTopComponent(m_toolBar);
         devicesBundlesPanel.add(m_grid);
@@ -124,52 +124,58 @@ public class DeviceTabBundles extends LayoutContainer {
         m_initialized = true;
     }
 
-
-    private void initToolBar() {
+    private void initToolBar()
+    {
         m_toolBar = new ToolBar();
 
         //
         // Refresh Button
         m_refreshButton = new Button(MSGS.refreshButton(),
                                      AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
-        new SelectionListener<ButtonEvent>() {
-            @Override
-            public void componentSelected(ButtonEvent ce) {
-                if (!refreshProcess) {
-                    refreshProcess=true;
+                                     new SelectionListener<ButtonEvent>() {
+                                         @Override
+                                         public void componentSelected(ButtonEvent ce)
+                                         {
+                                             if (!refreshProcess) {
+                                                 refreshProcess = true;
 
-                    GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_BUNDLES_REFRESH);
-                    if (m_selectedDevice.isOnline()) {
-                        m_toolBar.disable();
-                        m_dirty = true;
-                        refresh();
+                                                 GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_BUNDLES_REFRESH);
+                                                 if (m_selectedDevice.isOnline()) {
+                                                     m_toolBar.disable();
+                                                     m_dirty = true;
+                                                     refresh();
 
-                        refreshProcess=false;
-                    } else {
-                        MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
-                        new Listener<MessageBoxEvent>() {
-                            @Override
-                            public void handleEvent(MessageBoxEvent be) {
-                                m_grid.unmask();
+                                                     refreshProcess = false;
+                                                 }
+                                                 else {
+                                                     MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
+                                                                      new Listener<MessageBoxEvent>() {
+                                                                          @Override
+                                                                          public void handleEvent(MessageBoxEvent be)
+                                                                          {
+                                                                              m_grid.unmask();
 
-                                refreshProcess=false;
-                            }
-                        });
-                    }
-                }
-            }
-        });
+                                                                              refreshProcess = false;
+                                                                          }
+                                                                      });
+                                                 }
+                                             }
+                                         }
+                                     });
 
         m_refreshButton.setEnabled(true);
         m_toolBar.add(m_refreshButton);
         m_toolBar.add(new SeparatorToolItem());
 
         final AsyncCallback<Void> callback = new AsyncCallback<Void>() {
-            public void onFailure(Throwable caught) {
+            public void onFailure(Throwable caught)
+            {
                 FailureHandler.handle(caught);
                 m_dirty = true;
             }
-            public void onSuccess(Void arg0) {
+
+            public void onSuccess(Void arg0)
+            {
                 // mark this panel dirty and also all the other pier panels
                 m_deviceTabs.setDevice(m_selectedDevice);
                 m_dirty = true;
@@ -181,40 +187,46 @@ public class DeviceTabBundles extends LayoutContainer {
         // Start Button
         m_startButton = new Button(MSGS.deviceBndStart(),
                                    AbstractImagePrototype.create(Resources.INSTANCE.bundleStart()),
-        new SelectionListener<ButtonEvent>() {
-            @Override
-            public void componentSelected(ButtonEvent ce) {
-                GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_BUNDLES_START);
-                if (m_selectedDevice.isOnline()) {
-                    m_toolBar.disable();
-                    m_grid.mask(MSGS.loading());
+                                   new SelectionListener<ButtonEvent>() {
+                                       @Override
+                                       public void componentSelected(ButtonEvent ce)
+                                       {
+                                           GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_BUNDLES_START);
+                                           if (m_selectedDevice.isOnline()) {
+                                               m_toolBar.disable();
+                                               m_grid.mask(MSGS.loading());
 
-                    //
-                    // Getting XSRF token
-                    gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken> () {
-                        @Override
-                        public void onFailure(Throwable ex) {
-                            FailureHandler.handle(ex);
-                        }
-                        @Override
-                        public void onSuccess(GwtXSRFToken token) {
-                            gwtDeviceService.startBundle(token,
-                                                         m_selectedDevice,
-                                                         m_grid.getSelectionModel().getSelectedItem(),
-                                                         callback);
-                        }
-                    });
-                } else {
-                    MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
-                    new Listener<MessageBoxEvent>() {
-                        @Override
-                        public void handleEvent(MessageBoxEvent be) {
-                            m_grid.unmask();
-                        }
-                    });
-                }
-            }
-        });
+                                               //
+                                               // Getting XSRF token
+                                               gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
+                                                   @Override
+                                                   public void onFailure(Throwable ex)
+                                                   {
+                                                       FailureHandler.handle(ex);
+                                                   }
+
+                                                   @Override
+                                                   public void onSuccess(GwtXSRFToken token)
+                                                   {
+                                                       gwtDeviceService.startBundle(token,
+                                                                                    m_selectedDevice,
+                                                                                    m_grid.getSelectionModel().getSelectedItem(),
+                                                                                    callback);
+                                                   }
+                                               });
+                                           }
+                                           else {
+                                               MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
+                                                                new Listener<MessageBoxEvent>() {
+                                                                    @Override
+                                                                    public void handleEvent(MessageBoxEvent be)
+                                                                    {
+                                                                        m_grid.unmask();
+                                                                    }
+                                                                });
+                                           }
+                                       }
+                                   });
         m_startButton.setEnabled(true);
         m_toolBar.add(m_startButton);
         m_toolBar.add(new SeparatorToolItem());
@@ -223,51 +235,58 @@ public class DeviceTabBundles extends LayoutContainer {
         // Stop Button
         m_stopButton = new Button(MSGS.deviceBndStop(),
                                   AbstractImagePrototype.create(Resources.INSTANCE.bundleStop()),
-        new SelectionListener<ButtonEvent>() {
-            @Override
-            public void componentSelected(ButtonEvent ce) {
-                GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_BUNDLES_STOP);
-                if (m_selectedDevice.isOnline()) {
-                    final GwtGroupedNVPair pair = m_grid.getSelectionModel().getSelectedItem();
-                    String bundleName = pair.getName();
-                    MessageBox.confirm(MSGS.confirm(),
-                                       MSGS.deviceStopBundle(bundleName),
-                    new Listener<MessageBoxEvent>() {
-                        public void handleEvent(MessageBoxEvent ce) {
-                            // if confirmed, stop
-                            Dialog  dialog = ce.getDialog();
-                            if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
-                                m_toolBar.disable();
-                                m_grid.mask(MSGS.loading());
-                                //
-                                // Getting XSRF token
-                                gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken> () {
-                                    @Override
-                                    public void onFailure(Throwable ex) {
-                                        FailureHandler.handle(ex);
-                                    }
-                                    @Override
-                                    public void onSuccess(GwtXSRFToken token) {
-                                        gwtDeviceService.stopBundle(token,
-                                                                    m_selectedDevice,
-                                                                    pair,
-                                                                    callback);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                } else {
-                    MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
-                    new Listener<MessageBoxEvent>() {
-                        @Override
-                        public void handleEvent(MessageBoxEvent be) {
-                            m_grid.unmask();
-                        }
-                    });
-                }
-            }
-        });
+                                  new SelectionListener<ButtonEvent>() {
+                                      @Override
+                                      public void componentSelected(ButtonEvent ce)
+                                      {
+                                          GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_BUNDLES_STOP);
+                                          if (m_selectedDevice.isOnline()) {
+                                              final GwtGroupedNVPair pair = m_grid.getSelectionModel().getSelectedItem();
+                                              String bundleName = pair.getName();
+                                              MessageBox.confirm(MSGS.confirm(),
+                                                                 MSGS.deviceStopBundle(bundleName),
+                                                                 new Listener<MessageBoxEvent>() {
+                                                                     public void handleEvent(MessageBoxEvent ce)
+                                                                     {
+                                                                         // if confirmed, stop
+                                                                         Dialog dialog = ce.getDialog();
+                                                                         if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
+                                                                             m_toolBar.disable();
+                                                                             m_grid.mask(MSGS.loading());
+                                                                             //
+                                                                             // Getting XSRF token
+                                                                             gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
+                                                                                 @Override
+                                                                                 public void onFailure(Throwable ex)
+                                                                                 {
+                                                                                     FailureHandler.handle(ex);
+                                                                                 }
+
+                                                                                 @Override
+                                                                                 public void onSuccess(GwtXSRFToken token)
+                                                                                 {
+                                                                                     gwtDeviceService.stopBundle(token,
+                                                                                                                 m_selectedDevice,
+                                                                                                                 pair,
+                                                                                                                 callback);
+                                                                                 }
+                                                                             });
+                                                                         }
+                                                                     }
+                                                                 });
+                                          }
+                                          else {
+                                              MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
+                                                               new Listener<MessageBoxEvent>() {
+                                                                   @Override
+                                                                   public void handleEvent(MessageBoxEvent be)
+                                                                   {
+                                                                       m_grid.unmask();
+                                                                   }
+                                                               });
+                                          }
+                                      }
+                                  });
         m_stopButton.setEnabled(true);
         m_toolBar.add(m_stopButton);
         m_toolBar.add(new SeparatorToolItem());
@@ -275,15 +294,17 @@ public class DeviceTabBundles extends LayoutContainer {
         m_toolBar.disable();
     }
 
-
-    private void initGrid() {
+    private void initGrid()
+    {
         RpcProxy<ListLoadResult<GwtGroupedNVPair>> proxy = new RpcProxy<ListLoadResult<GwtGroupedNVPair>>() {
             @Override
-            protected void load(Object loadConfig, final AsyncCallback<ListLoadResult<GwtGroupedNVPair>> callback) {
+            protected void load(Object loadConfig, final AsyncCallback<ListLoadResult<GwtGroupedNVPair>> callback)
+            {
                 if (m_selectedDevice != null) {
                     if (m_selectedDevice.isOnline()) {
                         gwtDeviceService.findBundles(m_selectedDevice, callback);
-                    } else {
+                    }
+                    else {
                         m_grid.getStore().removeAll();
                         m_grid.unmask();
                     }
@@ -291,14 +312,14 @@ public class DeviceTabBundles extends LayoutContainer {
             }
         };
         m_loader = new BaseListLoader<ListLoadResult<GwtGroupedNVPair>>(proxy);
-        m_loader.addLoadListener( new DataLoadListener());
+        m_loader.addLoadListener(new DataLoadListener());
 
         m_store = new ListStore<GwtGroupedNVPair>(m_loader);
 
-        ColumnConfig id      = new ColumnConfig("id",        MSGS.deviceBndId(), 10);
-        ColumnConfig name    = new ColumnConfig("name",      MSGS.deviceBndName(), 50);
-        ColumnConfig status  = new ColumnConfig("statusLoc", MSGS.deviceBndState(), 20);
-        ColumnConfig version = new ColumnConfig("version",   MSGS.deviceBndVersion(), 20);
+        ColumnConfig id = new ColumnConfig("id", MSGS.deviceBndId(), 10);
+        ColumnConfig name = new ColumnConfig("name", MSGS.deviceBndName(), 50);
+        ColumnConfig status = new ColumnConfig("statusLoc", MSGS.deviceBndState(), 20);
+        ColumnConfig version = new ColumnConfig("version", MSGS.deviceBndVersion(), 20);
 
         List<ColumnConfig> config = new ArrayList<ColumnConfig>();
         config.add(id);
@@ -324,13 +345,15 @@ public class DeviceTabBundles extends LayoutContainer {
         m_grid.getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<GwtGroupedNVPair>() {
 
             @Override
-            public void selectionChanged(SelectionChangedEvent<GwtGroupedNVPair> se) {
+            public void selectionChanged(SelectionChangedEvent<GwtGroupedNVPair> se)
+            {
                 if (m_grid.getSelectionModel().getSelectedItem() != null) {
                     GwtGroupedNVPair selectedBundle = m_grid.getSelectionModel().getSelectedItem();
                     if ("bndActive".equals(selectedBundle.getStatus())) {
                         m_startButton.disable();
                         m_stopButton.enable();
-                    } else {
+                    }
+                    else {
                         m_stopButton.disable();
                         m_startButton.enable();
                     }
@@ -339,8 +362,8 @@ public class DeviceTabBundles extends LayoutContainer {
         });
     }
 
-
-    public void refresh() {
+    public void refresh()
+    {
         if (m_dirty && m_initialized) {
 
             m_dirty = false;
@@ -349,35 +372,40 @@ public class DeviceTabBundles extends LayoutContainer {
                 m_toolBar.enable();
                 m_startButton.disable();
                 m_stopButton.disable();
-            } else {
+            }
+            else {
                 m_grid.getStore().removeAll();
                 m_toolBar.disable();
             }
         }
     }
 
-    public void reload() {
+    public void reload()
+    {
         if (m_selectedDevice != null) {
             m_loader.load();
         }
     }
 
-
     // --------------------------------------------------------------------------------------
     //
-    //    Data Load Listener
+    // Data Load Listener
     //
     // --------------------------------------------------------------------------------------
 
-    private class DataLoadListener extends EdcLoadListener {
-        public DataLoadListener() {
+    private class DataLoadListener extends EdcLoadListener
+    {
+        public DataLoadListener()
+        {
         }
 
-        public void loaderBeforeLoad(LoadEvent le) {
+        public void loaderBeforeLoad(LoadEvent le)
+        {
             m_grid.mask(MSGS.loading());
         }
 
-        public void loaderLoad(LoadEvent le) {
+        public void loaderLoad(LoadEvent le)
+        {
             if (le.exception != null) {
                 FailureHandler.handle(le.exception);
             }
@@ -386,7 +414,8 @@ public class DeviceTabBundles extends LayoutContainer {
             m_grid.unmask();
         }
 
-        public void loaderLoadException(LoadEvent le) {
+        public void loaderLoadException(LoadEvent le)
+        {
 
             if (le.exception != null) {
                 FailureHandler.handle(le.exception);

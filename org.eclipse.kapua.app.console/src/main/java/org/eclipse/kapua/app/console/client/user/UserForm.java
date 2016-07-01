@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.user;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.util.ConfirmPasswordFieldValidator;
 import org.eclipse.kapua.app.console.client.util.ConsoleInfo;
 import org.eclipse.kapua.app.console.client.util.Constants;
@@ -23,14 +24,13 @@ import org.eclipse.kapua.app.console.client.util.TextFieldValidator;
 import org.eclipse.kapua.app.console.client.util.TextFieldValidator.FieldType;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
-import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.model.GwtUser.GwtUserStatus;
+import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
+import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtUserService;
+import org.eclipse.kapua.app.console.shared.service.GwtUserServiceAsync;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtSecurityTokenServiceAsync;
-import com.eurotech.cloud.console.shared.service.GwtUserServiceAsync;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -335,13 +335,15 @@ public class UserForm extends Window
         username.setValue(gwtUser.getUnescapedUsername());
         username.setOriginalValue(gwtUser.getUnescapedUsername());
 
-        password.setValue(gwtUser.getPassword().substring(0, Math.min(10, gwtUser.getPassword().length() - 1)));
-        password.setOriginalValue(gwtUser.getPassword().substring(0, Math.min(10, gwtUser.getPassword().length() - 1)));
-        password.clearInvalid();
+        // password.setValue(gwtUser.getPassword().substring(0, Math.min(10, gwtUser.getPassword().length() - 1)));
+        // password.setOriginalValue(gwtUser.getPassword().substring(0, Math.min(10, gwtUser.getPassword().length() - 1)));
+        // password.clearInvalid();
+        password.setValidator(null);
 
-        confirmPassword.setValue(gwtUser.getPassword().substring(0, Math.min(10, gwtUser.getPassword().length() - 1)));
-        confirmPassword.setOriginalValue(gwtUser.getPassword().substring(0, Math.min(10, gwtUser.getPassword().length() - 1)));
-        confirmPassword.clearInvalid();
+        // confirmPassword.setValue(gwtUser.getPassword().substring(0, Math.min(10, gwtUser.getPassword().length() - 1)));
+        // confirmPassword.setOriginalValue(gwtUser.getPassword().substring(0, Math.min(10, gwtUser.getPassword().length() - 1)));
+        // confirmPassword.clearInvalid();
+        confirmPassword.setValidator(null);
 
         displayName.setValue(gwtUser.getUnescapedDisplayName());
         displayName.setOriginalValue(gwtUser.getUnescapedDisplayName());
@@ -353,19 +355,6 @@ public class UserForm extends Window
         phoneNumber.setOriginalValue(gwtUser.getUnescapedPhoneNumber());
 
         statusCombo.setSimpleValue(MessageUtils.get(gwtUser.getStatus()));
-
-        if (gwtUser.isLocked()) {
-            lockedCheckBox.setValue(gwtUser.isLocked());
-        }
-        else {
-            lockedCheckGroup.setVisible(false);
-        }
-
-        loginOnLabel.setValue(gwtUser.getLoginOnFormatted());
-        loginAttemptsLabel.setValue(gwtUser.getLoginAttempts());
-        loginAttemptsResetOnLabel.setValue(gwtUser.getLoginAttemptsResetOnFormatted());
-        lockedOnLabel.setValue(gwtUser.getLockedOnFormatted());
-        unlockOnLabel.setValue(gwtUser.getUnlockOnFormatted());
 
         optlock.setValue(gwtUser.getOptlock());
     }

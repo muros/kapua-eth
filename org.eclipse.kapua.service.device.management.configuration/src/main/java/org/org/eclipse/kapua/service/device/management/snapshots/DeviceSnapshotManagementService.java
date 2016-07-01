@@ -10,6 +10,9 @@ public interface DeviceSnapshotManagementService extends KapuaService
     public DeviceSnapshotListResult get(KapuaId scopeId, KapuaId deviceid)
         throws KapuaException;
 
+    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String snapshotId)
+        throws KapuaException;
+
     public void exec(KapuaId scopeId, KapuaId deviceid, DeviceConfiguration snapshotId)
         throws KapuaException;
 

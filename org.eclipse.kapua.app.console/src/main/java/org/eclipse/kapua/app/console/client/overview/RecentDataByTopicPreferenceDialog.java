@@ -14,6 +14,7 @@ package org.eclipse.kapua.app.console.client.overview;
 
 import java.util.List;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.util.DialogUtils;
 import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
@@ -21,9 +22,8 @@ import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtHeader;
 import org.eclipse.kapua.app.console.shared.model.GwtTopic;
 import org.eclipse.kapua.app.console.shared.service.GwtDataService;
+import org.eclipse.kapua.app.console.shared.service.GwtDataServiceAsync;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtDataServiceAsync;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.data.BaseListLoader;
@@ -51,7 +51,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class RecentDataByTopicPreferenceDialog extends Window {
+public class RecentDataByTopicPreferenceDialog extends Window
+{
     private static final ConsoleMessages              MSGS             = GWT.create(ConsoleMessages.class);
     private final GwtDataServiceAsync                 gwtDataService   = GWT.create(GwtDataService.class);
 
@@ -73,7 +74,8 @@ public class RecentDataByTopicPreferenceDialog extends Window {
     private boolean                                   updated;
     private Button                                    saveButton;
 
-    public RecentDataByTopicPreferenceDialog(GwtAccount gwtAccount) {
+    public RecentDataByTopicPreferenceDialog(GwtAccount gwtAccount)
+    {
         m_currentSelectedAccount = gwtAccount;
 
         setHeading(MSGS.dashboardDataChartTitleDialogHeader());
@@ -83,7 +85,8 @@ public class RecentDataByTopicPreferenceDialog extends Window {
         DialogUtils.resizeDialog(this, 500, 140);
     }
 
-    protected void onRender(Element parent, int index) {
+    protected void onRender(Element parent, int index)
+    {
         super.onRender(parent, index);
 
         FormData formData = new FormData("-20");
@@ -120,7 +123,8 @@ public class RecentDataByTopicPreferenceDialog extends Window {
         topicCombo.addSelectionChangedListener(new SelectionChangedListener<GwtTopic>() {
 
             @Override
-            public void selectionChanged(SelectionChangedEvent<GwtTopic> se) {
+            public void selectionChanged(SelectionChangedEvent<GwtTopic> se)
+            {
                 selectedMetric = null;
                 metricCombo.clear();
                 metricCombo.disable();
@@ -134,7 +138,8 @@ public class RecentDataByTopicPreferenceDialog extends Window {
 
         RpcProxy<ListLoadResult<GwtHeader>> proxy = new RpcProxy<ListLoadResult<GwtHeader>>() {
             @Override
-            protected void load(Object loadConfig, AsyncCallback<ListLoadResult<GwtHeader>> callback) {
+            protected void load(Object loadConfig, AsyncCallback<ListLoadResult<GwtHeader>> callback)
+            {
                 gwtDataService.findNumberHeaders((LoadConfig) loadConfig,
                                                  m_currentSelectedAccount.getName(),
                                                  selectedTopic,
@@ -162,7 +167,8 @@ public class RecentDataByTopicPreferenceDialog extends Window {
 
         metricCombo.addSelectionChangedListener(new SelectionChangedListener<GwtHeader>() {
             @Override
-            public void selectionChanged(SelectionChangedEvent<GwtHeader> se) {
+            public void selectionChanged(SelectionChangedEvent<GwtHeader> se)
+            {
                 selectedMetric = metricCombo.getValue();
 
                 if (selectedMetric != null) {
@@ -172,19 +178,21 @@ public class RecentDataByTopicPreferenceDialog extends Window {
         });
 
         gwtDataService.findTopicsList(m_currentSelectedAccount.getName(), new AsyncCallback<List<GwtTopic>>() {
-            public void onFailure(Throwable caught) {
+            public void onFailure(Throwable caught)
+            {
                 FailureHandler.handle(caught);
                 topicCombo.disable();
             }
 
-            public void onSuccess(List<GwtTopic> topicList) {
+            public void onSuccess(List<GwtTopic> topicList)
+            {
                 topicCombo.clear();
                 topicStore.add(topicList);
                 topicCombo.enable();
 
                 // Pre-load last topic and metric selected
                 if (m_currentSelectedAccount.getDashboardPreferredTopic() != null &&
-                        m_currentSelectedAccount.getDashboardPreferredMetric() != null) {
+                    m_currentSelectedAccount.getDashboardPreferredMetric() != null) {
                     // Pre-load topic
                     selectedTopic = topicStore.findModel("semanticTopic", m_currentSelectedAccount.getDashboardPreferredTopic());
                     topicCombo.setValue(selectedTopic);
@@ -210,9 +218,10 @@ public class RecentDataByTopicPreferenceDialog extends Window {
         //
         saveButton = new Button(MSGS.saveButton(), new SelectionListener<ButtonEvent>() {
             @Override
-            public void componentSelected(ButtonEvent ce) {
+            public void componentSelected(ButtonEvent ce)
+            {
                 if (metricCombo.getValue() == null &&
-                        metricCombo.getRawValue().isEmpty()) {
+                    metricCombo.getRawValue().isEmpty()) {
                     metricCombo.markInvalid(MSGS.dashboardDataChartMetricComboValidationMessage());
                     return;
                 }
@@ -228,7 +237,8 @@ public class RecentDataByTopicPreferenceDialog extends Window {
         //
         m_formPanel.addButton(new Button(MSGS.cancelButton(), new SelectionListener<ButtonEvent>() {
             @Override
-            public void componentSelected(ButtonEvent ce) {
+            public void componentSelected(ButtonEvent ce)
+            {
                 hide();
             }
 
@@ -238,15 +248,18 @@ public class RecentDataByTopicPreferenceDialog extends Window {
         add(m_formPanel);
     }
 
-    public GwtTopic getSelectedTopic() {
+    public GwtTopic getSelectedTopic()
+    {
         return selectedTopic;
     }
 
-    public GwtHeader getMetricTopic() {
+    public GwtHeader getMetricTopic()
+    {
         return selectedMetric;
     }
 
-    public boolean isUpdated() {
+    public boolean isUpdated()
+    {
         return updated;
     }
 }

@@ -129,10 +129,6 @@ public class UserManageForm extends UserForm
 
         m_tabsPanel.add(m_tabUserPermission);
 
-        // populate
-        if (m_existingUser != null)
-            updateUserPermissionsGrid();
-
         add(m_formPanel);
     }
 
@@ -161,38 +157,6 @@ public class UserManageForm extends UserForm
             // New user. No need to show the status field set
             statusFieldSet.setVisible(false);
         }
-    }
-
-    private void updateUserPermissionsGrid()
-    {
-        gwtUserService.find(m_existingUser.getScopeId(), m_existingUser.getId(), new AsyncCallback<GwtUser>() {
-            public void onFailure(Throwable caught)
-            {
-                FailureHandler.handle(caught);
-            }
-
-            public void onSuccess(GwtUser user)
-            {
-                List<GwtUserPermission> selectedPermissions = new ArrayList<GwtUserPermission>();
-                List<GwtUserPermission> permissions = GwtUserPermission.getAllPermissions(user.getScopeId());
-                for (GwtUserPermission permission : permissions) {
-                    if (user.getPermissions().indexOf(permission.toString()) != -1) {
-                        selectedPermissions.add(permission);
-                    }
-                }
-
-                MemoryProxy<List<GwtUserPermission>> proxy = new MemoryProxy<List<GwtUserPermission>>(permissions);
-                ListLoader<ListLoadResult<ModelData>> loader = new BaseListLoader<ListLoadResult<ModelData>>(proxy);
-                ListStore<GwtUserPermission> permissionStore = new ListStore<GwtUserPermission>(loader);
-                loader.load();
-
-                m_permisssionGrid.reconfigure(permissionStore, m_columnModel);
-
-                CheckBoxSelectionModel<GwtUserPermission> sm = null;
-                sm = (CheckBoxSelectionModel<GwtUserPermission>) m_permisssionGrid.getSelectionModel();
-                sm.setSelection(selectedPermissions);
-            }
-        });
     }
 
     private String getEnabledUserPermissions()

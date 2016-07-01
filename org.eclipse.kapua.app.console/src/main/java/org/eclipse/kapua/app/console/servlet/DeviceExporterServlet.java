@@ -22,25 +22,26 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.KapuaUnauthenticatedException;
-import org.eclipse.kapua.service.account.AccountServiceOld;
-import org.eclipse.kapua.service.config.EdcConfig;
-import org.eclipse.kapua.service.device.registry.DeviceOld;
-import org.eclipse.kapua.service.device.registry.DeviceConnectionStatus;
-import org.eclipse.kapua.service.device.registry.DeviceRegistryServiceOld;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.model.query.FieldSortCriteria;
+import org.eclipse.kapua.commons.model.query.FieldSortCriteria.SortOrder;
+import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
+import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.query.predicate.KapuaAttributePredicate.Operator;
+import org.eclipse.kapua.service.device.registry.DeviceFactory;
+import org.eclipse.kapua.service.device.registry.DeviceListResult;
+import org.eclipse.kapua.service.device.registry.DevicePredicates;
+import org.eclipse.kapua.service.device.registry.DeviceQuery;
+import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.service.device.registry.DeviceStatus;
-import org.eclipse.kapua.service.locator.ServiceLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.eurotech.cloud.commons.model.query.AndPredicate;
-import com.eurotech.cloud.commons.model.query.AttributeSortCriteria.SortOrder;
-import com.eurotech.cloud.commons.model.query.DeviceQueryOld;
-import com.eurotech.cloud.commons.model.query.EdcListResult;
 
 public class DeviceExporterServlet extends HttpServlet
 {
     private static final long serialVersionUID = -2533869595709953567L;
-    private static Logger     s_logger         = LoggerFactory.getLogger(DataExporterServlet.class);
+    private static Logger     s_logger         = LoggerFactory.getLogger(DeviceExporterServlet.class);
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -61,7 +62,7 @@ public class DeviceExporterServlet extends HttpServlet
         try {
             // parameter extraction
             String format = request.getParameter("format");
-            String account = request.getParameter("account");
+            String scopeIdString = request.getParameter("scopeIdString");
 
             // data exporter
             DeviceExporter deviceExporter = null;
@@ -75,133 +76,85 @@ public class DeviceExporterServlet extends HttpServlet
                 throw new IllegalArgumentException("format");
             }
 
-            if (account == null || account.isEmpty()) {
+            if (scopeIdString == null || scopeIdString.isEmpty()) {
                 throw new IllegalArgumentException("account");
             }
 
-            deviceExporter.init(account);
+            deviceExporter.init(scopeIdString);
 
             //
             // get the devices and append them to the exporter
-            ServiceLocator locator = ServiceLocator.getInstance();
-            AccountServiceOld acs = locator.getAccountService();
-            DeviceRegistryServiceOld drs = locator.getDeviceRegistryService();
+            KapuaLocator locator = KapuaLocator.getInstance();
+            DeviceRegistryService drs = locator.getService(DeviceRegistryService.class);
+            DeviceFactory drf = locator.getFactory(DeviceFactory.class);
 
-            long accountId = acs.getAccountId(account);
             int resultsCount = 0;
-            int maxCount = EdcConfig.getInstance().getDataExportMaxCount();
             int offset = 0;
 
             // paginate through the matching message
-            DeviceQueryOld dq = new DeviceQueryOld();
+            DeviceQuery dq = drf.newQuery(KapuaEid.parseShortId(scopeIdString));
             dq.setLimit(250);
 
             // Inserting filter parameter if specified
             AndPredicate andPred = new AndPredicate();
 
-            String tag = request.getParameter("tag");
-            if (tag != null && !tag.isEmpty()) {
-                Long tagId = Long.valueOf(tag);
-                andPred = andPred.and(dq.createTagPredicate(tagId));
-            }
-
             String clientId = request.getParameter("clientId");
             if (clientId != null && !clientId.isEmpty()) {
-                andPred = andPred.and(dq.createClientIdPredicate(clientId));
+                andPred = andPred.and(new AttributePredicate<String>(DevicePredicates.CLIENT_ID, clientId, Operator.STARTS_WITH));
             }
 
             String displayName = request.getParameter("displayName");
             if (displayName != null && !displayName.isEmpty()) {
-                andPred = andPred.and(dq.createDisplayNamePredicate(displayName));
+                andPred = andPred.and(new AttributePredicate<String>(DevicePredicates.DISPLAY_NAME, displayName, Operator.STARTS_WITH));
             }
 
             String serialNumber = request.getParameter("serialNumber");
             if (serialNumber != null && !serialNumber.isEmpty()) {
-                andPred = andPred.and(dq.createSerialNumberPredicate(serialNumber));
+                andPred = andPred.and(new AttributePredicate<String>(DevicePredicates.SERIAL_NUMBER, serialNumber));
             }
 
             String deviceStatus = request.getParameter("deviceStatus");
             if (deviceStatus != null && !deviceStatus.isEmpty()) {
-                andPred = andPred.and(dq.createDeviceStatusPredicate(DeviceStatus.valueOf(deviceStatus)));
-            }
-
-            String deviceConnectionStatus = request.getParameter("deviceConnectionStatus");
-            if (deviceConnectionStatus != null && !deviceConnectionStatus.isEmpty()) {
-                andPred = andPred.and(dq.createDeviceConnectionStatusPredicate(DeviceConnectionStatus.valueOf(deviceConnectionStatus)));
-            }
-
-            String esfVersion = request.getParameter("esfVersion");
-            if (esfVersion != null && !esfVersion.isEmpty()) {
-                andPred = andPred.and(dq.createEsfVersionPredicate(esfVersion));
-            }
-
-            String applicationIdentifiers = request.getParameter("applicationIdentifiers");
-            if (applicationIdentifiers != null && !applicationIdentifiers.isEmpty()) {
-                andPred = andPred.and(dq.createApplicationIdentifiersPredicate(applicationIdentifiers));
-            }
-
-            String imei = request.getParameter("imei");
-            if (imei != null && !imei.isEmpty()) {
-                andPred = andPred.and(dq.createImeiPredicate(imei));
-            }
-
-            String imsi = request.getParameter("imsi");
-            if (imsi != null && !imsi.isEmpty()) {
-                andPred = andPred.and(dq.createImsiPredicate(imsi));
-            }
-
-            String iccid = request.getParameter("iccid");
-            if (iccid != null && !iccid.isEmpty()) {
-                andPred = andPred.and(dq.createIccidPredicate(iccid));
-            }
-
-            String customAttribute1 = request.getParameter("customAttribute1");
-            if (customAttribute1 != null && !customAttribute1.isEmpty()) {
-                andPred = andPred.and(dq.createCustomAttribute1Predicate(customAttribute1));
-            }
-
-            String customAttribute2 = request.getParameter("customAttribute2");
-            if (customAttribute2 != null && !customAttribute2.isEmpty()) {
-                andPred = andPred.and(dq.createCustomAttribute2Predicate(customAttribute2));
+                andPred = andPred.and(new AttributePredicate<DeviceStatus>(DevicePredicates.STATUS, DeviceStatus.valueOf(deviceStatus)));
             }
 
             String sortAttribute = request.getParameter("sortAttribute");
             if (sortAttribute != null && !sortAttribute.isEmpty()) {
 
-                String sortOrder = request.getParameter("sortOrder");
-                SortOrder sortOrderEnum;
-                if (sortOrder != null && !sortOrder.isEmpty()) {
-                    sortOrderEnum = SortOrder.valueOf(sortOrder);
+                String sortOrderString = request.getParameter("sortOrder");
+                SortOrder sortOrder;
+                if (sortOrderString != null && !sortOrderString.isEmpty()) {
+                    sortOrder = SortOrder.valueOf(sortOrderString);
                 }
                 else {
-                    sortOrderEnum = SortOrder.ASCENDING;
+                    sortOrder = SortOrder.ASCENDING;
                 }
 
                 if (sortAttribute.compareTo("CLIENT_ID") == 0) {
-                    dq.setSortCriteria(dq.createClientIdSortCriteria(sortOrderEnum));
+                    dq.setSortCriteria(new FieldSortCriteria(DevicePredicates.CLIENT_ID, sortOrder));
                 }
                 else if (sortAttribute.compareTo("DISPLAY_NAME") == 0) {
-                    dq.setSortCriteria(dq.createDisplayNameSortCriteria(sortOrderEnum));
+                    dq.setSortCriteria(new FieldSortCriteria(DevicePredicates.DISPLAY_NAME, sortOrder));
                 }
                 else if (sortAttribute.compareTo("LAST_EVENT_ON") == 0) {
-                    dq.setSortCriteria(dq.createLastEventOnCriteria(sortOrderEnum));
+                    dq.setSortCriteria(new FieldSortCriteria(DevicePredicates.LAST_EVENT_ON, sortOrder));
                 }
             }
 
             dq.setPredicate(andPred);
 
-            EdcListResult<DeviceOld> results = null;
+            DeviceListResult results = null;
             do {
 
-                dq.setIndexOffset(offset);
-                results = drs.findDevices(accountId, dq);
+                dq.setOffset(offset);
+                results = drs.query(dq);
 
                 deviceExporter.append(results);
 
                 offset += results.size();
                 resultsCount += results.size();
             }
-            while (results.size() > 0 && resultsCount < maxCount);
+            while (results.size() > 0);
 
             // Close things up
             deviceExporter.close();

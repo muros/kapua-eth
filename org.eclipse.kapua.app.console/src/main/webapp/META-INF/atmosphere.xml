@@ -15,7 +15,7 @@
 
 <atmosphere-handlers>
     <atmosphere-handler context-root="/console/gwtComet"
-                        class-name="com.eurotech.cloud.console.server.AtmosphereHandler">
+                        class-name="org.eclipse.kapua.app.console.server.AtmosphereHandler">
         <!--  <property name="heartbeat" value="60000"/> -->
     </atmosphere-handler>
 </atmosphere-handlers>

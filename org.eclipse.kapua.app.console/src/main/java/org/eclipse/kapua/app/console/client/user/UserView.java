@@ -15,6 +15,7 @@ package org.eclipse.kapua.app.console.client.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.client.util.ConsoleInfo;
 import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
@@ -25,11 +26,10 @@ import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
+import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtUserService;
+import org.eclipse.kapua.app.console.shared.service.GwtUserServiceAsync;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtSecurityTokenServiceAsync;
-import com.eurotech.cloud.console.shared.service.GwtUserServiceAsync;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Scroll;
@@ -156,9 +156,6 @@ public class UserView extends LayoutContainer
         GridCellRenderer<GwtUser> setStatusIcon = new GridCellRenderer<GwtUser>() {
             public String render(GwtUser model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtUser> employeeList, Grid<GwtUser> grid)
             {
-                if (model.isLocked()) {
-                    return "<image src=\"eurotech/com/eurotech/cloud/icon/red.gif\" width=\"12\" height=\"12\" style=\"vertical-align: bottom\" title=\"" + MSGS.locked() + "\"/>";
-                }
                 switch (GwtUser.GwtUserStatus.valueOf(model.getStatus())) {
                     case ENABLED:
                         return "<image src=\"eurotech/com/eurotech/cloud/icon/green.gif\" width=\"12\" height=\"12\" style=\"vertical-align: bottom\" title=\"" + MSGS.enabled() + "\"/>";

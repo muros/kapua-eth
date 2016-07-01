@@ -12,20 +12,20 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.device;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.client.widget.dialog.InfoDialog;
+import org.eclipse.kapua.app.console.client.widget.dialog.InfoDialog.InfoDialogType;
 import org.eclipse.kapua.app.console.client.widget.dialog.SimpleDialog;
 import org.eclipse.kapua.app.console.client.widget.dialog.SyncPackageInstallDialog;
 import org.eclipse.kapua.app.console.client.widget.dialog.SyncPackageUninstallDialog;
 import org.eclipse.kapua.app.console.client.widget.dialog.TabbedDialog;
-import org.eclipse.kapua.app.console.client.widget.dialog.InfoDialog.InfoDialogType;
 import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtDeploymentPackage;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
-import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice.GwtDeviceApplication;
+import org.eclipse.kapua.app.console.shared.model.GwtSession;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.event.BaseEvent;
 import com.extjs.gxt.ui.client.event.ButtonEvent;

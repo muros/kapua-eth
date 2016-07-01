@@ -183,7 +183,7 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
 
     @XmlElement(name = "acceptEncoding")
     @Basic
-    @Column(name = "accept_encoging")
+    @Column(name = "accept_encoding")
     private String                acceptEncoding;
 
     @XmlElement(name = "gpsLongitude")
@@ -223,7 +223,7 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
 
     @XmlElement(name = "devoceCredentialsMode")
     @Enumerated(EnumType.STRING)
-    @Column(name = "device_credentials_mde")
+    @Column(name = "device_credentials_mode")
     private DeviceCredentialsMode deviceCredentialsMode;
 
     @XmlElement(name = "preferredUserId")

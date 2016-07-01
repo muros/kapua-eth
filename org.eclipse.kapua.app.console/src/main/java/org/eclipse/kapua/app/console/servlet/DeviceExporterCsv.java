@@ -24,7 +24,8 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.kapua.service.device.registry.DeviceOld;
+import org.eclipse.kapua.service.device.registry.Device;
+import org.eclipse.kapua.service.device.registry.DeviceListResult;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -57,10 +58,10 @@ public class DeviceExporterCsv extends DeviceExporter
     }
 
     @Override
-    public void append(List<DeviceOld> devices)
+    public void append(DeviceListResult devices)
         throws ServletException, IOException
     {
-        for (DeviceOld device : devices) {
+        for (Device device : devices) {
 
             List<String> cols = new ArrayList<String>();
             cols.add(m_account);
@@ -79,12 +80,7 @@ public class DeviceExporterCsv extends DeviceExporter
                 cols.add("");
             }
 
-            if (device.getConnectionStatus() != null) {
-                cols.add(device.getConnectionStatus().name());
-            }
-            else {
-                cols.add("");
-            }
+            cols.add("");
 
             if (device.getCreatedOn() != null) {
                 cols.add(m_dateFormat.format(device.getCreatedOn()));
@@ -107,12 +103,7 @@ public class DeviceExporterCsv extends DeviceExporter
                 cols.add("");
             }
 
-            if (device.getConnectionIp() != null) {
-                cols.add(device.getConnectionIp());
-            }
-            else {
-                cols.add("");
-            }
+            cols.add("");
 
             if (device.getDisplayName() != null) {
                 cols.add(device.getDisplayName());
@@ -184,19 +175,9 @@ public class DeviceExporterCsv extends DeviceExporter
                 cols.add("");
             }
 
-            if (device.getOsgiFrameworkVersion() != null) {
-                cols.add(device.getOsgiFrameworkVersion());
-            }
-            else {
-                cols.add("");
-            }
+            cols.add("");
 
-            if (device.getEsfKuraVersion() != null) {
-                cols.add(device.getEsfKuraVersion());
-            }
-            else {
-                cols.add("");
-            }
+            cols.add("");
 
             if (device.getApplicationIdentifiers() != null) {
                 cols.add(device.getApplicationIdentifiers());
@@ -260,14 +241,9 @@ public class DeviceExporterCsv extends DeviceExporter
             else {
                 cols.add("");
             }
-            
-            if (device.getSignedCertificateId() != null) {
-                cols.add(""+device.getSignedCertificateId());
-            }
-            else {
-                cols.add("");
-            }            
-            
+
+            cols.add("");
+
             m_writer.writeNext(cols.toArray(new String[] {}));
         }
     }
@@ -280,9 +256,9 @@ public class DeviceExporterCsv extends DeviceExporter
         m_response.setCharacterEncoding("UTF-8");
         m_response.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + URLEncoder.encode(m_account, "UTF-8") + "_devices.csv");
         m_response.setHeader("Cache-Control", "no-transform, max-age=0");
-        
+
         m_writer.flush();
-        
+
         m_writer.close();
     }
 }

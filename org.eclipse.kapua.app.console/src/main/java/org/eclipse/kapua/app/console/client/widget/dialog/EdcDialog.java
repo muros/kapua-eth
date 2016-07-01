@@ -12,7 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.widget.dialog;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
+
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Orientation;
 import com.extjs.gxt.ui.client.Style.Scroll;
@@ -33,7 +34,7 @@ public abstract class EdcDialog extends Dialog
     protected static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
     private ContentPanel                   m_infoPanel;
-    
+
     public EdcDialog()
     {
         super();

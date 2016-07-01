@@ -19,8 +19,11 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         
         <class>org.eclipse.kapua.service.user.internal.UserImpl</class>
-        <class>org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionImpl</class>
+        <class>org.eclipse.kapua.service.account.internal.AccountImpl</class>
+        <class>org.eclipse.kapua.service.device.registry.internal.DeviceImpl</class>
         <class>org.eclipse.kapua.service.device.registry.connection.internal.DeviceConnectionImpl</class>
+        <class>org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionImpl</class>
+        
         
 		<properties>
 			<property name="hibernate.cache.use_second_level_cache" value="false" />

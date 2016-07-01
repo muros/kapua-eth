@@ -34,6 +34,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.sax.SAXSource;
 
+import org.eclipse.kapua.commons.util.XmlNamespaceFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;

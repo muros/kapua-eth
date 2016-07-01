@@ -14,12 +14,12 @@ package org.eclipse.kapua.app.console.client.widget.dialog;
 
 import java.util.List;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
+import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtSecurityTokenServiceAsync;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
@@ -42,32 +42,34 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class FileUploadDialog extends Dialog {
+public class FileUploadDialog extends Dialog
+{
 
-    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
+    private static final ConsoleMessages       MSGS           = GWT.create(ConsoleMessages.class);
 
     // XSRF
     private final GwtSecurityTokenServiceAsync gwtXSRFService = GWT.create(GwtSecurityTokenService.class);
-    private HiddenField<String> xsrfTokenField;
+    private HiddenField<String>                xsrfTokenField;
 
-    private FormPanel m_formPanel;
-    private FileUploadField m_fileUploadField;
-    private List<HiddenField<?>> m_hiddenFields;
-    private Button m_submitButton;
-    private Button m_cancelButton;
-    private Status m_status;
-    private String m_url;
+    private FormPanel                          m_formPanel;
+    private FileUploadField                    m_fileUploadField;
+    private List<HiddenField<?>>               m_hiddenFields;
+    private Button                             m_submitButton;
+    private Button                             m_cancelButton;
+    private Status                             m_status;
+    private String                             m_url;
 
-    public FileUploadDialog(String url, List<HiddenField<?>> hiddenFields) {
+    public FileUploadDialog(String url, List<HiddenField<?>> hiddenFields)
+    {
         super();
         m_url = url;
         m_hiddenFields = hiddenFields;
         setButtonAlign(HorizontalAlignment.RIGHT);
     }
 
-
     @Override
-    protected void onRender(Element parent, int pos) {
+    protected void onRender(Element parent, int pos)
+    {
         super.onRender(parent, pos);
 
         setLayout(new FormLayout());
@@ -90,18 +92,20 @@ public class FileUploadDialog extends Dialog {
 
         m_formPanel.addListener(Events.Submit, new Listener<FormEvent>() {
             @Override
-            public void handleEvent(FormEvent be) {
+            public void handleEvent(FormEvent be)
+            {
                 String htmlResponse = be.getResultHtml();
                 if (htmlResponse == null || htmlResponse.isEmpty()) {
                     MessageBox.info(MSGS.information(), MSGS.fileUploadSuccess(), null);
-                } else {
+                }
+                else {
                     String errMsg = htmlResponse;
                     int startIdx = htmlResponse.indexOf("<pre>");
                     int endIndex = htmlResponse.indexOf("</pre>");
                     if (startIdx != -1 && endIndex != -1) {
-                        errMsg = htmlResponse.substring(startIdx+5, endIndex);
+                        errMsg = htmlResponse.substring(startIdx + 5, endIndex);
                     }
-                    MessageBox.alert(MSGS.error(), MSGS.fileUploadFailure()+": "+errMsg, null);
+                    MessageBox.alert(MSGS.error(), MSGS.fileUploadFailure() + ": " + errMsg, null);
                 }
                 hide();
             }
@@ -124,12 +128,14 @@ public class FileUploadDialog extends Dialog {
         //
         gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
             @Override
-            public void onFailure(Throwable ex) {
+            public void onFailure(Throwable ex)
+            {
                 FailureHandler.handle(ex);
             }
 
             @Override
-            public void onSuccess(GwtXSRFToken token) {
+            public void onSuccess(GwtXSRFToken token)
+            {
                 xsrfTokenField.setValue(token.getToken());
             }
         });
@@ -146,7 +152,8 @@ public class FileUploadDialog extends Dialog {
     }
 
     @Override
-    protected void createButtons() {
+    protected void createButtons()
+    {
         super.createButtons();
 
         m_status = new Status();
@@ -160,16 +167,17 @@ public class FileUploadDialog extends Dialog {
         m_submitButton = new Button(MSGS.uploadButton());
         m_submitButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
             @Override
-            public void componentSelected(ButtonEvent ce) {
+            public void componentSelected(ButtonEvent ce)
+            {
                 submit();
             }
         });
 
-
         m_cancelButton = new Button(MSGS.cancelButton());
         m_cancelButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
             @Override
-            public void componentSelected(ButtonEvent ce) {
+            public void componentSelected(ButtonEvent ce)
+            {
                 hide();
             }
         });
@@ -178,7 +186,8 @@ public class FileUploadDialog extends Dialog {
         addButton(m_submitButton);
     }
 
-    private void submit() {
+    private void submit()
+    {
         if (!m_formPanel.isValid()) {
             return;
         }

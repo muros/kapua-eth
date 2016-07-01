@@ -16,8 +16,8 @@ import java.util.Arrays;
 
 import org.eclipse.kapua.app.console.client.account.AccountDetailsView;
 import org.eclipse.kapua.app.console.client.account.AccountView;
-import org.eclipse.kapua.app.console.client.data.DataView;
 import org.eclipse.kapua.app.console.client.device.DevicesView;
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.overview.DashboardView;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.client.user.UserView;
@@ -25,7 +25,6 @@ import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.Style.SelectionMode;
 import com.extjs.gxt.ui.client.data.BaseModelData;
@@ -251,16 +250,16 @@ public class WestNavigationView extends LayoutContainer
 
                     GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES);
                 }
-                else if ("data".equals(selectedId)) {
-
-                    panel.setHeaderVisible(false);
-                    panel.add(new DataView(m_currentSession));
-                    m_centerPanel.add(panel);
-                    m_centerPanel.layout();
-                    dashboardSelected = false;
-
-                    GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DATA);
-                }
+                // else if ("data".equals(selectedId)) {
+                //
+                // panel.setHeaderVisible(false);
+                // panel.add(new DataView(m_currentSession));
+                // m_centerPanel.add(panel);
+                // m_centerPanel.layout();
+                // dashboardSelected = false;
+                //
+                // GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DATA);
+                // }
                 else if ("user".equals(selectedId)) {
 
                     panel.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.users16()));
@@ -388,10 +387,10 @@ public class WestNavigationView extends LayoutContainer
             if (m_currentSession.hasDeviceReadPermission()) {
                 m_accountStore.add(newItem("devices", MSGS.devices(), Resources.INSTANCE.devices32()), false);
             }
-
-            if (m_currentSession.hasDataReadPermission()) {
-                m_accountStore.add(newItem("data", MSGS.data(), Resources.INSTANCE.data32()), false);
-            }
+            //
+            // if (m_currentSession.hasDataReadPermission()) {
+            // m_accountStore.add(newItem("data", MSGS.data(), Resources.INSTANCE.data32()), false);
+            // }
 
             if (m_currentSession.hasDataReadPermission()) {
                 m_accountStore.add(newItem("usage", MSGS.usages(), Resources.INSTANCE.usages32()), false);

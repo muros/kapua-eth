@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.mqtt.MqttMessageDispatcher;
 import org.eclipse.kapua.app.console.client.mqtt.MqttMessageDispatcherCreator;
 import org.eclipse.kapua.app.console.client.resources.Resources;
@@ -23,11 +24,10 @@ import org.eclipse.kapua.app.console.shared.model.GwtAccountStringListItem;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
 import org.eclipse.kapua.app.console.shared.service.GwtAccountService;
+import org.eclipse.kapua.app.console.shared.service.GwtAccountServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtAuthorizationService;
+import org.eclipse.kapua.app.console.shared.service.GwtAuthorizationServiceAsync;
 
-import com.eurotech.cloud.console.client.messages.ConsoleMessages;
-import com.eurotech.cloud.console.shared.service.GwtAccountServiceAsync;
-import com.eurotech.cloud.console.shared.service.GwtAuthorizationServiceAsync;
 import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.extjs.gxt.ui.client.event.MenuEvent;
@@ -55,7 +55,7 @@ public class NorthView extends LayoutContainer
     private final GwtAccountServiceAsync       gwtAccountService       = GWT.create(GwtAccountService.class);
 
     // UI stuff
-    private KapuaCloudConsole              parent;
+    private KapuaCloudConsole                  parent;
     private Menu                               subAccountMenu;
     private Button                             userActionButton;
 
