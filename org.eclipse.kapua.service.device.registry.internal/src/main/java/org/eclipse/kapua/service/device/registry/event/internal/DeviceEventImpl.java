@@ -68,6 +68,11 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     })
     private KapuaPosition     position;
 
+    private DeviceEventImpl()
+    {
+        super();
+    }
+
     public DeviceEventImpl(KapuaId scopeId)
     {
         super(scopeId);

@@ -23,7 +23,9 @@ public class DeviceFactoryImpl implements DeviceFactory
     @Override
     public DeviceCreator newCreator(KapuaId scopeId, String clientId)
     {
-        return new DeviceCreatorImpl(scopeId);
+        DeviceCreator deviceCreator = new DeviceCreatorImpl(scopeId);
+        deviceCreator.setClientId(clientId);
+        return deviceCreator;
     }
 
     @Override

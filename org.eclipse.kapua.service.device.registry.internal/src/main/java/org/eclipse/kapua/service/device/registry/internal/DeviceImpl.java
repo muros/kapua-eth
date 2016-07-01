@@ -229,9 +229,15 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
     @XmlElement(name = "preferredUserId")
     @Embedded
     @AttributeOverrides({
-                          @AttributeOverride(name = "eid", column = @Column(name = "preferred_user_id", nullable = false))
+                          @AttributeOverride(name = "eid", column = @Column(name = "preferred_user_id"))
     })
     private KapuaEid              preferredUserId;
+
+    @SuppressWarnings("unused")
+    private DeviceImpl()
+    {
+        super();
+    }
 
     public DeviceImpl(KapuaId scopeId)
     {
