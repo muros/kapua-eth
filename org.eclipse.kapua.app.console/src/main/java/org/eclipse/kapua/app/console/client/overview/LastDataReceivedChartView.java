@@ -22,8 +22,6 @@ import org.eclipse.kapua.app.console.client.util.ConsoleInfo;
 import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
-import org.eclipse.kapua.app.console.shared.model.GwtDataPoint;
-import org.eclipse.kapua.app.console.shared.model.GwtEdcChartResult;
 import org.eclipse.kapua.app.console.shared.model.GwtHeader;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtTopic;
@@ -45,8 +43,6 @@ import org.moxieapps.gwt.highcharts.client.Series;
 import org.moxieapps.gwt.highcharts.client.ToolTip;
 import org.moxieapps.gwt.highcharts.client.ToolTipData;
 import org.moxieapps.gwt.highcharts.client.ToolTipFormatter;
-import org.moxieapps.gwt.highcharts.client.plotOptions.Marker;
-import org.moxieapps.gwt.highcharts.client.plotOptions.SplinePlotOptions;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
@@ -308,59 +304,59 @@ public class LastDataReceivedChartView extends LayoutContainer
             List<GwtHeader> metrics = new ArrayList<GwtHeader>();
             metrics.add(m_selectedMetric);
 
-            gwtDataService.findMessagesByTopic(m_currentSession.getSelectedAccount().getName(),
-                                               m_selectedTopic,
-                                               metrics,
-                                               new Date(System.currentTimeMillis() - 1000 * 3600 * 24 * 7),
-                                               new Date(),
-                                               new AsyncCallback<GwtEdcChartResult>() {
-
-                                                   public void onFailure(Throwable caught)
-                                                   {
-                                                       chart.hideLoading();
-                                                       FailureHandler.handle(caught);
-                                                   }
-
-                                                   public void onSuccess(GwtEdcChartResult data)
-                                                   {
-                                                       GwtHeader metric = m_selectedMetric;
-
-                                                       String seriesName = metric.getName();
-
-                                                       if (data.getDataPoint().get(seriesName) != null) {
-
-                                                           List<GwtDataPoint> list = data.getDataPoint().get(seriesName);
-                                                           int size = list.size();
-                                                           //
-                                                           SplinePlotOptions po = new SplinePlotOptions().setColor(chartColorMetric).setMarker(new Marker().setSymbol(Marker.Symbol.CIRCLE));
-
-                                                           GwtDataPoint dataPoint = null;
-                                                           Series serie = chart.createSeries().setName(seriesName);
-                                                           for (int i = size - 1; i >= 0; i--) {
-                                                               dataPoint = list.get(i);
-                                                               serie.addPoint(dataPoint.getTimestamp(),
-                                                                              dataPoint.getValue(),
-                                                                              true,
-                                                                              false,
-                                                                              true)
-                                                                    .setPlotOptions(po);
-                                                           }
-
-                                                           try {
-                                                               chart.addSeries(serie, true, true);
-                                                               chart.hideLoading();
-                                                           }
-                                                           catch (Exception e) {
-                                                               FailureHandler.handle(e);
-                                                               chart.showLoading(MSGS.noResults());
-                                                           }
-
-                                                       }
-                                                       else {
-                                                           chart.showLoading(MSGS.noResults());
-                                                       }
-                                                   }
-                                               });
+            // gwtDataService.findMessagesByTopic(m_currentSession.getSelectedAccount().getName(),
+            // m_selectedTopic,
+            // metrics,
+            // new Date(System.currentTimeMillis() - 1000 * 3600 * 24 * 7),
+            // new Date(),
+            // new AsyncCallback<GwtEdcChartResult>() {
+            //
+            // public void onFailure(Throwable caught)
+            // {
+            // chart.hideLoading();
+            // FailureHandler.handle(caught);
+            // }
+            //
+            // public void onSuccess(GwtEdcChartResult data)
+            // {
+            // GwtHeader metric = m_selectedMetric;
+            //
+            // String seriesName = metric.getName();
+            //
+            // if (data.getDataPoint().get(seriesName) != null) {
+            //
+            // List<GwtDataPoint> list = data.getDataPoint().get(seriesName);
+            // int size = list.size();
+            // //
+            // SplinePlotOptions po = new SplinePlotOptions().setColor(chartColorMetric).setMarker(new Marker().setSymbol(Marker.Symbol.CIRCLE));
+            //
+            // GwtDataPoint dataPoint = null;
+            // Series serie = chart.createSeries().setName(seriesName);
+            // for (int i = size - 1; i >= 0; i--) {
+            // dataPoint = list.get(i);
+            // serie.addPoint(dataPoint.getTimestamp(),
+            // dataPoint.getValue(),
+            // true,
+            // false,
+            // true)
+            // .setPlotOptions(po);
+            // }
+            //
+            // try {
+            // chart.addSeries(serie, true, true);
+            // chart.hideLoading();
+            // }
+            // catch (Exception e) {
+            // FailureHandler.handle(e);
+            // chart.showLoading(MSGS.noResults());
+            // }
+            //
+            // }
+            // else {
+            // chart.showLoading(MSGS.noResults());
+            // }
+            // }
+            // });
         }
     }
 

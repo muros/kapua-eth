@@ -392,9 +392,9 @@ public class WestNavigationView extends LayoutContainer
             // m_accountStore.add(newItem("data", MSGS.data(), Resources.INSTANCE.data32()), false);
             // }
 
-            if (m_currentSession.hasDataReadPermission()) {
-                m_accountStore.add(newItem("usage", MSGS.usages(), Resources.INSTANCE.usages32()), false);
-            }
+            // if (m_currentSession.hasDataReadPermission()) {
+            // m_accountStore.add(newItem("usage", MSGS.usages(), Resources.INSTANCE.usages32()), false);
+            // }
 
             if (m_currentSession.hasUserReadPermission()) {
                 m_accountStore.add(newItem("user", MSGS.users(), Resources.INSTANCE.users32()), false);
