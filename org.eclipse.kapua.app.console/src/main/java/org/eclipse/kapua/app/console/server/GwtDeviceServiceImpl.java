@@ -160,13 +160,22 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             DeviceConnectionQuery query = deviceConnectionFactory.newQuery(scopeId);
 
             query.setPredicate(new AttributePredicate<DeviceConnectionStatus>(DeviceConnectionPredicates.CONNECTION_STATUS, DeviceConnectionStatus.CONNECTED));
-            devicesStatus.put("connected", new Long(dcs.count(query)).intValue());
+            int count = new Long(dcs.count(query)).intValue();
+            if (count > 0) {
+                devicesStatus.put("connected", count);
+            }
 
             query.setPredicate(new AttributePredicate<DeviceConnectionStatus>(DeviceConnectionPredicates.CONNECTION_STATUS, DeviceConnectionStatus.DISCONNECTED));
-            devicesStatus.put("disconnected", new Long(dcs.count(query)).intValue());
+            count = new Long(dcs.count(query)).intValue();
+            if (count > 0) {
+                devicesStatus.put("disconnected", count);
+            }
 
             query.setPredicate(new AttributePredicate<DeviceConnectionStatus>(DeviceConnectionPredicates.CONNECTION_STATUS, DeviceConnectionStatus.MISSING));
-            devicesStatus.put("missing", new Long(dcs.count(query)).intValue());
+            count = new Long(dcs.count(query)).intValue();
+            if (count > 0) {
+                devicesStatus.put("missing", count);
+            }
 
         }
         catch (Throwable t) {

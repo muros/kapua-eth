@@ -75,6 +75,14 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
     }
 
     @Override
+    public void put(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration deviceConfig)
+        throws KapuaException
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
     public void apply(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration configuration)
         throws KapuaException
     {

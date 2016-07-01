@@ -21,6 +21,8 @@ import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceEvent;
 import org.eclipse.kapua.app.console.shared.model.GwtOrganization;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
+import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
+import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
 import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -55,6 +57,14 @@ public class KapuaGwtConverter
         gwtAccount.setParentAccountId(account.getScopeId() != null ? account.getScopeId().getShortId() : null);
         gwtAccount.setOptlock(account.getOptlock());
 
+        String brokerUrlFormat = "%s://%s:%s";
+        KapuaEnvironmentConfig envConfig = KapuaEnvironmentConfig.getInstance();
+        String brokerURL = String.format(brokerUrlFormat,
+                                         envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_PROTOCOL),
+                                         envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_DNS),
+                                         envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_PORT));
+        gwtAccount.setBrokerURL(brokerURL);
+
         Properties accountProperties = account.getEntityProperties();
         gwtAccount.setDashboardPreferredTopic(accountProperties.getProperty("topic"));
         gwtAccount.setDashboardPreferredMetric(accountProperties.getProperty("metric"));
@@ -72,7 +82,6 @@ public class KapuaGwtConverter
         gwtOrganization.setPhoneNumber(organization.getPhoneNumber());
         gwtOrganization.setAddressLine1(organization.getAddressLine1());
         gwtOrganization.setAddressLine2(organization.getAddressLine2());
-        gwtOrganization.setAddressLine3(organization.getAddressLine3());
         gwtOrganization.setZipPostCode(organization.getZipPostCode());
         gwtOrganization.setCity(organization.getCity());
         gwtOrganization.setStateProvinceCounty(organization.getStateProvinceCounty());

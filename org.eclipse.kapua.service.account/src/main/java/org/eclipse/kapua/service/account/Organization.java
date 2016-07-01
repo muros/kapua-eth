@@ -39,10 +39,6 @@ public interface Organization
 
     public void setAddressLine2(String addressLine2);
 
-    public String getAddressLine3();
-
-    public void setAddressLine3(String addressLine3);
-
     public String getZipPostCode();
 
     public void setZipPostCode(String zipPostalCode);

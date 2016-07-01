@@ -170,6 +170,8 @@ public class AccountForm extends Window
         confirmPassword.setPassword(true);
         fieldSet.add(confirmPassword, formData);
 
+        m_formPanel.add(fieldSet);
+
         // //////////////////////////////////////////
         // Deployment Information field set
         // //////////////////////////////////////////
@@ -517,5 +519,6 @@ public class AccountForm extends Window
             });
         }
 
+        add(m_formPanel);
     }
 }

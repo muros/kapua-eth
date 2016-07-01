@@ -223,7 +223,7 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
 
     @XmlElement(name = "devoceCredentialsMode")
     @Enumerated(EnumType.STRING)
-    @Column(name = "device_credentials_mode")
+    @Column(name = "credentials_mode")
     private DeviceCredentialsMode deviceCredentialsMode;
 
     @XmlElement(name = "preferredUserId")

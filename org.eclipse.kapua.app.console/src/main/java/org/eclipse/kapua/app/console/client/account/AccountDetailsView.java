@@ -88,7 +88,7 @@ public class AccountDetailsView extends LayoutContainer
     public void setAccount(GwtAccount selectedAccount)
     {
         m_dirty = true;
-        selectedAccount = selectedAccount;
+        this.selectedAccount = selectedAccount;
     }
 
     protected void onRender(Element parent, int index)

@@ -129,7 +129,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountCreatedOn", account.getCreatedOn().toString()));
             accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountCreatedBy", account.getCreatedBy().getShortId()));
 
-            String brokerUrlFormat = "%s://%s:$s";
+            String brokerUrlFormat = "%s://%s:%s";
             KapuaEnvironmentConfig envConfig = KapuaEnvironmentConfig.getInstance();
             String brokerURL = String.format(brokerUrlFormat,
                                              envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_PROTOCOL),
@@ -216,7 +216,6 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             account.getOrganization().setPhoneNumber(gwtAccount.getGwtOrganization().getPhoneNumber());
             account.getOrganization().setAddressLine1(gwtAccount.getGwtOrganization().getAddressLine1());
             account.getOrganization().setAddressLine2(gwtAccount.getGwtOrganization().getAddressLine2());
-            account.getOrganization().setAddressLine3(gwtAccount.getGwtOrganization().getAddressLine3());
             account.getOrganization().setZipPostCode(gwtAccount.getGwtOrganization().getZipPostCode());
             account.getOrganization().setCity(gwtAccount.getGwtOrganization().getCity());
             account.getOrganization().setStateProvinceCounty(gwtAccount.getGwtOrganization().getStateProvinceCounty());

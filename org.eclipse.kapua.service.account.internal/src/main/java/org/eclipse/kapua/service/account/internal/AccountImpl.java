@@ -37,7 +37,8 @@ import org.eclipse.kapua.service.account.Organization;
 @XmlType(propOrder = { "scopeId", "id", "name", "createdOn", "createdBy", "modifiedOn", "modifiedBy", "organization", "parentAccountPath", "optlock" })
 @Entity(name = "Account")
 @NamedQueries({
-                @NamedQuery(name = "Account.findChildAccounts", query = "SELECT a FROM Account a WHERE a.scopeId = :scopeId ORDER BY a.name")
+                @NamedQuery(name = "Account.findChildAccounts", query = "SELECT a FROM Account a WHERE a.scopeId = :scopeId ORDER BY a.name"),
+                @NamedQuery(name = "Account.findChildAccountsRecursive", query = "SELECT a FROM Account a WHERE a.parentAccountPath LIKE :parentAccountPath ORDER BY a.name")
 })
 @Table(name = "act_account")
 public class AccountImpl extends AbstractKapuaNamedEntity implements Account

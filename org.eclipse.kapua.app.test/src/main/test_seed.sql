@@ -1,31 +1,17 @@
+DROP TABLE IF EXISTS act_account;
 DROP TABLE IF EXISTS athz_permission;
 DROP TABLE IF EXISTS usr_user;
-DROP TABLE IF EXISTS act_account;
-
-CREATE TABLE athz_permission (
-  scope_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
-  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
-  created_on             	TIMESTAMP(3)  DEFAULT 0,
-  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
-  
-  user_id					BIGINT(21) 	  UNSIGNED NOT NULL,
-  domain					VARCHAR(64)   NOT NULL,
-  action					VARCHAR(64),
-  target_scope_id		    BIGINT(21),
-  
-  PRIMARY KEY (id),
-  
-  UNIQUE INDEX idx_permissionScopeId (scope_id, user_id, domain, action, target_scope_id)
-  
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS dvc_device;
+DROP TABLE IF EXISTS dvc_device_event;
+DROP TABLE IF EXISTS dvc_device_connection;
 
 CREATE TABLE act_account (
   scope_id          		 BIGINT(21) 	  UNSIGNED,
   id                         BIGINT(21) 	  UNSIGNED NOT NULL,
   name                       VARCHAR(255) 	  NOT NULL,
-  created_on                 TIMESTAMP 		  DEFAULT 0,
+  created_on                 TIMESTAMP(3) 	  DEFAULT 0,
   created_by                 BIGINT(21) 	  UNSIGNED NOT NULL,
-  modified_on                TIMESTAMP 		  NOT NULL,
+  modified_on                TIMESTAMP(3)     NOT NULL,
   modified_by                BIGINT(21) 	  UNSIGNED NOT NULL,
   org_name                   VARCHAR(255) 	  NOT NULL,
   org_person_name            VARCHAR(255) 	  DEFAULT "",
@@ -48,7 +34,7 @@ CREATE TABLE act_account (
   INDEX idx_accountScopeId (scope_id)  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `edcdb`.`act_account` ( 
+INSERT INTO act_account ( 
 	`scope_id`,
 	`id`,
 	`name`,
@@ -74,9 +60,9 @@ INSERT INTO `edcdb`.`act_account` (
 VALUES (NULL,
 		1,
 		'kapua-sys',
-		'0000-00-00 00:00:00',
+		UTC_TIMESTAMP(),
 		1,
-		'0000-00-00 00:00:00',
+		UTC_TIMESTAMP(),
 		1,
 		'kapua-org',
 		'Kapua Sysadmin',
@@ -94,7 +80,126 @@ VALUES (NULL,
 		NULL,
 		NULL);
 
-CREATE TABLE edcdb.usr_user (
+CREATE TABLE athz_permission (
+  scope_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
+  created_on             	TIMESTAMP(3)  DEFAULT 0,
+  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
+  
+  user_id					BIGINT(21) 	  UNSIGNED NOT NULL,
+  domain					VARCHAR(64)   NOT NULL,
+  action					VARCHAR(64),
+  target_scope_id		    BIGINT(21),
+  
+  PRIMARY KEY (id),
+  
+  UNIQUE INDEX idx_permissionScopeId (scope_id, user_id, domain, action, target_scope_id)
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `athz_permission` (`scope_id`, 
+								`id`,
+								`created_on`,
+								`created_by`,
+								`user_id`,
+								`domain`,
+								`action`,
+								`target_scope_id`) 
+		VALUES ('1', 
+				'1',
+				UTC_TIMESTAMP(),
+				'1',
+				'1', 
+				'account',
+				NULL,
+				NULL);
+
+INSERT INTO `athz_permission` (`scope_id`, 
+								`id`,
+								`created_on`,
+								`created_by`,
+								`user_id`,
+								`domain`,
+								`action`,
+								`target_scope_id`) 
+		VALUES ('1', 
+				'2',
+				UTC_TIMESTAMP(),
+				'1',
+				'1', 
+				'user',
+				NULL,
+				NULL);
+				
+INSERT INTO `athz_permission` (`scope_id`, 
+								`id`,
+								`created_on`,
+								`created_by`,
+								`user_id`,
+								`domain`,
+								`action`,
+								`target_scope_id`) 
+		VALUES ('1', 
+				'3',
+				UTC_TIMESTAMP(),
+				'1',
+				'1', 
+				'device-connection',
+				NULL,
+				NULL);
+
+INSERT INTO `athz_permission` (`scope_id`, 
+								`id`,
+								`created_on`,
+								`created_by`,
+								`user_id`,
+								`domain`,
+								`action`,
+								`target_scope_id`) 
+		VALUES ('1', 
+				'4',
+				UTC_TIMESTAMP(),
+				'1',
+				'1', 
+				'device',
+				NULL,
+				NULL);
+				
+INSERT INTO `athz_permission` (`scope_id`, 
+								`id`,
+								`created_on`,
+								`created_by`,
+								`user_id`,
+								`domain`,
+								`action`,
+								`target_scope_id`) 
+		VALUES ('1', 
+				'5',
+				UTC_TIMESTAMP(),
+				'1',
+				'1', 
+				'data',
+				NULL,
+				NULL);
+
+INSERT INTO `athz_permission` (`scope_id`, 
+								`id`,
+								`created_on`,
+								`created_by`,
+								`user_id`,
+								`domain`,
+								`action`,
+								`target_scope_id`) 
+		VALUES ('1', 
+				'6',
+				UTC_TIMESTAMP(),
+				'1',
+				'1', 
+				'broker',
+				NULL,
+				NULL);
+
+CREATE TABLE usr_user (
   scope_id             		BIGINT(21) 	  UNSIGNED NOT NULL,
   id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
   name               	    VARCHAR(255)  NOT NULL,
@@ -135,50 +240,130 @@ INSERT INTO `usr_user` (`scope_id`,
 		VALUES (1,
 				1,
 				'kapua-sys',
-				'0000-00-00 00:00:00',
+				UTC_TIMESTAMP(),
 				1,
-				'0000-00-00 00:00:00',
+				UTC_TIMESTAMP(),
 				1,
 				'ENABLED',
 				'Kapua Sysadmin',
 				'kapua-sys@eclipse.org',
 				'+1 555 123 4567',
-				'We!come12345',
+				'$2a$12$cIW.D14SAka9SnNPVQVMUOLy2CYOEXDhEZ2KEeAeoLJmHeciWeht.',
 				NULL,
 				0,
 				NULL,
 				NULL);
-		
-INSERT INTO `athz_permission` (`scope_id`, 
-								`id`,
-								`created_on`,
-								`created_by`,
-								`user_id`,
-								`domain`,
-								`action`,
-								`target_scope_id`) 
-		VALUES ('1', 
-				'1',
-				'0000-00-00 00:00:00',
-				'1',
-				'1', 
-				'account',
-				NULL,
-				NULL);
+                
+CREATE TABLE dvc_device (
+  scope_id             	    BIGINT(21) 	    UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	    UNSIGNED NOT NULL,
+  client_id                 VARCHAR(255)    BINARY NOT NULL,
+  created_on             	TIMESTAMP(3)    NULL,
+  created_by             	BIGINT(21)      UNSIGNED NOT NULL,
+  modified_on            	TIMESTAMP       NULL,
+  modified_by            	BIGINT(21)      UNSIGNED NOT NULL,
+  status                 	VARCHAR(64)     NOT NULL DEFAULT 'ENABLED',
+  display_name              VARCHAR(255), 
+  last_event_on             TIMESTAMP(3)    NULL DEFAULT NULL,
+  last_event_type           VARCHAR(255),
+  serial_number             VARCHAR(255),
+  model_id                  VARCHAR(255),
+  imei                      VARCHAR(24),
+  imsi                      VARCHAR(15),
+  iccid                     VARCHAR(22),
+  bios_version              VARCHAR(255),
+  firmware_version          VARCHAR(255),
+  os_version                VARCHAR(255),
+  jvm_version               VARCHAR(255),
+  osgi_version              VARCHAR(255),
+  app_framework_version     VARCHAR(255),
+  app_identifiers           VARCHAR(1024),
+  accept_encoding           VARCHAR(255),
+  gps_longitude             DECIMAL(11,8),
+  gps_latitude              DECIMAL(11,8),
+  custom_attribute_1        VARCHAR(255),
+  custom_attribute_2        VARCHAR(255),
+  custom_attribute_3        VARCHAR(255),
+  custom_attribute_4        VARCHAR(255),
+  custom_attribute_5        VARCHAR(255),
+  credentials_mode          VARCHAR(64)   NOT NULL DEFAULT "INHERITED",
+  preferred_user_id			BIGINT(21)    DEFAULT 0,
+  optlock                   INT UNSIGNED,
+  attributes             	TEXT,  
+  properties             	TEXT,   
+  PRIMARY KEY (scope_id, id),   -- primary key needs to include the partitioning key
+  CONSTRAINT uc_clientId UNIQUE (scope_id, client_id),
+  CONSTRAINT uc_imei UNIQUE (scope_id, imei),
+  CONSTRAINT uc_imsi UNIQUE (scope_id, imsi),
+  CONSTRAINT uc_iccid UNIQUE (scope_id, iccid),
+  INDEX idx_serialNumber (scope_id, serial_number),
+  INDEX idx_displayName (scope_id, display_name),
+  INDEX idx_status_id (scope_id, status, client_id),
+  INDEX idx_status_dn (scope_id, status, display_name),
+  INDEX idx_status_le (scope_id, status, last_event_on),
+  INDEX idx_model_id (scope_id, model_id, client_id),
+  INDEX idx_model_dn (scope_id, model_id, display_name),
+  INDEX idx_model_le (scope_id, model_id, last_event_on),
+  INDEX idx_esf_id (scope_id, app_framework_version, client_id),
+  INDEX idx_esf_dn (scope_id, app_framework_version, display_name),
+  INDEX idx_esf_le (scope_id, app_framework_version, last_event_on),
+  INDEX idx_app_id (scope_id, app_identifiers(255), client_id),
+  INDEX idx_app_dn (scope_id, app_identifiers(255), display_name),
+  INDEX idx_app_le (scope_id, app_identifiers(255), last_event_on),
+  INDEX idx_c1_id (scope_id, custom_attribute_1, client_id),
+  INDEX idx_c1_dn (scope_id, custom_attribute_1, display_name),
+  INDEX idx_c1_le (scope_id, custom_attribute_1, last_event_on),
+  INDEX idx_c2_id (scope_id, custom_attribute_2, client_id),
+  INDEX idx_c2_dn (scope_id, custom_attribute_2, display_name),
+  INDEX idx_c2_le (scope_id, custom_attribute_2, last_event_on),
+  INDEX idx_preferred_user_id (scope_id, preferred_user_id)  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PARTITION BY HASH(scope_id) PARTITIONS 64;
 
-INSERT INTO `athz_permission` (`scope_id`, 
-								`id`,
-								`created_on`,
-								`created_by`,
-								`user_id`,
-								`domain`,
-								`action`,
-								`target_scope_id`) 
-		VALUES ('1', 
-				'2',
-				'0000-00-00 00:00:00',
-				'1',
-				'1', 
-				'user',
-				NULL,
-				NULL);
+CREATE TABLE dvc_device_event (
+  scope_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
+  created_on             	TIMESTAMP(3)  NULL NOT NULL DEFAULT 0,
+  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
+  
+  device_id					BIGINT(21) 	  UNSIGNED NOT NULL,
+  received_on				TIMESTAMP(3)  NULL NOT NULL DEFAULT 0,
+  sent_on					TIMESTAMP(3)  NULL DEFAULT NULL,
+  event_type				VARCHAR(255)  NOT NULL,
+  event_message				TEXT,
+  pos_longitude				DECIMAL(11,8),
+  pos_latitude 	            DECIMAL(11,8),
+  pos_altitude              DECIMAL(11,8),
+  pos_precision 			DECIMAL(11,8),
+  pos_heading				DECIMAL(11,8),
+  pos_speed                 DECIMAL(11,8),
+  pos_timestamp             TIMESTAMP(3)  NULL DEFAULT 0,
+  pos_satellites			INT,
+  pos_status				INT,
+  attributes				 TEXT,
+  properties                 TEXT,
+
+  PRIMARY KEY (scope_id, id),   -- primary key needs to include the partitioning key
+  INDEX idx_connection_status_id (scope_id, device_id, event_type)
+ 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PARTITION BY HASH(scope_id) PARTITIONS 64;
+
+CREATE TABLE dvc_device_connection (
+  scope_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
+  created_on             	TIMESTAMP(3)  NULL NOT NULL DEFAULT 0,
+  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
+  modified_on            	TIMESTAMP(3)  NULL NOT NULL,
+  modified_by            	BIGINT(21)    UNSIGNED NOT NULL,  
+  connection_status		    VARCHAR(20)   NOT NULL,
+  client_id					VARCHAR(255)  NOT NULL,
+  user_id        			BIGINT(21)    UNSIGNED NOT NULL,  
+  protocol       			VARCHAR(64),
+  client_ip      			VARCHAR(255),
+  server_ip      			VARCHAR(255), 
+  optlock                   INT UNSIGNED,
+  attributes				 TEXT,
+  properties                 TEXT,
+
+  PRIMARY KEY (scope_id, id),   -- primary key needs to include the partitioning key
+  INDEX idx_connection_status_id (scope_id, id, connection_status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PARTITION BY HASH(scope_id) PARTITIONS 64;
