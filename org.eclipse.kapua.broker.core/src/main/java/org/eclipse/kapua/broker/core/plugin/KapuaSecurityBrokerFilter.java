@@ -1,5 +1,6 @@
 package org.eclipse.kapua.broker.core.plugin;
 
+import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,15 +29,18 @@ import org.apache.activemq.security.DefaultAuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.SubjectThreadState;
+import org.apache.shiro.util.ThreadContext;
 import org.apache.shiro.util.ThreadState;
 import org.eclipse.kapua.KapuaErrorCode;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
+import org.eclipse.kapua.broker.core.TempId;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
 import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
 import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
@@ -383,9 +387,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             AuthenticationCredentials credentials = credentialsFactory.newInstance(username, password.toCharArray());
             AccessToken accessToken = authenticationService.login(credentials);
 
-            KapuaId scopeId = accessToken.getScopeId();
-            KapuaId userId = accessToken.getId();
+            KapuaId scopeId = new KapuaEid(new BigInteger("1"));//accessToken.getScopeId();
+            KapuaId userId = new KapuaEid(new BigInteger("2"));//accessToken.getId();
             Account account = accountService.find(scopeId);
+			
             String accountName = account.getName();
 //            KapuaSession kapuaSession = authSrv.getCurrentSession();
 //            User currentUser = kapuaSession.getUser();
@@ -609,7 +614,9 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         	Context loginShiroLogoutTimeContext = metricLoginShiroLogoutTime.time();
 
         	authenticationService.logout();
-
+        	// DON'T remove that. Fix shiro exceptions due to the reuse of subject on a heavy stress on amq broker
+            ThreadContext.unbindSubject();
+            
             loginShiroLogoutTimeContext.stop();
             loginTotalContext.stop();
         }
@@ -625,6 +632,12 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 	    	Thread.currentThread().setContextClassLoader(classClassloader);
         	Context loginRemoveConnectionTimeContext = metricLoginRemoveConnectionTime.time();
         	try {
+        		
+        		Subject currentSubject = (new Subject.Builder()).buildSubject();
+                ThreadState threadState = new SubjectThreadState(currentSubject);
+                threadState.bind();
+                
+                
         		KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
         		
         		KapuaPrincipal kapuaPrincipal = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal());
@@ -632,6 +645,13 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         		long accountId = kapuaPrincipal.getAccountId();
         		String username = kapuaSecurityContext.getUserName();
         		String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
+
+        		AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
+        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-user", "We!come12345".toCharArray());
+        		AccessToken accessToken = authenticationService.login(credentials);
+        		KapuaId scopeId = new KapuaEid(new BigInteger("1"));//accessToken.getScopeId();
+                KapuaId userId = new KapuaEid(new BigInteger("2"));//accessToken.getId();
         		
         		// multiple account stealing link fix
         		String fullClientId = MessageFormat.format(MULTI_ACCOUNT_CLIENT_ID, accountId, clientId);
@@ -658,7 +678,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         			else {
         				KapuaId deviceConnectionId = kapuaSecurityContext.getConnectionId();
         				DeviceConnectionService deviceConnectionService = locator.getService(DeviceConnectionService.class);
-        				DeviceConnection deviceConnection = deviceConnectionService.findByClientId(deviceConnectionId, clientId);
+        				DeviceConnection deviceConnection = deviceConnectionService.findByClientId(scopeId, clientId);
         				//the device connection must be not null
         				
         				// cleanup stealing link detection map
@@ -686,6 +706,12 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         	}
         	finally {
         		loginRemoveConnectionTimeContext.stop();
+        		
+        		AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+        		authenticationService.logout();
+            	// DON'T remove that. Fix shiro exceptions due to the reuse of subject on a heavy stress on amq broker
+                ThreadContext.unbindSubject();
+                
         	}
         	Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
         }

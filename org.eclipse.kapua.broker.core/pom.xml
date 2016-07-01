@@ -64,6 +64,7 @@
 	                    </Embed-Dependency>
 						<Export-Package>
 							org.eclipse.kapua.broker.core,
+							org.eclipse.kapua.broker.core.converter,
 							org.eclipse.kapua.broker.core.listener,
 							org.eclipse.kapua.broker.core.plugin,
 							org.eclipse.kapua.broker.core.threadfactory

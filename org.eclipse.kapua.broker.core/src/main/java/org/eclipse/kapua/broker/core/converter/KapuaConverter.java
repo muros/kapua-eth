@@ -52,7 +52,7 @@ public class KapuaConverter {
 			try {
 		        Date queuedOn = new Date(message.getHeader(CamelConstants.JMS_HEADER_TIMESTAMP, Long.class));
 		        KapuaId connectionId = (KapuaId)message.getHeader(KapuaSecurityBrokerFilter.HEADER_KAPUA_CONNECTION_ID);
-				return JmsUtil.convertToKapuaMessage((javax.jms.BytesMessage)value, CamelUtil.getTopic(message), queuedOn, connectionId);
+				return JmsUtil.convertToKapuaMessage((byte[])value, CamelUtil.getTopic(message), queuedOn, connectionId);
 			} 
 			catch (JMSException | KapuaInvalidTopicException e) {
 				metricConverterErrorMessage.inc();

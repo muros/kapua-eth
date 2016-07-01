@@ -48,8 +48,6 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 
 	private static final Logger s_logger = LoggerFactory.getLogger(DeviceMessageListener.class);
 	
-	private static KapuaLocator                 locator               = KapuaLocator.getInstance();
-
 	private static final String BIRTH 	   = "MQTT/BIRTH";
 	private static final String DC         = "MQTT/DC";
 	private static final String LWT 	   = "MQTT/LWT";
@@ -68,8 +66,18 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 	private Counter metricDeviceDirectUnknownMessage;
 	private Counter metricDeviceDirectErrorMessage;
 	
+	private KapuaLocator locator;
+	private ClassLoader classClassloader;
+	private ClassLoader currentThreadClassLoader;
+
 	public DeviceMessageListener() {
 		super("device");
+		
+		currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+    	classClassloader = this.getClass().getClassLoader();
+    	Thread.currentThread().setContextClassLoader(classClassloader);
+    	
+		locator = KapuaLocator.getInstance();
 		metricDeviceMessage          = registerCounter("messages", "count");
 		//direct
 		metricDeviceDirectMessage            = registerCounter("messages", "direct", "count");
@@ -79,17 +87,23 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 		metricDeviceDirectAppsMessage        = registerCounter("messages", "direct", "apps", "count");
 		metricDeviceDirectUnknownMessage     = registerCounter("messages", "direct", "unknown", "count");
 		metricDeviceDirectErrorMessage       = registerCounter("messages", "direct", "error", "count");
+		
+		Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
 	}
 	
 	@Override
 	public void processMessage(CamelKapuaMessage message) 
 	{
+		Thread.currentThread().setContextClassLoader(classClassloader);
+    	
 		metricDeviceMessage.inc();
 		KapuaTopic kapuaTopic = message.getMessage().getKapuaTopic();
 		if (kapuaTopic.isKapuaTopic()) {
 			metricDeviceDirectMessage.inc();
 			processLifeCycleMessage(message.getConnectionId(), message.getMessage(), kapuaTopic);
 		}
+		
+		Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
 	}
 
 	private void processLifeCycleMessage(KapuaId connectionId, KapuaMessage message, KapuaTopic kapuaTopic)

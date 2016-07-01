@@ -240,7 +240,7 @@
         	-->
         <errorHandler id="lifeCycleMessageErrorHandler" 
             type="DeadLetterChannel"
-            deadLetterUri="bean:errorMessageListener?method=processLifeCycleMessage"
+            deadLetterUri="bean:errorMessageListener?method=lifeCycleMessage"
             useOriginalMessage="true">
             <redeliveryPolicy maximumRedeliveries="1" />
         </errorHandler>
