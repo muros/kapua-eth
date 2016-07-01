@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
-import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.shared.model.GwtMessage;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.service.GwtDataService;
@@ -33,7 +32,6 @@ import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class LastMessagesView extends LayoutContainer
 {
@@ -102,23 +100,23 @@ public class LastMessagesView extends LayoutContainer
         if (rendered && m_currentSession.hasDataReadPermission()) {
             m_grid.mask(MSGS.loading());
 
-            gwtDataService.findLastMessageByTopic(m_currentSession.getSelectedAccount().getName(), LAST_MESSAGE_LIMIT, new AsyncCallback<List<GwtMessage>>() {
-
-                @Override
-                public void onFailure(Throwable caught)
-                {
-                    FailureHandler.handle(caught);
-                    m_grid.unmask();
-                }
-
-                @Override
-                public void onSuccess(List<GwtMessage> lastMessages)
-                {
-                    m_lastMessageStore.removeAll();
-                    m_lastMessageStore.add(lastMessages);
-                    m_grid.unmask();
-                }
-            });
+            // gwtDataService.findLastMessageByTopic(m_currentSession.getSelectedAccount().getName(), LAST_MESSAGE_LIMIT, new AsyncCallback<List<GwtMessage>>() {
+            //
+            // @Override
+            // public void onFailure(Throwable caught)
+            // {
+            // FailureHandler.handle(caught);
+            // m_grid.unmask();
+            // }
+            //
+            // @Override
+            // public void onSuccess(List<GwtMessage> lastMessages)
+            // {
+            // m_lastMessageStore.removeAll();
+            // m_lastMessageStore.add(lastMessages);
+            // m_grid.unmask();
+            // }
+            // });
         }
     }
 }

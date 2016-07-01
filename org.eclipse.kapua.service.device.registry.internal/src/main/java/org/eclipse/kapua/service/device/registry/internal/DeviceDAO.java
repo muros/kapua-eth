@@ -68,7 +68,7 @@ public class DeviceDAO extends ServiceDAO
 
     public static Device find(EntityManager em, KapuaId deviceId)
     {
-        return em.find(Device.class, deviceId);
+        return em.find(DeviceImpl.class, deviceId);
     }
 
     public static DeviceListResult query(EntityManager em, KapuaQuery<Device> query)
