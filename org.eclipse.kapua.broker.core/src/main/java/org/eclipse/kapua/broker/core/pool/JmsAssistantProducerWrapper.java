@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.broker.core.pooling;
+package org.eclipse.kapua.broker.core.pool;
 
 import java.text.MessageFormat;
 import java.util.Date;
@@ -21,6 +21,8 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.eclipse.kapua.broker.core.message.Constants;
+import org.eclipse.kapua.broker.core.message.JmsUtil;
 import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
 import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.message.KapuaMessage;
@@ -34,24 +36,6 @@ import org.eclipse.kapua.service.user.UserStatus;
  */
 public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	
-	// used by login update info asynch
-	public static final String  METRIC_USERNAME                = "username";
-    public static final String  METRIC_ACCOUNT                 = "account";
-    public static final String  METRIC_CLIENT_ID               = "clientId";
-    public static final String  METRIC_IP                      = "ip";
-    public final static String  PROPERTY_TOPIC_ORIG            = "topicOrg";
-    public final static String  PROPERTY_ENQUEUED_TIMESTAMP    = "enqueuedTimestamp";
-    
-    // used by login update info asynch
-    public static final String  METRIC_USER_ID                 = "userId";
-    public static final String  METRIC_NODE_ID                 = "nodeId";
-    public static final String  METRIC_STATUS                  = "status";
-    public static final String  METRIC_LOGIN_ON                = "loginOn";
-    public static final String  METRIC_LOGIN_ATTEMPTS          = "loginAttempts";
-    public static final String  METRIC_LOGIN_ATTEMPTS_RESET_ON = "loginAttemptsResetOn";
-    public static final String  METRIC_LOCKED_ON               = "lockedOn";
-    public static final String  METRIC_UNLOCK_ON               = "unlockOn";
-    
 	private static final String CONNECT_TOPIC      = "$EDC.{0}.{1}.MQTT.CONNECT";
 	private static final String DISCONNECT_TOPIC   = "$EDC.{0}.{1}.MQTT.DISCONNECT";
 	//TODO check the topic and the security broker filter behavior
@@ -114,8 +98,8 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
         String topic = MessageFormat.format(CONNECT_TOPIC, accountName, clientId);
         
         KapuaMessage kapuaMessage = buildNetworkKapuaMessage(topic, accountName, userName, userId, clientId, nodeId, remoteAddress);
-		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, topic);
-		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
+		byteMessage.setStringProperty(Constants.PROPERTY_TOPIC_ORIG, topic);
+		byteMessage.setLongProperty(Constants.PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 
 		byteMessage.writeBytes(kapuaMessage.getPayload());
 		return topic;
@@ -135,8 +119,8 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		KapuaMessage kapuaMessage = buildNetworkDisconnectMessage(accountName, userName, userId, clientId, remoteAddress);
 		String topic = kapuaMessage.getTopic();
 		
-		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, kapuaMessage.getTopic());
-		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
+		byteMessage.setStringProperty(Constants.PROPERTY_TOPIC_ORIG, kapuaMessage.getTopic());
+		byteMessage.setLongProperty(Constants.PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 
 		byteMessage.writeBytes(kapuaMessage.getPayload());
 		return topic;
@@ -172,8 +156,8 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		KapuaMessage kapuaMessage = buildNetworkMissingMessage(accountName, userName, userId, clientId, remoteAddress);
 		String topic = kapuaMessage.getTopic();
 		
-		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, kapuaMessage.getTopic());
-		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
+		byteMessage.setStringProperty(Constants.PROPERTY_TOPIC_ORIG, kapuaMessage.getTopic());
+		byteMessage.setLongProperty(Constants.PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 
 		byteMessage.writeBytes(kapuaMessage.getPayload());
 		return topic;
@@ -197,43 +181,6 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	//==========================================================
 	//Messages to be send into the internal EDC_SERVICE queue
 	//==========================================================
-	
-//	/**
-//	 * Send a message to insert an alert asynchronous (this message will be send to the internal EDC_SERVICE queue)
-//	 * The topic used for the instantiation of the KapuaTopic it's different (MQTT wildcards) from the topic used to set the property PROPERTY_TOPIC_ORIG
-//	 * @param accountName
-//	 * @param accountId
-//	 * @param userName
-//	 * @param userId
-//	 * @param clientId
-//	 * @param category
-//	 * @param message
-//	 * @throws KapuaInvalidTopicException
-//	 * @throws JMSException
-//	 */
-//	public void sendAlertMessage(String accountName, String userName, String clientId, String category, Severity severity, String message) throws KapuaInvalidTopicException, JMSException {
-//		BytesMessage byteMessage = session.createBytesMessage();
-//		
-//		String topic = MessageFormat.format(ALERT_TOPIC_MQTT, accountName, clientId);
-//        
-//        KapuaMessage kapuaMessage = buildNetworkKapuaMessage(topic, accountName, userName, null, clientId, null, null);
-//        KapuaPayload kapuaPayload = kapuaMessage.getKapuaPayload();
-//		kapuaPayload.addMetric(METRIC_ALERT_CATEGORY, category);
-//		kapuaPayload.addMetric(METRIC_ALERT_MESSAGE, message);
-//        if (severity!=null) {
-//        	kapuaPayload.addMetric(METRIC_ALERT_SEVERITY, severity.name());
-//        }
-//        else {
-//        	kapuaPayload.addMetric(METRIC_ALERT_SEVERITY, Severity.INFO);
-//        }
-//		
-//		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, convertMqttWildCardToJms(topic));
-//		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
-//		
-//		byteMessage.writeBytes(kapuaMessage.getPayload());
-//		
-//		producer.send(byteMessage);
-//	}
 	
 	/**
 	 * Send the update login info message
@@ -287,28 +234,28 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		String uuid = UUID.randomUUID().toString();
 		KapuaTopic kapuaTopic = new KapuaTopic(topic);
 		KapuaPayload kapuapay = new KapuaPayload();
-		kapuapay.addMetric(METRIC_USER_ID, userId);
+		kapuapay.addMetric(Constants.METRIC_USER_ID, userId);
 		if (status!=null) {
-			kapuapay.addMetric(METRIC_STATUS, status.name());
+			kapuapay.addMetric(Constants.METRIC_STATUS, status.name());
 		}
 		if (loginOn!=null) {
-			kapuapay.addMetric(METRIC_LOGIN_ON, loginOn.getTime());
+			kapuapay.addMetric(Constants.METRIC_LOGIN_ON, loginOn.getTime());
 		}
-		kapuapay.addMetric(METRIC_LOGIN_ATTEMPTS, loginAttempts);
+		kapuapay.addMetric(Constants.METRIC_LOGIN_ATTEMPTS, loginAttempts);
 		if (loginAttemptsResetOn!=null) {
-			kapuapay.addMetric(METRIC_LOGIN_ATTEMPTS_RESET_ON, loginAttemptsResetOn.getTime());
+			kapuapay.addMetric(Constants.METRIC_LOGIN_ATTEMPTS_RESET_ON, loginAttemptsResetOn.getTime());
 		}
 		if (lockedOn!=null) {
-			kapuapay.addMetric(METRIC_LOCKED_ON, lockedOn.getTime());
+			kapuapay.addMetric(Constants.METRIC_LOCKED_ON, lockedOn.getTime());
 		}
 		if (unlockOn!=null) {
-			kapuapay.addMetric(METRIC_UNLOCK_ON, unlockOn.getTime());
+			kapuapay.addMetric(Constants.METRIC_UNLOCK_ON, unlockOn.getTime());
 		}
 
 		KapuaMessage kapuaMessage = new KapuaMessage(kapuaTopic, new Date(), uuid, kapuapay);
 		
-		byteMessage.setStringProperty(PROPERTY_TOPIC_ORIG, convertMqttWildCardToJms(topic));
-		byteMessage.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
+		byteMessage.setStringProperty(Constants.PROPERTY_TOPIC_ORIG, JmsUtil.convertMqttWildCardToJms(topic));
+		byteMessage.setLongProperty(Constants.PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 
 		byteMessage.writeBytes(kapuaMessage.getPayload());
 	}
@@ -323,8 +270,8 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	public void sendDataMessageNotStored(String topic, byte[] messageNotStored) throws JMSException {
 		BytesMessage message = session.createBytesMessage();
 		
-		message.setStringProperty(PROPERTY_TOPIC_ORIG, convertMqttWildCardToJms(topic));
-		message.setLongProperty(PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
+		message.setStringProperty(Constants.PROPERTY_TOPIC_ORIG, JmsUtil.convertMqttWildCardToJms(topic));
+		message.setLongProperty(Constants.PROPERTY_ENQUEUED_TIMESTAMP, System.currentTimeMillis());
 		message.writeBytes(messageNotStored);
 		
 		producer.send(message);
@@ -334,93 +281,20 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		String uuid = UUID.randomUUID().toString();
 		KapuaTopic kapuaTopic = new KapuaTopic(topic);
 		KapuaPayload kapuapay = new KapuaPayload();
-		kapuapay.addMetric(METRIC_USERNAME, userName);
+		kapuapay.addMetric(Constants.METRIC_USERNAME, userName);
 		if (userId!=null) {
-			kapuapay.addMetric(METRIC_USER_ID, userId);
+			kapuapay.addMetric(Constants.METRIC_USER_ID, userId);
 		}
-		kapuapay.addMetric(METRIC_ACCOUNT, accountName);
-		kapuapay.addMetric(METRIC_CLIENT_ID, clientId);
+		kapuapay.addMetric(Constants.METRIC_ACCOUNT, accountName);
+		kapuapay.addMetric(Constants.METRIC_CLIENT_ID, clientId);
 		if (nodeId != null) {
-			kapuapay.addMetric(METRIC_NODE_ID, nodeId);
+			kapuapay.addMetric(Constants.METRIC_NODE_ID, nodeId);
 		}
 		if (remoteAddress != null) {
-			kapuapay.addMetric(METRIC_IP, remoteAddress);
+			kapuapay.addMetric(Constants.METRIC_IP, remoteAddress);
 		}
 
 		return new KapuaMessage(kapuaTopic, new Date(), uuid, kapuapay);
 	}
-	
-	// =========================================
-    // wildcards conversion
-    // =========================================
-    /**
-     * A-MQ translate wildcards from jms to mqtt
-     * function        ActiveMQ        MQTT
-     * separator        .               /
-     * element          *               +
-     * sub tree         >               #
-     * 
-     * @param jmsTopic
-     * @return
-     */
-    public static String convertJmsWildCardToMqtt(String jmsTopic)
-    {
-        String processedTopic = null;
-        if (jmsTopic != null) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < jmsTopic.length(); i++) {
-                sb.append(convertWildcardJmsToMqtt(jmsTopic.charAt(i)));
-            }
-            processedTopic = sb.toString();
-        }
-        return processedTopic;
-    }
-
-    private static char convertWildcardJmsToMqtt(char c)
-    {
-        switch (c) {
-            case '.':
-                return '/';
-            case '/':
-                return '.';
-            default:
-                return c;
-        }
-    }
-
-    /**
-     * A-MQ translate wildcards from jms to mqtt
-     * function        ActiveMQ        MQTT
-     * separator        .               /
-     * element          *               +
-     * sub tree         >               #
-     * 
-     * @param mqttTopic
-     * @return
-     */
-    public static String convertMqttWildCardToJms(String mqttTopic)
-    {
-        String processedTopic = null;
-        if (mqttTopic != null) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < mqttTopic.length(); i++) {
-                sb.append(convertWildcardMqttToJms(mqttTopic.charAt(i)));
-            }
-            processedTopic = sb.toString();
-        }
-        return processedTopic;
-    }
-
-    private static char convertWildcardMqttToJms(char c)
-    {
-        switch (c) {
-            case '.':
-                return '/';
-            case '/':
-                return '.';
-            default:
-                return c;
-        }
-    }
 	
 }

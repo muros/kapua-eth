@@ -18,10 +18,11 @@ import javax.jms.JMSException;
 
 import org.apache.camel.spi.UriEndpoint;
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool;
-import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerPool.DESTINATIONS;
+import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
+import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool;
+import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerWrapper;
+import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.broker.core.pooling.JmsAssistantProducerWrapper;
 import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;

@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.broker.core.pooling;
+package org.eclipse.kapua.broker.core.pool;
 
 import java.util.HashMap;
 import java.util.Map;

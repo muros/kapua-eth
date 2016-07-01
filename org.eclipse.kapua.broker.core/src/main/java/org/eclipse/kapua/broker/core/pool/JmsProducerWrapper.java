@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.broker.core.pooling;
+package org.eclipse.kapua.broker.core.pool;
 
 import java.text.MessageFormat;
 
@@ -22,6 +22,7 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.eclipse.kapua.broker.core.message.JmsUtil;
 import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +94,7 @@ public abstract class JmsProducerWrapper {
 	 * @throws EdcInvalidTopicException
 	 */
 	public void sendRawMessage(String mqttTopic, byte[] payload) throws JMSException {
-        String jmsTopic = MessageFormat.format(KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX_TEMPLATE, JmsAssistantProducerWrapper.convertMqttWildCardToJms(mqttTopic));
+        String jmsTopic = MessageFormat.format(KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX_TEMPLATE, JmsUtil.convertMqttWildCardToJms(mqttTopic));
 		Destination destination = session.createTopic(jmsTopic);
         BytesMessage message = session.createBytesMessage();
         message.setJMSDestination(destination);

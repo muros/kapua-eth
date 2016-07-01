@@ -13,6 +13,7 @@
 package org.eclipse.kapua.service.datastore.internal;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.datastore.StorableQuery;
 import org.eclipse.kapua.service.datastore.StorableResultList;
 import org.eclipse.kapua.service.datastore.TopicStoreService;
@@ -23,7 +24,7 @@ public class TopicStoreServiceImpl implements TopicStoreService
 {
 
     @Override
-    public void delete(String scopeName, StorableId uuid)
+    public void delete(KapuaId scopeId, StorableId uuid)
         throws KapuaException
     {
         // TODO Auto-generated method stub
@@ -31,7 +32,7 @@ public class TopicStoreServiceImpl implements TopicStoreService
     }
 
     @Override
-    public TopicInfo find(String scopeName, StorableId uuid)
+    public TopicInfo find(KapuaId scopeId, StorableId uuid)
         throws KapuaException
     {
         // TODO Auto-generated method stub
@@ -39,7 +40,7 @@ public class TopicStoreServiceImpl implements TopicStoreService
     }
 
     @Override
-    public StorableResultList<TopicInfo> query(String scopeName, StorableQuery<TopicInfo> query)
+    public StorableResultList<TopicInfo> query(KapuaId scopeId, StorableQuery<TopicInfo> query)
         throws KapuaException
     {
         // TODO Auto-generated method stub

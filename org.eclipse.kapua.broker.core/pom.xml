@@ -30,7 +30,6 @@
         <commons.pool.version>2.2</commons.pool.version>
 	</properties>
 
-
 	<build>
 		<plugins>
 			<plugin>
@@ -40,18 +39,118 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
+						<Embed-Transitive>true</Embed-Transitive> 
+						<Embed-Dependency>
+							com.google.protobuf|protobuf-java;
+							org.apache.shiro|shiro-core;
+							org.apache.shiro|shiro-web;
+							org.eclipse.kapua|org.eclipse.kapua.commons;
+							org.eclipse.kapua|org.eclipse.kapua.configuration.spi;
+							org.eclipse.kapua|org.eclipse.kapua.locator.spi;
+							org.eclipse.kapua|org.eclipse.kapua.message;
+							org.eclipse.kapua|org.eclipse.kapua.service;
+							org.eclipse.kapua|org.eclipse.kapua.service.account;
+							org.eclipse.kapua|org.eclipse.kapua.service.account.internal;
+							org.eclipse.kapua|org.eclipse.kapua.service.auth.shiro;
+							org.eclipse.kapua|org.eclipse.kapua.service.authentication;
+							org.eclipse.kapua|org.eclipse.kapua.service.authorization;
+							org.eclipse.kapua|org.eclipse.kapua.service.datastore;
+							org.eclipse.kapua|org.eclipse.kapua.service.datastore.internal;
+							org.eclipse.kapua|org.eclipse.kapua.service.device.registry;
+							org.eclipse.kapua|org.eclipse.kapua.service.device.registry.internal;
+							org.eclipse.kapua|org.eclipse.kapua.service.user;
+							org.eclipse.kapua|org.eclipse.kapua.service.user.internal;
+						    inline=true
+	                    </Embed-Dependency>
 						<Export-Package>
-						org.eclipse.kapua.broker.core
-						org.eclipse.kapua.broker.core
-						org.eclipse.kapua.broker.core
 							org.eclipse.kapua.broker.core,
+							org.eclipse.kapua.broker.core.listener,
+							org.eclipse.kapua.broker.core.plugin,
+							org.eclipse.kapua.broker.core.threadfactory
 						</Export-Package>
-						<Private-Package>org.eclipse.kapua.broker.core.*</Private-Package>
+						<Import-Package>
+							com.codahale.metrics;version="[3.1,4)",
+							com.google.common.cache;version="[18.0,19)",
+							com.google.common.hash;version="[18.0,19)",
+							com.google.common.util.concurrent;version="[18.0,19)",
+							com.mchange.v2.c3p0,
+							com.mysql.jdbc;version="[5.1,6)",
+							javax.crypto,
+							javax.crypto.spec,
+							javax.jms,
+							javax.naming,
+							javax.naming.directory,
+							javax.naming.ldap,
+							javax.persistence;version="[2.1,3)",
+							javax.persistence.criteria;version="[2.1,3)",
+							javax.persistence.metamodel;version="[2.1,3)",
+							javax.persistence.spi;version="[2.1,3)",
+							javax.security.auth.login,
+							javax.sql,
+							javax.xml.bind,
+							javax.xml.bind.annotation,
+							javax.xml.bind.annotation.adapters,
+							javax.xml.namespace,
+							org.apache.activemq,
+							org.apache.activemq.broker,
+							org.apache.activemq.broker.region,
+							org.apache.activemq.command,
+							org.apache.activemq.security,
+							org.apache.activemq.thread,
+							org.apache.activemq.util,
+							org.apache.camel;version="[2.15,3)",
+							org.apache.camel.component.jms;version="[2.15,3)",
+							org.apache.camel.impl;version="[2.15,3)",
+							org.apache.camel.spi;version="[2.15,3)",
+							org.apache.camel.util.concurrent;version="[2.15,3)",
+							org.apache.commons.beanutils;version="[1.8,2)",
+							org.apache.commons.configuration;version="[1.9,2)",
+							org.apache.commons.pool2;version="[2.2,3)",
+							org.apache.commons.pool2.impl;version="[2.2,3)",
+							org.elasticsearch.action,
+							org.elasticsearch.action.admin.indices.create,
+							org.elasticsearch.action.admin.indices.exists.indices,
+							org.elasticsearch.action.admin.indices.mapping.get,
+							org.elasticsearch.action.admin.indices.mapping.put,
+							org.elasticsearch.action.bulk,
+							org.elasticsearch.action.delete,
+							org.elasticsearch.action.index,
+							org.elasticsearch.action.search,
+							org.elasticsearch.action.support.master.info,
+							org.elasticsearch.action.support.replication,
+							org.elasticsearch.action.update,
+							org.elasticsearch.client,
+							org.elasticsearch.client.transport,
+							org.elasticsearch.cluster.metadata,
+							org.elasticsearch.common,
+							org.elasticsearch.common.collect,
+							org.elasticsearch.common.settings,
+							org.elasticsearch.common.transport,
+							org.elasticsearch.common.unit,
+							org.elasticsearch.common.xcontent,
+							org.elasticsearch.index.engine,
+							org.elasticsearch.index.query,
+							org.elasticsearch.search,
+							org.elasticsearch.search.sort,
+							org.hibernate.annotations;version="[4.3,5)",
+							org.hibernate.cfg;version="[4.3,5)",
+							org.hibernate.exception;version="[4.3,5)",
+							org.hibernate.internal;version="[4.3,5)",
+							org.hibernate.jpa.internal;version="[4.3,5)",
+							org.mindrot.jbcrypt,
+							org.osgi.framework,
+							org.slf4j,
+							<!-- added manually -->
+							org.hibernate.proxy;version="[4.3,5)",
+							javassist.util.proxy
+						</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	
+	
 	
 	<dependencies>
 		<dependency>
@@ -61,7 +160,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user</artifactId>
+			<artifactId>org.eclipse.kapua.configuration.spi</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.locator.spi</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -77,6 +181,11 @@
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.account</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.account.internal</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -101,7 +210,27 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.datastore.internal</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.registry</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.registry.internal</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.user</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- activemq -->
@@ -144,11 +273,6 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>18.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-core</artifactId>
-			<version>${shiro.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>

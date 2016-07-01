@@ -45,6 +45,10 @@ public class KapuaBrokerSecurityPlugin implements BrokerPlugin
     {            
     	s_logger.info(">> installPlugin {}", KapuaBrokerSecurityPlugin.class.getName());
         try {
+        	ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
+        	ClassLoader classClassloader = this.getClass().getClassLoader();
+        	Thread.currentThread().setContextClassLoader(classClassloader);
+
         	//initialize shiro context for broker plugin from shiro ini file
             URL shiroIniUrl = getClass().getResource("/shiro.ini");
             String shiroIniStr = ResourceUtils.readResource(shiroIniUrl);
@@ -57,7 +61,8 @@ public class KapuaBrokerSecurityPlugin implements BrokerPlugin
   	      	
       		// install the filters
       		broker = new KapuaSecurityBrokerFilter(broker);
-            
+      		
+//      		Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
             return broker;
         }
         catch (Throwable t) {

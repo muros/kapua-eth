@@ -31,6 +31,7 @@ import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
@@ -98,18 +99,16 @@ public class EsMessageStoreServiceImpl
         ArgumentValidator.notNull(scopeName, "scopeName");
         ArgumentValidator.notNull(messageCreator, "messageCreator");
         
-        KapuaTopic kapuaTopic = null;
+        KapuaMessage kapuaMessage = null;
         try 
         {
-            kapuaTopic = MessageConverter.toKapuaTopic(messageCreator.getTopic());
+            kapuaMessage = MessageConverter.toKapuaMessage(messageCreator);
         }
         catch (KapuaInvalidTopicException exc)
         {
             throw KapuaException.internalError(exc);
         }
         
-        KapuaPayload kapauPayload = toKapuaPayload(messageCreator.getPayload());
-        KapuaMessage kapuaMessage = new KapuaMessage(kapuaTopic, messageCreator.getTimestamp(), null, kapauPayload);
            
         String forceUUID = UUID.randomUUID().toString();
         this.storeMessageImpl(scopeName, kapuaMessage, forceUUID);
@@ -137,50 +136,6 @@ public class EsMessageStoreServiceImpl
         topic.setTopicName(topic.getTopicName());
         MessageImpl message = new MessageImpl(kapuaMessage.getUuid(), kapuaMessage.getTimestamp(), topic); 
         return message;
-    }
-    
-    private KapuaPosition toKapuaPosition(Position position)
-    {
-        if (position == null)
-            return null;
-        
-        KapuaPosition kapuaPosition = new KapuaPosition();
-        kapuaPosition.setAltitude(position.getAltitude());
-        kapuaPosition.setHeading(position.getHeading());
-        kapuaPosition.setLatitude(position.getLatitude());
-        kapuaPosition.setLongitude(position.getLongitude());
-        kapuaPosition.setPrecision(position.getPrecision());
-        kapuaPosition.setSatellites(position.getSatellites());
-        kapuaPosition.setSpeed(position.getSpeed());
-        kapuaPosition.setStatus(position.getStatus());
-        kapuaPosition.setTimestamp(position.getTimestamp());
-        return kapuaPosition;
-    }
-    
-    private KapuaPayload toKapuaPayload(Payload payload)
-    {
-        KapuaPayload kapauPayload = null;
-        if (payload == null)
-            return null;
-
-        kapauPayload = new KapuaPayload();
-        kapauPayload.setBody(payload.getBody());
-        
-        if (payload.getMetrics() != null)
-        {
-            Map<String, Object> map = payload.getMetrics();
-            Iterator<String> i = map.keySet().iterator();
-            while(i.hasNext())
-            {
-                String metric = i.next();
-                kapauPayload.addMetric(metric, map.get(metric));
-            }
-        }
-        
-        kapauPayload.setPosition(this.toKapuaPosition(payload.getPosition()));
-        kapauPayload.setTimestamp(payload.getCollectedOn());
-        
-        return kapauPayload;
     }
     
     private void storeMessageImpl(String accountName, KapuaMessage message, String forceUUID)
@@ -234,7 +189,6 @@ public class EsMessageStoreServiceImpl
 
         // MessageDAO: prepare the store parameters
         Date capturedOn = null;
-        Map<String, Object> metricsMap = new HashMap<String, Object>();
         if (message.hasEdcPayload()) {
             capturedOn = message.getKapuaPayload().getTimestamp();
         }
