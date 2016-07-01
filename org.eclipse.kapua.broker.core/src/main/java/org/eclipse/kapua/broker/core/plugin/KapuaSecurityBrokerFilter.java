@@ -34,7 +34,6 @@ import org.apache.shiro.util.ThreadState;
 import org.eclipse.kapua.KapuaErrorCode;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
-import org.eclipse.kapua.broker.core.TempId;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
 import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
