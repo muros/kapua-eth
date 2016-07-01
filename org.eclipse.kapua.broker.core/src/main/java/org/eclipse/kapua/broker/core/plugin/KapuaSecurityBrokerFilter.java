@@ -647,7 +647,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
         		AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
         		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
-        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-user", "We!come12345".toCharArray());
+        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
         		AccessToken accessToken = authenticationService.login(credentials);
         		KapuaId scopeId = new KapuaEid(new BigInteger("1"));//accessToken.getScopeId();
                 KapuaId userId = new KapuaEid(new BigInteger("2"));//accessToken.getId();

@@ -28,6 +28,10 @@ import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.KapuaTopic;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authentication.AccessToken;
+import org.eclipse.kapua.service.authentication.AuthenticationCredentials;
+import org.eclipse.kapua.service.authentication.AuthenticationService;
+import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,23 +143,58 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 				// send the appropriate signal to the device service
 				DeviceLifeCycleService deviceLifeCycleService = locator.getService(DeviceLifeCycleService.class);
 				if (BIRTH.equals(semanticTopic)) {
+					
+					
+					AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+	        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
+	        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
+	        		AccessToken accessToken = authenticationService.login(credentials);
+	        		
+	        		
 					deviceLifeCycleService.birth(connectionId, message);
 					metricDeviceDirectBirthMessage.inc();
+					
+					
+					authenticationService.logout();
 				}
 				else if (DC.equals(semanticTopic)) {
+					AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+	        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
+	        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
+	        		AccessToken accessToken = authenticationService.login(credentials);
+					
 					deviceLifeCycleService.death(connectionId, message);
 					metricDeviceDirectDcMessage.inc();
+					
+					
+					authenticationService.logout();
 				}
 				else if (LWT.equals(semanticTopic)) {
+					AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+	        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
+	        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
+	        		AccessToken accessToken = authenticationService.login(credentials);
+	        		
 					deviceLifeCycleService.missing(connectionId, message);
 					metricDeviceDirectMissingMessage.inc();
+					
+					
+					authenticationService.logout();
 				}
 				else if (APPS.equals(semanticTopic)) {
 					// The APPS message has the same payload as the BIRTH message.
 					// The payload is published on a different topic onlys
 					// to create a different event.
+					
+					AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+	        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
+	        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
+	        		AccessToken accessToken = authenticationService.login(credentials);
+					
 					deviceLifeCycleService.applications(connectionId, message);
 					metricDeviceDirectAppsMessage.inc();
+					
+					authenticationService.logout();
 				}
 				else {
 					metricDeviceDirectUnknownMessage.inc();

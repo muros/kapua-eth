@@ -23,6 +23,7 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
+import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
 import org.eclipse.kapua.service.device.registry.DeviceFactory;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
@@ -37,7 +38,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
     public void birth(KapuaId connectionId, KapuaMessage message)
         throws KapuaException
     {
-        KapuaBirthPayload payload = (KapuaBirthPayload) message.getKapuaPayload();
+        KapuaBirthPayload payload = new KapuaBirthPayload(message.getKapuaPayload());
         KapuaTopic topic = message.getKapuaTopic();
         String accountName = topic.getAccount();
         String clientId = topic.getAsset();
@@ -47,7 +48,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         KapuaLocator locator = KapuaLocator.getInstance();
         AccountService accountService = locator.getService(AccountService.class);
         Account account = accountService.findByName(accountName);
-        KapuaId scopeId = account.getScopeId();
+        KapuaId scopeId = account.getId();
 
         //
         // Device update
@@ -74,6 +75,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
             deviceCreator.setOsgiFrameworkVersion(payload.getOsgiFrameworkVersion());
             deviceCreator.setApplicationIdentifiers(payload.getApplicationIdentifiers());
             deviceCreator.setAcceptEncoding(payload.getAcceptEncoding());
+            deviceCreator.setCredentialsMode(DeviceCredentialsMode.LOOSE);
 
             device = deviceRegistryService.create(deviceCreator);
         }
@@ -127,7 +129,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         KapuaLocator locator = KapuaLocator.getInstance();
         AccountService accountService = locator.getService(AccountService.class);
         Account account = accountService.findByName(accountName);
-        KapuaId scopeId = account.getScopeId();
+        KapuaId scopeId = account.getId();
 
         //
         // Device update
@@ -167,7 +169,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         KapuaLocator locator = KapuaLocator.getInstance();
         AccountService accountService = locator.getService(AccountService.class);
         Account account = accountService.findByName(accountName);
-        KapuaId scopeId = account.getScopeId();
+        KapuaId scopeId = account.getId();
 
         //
         // Device update
@@ -208,7 +210,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         KapuaLocator locator = KapuaLocator.getInstance();
         AccountService accountService = locator.getService(AccountService.class);
         Account account = accountService.findByName(accountName);
-        KapuaId scopeId = account.getScopeId();
+        KapuaId scopeId = account.getId();
 
         //
         // Device update
