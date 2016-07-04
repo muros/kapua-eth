@@ -21,17 +21,13 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
 import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool;
 import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerWrapper;
-import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.KapuaTopic;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authentication.AccessToken;
-import org.eclipse.kapua.service.authentication.AuthenticationCredentials;
-import org.eclipse.kapua.service.authentication.AuthenticationService;
-import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,18 +66,9 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 	private Counter metricDeviceDirectUnknownMessage;
 	private Counter metricDeviceDirectErrorMessage;
 	
-	private KapuaLocator locator;
-	private ClassLoader classClassloader;
-	private ClassLoader currentThreadClassLoader;
-
 	public DeviceMessageListener() {
 		super("device");
 		
-		currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
-    	classClassloader = this.getClass().getClassLoader();
-    	Thread.currentThread().setContextClassLoader(classClassloader);
-    	
-		locator = KapuaLocator.getInstance();
 		metricDeviceMessage          = registerCounter("messages", "count");
 		//direct
 		metricDeviceDirectMessage            = registerCounter("messages", "direct", "count");
@@ -91,23 +78,17 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 		metricDeviceDirectAppsMessage        = registerCounter("messages", "direct", "apps", "count");
 		metricDeviceDirectUnknownMessage     = registerCounter("messages", "direct", "unknown", "count");
 		metricDeviceDirectErrorMessage       = registerCounter("messages", "direct", "error", "count");
-		
-		Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
 	}
 	
 	@Override
 	public void processMessage(CamelKapuaMessage message) 
 	{
-		Thread.currentThread().setContextClassLoader(classClassloader);
-    	
 		metricDeviceMessage.inc();
 		KapuaTopic kapuaTopic = message.getMessage().getKapuaTopic();
 		if (kapuaTopic.isKapuaTopic()) {
 			metricDeviceDirectMessage.inc();
 			processLifeCycleMessage(message.getConnectionId(), message.getMessage(), kapuaTopic);
 		}
-		
-		Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
 	}
 
 	private void processLifeCycleMessage(KapuaId connectionId, KapuaMessage message, KapuaTopic kapuaTopic)
@@ -133,7 +114,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 //                s_logger.info("****** ENTERING PURGE ******");
 //                s_logger.info("* On topic: {}", accountName + (topic != null ? topic : "/+/#"));
 //
-//                MessageStoreService messageStoreService = locator.getService(MessageStoreService.class);
+//                MessageStoreService messageStoreService = KapuaLocator.getInstance().getService(MessageStoreService.class);
 //                //TODO check if it's not necessary with the new datastore
 ////                messageStoreService.resetCache(accountName, topic);
 //                return;
@@ -141,60 +122,25 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 //			else{
 				//
 				// send the appropriate signal to the device service
-				DeviceLifeCycleService deviceLifeCycleService = locator.getService(DeviceLifeCycleService.class);
+				DeviceLifeCycleService deviceLifeCycleService = KapuaLocator.getInstance().getService(DeviceLifeCycleService.class);
 				if (BIRTH.equals(semanticTopic)) {
-					
-					
-					AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-	        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
-	        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
-	        		AccessToken accessToken = authenticationService.login(credentials);
-	        		
-	        		
 					deviceLifeCycleService.birth(connectionId, message);
 					metricDeviceDirectBirthMessage.inc();
-					
-					
-					authenticationService.logout();
 				}
 				else if (DC.equals(semanticTopic)) {
-					AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-	        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
-	        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
-	        		AccessToken accessToken = authenticationService.login(credentials);
-					
 					deviceLifeCycleService.death(connectionId, message);
 					metricDeviceDirectDcMessage.inc();
-					
-					
-					authenticationService.logout();
 				}
 				else if (LWT.equals(semanticTopic)) {
-					AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-	        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
-	        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
-	        		AccessToken accessToken = authenticationService.login(credentials);
-	        		
 					deviceLifeCycleService.missing(connectionId, message);
 					metricDeviceDirectMissingMessage.inc();
-					
-					
-					authenticationService.logout();
 				}
 				else if (APPS.equals(semanticTopic)) {
 					// The APPS message has the same payload as the BIRTH message.
 					// The payload is published on a different topic onlys
 					// to create a different event.
-					
-					AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-	        		UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
-	        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
-	        		AccessToken accessToken = authenticationService.login(credentials);
-					
 					deviceLifeCycleService.applications(connectionId, message);
 					metricDeviceDirectAppsMessage.inc();
-					
-					authenticationService.logout();
 				}
 				else {
 					metricDeviceDirectUnknownMessage.inc();

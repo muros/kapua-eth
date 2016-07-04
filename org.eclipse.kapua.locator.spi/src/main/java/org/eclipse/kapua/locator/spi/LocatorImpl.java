@@ -20,7 +20,7 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.KapuaEntityFactory;
 import org.eclipse.kapua.service.KapuaService;
 
-public class LocatorImpl implements KapuaLocator
+public class LocatorImpl extends KapuaLocator
 {
     @Override
     public <S extends KapuaService> S getService(Class<S> serviceClass)
