@@ -83,32 +83,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 {
     private static Logger                          logger                            = LoggerFactory.getLogger(KapuaSecurityBrokerFilter.class);
     
-    public static final String VT_TOPIC_PREFIX_TEMPLATE    = "VirtualTopic.{0}";
-    public static final String VT_TOPIC_PREFIX             = "VirtualTopic.";
-    public static final String HEADER_KAPUA_CONNECTION_ID  = "KAPUA_CONNECTION_ID";
-    
-    /**
-	 * VM connector
-	 */
-	private final static String CONNECTOR_NAME_VM = "vm://amq";
-	private final static String VT_CONSUMER_PREFIX          = "Consumer";
-	private final static String ACL_HASH                         = "VirtualTopic.>";
-	private final static String ACL_AMQ_ADVISORY                 = "VirtualTopic.ActiveMQ.Advisory.>";
-	private final static String ACL_CTRL_ACC_REPLY               = "VirtualTopic.$EDC.{0}.*.*.REPLY.>";
-	private final static String ACL_CTRL_ACC_CLI_MQTT_LIFE_CYCLE = "VirtualTopic.$EDC.{0}.{1}.MQTT.>";
-	private final static String ACL_CTRL_ACC                     = "VirtualTopic.$EDC.{0}.>";
-	private final static String ACL_CTRL_ACC_CLI                 = "VirtualTopic.$EDC.{0}.{1}.>";
-	private final static String ACL_DATA_ACC                     = "VirtualTopic.{0}.>";
-	private final static String ACL_DATA_ACC_CLI                 = "VirtualTopic.{0}.{1}.>";
-	private final static String ACL_CTRL_ACC_NOTIFY              = "VirtualTopic.$EDC.{0}.*.*.NOTIFY.{1}.>";
-	
-	private final static String[] ACL_VT_DURABLE_PREFIX          = new String[]{
-    											"Consumer.{0}:AT_LEAST_ONCE.{1}",
-    											"Consumer.{0}:EXACTLY_ONCE.{1}"};
-
-	// full client id, with account prepended
-	public final static String MULTI_ACCOUNT_CLIENT_ID = "{0}:{1}";
-    
     //rate limiter section
     //TODO read these parameters from the configuration
     private final static long                      UPDATER_RELOAD_PARAMETER_FREQUENCY  = 5 * 60 * 1000;
@@ -117,13 +91,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private final static RateLimiter               CONNECTION_RATE_LIMITER             = RateLimiter.create(connectionRateLimit);
     private Runnable                               configurationUpdaterTask;
     
-    private final static String                    PERMISSION_LOG                      = "{0}/{1}/{2} - {3}";
-
-    private static final int                       BROKER_CONNECT_IDX                  = 0;
-    private static final int                       DEVICE_MANAGE_IDX                   = 1;
-    private static final int                       DATA_VIEW_IDX                       = 2;
-    private static final int                       DATA_MANAGE_IDX                     = 3;
-
     private final static Map<String, ConnectionId> connectionMap                       = new ConcurrentHashMap<String, ConnectionId>();
 
     //metrics section
@@ -259,7 +226,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private boolean isPassThroughConnection(ConnectionContext context)
     {
         if (context != null) {
-            if (context.getConnector() == null || CONNECTOR_NAME_VM.equals(((TransportConnector) context.getConnector()).getName())) {
+            if (context.getConnector() == null || AclConstants.CONNECTOR_NAME_VM.equals(((TransportConnector) context.getConnector()).getName())) {
                 return true;
             }
 
@@ -396,7 +363,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //            long accountId = kapuaSession.getSessionAccountId();
 
             // multiple account stealing link fix
-            String fullClientId = MessageFormat.format(MULTI_ACCOUNT_CLIENT_ID, scopeId.getId().longValue(), clientId);
+            String fullClientId = MessageFormat.format(AclConstants.MULTI_ACCOUNT_CLIENT_ID, scopeId.getId().longValue(), clientId);
 
             KapuaPrincipal principal = new KapuaPrincipal(username,
 										            scopeId.getId().longValue(),
@@ -409,7 +376,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             if (isAdminUser(username)) {
             	metricLoginKapuasysTokenAttempt.inc();
                 // 3-1) admin authMap
-                authMap = buildEurotechAdminAuthMap(authDestinations, principal, fullClientId);
+                authMap = buildAdminAuthMap(authDestinations, principal, fullClientId);
                 metricClientConnectedKapuasys.inc();
             }
             else {
@@ -425,7 +392,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                     		authorizationService.isPermitted(permissionFactory.newInstance("data", "read", scopeId)),
                     		authorizationService.isPermitted(permissionFactory.newInstance("data", "create", scopeId))
                     };
-                    if (!hasPermissions[BROKER_CONNECT_IDX]) {
+                    if (!hasPermissions[AclConstants.BROKER_CONNECT_IDX]) {
                         throw new KapuaIllegalAccessException(permissionFactory.newInstance("broker", "connect", scopeId).toString());
                     }
                     loginCheckAccessTimeContext.stop();
@@ -482,7 +449,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //                    // if user admin send alert
 //                    if (currentUser.hasAdministratorRole()) {
 //                        // send asynch alert
-//                        JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.EDC_SERVICE);
+//                        JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.KAPUA_SERVICE);
 //                        JmsAssistantProducerWrapper producer = null;
 //                        try {
 //                            // to do refresh change user on connect value
@@ -643,7 +610,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 KapuaId userId = new KapuaEid(new BigInteger("2"));//accessToken.getId();
         		
         		// multiple account stealing link fix
-        		String fullClientId = MessageFormat.format(MULTI_ACCOUNT_CLIENT_ID, accountId, clientId);
+        		String fullClientId = MessageFormat.format(AclConstants.MULTI_ACCOUNT_CLIENT_ID, accountId, clientId);
         		
         		if (!isAdminUser(username)) {
         			// Stealing link check
@@ -764,7 +731,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 // kapuaSecurityContext.getAuthorizedWriteDests().put(messageSend.getDestination(), messageSend.getDestination());
             }
             // }
-            messageSend.setProperty(HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
+            messageSend.setProperty(AclConstants.HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
         }
         if (messageSend.getContent()!=null) {
         	metricPublishMessageSizeAllowed.update(messageSend.getContent().length);
@@ -804,7 +771,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             String[] destinationsPath = info.getDestination().getDestinationPaths();
             String destination = info.getDestination().getPhysicalName();
             KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
-            if (destinationsPath != null && destinationsPath.length >= 2 && destinationsPath[0].equals(VT_CONSUMER_PREFIX)) {
+            if (destinationsPath != null && destinationsPath.length >= 2 && destinationsPath[0].equals(AclConstants.VT_CONSUMER_PREFIX)) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(destination.substring(0, destinationsPath[0].length() + 1));
                 sb.append(context.getClientId());
@@ -876,13 +843,13 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     // ------------------------------------------------------------------
 
     @SuppressWarnings("rawtypes")
-    private DefaultAuthorizationMap buildEurotechAdminAuthMap(List<String> authDestinations, KapuaPrincipal principal, String fullClientId)
+    private DefaultAuthorizationMap buildAdminAuthMap(List<String> authDestinations, KapuaPrincipal principal, String fullClientId)
     {
         ArrayList<DestinationMapEntry> dme = new ArrayList<DestinationMapEntry>();
         String clientId = principal.getClientId();
-        dme.addAll(createAuthorizationEntries(authDestinations, ACL_HASH,
+        dme.addAll(createAuthorizationEntries(authDestinations, AclConstants.ACL_HASH,
                                               principal, clientId, fullClientId, true, true, true));// (topic, principal, read, write, admin)
-        dme.addAll(createAuthorizationEntries(authDestinations, ACL_AMQ_ADVISORY,
+        dme.addAll(createAuthorizationEntries(authDestinations, AclConstants.ACL_AMQ_ADVISORY,
                                               principal, clientId, fullClientId, false, true, true));// (topic, principal, read, write, admin)
         return new DefaultAuthorizationMap(dme);
     }
@@ -894,22 +861,22 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
         String clientId = principal.getClientId();
         // Write reply to any client Id and any application
-        dme.addAll(createAuthorizationEntries(authDestinations, MessageFormat.format(ACL_CTRL_ACC_REPLY, accountName),
+        dme.addAll(createAuthorizationEntries(authDestinations, MessageFormat.format(AclConstants.ACL_CTRL_ACC_REPLY, accountName),
                                               principal, clientId, fullClientId, false, true, false));// (topic, principal, read, write, admin)
 
         // Publish only on MQTT/# for life-cycle messages and message that will trigger the provision service
-        dme.addAll(createAuthorizationEntries(authDestinations, MessageFormat.format(ACL_CTRL_ACC_CLI_MQTT_LIFE_CYCLE, accountName, clientId),
+        dme.addAll(createAuthorizationEntries(authDestinations, MessageFormat.format(AclConstants.ACL_CTRL_ACC_CLI_MQTT_LIFE_CYCLE, accountName, clientId),
                                               principal, clientId, fullClientId, false, true, false));// (topic, principal, read, write, admin)
 
         // Read any control topic on its client id to be able to receive configurations and bundles
-        dme.addAll(createAuthorizationEntries(authDestinations, MessageFormat.format(ACL_CTRL_ACC_CLI, accountName, clientId),
+        dme.addAll(createAuthorizationEntries(authDestinations, MessageFormat.format(AclConstants.ACL_CTRL_ACC_CLI, accountName, clientId),
                                               principal, clientId, fullClientId, true, false, false));// (topic, principal, read, write, admin)
 
         // FIXME: check if is correct "$EDC.{0}.>" instead of ">"
-        dme.addAll(createAuthorizationEntries(authDestinations, MessageFormat.format(ACL_CTRL_ACC, accountName),
+        dme.addAll(createAuthorizationEntries(authDestinations, MessageFormat.format(AclConstants.ACL_CTRL_ACC, accountName),
                                               principal, clientId, fullClientId, false, false, true));// (topic, principal, read, write, admin)
 
-        dme.addAll(createAuthorizationEntries(authDestinations, ACL_AMQ_ADVISORY,
+        dme.addAll(createAuthorizationEntries(authDestinations, AclConstants.ACL_AMQ_ADVISORY,
                                               principal, clientId, fullClientId, false, true, true));// (topic, principal, read, write, admin)
 
         return new DefaultAuthorizationMap(dme);
@@ -924,15 +891,15 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     {
         ArrayList<DestinationMapEntry> dme = new ArrayList<DestinationMapEntry>();
 
-        dme.addAll(createAuthorizationEntries(authDestinations, ACL_AMQ_ADVISORY,
+        dme.addAll(createAuthorizationEntries(authDestinations, AclConstants.ACL_AMQ_ADVISORY,
                                               principal, clientId, fullClientId, false, true, true));// (topic, principal, read, write, admin)
 
         // addConnection checks BROKER_CONNECT_IDX permission before call this method
         // then here user has BROKER_CONNECT_IDX permission and if check isn't needed
         // if (hasPermissions[BROKER_CONNECT_IDX]) {
-        if (hasPermissions[DEVICE_MANAGE_IDX]) {
+        if (hasPermissions[AclConstants.DEVICE_MANAGE_IDX]) {
             dme.addAll(createAuthorizationEntries(authDestinations,
-                                                  MessageFormat.format(ACL_CTRL_ACC, accountName),
+                                                  MessageFormat.format(AclConstants.ACL_CTRL_ACC, accountName),
                                                   principal,
                                                   clientId,
                                                   fullClientId,
@@ -942,7 +909,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
         else {
             dme.addAll(createAuthorizationEntries(authDestinations,
-                                                  MessageFormat.format(ACL_CTRL_ACC_CLI, accountName, clientId),
+                                                  MessageFormat.format(AclConstants.ACL_CTRL_ACC_CLI, accountName, clientId),
                                                   principal,
                                                   clientId,
                                                   fullClientId,
@@ -951,9 +918,9 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                                                   true)); // (topic, principal, read, write, admin)
         }
 
-        if (hasPermissions[DATA_MANAGE_IDX]) {
+        if (hasPermissions[AclConstants.DATA_MANAGE_IDX]) {
             dme.addAll(createAuthorizationEntries(authDestinations,
-                                                  MessageFormat.format(ACL_DATA_ACC, accountName),
+                                                  MessageFormat.format(AclConstants.ACL_DATA_ACC, accountName),
                                                   principal,
                                                   clientId,
                                                   fullClientId,
@@ -961,9 +928,9 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                                                   true,
                                                   true)); // (topic, principal, read, write, admin)
         }
-        else if (hasPermissions[DATA_VIEW_IDX]) {
+        else if (hasPermissions[AclConstants.DATA_VIEW_IDX]) {
             dme.addAll(createAuthorizationEntries(authDestinations,
-                                                  MessageFormat.format(ACL_DATA_ACC, accountName),
+                                                  MessageFormat.format(AclConstants.ACL_DATA_ACC, accountName),
                                                   principal,
                                                   clientId,
                                                   fullClientId,
@@ -972,7 +939,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                                                   true)); // (topic, principal, read, write, admin)
 
             dme.addAll(createAuthorizationEntries(authDestinations,
-                                                  MessageFormat.format(ACL_DATA_ACC_CLI, accountName, clientId),
+                                                  MessageFormat.format(AclConstants.ACL_DATA_ACC_CLI, accountName, clientId),
                                                   principal,
                                                   clientId,
                                                   fullClientId,
@@ -982,7 +949,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
         else {
             dme.addAll(createAuthorizationEntries(authDestinations,
-                                                  MessageFormat.format(ACL_DATA_ACC_CLI, accountName, clientId),
+                                                  MessageFormat.format(AclConstants.ACL_DATA_ACC_CLI, accountName, clientId),
                                                   principal,
                                                   clientId,
                                                   fullClientId,
@@ -992,7 +959,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
 
         dme.addAll(createAuthorizationEntries(authDestinations,
-                                              MessageFormat.format(ACL_CTRL_ACC_REPLY, accountName),
+                                              MessageFormat.format(AclConstants.ACL_CTRL_ACC_REPLY, accountName),
                                               principal,
                                               clientId,
                                               fullClientId,
@@ -1002,7 +969,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         
         // Write notify to any client Id and any application and operation
         dme.addAll(createAuthorizationEntries(authDestinations,
-                                              MessageFormat.format(ACL_CTRL_ACC_NOTIFY, accountName, clientId),
+                                              MessageFormat.format(AclConstants.ACL_CTRL_ACC_NOTIFY, accountName, clientId),
                                               principal,
                                               clientId,
                                               fullClientId,
@@ -1022,10 +989,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         if (read) {
             // logger.info("pattern {} - clientid {} - topic {} - evaluated {}", new Object[]{JmsConstants.ACL_VT_DURABLE_PREFIX[0], clientId, topic,
             // MessageFormat.format(JmsConstants.ACL_VT_DURABLE_PREFIX[0], fullClientId, topic)});
-            entries.add(createAuthorizationEntry(authDestinations, MessageFormat.format(ACL_VT_DURABLE_PREFIX[0], fullClientId, topic), principal));
+            entries.add(createAuthorizationEntry(authDestinations, MessageFormat.format(AclConstants.ACL_VT_DURABLE_PREFIX[0], fullClientId, topic), principal));
             // logger.info("pattern {} - clientid {} - topic {} - evaluated {}", new Object[]{JmsConstants.ACL_VT_DURABLE_PREFIX[1], clientId, topic,
             // MessageFormat.format(JmsConstants.ACL_VT_DURABLE_PREFIX[1], fullClientId, topic)});
-            entries.add(createAuthorizationEntry(authDestinations, MessageFormat.format(ACL_VT_DURABLE_PREFIX[1], fullClientId, topic), principal));
+            entries.add(createAuthorizationEntry(authDestinations, MessageFormat.format(AclConstants.ACL_VT_DURABLE_PREFIX[1], fullClientId, topic), principal));
         }
         return entries;
     }
@@ -1049,7 +1016,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         entry.setWriteACLs(writeACLs);
         entry.setReadACLs(readACLs);
         entry.setAdminACLs(adminACLs);
-        addAuthDestinationToLog(authDestinations, MessageFormat.format(PERMISSION_LOG,
+        addAuthDestinationToLog(authDestinations, MessageFormat.format(AclConstants.PERMISSION_LOG,
                                                                        read ? "r" : "_",
                                                                        write ? "w" : "_",
                                                                        admin ? "a" : "_",
@@ -1069,7 +1036,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         entry.setWriteACLs(writeACLs);
         entry.setReadACLs(readACLs);
         entry.setAdminACLs(adminACLs);
-        addAuthDestinationToLog(authDestinations, MessageFormat.format(PERMISSION_LOG, "r", "_", "_", topic));
+        addAuthDestinationToLog(authDestinations, MessageFormat.format(AclConstants.PERMISSION_LOG, "r", "_", "_", topic));
         return entry;
 
     }
@@ -1114,7 +1081,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 //
 //        // If all data is retrieved, then check
 //        if (s_clusterId != deploymentPlan.getBrokerCluster().getId()) {
-//            if (clientAccountId != s_eurotechAccount.getId()) {
+//            if (clientAccountId != sAdminAccount.getId()) {
 //                logger.error("Cross cluster login check FAILED for account {}", accountName);
 //                throw new KapuaOperationNotAllowedException("Account not authorized for this cluster.");
 //            }

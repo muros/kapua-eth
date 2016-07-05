@@ -10,7 +10,7 @@ import javax.jms.Topic;
 
 import org.apache.activemq.command.ActiveMQMessage;
 import org.eclipse.kapua.broker.core.converter.KapuaConverter;
-import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
+import org.eclipse.kapua.broker.core.plugin.AclConstants;
 import org.eclipse.kapua.message.KapuaInvalidMessageException;
 import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.message.KapuaMessage;
@@ -39,10 +39,12 @@ public class JmsUtil {
     {
     	String jmsTopic = null;
 		if (jmsMessage.getDestination().isTopic()) {
-			jmsTopic = ((Topic) jmsMessage.getJMSDestination()).getTopicName().substring(KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX.length());
-		} else if (jmsMessage.getDestination().isQueue()) {
+			jmsTopic = ((Topic) jmsMessage.getJMSDestination()).getTopicName().substring(AclConstants.VT_TOPIC_PREFIX.length());
+		}
+		else if (jmsMessage.getDestination().isQueue()) {
 			jmsTopic = jmsMessage.getStringProperty(Constants.PROPERTY_TOPIC_ORIG);
-		} else {
+		}
+		else {
 			logger.warn("jmsMessage destination is not a Topic or Queue: {}", jmsMessage.getDestination());
 		}
 		return jmsTopic;

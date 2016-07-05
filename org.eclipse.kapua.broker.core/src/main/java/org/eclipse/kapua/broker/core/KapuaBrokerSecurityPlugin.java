@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  * Is called by amq broker by configuring plugin tag inside broker tag into activemq.xml
  * 
  * <plugins>
- *     <bean xmlns="http://www.springframework.org/schema/beans" id="edcFilter" class="com.eurotech.cloud.broker.EdcBrokerPlugin"/>  
+ *     <bean xmlns="http://www.springframework.org/schema/beans" id="kapuaFilter" class="org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter"/>  
  * </plugins>
  *
  */

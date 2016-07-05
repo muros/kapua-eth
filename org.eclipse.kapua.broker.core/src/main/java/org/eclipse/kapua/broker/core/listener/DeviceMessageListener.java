@@ -46,7 +46,7 @@ import com.codahale.metrics.Counter;
 		scheme="bean") 
 public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 
-	private static final Logger s_logger = LoggerFactory.getLogger(DeviceMessageListener.class);
+	private static final Logger logger = LoggerFactory.getLogger(DeviceMessageListener.class);
 	
 	private static final String BIRTH 	   = "MQTT/BIRTH";
 	private static final String DC         = "MQTT/DC";
@@ -100,7 +100,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 
 		// FIXME: Remove this filtering of the republishes if no longer necessary
 		if(semanticTopic.startsWith("BA/")) {
-			s_logger.debug("Ignoring republish");
+			logger.debug("Ignoring republish");
 			return;
 		}
 		try {
@@ -111,8 +111,8 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 //                    topic = (String) message.getKapuaPayload().getMetric("topic");
 //                }
 //
-//                s_logger.info("****** ENTERING PURGE ******");
-//                s_logger.info("* On topic: {}", accountName + (topic != null ? topic : "/+/#"));
+//                logger.info("****** ENTERING PURGE ******");
+//                logger.info("* On topic: {}", accountName + (topic != null ? topic : "/+/#"));
 //
 //                MessageStoreService messageStoreService = KapuaLocator.getInstance().getService(MessageStoreService.class);
 //                //TODO check if it's not necessary with the new datastore
@@ -144,15 +144,15 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 				}
 				else {
 					metricDeviceDirectUnknownMessage.inc();
-					s_logger.info("Unknown semantic part for $EDC topic: {}", message.getKapuaTopic().getFullTopic());
+					logger.info("Unknown semantic part for $EDC topic: {}", message.getKapuaTopic().getFullTopic());
 					return;
 				}
 //			}
 		}
 		catch (KapuaException e) {
 			metricDeviceDirectErrorMessage.inc();
-//			alerts.error(message.getKapuaTopic().getAccount(), Code.INVALID_EDCTOPIC);
-			s_logger.error("Error while processing device life-cycle event", e);
+//			alerts.error(message.getKapuaTopic().getAccount(), Code.INVALID_KAPUATOPIC);
+			logger.error("Error while processing device life-cycle event", e);
 			return;			    
 		}
 		if (!CONNECT.equals(semanticTopic) && ! DISCONNECT.equals(semanticTopic)) {
@@ -188,7 +188,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 				destination.append("/BA/PROV");
 			}
 			try {
-                s_logger.debug("MESSAGE: {}", kapuaPayload);
+                logger.debug("MESSAGE: {}", kapuaPayload);
                 JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.NO_DESTINATION);
                 JmsAssistantProducerWrapper producer = null;
                 try {
@@ -200,16 +200,16 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
                 }
             } 
 			catch (JMSException e) {
-                s_logger.error("An error occurred while publishing device history event: {}", e.getMessage());
+                logger.error("An error occurred while publishing device history event: {}", e.getMessage());
 //                alerts.severe(message.getKapuaTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, e, e.getErrorCode().toString());
                 return;
             }
             catch (KapuaInvalidTopicException e) {
-                s_logger.error("An error occurred while publishing device history event: {}", e.getMessage());
+                logger.error("An error occurred while publishing device history event: {}", e.getMessage());
 //                alerts.severe(message.getKapuaTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, e, "");
             }
             catch (Throwable t) {
-                s_logger.warn("Cannot send life cycle message {}! {}", new Object[]{destination.toString(), t.getMessage()}, t);
+                logger.warn("Cannot send life cycle message {}! {}", new Object[]{destination.toString(), t.getMessage()}, t);
 //                alerts.severe(message.getKapuaTopic().getAccount(), Code.PUBLISHING_DEVICE_ERROR, t, "");
                 return;
             }
@@ -243,14 +243,14 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 //			
 //			if(connectionIdString.equals(conn.getConnectionId())) {
 //				metricDeviceForwardedDisconnctClient.inc();
-//				s_logger.info("New connection detected for {} on another broker.  Stopping the current connection on transport connector: {}.", connectionIdString, tc.getName());
+//				logger.info("New connection detected for {} on another broker.  Stopping the current connection on transport connector: {}.", connectionIdString, tc.getName());
 //				try {
 //					// Include KapuaDuplicateClientIdException to notify the security broker filter
 //					conn.stopAsync(new KapuaDuplicateClientIdException(connectionIdString));;
 //				} 
 //				catch (Exception e) {
 //					metricDeviceForwardedDisconnctClientError.inc();
-//					s_logger.error("Could not stop connection: " + conn.getConnectionId(), e);
+//					logger.error("Could not stop connection: " + conn.getConnectionId(), e);
 //				}
 //				
 //				// assume only one connection since this broker should have already handled any duplicates
@@ -272,7 +272,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage> {
 //			AlertManagerTrusted.create(alertCreator);
 //		} 
 //		catch (KapuaException e) {
-//			s_logger.error("Error during ALERT storage ", e);
+//			logger.error("Error during ALERT storage ", e);
 //		}	
 //	}
 }

@@ -23,9 +23,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class is needed by {@link EdcSecurityBrokerFilter} to handle a vm connection.<br>
- * Indeed this bundle is instantiated during the broker startup then if {@link EdcSecurityBrokerFilter} try to instantiate a connection receive an error from the broker. (the vm factory couldn't reach the broker)
- * Then this class is needed to instantiate only a connection to be useful for the filter when it need ({@link EdcSecurityBrokerFilter#addConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo) add connection} and {@link EdcSecurityBrokerFilter#removeConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo, Throwable) remove connection}).
+ * This class is needed by {@link KapuaSecurityBrokerFilter} to handle a vm connection.<br>
+ * Indeed this bundle is instantiated during the broker startup then if {@link KapuaSecurityBrokerFilter} try to instantiate a connection receive an error from the broker. (the vm factory couldn't reach the broker)
+ * Then this class is needed to instantiate only a connection to be useful for the filter when it need ({@link KapuaSecurityBrokerFilter#addConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo) add connection} and {@link KapuaSecurityBrokerFilter#removeConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo, Throwable) remove connection}).
  *
  * NOTE:
  * with virtual topic support the destinations are removed! The message destination will be coded inside send method!
@@ -35,7 +35,7 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
 	private static Logger s_logger = LoggerFactory.getLogger(JmsAssistantProducerPool.class);
 	
 	public enum DESTINATIONS {
-		EDC_SERVICE,
+		KAPUA_SERVICE,
 		/**
 		 * To be used to send messages without known destination.
 		 * Otherwise the inactive monitor will not be able to remove the destination because it has a producer!
@@ -50,9 +50,9 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
 		s_logger.info("Create pools for broker assistants (amq server instance)");
 		s_logger.info("Create Service pool...");
 		//TODO parameter to be added to configuration
-//		pools.put(DESTINATIONS.EDC_SERVICE, 
+//		pools.put(DESTINATIONS.KAPUA_SERVICE, 
 //				new JmsAssistantProducerPool(new JmsAssistantProducerWrapperFactory(KapuaEnvironmentConfig.getInstance().getString(KapuaEnvironmentConfigKeys.SERVICE_QUEUE_NAME))));
-		pools.put(DESTINATIONS.EDC_SERVICE, 
+		pools.put(DESTINATIONS.KAPUA_SERVICE, 
 				new JmsAssistantProducerPool(new JmsAssistantProducerWrapperFactory("KapuaService")));
 		s_logger.info("Create NoDestination pool...");
 		pools.put(DESTINATIONS.NO_DESTINATION, 
@@ -91,7 +91,7 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
 	public static void closePools() {
 		if (pools!=null) {
 			s_logger.info("Close Service pool...");
-			pools.get(DESTINATIONS.EDC_SERVICE).close();
+			pools.get(DESTINATIONS.KAPUA_SERVICE).close();
 			s_logger.info("Close NoDestination pool...");
 			pools.get(DESTINATIONS.NO_DESTINATION).close();
 			s_logger.info("Close pools... done.");

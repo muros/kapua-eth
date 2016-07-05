@@ -13,7 +13,7 @@ import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
 import org.eclipse.kapua.broker.core.message.CamelUtil;
 import org.eclipse.kapua.broker.core.message.JmsUtil;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
-import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
+import org.eclipse.kapua.broker.core.plugin.AclConstants;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -50,7 +50,7 @@ public class KapuaConverter {
 		if ((Message)message.getJmsMessage() instanceof javax.jms.BytesMessage) {
 			try {
 		        Date queuedOn = new Date(message.getHeader(CamelConstants.JMS_HEADER_TIMESTAMP, Long.class));
-		        KapuaId connectionId = (KapuaId)message.getHeader(KapuaSecurityBrokerFilter.HEADER_KAPUA_CONNECTION_ID);
+		        KapuaId connectionId = (KapuaId)message.getHeader(AclConstants.HEADER_KAPUA_CONNECTION_ID);
 				return JmsUtil.convertToKapuaMessage((byte[])value, CamelUtil.getTopic(message), queuedOn, connectionId);
 			} 
 			catch (JMSException | KapuaInvalidTopicException e) {
