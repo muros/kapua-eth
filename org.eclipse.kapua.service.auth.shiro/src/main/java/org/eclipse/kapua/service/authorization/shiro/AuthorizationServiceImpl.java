@@ -13,8 +13,11 @@
 package org.eclipse.kapua.service.authorization.shiro;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
+import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.Permission;
 
@@ -25,15 +28,27 @@ public class AuthorizationServiceImpl implements AuthorizationService
     public boolean isPermitted(Permission permission)
         throws KapuaException
     {
-        Subject subject = SecurityUtils.getSubject();
-        return subject.isPermitted(permission.toString());
+        boolean isPermitted = true;
+
+        try {
+            checkPermission(permission);
+        }
+        catch (AuthorizationException e) {
+            isPermitted = false;
+        }
+
+        return isPermitted;
     }
 
     @Override
     public void checkPermission(Permission permission)
         throws KapuaException
     {
-        Subject subject = SecurityUtils.getSubject();
-        subject.checkPermission(permission.toString());
+        KapuaSession session = KapuaSecurityUtils.getSession();
+
+        if (!session.isTrustwedMode()) {
+            Subject subject = SecurityUtils.getSubject();
+            subject.checkPermission(permission.toString());
+        }
     }
 }

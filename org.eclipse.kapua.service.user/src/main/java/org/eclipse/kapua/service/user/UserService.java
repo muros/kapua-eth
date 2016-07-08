@@ -24,7 +24,7 @@ import org.eclipse.kapua.service.KapuaUpdatableEntityService;
  * It includes APIs to create, update, find, list and delete Users.
  * Instances of the UserService can be acquired through the ServiceLocator.
  */
-public interface UserService extends KapuaEntityService<User, UserCreator, UserListResult>,
+public interface UserService extends KapuaEntityService<User, UserCreator>,
                              KapuaUpdatableEntityService<User>,
                              KapuaNamedEntityService<User>
 {
@@ -52,21 +52,6 @@ public interface UserService extends KapuaEntityService<User, UserCreator, UserL
      */
     public User update(User user)
         throws KapuaException;
-
-    /**
-     * Updates an User in the database and returns the refreshed/reloaded entity instance.
-     * The returned User object does not have its access information, roles and permissions, loaded.
-     * There are a limited updatable fields list - It is used when a user has only the self:magae rights
-     * Warning... this method check only for the self:manage rights so if a user has the user:manage rights this method prevent him to update his data.
-     * In that case use the full update method!
-     * 
-     * @param user
-     *            to be update
-     * @return
-     * @throws KapuaException
-     *             public User updateSelfManage(User user)
-     *             throws KapuaException;
-     */
 
     /**
      * Delete the supplied User.

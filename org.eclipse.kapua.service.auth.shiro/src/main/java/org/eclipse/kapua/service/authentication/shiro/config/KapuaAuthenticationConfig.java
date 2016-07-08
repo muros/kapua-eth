@@ -13,9 +13,9 @@
 package org.eclipse.kapua.service.authentication.shiro.config;
 
 import org.apache.commons.configuration.Configuration;
-import org.eclipse.kapua.commons.config.AbstractKapuaConfig;
+import org.eclipse.kapua.commons.setting.AbstractKapuaSettings;
 
-public class KapuaAuthenticationConfig extends AbstractKapuaConfig<KapuaAuthenticationConfigKeys>
+public class KapuaAuthenticationConfig extends AbstractKapuaSettings<KapuaAuthenticationConfigKeys>
 {
     private static final KapuaAuthenticationConfig instance;
     static {

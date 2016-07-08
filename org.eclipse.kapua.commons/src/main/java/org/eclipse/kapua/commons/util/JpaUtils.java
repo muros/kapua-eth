@@ -32,8 +32,8 @@ import org.eclipse.kapua.KapuaDuplicateNameException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalNullArgumentException;
 import org.eclipse.kapua.KapuaOptimisticLockingException;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
+import org.eclipse.kapua.commons.setting.system.SystemSetting;
+import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
 import org.slf4j.Logger;
@@ -59,23 +59,23 @@ public class JpaUtils
         // Initialize the EntityManagerFactory
         try {
 
-            KapuaEnvironmentConfig config = KapuaEnvironmentConfig.getInstance();
-            String dbUrl = config.get(String.class, KapuaEnvironmentConfigKeys.DB_URL);
+            SystemSetting config = SystemSetting.getInstance();
+            String dbUrl = config.get(String.class, SystemSettingKey.DB_URL);
             dbUrl = dbUrl + "?useTimezone=true&useLegacyDatetimeCode=false&serverTimezone=UTC&characterEncoding=UTF-8";
 
             Map<String, Object> configOverrides = new HashMap<String, Object>();
             configOverrides.put("javax.persistence.spi.PersistenceProvider", "org.hibernate.jpa.HibernatePersistenceProvider");
             configOverrides.put("hibernate.connection.url", dbUrl);
-            configOverrides.put("hibernate.connection.username", config.getString(KapuaEnvironmentConfigKeys.DB_USERNAME));
-            configOverrides.put("hibernate.connection.password", config.getString(KapuaEnvironmentConfigKeys.DB_PASSWORD));
+            configOverrides.put("hibernate.connection.username", config.getString(SystemSettingKey.DB_USERNAME));
+            configOverrides.put("hibernate.connection.password", config.getString(SystemSettingKey.DB_PASSWORD));
             configOverrides.put("hibernate.c3p0.dataSourceName", DATASOURCE_NAME);
-            configOverrides.put("hibernate.c3p0.min_size", config.getInt(KapuaEnvironmentConfigKeys.DB_MIN_SIZE));
-            configOverrides.put("hibernate.c3p0.max_size", config.getInt(KapuaEnvironmentConfigKeys.DB_MAX_SIZE));
-            configOverrides.put("hibernate.c3p0.acquire_increment", config.getString(KapuaEnvironmentConfigKeys.DB_INCREMENT));
-            configOverrides.put("hibernate.c3p0.timeout", config.getInt(KapuaEnvironmentConfigKeys.DB_TIMEOUT));
+            configOverrides.put("hibernate.c3p0.min_size", config.getInt(SystemSettingKey.DB_MIN_SIZE));
+            configOverrides.put("hibernate.c3p0.max_size", config.getInt(SystemSettingKey.DB_MAX_SIZE));
+            configOverrides.put("hibernate.c3p0.acquire_increment", config.getString(SystemSettingKey.DB_INCREMENT));
+            configOverrides.put("hibernate.c3p0.timeout", config.getInt(SystemSettingKey.DB_TIMEOUT));
             configOverrides.put("hibernate.connection.zeroDateTimeBehavior", "convertToNull");
 
-            if (config.getBoolean(KapuaEnvironmentConfigKeys.OSGI_CONTEXT)) {
+            if (config.getBoolean(SystemSettingKey.OSGI_CONTEXT)) {
                 // OSGi JPA
                 // Could get this by wiring up OsgiTestBundleActivator as well.
                 org.osgi.framework.Bundle thisBundle = org.osgi.framework.FrameworkUtil.getBundle(JpaUtils.class);

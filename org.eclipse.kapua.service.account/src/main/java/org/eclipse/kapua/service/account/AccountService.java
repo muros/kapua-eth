@@ -24,7 +24,7 @@ import org.eclipse.kapua.service.config.KapuaConfigurableService;
  * Instances of the AccountService can be acquired through the ServiceLocator object.
  * 
  */
-public interface AccountService extends KapuaEntityService<Account, AccountCreator, AccountListResult>,
+public interface AccountService extends KapuaEntityService<Account, AccountCreator>,
                                 KapuaUpdatableEntityService<Account>,
                                 KapuaNamedEntityService<Account>,
                                 KapuaConfigurableService

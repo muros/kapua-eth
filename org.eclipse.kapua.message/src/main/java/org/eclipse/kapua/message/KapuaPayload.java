@@ -28,13 +28,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.eclipse.kapua.message.KapuaPayload;
-import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.message.protobuf.KapuaPayloadProto;
 import org.eclipse.kapua.message.util.GZIPUtils;
 import org.eclipse.kapua.message.xml.KapuaMetricsMapAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -50,32 +48,33 @@ import com.google.protobuf.InvalidProtocolBufferException;
  * <ul>
  * <li>sentOn: it is the timestamp when the data was captured and sent to the Everyware Cloud platform.
  * <li>metrics: a metric is a data structure composed of the name, a value, and the type of the value.
- *     When used with the REST API valid metric types are: string, double, int, float, long, boolean, base64Binary.
- *     Data exposed into the payload metrics can be processed through the real-time rules offered by the
- *     Everyware Cloud platform or used as query criteria when searching for messages through the messages/searchByMetric API.
- *     Each payload can have zero or more metrics.
- * <li>position: it is an optional field  used to capture a geo position associated to this payload.
+ * When used with the REST API valid metric types are: string, double, int, float, long, boolean, base64Binary.
+ * Data exposed into the payload metrics can be processed through the real-time rules offered by the
+ * Everyware Cloud platform or used as query criteria when searching for messages through the messages/searchByMetric API.
+ * Each payload can have zero or more metrics.
+ * <li>position: it is an optional field used to capture a geo position associated to this payload.
  * <li>body: it is an optional part of the payload that allows additional information to be transmitted in any format determined by the user.
  * This field will be stored into the platform database, but the Everyware Cloud cannot apply any statistical analysis on it.
  * </ul>
  */
-@XmlRootElement(name="payload")
+@XmlRootElement(name = "payload")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class KapuaPayload {
+public class KapuaPayload
+{
 
     private static final Logger s_logger = LoggerFactory.getLogger(KapuaPayload.class);
 
     /**
      * Timestamp when the data was captured and sent to the Everyware Cloud platform.
      */
-    @XmlElement(name="sentOn")
-    private Date      timestamp;
+    @XmlElement(name = "sentOn")
+    private Date                timestamp;
 
     /**
      * It is an optional field used to capture a geo position associated to this payload.
      */
-    @XmlElement(name="position")
-    private KapuaPosition     position;
+    @XmlElement(name = "position")
+    private KapuaPosition       position;
 
     /**
      * A metric is a data structure composed of the name, a value, and the type of the value.
@@ -84,88 +83,113 @@ public class KapuaPayload {
      * Everyware Cloud platform or used a query criteria when searching for messages through the messages/searchByMetric API.
      * Each payload can have zero or more metrics.
      */
-    @XmlElement(name="metrics")
+    @XmlElement(name = "metrics")
     @XmlJavaTypeAdapter(KapuaMetricsMapAdapter.class)
-    private Map<String,Object> metrics;
+    private Map<String, Object> metrics;
 
     /**
      * It is an optional part of the payload that allows additional information to be transmitted in any format determined by the user.
      * This field will be stored into the platform database but the Everyware Cloud cannot apply any statistical analysis on it.
      */
-    @XmlElement(name="body")
+    @XmlElement(name = "body")
     @XmlInlineBinaryData
-    private byte[]             body;
+    private byte[]              body;
 
     @XmlTransient
-    private byte[]             rawBytes;
+    private byte[]              rawBytes;
 
-    public KapuaPayload() {
-        metrics       = new HashMap<String,Object>();
-        this.body     = null;
+    public KapuaPayload()
+    {
+        metrics = new HashMap<String, Object>();
+        this.body = null;
         this.rawBytes = null;
     }
 
-    public Date getTimestamp() {
+    public KapuaPayload(KapuaPayload kapuaPayload)
+    {
+        this();
+
+        for (String name : kapuaPayload.metricNames()) {
+            addMetric(name, kapuaPayload.getMetric(name));
+        }
+        setBody(kapuaPayload.getBody());
+    }
+
+    public Date getTimestamp()
+    {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Date timestamp)
+    {
         invalidateRawBytes();
         this.timestamp = timestamp;
     }
 
-    public KapuaPosition getPosition() {
+    public KapuaPosition getPosition()
+    {
         return position;
     }
 
-    public KapuaPayload setPosition(KapuaPosition position) {
+    public KapuaPayload setPosition(KapuaPosition position)
+    {
         invalidateRawBytes();
         this.position = position;
         return this;
     }
 
-    public Object getMetric(String name) {
+    public Object getMetric(String name)
+    {
         return metrics.get(name);
     }
 
-    public void addMetric(String name, Object value) {
+    public void addMetric(String name, Object value)
+    {
         invalidateRawBytes();
         metrics.put(name, value);
     }
 
-    public void removeMetric(String name) {
+    public void removeMetric(String name)
+    {
         invalidateRawBytes();
         metrics.remove(name);
     }
 
-    public void removeAllMetrics() {
+    public void removeAllMetrics()
+    {
         invalidateRawBytes();
         metrics.clear();
     }
 
-    public Set<String> metricNames() {
+    public Set<String> metricNames()
+    {
         return Collections.unmodifiableSet(metrics.keySet());
     }
 
-    public Iterator<String> metricsIterator() {
+    public Iterator<String> metricsIterator()
+    {
         return metrics.keySet().iterator();
     }
 
-    public Map<String,Object> metrics() {
+    public Map<String, Object> metrics()
+    {
         return Collections.unmodifiableMap(metrics);
     }
 
-    public byte[] getBody() {
+    public byte[] getBody()
+    {
         return body;
     }
 
-    public void setBody(byte[] body) {
+    public void setBody(byte[] body)
+    {
         invalidateRawBytes();
         this.body = body;
     }
 
     public static KapuaPayload buildFromByteArray(byte[] bytes)
-    throws KapuaInvalidMessageException, IOException {
+        throws KapuaInvalidMessageException, IOException
+    {
         return buildFromByteArray(bytes, null);
     }
 
@@ -178,13 +202,15 @@ public class KapuaPayload {
      * @throws IOException
      */
     public static KapuaPayload buildFromByteArray(byte[] bytes, String jmsTopic)
-    throws KapuaInvalidMessageException, IOException {
+        throws KapuaInvalidMessageException, IOException
+    {
         // Check if a compressed payload and try to decompress it
         if (GZIPUtils.isCompressed(bytes)) {
             try {
                 bytes = GZIPUtils.decompress(bytes);
-            } catch (IOException e) {
-                s_logger.info("Decompression failed! Topic was: {} - message size: {}", new Object[] {jmsTopic, bytes.length}, e);
+            }
+            catch (IOException e) {
+                s_logger.info("Decompression failed! Topic was: {} - message size: {}", new Object[] { jmsTopic, bytes.length }, e);
             }
         }
 
@@ -192,13 +218,14 @@ public class KapuaPayload {
         KapuaPayloadProto.KapuaPayload protoMsg = null;
         try {
             protoMsg = KapuaPayloadProto.KapuaPayload.parseFrom(bytes);
-        } catch (InvalidProtocolBufferException ipbe) {
+        }
+        catch (InvalidProtocolBufferException ipbe) {
             throw new KapuaInvalidMessageException(ipbe);
         }
 
         // build the EdcPayload
         KapuaPayload edcPayload = new KapuaPayload();
-        edcPayload.rawBytes   = bytes;
+        edcPayload.rawBytes = bytes;
 
         // set the timestamp
         if (protoMsg.hasTimestamp()) {
@@ -211,13 +238,14 @@ public class KapuaPayload {
         }
 
         // set the metrics
-        for (int i=0; i<protoMsg.getMetricCount(); i++) {
-            String name  = protoMsg.getMetric(i).getName();
+        for (int i = 0; i < protoMsg.getMetricCount(); i++) {
+            String name = protoMsg.getMetric(i).getName();
             try {
                 Object value = getProtoKapuaMetricValue(protoMsg.getMetric(i),
-                                                      protoMsg.getMetric(i).getType());
+                                                        protoMsg.getMetric(i).getType());
                 edcPayload.addMetric(name, value);
-            } catch (KapuaInvalidMetricTypeException ihte) {
+            }
+            catch (KapuaInvalidMetricTypeException ihte) {
                 s_logger.warn("During deserialization, ignoring metric named: {}. Unrecognized value type: {}.", name, ihte.getValueTypeOrdinal());
             }
         }
@@ -230,13 +258,13 @@ public class KapuaPayload {
         return edcPayload;
     }
 
-
     /**
      * Conversion method to serialize an EdcPayload instance into a byte array.
      *
      * @return
      */
-    public byte[] toByteArray() {
+    public byte[] toByteArray()
+    {
         if (this.rawBytes != null) {
             return rawBytes;
         }
@@ -268,10 +296,12 @@ public class KapuaPayload {
 
                 // add it to the message
                 protoMsg.addMetric(metricB);
-            } catch (KapuaInvalidMetricTypeException eihte) {
+            }
+            catch (KapuaInvalidMetricTypeException eihte) {
                 try {
                     s_logger.error("During serialization, ignoring metric named: {}. Unrecognized value type: {}.", name, value.getClass().getName());
-                } catch(NullPointerException npe) {
+                }
+                catch (NullPointerException npe) {
                     s_logger.error("During serialization, ignoring metric named: {}. The value is null.", name);
                 }
                 throw new RuntimeException(eihte);
@@ -287,8 +317,8 @@ public class KapuaPayload {
         return this.rawBytes;
     }
 
-
-    public String toDisplayString() {
+    public String toDisplayString()
+    {
         StringBuilder sb = new StringBuilder();
         Iterator<String> hdrIterator = metricsIterator();
         while (hdrIterator.hasNext()) {
@@ -296,20 +326,26 @@ public class KapuaPayload {
             Object hdrValue = getMetric(hdrName);
             String hdrValueString = "";
             Class<?> type = hdrValue.getClass();
-            if(type == Float.class) {
-                hdrValueString = Float.toString((Float)hdrValue);
-            } else if(type == Double.class) {
-                hdrValueString = Double.toString((Double)hdrValue);
-            } else if(type == Integer.class) {
-                hdrValueString = Integer.toString((Integer)hdrValue);
-            } else if(type == Long.class) {
-                hdrValueString = Long.toString((Long)hdrValue);
-            } else if(type == Boolean.class) {
-                hdrValueString = Boolean.toString((Boolean)hdrValue);
-            } else if(type == String.class) {
-                hdrValueString = (String)hdrValue;
-            } else if(type == byte[].class) {
-                hdrValueString = byteArrayToHexString((byte[])hdrValue);
+            if (type == Float.class) {
+                hdrValueString = Float.toString((Float) hdrValue);
+            }
+            else if (type == Double.class) {
+                hdrValueString = Double.toString((Double) hdrValue);
+            }
+            else if (type == Integer.class) {
+                hdrValueString = Integer.toString((Integer) hdrValue);
+            }
+            else if (type == Long.class) {
+                hdrValueString = Long.toString((Long) hdrValue);
+            }
+            else if (type == Boolean.class) {
+                hdrValueString = Boolean.toString((Boolean) hdrValue);
+            }
+            else if (type == String.class) {
+                hdrValueString = (String) hdrValue;
+            }
+            else if (type == byte[].class) {
+                hdrValueString = byteArrayToHexString((byte[]) hdrValue);
             }
             sb.append(hdrName);
             sb.append("=");
@@ -320,9 +356,9 @@ public class KapuaPayload {
             }
         }
 
-        if(position != null) {
+        if (position != null) {
             String pos = position.toDisplayString();
-            if(pos != null) {
+            if (pos != null) {
                 sb.append("~~").append(pos);
             }
         }
@@ -330,84 +366,92 @@ public class KapuaPayload {
         return sb.toString();
     }
 
-
     //
     // Helper methods to convert the EdcMetrics
     //
 
-    private void invalidateRawBytes() {
+    private void invalidateRawBytes()
+    {
         this.rawBytes = null;
     }
 
-
     private static void setProtoKapuaMetricValue(KapuaPayloadProto.KapuaPayload.KapuaMetric.Builder metric,
-            Object o)
-    throws KapuaInvalidMetricTypeException {
+                                                 Object o)
+        throws KapuaInvalidMetricTypeException
+    {
 
         if (o instanceof String) {
             metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.STRING);
-            metric.setStringValue((String)o);
-        } else if (o instanceof Double) {
+            metric.setStringValue((String) o);
+        }
+        else if (o instanceof Double) {
             metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.DOUBLE);
-            metric.setDoubleValue((Double)o);
-        } else if (o instanceof Integer) {
+            metric.setDoubleValue((Double) o);
+        }
+        else if (o instanceof Integer) {
             metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.INT32);
-            metric.setIntValue((Integer)o);
-        } else if (o instanceof Float) {
+            metric.setIntValue((Integer) o);
+        }
+        else if (o instanceof Float) {
             metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.FLOAT);
-            metric.setFloatValue((Float)o);
-        } else if (o instanceof Long) {
+            metric.setFloatValue((Float) o);
+        }
+        else if (o instanceof Long) {
             metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.INT64);
-            metric.setLongValue((Long)o);
-        } else if (o instanceof Boolean) {
+            metric.setLongValue((Long) o);
+        }
+        else if (o instanceof Boolean) {
             metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.BOOL);
-            metric.setBoolValue((Boolean)o);
-        } else if (o instanceof byte[]) {
+            metric.setBoolValue((Boolean) o);
+        }
+        else if (o instanceof byte[]) {
             metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.BYTES);
-            metric.setBytesValue(ByteString.copyFrom((byte[])o));
-        } else if (o == null) {
+            metric.setBytesValue(ByteString.copyFrom((byte[]) o));
+        }
+        else if (o == null) {
             throw new KapuaInvalidMetricTypeException("null value");
-        } else {
+        }
+        else {
             throw new KapuaInvalidMetricTypeException(o.getClass().getName());
         }
     }
 
-
     private static Object getProtoKapuaMetricValue(KapuaPayloadProto.KapuaPayload.KapuaMetric metric,
-            KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType type)
-    throws KapuaInvalidMetricTypeException {
+                                                   KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType type)
+        throws KapuaInvalidMetricTypeException
+    {
         switch (type) {
 
-        case DOUBLE:
-            return metric.getDoubleValue();
+            case DOUBLE:
+                return metric.getDoubleValue();
 
-        case FLOAT:
-            return metric.getFloatValue();
+            case FLOAT:
+                return metric.getFloatValue();
 
-        case INT64:
-            return metric.getLongValue();
+            case INT64:
+                return metric.getLongValue();
 
-        case INT32:
-            return metric.getIntValue();
+            case INT32:
+                return metric.getIntValue();
 
-        case BOOL:
-            return metric.getBoolValue();
+            case BOOL:
+                return metric.getBoolValue();
 
-        case STRING:
-            return metric.getStringValue();
+            case STRING:
+                return metric.getStringValue();
 
-        case BYTES:
-            ByteString bs = metric.getBytesValue();
-            return bs.toByteArray();
+            case BYTES:
+                ByteString bs = metric.getBytesValue();
+                return bs.toByteArray();
 
-        default:
-            throw new KapuaInvalidMetricTypeException(type.ordinal());
+            default:
+                throw new KapuaInvalidMetricTypeException(type.ordinal());
         }
 
     }
 
-
-    private String byteArrayToHexString(byte[] b) {
+    private String byteArrayToHexString(byte[] b)
+    {
         StringBuffer sb = new StringBuffer(b.length * 2);
         for (int i = 0; i < b.length; i++) {
             int v = b[i] & 0xff;

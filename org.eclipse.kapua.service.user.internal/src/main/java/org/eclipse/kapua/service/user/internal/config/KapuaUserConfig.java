@@ -13,9 +13,9 @@
 package org.eclipse.kapua.service.user.internal.config;
 
 import org.apache.commons.configuration.Configuration;
-import org.eclipse.kapua.commons.config.AbstractKapuaConfig;
+import org.eclipse.kapua.commons.setting.AbstractKapuaSettings;
 
-public class KapuaUserConfig extends AbstractKapuaConfig<KapuaUserConfigKeys>
+public class KapuaUserConfig extends AbstractKapuaSettings<KapuaUserConfigKeys>
 {
     private static final KapuaUserConfig instance;
     static {

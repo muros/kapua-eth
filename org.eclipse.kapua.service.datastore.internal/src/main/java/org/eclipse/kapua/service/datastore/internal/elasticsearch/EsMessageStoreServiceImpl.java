@@ -1192,7 +1192,7 @@ public class EsMessageStoreServiceImpl
         Account account = accountService.findByName(accountName);
 
         //TODO add enum for actions
-        Permission permission = permissionFactory.newInstance("data", action.key(), account.getId());
+        Permission permission = permissionFactory.newPermission("data", action.key(), account.getId());
         authorizationService.checkPermission(permission);
     }
 

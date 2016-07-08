@@ -13,7 +13,7 @@
 package org.eclipse.kapua.app.console.config;
 
 import org.apache.commons.configuration.Configuration;
-import org.eclipse.kapua.commons.config.AbstractKapuaConfig;
+import org.eclipse.kapua.commons.setting.AbstractKapuaConfig;
 
 public class ConsoleConfig extends AbstractKapuaConfig<ConsoleConfigKeys>
 {

@@ -25,7 +25,7 @@ import org.eclipse.kapua.model.query.KapuaQuery;
  * @param <E> - Class of the KapuaEntity being managed by this Service
  * @param <C> - Creator Class of the KapuaEntity being managed by this Service
  */
-public interface KapuaEntityService<E extends KapuaEntity, C extends KapuaEntityCreator<E>, L extends KapuaListResult<E>> extends KapuaService
+public interface KapuaEntityService<E extends KapuaEntity, C extends KapuaEntityCreator<E>> extends KapuaService
 {
     public E create(C creator)
         throws KapuaException;
@@ -33,7 +33,7 @@ public interface KapuaEntityService<E extends KapuaEntity, C extends KapuaEntity
     public E find(KapuaId scopeId, KapuaId entityId)
         throws KapuaException;
 
-    public L query(KapuaQuery<E> query)
+    public KapuaListResult<E> query(KapuaQuery<E> query)
         throws KapuaException;
 
     public long count(KapuaQuery<E> query)

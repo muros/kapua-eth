@@ -12,13 +12,14 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.shiro;
 
+import java.util.concurrent.Callable;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.DisabledAccountException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
@@ -27,8 +28,14 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaRuntimeException;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.service.account.Account;
+import org.eclipse.kapua.service.account.AccountService;
+import org.eclipse.kapua.service.authentication.Credential;
+import org.eclipse.kapua.service.authentication.CredentialService;
 import org.eclipse.kapua.service.authentication.shiro.credential.BCryptCredentialsMatcher;
+import org.eclipse.kapua.service.authentication.shiro.credential.KapuaSimpleAuthenticationInfo;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserService;
 import org.eclipse.kapua.service.user.UserStatus;
@@ -72,12 +79,14 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
         // Get Services
         KapuaLocator locator;
         UserService userService;
-        // AccountService accountService;
+        AccountService accountService;
+        CredentialService credentialService;
 
         try {
             locator = KapuaLocator.getInstance();
             userService = locator.getService(UserService.class);
-            // accountService; = locator.getService(AccountService.class);
+            accountService = locator.getService(AccountService.class);
+            credentialService = locator.getService(CredentialService.class);
         }
         catch (KapuaRuntimeException kre) {
             throw new ShiroException("Error while getting services!", kre);
@@ -85,149 +94,80 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
 
         //
         // Get the associated user by name
-        User user = null;
+        final User user;
         try {
-            user = userService.findByName(tokenUsername);
+            user = KapuaSecurityUtils.doPriviledge(new Callable<User>() {
+
+                @Override
+                public User call()
+                    throws Exception
+                {
+                    return userService.findByName(tokenUsername);
+                }
+            });
         }
-        catch (KapuaException ke) {
-            throw new ShiroException("Error while find user!", ke);
+        catch (Exception e) {
+            throw new ShiroException("Error while find user!", e);
         }
 
-        //
         // Check existence
         if (user == null) {
             throw new UnknownAccountException();
         }
 
-        //
         // Check disabled
         if (UserStatus.DISABLED.equals(user.getStatus())) {
             throw new DisabledAccountException();
         }
 
         //
-        // Get the associated account by scopeId
-        // Account account = null;
-        // try {
-        // account = accountService.find(null, user.getScopeId());
-        // }
-        // catch (KapuaException ke) {
-        // throw new ShiroException("Error while find account.", ke);
-        // }
+        // Find account
+        final Account account;
+        try {
+            account = KapuaSecurityUtils.doPriviledge(new Callable<Account>() {
 
-        // //
-        // // Check existence
-        // if (account == null) {
-        // throw new ShiroException("Account(" + user.getScopeId() + ") not found for user: " + user.getId());
-        // }
+                @Override
+                public Account call()
+                    throws Exception
+                {
+                    return accountService.find(user.getScopeId());
+                }
+            });
+        }
+        catch (Exception e) {
+            throw new ShiroException("Error while find account!", e);
+        }
+
+        // Check existence
+        if (account == null) {
+            throw new UnknownAccountException();
+        }
+
+        //
+        // Find credentials
+        Credential credential = null;
+        try {
+            credential = KapuaSecurityUtils.doPriviledge(new Callable<Credential>() {
+
+                @Override
+                public Credential call()
+                    throws Exception
+                {
+                    return credentialService.find(user.getScopeId(),
+                                                  user.getId());
+                }
+            });
+        }
+        catch (Exception e) {
+            throw new ShiroException("Error while find credentials!", e);
+        }
 
         //
         // BuildAuthenticationInfo
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getName(),
-                                                                     user.getPassword(),
-                                                                     getName());
-
-        // try {
-        // ServiceLocator locator = ServiceLocator.getInstance();
-        // AuthorizationService authorizationService = locator.getAuthorizationService();
-        // AccountService accountService = locator.getAccountService();
-        //
-        // // Check the user
-        // User user = authorizationService.findUserByNameWithAccessInfo(username);
-        // if (user == null) {
-        // unknownUser.inc();
-        // throw new UnknownAccountException(username);
-        // }
-        //
-        // // If specified, check @accountName info
-        // Long runAsAccountId = null;
-        // AccountServicePlan runAsAccountServicePlan = null;
-        // if (runAsAccountName != null) {
-        // runAsAccountId = accountService.getAccountId(runAsAccountName);
-        // if (runAsAccountId==null) {
-        // unknownAccount.inc();
-        // throw new KapuaEntityNotFoundException(Account.class, runAsAccountName);
-        // }
-        // runAsAccountServicePlan = accountService.getAccountServicePlanTrusted(runAsAccountId);
-        // }
-        //
-        // if (UserStatus.DISABLED.equals(user.getStatus())) {
-        // disabledUser.inc();
-        // throw new DisabledAccountException(username);
-        // }
-        //
-        // // Load account name from ID
-        // // Load account service plan as a single DAO call (do not load the whole account)
-        // // UserService.isUserLocked(User, ASP.gteLockoutPolicy)
-        // // load account service plan for the user
-        // AccountServicePlan accountServicePlan = accountService.getAccountServicePlanTrusted(user.getAccountId());
-        // UserService userService = ServiceLocator.getInstance().getUserService();
-        // if (userService.isLocked(user, accountServicePlan.getLockoutPolicy())) {
-        // // increment the number of login attempts
-        // UserService us = locator.getUserService();
-        // us.updateLoginInfo(user.getAccountId(),
-        // user.getId(),
-        // user.getStatus(),
-        // user.getLoginOn(),
-        // user.getLoginAttempts() + 1,
-        // user.getLoginAttemptsResetOn(),
-        // user.getLockedOn(),
-        // user.getUnlockOn());
-        // lockedUser.inc();
-        // throw new LockedAccountException(username);
-        // }
-        //
-        // if (!AccountStatus.ENABLED.equals(accountServicePlan.getStatus())) {
-        // String msg = MessageFormat.format("Account {0} disabled for user {1}", accountServicePlan.getAccountId(), username);
-        // disabledAccount.inc();
-        // throw new DisabledAccountException(msg);
-        // }
-        // Date now = new Date();
-        // if (accountServicePlan.getExpirationDate() != null && now.after(accountServicePlan.getExpirationDate())) {
-        // String msg = MessageFormat.format("Account {0} expired for user {1}", accountServicePlan.getAccountId(), username);
-        // expiredAccount.inc();
-        // throw new ExpiredCredentialsException(msg);
-        // }
-        //
-        // // All good
-        // // A User was found and it is enabled.
-        // // Build a SimpleAuthenticationInfo, EdcSession and return it.
-        // EdcSimpleByteSource sbs = null;
-        // if (user.getSalt() != null) {
-        // sbs = new EdcSimpleByteSource(user.getSalt());
-        // }
-        //
-        // // load account name
-        // String accountName = accountService.getAccountName(user.getAccountId());
-        //
-        // // create edc session object
-        // EdcSession edcSession = new EdcSession(user, accountServicePlan, accountName);
-        // if (runAsAccountName != null) {
-        // edcSession.setRunAsAccountId(runAsAccountId);
-        // edcSession.setRunAsAccountName(runAsAccountName);
-        // edcSession.setRunAsAccountServicePlan(runAsAccountServicePlan);
-        // }
-
-        // EdcSimpleAuthenticationInfo should keep: User, AccountServicePlan, accountName
-
-        // edcSession,
-        // user.getId(),
-        // user.getPassword(),
-        // sbs,
-        // getName());
-        // }
-        // catch (AuthenticationException ae) {
-        // s_logger.error("AuthenticationException during doGetAuthenticationInfo", ae);
-        // throw ae;
-        // }
-        // catch (KapuaException ee) {
-        // s_logger.error("EdcException during doGetAuthenticationInfo", ee);
-        // throw new AuthenticationException(ee);
-        // }
-        // catch (Throwable t) {
-        // s_logger.error("Throwable during doGetAuthenticationInfo", t);
-        // throw new AuthenticationException(t);
-        // }
+        KapuaSimpleAuthenticationInfo info = new KapuaSimpleAuthenticationInfo(user,
+                                                                               credential,
+                                                                               account,
+                                                                               getName());
 
         return info;
     }
@@ -250,6 +190,8 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
         // IncorrectCredentialsException ice = null;
         //
 
+        KapuaSimpleAuthenticationInfo kapuaInfo = (KapuaSimpleAuthenticationInfo) info;
+
         super.assertCredentialsMatch(authcToken, info);
 
         //
@@ -266,6 +208,10 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
         // user.setRawPassword(new String(token.getPassword()));
         // }
         Session session = currentSubject.getSession();
+        session.setAttribute("scopeId", kapuaInfo.getUser().getScopeId());
+        session.setAttribute("userScopeId", kapuaInfo.getUser().getScopeId());
+        session.setAttribute("userId", kapuaInfo.getUser().getId());
+
         // session.setAttribute(AuthorizationServiceBean.EDC_SESSION, edcSession);
 
     }

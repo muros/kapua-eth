@@ -69,6 +69,26 @@ import org.eclipse.kapua.model.config.metatype.Toption;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.predicate.KapuaAndPredicate;
 import org.eclipse.kapua.model.query.predicate.KapuaAttributePredicate.Operator;
+import org.eclipse.kapua.service.device.management.bundle.DeviceBundle;
+import org.eclipse.kapua.service.device.management.bundle.DeviceBundleListResult;
+import org.eclipse.kapua.service.device.management.bundle.DeviceBundleManagementService;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
+import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfigParamPassowrd;
+import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
+import org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService;
+import org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentPackage;
+import org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentPackageListResult;
+import org.eclipse.kapua.service.device.management.deploy.DevicePackageBundleInfo;
+import org.eclipse.kapua.service.device.management.deploy.DevicePackageBundleInfoListResult;
+import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshot;
+import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotListResult;
+import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
@@ -90,26 +110,6 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventListResult;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventPredicates;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventQuery;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
-import org.org.eclipse.kapua.service.device.management.bundle.DeviceBundle;
-import org.org.eclipse.kapua.service.device.management.bundle.DeviceBundleListResult;
-import org.org.eclipse.kapua.service.device.management.bundle.DeviceBundleManagementService;
-import org.org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
-import org.org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
-import org.org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
-import org.org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
-import org.org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfigParamPassowrd;
-import org.org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
-import org.org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
-import org.org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
-import org.org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService;
-import org.org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentPackage;
-import org.org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentPackageListResult;
-import org.org.eclipse.kapua.service.device.management.deploy.DevicePackageBundleInfo;
-import org.org.eclipse.kapua.service.device.management.deploy.DevicePackageBundleInfoListResult;
-import org.org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshot;
-import org.org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotListResult;
-import org.org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -752,8 +752,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
         DeviceConfigurationFactory deviceConfigurationManagementFactory = locator.getFactory(DeviceConfigurationFactory.class);
 
         // set name and properties
-        DeviceComponentConfiguration compConfig = deviceConfigurationManagementFactory.newComponentConfigurationInstance();
-        compConfig.setComponentId(gwtCompConfig.getUnescapedComponentId());
+        DeviceComponentConfiguration compConfig = deviceConfigurationManagementFactory.newComponentConfigurationInstance(gwtCompConfig.getUnescapedComponentId());
         compConfig.setComponentName(gwtCompConfig.getUnescapedComponentName());
 
         Map<String, Object> compProps = new HashMap<String, Object>();
@@ -893,7 +892,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                 args[i++] = st.nextToken();
             }
 
-            DeviceCommandInput commandInput = deviceCommandFactory.newInstance();
+            DeviceCommandInput commandInput = deviceCommandFactory.newInputInstance();
             // commandInput.setArguments(gwtCommandInput.getArguments());
             commandInput.setArguments(args);
             // commandInput.setCommand(gwtCommandInput.getCommand());

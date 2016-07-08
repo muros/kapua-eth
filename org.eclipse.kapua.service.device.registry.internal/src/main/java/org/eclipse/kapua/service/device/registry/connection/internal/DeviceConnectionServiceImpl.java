@@ -54,7 +54,7 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-connection", "create", deviceConnectionCreator.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-connection", "create", deviceConnectionCreator.getScopeId()));
 
         //
         // Create the connection
@@ -94,7 +94,7 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-connection", "update", deviceConnection.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-connection", "update", deviceConnection.getScopeId()));
 
         //
         // Do update
@@ -134,7 +134,7 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-connection", "read", scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-connection", "read", scopeId));
 
         //
         // Do find
@@ -193,7 +193,7 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-connection", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-connection", "read", query.getScopeId()));
 
         //
         // Do Query
@@ -226,7 +226,7 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-connection", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-connection", "read", query.getScopeId()));
 
         //
         // Do count
@@ -260,7 +260,7 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-connection", "delete", deviceConnection.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-connection", "delete", deviceConnection.getScopeId()));
 
         //
         // Do delete

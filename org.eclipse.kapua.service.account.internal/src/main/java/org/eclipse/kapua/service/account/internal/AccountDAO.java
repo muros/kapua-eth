@@ -3,12 +3,12 @@ package org.eclipse.kapua.service.account.internal;
 import javax.persistence.EntityManager;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.commons.service.internal.ServiceDAO;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
-import org.eclipse.kapua.service.account.AccountListResult;
 
 public class AccountDAO
 {
@@ -62,10 +62,10 @@ public class AccountDAO
         return ServiceDAO.findByName(em, AccountImpl.class, name);
     }
 
-    public static AccountListResult query(EntityManager em, KapuaQuery<Account> accountQuery)
+    public static KapuaListResultImpl<Account> query(EntityManager em, KapuaQuery<Account> accountQuery)
         throws KapuaException
     {
-        return ServiceDAO.query(em, Account.class, AccountImpl.class, new AccountListResultImpl(), accountQuery);
+        return ServiceDAO.query(em, Account.class, AccountImpl.class, new KapuaListResultImpl<Account>(), accountQuery);
     }
 
     public static long count(EntityManager em, KapuaQuery<Account> accountQuery)

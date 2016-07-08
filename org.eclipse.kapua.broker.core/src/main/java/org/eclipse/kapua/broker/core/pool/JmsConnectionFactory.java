@@ -1,8 +1,8 @@
 package org.eclipse.kapua.broker.core.pool;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
+import org.eclipse.kapua.commons.setting.system.SystemSetting;
+import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.internal.config;
 
-import org.eclipse.kapua.commons.config.KapuaConfigKey;
+import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum KapuaDatastoreConfigKeys implements KapuaConfigKey
+public enum KapuaDatastoreConfigKeys implements SettingKey
 {
 
     ELASTICSEARCH ("datastore.elasticsearch"),

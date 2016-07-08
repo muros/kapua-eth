@@ -26,20 +26,9 @@
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.registry</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.device.call</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-
 
         <!-- -->
         <!-- Internal dependencies -->
@@ -48,7 +37,7 @@
             <artifactId>org.eclipse.kapua.commons</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.device.management.commons</artifactId>
             <version>0.1-SNAPSHOT</version>

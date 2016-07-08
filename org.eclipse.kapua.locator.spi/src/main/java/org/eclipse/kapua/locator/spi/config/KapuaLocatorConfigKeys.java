@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.locator.spi.config;
 
-import org.eclipse.kapua.commons.config.KapuaConfigKey;
+import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum KapuaLocatorConfigKeys implements KapuaConfigKey
+public enum KapuaLocatorConfigKeys implements SettingKey
 {
     LOCATOR_KEY("locator.key");
 

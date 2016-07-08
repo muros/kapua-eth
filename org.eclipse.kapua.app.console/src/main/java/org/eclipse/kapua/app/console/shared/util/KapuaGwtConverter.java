@@ -21,10 +21,10 @@ import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceEvent;
 import org.eclipse.kapua.app.console.shared.model.GwtOrganization;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
 import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
+import org.eclipse.kapua.commons.setting.KapuaEnvironmentConfig;
+import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.query.predicate.KapuaAndPredicate;
 import org.eclipse.kapua.service.account.Account;
@@ -60,9 +60,9 @@ public class KapuaGwtConverter
         String brokerUrlFormat = "%s://%s:%s";
         KapuaEnvironmentConfig envConfig = KapuaEnvironmentConfig.getInstance();
         String brokerURL = String.format(brokerUrlFormat,
-                                         envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_PROTOCOL),
-                                         envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_DNS),
-                                         envConfig.getString(KapuaEnvironmentConfigKeys.BROKER_PORT));
+                                         envConfig.getString(SystemSettingKey.BROKER_PROTOCOL),
+                                         envConfig.getString(SystemSettingKey.BROKER_DNS),
+                                         envConfig.getString(SystemSettingKey.BROKER_PORT));
         gwtAccount.setBrokerURL(brokerURL);
 
         Properties accountProperties = account.getEntityProperties();

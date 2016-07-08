@@ -17,7 +17,7 @@ import java.net.URL;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfiguration;
+import org.eclipse.kapua.commons.setting.EnvironmentConfiguration;
 import org.eclipse.kapua.commons.util.ResourceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class KapuaLocatorConfiguration
             throw new ExceptionInInitializerError(e);
         }
 
-        compositeConfig.addConfiguration(KapuaEnvironmentConfiguration.getConfiguration());
+        compositeConfig.addConfiguration(EnvironmentConfiguration.getConfiguration());
         s_config = compositeConfig;
     }
 

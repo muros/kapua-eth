@@ -17,8 +17,8 @@ import java.util.Map;
 
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
+import org.eclipse.kapua.commons.setting.system.SystemSetting;
+import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

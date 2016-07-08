@@ -38,12 +38,4 @@ public interface User extends KapuaNamedEntity
     public String getPhoneNumber();
 
     public void setPhoneNumber(String phoneNumber);
-
-    public String getPassword();
-
-    public String getSalt();
-
-    public String getRawPassword();
-
-    public void setRawPassword(String rawPassword);
 }

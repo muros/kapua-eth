@@ -13,7 +13,6 @@
 package org.eclipse.kapua.service.authentication;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaService;
 
 /**
@@ -27,14 +26,5 @@ public interface AuthenticationService extends KapuaService
         throws KapuaException;
 
     public void logout()
-        throws KapuaException;
-
-    public KapuaId getCurrentUserId()
-        throws KapuaException;
-
-    public KapuaSession getCurrentSession()
-        throws KapuaException;
-
-    public String cryptCredential(String plainValue)
         throws KapuaException;
 }

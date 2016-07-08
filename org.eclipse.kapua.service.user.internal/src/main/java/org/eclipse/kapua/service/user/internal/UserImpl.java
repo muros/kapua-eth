@@ -51,10 +51,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @Entity(name = "User")
 @Table(name = "usr_user")
 @DynamicUpdate
-// @NamedQueries({
-// @NamedQuery(name = "User.find", query = "SELECT u FROM User u WHERE u.id = :userId"),
-// @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
-// })
 public class UserImpl extends AbstractKapuaNamedEntity implements User
 {
     private static final long serialVersionUID = 4029650117581681503L;

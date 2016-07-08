@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.config;
 
-import org.eclipse.kapua.commons.config.KapuaConfigKey;
+import org.eclipse.kapua.commons.setting.KapuaConfigKey;
 
 public enum ConsoleConfigKeys implements KapuaConfigKey
 {

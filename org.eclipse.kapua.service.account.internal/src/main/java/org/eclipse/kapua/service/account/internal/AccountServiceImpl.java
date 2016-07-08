@@ -21,9 +21,10 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.KapuaIllegalArgumentException;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
+import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.commons.service.config.AbstractKapuaConfigurableService;
+import org.eclipse.kapua.commons.setting.system.SystemSetting;
+import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -73,7 +74,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("account", "create", accountCreator.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("account", "create", accountCreator.getScopeId()));
 
         // Check if the parent account exists
         if (findTrusted(accountCreator.getScopeId()) == null) {
@@ -134,7 +135,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("account", "update", account.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("account", "update", account.getScopeId()));
 
         //
         // Update the Account
@@ -200,7 +201,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("account", action, account.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("account", action, account.getScopeId()));
 
         //
         // Check if it has children
@@ -221,12 +222,12 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             }
 
             // do not allow deletion of the edc admin account
-            KapuaEnvironmentConfig config = KapuaEnvironmentConfig.getInstance();
-            if (config.getString(KapuaEnvironmentConfigKeys.SYS_PROVISION_ACCOUNT_NAME).equals(accountx.getName())) {
+            SystemSetting config = SystemSetting.getInstance();
+            if (config.getString(SystemSettingKey.SYS_PROVISION_ACCOUNT_NAME).equals(accountx.getName())) {
                 throw new KapuaIllegalAccessException(action);
             }
 
-            if (config.getString(KapuaEnvironmentConfigKeys.SYS_ADMIN_ACCOUNT).equals(accountx.getName())) {
+            if (config.getString(SystemSettingKey.SYS_ADMIN_ACCOUNT).equals(accountx.getName())) {
                 throw new KapuaIllegalAccessException(action);
             }
 
@@ -283,7 +284,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("account", "view", accountId));
+        authorizationService.checkPermission(permissionFactory.newPermission("account", "view", accountId));
 
         //
         // Make sure account exists
@@ -307,13 +308,6 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         // Argument Validation
         ArgumentValidator.notEmptyOrNull(name, "name");
 
-        // //
-        // // Check Access
-        // KapuaLocator locator = KapuaLocator.getInstance();
-        // AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
-        // PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        // authorizationService.checkPermission(permissionFactory.newInstance("account", "view", account.getId()));
-
         //
         // Do the find
         Account account = null;
@@ -326,6 +320,15 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         }
         finally {
             JpaUtils.close(em);
+        }
+
+        //
+        // Check Access
+        if (account != null) {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+            PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+            authorizationService.checkPermission(permissionFactory.newPermission("account", "view", account.getId()));
         }
 
         return account;
@@ -361,7 +364,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("account", "view", account.getId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("account", "view", account.getId()));
 
         AccountListResult result = null;
         EntityManager em = JpaUtils.getEntityManager();
@@ -386,7 +389,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
     }
 
     @Override
-    public AccountListResult query(KapuaQuery<Account> query)
+    public KapuaListResultImpl<Account> query(KapuaQuery<Account> query)
         throws KapuaException
     {
         ArgumentValidator.notNull(query, "query");
@@ -397,11 +400,11 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("account", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("account", "read", query.getScopeId()));
 
         //
         // Do count
-        AccountListResult result = null;
+        KapuaListResultImpl<Account> result = null;
         EntityManager em = JpaUtils.getEntityManager();
         try {
             result = AccountDAO.query(em, query);
@@ -428,7 +431,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("account", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("account", "read", query.getScopeId()));
 
         //
         // Do count

@@ -13,9 +13,9 @@
 package org.eclipse.kapua.service.datastore.internal.config;
 
 import org.apache.commons.configuration.Configuration;
-import org.eclipse.kapua.commons.config.AbstractKapuaConfig;
+import org.eclipse.kapua.commons.setting.AbstractKapuaSettings;
 
-public class KapuaDatastoreConfig extends AbstractKapuaConfig<KapuaDatastoreConfigKeys>
+public class KapuaDatastoreConfig extends AbstractKapuaSettings<KapuaDatastoreConfigKeys>
 {
     private static final KapuaDatastoreConfig instance;
     static {

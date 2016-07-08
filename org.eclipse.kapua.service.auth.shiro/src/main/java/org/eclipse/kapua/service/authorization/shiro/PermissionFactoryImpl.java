@@ -24,7 +24,7 @@ import org.eclipse.kapua.service.authorization.PermissionFactory;
 public class PermissionFactoryImpl implements PermissionFactory
 {
     @Override
-    public Permission newInstance(String domain, String action, KapuaId targetScopeId)
+    public Permission newPermission(String domain, String action, KapuaId targetScopeId)
     {
         return new PermissionImpl(domain, action, targetScopeId);
     }

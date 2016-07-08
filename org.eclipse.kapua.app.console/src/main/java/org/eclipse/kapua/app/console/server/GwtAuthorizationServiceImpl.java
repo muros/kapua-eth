@@ -29,9 +29,9 @@ import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
 import org.eclipse.kapua.app.console.shared.service.GwtAuthorizationService;
 import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.setting.KapuaEnvironmentConfig;
+import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
@@ -179,24 +179,24 @@ public class GwtAuthorizationServiceImpl extends KapuaRemoteServiceServlet imple
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
 
-        boolean hasAccountCreate = authorizationService.isPermitted(permissionFactory.newInstance("account", "create", kapuaSession.getScopeId()));
-        boolean hasAccountRead = authorizationService.isPermitted(permissionFactory.newInstance("account", "read", kapuaSession.getScopeId()));
-        boolean hasAccountUpdate = authorizationService.isPermitted(permissionFactory.newInstance("account", "update", kapuaSession.getScopeId()));
-        boolean hasAccountDelete = authorizationService.isPermitted(permissionFactory.newInstance("account", "delete", kapuaSession.getScopeId()));
-        boolean hasAccountAll = authorizationService.isPermitted(permissionFactory.newInstance("account", null, null));
+        boolean hasAccountCreate = authorizationService.isPermitted(permissionFactory.newPermission("account", "create", kapuaSession.getScopeId()));
+        boolean hasAccountRead = authorizationService.isPermitted(permissionFactory.newPermission("account", "read", kapuaSession.getScopeId()));
+        boolean hasAccountUpdate = authorizationService.isPermitted(permissionFactory.newPermission("account", "update", kapuaSession.getScopeId()));
+        boolean hasAccountDelete = authorizationService.isPermitted(permissionFactory.newPermission("account", "delete", kapuaSession.getScopeId()));
+        boolean hasAccountAll = authorizationService.isPermitted(permissionFactory.newPermission("account", null, null));
 
-        boolean hasDeviceCreate = authorizationService.isPermitted(permissionFactory.newInstance("device", "create", kapuaSession.getScopeId()));
-        boolean hasDeviceRead = authorizationService.isPermitted(permissionFactory.newInstance("device", "read", kapuaSession.getScopeId()));
-        boolean hasDeviceUpdate = authorizationService.isPermitted(permissionFactory.newInstance("device", "update", kapuaSession.getScopeId()));
-        boolean hasDeviceDelete = authorizationService.isPermitted(permissionFactory.newInstance("device", "delete", kapuaSession.getScopeId()));
-        boolean hasDeviceManage = authorizationService.isPermitted(permissionFactory.newInstance("device", "manage", kapuaSession.getScopeId()));
+        boolean hasDeviceCreate = authorizationService.isPermitted(permissionFactory.newPermission("device", "create", kapuaSession.getScopeId()));
+        boolean hasDeviceRead = authorizationService.isPermitted(permissionFactory.newPermission("device", "read", kapuaSession.getScopeId()));
+        boolean hasDeviceUpdate = authorizationService.isPermitted(permissionFactory.newPermission("device", "update", kapuaSession.getScopeId()));
+        boolean hasDeviceDelete = authorizationService.isPermitted(permissionFactory.newPermission("device", "delete", kapuaSession.getScopeId()));
+        boolean hasDeviceManage = authorizationService.isPermitted(permissionFactory.newPermission("device", "manage", kapuaSession.getScopeId()));
 
-        boolean hasDataRead = authorizationService.isPermitted(permissionFactory.newInstance("data", "read", kapuaSession.getScopeId()));
+        boolean hasDataRead = authorizationService.isPermitted(permissionFactory.newPermission("data", "read", kapuaSession.getScopeId()));
 
-        boolean hasUserCreate = authorizationService.isPermitted(permissionFactory.newInstance("user", "create", kapuaSession.getScopeId()));
-        boolean hasUserRead = authorizationService.isPermitted(permissionFactory.newInstance("user", "read", kapuaSession.getScopeId()));
-        boolean hasUserUpdate = authorizationService.isPermitted(permissionFactory.newInstance("user", "update", kapuaSession.getScopeId()));
-        boolean hasUserDelete = authorizationService.isPermitted(permissionFactory.newInstance("user", "delete", kapuaSession.getScopeId()));
+        boolean hasUserCreate = authorizationService.isPermitted(permissionFactory.newPermission("user", "create", kapuaSession.getScopeId()));
+        boolean hasUserRead = authorizationService.isPermitted(permissionFactory.newPermission("user", "read", kapuaSession.getScopeId()));
+        boolean hasUserUpdate = authorizationService.isPermitted(permissionFactory.newPermission("user", "update", kapuaSession.getScopeId()));
+        boolean hasUserDelete = authorizationService.isPermitted(permissionFactory.newPermission("user", "delete", kapuaSession.getScopeId()));
 
         //
         // Get account info
@@ -214,9 +214,9 @@ public class GwtAuthorizationServiceImpl extends KapuaRemoteServiceServlet imple
 
         // Console info
         KapuaEnvironmentConfig commonsConfig = KapuaEnvironmentConfig.getInstance();
-        gwtSession.setVersion(commonsConfig.getString(KapuaEnvironmentConfigKeys.VERSION));
-        gwtSession.setBuildVersion(commonsConfig.getString(KapuaEnvironmentConfigKeys.BUILD_VERSION));
-        gwtSession.setBuildNumber(commonsConfig.getString(KapuaEnvironmentConfigKeys.BUILD_NUMBER));
+        gwtSession.setVersion(commonsConfig.getString(SystemSettingKey.VERSION));
+        gwtSession.setBuildVersion(commonsConfig.getString(SystemSettingKey.BUILD_VERSION));
+        gwtSession.setBuildNumber(commonsConfig.getString(SystemSettingKey.BUILD_NUMBER));
 
         // Google Analytics in
         ConsoleConfig consoleConfig = ConsoleConfig.getInstance();

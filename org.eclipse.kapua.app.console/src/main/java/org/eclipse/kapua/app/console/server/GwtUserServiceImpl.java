@@ -67,7 +67,8 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             userCreator.setEmail(gwtUserCreator.getEmail());
             userCreator.setPhoneNumber(gwtUserCreator.getPhoneNumber());
 
-            // create the User
+            //
+            // Create the User
             UserService userService = locator.getService(UserService.class);
             User user = userService.create(userCreator);
 

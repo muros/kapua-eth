@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.permission.shiro;
 
-import org.eclipse.kapua.commons.model.query.AbstractKapuaListResult;
+import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.service.authorization.permission.UserPermission;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionListResult;
 
-public class UserPermissionListResultImpl extends AbstractKapuaListResult<UserPermission> implements UserPermissionListResult
+public class UserPermissionListResultImpl extends KapuaListResultImpl<UserPermission> implements UserPermissionListResult
 {
     private static final long serialVersionUID = 2231053707705207563L;
 }

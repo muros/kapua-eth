@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.shiro.config;
 
-import org.eclipse.kapua.commons.config.KapuaConfigKey;
+import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum KapuaAuthorizationConfigKeys implements KapuaConfigKey
+public enum KapuaAuthorizationConfigKeys implements SettingKey
 {
     AUTHORIZATION_KEY("authorization.key");
 

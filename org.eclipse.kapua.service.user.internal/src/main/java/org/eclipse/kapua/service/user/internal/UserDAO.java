@@ -25,7 +25,7 @@ import org.eclipse.kapua.service.user.UserListResult;
 public class UserDAO extends ServiceDAO
 {
 
-    public static User create(EntityManager em, UserCreator userCreator, String bcryptedPassword)
+    public static User create(EntityManager em, UserCreator userCreator)
         throws KapuaException
     {
         //
@@ -33,7 +33,6 @@ public class UserDAO extends ServiceDAO
         UserImpl userImpl = new UserImpl(userCreator.getScopeId(),
                                          userCreator.getName());
 
-        userImpl.setPassword(bcryptedPassword);
         userImpl.setDisplayName(userCreator.getDisplayName());
         userImpl.setEmail(userCreator.getEmail());
         userImpl.setPhoneNumber(userCreator.getPhoneNumber());

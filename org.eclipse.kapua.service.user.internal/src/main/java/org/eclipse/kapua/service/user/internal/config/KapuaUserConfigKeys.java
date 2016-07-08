@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.user.internal.config;
 
-import org.eclipse.kapua.commons.config.KapuaConfigKey;
+import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum KapuaUserConfigKeys implements KapuaConfigKey
+public enum KapuaUserConfigKeys implements SettingKey
 {
 	USER_KEY("user.key");
 	

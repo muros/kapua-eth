@@ -54,7 +54,7 @@ public class AbstractKapuaConfigurableService implements KapuaConfigurableServic
         KapuaLocator locator = KapuaLocator.getInstance();
 		AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance(this.domain, "read", scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission(this.domain, "read", scopeId));
 		
 		KapuaServiceConfigurationProvider configProvider = locator.getService(KapuaServiceConfigurationProvider.class);
 		ComponentConfiguration compomentConfig = configProvider.getServiceConfiguration(pid);

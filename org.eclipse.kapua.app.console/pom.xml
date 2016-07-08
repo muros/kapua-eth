@@ -73,7 +73,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user.internal</artifactId>
+            <artifactId>org.eclipse.kapua.service.user.proxy</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 

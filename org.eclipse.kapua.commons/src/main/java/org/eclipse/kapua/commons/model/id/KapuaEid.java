@@ -40,11 +40,6 @@ public class KapuaEid implements KapuaId, Serializable
         this.eid = id;
     }
 
-    // public KapuaEid(byte[] byteArray)
-    // {
-    // this(new BigInteger(byteArray));
-    // }
-
     public static KapuaEid parseShortId(String shortId)
     {
         byte[] bytes = Base64.getDecoder().decode(shortId);
@@ -54,11 +49,6 @@ public class KapuaEid implements KapuaId, Serializable
     public BigInteger getId()
     {
         return eid;
-    }
-
-    public String getShortId()
-    {
-        return Base64.getEncoder().withoutPadding().encodeToString(eid.toByteArray());
     }
 
     public String toString()

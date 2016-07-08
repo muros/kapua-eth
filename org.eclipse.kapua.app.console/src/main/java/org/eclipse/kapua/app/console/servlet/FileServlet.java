@@ -39,18 +39,18 @@ import org.eclipse.kapua.KapuaUnauthenticatedException;
 import org.eclipse.kapua.app.console.config.ConsoleConfig;
 import org.eclipse.kapua.app.console.config.ConsoleConfigKeys;
 import org.eclipse.kapua.app.console.server.KapuaRemoteServiceServlet;
-import org.eclipse.kapua.app.console.server.util.XmlUtil;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.model.KapuaFormFields;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
-import org.org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
-import org.org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
-import org.org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
-import org.org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
-import org.org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
+import org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -290,7 +290,7 @@ public class FileServlet extends EdcHttpServlet
             byte[] data = fileItems.size() == 0 ? null : fileItems.get(0).get();
 
             DeviceCommandFactory deviceCommandFactory = locator.getFactory(DeviceCommandFactory.class);
-            DeviceCommandInput commandInput = deviceCommandFactory.newInstance();
+            DeviceCommandInput commandInput = deviceCommandFactory.newInputInstance();
 
             StringTokenizer st = new StringTokenizer(command);
             int count = st.countTokens();

@@ -13,10 +13,14 @@
 package org.eclipse.kapua.model.id;
 
 import java.math.BigInteger;
+import java.util.Base64;
 
 public interface KapuaId
 {
     public BigInteger getId();
 
-    public String getShortId();
+    default public String getShortId()
+    {
+        return Base64.getEncoder().withoutPadding().encodeToString(getId().toByteArray());
+    }
 }

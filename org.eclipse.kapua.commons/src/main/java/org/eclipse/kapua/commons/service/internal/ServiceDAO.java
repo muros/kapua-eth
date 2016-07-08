@@ -343,6 +343,7 @@ public class ServiceDAO
                     binds.put(pl, "%" + attrValue + "%");
                     expr = cb.like((Expression<String>) entityRoot.get(entityType.getSingularAttribute(attrName)), pl);
                     break;
+
                 case STARTS_WITH:
                     ParameterExpression<String> psw = cb.parameter(String.class);
                     binds.put(psw, attrValue + "%");
@@ -352,6 +353,7 @@ public class ServiceDAO
                 case IS_NULL:
                     expr = cb.isNull(entityRoot.get(entityType.getSingularAttribute(attrName)));
                     break;
+
                 case NOT_NULL:
                     expr = cb.isNotNull(entityRoot.get(entityType.getSingularAttribute(attrName)));
                     break;
@@ -359,6 +361,7 @@ public class ServiceDAO
                 case NOT_EQUAL:
                     expr = cb.notEqual(entityRoot.get(entityType.getSingularAttribute(attrName)), attrValue);
                     break;
+
                 default:
                 case EQUAL:
                     expr = cb.equal(entityRoot.get(entityType.getSingularAttribute(attrName)), attrValue);

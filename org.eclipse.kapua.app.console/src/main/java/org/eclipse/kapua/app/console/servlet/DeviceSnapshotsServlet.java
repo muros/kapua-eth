@@ -21,11 +21,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.kapua.app.console.server.util.XmlUtil;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
+import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

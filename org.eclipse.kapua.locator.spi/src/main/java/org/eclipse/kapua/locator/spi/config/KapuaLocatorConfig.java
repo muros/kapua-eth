@@ -13,9 +13,9 @@
 package org.eclipse.kapua.locator.spi.config;
 
 import org.apache.commons.configuration.Configuration;
-import org.eclipse.kapua.commons.config.AbstractKapuaConfig;
+import org.eclipse.kapua.commons.setting.AbstractKapuaSettings;
 
-public class KapuaLocatorConfig extends AbstractKapuaConfig<KapuaLocatorConfigKeys>
+public class KapuaLocatorConfig extends AbstractKapuaSettings<KapuaLocatorConfigKeys>
 {
     private static final KapuaLocatorConfig instance;
     static {

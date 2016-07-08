@@ -37,9 +37,9 @@ import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
 import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfig;
-import org.eclipse.kapua.commons.config.KapuaEnvironmentConfigKeys;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.setting.system.SystemSetting;
+import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
@@ -427,13 +427,13 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 	
                     Context loginCheckAccessTimeContext = metricLoginCheckAccessTime.time();
                     boolean[] hasPermissions = new boolean[]{
-                    		authorizationService.isPermitted(permissionFactory.newInstance("broker", "connect", scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newInstance("device", "manage", scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newInstance("data", "read", scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newInstance("data", "create", scopeId))
+                    		authorizationService.isPermitted(permissionFactory.newPermission("broker", "connect", scopeId)),
+                    		authorizationService.isPermitted(permissionFactory.newPermission("device", "manage", scopeId)),
+                    		authorizationService.isPermitted(permissionFactory.newPermission("data", "read", scopeId)),
+                    		authorizationService.isPermitted(permissionFactory.newPermission("data", "create", scopeId))
                     };
                     if (!hasPermissions[BROKER_CONNECT_IDX]) {
-                        throw new KapuaIllegalAccessException(permissionFactory.newInstance("broker", "connect", scopeId).toString());
+                        throw new KapuaIllegalAccessException(permissionFactory.newPermission("broker", "connect", scopeId).toString());
                     }
                     loginCheckAccessTimeContext.stop();
 
@@ -1111,7 +1111,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     }
     
     private boolean isAdminUser(String user) {
-    	String adminAccount = KapuaEnvironmentConfig.getInstance().getString(KapuaEnvironmentConfigKeys.SYS_ADMIN_ACCOUNT);
+    	String adminAccount = SystemSetting.getInstance().getString(SystemSettingKey.SYS_ADMIN_ACCOUNT);
     	return user.equals(adminAccount);
     }
 

@@ -103,7 +103,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         Account account = accountService.find(scopeId);
 
         // TODO add enum for actions
-        Permission permission = permissionFactory.newInstance("data", action.key(), account.getId());
+        Permission permission = permissionFactory.newPermission("data", action.key(), account.getId());
         authorizationService.checkPermission(permission);
         
         return account.getName();

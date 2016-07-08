@@ -18,7 +18,7 @@ import org.eclipse.kapua.model.id.KapuaId;
 
 public interface PermissionFactory extends KapuaEntityFactory
 {
-    public Permission newInstance(String domain, String action, KapuaId targetScopeId);
+    public Permission newPermission(String domain, String action, KapuaId targetScopeId);
 
     public Permission parseString(String stringPermission)
         throws KapuaException;

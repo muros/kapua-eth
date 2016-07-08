@@ -141,6 +141,7 @@
 
         <module>org.eclipse.kapua.service.user</module>
         <module>org.eclipse.kapua.service.user.internal</module>
+        <module>org.eclipse.kapua.service.user.proxy</module>
 
         <module>org.eclipse.kapua.service.account</module>
         <module>org.eclipse.kapua.service.account.internal</module>
@@ -153,12 +154,18 @@
         <module>org.eclipse.kapua.service.datastore</module>
         <module>org.eclipse.kapua.service.datastore.internal</module>
 
+        <module>org.eclipse.kapua.service.device.call</module>
+        <module>org.eclipse.kapua.service.device.call.mqtt</module>
+
         <module>org.eclipse.kapua.service.device.management.configuration</module>
+        <module>org.eclipse.kapua.service.device.management.configuration.internal</module>
         <module>org.eclipse.kapua.service.device.management.deploy</module>
         <module>org.eclipse.kapua.service.device.management.bundle</module>
+        <module>org.eclipse.kapua.service.device.management.bundle.internal</module>
         <module>org.eclipse.kapua.service.device.management.command</module>
+        <module>org.eclipse.kapua.service.device.management.command.internal</module>
+        <module>org.eclipse.kapua.service.device.management.commons</module>
 
-        <module>org.eclipse.kapua.service.device.call</module>
 
         <module>org.eclipse.kapua.broker.core</module>
         <module>org.eclipse.kapua.broker.jdbc</module>
@@ -166,8 +173,9 @@
 
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
-    <module>org.eclipse.kapua.service.device.management.configuration.internal</module>
-    <module>org.eclipse.kapua.service.device.management.commons</module>
+    <module>org.eclipse.kapua.client</module>
+    <module>org.eclipse.kapua.client.mqtt</module>
+    <module>org.eclipse.kapua.client.pool</module>
   </modules>
 
     <issueManagement>

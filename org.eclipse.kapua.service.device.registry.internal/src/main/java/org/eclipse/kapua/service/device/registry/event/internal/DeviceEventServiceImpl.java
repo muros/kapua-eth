@@ -36,7 +36,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-event", "create", deviceEventCreator.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "create", deviceEventCreator.getScopeId()));
 
         //
         // Create the event
@@ -75,7 +75,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-event", "read", scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "read", scopeId));
 
         //
         // Do find
@@ -108,7 +108,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-event", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "read", query.getScopeId()));
 
         //
         // Do Query
@@ -141,7 +141,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-event", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "read", query.getScopeId()));
 
         //
         // Do count
@@ -175,7 +175,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newInstance("device-event", "delete", deviceEvent.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "delete", deviceEvent.getScopeId()));
 
         //
         // Do delete

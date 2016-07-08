@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account.internal.config;
 
-import org.eclipse.kapua.commons.config.KapuaConfigKey;
+import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum KapuaAccountConfigKeys implements KapuaConfigKey
+public enum KapuaAccountConfigKeys implements SettingKey
 {
 	;
 	

@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account.internal;
 
-import org.eclipse.kapua.commons.model.query.AbstractKapuaListResult;
+import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountListResult;
 
-public class AccountListResultImpl extends AbstractKapuaListResult<Account> implements AccountListResult 
+public class AccountListResultImpl extends KapuaListResultImpl<Account> implements AccountListResult 
 {
 	private static final long serialVersionUID = -5118004898345748297L;
 }
