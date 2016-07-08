@@ -15,7 +15,7 @@ package org.eclipse.kapua.broker.core.listener;
 import org.apache.camel.Exchange;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
-import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
+import org.eclipse.kapua.locator.KapuaLocator;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
@@ -29,8 +29,7 @@ public abstract class AbstractErrorListener<M extends Object> {
 	
 	//metrics
 	private final static String METRIC_COMPONENT_NAME = "listener";
-	//TODO get the metric service through the service locator
-  	private final static MetricsService metricsService = MetricsServiceBean.getInstance();
+  	private final static MetricsService metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
   	
   	protected String name;
 	

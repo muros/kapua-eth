@@ -13,6 +13,7 @@
 package org.eclipse.kapua.broker.core.metrics;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.service.KapuaService;
 
 import com.codahale.metrics.Counter;
 import com.codahale.metrics.Gauge;
@@ -24,7 +25,7 @@ import com.codahale.metrics.Timer;
  * Metric service definition
  *
  */
-public interface MetricsService {
+public interface MetricsService extends KapuaService {
 	
 	/**
 	 * Get a Counter for the specified name. If the counter doesn't exist the method should create a new one counter with the specified name.

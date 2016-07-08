@@ -4,7 +4,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
-import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
+import org.eclipse.kapua.locator.KapuaLocator;
 
 import com.codahale.metrics.Counter;
 
@@ -16,8 +16,7 @@ import com.codahale.metrics.Counter;
 public class KapuaThreadFactory implements ThreadFactory {
 	
 	//metrics
-	//TODO get the metric service through the service locator
-  	private final static MetricsService metricsService = MetricsServiceBean.getInstance();
+  	private final static MetricsService metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
 	private Counter metricThreadCreationRequest;
 
 	private String name;

@@ -222,7 +222,7 @@
 	<camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring" >
 	    <!-- the beans are defined as spring bean so check if it's possible to remove the package scan at all. Remove also the endpoint annotation from the pojo endpoints and all should works. Otherwise send to Dejan a simplified example -->
 		<packageScan>
-		  <package>com.eurotech.cloud</package>
+		  <package>org.ecplise.kapua</package>
 		  <excludes>**.*Excluded*</excludes>
 		  <includes>**.*</includes>
 		</packageScan>

@@ -13,8 +13,8 @@ import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
 import org.eclipse.kapua.broker.core.message.CamelUtil;
 import org.eclipse.kapua.broker.core.message.JmsUtil;
 import org.eclipse.kapua.broker.core.metrics.MetricsService;
-import org.eclipse.kapua.broker.core.metrics.internal.MetricsServiceBean;
-import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
+import org.eclipse.kapua.broker.core.plugin.AclConstants;
+import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.slf4j.Logger;
@@ -28,8 +28,7 @@ public class KapuaConverter {
 	
 	//metrics
 	private final static String METRIC_COMPONENT_NAME = "converter";
-	//TODO get the metric service through the service locator
-  	private final static MetricsService metricsService = MetricsServiceBean.getInstance();
+  	private final static MetricsService metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
 	
 	private Counter metricConverterJmsMessage;
 	private Counter metricConverterJmsErrorMessage;
@@ -51,7 +50,7 @@ public class KapuaConverter {
 		if ((Message)message.getJmsMessage() instanceof javax.jms.BytesMessage) {
 			try {
 		        Date queuedOn = new Date(message.getHeader(CamelConstants.JMS_HEADER_TIMESTAMP, Long.class));
-		        KapuaId connectionId = (KapuaId)message.getHeader(KapuaSecurityBrokerFilter.HEADER_KAPUA_CONNECTION_ID);
+		        KapuaId connectionId = (KapuaId)message.getHeader(AclConstants.HEADER_KAPUA_CONNECTION_ID);
 				return JmsUtil.convertToKapuaMessage((byte[])value, CamelUtil.getTopic(message), queuedOn, connectionId);
 			} 
 			catch (JMSException | KapuaInvalidTopicException e) {

@@ -30,25 +30,21 @@ import org.slf4j.LoggerFactory;
  * Is called by amq broker by configuring plugin tag inside broker tag into activemq.xml
  * 
  * <plugins>
- *     <bean xmlns="http://www.springframework.org/schema/beans" id="edcFilter" class="com.eurotech.cloud.broker.EdcBrokerPlugin"/>  
+ *     <bean xmlns="http://www.springframework.org/schema/beans" id="kapuaFilter" class="org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter"/>  
  * </plugins>
  *
  */
 public class KapuaBrokerSecurityPlugin implements BrokerPlugin 
 {	        
-	private static Logger s_logger = LoggerFactory.getLogger(KapuaBrokerSecurityPlugin.class);
+	private static Logger logger = LoggerFactory.getLogger(KapuaBrokerSecurityPlugin.class);
 	
 	public KapuaBrokerSecurityPlugin() {
 	}
 	
     public Broker installPlugin(Broker broker) throws Exception 
-    {            
-    	s_logger.info(">> installPlugin {}", KapuaBrokerSecurityPlugin.class.getName());
+    {
+    	logger.info(">> installPlugin {}", KapuaBrokerSecurityPlugin.class.getName());
         try {
-        	ClassLoader currentThreadClassLoader = Thread.currentThread().getContextClassLoader();
-        	ClassLoader classClassloader = this.getClass().getClassLoader();
-        	Thread.currentThread().setContextClassLoader(classClassloader);
-
         	//initialize shiro context for broker plugin from shiro ini file
             URL shiroIniUrl = getClass().getResource("/shiro.ini");
             String shiroIniStr = ResourceUtils.readResource(shiroIniUrl);
@@ -61,12 +57,10 @@ public class KapuaBrokerSecurityPlugin implements BrokerPlugin
   	      	
       		// install the filters
       		broker = new KapuaSecurityBrokerFilter(broker);
-      		
-//      		Thread.currentThread().setContextClassLoader(currentThreadClassLoader);
             return broker;
         }
         catch (Throwable t) {
-        	s_logger.error("Error in plugin installation.", t);
+        	logger.error("Error in plugin installation.", t);
         	throw (SecurityException) new SecurityException(t);
         }
     }

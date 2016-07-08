@@ -31,7 +31,7 @@ public class KapuaPrincipal implements Principal, java.io.Serializable {
     private ConnectionId connectionId;
 
     /**
-     * Create a EdcPrincipal with the supplied name.
+     * Create a KapuaPrincipal with the supplied name.
      */
     public KapuaPrincipal(String username, Long accountId, String clientId, String clientIp, ConnectionId connectionId) {
     	this.username     = username;

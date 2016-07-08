@@ -23,7 +23,7 @@ import javax.jms.JMSException;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.eclipse.kapua.broker.core.message.Constants;
 import org.eclipse.kapua.broker.core.message.JmsUtil;
-import org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter;
+import org.eclipse.kapua.broker.core.plugin.AclConstants;
 import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
@@ -59,7 +59,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		BytesMessage message = session.createBytesMessage();
 		
 		String topic = buildNetworkConnectMessage(message, accountName, userName, userId, clientId, nodeId, remoteAddress);
-		Destination destination = session.createTopic(MessageFormat.format(KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX_TEMPLATE, topic));
+		Destination destination = session.createTopic(MessageFormat.format(AclConstants.VT_TOPIC_PREFIX_TEMPLATE, topic));
 
 		producer.send(destination, message);
 	}
@@ -69,7 +69,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		BytesMessage message = session.createBytesMessage();
 		
 		String topic = buildNetworkDisconnectMessage(message, accountName, userName, null, clientId, remoteAddress);
-		Destination destination = session.createTopic(MessageFormat.format(KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX_TEMPLATE, topic));
+		Destination destination = session.createTopic(MessageFormat.format(AclConstants.VT_TOPIC_PREFIX_TEMPLATE, topic));
 		
 		producer.send(destination, message);
 	}
@@ -79,7 +79,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 		BytesMessage message = session.createBytesMessage();
 		
 		String topic = buildNetworkMissingMessage(message, accountName, userName, null, clientId, remoteAddress);
-		Destination destination = session.createTopic(MessageFormat.format(KapuaSecurityBrokerFilter.VT_TOPIC_PREFIX_TEMPLATE, topic));
+		Destination destination = session.createTopic(MessageFormat.format(AclConstants.VT_TOPIC_PREFIX_TEMPLATE, topic));
 
 		producer.send(destination, message);
 	}
@@ -179,7 +179,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	}
 	
 	//==========================================================
-	//Messages to be send into the internal EDC_SERVICE queue
+	//Messages to be send into the internal KAPUA_SERVICE queue
 	//==========================================================
 	
 	/**
@@ -210,7 +210,7 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper {
 	}
 	
 	/**
-	 * Prepare the update login info message (this message will be send to the internal EDC_SERVICE queue)
+	 * Prepare the update login info message (this message will be send to the internal KAPUA_SERVICE queue)
 	 * The topic used for the instantiation of the KapuaTopic it's different (MQTT wildcards) from the topic used to set the property PROPERTY_TOPIC_ORIG
 	 * @param byteMessage
 	 * @param accountName

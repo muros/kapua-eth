@@ -39,6 +39,24 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
+						<Service-Component>
+							OSGI-INF/accountService.xml,
+							OSGI-INF/authenticationService.xml,
+							OSGI-INF/authorizationService.xml,
+							OSGI-INF/deviceConnectionFactoryService.xml,
+							OSGI-INF/deviceConnectionService.xml,
+							OSGI-INF/deviceEventService.xml,
+							OSGI-INF/deviceEventFactoryService.xml,
+							OSGI-INF/deviceFactoryService.xml,
+							OSGI-INF/deviceLifeCycleService.xml,
+							OSGI-INF/deviceRegistryService.xml,
+							OSGI-INF/metricService.xml,
+							OSGI-INF/permissionFactoryService.xml,
+							OSGI-INF/usernamePasswordTokenFactoryService.xml,
+							OSGI-INF/userPermissionService.xml,
+							OSGI-INF/userPermissionFactoryService.xml,
+							OSGI-INF/userService.xml
+						</Service-Component>
 						<Embed-Transitive>true</Embed-Transitive> 
 						<Embed-Dependency>
 							com.google.protobuf|protobuf-java;
@@ -66,6 +84,8 @@
 							org.eclipse.kapua.broker.core,
 							org.eclipse.kapua.broker.core.converter,
 							org.eclipse.kapua.broker.core.listener,
+							org.eclipse.kapua.broker.core.metrics,
+							org.eclipse.kapua.broker.core.metrics.internal,
 							org.eclipse.kapua.broker.core.plugin,
 							org.eclipse.kapua.broker.core.threadfactory
 						</Export-Package>
@@ -262,6 +282,13 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-bindy</artifactId>
             <version>${camel.version}</version>
+        </dependency>
+        <!-- OSGI -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>4.3.1</version>
+            <scope>provided</scope>
         </dependency>
         <!-- misc -->
         <dependency>

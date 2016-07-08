@@ -30,29 +30,15 @@ import com.codahale.metrics.Timer;
  * It provides methods for register/unregister metric in the context
  *
  */
-public class MetricsServiceBean implements MetricsService {
+public class MetricsServiceImpl implements MetricsService {
 		
-	private static Logger logger = LoggerFactory.getLogger(MetricsServiceBean.class);
+	private static Logger logger = LoggerFactory.getLogger(MetricsServiceImpl.class);
 	
 	public final static String METRICS_NAME_FORMAT = "{0}.{1}.{2}";
-	private final static Object monitor = new Object();
-
-	private static MetricsServiceBean instance;
 	
 	private final MetricRegistry metricRegistry;
 
-	public static MetricsService getInstance() {
-		if (instance==null) {
-			synchronized (monitor) {
-				if (instance==null) {
-					instance = new MetricsServiceBean();
-				}
-			}
-		}
-		return instance;
-	}
-	
-	private MetricsServiceBean() {
+	public MetricsServiceImpl() {
 		 metricRegistry = new MetricRegistry();
 	}
 	
