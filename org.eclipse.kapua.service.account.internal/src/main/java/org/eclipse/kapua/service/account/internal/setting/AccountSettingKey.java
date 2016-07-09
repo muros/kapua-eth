@@ -10,17 +10,17 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.account.internal.config;
+package org.eclipse.kapua.service.account.internal.setting;
 
 import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum KapuaAccountConfigKeys implements SettingKey
+public enum AccountSettingKey implements SettingKey
 {
 	;
 	
 	private String key;
 	
-	private KapuaAccountConfigKeys(String key) {
+	private AccountSettingKey(String key) {
 		this.key = key;
 	}
 	

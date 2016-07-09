@@ -10,24 +10,23 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.account.internal.config;
+package org.eclipse.kapua.service.account.internal.setting;
 
-import org.apache.commons.configuration.Configuration;
 import org.eclipse.kapua.commons.setting.AbstractKapuaSettings;
 
-public class KapuaAccountConfig extends AbstractKapuaSettings<KapuaAccountConfigKeys>
+public class AccountSettings extends AbstractKapuaSettings<AccountSettingKey>
 {
-    private static final KapuaAccountConfig instance;
-    static {
-        instance = new KapuaAccountConfig(KapuaAccountConfiguration.getConfiguration());
-    }
+    
+    private static final String ACCOUNT_CONFIG_RESOURCE = "kapua-account-config.properties";
 
-    private KapuaAccountConfig(Configuration config)
+    private static final AccountSettings instance = new AccountSettings();
+    
+    private AccountSettings()
     {
-        super(config);
+        super(ACCOUNT_CONFIG_RESOURCE);
     }
 
-    public static KapuaAccountConfig getInstance()
+    public static AccountSettings getInstance()
     {
         return instance;
     }

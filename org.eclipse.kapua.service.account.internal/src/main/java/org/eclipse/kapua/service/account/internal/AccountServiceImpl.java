@@ -53,6 +53,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
     /**
      * Account Create.
      */
+    @Override
     public Account create(AccountCreator accountCreator)
         throws KapuaException
     {
@@ -77,7 +78,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         authorizationService.checkPermission(permissionFactory.newPermission("account", "create", accountCreator.getScopeId()));
 
         // Check if the parent account exists
-        if (findTrusted(accountCreator.getScopeId()) == null) {
+        if (findById(accountCreator.getScopeId()) == null) {
             throw new KapuaIllegalArgumentException("scopeId", "parent account does not exist");
         }
 
@@ -118,6 +119,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
     /**
      * Account Update.
      */
+    @Override
     public Account update(Account account)
         throws KapuaException
     {
@@ -185,6 +187,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
      * It's not allowed to delete the eurotech-provision and edcmonitor account for safety reasons.
      * 
      */
+    @Override
     public void delete(Account account)
         throws KapuaException
     {
@@ -222,12 +225,12 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             }
 
             // do not allow deletion of the edc admin account
-            SystemSetting config = SystemSetting.getInstance();
-            if (config.getString(SystemSettingKey.SYS_PROVISION_ACCOUNT_NAME).equals(accountx.getName())) {
+            SystemSetting settings = SystemSetting.getInstance();
+            if (settings.getString(SystemSettingKey.SYS_PROVISION_ACCOUNT_NAME).equals(accountx.getName())) {
                 throw new KapuaIllegalAccessException(action);
             }
 
-            if (config.getString(SystemSettingKey.SYS_ADMIN_ACCOUNT).equals(accountx.getName())) {
+            if (settings.getString(SystemSettingKey.SYS_ADMIN_ACCOUNT).equals(accountx.getName())) {
                 throw new KapuaIllegalAccessException(action);
             }
 
@@ -244,63 +247,54 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         }
     }
 
-    private List<Account> findChildAccountsTrusted(KapuaId accountId)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(accountId, "accountId");
-        ArgumentValidator.notNull(accountId.getId(), "accountId.id");
-
-        //
-        // Do the find
-        List<Account> accounts = null;
-        EntityManager em = JpaUtils.getEntityManager();
-        try {
-            TypedQuery<Account> q = em.createNamedQuery("Account.findChildAccounts", Account.class);
-            q.setParameter("scopeId", accountId);
-            accounts = q.getResultList();
-        }
-        catch (Exception pe) {
-            throw JpaUtils.toKapuaException(pe);
-        }
-        finally {
-            JpaUtils.close(em);
-        }
-        return accounts;
-    }
-
     @Override
-    public Account find(KapuaId accountId)
+    public Account find(KapuaId scopeId, KapuaId id)
         throws KapuaException
     {
         //
         // Validation of the fields
-        ArgumentValidator.notNull(accountId, "accountId");
-        ArgumentValidator.notNull(accountId.getId(), "accountId.id");
+        ArgumentValidator.notNull(scopeId, "scopeId");
+        ArgumentValidator.notNull(scopeId.getId(), "scopeId.id");
+        ArgumentValidator.notNull(id, "id");
+        ArgumentValidator.notNull(id.getId(), "id.id");
 
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", "view", accountId));
+        authorizationService.checkPermission(permissionFactory.newPermission("account", "view", scopeId));
 
         //
         // Make sure account exists
-        return findTrusted(accountId);
+        return findById(id);
     }
 
     @Override
-    public Account find(KapuaId scopeId, KapuaId accountId)
+    public Account find(KapuaId id)
         throws KapuaException
     {
-        return find(accountId);
+        //
+        // Validation of the fields
+        ArgumentValidator.notNull(id, "id");
+        ArgumentValidator.notNull(id.getId(), "id.id");
+
+        //
+        // Check Access
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+        authorizationService.checkPermission(permissionFactory.newPermission("account", "view", id));
+
+        //
+        // Make sure account exists
+        return findById(id);
     }
 
     /**
      * Account Find.
      */
+    @Override
     public Account findByName(String name)
         throws KapuaException
     {
@@ -343,20 +337,20 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
      * @throws KapuaException
      */
     @Override
-    public AccountListResult findChildsRecursively(KapuaId accountId)
+    public AccountListResult findChildsRecursively(KapuaId id)
         throws KapuaException
     {
 
         //
         // Validation of the fields
-        ArgumentValidator.notNull(accountId, "scopeId");
-        ArgumentValidator.notNull(accountId.getId(), "scopeId.id");
+        ArgumentValidator.notNull(id, "scopeId");
+        ArgumentValidator.notNull(id.getId(), "scopeId.id");
 
         //
         // Make sure account exists
-        Account account = findTrusted(accountId);
+        Account account = findById(id);
         if (account == null) {
-            throw new KapuaEntityNotFoundException(Account.TYPE, accountId);
+            throw new KapuaEntityNotFoundException(Account.TYPE, id);
         }
 
         //
@@ -457,7 +451,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
      * @return
      * @throws KapuaException
      */
-    private Account findTrusted(KapuaId accountId)
+    private Account findById(KapuaId accountId)
         throws KapuaException
     {
 
@@ -479,5 +473,31 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             JpaUtils.close(em);
         }
         return account;
+    }
+
+    private List<Account> findChildAccountsTrusted(KapuaId accountId)
+        throws KapuaException
+    {
+        //
+        // Argument Validation
+        ArgumentValidator.notNull(accountId, "accountId");
+        ArgumentValidator.notNull(accountId.getId(), "accountId.id");
+
+        //
+        // Do the find
+        List<Account> accounts = null;
+        EntityManager em = JpaUtils.getEntityManager();
+        try {
+            TypedQuery<Account> q = em.createNamedQuery("Account.findChildAccounts", Account.class);
+            q.setParameter("scopeId", accountId);
+            accounts = q.getResultList();
+        }
+        catch (Exception pe) {
+            throw JpaUtils.toKapuaException(pe);
+        }
+        finally {
+            JpaUtils.close(em);
+        }
+        return accounts;
     }
 }
