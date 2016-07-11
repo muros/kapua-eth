@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.client.mqtt.config;
+package org.eclipse.kapua.client.mqtt.setting;
 
 import java.net.URL;
 
@@ -29,11 +29,9 @@ import org.slf4j.LoggerFactory;
  */
 public class MqttClientConfiguration
 {
-    private static final Logger    s_logger                    = LoggerFactory.getLogger(MqttClientConfiguration.class);
+    private static final Logger    s_logger = LoggerFactory.getLogger(MqttClientConfiguration.class);
 
-    private static final String    MQTT_CLIENT_CONFIG_RESOURCE = "mqtt-client-config.properties";
-
-    protected static Configuration s_config                    = null;
+    protected static Configuration s_config = null;
     static {
 
         CompositeConfiguration compositeConfig = new CompositeConfiguration();

@@ -10,11 +10,11 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.client.mqtt.config;
+package org.eclipse.kapua.client.mqtt.setting;
 
 import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum MqttClientConfigKeys implements SettingKey
+public enum MqttClientSettingKeys implements SettingKey
 {
     CLIENT_POOL_SIZE_MINIDLE("client.pool.size.min"),
     CLIENT_POOL_SIZE_MAXIDLE("client.pool.size.max"),
@@ -32,7 +32,7 @@ public enum MqttClientConfigKeys implements SettingKey
 
     private String key;
 
-    private MqttClientConfigKeys(String key)
+    private MqttClientSettingKeys(String key)
     {
         this.key = key;
     }

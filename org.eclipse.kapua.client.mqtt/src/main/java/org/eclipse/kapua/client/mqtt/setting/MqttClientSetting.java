@@ -10,22 +10,22 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.account.internal.setting;
+package org.eclipse.kapua.client.mqtt.setting;
 
 import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 
-public class KapuaAccountSetting extends AbstractKapuaSetting<KapuaAccountSettingKeys>
+public class MqttClientSetting extends AbstractKapuaSetting<MqttClientSettingKeys>
 {
-    private static final String              ACCOUNT_SETTING_RESOURCE = "kapua-account-setting.properties";
+    private static final String            MQTT_CLIENT_CONFIG_RESOURCE = "mqtt-client-setting.properties";
 
-    private static final KapuaAccountSetting instance                 = new KapuaAccountSetting();
+    private static final MqttClientSetting instance                    = new MqttClientSetting();
 
-    private KapuaAccountSetting()
+    private MqttClientSetting()
     {
-        super(ACCOUNT_SETTING_RESOURCE);
+        super(MQTT_CLIENT_CONFIG_RESOURCE);
     }
 
-    public static KapuaAccountSetting getInstance()
+    public static MqttClientSetting getInstance()
     {
         return instance;
     }

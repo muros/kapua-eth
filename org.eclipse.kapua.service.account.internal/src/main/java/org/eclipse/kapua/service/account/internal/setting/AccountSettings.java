@@ -12,19 +12,22 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account.internal.setting;
 
-import org.eclipse.kapua.commons.setting.SettingKey;
+import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 
-public enum KapuaAccountSettingKeys implements SettingKey
+public class AccountSettings extends AbstractKapuaSetting<AccountSettingKey>
 {
-	;
-	
-	private String key;
-	
-	private KapuaAccountSettingKeys(String key) {
-		this.key = key;
-	}
-	
-	public String key() {
-		return key;
-	}
+
+    private static final String          ACCOUNT_CONFIG_RESOURCE = "kapua-account-config.properties";
+
+    private static final AccountSettings instance                = new AccountSettings();
+
+    private AccountSettings()
+    {
+        super(ACCOUNT_CONFIG_RESOURCE);
+    }
+
+    public static AccountSettings getInstance()
+    {
+        return instance;
+    }
 }

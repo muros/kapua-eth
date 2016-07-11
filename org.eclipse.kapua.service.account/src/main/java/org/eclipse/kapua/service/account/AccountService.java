@@ -30,7 +30,7 @@ public interface AccountService extends KapuaEntityService<Account, AccountCreat
                                 KapuaConfigurableService
 {
     // FIXME - Add java doc
-    public Account find(KapuaId accountId)
+    public Account find(KapuaId id)
         throws KapuaException;
 
     // FIXME - Add java doc
