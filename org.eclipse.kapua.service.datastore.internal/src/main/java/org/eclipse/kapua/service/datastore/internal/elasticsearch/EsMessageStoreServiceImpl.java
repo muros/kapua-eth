@@ -40,12 +40,12 @@ import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 import org.eclipse.kapua.service.datastore.StorableQuery;
 import org.eclipse.kapua.service.datastore.internal.MessageStoreServiceAction;
-import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfig;
-import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfigKeys;
 import org.eclipse.kapua.service.datastore.internal.model.DataIndexBy;
 import org.eclipse.kapua.service.datastore.internal.model.MessageImpl;
 import org.eclipse.kapua.service.datastore.internal.model.MetricsIndexBy;
 import org.eclipse.kapua.service.datastore.internal.model.TopicImpl;
+import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSetting;
+import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSettingKeys;
 import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.Payload;
@@ -85,10 +85,10 @@ public class EsMessageStoreServiceImpl
     {
         this.configurationService = configurationService;
 		datastoreFacade = new EsDatastoreAdapter();
-		KapuaDatastoreConfig config = KapuaDatastoreConfig.getInstance();
-        maxTopicDepth = config.getInt(KapuaDatastoreConfigKeys.CONFIG_TOPIC_MAX_DEPTH);
-        enableTimingProfile = config.getBoolean(KapuaDatastoreConfigKeys.CONFIG_DATA_STORAGE_ENABLE_TIMING_PROFILE, false);
-        timingProfileThreshold = config.getLong(KapuaDatastoreConfigKeys.CONFIG_DATA_STORAGE_TIMING_PROFILE_THRESHOLD, 1000L);
+		KapuaDatastoreSetting config = KapuaDatastoreSetting.getInstance();
+        maxTopicDepth = config.getInt(KapuaDatastoreSettingKeys.CONFIG_TOPIC_MAX_DEPTH);
+        enableTimingProfile = config.getBoolean(KapuaDatastoreSettingKeys.CONFIG_DATA_STORAGE_ENABLE_TIMING_PROFILE, false);
+        timingProfileThreshold = config.getLong(KapuaDatastoreSettingKeys.CONFIG_DATA_STORAGE_TIMING_PROFILE_THRESHOLD, 1000L);
     }
 
     public String store(String scopeName, MessageCreator messageCreator)

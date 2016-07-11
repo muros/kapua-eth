@@ -27,8 +27,6 @@ import org.eclipse.kapua.commons.util.KapuaDateUtils;
 import org.eclipse.kapua.message.KapuaInvalidTopicException;
 import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaTopic;
-import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfig;
-import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfigKeys;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsAssetDAO;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsAssetTopicDAO;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsDaoEvent;
@@ -38,6 +36,8 @@ import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsTopicDAO
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsTopicMetricDAO;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsTypeDAO;
 import org.eclipse.kapua.service.datastore.internal.model.MetricsIndexBy;
+import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSetting;
+import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSettingKeys;
 import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -97,9 +97,9 @@ public class EsDatastoreAdapter {
 
 		esSchema = new EsSchema();
 		
-        KapuaDatastoreConfig  config = KapuaDatastoreConfig.getInstance();
-        int expireAfter = config.getInt(KapuaDatastoreConfigKeys.CONFIG_CACHE_LOCAL_EXPIRE_AFTER);
-        int sizeMax = config.getInt(KapuaDatastoreConfigKeys.CONFIG_CACHE_LOCAL_SIZE_MAXIMUM);
+        KapuaDatastoreSetting  config = KapuaDatastoreSetting.getInstance();
+        int expireAfter = config.getInt(KapuaDatastoreSettingKeys.CONFIG_CACHE_LOCAL_EXPIRE_AFTER);
+        int sizeMax = config.getInt(KapuaDatastoreSettingKeys.CONFIG_CACHE_LOCAL_SIZE_MAXIMUM);
 
         // TODO set expiration to happen frequently because the reset cache method will not get 
         // called from service clients any more

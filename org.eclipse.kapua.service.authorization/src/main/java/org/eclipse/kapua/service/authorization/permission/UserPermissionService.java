@@ -19,7 +19,7 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.KapuaEntityService;
 
-public interface UserPermissionService extends KapuaEntityService<UserPermission, UserPermissionCreator, UserPermissionListResult>
+public interface UserPermissionService extends KapuaEntityService<UserPermission, UserPermissionCreator>
 {
     public UserPermission create(UserPermissionCreator creator)
         throws KapuaException;

@@ -47,22 +47,6 @@ public class UserDAO extends ServiceDAO
         // Update user
         UserImpl userImpl = (UserImpl) user;
 
-        // password update
-        if (userImpl.getRawPassword() != null) {
-            // there is a new raw password
-            // we interpret this as a request for a password reset
-            // hash the password and store in the bean to be updated
-            // FIXME-RAW - call authService.encryptPassword(password);
-            userImpl.setPassword(user.getRawPassword());
-        }
-        if (userImpl.getPassword() == null) {
-            // there is not new password and no old password
-            // restore the current password to avoid
-            // nulling the password field
-            User oldUser = find(em, user.getId());
-            userImpl.setPassword(oldUser.getPassword());
-        }
-
         return ServiceDAO.update(em, UserImpl.class, userImpl);
     }
 

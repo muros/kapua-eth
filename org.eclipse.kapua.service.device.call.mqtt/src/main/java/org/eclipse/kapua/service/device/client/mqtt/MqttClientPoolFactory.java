@@ -5,8 +5,8 @@ import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.eclipse.kapua.commons.util.KapuaEnvironmentUtils;
 import org.eclipse.kapua.service.device.client.KapuaClientFactory;
-import org.eclipse.kapua.service.device.client.mqtt.config.MqttClientConfig;
-import org.eclipse.kapua.service.device.client.mqtt.config.MqttClientConfigKeys;
+import org.eclipse.kapua.service.device.client.mqtt.setting.MqttClientSetting;
+import org.eclipse.kapua.service.device.client.mqtt.setting.MqttClientSettingKeys;
 import org.eclipse.kapua.service.device.client.mqtt.utils.MqttClientIdGenerator;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -19,11 +19,11 @@ public class MqttClientPoolFactory extends BasePooledObjectFactory<MqttClient> i
     public MqttClient create()
         throws Exception
     {
-        MqttClientConfig deviceCallConfig = MqttClientConfig.getInstance();
+        MqttClientSetting deviceCallConfig = MqttClientSetting.getInstance();
 
         String username = "kapua-sys";
         char[] password = "We!come12345".toCharArray();
-        String clientId = MqttClientIdGenerator.next(deviceCallConfig.getString(MqttClientConfigKeys.CLIENT_POOL_CLIENT_PREFIX));
+        String clientId = MqttClientIdGenerator.next(deviceCallConfig.getString(MqttClientSettingKeys.CLIENT_POOL_CLIENT_PREFIX));
 
         MqttConnectOptions connectOptions = new MqttConnectOptions();
         connectOptions.setCleanSession(true);

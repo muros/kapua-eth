@@ -32,9 +32,9 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfig;
-import org.eclipse.kapua.service.datastore.internal.config.KapuaDatastoreConfigKeys;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsMetric;
+import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSetting;
+import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSettingKeys;
 
 public class EsSchema
 {
@@ -198,8 +198,8 @@ public class EsSchema
         throws IOException
     {
 
-        KapuaDatastoreConfig config = KapuaDatastoreConfig.getInstance();
-        String idxRefreshInterval = config.getString(KapuaDatastoreConfigKeys.ELASTICSEARCH_IDX_REFRESH_INTERVAL);
+        KapuaDatastoreSetting config = KapuaDatastoreSetting.getInstance();
+        String idxRefreshInterval = config.getString(KapuaDatastoreSettingKeys.ELASTICSEARCH_IDX_REFRESH_INTERVAL);
 
         XContentBuilder builder = XContentFactory.jsonBuilder()
         .startObject()

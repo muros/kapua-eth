@@ -8,9 +8,9 @@ import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCall;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCallFactory;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementTopicBuilder;
-import org.eclipse.kapua.service.device.management.commons.config.DeviceManagementConfig;
-import org.eclipse.kapua.service.device.management.commons.config.DeviceManagementConfigKey;
 import org.eclipse.kapua.service.device.management.commons.message.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.message.request.KapuaRequestPayload;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
@@ -62,8 +62,8 @@ public class DeviceApplicationCall<T>
 
         //
         // Build request topic
-        DeviceManagementConfig devManagementConfig = DeviceManagementConfig.getInstance();
-        String topicPrefix = devManagementConfig.getString(DeviceManagementConfigKey.CONTROL_TOPIC_PREFIX);
+        DeviceManagementSetting devManagementConfig = DeviceManagementSetting.getInstance();
+        String topicPrefix = devManagementConfig.getString(DeviceManagementSettingKey.CONTROL_TOPIC_PREFIX);
         DeviceManagementTopicBuilder.Request requestTopicBuilder = new DeviceManagementTopicBuilder.Request().withTopicPrefix(topicPrefix)
                                                                                                              .withAccountName(account.getName())
                                                                                                              .withAssetId(device.getClientId())
@@ -79,11 +79,11 @@ public class DeviceApplicationCall<T>
 
         //
         // Send request
-        DeviceManagementConfig config = DeviceManagementConfig.getInstance();
+        DeviceManagementSetting config = DeviceManagementSetting.getInstance();
         KapuaDeviceCallFactory kapuaDeviceCallFactory = locator.getFactory(KapuaDeviceCallFactory.class);
         KapuaDeviceCall deviceCall = kapuaDeviceCallFactory.newInstance(requestTopicBuilder.build(),
                                                                         requestPayload,
-                                                                        config.getLong(DeviceManagementConfigKey.REQUEST_TIMEOUT));
+                                                                        config.getLong(DeviceManagementSettingKey.REQUEST_TIMEOUT));
 
         KapuaResponseMessage responseMessage = (KapuaResponseMessage) deviceCall.send();
 

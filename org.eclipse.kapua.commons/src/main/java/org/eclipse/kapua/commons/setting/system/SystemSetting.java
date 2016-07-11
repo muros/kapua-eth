@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.setting.system;
 
-import org.eclipse.kapua.commons.setting.AbstractKapuaSettings;
+import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 
-public class SystemSetting extends AbstractKapuaSettings<SystemSettingKey>
+public class SystemSetting extends AbstractKapuaSetting<SystemSettingKey>
 {
     private static final String        CONFIG_RESOURCE_NAME = "kapua-environment-config.properties";
 

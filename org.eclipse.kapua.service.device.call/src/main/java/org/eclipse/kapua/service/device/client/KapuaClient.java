@@ -6,7 +6,7 @@ import org.eclipse.kapua.service.device.message.KapuaPayload;
 
 public interface KapuaClient
 {
-    public void publish(KapuaDestination requestDestination, KapuaPayload requestPayload)
+    public void publish(KapuaDestination destination, KapuaPayload payload)
         throws KapuaException;
 
     public void subscribe(KapuaDestination destination)

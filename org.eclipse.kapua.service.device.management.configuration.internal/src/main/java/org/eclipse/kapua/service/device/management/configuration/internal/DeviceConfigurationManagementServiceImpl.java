@@ -12,10 +12,10 @@ import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementMethod;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceApplicationCall;
-import org.eclipse.kapua.service.device.management.commons.config.DeviceManagementConfig;
-import org.eclipse.kapua.service.device.management.commons.config.DeviceManagementConfigKey;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
@@ -92,8 +92,8 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
             DeviceConfiguration deviceConfiguration = deviceConfigurationFactory.newConfigurationInstance();
             deviceConfiguration.getComponentConfigurations().add(deviceComponentConfiguration);
 
-            DeviceManagementConfig deviceManagementConfig = DeviceManagementConfig.getInstance();
-            String charEncoding = deviceManagementConfig.getString(DeviceManagementConfigKey.CHAR_ENCODING);
+            DeviceManagementSetting deviceManagementConfig = DeviceManagementSetting.getInstance();
+            String charEncoding = deviceManagementConfig.getString(DeviceManagementSettingKey.CHAR_ENCODING);
 
             StringWriter sw = new StringWriter();
             XmlUtil.marshal(deviceConfiguration, sw);
@@ -142,8 +142,8 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         String[] resources = new String[] { "configuration" };
         KapuaPayload requestPayload = new KapuaPayload();
         try {
-            DeviceManagementConfig deviceManagementConfig = DeviceManagementConfig.getInstance();
-            String charEncoding = deviceManagementConfig.getString(DeviceManagementConfigKey.CHAR_ENCODING);
+            DeviceManagementSetting deviceManagementConfig = DeviceManagementSetting.getInstance();
+            String charEncoding = deviceManagementConfig.getString(DeviceManagementSettingKey.CHAR_ENCODING);
 
             StringWriter sw = new StringWriter();
             XmlUtil.marshal(deviceConfiguration, sw);

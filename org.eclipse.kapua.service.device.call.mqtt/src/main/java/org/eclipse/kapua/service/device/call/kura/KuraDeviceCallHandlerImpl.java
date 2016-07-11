@@ -2,20 +2,20 @@ package org.eclipse.kapua.service.device.call.kura;
 
 import java.util.List;
 
-import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCallHandler;
+import org.eclipse.kapua.service.device.message.response.KapuaResponseMessage;
 
-public class KuraDeviceCallHandlerImpl implements KapuaDeviceCallHandler
+public class KuraDeviceCallHandlerImpl implements KapuaDeviceCallHandler<KapuaResponseMessage>
 {
-    List<KapuaMessage> responsesContainer;
+    List<KapuaResponseMessage> responsesContainer;
 
-    public KuraDeviceCallHandlerImpl(List<KapuaMessage> responseContainer)
+    public KuraDeviceCallHandlerImpl(List<KapuaResponseMessage> responseContainer)
     {
         this.responsesContainer = responseContainer;
     }
 
     @Override
-    public void responseReceived(KapuaMessage response)
+    public void responseReceived(KapuaResponseMessage response)
     {
         synchronized (this) {
             responsesContainer.add(response);

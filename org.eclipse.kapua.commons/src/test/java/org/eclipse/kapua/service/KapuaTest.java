@@ -16,7 +16,7 @@ import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.util.SubjectUtils;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.AuthenticationService;
@@ -46,7 +46,7 @@ public class KapuaTest
 
             //
             // Get current user Id
-            adminUserId = SubjectUtils.getCurrentUserId();
+            adminUserId = KapuaSecurityUtils.getSession().getUserId();
 
         }
         catch (KapuaException exc) {

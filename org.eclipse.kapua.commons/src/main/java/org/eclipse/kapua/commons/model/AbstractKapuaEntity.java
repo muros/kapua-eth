@@ -32,8 +32,8 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.commons.util.KapuaEidGenerator;
-import org.eclipse.kapua.commons.util.SubjectUtils;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 
@@ -104,7 +104,7 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
         throws KapuaException
     {
         this.id = KapuaEidGenerator.generate();
-        this.createdBy = (KapuaEid) SubjectUtils.getCurrentUserId();
+        this.createdBy = (KapuaEid) KapuaSecurityUtils.getSession().getUserId();
         this.createdOn = new Date();
     }
 }

@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
-import org.eclipse.kapua.commons.util.SubjectUtils;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.model.KapuaUpdatableEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 
@@ -187,7 +187,7 @@ public abstract class AbstractKapuaUpdatableEntity extends AbstractKapuaEntity i
     protected void preUpdateAction()
         throws KapuaException
     {
-        this.modifiedBy = (KapuaEid) SubjectUtils.getCurrentUserId();
+        this.modifiedBy = (KapuaEid) KapuaSecurityUtils.getSession().getUserId();
         this.modifiedOn = new Date();
     }
 }

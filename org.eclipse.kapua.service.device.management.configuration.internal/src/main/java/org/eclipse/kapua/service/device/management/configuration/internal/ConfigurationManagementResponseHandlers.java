@@ -2,12 +2,12 @@ package org.eclipse.kapua.service.device.management.configuration.internal;
 
 import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.service.device.management.commons.call.AbstractDeviceApplicationCallResponseHandler;
-import org.eclipse.kapua.service.device.management.commons.config.DeviceManagementConfig;
-import org.eclipse.kapua.service.device.management.commons.config.DeviceManagementConfigKey;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
 import org.eclipse.kapua.service.device.management.commons.message.KapuaResponseMessage;
 import org.eclipse.kapua.service.device.management.commons.message.KapuaResponsePayload;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 
 public class ConfigurationManagementResponseHandlers
@@ -20,8 +20,8 @@ public class ConfigurationManagementResponseHandlers
         {
             KapuaResponsePayload responsePayload = responseMessage.getResponsePayload();
 
-            DeviceManagementConfig config = DeviceManagementConfig.getInstance();
-            String charEncoding = config.getString(DeviceManagementConfigKey.CHAR_ENCODING);
+            DeviceManagementSetting config = DeviceManagementSetting.getInstance();
+            String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
 
             String body = null;
             try {

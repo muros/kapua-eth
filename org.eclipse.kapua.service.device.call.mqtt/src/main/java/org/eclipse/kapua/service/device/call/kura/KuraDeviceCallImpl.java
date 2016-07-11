@@ -7,7 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCall;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCallHandler;
 import org.eclipse.kapua.service.device.call.kura.exception.KapuaDeviceCallErrorCodes;
@@ -15,9 +14,13 @@ import org.eclipse.kapua.service.device.call.kura.exception.KapuaDeviceCallExcep
 import org.eclipse.kapua.service.device.client.KapuaClient;
 import org.eclipse.kapua.service.device.client.KapuaClientPool;
 import org.eclipse.kapua.service.device.client.mqtt.MqttClientCallback;
+import org.eclipse.kapua.service.device.message.request.KapuaRequestDestination;
+import org.eclipse.kapua.service.device.message.request.KapuaRequestMessage;
 import org.eclipse.kapua.service.device.message.request.KapuaRequestPayload;
+import org.eclipse.kapua.service.device.message.response.KapuaResponseDestination;
+import org.eclipse.kapua.service.device.message.response.KapuaResponseMessage;
 
-public class KuraDeviceCallImpl implements KapuaDeviceCall
+public class KuraDeviceCallImpl implements KapuaDeviceCall<KapuaRequestMessage, KapuaResponseMessage, KapuaRequestDestination, KapuaResponseDestination, KapuaDeviceCallHandler<RSM>>
 {
     private String              requestTopic;
     private String              responseTopic;
@@ -43,10 +46,10 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall
     }
 
     @Override
-    public KapuaMessage send()
+    public KapuaResponseMessage send()
         throws KapuaDeviceCallException
     {
-        List<KapuaMessage> responses = new ArrayList<KapuaMessage>();
+        List<KapuaResponseMessage> responses = new ArrayList<KapuaResponseMessage>();
         KuraDeviceCallHandlerImpl kuraDeviceCallHandler = new KuraDeviceCallHandlerImpl(responses);
 
         synchronized (kuraDeviceCallHandler) {
@@ -68,20 +71,20 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall
     }
 
     @Override
-    public String sendAsync()
+    public KapuaRequestDestination sendAsync()
         throws KapuaDeviceCallException
     {
         return sendInternal(null);
     }
 
     @Override
-    public String sendAsync(KapuaDeviceCallHandler kuraDeviceCallHandler)
+    public KapuaRequestDestination sendAsync(KapuaDeviceCallHandler kuraDeviceCallHandler)
         throws KapuaDeviceCallException
     {
         return sendInternal(kuraDeviceCallHandler);
     }
 
-    private String sendInternal(KapuaDeviceCallHandler kuraDeviceCallHandler)
+    private KapuaRequestDestination sendInternal(KapuaDeviceCallHandler kuraDeviceCallHandler)
         throws KapuaDeviceCallException
     {
         // Borrow a KapuaClient
