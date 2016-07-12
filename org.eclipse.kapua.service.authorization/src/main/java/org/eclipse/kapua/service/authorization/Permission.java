@@ -16,13 +16,13 @@ import org.eclipse.kapua.model.id.KapuaId;
 
 public interface Permission
 {
-    public void setDomain(String domain);
+    public void setDomain(Domain domain);
 
-    public String getDomain();
+    public Domain getDomain();
 
-    public void setAction(String action);
+    public void setAction(Action action);
 
-    public String getAction();
+    public Action getAction();
 
     public void setTargetScopeId(KapuaId targetScopeId);
 

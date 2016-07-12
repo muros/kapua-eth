@@ -108,8 +108,8 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
         for (UserPermission userPermission : userPermissions) {
 
             Permission p = permissionFactory.newPermission(userPermission.getDomain(),
-                                                         userPermission.getAction(),
-                                                         userPermission.getTargetScopeId());
+                                                           userPermission.getAction(),
+                                                           userPermission.getTargetScopeId());
 
             logger.trace("Username: {} has permission: {}", username, p);
             info.addStringPermission(p.toString());

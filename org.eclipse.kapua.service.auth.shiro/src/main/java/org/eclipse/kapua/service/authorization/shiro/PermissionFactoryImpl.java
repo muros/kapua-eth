@@ -18,13 +18,15 @@ import java.util.StringTokenizer;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authorization.Action;
+import org.eclipse.kapua.service.authorization.Domain;
 import org.eclipse.kapua.service.authorization.Permission;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 
 public class PermissionFactoryImpl implements PermissionFactory
 {
     @Override
-    public Permission newPermission(String domain, String action, KapuaId targetScopeId)
+    public Permission newPermission(Domain domain, Action action, KapuaId targetScopeId)
     {
         return new PermissionImpl(domain, action, targetScopeId);
     }
@@ -59,8 +61,8 @@ public class PermissionFactoryImpl implements PermissionFactory
             }
         }
 
-        Permission p = new PermissionImpl(domain, action, scopeTargetId);
-        return p;
+        // Permission p = new PermissionImpl(domain, action, scopeTargetId);
+        return null;
     }
 
 }

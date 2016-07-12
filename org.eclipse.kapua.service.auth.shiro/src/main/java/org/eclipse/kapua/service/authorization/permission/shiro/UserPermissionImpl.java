@@ -14,16 +14,19 @@ package org.eclipse.kapua.service.authorization.permission.shiro;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authorization.Action;
+import org.eclipse.kapua.service.authorization.Domain;
 import org.eclipse.kapua.service.authorization.permission.UserPermission;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -42,14 +45,14 @@ public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermi
     private KapuaEid          userId;
 
     @XmlElement(name = "domain")
-    @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "domain", nullable = false, updatable = false)
-    private String            domain;
+    private Domain            domain;
 
     @XmlElement(name = "action")
-    @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "action", nullable = false, updatable = false)
-    private String            action;
+    private Action            action;
 
     @XmlElement(name = "targetScopeId")
     @Embedded
@@ -81,26 +84,26 @@ public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermi
     }
 
     @Override
-    public void setDomain(String domain)
+    public void setDomain(Domain domain)
     {
         this.domain = domain;
     }
 
     @Override
-    public String getDomain()
+    public Domain getDomain()
     {
         return domain;
     }
 
     @Override
-    public void setAction(String action)
+    public void setAction(Action action)
     {
         this.action = action;
 
     }
 
     @Override
-    public String getAction()
+    public Action getAction()
     {
         return action;
     }

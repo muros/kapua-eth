@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authorization.Action;
+import org.eclipse.kapua.service.authorization.Domain;
 import org.eclipse.kapua.service.authorization.permission.UserPermission;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
 
@@ -27,10 +29,10 @@ public class UserPermissionCreatorImpl extends AbstractKapuaEntityCreator<UserPe
     private KapuaId           userId;
 
     @XmlElement(name = "domain")
-    private String            domain;
+    private Domain            domain;
 
     @XmlElement(name = "action")
-    private String            action;
+    private Action            action;
 
     @XmlElement(name = "targetScopeId")
     private KapuaId           targetScopeId;
@@ -53,25 +55,25 @@ public class UserPermissionCreatorImpl extends AbstractKapuaEntityCreator<UserPe
     }
 
     @Override
-    public void setDomain(String domain)
+    public void setDomain(Domain domain)
     {
         this.domain = domain;
     }
 
     @Override
-    public String getDomain()
+    public Domain getDomain()
     {
         return domain;
     }
 
     @Override
-    public void setAction(String action)
+    public void setAction(Action action)
     {
         this.action = action;
     }
 
     @Override
-    public String getAction()
+    public Action getAction()
     {
         return action;
     }
