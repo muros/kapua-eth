@@ -9,8 +9,11 @@ import org.eclipse.kapua.client.message.mqtt.MqttDestination;
 import org.eclipse.kapua.client.message.mqtt.MqttPayload;
 import org.eclipse.kapua.client.mqtt.setting.MqttClientSetting;
 import org.eclipse.kapua.client.mqtt.setting.MqttClientSettingKeys;
+import org.org.eclipse.kapua.client.pool.KapuaClientPoolFactory;
+import org.org.eclipse.kapua.client.pool.setting.internal.KapuaClientPoolSetting;
+import org.org.eclipse.kapua.client.pool.setting.internal.KapuaClientPoolSettingKeys;
 
-public class KapuaClientPoolImpl extends GenericObjectPool<K extends KapuaClient> implements KapuaClientPool<MqttDestination, MqttPayload, MqttClientCallback, MqttClient>
+public class KapuaClientPoolImpl extends GenericObjectPool<K extends KapuaClient> implements KapuaClientPool<KapuaDestination, KapuaPayload, MqttClientCallback, MqttClient>
 {
     // private static MqttClientPool mqttClientPoolInstance;
 
@@ -18,23 +21,23 @@ public class KapuaClientPoolImpl extends GenericObjectPool<K extends KapuaClient
     // mqttClientPoolInstance = new MqttClientPool(new MqttClientPoolFactory());
     // }
 
-    public KapuaClientPoolImpl(MqttClientPoolFactory factory)
+    public KapuaClientPoolImpl(KapuaClientPoolFactory<KapuaDestination, KapuaPayload, KapuaClientCallback, KapuaClient<D,P,CB>> factory)
     {
         super(factory);
 
-        MqttClientSetting config = MqttClientSetting.getInstance();
+        KapuaClientPoolSetting config = KapuaClientPoolSetting.getInstance();
         GenericObjectPoolConfig clientPoolConfig = new GenericObjectPoolConfig();
-        clientPoolConfig.setMinIdle(config.getInt(MqttClientSettingKeys.CLIENT_POOL_SIZE_MINIDLE));
-        clientPoolConfig.setMaxIdle(config.getInt(MqttClientSettingKeys.CLIENT_POOL_SIZE_MAXIDLE));
-        clientPoolConfig.setMaxTotal(config.getInt(MqttClientSettingKeys.CLIENT_POOL_SIZE_MAXTOTAL));
+        clientPoolConfig.setMinIdle(config.getInt(KapuaClientPoolSettingKeys.CLIENT_POOL_SIZE_MINIDLE));
+        clientPoolConfig.setMaxIdle(config.getInt(KapuaClientPoolSettingKeys.CLIENT_POOL_SIZE_MAXIDLE));
+        clientPoolConfig.setMaxTotal(config.getInt(KapuaClientPoolSettingKeys.CLIENT_POOL_SIZE_MAXTOTAL));
 
-        clientPoolConfig.setTestOnReturn(config.getBoolean(MqttClientSettingKeys.CLIENT_POOL_ON_RETURN_TEST));
-        clientPoolConfig.setTestOnBorrow(config.getBoolean(MqttClientSettingKeys.CLIENT_POOL_ON_BORROW_TEST));
+        clientPoolConfig.setTestOnReturn(config.getBoolean(KapuaClientPoolSettingKeys.CLIENT_POOL_ON_RETURN_TEST));
+        clientPoolConfig.setTestOnBorrow(config.getBoolean(KapuaClientPoolSettingKeys.CLIENT_POOL_ON_BORROW_TEST));
 
-        clientPoolConfig.setTestWhileIdle(config.getBoolean(MqttClientSettingKeys.CLIENT_POOL_WHEN_IDLE_TEST));
-        clientPoolConfig.setBlockWhenExhausted(config.getBoolean(MqttClientSettingKeys.CLIENT_POOL_WHEN_EXAUSTED_BLOCK));
+        clientPoolConfig.setTestWhileIdle(config.getBoolean(KapuaClientPoolSettingKeys.CLIENT_POOL_WHEN_IDLE_TEST));
+        clientPoolConfig.setBlockWhenExhausted(config.getBoolean(KapuaClientPoolSettingKeys.CLIENT_POOL_WHEN_EXAUSTED_BLOCK));
 
-        clientPoolConfig.setTimeBetweenEvictionRunsMillis(config.getLong(MqttClientSettingKeys.CLIENT_POOL_EVICTION_INTERVAL));
+        clientPoolConfig.setTimeBetweenEvictionRunsMillis(config.getLong(KapuaClientPoolSettingKeys.CLIENT_POOL_EVICTION_INTERVAL));
 
         setConfig(clientPoolConfig);
     }
