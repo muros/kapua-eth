@@ -22,6 +22,7 @@ import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.user.User;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("user", "create", userCreator.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.user, Actions.write, userCreator.getScopeId()));
 
         //
         // Do create
@@ -97,7 +98,7 @@ public class UserServiceImpl implements UserService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("user", "update", user.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.user, Actions.write, user.getScopeId()));
 
         //
         // Do update
@@ -141,7 +142,7 @@ public class UserServiceImpl implements UserService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("user", "delete", user.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.user, Actions.write, user.getScopeId()));
 
         // Do the delete
         EntityManager em = JpaUtils.getEntityManager();
@@ -185,7 +186,7 @@ public class UserServiceImpl implements UserService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("user", "read", accountId));
+        authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.user, Actions.read, accountId));
 
         // Do the find
         User user = null;
@@ -229,7 +230,7 @@ public class UserServiceImpl implements UserService
             KapuaLocator locator = KapuaLocator.getInstance();
             AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
             PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-            authorizationService.checkPermission(permissionFactory.newPermission("user", "read", user.getScopeId()));
+            authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.user, Actions.read, user.getScopeId()));
         }
 
         return user;
@@ -247,7 +248,7 @@ public class UserServiceImpl implements UserService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("user", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.user, Actions.read, query.getScopeId()));
 
         //
         // Do count
@@ -278,7 +279,7 @@ public class UserServiceImpl implements UserService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("user", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.user, Actions.read, query.getScopeId()));
 
         //
         // Do count

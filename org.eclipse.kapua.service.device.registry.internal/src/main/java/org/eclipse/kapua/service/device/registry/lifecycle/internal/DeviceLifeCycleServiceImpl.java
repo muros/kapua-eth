@@ -90,7 +90,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
             device.setFirmwareVersion(payload.getFirmwareVersion());
             device.setOsVersion(payload.getOsVersion());
             device.setJvmVersion(payload.getJvmVersion());
-            device.setOsgiVersion(payload.getOsgiFrameworkVersion());
+            device.setOsgiFrameworkVersion(payload.getOsgiFrameworkVersion());
             device.setApplicationIdentifiers(payload.getApplicationIdentifiers());
             device.setAcceptEncoding(payload.getAcceptEncoding());
 

@@ -34,6 +34,8 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountService;
+import org.eclipse.kapua.service.authorization.Action;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 
@@ -75,7 +77,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", "create", accountCreator.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, Actions.write, accountCreator.getScopeId()));
 
         // Check if the parent account exists
         if (findById(accountCreator.getScopeId()) == null) {
@@ -137,7 +139,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", "update", account.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, Actions.write, account.getScopeId()));
 
         //
         // Update the Account
@@ -200,11 +202,11 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
 
         //
         // Check Access
-        String action = "delete";
+        Action action = Actions.write;
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", action, account.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, action, account.getScopeId()));
 
         //
         // Check if it has children
@@ -227,11 +229,11 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             // do not allow deletion of the edc admin account
             SystemSetting settings = SystemSetting.getInstance();
             if (settings.getString(SystemSettingKey.SYS_PROVISION_ACCOUNT_NAME).equals(accountx.getName())) {
-                throw new KapuaIllegalAccessException(action);
+                throw new KapuaIllegalAccessException(action.name());
             }
 
             if (settings.getString(SystemSettingKey.SYS_ADMIN_ACCOUNT).equals(accountx.getName())) {
-                throw new KapuaIllegalAccessException(action);
+                throw new KapuaIllegalAccessException(action.name());
             }
 
             JpaUtils.beginTransaction(em);
@@ -263,7 +265,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", "view", scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, Actions.read, scopeId));
 
         //
         // Make sure account exists
@@ -284,7 +286,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", "view", id));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, Actions.read, id));
 
         //
         // Make sure account exists
@@ -322,7 +324,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             KapuaLocator locator = KapuaLocator.getInstance();
             AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
             PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-            authorizationService.checkPermission(permissionFactory.newPermission("account", "view", account.getId()));
+            authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, Actions.read, account.getId()));
         }
 
         return account;
@@ -358,7 +360,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", "view", account.getId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, Actions.read, account.getId()));
 
         AccountListResult result = null;
         EntityManager em = JpaUtils.getEntityManager();
@@ -394,7 +396,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, Actions.read, query.getScopeId()));
 
         //
         // Do count
@@ -425,7 +427,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("account", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.account, Actions.read, query.getScopeId()));
 
         //
         // Do count

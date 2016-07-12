@@ -119,7 +119,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
             device.setFirmwareVersion(device.getFirmwareVersion());
             device.setOsVersion(device.getOsVersion());
             device.setJvmVersion(device.getJvmVersion());
-            device.setOsgiVersion(device.getOsVersion());
+            device.setOsgiFrameworkVersion(device.getOsgiFrameworkVersion());
             device.setApplicationFrameworkVersion(device.getApplicationFrameworkVersion());
             device.setApplicationIdentifiers(device.getApplicationIdentifiers());
             device.setAcceptEncoding(device.getAcceptEncoding());
