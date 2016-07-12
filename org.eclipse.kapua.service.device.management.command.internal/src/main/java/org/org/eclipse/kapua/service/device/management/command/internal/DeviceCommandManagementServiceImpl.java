@@ -4,11 +4,13 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
+import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementMethod;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceApplicationCall;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.DeviceCommandRequestPayload;
@@ -32,7 +34,7 @@ public class DeviceCommandManagementServiceImpl implements DeviceCommandManageme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device-manage", "update", scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceManagementDomain.device_management, Actions.execute, scopeId));
 
         //
         // Prepare the request
