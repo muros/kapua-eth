@@ -23,6 +23,7 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.model.query.predicate.KapuaPredicate;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.device.registry.Device;
@@ -50,7 +51,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device", "create", deviceCreator.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.device, Actions.write, deviceCreator.getScopeId()));
 
         //
         // Create the connection
@@ -90,7 +91,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device", "update", device.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.device, Actions.write, device.getScopeId()));
 
         //
         // Do update
@@ -164,7 +165,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device", "read", scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.device, Actions.read, scopeId));
 
         //
         // Do find
@@ -197,7 +198,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.device, Actions.read, query.getScopeId()));
 
         //
         // Do Query
@@ -230,7 +231,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.device, Actions.read, query.getScopeId()));
 
         //
         // Do count
@@ -264,7 +265,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device", "delete", device.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.device, Actions.delete, device.getScopeId()));
 
         //
         // Do delete
@@ -297,6 +298,13 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         // Argument Validation
         ArgumentValidator.notNull(scopeId, "scopeId");
         ArgumentValidator.notEmptyOrNull(clientId, "clientId");
+
+        //
+        // Check Access
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.device, Actions.read, scopeId));
 
         //
         // Build query

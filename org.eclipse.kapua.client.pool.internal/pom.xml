@@ -10,28 +10,26 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.kapua.client.pool</artifactId>
-    <name>org.eclipse.kapua.client.pool</name>
+    <artifactId>org.eclipse.kapua.client.pool.internal</artifactId>
+    <name>org.eclipse.kapua.client.pool.internal</name>
+
 
     <dependencies>
-
         <!-- -->
-        <!-- Extended service interfaces -->
+        <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
+            <artifactId>org.eclipse.kapua.client.pool</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- -->
-        <!-- Required service interfaces -->
+        <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.client</artifactId>
+            <artifactId>org.eclipse.kapua.commons</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-
-        
 
         <!-- -->
         <!-- External dependencies -->

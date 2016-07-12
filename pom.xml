@@ -176,6 +176,7 @@
     <module>org.eclipse.kapua.client</module>
     <module>org.eclipse.kapua.client.mqtt</module>
     <module>org.eclipse.kapua.client.pool</module>
+    <module>org.eclipse.kapua.client.pool.internal</module>
   </modules>
 
     <issueManagement>

@@ -86,9 +86,9 @@ public interface Device extends KapuaUpdatableEntity
 
     public void setJvmVersion(String jvmVersion);
 
-    public String getOsgiVersion();
+    public String getOsgiFrameworkVersion();
 
-    public void setOsgiVersion(String osgiVersion);
+    public void setOsgiFrameworkVersion(String osgiFrameworkVersion);
 
     public String getApplicationFrameworkVersion();
 

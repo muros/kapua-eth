@@ -1,15 +1,16 @@
-package org.eclipse.kapua.client.mqtt;
+package org.org.eclipse.kapua.client.pool.internal;
 
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.client.KapuaClient;
 import org.eclipse.kapua.client.KapuaClientPool;
 import org.eclipse.kapua.client.message.mqtt.MqttDestination;
 import org.eclipse.kapua.client.message.mqtt.MqttPayload;
 import org.eclipse.kapua.client.mqtt.setting.MqttClientSetting;
 import org.eclipse.kapua.client.mqtt.setting.MqttClientSettingKeys;
 
-public class MqttClientPool extends GenericObjectPool<MqttClient> implements KapuaClientPool<MqttDestination, MqttPayload, MqttClientCallback, MqttClient>
+public class KapuaClientPoolImpl extends GenericObjectPool<K extends KapuaClient> implements KapuaClientPool<MqttDestination, MqttPayload, MqttClientCallback, MqttClient>
 {
     // private static MqttClientPool mqttClientPoolInstance;
 
@@ -17,7 +18,7 @@ public class MqttClientPool extends GenericObjectPool<MqttClient> implements Kap
     // mqttClientPoolInstance = new MqttClientPool(new MqttClientPoolFactory());
     // }
 
-    public MqttClientPool(MqttClientPoolFactory factory)
+    public KapuaClientPoolImpl(MqttClientPoolFactory factory)
     {
         super(factory);
 
@@ -44,7 +45,7 @@ public class MqttClientPool extends GenericObjectPool<MqttClient> implements Kap
     // }
 
     @Override
-    public void returnObject(MqttClient mqttClient)
+    public void returnObject(KapuaClient mqttClient)
     {
         //
         // Clean up callback

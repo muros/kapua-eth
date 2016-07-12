@@ -61,12 +61,12 @@ public class KapuaSession implements Serializable
         return username;
     }
 
-    public void setTrustedMode(boolean trustedMode)
+    final void setTrustedMode(boolean trustedMode)
     {
         this.trustedMode = trustedMode;
     }
 
-    public boolean isTrustwedMode()
+    public final boolean isTrustedMode()
     {
         return trustedMode;
     }

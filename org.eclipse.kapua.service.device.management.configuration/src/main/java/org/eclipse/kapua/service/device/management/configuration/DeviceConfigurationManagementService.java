@@ -26,10 +26,4 @@ public interface DeviceConfigurationManagementService extends KapuaService
 
     public void put(KapuaId scopeId, KapuaId deviceId, DeviceComponentConfiguration deviceComponentConfig)
         throws KapuaException;
-
-    // public void apply(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration configuration)
-    // throws KapuaException;
-
-    // public void rollback(KapuaId scopeId, KapuaId deviceId, String configurationId)
-    // throws KapuaException;
 }

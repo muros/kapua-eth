@@ -9,6 +9,7 @@ import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
@@ -36,7 +37,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "create", deviceEventCreator.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.device_event, Actions.write, deviceEventCreator.getScopeId()));
 
         //
         // Create the event
@@ -75,7 +76,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "read", scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.device_event, Actions.read, scopeId));
 
         //
         // Do find
@@ -108,7 +109,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.device_event, Actions.read, query.getScopeId()));
 
         //
         // Do Query
@@ -141,7 +142,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "read", query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.device_event, Actions.read, query.getScopeId()));
 
         //
         // Do count
@@ -175,7 +176,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission("device-event", "delete", deviceEvent.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.device_event, Actions.delete, deviceEvent.getScopeId()));
 
         //
         // Do delete

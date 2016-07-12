@@ -36,6 +36,7 @@ public class KapuaSecurityUtils
             setSession(session);
             created = true;
         }
+
         session.setTrustedMode(true);
         try {
             result = privilegedAction.call();

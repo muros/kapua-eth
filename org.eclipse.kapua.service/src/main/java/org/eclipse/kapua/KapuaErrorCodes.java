@@ -13,17 +13,18 @@
 package org.eclipse.kapua;
 
 /**
- * KapuaErrorCodes holds the enumeration of common error codes for KapuaServices. 
+ * KapuaErrorCodes holds the enumeration of common error codes for KapuaServices.
  * For each defined enum value, a corresponding message should be defined in the properties bundle named: KapuaExceptionMessagesBundle.properties.
  */
 public enum KapuaErrorCodes implements KapuaErrorCode
 {
     ENTITY_NOT_FOUND,
-    DUPLICATE_NAME, 
+    DUPLICATE_NAME,
     ILLEGAL_ACCESS,
-    ILLEGAL_ARGUMENT, 
-    ILLEGAL_NULL_ARGUMENT, 
+    ILLEGAL_ARGUMENT,
+    ILLEGAL_NULL_ARGUMENT,
+    ILLEGAL_STATE,
     OPTIMISTIC_LOCKING,
     UNAUTHENTICATED,
-    INTERNAL_ERROR
+    INTERNAL_ERROR,
 }

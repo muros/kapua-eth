@@ -70,40 +70,4 @@ public class MqttClient extends org.eclipse.paho.client.mqttv3.MqttClient implem
     {
         super.setCallback(clientCallback);
     }
-
-    // public void publish(String requestTopic, KapuaRequestPayload requestPayload)
-    // throws KapuaException
-    // {
-    // org.eclipse.paho.client.mqttv3.MqttMessage message = new org.eclipse.paho.client.mqttv3.MqttMessage(requestPayload.toByteArray());
-    //
-    // try {
-    // super.publish(requestTopic, message);
-    // }
-    // catch (MqttPersistenceException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // catch (MqttException e) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
-    // }
-    //
-    // public void subscribe(String requestTopic, Object o)
-    // throws KapuaException
-    // {
-    // try {
-    // super.subscribe(requestTopic);
-    // }
-    // catch (MqttException e) {
-    // throw new KapuaDeviceCallException(null, e, (Object[]) null);
-    // }
-    // }
-    //
-    // public void setCallback(KapuaClientCallback clientCallback)
-    // throws KapuaException
-    // {
-    // setCallback(clientCallback);
-    // }
-
 }

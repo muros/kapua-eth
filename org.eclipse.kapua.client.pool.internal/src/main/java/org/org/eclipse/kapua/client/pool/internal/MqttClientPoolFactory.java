@@ -1,31 +1,33 @@
-package org.eclipse.kapua.client.mqtt;
+package org.org.eclipse.kapua.client.pool.internal;
 
 import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
+import org.eclipse.kapua.client.KapuaClient;
+import org.eclipse.kapua.client.KapuaClientCallback;
 import org.eclipse.kapua.client.KapuaClientFactory;
-import org.eclipse.kapua.client.message.mqtt.MqttDestination;
-import org.eclipse.kapua.client.message.mqtt.MqttPayload;
-import org.eclipse.kapua.client.mqtt.setting.MqttClientSetting;
-import org.eclipse.kapua.client.mqtt.setting.MqttClientSettingKeys;
+import org.eclipse.kapua.client.message.KapuaDestination;
+import org.eclipse.kapua.client.message.KapuaPayload;
 import org.eclipse.kapua.client.utils.KapuaClientIdGenerator;
 import org.eclipse.kapua.commons.util.KapuaEnvironmentUtils;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttSecurityException;
+import org.org.eclipse.kapua.client.pool.setting.internal.KapuaClientPoolSetting;
+import org.org.eclipse.kapua.client.pool.setting.internal.KapuaClientPoolSettingKeys;
 
-public class MqttClientPoolFactory extends BasePooledObjectFactory<MqttClient> implements KapuaClientFactory<MqttDestination, MqttPayload, MqttClientCallback, MqttClient>
+public class MqttClientPoolFactory extends BasePooledObjectFactory<MqttClient> implements KapuaClientFactory<KapuaDestination, KapuaPayload, KapuaClientCallback, KapuaClient>
 {
 
     @Override
-    public MqttClient create()
+    public KapuaClient create()
         throws Exception
     {
-        MqttClientSetting deviceCallConfig = MqttClientSetting.getInstance();
+        KapuaClientPoolSetting deviceCallConfig = KapuaClientPoolSetting.getInstance();
 
         String username = "kapua-sys";
         char[] password = "We!come12345".toCharArray();
-        String clientId = KapuaClientIdGenerator.next(deviceCallConfig.getString(MqttClientSettingKeys.CLIENT_POOL_CLIENT_PREFIX));
+        String clientId = KapuaClientIdGenerator.next(deviceCallConfig.getString(KapuaClientPoolSettingKeys.CLIENT_POOL_CLIENT_PREFIX));
 
         MqttConnectOptions connectOptions = new MqttConnectOptions();
         connectOptions.setCleanSession(true);
@@ -50,20 +52,20 @@ public class MqttClientPoolFactory extends BasePooledObjectFactory<MqttClient> i
     }
 
     @Override
-    public PooledObject<MqttClient> wrap(MqttClient mqttClient)
+    public PooledObject<KapuaClient> wrap(KapuaClient mqttClient)
     {
-        return new DefaultPooledObject<MqttClient>(mqttClient);
+        return new DefaultPooledObject<KapuaClient>(mqttClient);
     }
 
     @Override
-    public boolean validateObject(PooledObject<MqttClient> mqttClientPool)
+    public boolean validateObject(PooledObject<KapuaClient> mqttClientPool)
     {
         MqttClient mqttClient = mqttClientPool.getObject();
         return (mqttClient != null && mqttClient.isConnected());
     }
 
     @Override
-    public void destroyObject(PooledObject<MqttClient> mqttClientPool)
+    public void destroyObject(PooledObject<KapuaClient> mqttClientPool)
         throws Exception
     {
         MqttClient mqttClient = mqttClientPool.getObject();

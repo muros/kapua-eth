@@ -14,6 +14,8 @@ package org.eclipse.kapua.service.authorization.permission;
 
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authorization.Action;
+import org.eclipse.kapua.service.authorization.Domain;
 
 public interface UserPermission extends KapuaEntity
 {
@@ -28,13 +30,13 @@ public interface UserPermission extends KapuaEntity
 
     public KapuaId getUserId();
 
-    public void setDomain(String domain);
+    public void setDomain(Domain domain);
 
-    public String getDomain();
+    public Domain getDomain();
 
-    public void setAction(String action);
+    public void setAction(Action action);
 
-    public String getAction();
+    public Action getAction();
 
     public void setTargetScopeId(KapuaId targetScopeId);
 

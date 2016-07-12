@@ -166,9 +166,9 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
     @Column(name = "jvm_version")
     private String                jvmVersion;
 
-    @XmlElement(name = "osgiVersion")
+    @XmlElement(name = "osgiFrameworkVersion")
     @Basic
-    @Column(name = "osgi_version")
+    @Column(name = "osgi_framework_version")
     private String                osgiFrameworkVersion;
 
     @XmlElement(name = "applicationFrameworkVersion")
@@ -384,12 +384,12 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
         this.jvmVersion = jvmVersion;
     }
 
-    public String getOsgiVersion()
+    public String getOsgiFrameworkVersion()
     {
         return osgiFrameworkVersion;
     }
 
-    public void setOsgiVersion(String osgiFrameworkVersion)
+    public void setOsgiFrameworkVersion(String osgiFrameworkVersion)
     {
         this.osgiFrameworkVersion = osgiFrameworkVersion;
     }

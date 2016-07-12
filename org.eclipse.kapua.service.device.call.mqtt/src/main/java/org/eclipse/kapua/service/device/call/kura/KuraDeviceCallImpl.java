@@ -88,14 +88,14 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall<KapuaRequestMessage, 
         throws KapuaDeviceCallException
     {
         // Borrow a KapuaClient
-        KapuaClient mqttClient = null;
+        KapuaClient kapuaClient = null;
         try {
-            mqttClient = KapuaClientPool.getInstance().borrowObject();
+            kapuaClient = KapuaClientPool.getInstance().borrowObject();
         }
         catch (Exception e) {
-            if (mqttClient != null) {
+            if (kapuaClient != null) {
                 try {
-                    KapuaClientPool.getInstance().returnObject(mqttClient);
+                    KapuaClientPool.getInstance().returnObject(kapuaClient);
                 }
                 catch (Exception e1) {
                     throw new KapuaDeviceCallException(KapuaDeviceCallErrorCodes.CLIENT_RETURN_ERROR, e, (Object[]) null);
@@ -116,7 +116,7 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall<KapuaRequestMessage, 
                                                        .append("/")
                                                        .append(requestTopicTokens[1])
                                                        .append("/")
-                                                       .append(mqttClient.getClientId())
+                                                       .append(kapuaClient.getClientId())
                                                        .append("/")
                                                        .append(requestTopicTokens[3])
                                                        .append("/")
@@ -126,20 +126,20 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall<KapuaRequestMessage, 
                     requestPayload.setRequestId(requestId);
                 }
 
-                requestPayload.setRequesterId(mqttClient.getClientId());
+                requestPayload.setRequesterId(kapuaClient.getClientId());
             }
 
             //
             // Subscribe to the response topic
             if (kuraDeviceCallHandler != null && responseTopic != null) {
-                mqttClient.setCallback(new MqttClientCallback(kuraDeviceCallHandler));
-                mqttClient.subscribe(responseTopic, null);
+                kapuaClient.setCallback(new MqttClientCallback(kuraDeviceCallHandler));
+                kapuaClient.subscribe(responseTopic, null);
             }
 
             //
             // Do publish
             try {
-                mqttClient.publish(requestTopic, requestPayload);
+                kapuaClient.publish(requestTopic, requestPayload);
             }
             catch (KapuaException e) {
                 throw new KapuaDeviceCallException(KapuaDeviceCallErrorCodes.CLIENT_SEND_ERROR, e, (Object[]) null);

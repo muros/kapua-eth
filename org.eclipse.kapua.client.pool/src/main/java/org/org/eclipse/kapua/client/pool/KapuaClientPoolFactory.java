@@ -1,5 +1,7 @@
-package org.eclipse.kapua.client;
+package org.org.eclipse.kapua.client.pool;
 
+import org.eclipse.kapua.client.KapuaClient;
+import org.eclipse.kapua.client.KapuaClientCallback;
 import org.eclipse.kapua.client.message.KapuaDestination;
 import org.eclipse.kapua.client.message.KapuaPayload;
 import org.eclipse.kapua.model.KapuaEntityFactory;

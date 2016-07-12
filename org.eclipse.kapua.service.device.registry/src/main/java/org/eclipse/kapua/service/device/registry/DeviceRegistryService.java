@@ -17,7 +17,7 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaEntityService;
 import org.eclipse.kapua.service.KapuaUpdatableEntityService;
 
-public interface DeviceRegistryService extends KapuaEntityService<Device, DeviceCreator, DeviceListResult>,
+public interface DeviceRegistryService extends KapuaEntityService<Device, DeviceCreator>,
                                        KapuaUpdatableEntityService<Device>
 {
     /**
