@@ -83,3 +83,7 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+
+# IDEA
+.idea/
+**/*.iml
