@@ -29,7 +29,7 @@ public class DeviceCommandRequestPayload extends KapuaPayload
             }
         }
 
-        if (v.size() == 0) {
+        if (v.isEmpty()) {
             return null;
         }
         else {
@@ -60,7 +60,7 @@ public class DeviceCommandRequestPayload extends KapuaPayload
             }
         }
 
-        if (v.size() == 0) {
+        if (v.isEmpty()) {
             return null;
         }
         else {
