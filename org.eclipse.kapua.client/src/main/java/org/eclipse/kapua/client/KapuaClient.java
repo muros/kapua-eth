@@ -15,6 +15,9 @@ public interface KapuaClient<D extends KapuaDestination, P extends KapuaPayload,
     public void unsubscribe(D desination)
         throws KapuaException;
 
+    void unsubscribeAll()
+        throws KapuaException;
+
     public void setCallback(C clientCallback)
         throws KapuaException;
 

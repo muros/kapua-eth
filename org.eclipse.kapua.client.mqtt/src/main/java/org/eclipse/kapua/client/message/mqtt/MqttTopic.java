@@ -2,7 +2,7 @@ package org.eclipse.kapua.client.message.mqtt;
 
 import org.eclipse.kapua.client.message.KapuaDestination;
 
-public class MqttDestination implements KapuaDestination
+public class MqttTopic implements KapuaDestination
 {
 
     @Override
@@ -10,5 +10,11 @@ public class MqttDestination implements KapuaDestination
     {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void fromClientDestination(String destination)
+    {
+
     }
 }
