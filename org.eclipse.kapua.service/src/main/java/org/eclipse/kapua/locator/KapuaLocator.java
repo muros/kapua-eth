@@ -37,7 +37,7 @@ public abstract class KapuaLocator
 	//TODO do we need synchronization?
 	private static KapuaLocator createInstance() {
 		//TODO choose the right way to get this implementation as parameter
-		String locatorImplementation = System.getProperty("locator.impl.class");
+		String locatorImplementation = locatorClassName();
 		if (locatorImplementation!=null && locatorImplementation.trim().length()>0) {
 			try {
 				return (KapuaLocator)Class.forName(locatorImplementation).newInstance();
@@ -99,4 +99,22 @@ public abstract class KapuaLocator
      * @return
      */
     public abstract <F extends KapuaEntityFactory> F getFactory(Class<F> factoryClass);
+
+	// Helpers
+
+	static String locatorClassName() {
+		String locatorClass = System.getProperty("locator.impl.class");
+		if(locatorClass != null) {
+			return locatorClass;
+		}
+
+		locatorClass = System.getenv("LOCATOR_CLASS_IMPL");
+		if(locatorClass != null) {
+			return locatorClass;
+		}
+
+		logger.debug("No service locator class resolved. Falling back to default.");
+		return null;
+	}
+
 }
