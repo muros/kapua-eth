@@ -13,10 +13,10 @@
 package org.eclipse.kapua.service.authorization;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
-public interface PermissionFactory extends KapuaEntityFactory
+public interface PermissionFactory extends KapuaObjectFactory
 {
     public Permission newPermission(Domain domain, Action action, KapuaId targetScopeId);
 

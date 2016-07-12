@@ -23,6 +23,19 @@
         </dependency>
         
         <!--  -->
+        <!-- Required service interfaces -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.client</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.client.pool</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        
+        <!--  -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

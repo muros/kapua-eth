@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
-public interface AccountFactory extends KapuaEntityFactory
+public interface AccountFactory extends KapuaObjectFactory
 {
     public AccountCreator newAccountCreator(KapuaId scopeId, String name);
 

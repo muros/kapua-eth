@@ -1,11 +1,11 @@
 package org.org.eclipse.kapua.service.device.management.command.internal;
 
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
 import org.eclipse.kapua.service.device.management.commons.call.AbstractDeviceApplicationCallResponseHandler;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponseMessage;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.DeviceCommandResponsePayload;
 
 public class CommandManagementResponseHandlers
@@ -13,6 +13,7 @@ public class CommandManagementResponseHandlers
     public static class EXEC extends AbstractDeviceApplicationCallResponseHandler<DeviceCommandOutput>
     {
 
+        @SuppressWarnings("rawtypes")
         @Override
         protected DeviceCommandOutput handleAcceptedRequest(KapuaResponseMessage responseMessage)
             throws DeviceManagementException

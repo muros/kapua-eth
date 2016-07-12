@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.eclipse.kapua.message.KapuaPosition;
-import org.eclipse.kapua.message.protobuf.KapuaPayloadProto;
+import org.eclipse.kapua.message.protobuf.MqttPayloadProto;
 
 /**
  * EdcPosition is a data structure to capture a geo location. It can be
@@ -163,7 +163,7 @@ public class KapuaPosition {
     }
 
     public static KapuaPosition buildFromProtoBuf(
-        KapuaPayloadProto.KapuaPayload.KapuaPosition protoPosition) {
+        MqttPayloadProto.KapuaPayload.KapuaPosition protoPosition) {
 
         KapuaPosition position = new KapuaPosition();
 
@@ -197,9 +197,9 @@ public class KapuaPosition {
         return position;
     }
 
-    public KapuaPayloadProto.KapuaPayload.KapuaPosition toProtoBuf() {
+    public MqttPayloadProto.KapuaPayload.KapuaPosition toProtoBuf() {
 
-            KapuaPayloadProto.KapuaPayload.KapuaPosition.Builder protoPos = KapuaPayloadProto.KapuaPayload.KapuaPosition
+            MqttPayloadProto.KapuaPayload.KapuaPosition.Builder protoPos = MqttPayloadProto.KapuaPayload.KapuaPosition
                 .newBuilder();
         if (latitude != null) {
             protoPos.setLatitude(latitude);

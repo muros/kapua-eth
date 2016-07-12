@@ -1,13 +1,14 @@
 package org.eclipse.kapua.service.device.management.commons.call;
 
+import org.eclipse.kapua.service.device.call.message.KapuaResponseCode;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.call.message.KapuaResponsePayload;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponseMessage;
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponsePayload;
-import org.eclipse.kapua.service.device.message.response.KapuaResponseCode;
 
 public abstract class AbstractDeviceApplicationCallResponseHandler<T>
 {
+    @SuppressWarnings("rawtypes")
     public T handle(KapuaResponseMessage responseMessage)
         throws DeviceManagementException
     {
@@ -42,9 +43,11 @@ public abstract class AbstractDeviceApplicationCallResponseHandler<T>
         return responseObject;
     }
 
+    @SuppressWarnings("rawtypes")
     protected abstract T handleAcceptedRequest(KapuaResponseMessage responseMessage)
         throws DeviceManagementException;
 
+    @SuppressWarnings("rawtypes")
     protected void handleBadRequestReply(KapuaResponseMessage responseMessage)
         throws DeviceManagementException
     {
@@ -58,6 +61,7 @@ public abstract class AbstractDeviceApplicationCallResponseHandler<T>
                                                            responsePayload.getExceptionStack() });
     }
 
+    @SuppressWarnings("rawtypes")
     protected void handleDeviceInternalErrorReply(KapuaResponseMessage responseMessage)
         throws DeviceManagementException
     {
@@ -71,6 +75,7 @@ public abstract class AbstractDeviceApplicationCallResponseHandler<T>
                                                            responsePayload.getExceptionStack() });
     }
 
+    @SuppressWarnings("rawtypes")
     protected void handleNotFoundReply(KapuaResponseMessage responseMessage)
         throws DeviceManagementException
     {

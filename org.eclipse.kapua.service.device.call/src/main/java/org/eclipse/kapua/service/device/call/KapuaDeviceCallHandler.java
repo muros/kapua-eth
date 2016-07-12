@@ -1,6 +1,6 @@
 package org.eclipse.kapua.service.device.call;
 
-import org.eclipse.kapua.service.device.message.response.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
 
 public interface KapuaDeviceCallHandler<RSM extends KapuaResponseMessage>
 {

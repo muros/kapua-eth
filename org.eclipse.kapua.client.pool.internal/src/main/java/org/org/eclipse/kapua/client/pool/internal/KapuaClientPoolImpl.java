@@ -4,16 +4,13 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.client.KapuaClient;
-import org.eclipse.kapua.client.KapuaClientPool;
-import org.eclipse.kapua.client.message.mqtt.MqttDestination;
-import org.eclipse.kapua.client.message.mqtt.MqttPayload;
-import org.eclipse.kapua.client.mqtt.setting.MqttClientSetting;
-import org.eclipse.kapua.client.mqtt.setting.MqttClientSettingKeys;
-import org.org.eclipse.kapua.client.pool.KapuaClientPoolFactory;
+import org.org.eclipse.kapua.client.pool.KapuaClientPool;
+import org.org.eclipse.kapua.client.pool.PooledKapuaClientFactory;
 import org.org.eclipse.kapua.client.pool.setting.internal.KapuaClientPoolSetting;
 import org.org.eclipse.kapua.client.pool.setting.internal.KapuaClientPoolSettingKeys;
 
-public class KapuaClientPoolImpl extends GenericObjectPool<K extends KapuaClient> implements KapuaClientPool<KapuaDestination, KapuaPayload, MqttClientCallback, MqttClient>
+@SuppressWarnings("rawtypes")
+public class KapuaClientPoolImpl<C extends KapuaClient> extends GenericObjectPool<C> implements KapuaClientPool<C>
 {
     // private static MqttClientPool mqttClientPoolInstance;
 
@@ -21,7 +18,7 @@ public class KapuaClientPoolImpl extends GenericObjectPool<K extends KapuaClient
     // mqttClientPoolInstance = new MqttClientPool(new MqttClientPoolFactory());
     // }
 
-    public KapuaClientPoolImpl(KapuaClientPoolFactory<KapuaDestination, KapuaPayload, KapuaClientCallback, KapuaClient<D,P,CB>> factory)
+    public KapuaClientPoolImpl(PooledKapuaClientFactory<C> factory)
     {
         super(factory);
 
@@ -47,25 +44,43 @@ public class KapuaClientPoolImpl extends GenericObjectPool<K extends KapuaClient
     // return kapuaClientPoolInstance;
     // }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void returnObject(KapuaClient mqttClient)
+    public void returnObject(C kapuaClient)
     {
         //
         // Clean up callback
         try {
-            mqttClient.setCallback((MqttClientCallback) null);
+            kapuaClient.setCallback(null);
         }
         catch (KapuaException e) {
+            try {
+                kapuaClient.terminateClient();
+            }
+            catch (KapuaException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        //
-        // Clean up subscription
-        // FIXME: clean up any subscription
+        try {
+            kapuaClient.unsubscribeAll();
+        }
+        catch (Exception e) {
+            try {
+                kapuaClient.terminateClient();
+            }
+            catch (KapuaException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            // TODO: handle exception
+        }
 
         //
         // Return object to pool
-        super.returnObject(mqttClient);
+        super.returnObject(kapuaClient);
     }
 }

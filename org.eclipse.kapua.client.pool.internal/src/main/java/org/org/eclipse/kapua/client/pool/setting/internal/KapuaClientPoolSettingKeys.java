@@ -16,6 +16,8 @@ import org.eclipse.kapua.commons.setting.SettingKey;
 
 public enum KapuaClientPoolSettingKeys implements SettingKey
 {
+    CLIENT_POOL_CLIENT_ID_PREFIX("client.pool.client.id.prefix"),
+
     CLIENT_POOL_SIZE_MINIDLE("client.pool.size.min"),
     CLIENT_POOL_SIZE_MAXIDLE("client.pool.size.max"),
     CLIENT_POOL_SIZE_MAXTOTAL("client.pool.size.maxTotal"),

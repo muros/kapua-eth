@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 
-public interface UsernamePasswordTokenFactory extends KapuaEntityFactory
+public interface UsernamePasswordTokenFactory extends KapuaObjectFactory
 {
     public UsernamePasswordToken newInstance(String username, char[] password);
 }

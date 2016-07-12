@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.command;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 
-public interface DeviceCommandFactory extends KapuaEntityFactory
+public interface DeviceCommandFactory extends KapuaObjectFactory
 {
     public DeviceCommandInput newInputInstance();
 

@@ -1,12 +1,11 @@
 package org.eclipse.kapua.service.device.call;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.service.device.message.request.KapuaRequestDestination;
-import org.eclipse.kapua.service.device.message.request.KapuaRequestMessage;
-import org.eclipse.kapua.service.device.message.response.KapuaResponseDestination;
-import org.eclipse.kapua.service.device.message.response.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseDestination;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.call.message.KapuaResponsePayload;
 
-public interface KapuaDeviceCall<RQM extends KapuaRequestMessage, RSM extends KapuaResponseMessage, RQD extends KapuaRequestDestination, RSD extends KapuaResponseDestination, H extends KapuaDeviceCallHandler<RSM>>
+public interface KapuaDeviceCall<RSD extends KapuaResponseDestination, RSP extends KapuaResponsePayload, RSM extends KapuaResponseMessage<RSD, RSP>, H extends KapuaDeviceCallHandler<RSM>>
 {
     public RSM send()
         throws KapuaException;

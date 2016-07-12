@@ -17,7 +17,7 @@ import java.util.ServiceLoader;
 
 import org.eclipse.kapua.KapuaRuntimeErrorCodes;
 import org.eclipse.kapua.KapuaRuntimeException;
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.service.KapuaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,5 +98,5 @@ public abstract class KapuaLocator
      * @param factoryClass - class of the factory whose instance is required.
      * @return
      */
-    public abstract <F extends KapuaEntityFactory> F getFactory(Class<F> factoryClass);
+    public abstract <F extends KapuaObjectFactory> F getFactory(Class<F> factoryClass);
 }

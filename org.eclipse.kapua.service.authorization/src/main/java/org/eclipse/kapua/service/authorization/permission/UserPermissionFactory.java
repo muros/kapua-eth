@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.permission;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
-public interface UserPermissionFactory extends KapuaEntityFactory
+public interface UserPermissionFactory extends KapuaObjectFactory
 {
     public UserPermissionCreator newCreator(KapuaId scopeId);
 

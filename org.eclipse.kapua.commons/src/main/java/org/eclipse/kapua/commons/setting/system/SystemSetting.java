@@ -16,7 +16,7 @@ import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 
 public class SystemSetting extends AbstractKapuaSetting<SystemSettingKey>
 {
-    private static final String        CONFIG_RESOURCE_NAME = "kapua-environment-config.properties";
+    private static final String        CONFIG_RESOURCE_NAME = "kapua-environment-setting.properties";
 
     private static final SystemSetting instance             = new SystemSetting();
 

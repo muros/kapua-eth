@@ -17,7 +17,7 @@ import java.util.ServiceLoader;
 
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.service.KapuaService;
 
 public class LocatorImpl extends KapuaLocator
@@ -42,7 +42,7 @@ public class LocatorImpl extends KapuaLocator
     }
 
     @Override
-    public <F extends KapuaEntityFactory> F getFactory(Class<F> factoryClass)
+    public <F extends KapuaObjectFactory> F getFactory(Class<F> factoryClass)
     {
         ServiceLoader<F> factoryLoaders = ServiceLoader.load(factoryClass);
 

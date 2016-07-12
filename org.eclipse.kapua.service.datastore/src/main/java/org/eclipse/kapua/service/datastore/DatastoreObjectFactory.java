@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.service.datastore.model.AssetInfo;
 import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
@@ -24,7 +24,7 @@ import org.eclipse.kapua.service.datastore.model.query.AssetInfoQuery;
 import org.eclipse.kapua.service.datastore.model.query.MessageQuery;
 import org.eclipse.kapua.service.datastore.model.query.TopicInfoQuery;
 
-public interface DatastoreObjectFactory extends KapuaEntityFactory
+public interface DatastoreObjectFactory extends KapuaObjectFactory
 {
     public Message newMessage();
 

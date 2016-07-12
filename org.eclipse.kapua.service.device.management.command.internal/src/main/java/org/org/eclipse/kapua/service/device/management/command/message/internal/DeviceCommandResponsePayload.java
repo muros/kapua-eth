@@ -1,6 +1,6 @@
 package org.org.eclipse.kapua.service.device.management.command.message.internal;
 
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponsePayload;
+import org.eclipse.kapua.service.device.call.message.KapuaResponsePayload;
 
 public class DeviceCommandResponsePayload extends KapuaResponsePayload
 {

@@ -1,9 +1,9 @@
 package org.eclipse.kapua.service.device.registry.event;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
-public interface DeviceEventFactory extends KapuaEntityFactory
+public interface DeviceEventFactory extends KapuaObjectFactory
 {
     public DeviceEventCreator newCreator(KapuaId scopeId);
 

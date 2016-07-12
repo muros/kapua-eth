@@ -1,8 +1,8 @@
 package org.eclipse.kapua.service.device.management.configuration;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 
-public interface DeviceConfigurationFactory extends KapuaEntityFactory
+public interface DeviceConfigurationFactory extends KapuaObjectFactory
 {
     public DeviceComponentConfiguration newComponentConfigurationInstance(String componentConfigurationId);
 

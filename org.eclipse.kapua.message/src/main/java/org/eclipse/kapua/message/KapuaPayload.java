@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.eclipse.kapua.message.protobuf.KapuaPayloadProto;
+import org.eclipse.kapua.message.protobuf.MqttPayloadProto;
 import org.eclipse.kapua.message.util.GZIPUtils;
 import org.eclipse.kapua.message.xml.KapuaMetricsMapAdapter;
 import org.slf4j.Logger;
@@ -215,9 +215,9 @@ public class KapuaPayload
         }
 
         // build the EdcPayloadProto.EdcPayload
-        KapuaPayloadProto.KapuaPayload protoMsg = null;
+        MqttPayloadProto.KapuaPayload protoMsg = null;
         try {
-            protoMsg = KapuaPayloadProto.KapuaPayload.parseFrom(bytes);
+            protoMsg = MqttPayloadProto.KapuaPayload.parseFrom(bytes);
         }
         catch (InvalidProtocolBufferException ipbe) {
             throw new KapuaInvalidMessageException(ipbe);
@@ -270,7 +270,7 @@ public class KapuaPayload
         }
 
         // Build the message
-        KapuaPayloadProto.KapuaPayload.Builder protoMsg = KapuaPayloadProto.KapuaPayload.newBuilder();
+        MqttPayloadProto.KapuaPayload.Builder protoMsg = MqttPayloadProto.KapuaPayload.newBuilder();
 
         // set the timestamp
         if (timestamp != null) {
@@ -288,7 +288,7 @@ public class KapuaPayload
             // build a metric
             Object value = metrics.get(name);
             try {
-                KapuaPayloadProto.KapuaPayload.KapuaMetric.Builder metricB = KapuaPayloadProto.KapuaPayload.KapuaMetric.newBuilder();
+                MqttPayloadProto.KapuaPayload.KapuaMetric.Builder metricB = MqttPayloadProto.KapuaPayload.KapuaMetric.newBuilder();
                 metricB.setName(name);
 
                 setProtoKapuaMetricValue(metricB, value);
@@ -375,37 +375,37 @@ public class KapuaPayload
         this.rawBytes = null;
     }
 
-    private static void setProtoKapuaMetricValue(KapuaPayloadProto.KapuaPayload.KapuaMetric.Builder metric,
+    private static void setProtoKapuaMetricValue(MqttPayloadProto.KapuaPayload.KapuaMetric.Builder metric,
                                                  Object o)
         throws KapuaInvalidMetricTypeException
     {
 
         if (o instanceof String) {
-            metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.STRING);
+            metric.setType(MqttPayloadProto.KapuaPayload.KapuaMetric.ValueType.STRING);
             metric.setStringValue((String) o);
         }
         else if (o instanceof Double) {
-            metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.DOUBLE);
+            metric.setType(MqttPayloadProto.KapuaPayload.KapuaMetric.ValueType.DOUBLE);
             metric.setDoubleValue((Double) o);
         }
         else if (o instanceof Integer) {
-            metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.INT32);
+            metric.setType(MqttPayloadProto.KapuaPayload.KapuaMetric.ValueType.INT32);
             metric.setIntValue((Integer) o);
         }
         else if (o instanceof Float) {
-            metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.FLOAT);
+            metric.setType(MqttPayloadProto.KapuaPayload.KapuaMetric.ValueType.FLOAT);
             metric.setFloatValue((Float) o);
         }
         else if (o instanceof Long) {
-            metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.INT64);
+            metric.setType(MqttPayloadProto.KapuaPayload.KapuaMetric.ValueType.INT64);
             metric.setLongValue((Long) o);
         }
         else if (o instanceof Boolean) {
-            metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.BOOL);
+            metric.setType(MqttPayloadProto.KapuaPayload.KapuaMetric.ValueType.BOOL);
             metric.setBoolValue((Boolean) o);
         }
         else if (o instanceof byte[]) {
-            metric.setType(KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType.BYTES);
+            metric.setType(MqttPayloadProto.KapuaPayload.KapuaMetric.ValueType.BYTES);
             metric.setBytesValue(ByteString.copyFrom((byte[]) o));
         }
         else if (o == null) {
@@ -416,8 +416,8 @@ public class KapuaPayload
         }
     }
 
-    private static Object getProtoKapuaMetricValue(KapuaPayloadProto.KapuaPayload.KapuaMetric metric,
-                                                   KapuaPayloadProto.KapuaPayload.KapuaMetric.ValueType type)
+    private static Object getProtoKapuaMetricValue(MqttPayloadProto.KapuaPayload.KapuaMetric metric,
+                                                   MqttPayloadProto.KapuaPayload.KapuaMetric.ValueType type)
         throws KapuaInvalidMetricTypeException
     {
         switch (type) {

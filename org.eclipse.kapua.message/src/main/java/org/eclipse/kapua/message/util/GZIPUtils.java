@@ -18,30 +18,38 @@ import java.io.IOException;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class GZIPUtils {
+public class GZIPUtils
+{
 
-    public static boolean isCompressed(byte[] bytes) throws IOException {
+    public static boolean isCompressed(byte[] bytes)
+    {
         if ((bytes == null) || (bytes.length < 2)) {
             return false;
-        } else {
+        }
+        else {
             return ((bytes[0] == (byte) (GZIPInputStream.GZIP_MAGIC)) && (bytes[1] == (byte) (GZIPInputStream.GZIP_MAGIC >> 8)));
         }
     }
 
-    public static byte[] compress(byte[] source) throws IOException {
+    public static byte[] compress(byte[] source)
+        throws IOException
+    {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         GZIPOutputStream gzipos = null;
         try {
             gzipos = new GZIPOutputStream(baos);
             gzipos.write(source);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw e;
-        } finally {
+        }
+        finally {
             if (gzipos != null) {
                 try {
                     gzipos.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     // Ignore
                 }
             }
@@ -49,7 +57,9 @@ public class GZIPUtils {
         return baos.toByteArray();
     }
 
-    public static byte[] decompress(byte[] source) throws IOException {
+    public static byte[] decompress(byte[] source)
+        throws IOException
+    {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ByteArrayInputStream bais = new ByteArrayInputStream(source);
         GZIPInputStream gzipis = null;
@@ -60,23 +70,27 @@ public class GZIPUtils {
             int n;
             final int MAX_BUF = 1024;
             byte[] buf = new byte[MAX_BUF];
-            while((n = gzipis.read(buf, 0, MAX_BUF)) != -1) {
+            while ((n = gzipis.read(buf, 0, MAX_BUF)) != -1) {
                 baos.write(buf, 0, n);
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw e;
-        } finally {
+        }
+        finally {
             if (gzipis != null) {
                 try {
                     gzipis.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     // Ignore
                 }
             }
 
             try {
                 baos.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 // Ignore
             }
         }

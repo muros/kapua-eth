@@ -7,11 +7,11 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCall;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCallFactory;
-import org.eclipse.kapua.service.device.management.commons.DeviceManagementTopicBuilder;
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.call.message.KapuaRequestDestination;
+import org.eclipse.kapua.service.device.call.message.KapuaRequestPayload;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
-import org.eclipse.kapua.service.device.message.request.KapuaRequestPayload;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 
@@ -50,6 +50,7 @@ public class DeviceApplicationCall<T>
         this.responseHandler = responseHandler;
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public T send()
         throws KapuaException
     {
@@ -64,28 +65,30 @@ public class DeviceApplicationCall<T>
         // Build request topic
         DeviceManagementSetting devManagementConfig = DeviceManagementSetting.getInstance();
         String topicPrefix = devManagementConfig.getString(DeviceManagementSettingKey.CONTROL_TOPIC_PREFIX);
-        DeviceManagementTopicBuilder.Request requestTopicBuilder = new DeviceManagementTopicBuilder.Request().withTopicPrefix(topicPrefix)
-                                                                                                             .withAccountName(account.getName())
-                                                                                                             .withAssetId(device.getClientId())
-                                                                                                             .withAppId(appId)
-                                                                                                             .withMethod(method)
-                                                                                                             .withResources(resources);
+
+        KapuaRequestDestination requestDestination = (KapuaRequestDestination) new Object();
+        requestDestination.setControlDestinationPrefix(topicPrefix);
+        requestDestination.setScopeNamespace(account.getName());
+        requestDestination.setClientId(device.getClientId());
+        requestDestination.setAppId(appId);
+        requestDestination.setMethod(method);
+        requestDestination.setResources(resources);
 
         //
         // Add request body
-        if (requestPayload == null) {
-            requestPayload = new KapuaRequestPayload();
-        }
+        // if (requestPayload == null) {
+        // requestPayload = new KapuaRequestPayload();
+        // }
 
         //
         // Send request
         DeviceManagementSetting config = DeviceManagementSetting.getInstance();
         KapuaDeviceCallFactory kapuaDeviceCallFactory = locator.getFactory(KapuaDeviceCallFactory.class);
-        KapuaDeviceCall deviceCall = kapuaDeviceCallFactory.newInstance(requestTopicBuilder.build(),
+        KapuaDeviceCall deviceCall = kapuaDeviceCallFactory.newInstance(requestDestination,
                                                                         requestPayload,
                                                                         config.getLong(DeviceManagementSettingKey.REQUEST_TIMEOUT));
 
-        KapuaResponseMessage responseMessage = (KapuaResponseMessage) deviceCall.send();
+        KapuaResponseMessage responseMessage = deviceCall.send();
 
         //
         // Handle response

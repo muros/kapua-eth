@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
-public interface DeviceFactory extends KapuaEntityFactory
+public interface DeviceFactory extends KapuaObjectFactory
 {
     public DeviceCreator newCreator(KapuaId scopeId, String clientId);
 

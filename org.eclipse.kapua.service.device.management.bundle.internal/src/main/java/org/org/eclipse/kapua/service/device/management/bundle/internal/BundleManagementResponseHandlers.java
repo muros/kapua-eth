@@ -1,12 +1,12 @@
 package org.org.eclipse.kapua.service.device.management.bundle.internal;
 
 import org.eclipse.kapua.commons.util.XmlUtil;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.call.message.KapuaResponsePayload;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundleListResult;
 import org.eclipse.kapua.service.device.management.commons.call.AbstractDeviceApplicationCallResponseHandler;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponseMessage;
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponsePayload;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 
@@ -14,6 +14,7 @@ public class BundleManagementResponseHandlers
 {
     public static class GET extends AbstractDeviceApplicationCallResponseHandler<DeviceBundleListResult>
     {
+        @SuppressWarnings("rawtypes")
         @Override
         protected DeviceBundleListResult handleAcceptedRequest(KapuaResponseMessage responseMessage)
             throws DeviceManagementException
@@ -53,6 +54,7 @@ public class BundleManagementResponseHandlers
     public static class PUT extends AbstractDeviceApplicationCallResponseHandler<Void>
     {
 
+        @SuppressWarnings("rawtypes")
         @Override
         protected Void handleAcceptedRequest(KapuaResponseMessage responseMessage)
             throws DeviceManagementException

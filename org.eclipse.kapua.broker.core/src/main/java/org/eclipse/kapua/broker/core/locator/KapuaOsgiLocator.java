@@ -3,7 +3,7 @@ package org.eclipse.kapua.broker.core.locator;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.locator.spi.KapuaLocatorErrorCodes;
-import org.eclipse.kapua.model.KapuaEntityFactory;
+import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.service.KapuaService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -23,7 +23,7 @@ public class KapuaOsgiLocator extends KapuaLocator {
 	}
 	
 	@Override
-	public <F extends KapuaEntityFactory> F getFactory(Class<F> factoryClass) {
+	public <F extends KapuaObjectFactory> F getFactory(Class<F> factoryClass) {
 		//TODO check the exception type thrown
 //    	ServiceReference<F>[] serviceReferences;
 //		try {

@@ -1,16 +1,18 @@
 package org.eclipse.kapua.service.device.call;
 
-import org.eclipse.kapua.model.KapuaEntityFactory;
-import org.eclipse.kapua.service.device.message.request.KapuaRequestDestination;
-import org.eclipse.kapua.service.device.message.request.KapuaRequestMessage;
-import org.eclipse.kapua.service.device.message.request.KapuaRequestPayload;
-import org.eclipse.kapua.service.device.message.response.KapuaResponseDestination;
-import org.eclipse.kapua.service.device.message.response.KapuaResponseMessage;
+import org.eclipse.kapua.model.KapuaObjectFactory;
+import org.eclipse.kapua.service.device.call.message.KapuaRequestDestination;
+import org.eclipse.kapua.service.device.call.message.KapuaRequestPayload;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseDestination;
+import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
 
-public interface KapuaDeviceCallFactory<RQM extends KapuaRequestMessage, RSM extends KapuaResponseMessage, RQD extends KapuaRequestDestination, RSD extends KapuaResponseDestination, H extends KapuaDeviceCallHandler<RSM>>
-                                       extends KapuaEntityFactory
+public interface KapuaDeviceCallFactory<RQD extends KapuaRequestDestination, RQP extends KapuaRequestPayload, RSD extends KapuaResponseDestination, RSM extends KapuaResponseMessage, H extends KapuaDeviceCallHandler<RSM>>
+                                       extends KapuaObjectFactory
 {
-    public KapuaDeviceCall<RQM, RSM, RQD, RSD, H> newInstance(String requestTopic, KapuaRequestPayload requestPayload, Long timeout);
+    @SuppressWarnings("rawtypes")
+    public KapuaDeviceCall newInstance(RQD requestDestination, RQP requestPayload, Long timeout);
 
-    public KapuaDeviceCall<RQM, RSM, RQD, RSD, H> newInstance(String requestTopic, String responseTopic, KapuaRequestPayload requestPayload, Long timeout);
+    @SuppressWarnings("rawtypes")
+    public KapuaDeviceCall newInstance(RQD requestDestination, RSD responseDestination, RQP requestPayload, Long timeout);
+
 }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.client.KapuaClient;
+import org.eclipse.kapua.client.KapuaClientConnectOptions;
 import org.eclipse.kapua.client.message.mqtt.MqttPayload;
 import org.eclipse.kapua.client.message.mqtt.MqttTopic;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -21,6 +22,37 @@ public class MqttClient extends org.eclipse.paho.client.mqttv3.MqttClient implem
         super(brokerURI, clientId, new MemoryPersistence());
     }
 
+    //
+    // Connection management
+    //
+
+    @Override
+    public void connectClient(KapuaClientConnectOptions options)
+        throws KapuaException
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void disconnectClient()
+        throws KapuaException
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void terminateClient()
+        throws KapuaException
+    {
+        // TODO Auto-generated method stub
+
+    }
+
+    //
+    // Message management
+    //
     @Override
     public void publish(MqttTopic kapuaDestination, MqttPayload kapuaPayload)
         throws KapuaException
@@ -86,4 +118,5 @@ public class MqttClient extends org.eclipse.paho.client.mqttv3.MqttClient implem
     {
         super.setCallback(clientCallback);
     }
+
 }
