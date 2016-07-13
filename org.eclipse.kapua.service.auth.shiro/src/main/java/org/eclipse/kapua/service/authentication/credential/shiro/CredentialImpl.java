@@ -5,17 +5,28 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
+import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.credential.Credential;
 import org.eclipse.kapua.service.authentication.credential.CredentialType;
+import org.hibernate.annotations.DynamicUpdate;
 
-public class CredentialImpl extends AbstractKapuaEntity implements Credential
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity(name = "Credential")
+@Table(name = "atht_credential")
+@DynamicUpdate
+public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Credential
 {
     private static final long serialVersionUID = -7921424688644169175L;
 
