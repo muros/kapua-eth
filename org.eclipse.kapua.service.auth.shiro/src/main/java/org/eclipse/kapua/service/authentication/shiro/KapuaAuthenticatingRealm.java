@@ -145,6 +145,7 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
 
         //
         // Find credentials
+        // FIXME: manage multiple credentials and multiple credentials type
         Credential credential = null;
         try {
             credential = KapuaSecurityUtils.doPriviledge(new Callable<Credential>() {

@@ -43,7 +43,7 @@ public class CredentialCreatorImpl extends AbstractKapuaEntityCreator<Credential
     }
 
     @Override
-    public String getCredentialKey()
+    public String getCredentialPlainKey()
     {
         return credentialKey;
     }

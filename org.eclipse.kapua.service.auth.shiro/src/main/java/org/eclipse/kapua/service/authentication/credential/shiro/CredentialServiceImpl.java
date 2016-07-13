@@ -34,7 +34,7 @@ public class CredentialServiceImpl implements CredentialService
         ArgumentValidator.notNull(credentialCreator.getScopeId(), "credentialCreator.scopeId");
         ArgumentValidator.notNull(credentialCreator.getUserId(), "credentialCreator.userId");
         ArgumentValidator.notNull(credentialCreator.getCredentialType(), "credentialCreator.credentialType");
-        ArgumentValidator.notEmptyOrNull(credentialCreator.getCredentialKey(), "credentialCreator.credentialKey");
+        ArgumentValidator.notEmptyOrNull(credentialCreator.getCredentialPlainKey(), "credentialCreator.credentialKey");
 
         //
         // Check access

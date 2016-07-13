@@ -21,6 +21,7 @@ import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.authentication.credential.Credential;
 import org.eclipse.kapua.service.authentication.credential.CredentialCreator;
 import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
+import org.eclipse.kapua.service.authentication.shiro.utils.AuthenticationUtils;
 
 public class CredentialDAO extends ServiceDAO
 {
@@ -33,7 +34,7 @@ public class CredentialDAO extends ServiceDAO
         CredentialImpl credentialImpl = new CredentialImpl(credentialCreator.getScopeId(),
                                                            credentialCreator.getUserId(),
                                                            credentialCreator.getCredentialType(),
-                                                           credentialCreator.getCredentialKey());
+                                                           AuthenticationUtils.cryptCredential(credentialCreator.getCredentialPlainKey()));
 
         return ServiceDAO.create(em, credentialImpl);
     }

@@ -20,8 +20,12 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.JpaUtils;
+import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
+import org.eclipse.kapua.service.authorization.Actions;
+import org.eclipse.kapua.service.authorization.AuthorizationService;
+import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.authorization.permission.UserPermission;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionListResult;
@@ -37,8 +41,15 @@ public class UserPermissionServiceImpl implements UserPermissionService
         ArgumentValidator.notNull(userPermissionCreator, "userPermissionCreator");
         ArgumentValidator.notNull(userPermissionCreator.getDomain(), "userPermissionCreator.domain");
 
-        // TODO: check access ??
+        //
+        // Check Access
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.user_permission, Actions.write, userPermissionCreator.getScopeId()));
 
+        //
+        // Do create
         UserPermission permission = null;
         EntityManager em = JpaUtils.getEntityManager();
         try {
@@ -65,8 +76,15 @@ public class UserPermissionServiceImpl implements UserPermissionService
     {
         ArgumentValidator.notNull(permission, "permission");
 
-        // TODO: check access ??
+        //
+        // Check Access
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.user_permission, Actions.write, permission.getScopeId()));
 
+        //
+        // Do delete
         EntityManager em = JpaUtils.getEntityManager();
         try {
             KapuaId permissionId = permission.getId();
@@ -89,14 +107,21 @@ public class UserPermissionServiceImpl implements UserPermissionService
     }
 
     @Override
-    public UserPermission find(KapuaId accountId, KapuaId permissionId)
+    public UserPermission find(KapuaId scopeId, KapuaId permissionId)
         throws KapuaException
     {
-        ArgumentValidator.notNull(accountId, "accountId");
+        ArgumentValidator.notNull(scopeId, "accountId");
         ArgumentValidator.notNull(permissionId, "permissionId");
 
-        // TODO: check access ??
+        //
+        // Check Access
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.user_permission, Actions.read, scopeId));
 
+        //
+        // Do find
         UserPermission permission = null;
         EntityManager em = JpaUtils.getEntityManager();
         try {
@@ -118,8 +143,15 @@ public class UserPermissionServiceImpl implements UserPermissionService
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
 
-        // TODO: check access ??
+        //
+        // Check Access
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.user_permission, Actions.read, query.getScopeId()));
 
+        //
+        // Do query
         UserPermissionListResult result = null;
         EntityManager em = JpaUtils.getEntityManager();
         try {
@@ -142,8 +174,15 @@ public class UserPermissionServiceImpl implements UserPermissionService
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
 
-        // TODO: check access ??
+        //
+        // Check Access
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.user_permission, Actions.read, query.getScopeId()));
 
+        //
+        // Do count
         long count = 0;
         EntityManager em = JpaUtils.getEntityManager();
         try {

@@ -28,9 +28,17 @@ import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authentication.credential.Credential;
+import org.eclipse.kapua.service.authentication.credential.CredentialCreator;
+import org.eclipse.kapua.service.authentication.credential.CredentialFactory;
+import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
+import org.eclipse.kapua.service.authentication.credential.CredentialService;
+import org.eclipse.kapua.service.authentication.credential.CredentialType;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionFactory;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionService;
+import org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionDomain;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
@@ -72,7 +80,8 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             UserService userService = locator.getService(UserService.class);
             User user = userService.create(userCreator);
 
-            // set permissions
+            //
+            // Create permissions
             Set<String> permissions = new HashSet<String>();
             if (gwtUserCreator.getPermissions() != null) {
                 // build the set of permissions
@@ -88,10 +97,10 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
                 String[] tokens = p.split(":");
                 if (tokens.length > 0) {
-                    userPermissionCreator.setDomain(tokens[0]);
+                    userPermissionCreator.setDomain(UserPermissionDomain.user_permission);// FIXME: interface Domain does not work ????
                 }
                 if (tokens.length > 1) {
-                    userPermissionCreator.setAction(tokens[1]);
+                    userPermissionCreator.setAction(Actions.valueOf(tokens[1]));
                 }
                 if (tokens.length > 2) {
                     userPermissionCreator.setTargetScopeId(KapuaEid.parseShortId(tokens[2]));
@@ -99,6 +108,17 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
                 userPermissionService.create(userPermissionCreator);
             }
+
+            //
+            // Create credentials
+            CredentialService credentialService = locator.getService(CredentialService.class);
+            CredentialFactory credentialFactory = locator.getFactory(CredentialFactory.class);
+
+            CredentialCreator credentialCreator = credentialFactory.newCreator(scopeId,
+                                                                               user.getId(),
+                                                                               CredentialType.PASSWORD,
+                                                                               gwtUserCreator.getPassword());
+            credentialService.create(credentialCreator);
 
             // convert to GwtAccount and return
             // reload the user as we want to load all its permissions
@@ -128,19 +148,18 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
             if (user != null) {
 
+                //
+                // Update user
                 user.setName(gwtUser.getUnescapedUsername());
                 user.setDisplayName(gwtUser.getUnescapedDisplayName());
                 user.setEmail(gwtUser.getUnescapedEmail());
                 user.setPhoneNumber(gwtUser.getUnescapedPhoneNumber());
-                if (gwtUser.getPassword() != null) {
-                    // do not reset the password unless a new value is supplied
-                    user.setRawPassword(gwtUser.getUnescapedPassword());
-                }
 
                 // status
                 user.setStatus(UserStatus.valueOf(gwtUser.getStatus()));
 
-                // set permissions
+                //
+                // Update permissions
                 Set<String> newPermissions = new HashSet<String>();
                 if (gwtUser.getPermissions() != null) {
                     // build the set of permissions
@@ -157,10 +176,10 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
                     String[] tokens = p.split(":");
                     if (tokens.length > 0) {
-                        userPermissionCreator.setDomain(tokens[0]);
+                        userPermissionCreator.setDomain(UserPermissionDomain.user_permission);// FIXME: interface Domain does not work ????
                     }
                     if (tokens.length > 1) {
-                        userPermissionCreator.setAction(tokens[1]);
+                        userPermissionCreator.setAction(Actions.valueOf(tokens[1]));
                     }
                     if (tokens.length > 2) {
                         userPermissionCreator.setTargetScopeId(KapuaEid.parseShortId(tokens[2]));
@@ -170,6 +189,36 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
                 }
 
                 userPermissionService.merge(newUserPermissions);
+
+                //
+                // Update credentials
+                if (gwtUser.getPassword() != null) {
+                    CredentialService credentialService = locator.getService(CredentialService.class);
+                    CredentialFactory credentialFactory = locator.getFactory(CredentialFactory.class);
+
+                    CredentialListResult credentials = credentialService.findByUserId(scopeId, userId);
+                    if (!credentials.isEmpty()) {
+                        //
+                        // Delete old PASSWORD credential
+                        Credential oldCredential = null;
+                        for (Credential c : credentials) {
+                            if (CredentialType.PASSWORD.equals(c.getCredentialType())) {
+                                oldCredential = c;
+                                break;
+                            }
+                        }
+                        credentialService.delete(oldCredential);
+
+                        //
+                        // Create new PASSWORD credential
+                        CredentialCreator credentialCreator = credentialFactory.newCreator(scopeId,
+                                                                                           user.getId(),
+                                                                                           CredentialType.PASSWORD,
+                                                                                           gwtUser.getPassword());
+
+                        credentialService.create(credentialCreator);
+                    }
+                }
 
                 // optlock
                 user.setOptlock(gwtUser.getOptlock());

@@ -9,5 +9,5 @@ public interface CredentialCreator extends KapuaEntityCreator<Credential>
 
     public CredentialType getCredentialType();
 
-    public String getCredentialKey();
+    public String getCredentialPlainKey();
 }
