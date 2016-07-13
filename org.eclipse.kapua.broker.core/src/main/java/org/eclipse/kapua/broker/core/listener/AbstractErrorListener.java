@@ -14,7 +14,7 @@ package org.eclipse.kapua.broker.core.listener;
 
 import org.apache.camel.Exchange;
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.broker.core.metrics.MetricsService;
+import org.eclipse.kapua.commons.metric.MetricsService;
 import org.eclipse.kapua.locator.KapuaLocator;
 
 import com.codahale.metrics.Counter;
