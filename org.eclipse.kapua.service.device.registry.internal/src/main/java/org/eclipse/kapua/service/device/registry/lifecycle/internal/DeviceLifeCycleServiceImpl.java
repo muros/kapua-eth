@@ -14,10 +14,10 @@ package org.eclipse.kapua.service.device.registry.lifecycle.internal;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.KapuaBirthPayload;
-import org.eclipse.kapua.message.KapuaMessage;
-import org.eclipse.kapua.message.KapuaPayload;
-import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.message.internal.KapuaBirthPayload;
+import org.eclipse.kapua.message.internal.KapuaMessage;
+import org.eclipse.kapua.message.internal.KapuaPayload;
+import org.eclipse.kapua.message.internal.KapuaTopic;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;

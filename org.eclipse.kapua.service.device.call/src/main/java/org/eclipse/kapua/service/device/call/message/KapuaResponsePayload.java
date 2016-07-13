@@ -1,6 +1,6 @@
 package org.eclipse.kapua.service.device.call.message;
 
-import org.eclipse.kapua.client.message.KapuaPayload;
+import org.eclipse.kapua.message.KapuaPayload;
 
 public interface KapuaResponsePayload extends KapuaPayload
 {

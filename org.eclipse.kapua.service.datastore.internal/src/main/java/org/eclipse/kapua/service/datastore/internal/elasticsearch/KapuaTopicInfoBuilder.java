@@ -18,8 +18,8 @@ import java.util.Map;
 
 import org.eclipse.kapua.KapuaIllegalNullArgumentException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.message.KapuaInvalidTopicException;
-import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.message.internal.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.internal.KapuaTopic;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 

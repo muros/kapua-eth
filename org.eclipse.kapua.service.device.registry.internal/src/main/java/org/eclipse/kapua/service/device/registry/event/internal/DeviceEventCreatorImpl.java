@@ -5,7 +5,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
-import org.eclipse.kapua.message.KapuaPosition;
+import org.eclipse.kapua.message.internal.KapuaPosition;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;

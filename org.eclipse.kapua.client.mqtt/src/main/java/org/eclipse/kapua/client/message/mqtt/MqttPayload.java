@@ -12,10 +12,10 @@ import javax.xml.bind.annotation.XmlInlineBinaryData;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.client.message.KapuaPayload;
 import org.eclipse.kapua.client.mqtt.MqttClientErrorCodes;
 import org.eclipse.kapua.client.mqtt.MqttClientException;
 import org.eclipse.kapua.message.KapuaInvalidMetricTypeException;
+import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.message.protobuf.MqttPayloadProto;
 import org.eclipse.kapua.message.util.GZIPUtils;

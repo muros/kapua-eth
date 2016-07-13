@@ -113,19 +113,17 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall<KuraResponseDestinati
                     String requestId = String.valueOf(r.nextLong());
                     //
 
-                    responseDestination = new KuraResponseDestination();
+                    responseDestination = new KuraResponseDestination(requestDestination.getControlDestinationPrefix(),
+                                                                      requestDestination.getScopeNamespace(),
+                                                                      kapuaClient.getClientId());
 
-                    responseDestination.setControlDestinationPrefix(requestDestination.getControlDestinationPrefix());
-                    responseDestination.setScopeNamespace(requestDestination.getScopeNamespace());
-                    responseDestination.setClientId(kapuaClient.getClientId());
                     responseDestination.setAppId(requestDestination.getAppId());
-                    // REPLY
                     responseDestination.setRequestId(requestId);
 
                     requestPayload.setRequestId(requestId);
                 }
 
-                requestPayload.setRequesterId(kapuaClient.getClientId());
+                requestPayload.setRequesterClientId(kapuaClient.getClientId());
             }
 
             //

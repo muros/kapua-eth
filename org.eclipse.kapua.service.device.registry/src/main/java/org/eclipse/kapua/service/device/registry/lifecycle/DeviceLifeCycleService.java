@@ -13,7 +13,7 @@
 package org.eclipse.kapua.service.device.registry.lifecycle;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.internal.KapuaMessage;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaService;
 

@@ -2,7 +2,7 @@ package org.eclipse.kapua.service.device.registry.event;
 
 import java.util.Date;
 
-import org.eclipse.kapua.message.KapuaPosition;
+import org.eclipse.kapua.message.internal.KapuaPosition;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 

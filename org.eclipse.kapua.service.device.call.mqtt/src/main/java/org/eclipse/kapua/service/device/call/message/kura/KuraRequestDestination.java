@@ -1,50 +1,83 @@
 package org.eclipse.kapua.service.device.call.message.kura;
 
+import java.util.Arrays;
+
 import org.eclipse.kapua.service.device.call.message.KapuaRequestDestination;
 
-public class KuraRequestDestination extends KuraAppDestination implements KapuaRequestDestination
+public class KuraRequestDestination extends AbstractKuraAppDestination implements KapuaRequestDestination
 {
+    private String   method;
+    private String[] resources;
+
+    public KuraRequestDestination(String scopeNamespace, String clientId)
+    {
+        this(null, scopeNamespace, clientId);
+    }
+
+    public KuraRequestDestination(String controlDestinationPrefix, String scopeNamespace, String clientId)
+    {
+        super(controlDestinationPrefix, scopeNamespace, clientId);
+    }
 
     @Override
     public String toClientDestination()
     {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder destinationSb = new StringBuilder(super.toClientDestination());
+
+        destinationSb.append(destinationSeparator)
+                     .append(getMethod());
+
+        if (resources != null) {
+            for (String r : resources) {
+                destinationSb.append(destinationSeparator)
+                             .append(r);
+            }
+        }
+
+        return destinationSb.toString();
     }
 
     @Override
     public void fromClientDestination(String destination)
     {
-        // TODO Auto-generated method stub
+        super.fromClientDestination(destination);
 
+        String[] destinationTokens = destination.split(destinationSeparator);
+
+        if (destinationControlPrefix.equals(destinationTokens[0])) {
+
+            if (destinationTokens.length > 4) {
+                setAppId(destinationTokens[4]);
+
+                if (destinationTokens.length > 5) {
+                    setResources(Arrays.copyOfRange(destinationTokens, 5, destinationTokens.length));
+                }
+            }
+
+        }
     }
 
     @Override
     public String getMethod()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return method;
     }
 
     @Override
     public void setMethod(String method)
     {
-        // TODO Auto-generated method stub
-
+        this.method = method;
     }
 
     @Override
     public String[] getResources()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return resources;
     }
 
     @Override
     public void setResources(String[] resources)
     {
-        // TODO Auto-generated method stub
-
+        this.resources = resources;
     }
-
 }

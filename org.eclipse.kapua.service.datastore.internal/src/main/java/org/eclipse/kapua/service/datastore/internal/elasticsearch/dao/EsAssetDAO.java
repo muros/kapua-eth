@@ -14,7 +14,7 @@ package org.eclipse.kapua.service.datastore.internal.elasticsearch.dao;
 
 import java.net.UnknownHostException;
 
-import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.message.internal.KapuaTopic;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsDatastoreException;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsSchema;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsUtils;

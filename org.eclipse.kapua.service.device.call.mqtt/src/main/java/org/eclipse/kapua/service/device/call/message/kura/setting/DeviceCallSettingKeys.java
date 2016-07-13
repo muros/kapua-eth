@@ -10,13 +10,24 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.message.encoder;
+package org.eclipse.kapua.service.device.call.message.kura.setting;
 
-import java.io.IOException;
+import org.eclipse.kapua.commons.setting.SettingKey;
 
-/**
- * Common interface for the PayloadEncoders
- */
-public interface KapuaPayloadEncoder {
-    public byte[] getBytes() throws IOException;
+public enum DeviceCallSettingKeys implements SettingKey
+{
+    DESTINATION_SEPARATOR("destination.separator"),
+    DESTINATION_CONTROL_PREFIX("destination.control.prefix");
+
+    private String key;
+
+    private DeviceCallSettingKeys(String key)
+    {
+        this.key = key;
+    }
+
+    public String key()
+    {
+        return key;
+    }
 }

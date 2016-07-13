@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.kapua.message.KapuaInvalidTopicException;
-import org.eclipse.kapua.message.KapuaMessage;
-import org.eclipse.kapua.message.KapuaPayload;
-import org.eclipse.kapua.message.KapuaPosition;
-import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.message.internal.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.internal.KapuaMessage;
+import org.eclipse.kapua.message.internal.KapuaPayload;
+import org.eclipse.kapua.message.internal.KapuaPosition;
+import org.eclipse.kapua.message.internal.KapuaTopic;
 import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.Payload;
