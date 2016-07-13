@@ -2,7 +2,7 @@ package org.eclipse.kapua.service.authentication.shiro.credential;
 
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.eclipse.kapua.service.account.Account;
-import org.eclipse.kapua.service.authentication.Credential;
+import org.eclipse.kapua.service.authentication.credential.Credential;
 import org.eclipse.kapua.service.user.User;
 
 public class KapuaSimpleAuthenticationInfo extends SimpleAuthenticationInfo

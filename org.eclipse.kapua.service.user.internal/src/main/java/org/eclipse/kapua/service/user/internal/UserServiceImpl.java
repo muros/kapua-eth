@@ -240,6 +240,8 @@ public class UserServiceImpl implements UserService
     public UserListResult query(KapuaQuery<User> query)
         throws KapuaException
     {
+        //
+        // Argument Validation
         ArgumentValidator.notNull(query, "query");
         ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
 

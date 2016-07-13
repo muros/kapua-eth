@@ -1,4 +1,4 @@
-package org.eclipse.kapua.service.authentication;
+package org.eclipse.kapua.service.authentication.credential;
 
 public enum CredentialType
 {
