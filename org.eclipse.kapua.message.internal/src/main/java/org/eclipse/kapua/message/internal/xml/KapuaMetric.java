@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.message.xml;
+package org.eclipse.kapua.message.internal.xml;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;
@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * EdcMetric represents an instance of a metric published as part of the message.
@@ -30,9 +29,10 @@ import org.slf4j.LoggerFactory;
  * Values of type base64Binary represent a metric of type byte array;
  * in this case, the metric value is serialized into a base64 encoded string.
  */
-@XmlRootElement(name="metric")
-@XmlType(propOrder= {"name","type","value"})
-public class KapuaMetric {
+@XmlRootElement(name = "metric")
+@XmlType(propOrder = { "name", "type", "value" })
+public class KapuaMetric
+{
     @SuppressWarnings("unused")
     private static final Logger s_logger = LoggerFactory.getLogger(KapuaMetric.class);
 
@@ -40,45 +40,45 @@ public class KapuaMetric {
      * Name of the Metric.
      */
     @XmlElement
-    public String name;
+    public String               name;
 
     /**
      * Type of the Metric value. Allowed types are: string, double, int, float, long, boolean, base64Binary.
      */
     @XmlElement
-    public String type;
+    public String               type;
 
     /**
      * String representation of the Metric value according to the Metric type.
      */
     @XmlElement
-    public String value;
+    public String               value;
 
-
-    public KapuaMetric() {
+    public KapuaMetric()
+    {
     }
 
-
-    public KapuaMetric(String name, String type, String value) {
-        this.name  = name;
-        this.type  = type;
+    public KapuaMetric(String name, String type, String value)
+    {
+        this.name = name;
+        this.type = type;
         this.value = value;
     }
 
-
-    public KapuaMetric(String name, Class<?> type, Object value) {
-        this.name  = name;
-        this.type  = getMetricType(type);
+    public KapuaMetric(String name, Class<?> type, Object value)
+    {
+        this.name = name;
+        this.type = getMetricType(type);
         this.value = getStringValue(value);
     }
 
-
-    public String getName() {
+    public String getName()
+    {
         return this.name;
     }
 
-
-    public static String getMetricType(Class<?> type) {
+    public static String getMetricType(Class<?> type)
+    {
 
         if (type == null) {
             return null;
@@ -86,27 +86,34 @@ public class KapuaMetric {
 
         if (String.class.equals(type)) {
             return "string";
-        } else if (Double.class.equals(type)) {
+        }
+        else if (Double.class.equals(type)) {
             return "double";
-        } else if (Integer.class.equals(type)) {
+        }
+        else if (Integer.class.equals(type)) {
             return "int";
-        } else if (Float.class.equals(type)) {
+        }
+        else if (Float.class.equals(type)) {
             return "float";
-        } else if (Long.class.equals(type)) {
+        }
+        else if (Long.class.equals(type)) {
             return "long";
-        } else if (Boolean.class.equals(type)) {
+        }
+        else if (Boolean.class.equals(type)) {
             return "boolean";
-        } else if (byte[].class.equals(type)) {
+        }
+        else if (byte[].class.equals(type)) {
             return "base64Binary";
-        } else {
+        }
+        else {
             // FIXME: What do we do in this case?
             // It should never happen but...
             return type.toString();
         }
     }
 
-
-    public static String getStringValue(Object value) {
+    public static String getStringValue(Object value)
+    {
 
         if (value == null) {
             return null;
@@ -114,13 +121,14 @@ public class KapuaMetric {
 
         if (value instanceof byte[]) {
             return DatatypeConverter.printBase64Binary((byte[]) value);
-        } else {
+        }
+        else {
             return String.valueOf(value);
         }
     }
 
-
-    public Object getValue() {
+    public Object getValue()
+    {
 
         if (type == null) {
             return null;
@@ -128,19 +136,26 @@ public class KapuaMetric {
 
         if ("string".equals(type)) {
             return value;
-        } else if ("double".equals(type)) {
+        }
+        else if ("double".equals(type)) {
             return Double.valueOf(value);
-        } else if ("int".equals(type)) {
+        }
+        else if ("int".equals(type)) {
             return Integer.valueOf(value);
-        } else if ("float".equals(type)) {
+        }
+        else if ("float".equals(type)) {
             return Float.valueOf(value);
-        } else if ("long".equals(type)) {
+        }
+        else if ("long".equals(type)) {
             return Long.valueOf(value);
-        } else if ("boolean".equals(type)) {
+        }
+        else if ("boolean".equals(type)) {
             return Boolean.valueOf(value);
-        } else if ("base64Binary".equals(type)) {
+        }
+        else if ("base64Binary".equals(type)) {
             return DatatypeConverter.parseBase64Binary(value);
-        } else {
+        }
+        else {
             // FIXME: What do we do in this case?
             // It should never happen but...
             return String.valueOf(value);

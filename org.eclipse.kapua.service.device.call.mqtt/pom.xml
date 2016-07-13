@@ -31,6 +31,11 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.message</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.client.pool</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
@@ -40,6 +45,11 @@
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.commons</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.message.internal</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
         
@@ -57,6 +67,12 @@
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <version>1.0.2</version>
+        </dependency>
+        <dependency>
+            <!-- Google protobuf for message encoding -->
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.6.0</version>
         </dependency>
     </dependencies>
 </project>

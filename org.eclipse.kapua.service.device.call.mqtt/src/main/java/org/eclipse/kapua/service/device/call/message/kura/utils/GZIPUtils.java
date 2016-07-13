@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.message.util;
+package org.eclipse.kapua.service.device.call.message.kura.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

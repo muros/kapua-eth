@@ -1,6 +1,6 @@
 package org.eclipse.kapua.broker.core.message;
 
-import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.internal.KapuaMessage;
 import org.eclipse.kapua.model.id.KapuaId;
 
 public class CamelKapuaMessage {

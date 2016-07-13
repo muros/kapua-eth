@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.message.xml;
+package org.eclipse.kapua.message.internal.xml;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;

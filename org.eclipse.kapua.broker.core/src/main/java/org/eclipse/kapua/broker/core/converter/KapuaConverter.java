@@ -15,7 +15,7 @@ import org.eclipse.kapua.broker.core.message.JmsUtil;
 import org.eclipse.kapua.broker.core.plugin.AclConstants;
 import org.eclipse.kapua.commons.metric.MetricsService;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.internal.KapuaInvalidTopicException;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

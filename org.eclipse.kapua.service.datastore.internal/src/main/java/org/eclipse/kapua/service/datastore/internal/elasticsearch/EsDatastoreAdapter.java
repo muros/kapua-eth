@@ -24,9 +24,9 @@ import java.util.UUID;
 
 import org.eclipse.kapua.commons.cache.LocalCache;
 import org.eclipse.kapua.commons.util.KapuaDateUtils;
-import org.eclipse.kapua.message.KapuaInvalidTopicException;
-import org.eclipse.kapua.message.KapuaMessage;
-import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.message.internal.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.internal.KapuaMessage;
+import org.eclipse.kapua.message.internal.KapuaTopic;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsAssetDAO;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsAssetTopicDAO;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.dao.EsDaoEvent;

@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.message.internal.KapuaTopic;
 
 @XmlRootElement(name = "topicInfo")
 @XmlAccessorType(XmlAccessType.PROPERTY)

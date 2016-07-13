@@ -2,7 +2,7 @@ package org.eclipse.kapua.client.message.mqtt;
 
 import java.util.Date;
 
-import org.eclipse.kapua.client.message.KapuaMessage;
+import org.eclipse.kapua.message.KapuaMessage;
 
 public class MqttMessage implements KapuaMessage<MqttTopic, MqttPayload>
 {

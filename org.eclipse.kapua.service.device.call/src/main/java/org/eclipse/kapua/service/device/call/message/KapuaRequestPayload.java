@@ -1,6 +1,6 @@
 package org.eclipse.kapua.service.device.call.message;
 
-public interface KapuaRequestPayload extends org.eclipse.kapua.client.message.KapuaPayload
+public interface KapuaRequestPayload extends org.eclipse.kapua.message.KapuaPayload
 {
 
     public void setRequestId(String requestId);
@@ -8,7 +8,7 @@ public interface KapuaRequestPayload extends org.eclipse.kapua.client.message.Ka
     // addMetric("request.id", requestId);
     // }
 
-    public void setRequesterId(String requesterId);
+    public void setRequesterClientId(String requesterId);
     // {
     // addMetric("requester.id", requesterId);
     // }

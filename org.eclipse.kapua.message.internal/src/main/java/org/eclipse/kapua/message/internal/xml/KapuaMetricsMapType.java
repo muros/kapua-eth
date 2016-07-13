@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.message.xml;
+package org.eclipse.kapua.message.internal.xml;
 
 import java.util.ArrayList;
 import java.util.List;

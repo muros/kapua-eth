@@ -1,4 +1,4 @@
-package org.eclipse.kapua.client.message;
+package org.eclipse.kapua.message;
 
 public interface KapuaDestination
 {

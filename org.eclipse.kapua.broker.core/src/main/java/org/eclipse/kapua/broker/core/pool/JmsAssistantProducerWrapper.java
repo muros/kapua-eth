@@ -24,10 +24,10 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import org.eclipse.kapua.broker.core.message.Constants;
 import org.eclipse.kapua.broker.core.message.JmsUtil;
 import org.eclipse.kapua.broker.core.plugin.AclConstants;
-import org.eclipse.kapua.message.KapuaInvalidTopicException;
-import org.eclipse.kapua.message.KapuaMessage;
-import org.eclipse.kapua.message.KapuaPayload;
-import org.eclipse.kapua.message.KapuaTopic;
+import org.eclipse.kapua.message.internal.KapuaInvalidTopicException;
+import org.eclipse.kapua.message.internal.KapuaMessage;
+import org.eclipse.kapua.message.internal.KapuaPayload;
+import org.eclipse.kapua.message.internal.KapuaTopic;
 import org.eclipse.kapua.service.user.UserStatus;
 
 /**
