@@ -23,6 +23,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.Session;
@@ -65,7 +66,18 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
         }
 
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
-
+        defaultSecurityManager.setAuthenticator(new KapuaAuthenticator());
+        logger.info("Set '{}' as shiro authenticator", KapuaAuthenticator.class);
+//        if (defaultSecurityManager.getAuthenticator() instanceof ModularRealmAuthenticator) {
+//        	KapuaAuthenticationStrategy authenticationStrategy = new KapuaAuthenticationStrategy();
+//        	((ModularRealmAuthenticator) defaultSecurityManager.getAuthenticator()).setAuthenticationStrategy(authenticationStrategy);
+//        	logger.info("Set '{}' as shiro authentication strategy ", KapuaAuthenticationStrategy.class);
+//        }
+//        else {
+//        	logger.warn("Cannot set '{}' as shiro authentication strategy! Authenticator class is '{}' and this option is only available for ModularRealmAuthenticator!", 
+//        			new Object[]{KapuaAuthenticationStrategy.class, defaultSecurityManager.getAuthenticator() != null ? defaultSecurityManager.getAuthenticator().getClass() : "null"});
+//        }
+        
         defaultSecurityManager.setRealms(realms);
         SecurityUtils.setSecurityManager(defaultSecurityManager);
 
@@ -76,14 +88,14 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
             logger.info("Shiro global session timeout set to indefinite.");
         }
         else {
-            logger.info("Cannot set Shiro global session timeout to indefinite.");
+            logger.warn("Cannot set Shiro global session timeout to indefinite.");
         }
         if (defaultSecurityManager.getSessionManager() instanceof AbstractValidatingSessionManager) {
             ((AbstractValidatingSessionManager) defaultSecurityManager.getSessionManager()).setSessionValidationSchedulerEnabled(false);
             logger.info("Shiro global session validator scheduler disabled.");
         }
         else {
-            logger.info("Cannot disable Shiro session validator scheduler.");
+            logger.warn("Cannot disable Shiro session validator scheduler.");
         }
 
         // TODO check this configuration!!!!
