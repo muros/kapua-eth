@@ -10,12 +10,11 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.broker.core.metrics.internal;
+package org.eclipse.kapua.commons.metric;
 
 import java.text.MessageFormat;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.broker.core.metrics.MetricsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,12 +41,10 @@ public class MetricsServiceImpl implements MetricsService {
 		 metricRegistry = new MetricRegistry();
 	}
 	
-	@Override
 	public MetricRegistry getMetricRegistry() {
 		return metricRegistry;
 	}
 	
-	@Override
 	public Counter getCounter(String module, String component, String... names) {
 		String name = getMetricName(module, component, names);
 		Counter counter = metricRegistry.getCounters().get(name);
@@ -58,7 +55,6 @@ public class MetricsServiceImpl implements MetricsService {
 		return counter;
 	}
 	
-	@Override
 	public Histogram getHistogram(String module, String component, String... names) {
 		String name = getMetricName(module, component, names);
 		Histogram histogram = metricRegistry.getHistograms().get(name);
@@ -69,7 +65,6 @@ public class MetricsServiceImpl implements MetricsService {
 		return histogram;
 	}
 	
-	@Override
 	public Timer getTimer(String module, String component, String... names) {
 		String name = getMetricName(module, component, names);
 		Timer timer = metricRegistry.getTimers().get(name);
@@ -80,7 +75,6 @@ public class MetricsServiceImpl implements MetricsService {
 		return timer;
 	}
 	
-	@Override
 	public void registerGauge(Gauge<?> gauge, String module, String component, String... names) throws KapuaException {
 		String name = getMetricName(module, component, names);
 		if (metricRegistry.getGauges().get(name) != null) {

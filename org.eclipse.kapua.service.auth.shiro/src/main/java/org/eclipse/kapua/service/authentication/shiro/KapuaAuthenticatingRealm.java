@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.shiro;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.apache.shiro.SecurityUtils;
@@ -154,15 +155,22 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
                 public Credential call()
                     throws Exception
                 {
-                    return credentialService.find(user.getScopeId(),
+                    List<Credential> credentialList = credentialService.findByUserId(user.getScopeId(),
                                                   user.getId());
+                    //TODO may be better to filter by credential type?
+                    if (credentialList!=null && !credentialList.isEmpty()) {
+                    	return credentialList.get(0);
+                    }
+                    else {
+                    	throw new UnknownAccountException();
+                    }
                 }
             });
         }
         catch (Exception e) {
             throw new ShiroException("Error while find credentials!", e);
         }
-
+        
         //
         // BuildAuthenticationInfo
         KapuaSimpleAuthenticationInfo info = new KapuaSimpleAuthenticationInfo(user,

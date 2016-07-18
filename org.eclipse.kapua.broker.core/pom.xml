@@ -43,6 +43,7 @@
 							OSGI-INF/accountService.xml,
 							OSGI-INF/authenticationService.xml,
 							OSGI-INF/authorizationService.xml,
+							OSGI-INF/credentialService.xml,
 							OSGI-INF/deviceConnectionFactoryService.xml,
 							OSGI-INF/deviceConnectionService.xml,
 							OSGI-INF/deviceEventService.xml,
@@ -84,10 +85,10 @@
 							org.eclipse.kapua.broker.core,
 							org.eclipse.kapua.broker.core.converter,
 							org.eclipse.kapua.broker.core.listener,
-							org.eclipse.kapua.broker.core.metrics,
-							org.eclipse.kapua.broker.core.metrics.internal,
 							org.eclipse.kapua.broker.core.plugin,
-							org.eclipse.kapua.broker.core.threadfactory
+							org.eclipse.kapua.broker.core.threadfactory,
+							org.eclipse.kapua.commons.metric,
+							org.eclipse.kapua.commons.metric.internal
 						</Export-Package>
 						<Import-Package>
 							com.codahale.metrics;version="[3.1,4)",
@@ -246,6 +247,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.metric</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.metric.internal</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
@@ -307,16 +318,5 @@
             <artifactId>commons-pool2</artifactId>
 			<version>${commons.pool.version}</version>
         </dependency>
-		<!-- metrics -->
-        <dependency>
-            <groupId>io.dropwizard.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-            <version>3.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.prometheus.jmx</groupId>
-            <artifactId>jmx_prometheus_javaagent</artifactId>
-            <version>0.5</version>
-		</dependency>
 	</dependencies>
 </project>

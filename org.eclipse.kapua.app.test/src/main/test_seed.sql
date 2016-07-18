@@ -108,10 +108,10 @@ INSERT INTO `athz_permission` (`scope_id`, `id`, `created_on`, `created_by`, `us
 			   ('1', '8',  UTC_TIMESTAMP(), '1', '2', 'account', NULL, NULL),
 			   ('1', '9',  UTC_TIMESTAMP(), '1', '2', 'user', NULL, NULL),
 			   ('1', '11', UTC_TIMESTAMP(), '1', '2', 'device-event', NULL, NULL),
-			   ('1', '11', UTC_TIMESTAMP(), '1', '2', 'device-connection', NULL, NULL),
-			   ('1', '12', UTC_TIMESTAMP(), '1', '2', 'device', NULL, NULL),
-			   ('1', '13', UTC_TIMESTAMP(), '1', '2', 'data', NULL, NULL),
-			   ('1', '14', UTC_TIMESTAMP(), '1', '2', 'broker', NULL, NULL);
+			   ('1', '12', UTC_TIMESTAMP(), '1', '2', 'device-connection', NULL, NULL),
+			   ('1', '13', UTC_TIMESTAMP(), '1', '2', 'device', NULL, NULL),
+			   ('1', '14', UTC_TIMESTAMP(), '1', '2', 'data', NULL, NULL),
+			   ('1', '15', UTC_TIMESTAMP(), '1', '2', 'broker', NULL, NULL);
 				
 CREATE TABLE usr_user (
   scope_id             		BIGINT(21) 	  UNSIGNED NOT NULL,

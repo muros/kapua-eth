@@ -3,7 +3,7 @@ package org.eclipse.kapua.broker.core.threadfactory;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.kapua.broker.core.metrics.MetricsService;
+import org.eclipse.kapua.commons.metric.MetricsService;
 import org.eclipse.kapua.locator.KapuaLocator;
 
 import com.codahale.metrics.Counter;
