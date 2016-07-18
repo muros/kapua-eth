@@ -1,18 +1,17 @@
 package org.eclipse.kapua.service.device.call;
 
 import org.eclipse.kapua.model.KapuaObjectFactory;
-import org.eclipse.kapua.service.device.call.message.KapuaRequestDestination;
-import org.eclipse.kapua.service.device.call.message.KapuaRequestPayload;
-import org.eclipse.kapua.service.device.call.message.KapuaResponseDestination;
-import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.call.message.DeviceMessage;
+import org.eclipse.kapua.service.device.call.message.app.request.DeviceRequestChannel;
+import org.eclipse.kapua.service.device.call.message.app.request.DeviceRequestPayload;
+import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseChannel;
 
-public interface KapuaDeviceCallFactory<RQD extends KapuaRequestDestination, RQP extends KapuaRequestPayload, RSD extends KapuaResponseDestination, RSM extends KapuaResponseMessage, H extends KapuaDeviceCallHandler<RSM>>
+@SuppressWarnings("rawtypes")
+public interface KapuaDeviceCallFactory<RQD extends DeviceRequestChannel, RQP extends DeviceRequestPayload, RSD extends DeviceResponseChannel, RSM extends DeviceMessage, H extends DeviceCallback>
                                        extends KapuaObjectFactory
 {
-    @SuppressWarnings("rawtypes")
-    public KapuaDeviceCall newInstance(RQD requestDestination, RQP requestPayload, Long timeout);
+    public DeviceCall newDeviceCall(RQD requestDestination, RQP requestPayload, Long timeout);
 
-    @SuppressWarnings("rawtypes")
-    public KapuaDeviceCall newInstance(RQD requestDestination, RSD responseDestination, RQP requestPayload, Long timeout);
+    public DeviceCall newDeviceCall(RQD requestDestination, RQP requestPayload, RSD responseDestination, Long timeout);
 
 }

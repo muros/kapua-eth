@@ -1,6 +1,7 @@
 package org.org.eclipse.kapua.service.device.management.command.message.internal;
 
-import org.eclipse.kapua.service.device.call.message.KapuaResponsePayload;
+import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.message.device.app.response.KapuaResponsePayload;
 
 public class DeviceCommandResponsePayload extends KapuaResponsePayload
 {
@@ -9,9 +10,10 @@ public class DeviceCommandResponsePayload extends KapuaResponsePayload
     public static final String METRIC_EXIT_CODE = "command.exit.code";
     public static final String METRIC_TIMEDOUT  = "command.timedout";
 
-    public DeviceCommandResponsePayload(KapuaResponsePayload kapuaResponsePayload)
+    public DeviceCommandResponsePayload(KapuaResponsePayload kapuaPayload) throws KapuaException
     {
-        super(kapuaResponsePayload);
+        super();
+        readFromByteArray(kapuaPayload.getBody());
     }
 
     public String getStderr()

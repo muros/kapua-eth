@@ -8,4 +8,6 @@ public interface KapuaPayload
 
     public void readFromByteArray(byte[] rawPayload)
         throws KapuaException;
+
+    public String toDisplayString();
 }

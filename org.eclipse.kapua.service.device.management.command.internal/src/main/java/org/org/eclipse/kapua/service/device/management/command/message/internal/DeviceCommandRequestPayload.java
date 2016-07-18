@@ -2,7 +2,9 @@ package org.org.eclipse.kapua.service.device.management.command.message.internal
 
 import java.util.Vector;
 
-public class DeviceCommandRequestPayload
+import org.eclipse.kapua.message.device.app.request.KapuaRequestPayload;
+
+public class DeviceCommandRequestPayload extends KapuaRequestPayload
 {
     public static final String METRIC_CMD      = "command.command";
     public static final String METRIC_ARG      = "command.argument";

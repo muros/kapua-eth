@@ -5,11 +5,14 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.device.call.KapuaDeviceCall;
+import org.eclipse.kapua.service.device.call.DeviceCall;
+import org.eclipse.kapua.service.device.call.DeviceMessageFactory;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCallFactory;
-import org.eclipse.kapua.service.device.call.message.KapuaRequestDestination;
-import org.eclipse.kapua.service.device.call.message.KapuaRequestPayload;
-import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
+import org.eclipse.kapua.service.device.call.message.app.request.DeviceRequestChannel;
+import org.eclipse.kapua.service.device.call.message.app.request.DeviceRequestPayload;
+import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseMessage;
+import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
+import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.registry.Device;
@@ -22,7 +25,7 @@ public class DeviceApplicationCall<T>
     private String                                          appId;
     private String                                          method;
     private String[]                                        resources;
-    private KapuaRequestPayload                             requestPayload;
+    private DeviceRequestPayload                            requestPayload;
 
     private AbstractDeviceApplicationCallResponseHandler<T> responseHandler;
 
@@ -40,7 +43,7 @@ public class DeviceApplicationCall<T>
         this.resources = resources;
     }
 
-    public void setRequestPayload(KapuaRequestPayload requestPayload)
+    public void setRequestPayload(DeviceRequestPayload requestPayload)
     {
         this.requestPayload = requestPayload;
     }
@@ -63,12 +66,10 @@ public class DeviceApplicationCall<T>
 
         //
         // Build request topic
-        DeviceManagementSetting devManagementConfig = DeviceManagementSetting.getInstance();
-        String topicPrefix = devManagementConfig.getString(DeviceManagementSettingKey.CONTROL_TOPIC_PREFIX);
-
-        KapuaRequestDestination requestDestination = (KapuaRequestDestination) new Object();
-        requestDestination.setControlDestinationPrefix(topicPrefix);
-        requestDestination.setScopeNamespace(account.getName());
+        DeviceMessageFactory messageFactory = locator.getFactory(DeviceMessageFactory.class);
+        DeviceRequestChannel requestDestination = messageFactory.newRequestChannel();
+        requestDestination.setMessageClassification(DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_CONTROL_PREFIX));
+        requestDestination.setScope(account.getName());
         requestDestination.setClientId(device.getClientId());
         requestDestination.setAppId(appId);
         requestDestination.setMethod(method);
@@ -84,11 +85,11 @@ public class DeviceApplicationCall<T>
         // Send request
         DeviceManagementSetting config = DeviceManagementSetting.getInstance();
         KapuaDeviceCallFactory kapuaDeviceCallFactory = locator.getFactory(KapuaDeviceCallFactory.class);
-        KapuaDeviceCall deviceCall = kapuaDeviceCallFactory.newInstance(requestDestination,
-                                                                        requestPayload,
-                                                                        config.getLong(DeviceManagementSettingKey.REQUEST_TIMEOUT));
+        DeviceCall deviceCall = kapuaDeviceCallFactory.newDeviceCall(requestDestination,
+                                                                     requestPayload,
+                                                                     config.getLong(DeviceManagementSettingKey.REQUEST_TIMEOUT));
 
-        KapuaResponseMessage responseMessage = deviceCall.send();
+        DeviceResponseMessage responseMessage = deviceCall.send();
 
         //
         // Handle response

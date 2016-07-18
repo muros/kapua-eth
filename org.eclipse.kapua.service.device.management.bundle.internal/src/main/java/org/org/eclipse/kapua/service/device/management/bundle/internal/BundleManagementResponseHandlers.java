@@ -1,8 +1,8 @@
 package org.org.eclipse.kapua.service.device.management.bundle.internal;
 
 import org.eclipse.kapua.commons.util.XmlUtil;
-import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
-import org.eclipse.kapua.service.device.call.message.KapuaResponsePayload;
+import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseMessage;
+import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponsePayload;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundleListResult;
 import org.eclipse.kapua.service.device.management.commons.call.AbstractDeviceApplicationCallResponseHandler;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
@@ -16,10 +16,10 @@ public class BundleManagementResponseHandlers
     {
         @SuppressWarnings("rawtypes")
         @Override
-        protected DeviceBundleListResult handleAcceptedRequest(KapuaResponseMessage responseMessage)
+        protected DeviceBundleListResult handleAcceptedRequest(DeviceResponseMessage responseMessage)
             throws DeviceManagementException
         {
-            KapuaResponsePayload responsePayload = responseMessage.getResponsePayload();
+            DeviceResponsePayload responsePayload = (DeviceResponsePayload) responseMessage.getPayload();
 
             DeviceManagementSetting config = DeviceManagementSetting.getInstance();
             String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
@@ -56,10 +56,10 @@ public class BundleManagementResponseHandlers
 
         @SuppressWarnings("rawtypes")
         @Override
-        protected Void handleAcceptedRequest(KapuaResponseMessage responseMessage)
+        protected Void handleAcceptedRequest(DeviceResponseMessage responseMessage)
             throws DeviceManagementException
         {
-            // TODO Auto-generated method stub
+            // TODO: Create device event!
             return null;
         }
 

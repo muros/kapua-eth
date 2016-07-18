@@ -1,41 +1,48 @@
 package org.eclipse.kapua.service.device.call.kura;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.client.KapuaClient;
-import org.eclipse.kapua.service.device.call.KapuaDeviceCall;
-import org.eclipse.kapua.service.device.call.kura.exception.KapuaDeviceCallErrorCodes;
-import org.eclipse.kapua.service.device.call.kura.exception.KapuaDeviceCallException;
-import org.eclipse.kapua.service.device.call.message.kura.KuraRequestDestination;
-import org.eclipse.kapua.service.device.call.message.kura.KuraRequestPayload;
-import org.eclipse.kapua.service.device.call.message.kura.KuraResponseDestination;
-import org.eclipse.kapua.service.device.call.message.kura.KuraResponseMessage;
-import org.eclipse.kapua.service.device.call.message.kura.KuraResponsePayload;
-import org.org.eclipse.kapua.client.pool.KapuaClientPool;
+import org.eclipse.kapua.service.device.call.DeviceCall;
+import org.eclipse.kapua.service.device.call.kura.exception.KuraMqttDeviceCallErrorCodes;
+import org.eclipse.kapua.service.device.call.kura.exception.KuraMqttDeviceCallException;
+import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
+import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponsePayload;
+import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
+import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
+import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
+import org.eclipse.kapua.translator.Translator;
+import org.eclipse.kapua.transport.TransportClient;
+import org.eclipse.kapua.transport.message.TransportChannel;
+import org.eclipse.kapua.transport.message.TransportMessage;
+import org.org.eclipse.kapua.transport.pooling.TransportClientPool;
 
-public class KuraDeviceCallImpl implements KapuaDeviceCall<KuraResponseDestination, KuraResponsePayload, KuraResponseMessage, KuraDeviceCallHandler>
+public class KuraDeviceCallImpl implements DeviceCall<KuraResponseChannel, KuraResponsePayload, KuraResponseMessage, KuraDeviceResponseContainer>
 {
-    private KuraRequestDestination  requestDestination;
-    private KuraRequestPayload      requestPayload;
-    private KuraResponseDestination responseDestination;
-    private Long                    timeout;
+    private KuraRequestChannel  requestDestination;
+    private KuraRequestPayload  requestPayload;
+    private KuraResponseChannel responseDestination;
+    private Long                timeout;
 
-    public KuraDeviceCallImpl(KuraRequestDestination requestDestination, KuraRequestPayload requestPayload)
+    public KuraDeviceCallImpl(KuraRequestChannel requestDestination, KuraRequestPayload requestPayload)
     {
         this(requestDestination, requestPayload, null);
     }
 
-    public KuraDeviceCallImpl(KuraRequestDestination requestDestination, KuraRequestPayload requestPayload, Long timeout)
+    public KuraDeviceCallImpl(KuraRequestChannel requestDestination, KuraRequestPayload requestPayload, Long timeout)
     {
         this(requestDestination, requestPayload, null, timeout);
     }
 
-    public KuraDeviceCallImpl(KuraRequestDestination requestDestination, KuraRequestPayload requestPayload, KuraResponseDestination responseDestination, Long timeout)
+    public KuraDeviceCallImpl(KuraRequestChannel requestDestination, KuraRequestPayload requestPayload, KuraResponseChannel responseDestination, Long timeout)
     {
         this.requestDestination = requestDestination;
         this.requestPayload = requestPayload;
@@ -45,63 +52,82 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall<KuraResponseDestinati
 
     @Override
     public KuraResponseMessage send()
-        throws KapuaDeviceCallException
+        throws KuraMqttDeviceCallException
     {
-        List<KuraResponseMessage> responses = new ArrayList<KuraResponseMessage>();
-        KuraDeviceCallHandler kuraDeviceCallHandler = new KuraDeviceCallHandler(responses);
 
-        synchronized (kuraDeviceCallHandler) {
-            sendInternal(kuraDeviceCallHandler);
+        KuraDeviceResponseContainer kuraDeviceResponseContainer = new KuraDeviceResponseContainer();
+
+        synchronized (kuraDeviceResponseContainer) {
+            sendInternal(kuraDeviceResponseContainer);
             try {
-                kuraDeviceCallHandler.wait();
+                kuraDeviceResponseContainer.wait();
             }
             catch (InterruptedException e) {
                 Thread.interrupted();
-                throw new KapuaDeviceCallException(KapuaDeviceCallErrorCodes.CALL_ERROR, e, (Object[]) null);
+                throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR, e, (Object[]) null);
             }
         }
 
-        if (responses.isEmpty() && responseDestination != null) {
-            throw new KapuaDeviceCallException(KapuaDeviceCallErrorCodes.CALL_TIMEOUT, null, (Object[]) null);
+        if (kuraDeviceResponseContainer.isEmpty() && responseDestination != null) {
+            throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_TIMEOUT, null, (Object[]) null);
         }
 
-        return responses.get(0);
+        return kuraDeviceResponseContainer.get(0);
     }
 
     @Override
-    public KuraResponseDestination sendAsync()
-        throws KapuaDeviceCallException
+    public KuraResponseChannel sendAsync()
+        throws KuraMqttDeviceCallException
     {
         return sendInternal(null);
     }
 
     @Override
-    public KuraResponseDestination sendAsync(KuraDeviceCallHandler kuraDeviceCallHandler)
-        throws KapuaDeviceCallException
+    public KuraResponseChannel sendAsync(KuraDeviceResponseContainer kuraDeviceCallHandler)
+        throws KuraMqttDeviceCallException
     {
         return sendInternal(kuraDeviceCallHandler);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private KuraResponseDestination sendInternal(KuraDeviceCallHandler kuraDeviceCallHandler)
-        throws KapuaDeviceCallException
+    private KuraResponseChannel sendInternal(KuraDeviceResponseContainer kuraDeviceResponseContainer)
+        throws KuraMqttDeviceCallException
     {
         // Borrow a KapuaClient
-        KapuaClient kapuaClient = null;
+        TransportClient transportClient = null;
         try {
-            kapuaClient = (KapuaClient) KapuaClientPool.getInstance().borrowObject();
+            // TODO:
+            // Device device = findByClientId(requestDest.getClientid();
+            // DeviceConnection deviceConnection = findById(scopeId, device.getConnectionId());
+            // kapuaClient = (KapuaClient) KapuaClientPool.getInstance(deviceConnection.getProtocol()).borrowObject();
+
+            transportClient = (TransportClient) TransportClientPool.getInstance(/* MqttClient.class */).borrowObject();
         }
         catch (Exception e) {
-            if (kapuaClient != null) {
+            if (transportClient != null) {
                 try {
-                    KapuaClientPool.getInstance().returnObject(kapuaClient);
+                    TransportClientPool.getInstance().returnObject(transportClient);
                 }
                 catch (Exception e1) {
-                    throw new KapuaDeviceCallException(KapuaDeviceCallErrorCodes.CLIENT_RETURN_ERROR, e, (Object[]) null);
+                    throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CLIENT_RETURN_ERROR,
+                                                          e,
+                                                          (Object[]) null);
                 }
             }
 
-            throw new KapuaDeviceCallException(KapuaDeviceCallErrorCodes.CLIENT_BORROW_ERROR, e, (Object[]) null);
+            throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CLIENT_BORROW_ERROR,
+                                                  e,
+                                                  (Object[]) null);
+        }
+
+        Translator translator;
+        try {
+            translator = Translator.getTranslatorFor(KuraMessage.class, transportClient.getMessageClass());
+        }
+        catch (KapuaException e) {
+            throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
+                                                  e,
+                                                  (Object[]) null);
         }
 
         try {
@@ -113,39 +139,54 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall<KuraResponseDestinati
                     String requestId = String.valueOf(r.nextLong());
                     //
 
-                    responseDestination = new KuraResponseDestination(requestDestination.getControlDestinationPrefix(),
-                                                                      requestDestination.getScopeNamespace(),
-                                                                      kapuaClient.getClientId());
+                    responseDestination = new KuraResponseChannel(requestDestination.getMessageClassification(),
+                                                                  requestDestination.getScope(),
+                                                                  transportClient.getClientId());
 
                     responseDestination.setAppId(requestDestination.getAppId());
+                    responseDestination.setReplyPart(DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_REPLY_PART));
                     responseDestination.setRequestId(requestId);
 
                     requestPayload.setRequestId(requestId);
                 }
 
-                requestPayload.setRequesterClientId(kapuaClient.getClientId());
+                requestPayload.setRequesterClientId(transportClient.getClientId());
             }
 
             //
             // Subscribe to the response topic
-            if (kuraDeviceCallHandler != null && responseDestination != null) {
-                kapuaClient.setCallback(new KuraClientCallback(kuraDeviceCallHandler));
-                kapuaClient.subscribe(responseDestination);
+            if (kuraDeviceResponseContainer != null && responseDestination != null) {
+
+                transportClient.newCallback(kuraDeviceResponseContainer, KuraResponseMessage.class);
+                transportClient.subscribe((TransportChannel) translator.translate(responseDestination));
             }
 
             //
             // Do publish
             try {
-                kapuaClient.publish(requestDestination, requestPayload);
+
+                // Mqtt topic
+                List<String> topicParts = new ArrayList<String>();
+                topicParts.add(requestDestination.getMessageClassification());
+                topicParts.add(requestDestination.getScope());
+                topicParts.add(requestDestination.getClientId());
+                topicParts.add(requestDestination.getAppId());
+                topicParts.add(requestDestination.getMethod());
+                for (String r : requestDestination.getResources()) {
+                    topicParts.add(r);
+                }
+
+                KuraMessage kuraMessage = new KuraMessage(requestDestination, new Date(), requestPayload);
+                transportClient.publish((TransportMessage) translator.translate(kuraMessage));
             }
             catch (KapuaException e) {
-                throw new KapuaDeviceCallException(KapuaDeviceCallErrorCodes.CLIENT_SEND_ERROR, e, (Object[]) null);
+                throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CLIENT_SEND_ERROR, e, (Object[]) null);
             }
 
             //
             // If timeout and handler are specified
             if (timeout != null &&
-                kuraDeviceCallHandler != null) {
+                kuraDeviceResponseContainer != null) {
                 Timer timeoutTimer = new Timer("timeoutTimer", true);
 
                 timeoutTimer.schedule(new TimerTask() {
@@ -153,8 +194,8 @@ public class KuraDeviceCallImpl implements KapuaDeviceCall<KuraResponseDestinati
                     @Override
                     public void run()
                     {
-                        if (kuraDeviceCallHandler != null) {
-                            kuraDeviceCallHandler.timedOut();
+                        if (kuraDeviceResponseContainer != null) {
+                            kuraDeviceResponseContainer.timedOut();
                         }
                     }
                 }, timeout);

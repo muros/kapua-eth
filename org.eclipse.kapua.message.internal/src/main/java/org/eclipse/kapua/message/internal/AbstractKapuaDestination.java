@@ -12,14 +12,14 @@
  *******************************************************************************/
 package org.eclipse.kapua.message.internal;
 
-import org.eclipse.kapua.message.KapuaDestination;
+import org.eclipse.kapua.message.KapuaChannel;
 
 /**
  * Models a topic for messages posted to the EDC platform.
  * Topic are expected to be in the form of "account/asset/<application_specific>";
  * system topic starts with the $EDC account.
  */
-public abstract class AbstractKapuaDestination implements KapuaDestination
+public abstract class AbstractKapuaDestination implements KapuaChannel
 {
     private String controlDestinationPrefix;
     private String scopeNamespace;
@@ -38,25 +38,25 @@ public abstract class AbstractKapuaDestination implements KapuaDestination
     }
 
     @Override
-    public String getControlDestinationPrefix()
+    public String getMessageClassification()
     {
         return controlDestinationPrefix;
     }
 
     @Override
-    public void setControlDestinationPrefix(String controlDestinationPrefix)
+    public void setMessageClassification(String controlDestinationPrefix)
     {
         this.controlDestinationPrefix = controlDestinationPrefix;
     }
 
     @Override
-    public String getScopeNamespace()
+    public String getScope()
     {
         return scopeNamespace;
     }
 
     @Override
-    public void setScopeNamespace(String scopeNamespace)
+    public void setScope(String scopeNamespace)
     {
         this.scopeNamespace = scopeNamespace;
     }

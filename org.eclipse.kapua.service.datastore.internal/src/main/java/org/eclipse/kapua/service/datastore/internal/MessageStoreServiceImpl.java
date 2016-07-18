@@ -15,7 +15,7 @@ package org.eclipse.kapua.service.datastore.internal;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.service.config.AbstractKapuaConfigurableService;
+import org.eclipse.kapua.configuration.spi.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;

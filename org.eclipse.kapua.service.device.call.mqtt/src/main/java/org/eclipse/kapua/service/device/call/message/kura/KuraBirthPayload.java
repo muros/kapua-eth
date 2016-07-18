@@ -14,9 +14,9 @@ package org.eclipse.kapua.service.device.call.message.kura;
 
 import java.util.Iterator;
 
-import org.eclipse.kapua.message.internal.AbstractKapuaPayload;
+import org.eclipse.kapua.message.device.lifecycle.KapuaBirthPayload;
 
-public abstract class KuraBirthPayload extends AbstractKuraPayload
+public class KuraBirthPayload extends KuraPayload implements KapuaBirthPayload
 {
     private final static String UPTIME                 = "uptime";
     private final static String DISPLAY_NAME           = "display_name";
@@ -78,240 +78,255 @@ public abstract class KuraBirthPayload extends AbstractKuraPayload
         super();
 
         if (uptime != null) {
-            addMetric(UPTIME, uptime);
+            metrics().put(UPTIME, uptime);
         }
         if (displayName != null) {
-            addMetric(DISPLAY_NAME, displayName);
+            metrics().put(DISPLAY_NAME, displayName);
         }
         if (modelName != null) {
-            addMetric(MODEL_NAME, modelName);
+            metrics().put(MODEL_NAME, modelName);
         }
         if (modelId != null) {
-            addMetric(MODEL_ID, modelId);
+            metrics().put(MODEL_ID, modelId);
         }
         if (partNumber != null) {
-            addMetric(PART_NUMBER, partNumber);
+            metrics().put(PART_NUMBER, partNumber);
         }
         if (serialNumber != null) {
-            addMetric(SERIAL_NUMBER, serialNumber);
+            metrics().put(SERIAL_NUMBER, serialNumber);
         }
         if (firmwareVersion != null) {
-            addMetric(FIRMWARE_VERSION, firmwareVersion);
+            metrics().put(FIRMWARE_VERSION, firmwareVersion);
         }
         if (biosVersion != null) {
-            addMetric(BIOS_VERSION, biosVersion);
+            metrics().put(BIOS_VERSION, biosVersion);
         }
         if (os != null) {
-            addMetric(OS, os);
+            metrics().put(OS, os);
         }
         if (osVersion != null) {
-            addMetric(OS_VERSION, osVersion);
+            metrics().put(OS_VERSION, osVersion);
         }
         if (jvmName != null) {
-            addMetric(JVM_NAME, jvmName);
+            metrics().put(JVM_NAME, jvmName);
         }
         if (jvmVersion != null) {
-            addMetric(JVM_VERSION, jvmVersion);
+            metrics().put(JVM_VERSION, jvmVersion);
         }
         if (jvmProfile != null) {
-            addMetric(JVM_PROFILE, jvmProfile);
+            metrics().put(JVM_PROFILE, jvmProfile);
         }
         if (esfkuraVersion != null) {
-            addMetric(ESFKURA_VERSION, esfkuraVersion);
+            metrics().put(ESFKURA_VERSION, esfkuraVersion);
         }
         if (connectionInterface != null) {
-            addMetric(CONNECTION_INTERFACE, connectionInterface);
+            metrics().put(CONNECTION_INTERFACE, connectionInterface);
         }
         if (connectionIp != null) {
-            addMetric(CONNECTION_IP, connectionIp);
+            metrics().put(CONNECTION_IP, connectionIp);
         }
         if (acceptEncoding != null) {
-            addMetric(ACCEPT_ENCODING, acceptEncoding);
+            metrics().put(ACCEPT_ENCODING, acceptEncoding);
         }
         if (applicationIdentifiers != null) {
-            addMetric(APPLICATION_IDS, applicationIdentifiers);
+            metrics().put(APPLICATION_IDS, applicationIdentifiers);
         }
         if (availableProcessors != null) {
-            addMetric(AVAILABLE_PROCESSORS, availableProcessors);
+            metrics().put(AVAILABLE_PROCESSORS, availableProcessors);
         }
         if (totalMemory != null) {
-            addMetric(TOTAL_MEMORY, totalMemory);
+            metrics().put(TOTAL_MEMORY, totalMemory);
         }
         if (osArch != null) {
-            addMetric(OS_ARCH, osArch);
+            metrics().put(OS_ARCH, osArch);
         }
         if (osgiFramework != null) {
-            addMetric(OSGI_FRAMEWORK, osgiFramework);
+            metrics().put(OSGI_FRAMEWORK, osgiFramework);
         }
         if (osgiFrameworkVersion != null) {
-            addMetric(OSGI_FRAMEWORK_VERSION, osgiFrameworkVersion);
+            metrics().put(OSGI_FRAMEWORK_VERSION, osgiFrameworkVersion);
         }
         if (modemImei != null) {
-            addMetric(MODEM_IMEI, modemImei);
+            metrics().put(MODEM_IMEI, modemImei);
         }
         if (modemImsi != null) {
-            addMetric(MODEM_IMSI, modemImsi);
+            metrics().put(MODEM_IMSI, modemImsi);
         }
         if (modemIccid != null) {
-            addMetric(MODEM_ICCID, modemIccid);
+            metrics().put(MODEM_ICCID, modemIccid);
         }
     }
 
-    public <P extends AbstractKapuaPayload> KuraBirthPayload(P kapuaPayload)
+    public <P extends KuraPayload> KuraBirthPayload(P kuraPayload)
     {
-        Iterator<String> hdrIterator = kapuaPayload.metricsIterator();
+        Iterator<String> hdrIterator = kuraPayload.metrics().keySet().iterator();
         while (hdrIterator.hasNext()) {
             String hdrName = hdrIterator.next();
-            String hdrVal = (String) kapuaPayload.getMetric(hdrName);
+            String hdrVal = (String) kuraPayload.metrics().get(hdrName);
 
             // FIXME: Is this fine??
             if (hdrName.compareTo(ESF_VERSION) == 0) {
-                addMetric(ESFKURA_VERSION, ESF_PREFIX + hdrVal);
+                metrics().put(ESFKURA_VERSION, ESF_PREFIX + hdrVal);
             }
             else if (hdrName.compareTo(KURA_VERSION) == 0) {
-                addMetric(ESFKURA_VERSION, hdrVal);
+                metrics().put(ESFKURA_VERSION, hdrVal);
             }
             else {
-                addMetric(hdrName, hdrVal);
+                metrics().put(hdrName, hdrVal);
             }
         }
-        setTimestamp(kapuaPayload.getTimestamp());
-        setBody(kapuaPayload.getBody());
-        setPosition(kapuaPayload.getPosition());
+        setTimestamp(kuraPayload.getTimestamp());
+        setBody(kuraPayload.getBody());
+        setPosition(kuraPayload.getPosition());
     }
 
     public String getUptime()
     {
-        return (String) getMetric(UPTIME);
+        return (String) metrics().get(UPTIME);
     }
 
     public String getDisplayName()
     {
-        return (String) getMetric(DISPLAY_NAME);
+        return (String) metrics().get(DISPLAY_NAME);
     }
 
     public String getModelName()
     {
-        return (String) getMetric(MODEL_NAME);
+        return (String) metrics().get(MODEL_NAME);
     }
 
     public String getModelId()
     {
-        return (String) getMetric(MODEL_ID);
+        return (String) metrics().get(MODEL_ID);
     }
 
     public String getPartNumber()
     {
-        return (String) getMetric(PART_NUMBER);
+        return (String) metrics().get(PART_NUMBER);
     }
 
     public String getSerialNumber()
     {
-        return (String) getMetric(SERIAL_NUMBER);
+        return (String) metrics().get(SERIAL_NUMBER);
+    }
+
+    public String getFirmware()
+    {
+        return (String) metrics().get(FIRMWARE_VERSION);
     }
 
     public String getFirmwareVersion()
     {
-        return (String) getMetric(FIRMWARE_VERSION);
+        return (String) metrics().get(FIRMWARE_VERSION);
+    }
+
+    public String getBios()
+    {
+        return (String) metrics().get(BIOS_VERSION);
     }
 
     public String getBiosVersion()
     {
-        return (String) getMetric(BIOS_VERSION);
+        return (String) metrics().get(BIOS_VERSION);
     }
 
     public String getOs()
     {
-        return (String) getMetric(OS);
+        return (String) metrics().get(OS);
     }
 
     public String getOsVersion()
     {
-        return (String) getMetric(OS_VERSION);
+        return (String) metrics().get(OS_VERSION);
     }
 
-    public String getJvmName()
+    public String getJvm()
     {
-        return (String) getMetric(JVM_NAME);
+        return (String) metrics().get(JVM_NAME);
     }
 
     public String getJvmVersion()
     {
-        return (String) getMetric(JVM_VERSION);
+        return (String) metrics().get(JVM_VERSION);
     }
 
     public String getJvmProfile()
     {
-        return (String) getMetric(JVM_PROFILE);
+        return (String) metrics().get(JVM_PROFILE);
     }
 
-    public String getEsfKuraVersion()
+    public String getContainerFramework()
     {
-        return (String) getMetric(ESFKURA_VERSION);
+        return (String) metrics().get(OSGI_FRAMEWORK);
+    }
+
+    public String getContainerFrameworkVersion()
+    {
+        return (String) metrics().get(OSGI_FRAMEWORK_VERSION);
+    }
+
+    public String getApplicationFramework()
+    {
+        return (String) metrics().get(ESFKURA_VERSION);
+    }
+
+    public String getApplicationFrameworkVersion()
+    {
+        return (String) metrics().get(ESFKURA_VERSION);
     }
 
     public String getConnectionInterface()
     {
-        return (String) getMetric(CONNECTION_INTERFACE);
+        return (String) metrics().get(CONNECTION_INTERFACE);
     }
 
     public String getConnectionIp()
     {
-        return (String) getMetric(CONNECTION_IP);
+        return (String) metrics().get(CONNECTION_IP);
     }
 
     public String getAcceptEncoding()
     {
-        return (String) getMetric(ACCEPT_ENCODING);
+        return (String) metrics().get(ACCEPT_ENCODING);
     }
 
     public String getApplicationIdentifiers()
     {
-        return (String) getMetric(APPLICATION_IDS);
+        return (String) metrics().get(APPLICATION_IDS);
     }
 
     public String getAvailableProcessors()
     {
-        return (String) getMetric(AVAILABLE_PROCESSORS);
+        return (String) metrics().get(AVAILABLE_PROCESSORS);
     }
 
     public String getTotalMemory()
     {
-        return (String) getMetric(TOTAL_MEMORY);
+        return (String) metrics().get(TOTAL_MEMORY);
     }
 
     public String getOsArch()
     {
-        return (String) getMetric(OS_ARCH);
-    }
-
-    public String getOsgiFramework()
-    {
-        return (String) getMetric(OSGI_FRAMEWORK);
-    }
-
-    public String getOsgiFrameworkVersion()
-    {
-        return (String) getMetric(OSGI_FRAMEWORK_VERSION);
+        return (String) metrics().get(OS_ARCH);
     }
 
     public String getModemImei()
     {
-        return (String) getMetric(MODEM_IMEI);
+        return (String) metrics().get(MODEM_IMEI);
     }
 
     public String getModemImsi()
     {
-        return (String) getMetric(MODEM_IMSI);
+        return (String) metrics().get(MODEM_IMSI);
     }
 
     public String getModemIccid()
     {
-        return (String) getMetric(MODEM_ICCID);
+        return (String) metrics().get(MODEM_ICCID);
     }
 
     @Override
-    public String toString()
+    public String toDisplayString()
     {
         return new StringBuilder().append("[ getUptime()=").append(getUptime())
                                   .append(", getDisplayName()=").append(getDisplayName())
@@ -323,10 +338,12 @@ public abstract class KuraBirthPayload extends AbstractKuraPayload
                                   .append(", getBiosVersion()=").append(getBiosVersion())
                                   .append(", getOs()=").append(getOs())
                                   .append(", getOsVersion()=").append(getOsVersion())
-                                  .append(", getJvmName()=").append(getJvmName())
+                                  .append(", getJvmName()=").append(getJvm())
                                   .append(", getJvmVersion()=").append(getJvmVersion())
                                   .append(", getJvmProfile()=").append(getJvmProfile())
-                                  .append(", getEsfKuraVersion()=").append(getEsfKuraVersion())
+                                  .append(", getOsgiFramework()=").append(getContainerFramework())
+                                  .append(", getOsgiFrameworkVersion()=").append(getContainerFrameworkVersion())
+                                  .append(", getEsfKuraVersion()=").append(getApplicationFrameworkVersion())
                                   .append(", getConnectionInterface()=").append(getConnectionInterface())
                                   .append(", getConnectionIp()=").append(getConnectionIp())
                                   .append(", getAcceptEncoding()=").append(getAcceptEncoding())
@@ -334,8 +351,6 @@ public abstract class KuraBirthPayload extends AbstractKuraPayload
                                   .append(", getAvailableProcessors()=").append(getAvailableProcessors())
                                   .append(", getTotalMemory()=").append(getTotalMemory())
                                   .append(", getOsArch()=").append(getOsArch())
-                                  .append(", getOsgiFramework()=").append(getOsgiFramework())
-                                  .append(", getOsgiFrameworkVersion()=").append(getOsgiFrameworkVersion())
                                   .append(", getModemImei()=").append(getModemImei())
                                   .append(", getModemImsi()=").append(getModemImsi())
                                   .append(", getModemIccid()=").append(getModemIccid())

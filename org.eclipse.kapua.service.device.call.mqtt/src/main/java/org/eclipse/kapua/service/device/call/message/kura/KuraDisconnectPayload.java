@@ -16,8 +16,9 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.kapua.message.internal.MessageException;
+import org.eclipse.kapua.service.device.call.message.DevicePayload;
 
-public class KuraDisconnectPayload extends AbstractKuraPayload
+public class KuraDisconnectPayload extends KuraPayload implements DevicePayload
 {
     private final static String UPTIME       = "uptime";
     private final static String DISPLAY_NAME = "display_name";
@@ -26,36 +27,35 @@ public class KuraDisconnectPayload extends AbstractKuraPayload
     {
         super();
 
-        addMetric(UPTIME, uptime);
-        addMetric(DISPLAY_NAME, displayName);
+        metrics().put(UPTIME, uptime);
+        metrics().put(DISPLAY_NAME, displayName);
     }
 
-    public <P extends AbstractKuraPayload> KuraDisconnectPayload(P kapuaPayload) throws MessageException, IOException
+    public <P extends KuraPayload> KuraDisconnectPayload(P kuraPayload) throws MessageException, IOException
     {
-        Iterator<String> hdrIterator = kapuaPayload.metricsIterator();
+        Iterator<String> hdrIterator = metrics().keySet().iterator();
 
         while (hdrIterator.hasNext()) {
             String hdrName = hdrIterator.next();
-            String hdrVal = (String) kapuaPayload.getMetric(hdrName);
+            String hdrVal = (String) metrics().get(hdrName);
 
-            addMetric(hdrName, hdrVal);
+            metrics().put(hdrName, hdrVal);
         }
 
-        setBody(kapuaPayload.getBody());
+        setBody(kuraPayload.getBody());
     }
 
     public String getUptime()
     {
-        return (String) getMetric(UPTIME);
+        return (String) metrics().get(UPTIME);
     }
 
     public String getDisplayName()
     {
-        return (String) getMetric(DISPLAY_NAME);
+        return (String) metrics().get(DISPLAY_NAME);
     }
 
-    @Override
-    public String toString()
+    public String toDisplayString()
     {
         return new StringBuilder().append("[ getUptime()=").append(getUptime())
                                   .append(", getDisplayName()=").append(getDisplayName())

@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.kapua.message.KapuaDestination;
+import org.eclipse.kapua.message.KapuaChannel;
 import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 
@@ -39,7 +39,7 @@ import org.eclipse.kapua.message.KapuaPayload;
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(propOrder = { "destination", "timestamp", "payload" })
-public abstract class AbstractKapuaMessage<D extends KapuaDestination, P extends KapuaPayload> implements Comparable<AbstractKapuaMessage>, KapuaMessage<D, P>
+public abstract class AbstractKapuaMessage<D extends KapuaChannel, P extends KapuaPayload> implements Comparable<AbstractKapuaMessage>, KapuaMessage<D, P>
 {
     private D    destination;
     private Date timestamp;
@@ -57,13 +57,13 @@ public abstract class AbstractKapuaMessage<D extends KapuaDestination, P extends
     }
 
     @XmlElement(name = "destination")
-    public D getDestination()
+    public D getChannel()
     {
         return destination;
     }
 
     @Override
-    public void setDestination(D destination)
+    public void setChannel(D destination)
     {
         this.destination = destination;
     }

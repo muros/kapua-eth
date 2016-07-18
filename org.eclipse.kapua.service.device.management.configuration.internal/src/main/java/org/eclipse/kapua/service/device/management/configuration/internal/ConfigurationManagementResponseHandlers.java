@@ -1,11 +1,11 @@
 package org.eclipse.kapua.service.device.management.configuration.internal;
 
 import org.eclipse.kapua.commons.util.XmlUtil;
+import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseMessage;
+import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponsePayload;
 import org.eclipse.kapua.service.device.management.commons.call.AbstractDeviceApplicationCallResponseHandler;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponseMessage;
-import org.eclipse.kapua.service.device.management.commons.message.KapuaResponsePayload;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
@@ -14,11 +14,12 @@ public class ConfigurationManagementResponseHandlers
 {
     public static class GET extends AbstractDeviceApplicationCallResponseHandler<DeviceConfiguration>
     {
+        @SuppressWarnings("rawtypes")
         @Override
-        protected DeviceConfiguration handleAcceptedRequest(KapuaResponseMessage responseMessage)
+        protected DeviceConfiguration handleAcceptedRequest(DeviceResponseMessage responseMessage)
             throws DeviceManagementException
         {
-            KapuaResponsePayload responsePayload = responseMessage.getResponsePayload();
+            DeviceResponsePayload responsePayload = (DeviceResponsePayload) responseMessage.getPayload();
 
             DeviceManagementSetting config = DeviceManagementSetting.getInstance();
             String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
@@ -52,11 +53,12 @@ public class ConfigurationManagementResponseHandlers
     public static class PUT extends AbstractDeviceApplicationCallResponseHandler<Void>
     {
 
+        @SuppressWarnings("rawtypes")
         @Override
-        protected Void handleAcceptedRequest(KapuaResponseMessage responseMessage)
+        protected Void handleAcceptedRequest(DeviceResponseMessage responseMessage)
             throws DeviceManagementException
         {
-            // TODO: Create event!
+            // TODO: Create device event!
             return null;
         }
 

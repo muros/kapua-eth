@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.eclipse.kapua</groupId>
@@ -67,7 +68,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -80,7 +81,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -93,7 +94,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -130,13 +131,17 @@
         <module>org.eclipse.kapua.commons</module>
         <module>org.eclipse.kapua.service</module>
 
+        <module>org.eclipse.kapua.message</module>
         <module>org.eclipse.kapua.message.internal</module>
 
-        <module>org.eclipse.kapua.client</module>
-        <module>org.eclipse.kapua.client.mqtt</module>
+        <module>org.eclipse.kapua.translator</module>
+        <module>org.eclipse.kapua.translator.kura.mqtt</module>
 
-        <module>org.eclipse.kapua.client.pool</module>
-        <module>org.eclipse.kapua.client.pool.internal</module>
+        <module>org.eclipse.kapua.transport</module>
+        <module>org.eclipse.kapua.transport.mqtt</module>
+
+        <module>org.eclipse.kapua.transport.pooling</module>
+        <module>org.eclipse.kapua.transport.pooling.internal</module>
 
         <module>org.eclipse.kapua.configuration.spi</module>
         <module>org.eclipse.kapua.locator.spi</module>
@@ -155,7 +160,6 @@
         <module>org.eclipse.kapua.service.device.registry</module>
         <module>org.eclipse.kapua.service.device.registry.internal</module>
 
-
         <module>org.eclipse.kapua.service.datastore</module>
         <module>org.eclipse.kapua.service.datastore.internal</module>
 
@@ -171,15 +175,13 @@
         <module>org.eclipse.kapua.service.device.management.command.internal</module>
         <module>org.eclipse.kapua.service.device.management.commons</module>
 
-
         <module>org.eclipse.kapua.broker.core</module>
         <module>org.eclipse.kapua.broker.jdbc</module>
         <module>org.eclipse.kapua.broker.feature</module>
 
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
-    <module>org.eclipse.kapua.message</module>
-  </modules>
+    </modules>
 
     <issueManagement>
         <system>GitHub Issues</system>

@@ -2,7 +2,7 @@ package org.eclipse.kapua.message;
 
 import java.util.Date;
 
-public interface KapuaPosition
+public interface KapuaPosition extends Position
 {
     public Double getLongitude();
 

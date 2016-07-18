@@ -6,12 +6,11 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.internal.KapuaPayload;
+import org.eclipse.kapua.message.device.app.request.KapuaRequestPayload;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
-import org.eclipse.kapua.service.device.call.message.KapuaRequestPayload;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementMethod;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceApplicationCall;
@@ -143,7 +142,7 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         //
         // Prepare the request
         String[] resources = new String[] { "configuration" };
-        KapuaPayload requestPayload = new KapuaPayload();
+        KapuaRequestPayload requestPayload = new KapuaRequestPayload();
         try {
             DeviceManagementSetting deviceManagementConfig = DeviceManagementSetting.getInstance();
             String charEncoding = deviceManagementConfig.getString(DeviceManagementSettingKey.CHAR_ENCODING);

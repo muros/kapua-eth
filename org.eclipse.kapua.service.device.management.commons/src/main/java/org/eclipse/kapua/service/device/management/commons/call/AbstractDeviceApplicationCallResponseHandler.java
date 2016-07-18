@@ -1,22 +1,22 @@
 package org.eclipse.kapua.service.device.management.commons.call;
 
-import org.eclipse.kapua.service.device.call.message.KapuaResponseCode;
-import org.eclipse.kapua.service.device.call.message.KapuaResponseMessage;
-import org.eclipse.kapua.service.device.call.message.KapuaResponsePayload;
+import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseMessage;
+import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponsePayload;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseCode;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
 
 public abstract class AbstractDeviceApplicationCallResponseHandler<T>
 {
     @SuppressWarnings("rawtypes")
-    public T handle(KapuaResponseMessage responseMessage)
+    public T handle(DeviceResponseMessage responseMessage)
         throws DeviceManagementException
     {
         T responseObject = null;
         if (responseMessage != null) {
-            KapuaResponsePayload responsePayload = responseMessage.getResponsePayload();
+            DeviceResponsePayload responsePayload = (DeviceResponsePayload) responseMessage.getPayload();
             if (responsePayload != null) {
-                KapuaResponseCode responseCode = responsePayload.getResponseCode();
+                KuraResponseCode responseCode = responsePayload.getResponseCode();
 
                 switch (responseCode) {
                     case ACCEPTED:
@@ -44,15 +44,15 @@ public abstract class AbstractDeviceApplicationCallResponseHandler<T>
     }
 
     @SuppressWarnings("rawtypes")
-    protected abstract T handleAcceptedRequest(KapuaResponseMessage responseMessage)
+    protected abstract T handleAcceptedRequest(DeviceResponseMessage responseMessage)
         throws DeviceManagementException;
 
     @SuppressWarnings("rawtypes")
-    protected void handleBadRequestReply(KapuaResponseMessage responseMessage)
+    protected void handleBadRequestReply(DeviceResponseMessage responseMessage)
         throws DeviceManagementException
     {
-        KapuaResponsePayload responsePayload = responseMessage.getResponsePayload();
-        KapuaResponseCode responseCode = responsePayload.getResponseCode();
+        DeviceResponsePayload responsePayload = (DeviceResponsePayload) responseMessage.getPayload();
+        KuraResponseCode responseCode = responsePayload.getResponseCode();
 
         throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_BAD_REQUEST,
                                             null,
@@ -62,11 +62,11 @@ public abstract class AbstractDeviceApplicationCallResponseHandler<T>
     }
 
     @SuppressWarnings("rawtypes")
-    protected void handleDeviceInternalErrorReply(KapuaResponseMessage responseMessage)
+    protected void handleDeviceInternalErrorReply(DeviceResponseMessage responseMessage)
         throws DeviceManagementException
     {
-        KapuaResponsePayload responsePayload = responseMessage.getResponsePayload();
-        KapuaResponseCode responseCode = responsePayload.getResponseCode();
+        DeviceResponsePayload responsePayload = (DeviceResponsePayload) responseMessage.getPayload();
+        KuraResponseCode responseCode = responsePayload.getResponseCode();
 
         throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_INTERNAL_ERROR,
                                             null,
@@ -76,11 +76,11 @@ public abstract class AbstractDeviceApplicationCallResponseHandler<T>
     }
 
     @SuppressWarnings("rawtypes")
-    protected void handleNotFoundReply(KapuaResponseMessage responseMessage)
+    protected void handleNotFoundReply(DeviceResponseMessage responseMessage)
         throws DeviceManagementException
     {
-        KapuaResponsePayload responsePayload = responseMessage.getResponsePayload();
-        KapuaResponseCode responseCode = responsePayload.getResponseCode();
+        DeviceResponsePayload responsePayload = (DeviceResponsePayload) responseMessage.getPayload();
+        KuraResponseCode responseCode = responsePayload.getResponseCode();
 
         throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_NOT_FOUND,
                                             null,

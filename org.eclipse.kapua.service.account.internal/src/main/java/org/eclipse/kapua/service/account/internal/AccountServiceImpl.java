@@ -22,11 +22,11 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.KapuaIllegalArgumentException;
 import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
-import org.eclipse.kapua.commons.service.config.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.JpaUtils;
+import org.eclipse.kapua.configuration.spi.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -49,7 +49,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
     public AccountServiceImpl()
     {
         // TODO pass a correct pid and domain
-        super("account", "pid");
+        super("org.eclipse.kapua.service.account.internal.AccountServiceImpl", AccountDomain.account);
     }
 
     /**

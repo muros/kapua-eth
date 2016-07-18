@@ -14,10 +14,13 @@ package org.eclipse.kapua.service.device.registry.lifecycle.internal;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.internal.KapuaBirthPayload;
-import org.eclipse.kapua.message.internal.KapuaMessage;
-import org.eclipse.kapua.message.internal.KapuaPayload;
-import org.eclipse.kapua.message.internal.KapuaTopic;
+import org.eclipse.kapua.message.KapuaChannel;
+import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.message.KapuaPosition;
+import org.eclipse.kapua.message.device.lifecycle.KapuaBirthMessage;
+import org.eclipse.kapua.message.device.lifecycle.KapuaBirthPayload;
+import org.eclipse.kapua.message.device.lifecycle.KapuaDisconnectMessage;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
@@ -31,17 +34,18 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 
+@SuppressWarnings("rawtypes")
 public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 {
-
     @Override
-    public void birth(KapuaId connectionId, KapuaMessage message)
+    public void birth(KapuaId connectionId, KapuaBirthMessage message)
         throws KapuaException
     {
-        KapuaBirthPayload payload = new KapuaBirthPayload(message.getKapuaPayload());
-        KapuaTopic topic = message.getKapuaTopic();
-        String accountName = topic.getAccount();
-        String clientId = topic.getAsset();
+        KapuaBirthPayload payload = message.getPayload();
+        KapuaChannel topic = message.getChannel();
+        KapuaPosition position = message.getPosition();
+        String accountName = topic.getScope();
+        String clientId = topic.getClientId();
 
         //
         // Account find
@@ -72,7 +76,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
             deviceCreator.setFirmwareVersion(payload.getFirmwareVersion());
             deviceCreator.setOsVersion(payload.getOsVersion());
             deviceCreator.setJvmVersion(payload.getJvmVersion());
-            deviceCreator.setOsgiFrameworkVersion(payload.getOsgiFrameworkVersion());
+            deviceCreator.setOsgiFrameworkVersion(payload.getContainerFrameworkVersion());
             deviceCreator.setApplicationIdentifiers(payload.getApplicationIdentifiers());
             deviceCreator.setAcceptEncoding(payload.getAcceptEncoding());
             deviceCreator.setCredentialsMode(DeviceCredentialsMode.LOOSE);
@@ -90,7 +94,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
             device.setFirmwareVersion(payload.getFirmwareVersion());
             device.setOsVersion(payload.getOsVersion());
             device.setJvmVersion(payload.getJvmVersion());
-            device.setOsgiFrameworkVersion(payload.getOsgiFrameworkVersion());
+            device.setOsgiFrameworkVersion(payload.getContainerFrameworkVersion());
             device.setApplicationIdentifiers(payload.getApplicationIdentifiers());
             device.setAcceptEncoding(payload.getAcceptEncoding());
 
@@ -106,23 +110,23 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setEventType("BIRTH");
-        deviceEventCreator.setReceivedOn(message.getTimestamp());
-        deviceEventCreator.setSentOn(payload.getTimestamp());
+        deviceEventCreator.setReceivedOn(message.getReceivedOn());
+        deviceEventCreator.setSentOn(message.getSentOn());
 
-        if (payload.getPosition() != null)
-            deviceEventCreator.setPosition(payload.getPosition());
+        if (position != null)
+            deviceEventCreator.setPosition(position);
 
         deviceEventService.create(deviceEventCreator);
     }
 
     @Override
-    public void death(KapuaId connectionId, KapuaMessage message)
+    public void death(KapuaId connectionId, KapuaDisconnectMessage message)
         throws KapuaException
     {
-        KapuaPayload payload = message.getKapuaPayload();
-        KapuaTopic topic = message.getKapuaTopic();
-        String accountName = topic.getAccount();
-        String clientId = topic.getAsset();
+        KapuaPayload payload = message.getPayload();
+        KapuaChannel channel = message.getChannel();
+        String accountName = channel.getScope();
+        String clientId = channel.getClientId();
 
         //
         // Account find
@@ -146,11 +150,11 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setEventType("DEATH");
-        deviceEventCreator.setReceivedOn(message.getTimestamp());
-        deviceEventCreator.setSentOn(payload.getTimestamp());
+        deviceEventCreator.setReceivedOn(message.getReceivedOn());
+        deviceEventCreator.setSentOn(message.getSentOn());
 
-        if (payload.getPosition() != null)
-            deviceEventCreator.setPosition(payload.getPosition());
+        if (message.getPosition() != null)
+            deviceEventCreator.setPosition(message.getPosition());
 
         deviceEventService.create(deviceEventCreator);
     }
@@ -159,10 +163,10 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
     public void missing(KapuaId connectionId, KapuaMessage message)
         throws KapuaException
     {
-        KapuaPayload payload = message.getKapuaPayload();
-        KapuaTopic topic = message.getKapuaTopic();
-        String accountName = topic.getAccount();
-        String clientId = topic.getAsset();
+        KapuaPayload payload = message.getPayload();
+        KapuaChannel channel = message.getChannel();
+        String accountName = channel.getScope();
+        String clientId = channel.getClientId();
 
         //
         // Account find
@@ -186,24 +190,24 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setEventType("MISSING");
-        deviceEventCreator.setReceivedOn(message.getTimestamp());
-        deviceEventCreator.setSentOn(payload.getTimestamp());
+        deviceEventCreator.setReceivedOn(message.getReceivedOn());
+        deviceEventCreator.setSentOn(message.getReceivedOn());
 
-        if (payload.getPosition() != null)
-            deviceEventCreator.setPosition(payload.getPosition());
+        if (message.getPosition() != null)
+            deviceEventCreator.setPosition(message.getPosition());
 
         deviceEventService.create(deviceEventCreator);
 
     }
 
     @Override
-    public void applications(KapuaId connectionId, KapuaMessage message)
+    public void applications(KapuaId connectionId, KapuaBirthMessage message)
         throws KapuaException
     {
-        KapuaPayload payload = message.getKapuaPayload();
-        KapuaTopic topic = message.getKapuaTopic();
-        String accountName = topic.getAccount();
-        String clientId = topic.getAsset();
+        KapuaPayload payload = message.getPayload();
+        KapuaChannel channel = message.getChannel();
+        String accountName = channel.getScope();
+        String clientId = channel.getClientId();
 
         //
         // Account find
@@ -227,11 +231,11 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setEventType("APPLICATION");
-        deviceEventCreator.setReceivedOn(message.getTimestamp());
-        deviceEventCreator.setSentOn(payload.getTimestamp());
+        deviceEventCreator.setReceivedOn(message.getReceivedOn());
+        deviceEventCreator.setSentOn(message.getReceivedOn());
 
-        if (payload.getPosition() != null)
-            deviceEventCreator.setPosition(payload.getPosition());
+        if (message.getPosition() != null)
+            deviceEventCreator.setPosition(message.getPosition());
 
         deviceEventService.create(deviceEventCreator);
     }

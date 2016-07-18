@@ -1,28 +1,25 @@
 package org.eclipse.kapua.service.device.call.kura;
 
-import org.eclipse.kapua.service.device.call.KapuaDeviceCall;
 import org.eclipse.kapua.service.device.call.KapuaDeviceCallFactory;
-import org.eclipse.kapua.service.device.call.message.kura.KuraRequestDestination;
-import org.eclipse.kapua.service.device.call.message.kura.KuraRequestPayload;
-import org.eclipse.kapua.service.device.call.message.kura.KuraResponseDestination;
-import org.eclipse.kapua.service.device.call.message.kura.KuraResponseMessage;
+import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
+import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
 
 public class KuraDeviceCallFactoryImpl implements
-                                       KapuaDeviceCallFactory<KuraRequestDestination, KuraRequestPayload, KuraResponseDestination, KuraResponseMessage, KuraDeviceCallHandler>
+                                       KapuaDeviceCallFactory<KuraRequestChannel, KuraRequestPayload, KuraResponseChannel, KuraResponseMessage, KuraDeviceResponseContainer>
 {
 
     @Override
-    public KapuaDeviceCall newInstance(KuraRequestDestination requestDestination, KuraRequestPayload requestPayload, Long timeout)
+    public KuraDeviceCallImpl newDeviceCall(KuraRequestChannel requestDestination, KuraRequestPayload requestPayload, Long timeout)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new KuraDeviceCallImpl(requestDestination, requestPayload, timeout);
     }
 
     @Override
-    public KapuaDeviceCall newInstance(KuraRequestDestination requestDestination, KuraResponseDestination responseDestination, KuraRequestPayload requestPayload, Long timeout)
+    public KuraDeviceCallImpl newDeviceCall(KuraRequestChannel requestDestination, KuraRequestPayload requestPayload, KuraResponseChannel responseDestination, Long timeout)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new KuraDeviceCallImpl(requestDestination, requestPayload, responseDestination, timeout);
     }
 
 }

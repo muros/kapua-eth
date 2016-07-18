@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.kapua</groupId>
+        <artifactId>kapua</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>org.eclipse.kapua.transport</artifactId>
+    <name>org.eclipse.kapua.transport</name>
+
+    <dependencies>
+        <!-- -->
+        <!-- Extended service interfaces -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- -->
+        <!-- Required service interfaces -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.message</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- -->
+        <!-- External dependencies -->
+        <dependency>
+            <!-- Object pooling for kapua clients -->
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.4.2</version>
+        </dependency>
+    </dependencies>
+</project>

@@ -18,8 +18,6 @@ public enum DeviceManagementSettingKey implements SettingKey
 {
     CHAR_ENCODING("character.encoding"),
 
-    // CONTROL_TOPIC_PREFIX("control.topic.prefix"),
-
     REQUEST_TIMEOUT("request.timeout");
 
     private String key;

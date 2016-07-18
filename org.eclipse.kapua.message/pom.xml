@@ -21,5 +21,13 @@
             <artifactId>org.eclipse.kapua.service</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        
+        <!--  -->
+        <!-- Internal dependencies -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.commons</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

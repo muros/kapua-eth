@@ -15,7 +15,10 @@ package org.eclipse.kapua;
 public enum KapuaRuntimeErrorCodes implements KapuaErrorCode
 {
     SERVICE_LOCATOR_UNAVAILABLE,
+
+    TRANSLATOR_NOT_FOUND,
+
     ENTITY_CREATOR_FACTORY_UNAVAILABLE,
     ENTITY_CREATOR_UNAVAILABLE,
-    ENTITY_CREATION_ERROR
+    ENTITY_CREATION_ERROR,
 }
