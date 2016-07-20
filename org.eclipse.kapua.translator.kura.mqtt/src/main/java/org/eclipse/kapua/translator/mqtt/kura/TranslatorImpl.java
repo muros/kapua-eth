@@ -14,6 +14,7 @@ import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
+@SuppressWarnings("rawtypes")
 public class TranslatorImpl implements Translator<MqttTopic, KuraChannel, MqttPayload, KuraPayload, MqttMessage, KuraMessage>
 {
     private final static String controlMessageClassifier = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_CONTROL_PREFIX);
@@ -24,7 +25,7 @@ public class TranslatorImpl implements Translator<MqttTopic, KuraChannel, MqttPa
     {
         //
         // Kura topic
-        KuraChannel kuraChannel = translate(mqttMessage.getTopic());
+        KuraChannel kuraChannel = translate(mqttMessage.getRequestTopic());
 
         //
         // Kura payload
@@ -32,6 +33,7 @@ public class TranslatorImpl implements Translator<MqttTopic, KuraChannel, MqttPa
 
         //
         // Kura message
+        @SuppressWarnings("unchecked")
         KuraMessage kuraMessage = new KuraMessage(kuraChannel,
                                                   mqttMessage.getTimestamp(),
                                                   kuraPayload);

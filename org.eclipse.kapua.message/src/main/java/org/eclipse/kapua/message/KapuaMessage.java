@@ -1,9 +1,24 @@
 package org.eclipse.kapua.message;
 
 import java.util.Date;
+import java.util.UUID;
 
-public interface KapuaMessage<D extends KapuaChannel, P extends KapuaPayload> extends Message
+import org.eclipse.kapua.model.id.KapuaId;
+
+public interface KapuaMessage<C extends KapuaChannel, P extends KapuaPayload> extends Message
 {
+    public UUID getId();
+
+    public void setId(UUID id);
+
+    public KapuaId getScopeId();
+
+    public void setScopeId(KapuaId scopeId);
+
+    public KapuaId getDeviceId();
+
+    public void setDeviceId(KapuaId deviceId);
+
     public Date getReceivedOn();
 
     public void setReceivedOn(Date receivedOn);
@@ -12,15 +27,18 @@ public interface KapuaMessage<D extends KapuaChannel, P extends KapuaPayload> ex
 
     public void setSentOn(Date sentOn);
 
-    public D getChannel();
+    public Date getCapturedOn();
 
-    public void setChannel(D channel);
-
-    public P getPayload();
-
-    public void setPayload(P payload);
+    public void setCapturedOn(Date capturedOn);
 
     public KapuaPosition getPosition();
 
-    public void setPosition();
+    public void setPosition(KapuaPosition position);
+
+    public C getSemanticChannel();
+
+    public void setSemanticChannel(C semantiChannel);
+
+    public P getPayload();
+
 }

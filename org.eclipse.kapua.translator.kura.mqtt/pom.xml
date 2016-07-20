@@ -23,7 +23,7 @@
         </dependency>
         
         <!-- -->
-        <!-- Required service interfaces -->
+         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>

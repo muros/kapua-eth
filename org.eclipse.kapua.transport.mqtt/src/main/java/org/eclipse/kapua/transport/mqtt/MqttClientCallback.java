@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.message.Message;
-import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.transport.TransportCallback;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
@@ -16,13 +14,18 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 
 public class MqttClientCallback implements MqttCallback, TransportCallback<MqttMessage>
 {
-    List<Message>  responses;
-    Class<Message> clazz;
+    private List<MqttMessage> responses;
+    private int               expectedResponses;
 
-    public MqttClientCallback(List<Message> responses, Class<Message> clazz)
+    public MqttClientCallback(List<MqttMessage> responses)
+    {
+        this(responses, 1);
+    }
+
+    public MqttClientCallback(List<MqttMessage> responses, int expectedResponses)
     {
         this.responses = responses;
-        this.clazz = clazz;
+        this.expectedResponses = expectedResponses;
     }
 
     @Override
@@ -34,7 +37,9 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
     {
         MqttTopic mqttTopic = new MqttTopic(stringTopic);
         MqttPayload mqttPayload = new MqttPayload(message.getPayload());
-        MqttMessage mqttMessage = new MqttMessage(mqttTopic, new Date(), mqttPayload);
+        MqttMessage mqttMessage = new MqttMessage(mqttTopic,
+                                                  new Date(),
+                                                  mqttPayload);
 
         //
         // Call the KapuaClientCallback
@@ -45,20 +50,24 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
     /**
      * Override from {@link org.eclipse.kapua.transport.TransportCallback<MqttMessage>}
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void messageArrived(MqttMessage messageArrived)
         throws KapuaException
     {
         //
         // Add to the received responses
         if (responses == null) {
-            responses = new ArrayList<Message>();
+            responses = new ArrayList<MqttMessage>();
         }
 
         //
         // Convert MqttMessage to the given device-levelMessage
-        Translator translator = Translator.getTranslatorFor(MqttMessage.class, clazz);
-        responses.add(translator.translate(messageArrived));
+        responses.add(messageArrived);
+
+        //
+        // notify if all expected responses arrived
+        if (expectedResponses == responses.size()) {
+            notifyAll();
+        }
     }
 
     @Override
@@ -80,6 +89,8 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
             // TODO Auto-generated catch block
             // FIXME: WTF to do here??
             e.printStackTrace();
+
+            notifyAll();
         }
     }
 

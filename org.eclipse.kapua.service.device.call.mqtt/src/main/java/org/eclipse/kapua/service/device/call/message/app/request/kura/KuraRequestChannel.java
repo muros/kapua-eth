@@ -7,6 +7,8 @@ public class KuraRequestChannel extends KuraAppChannel implements DeviceRequestC
 {
     private String   method;
     private String[] resources;
+    private String   requestId;
+    private String   requesterClientId;
 
     public KuraRequestChannel()
     {
@@ -46,4 +48,29 @@ public class KuraRequestChannel extends KuraAppChannel implements DeviceRequestC
     {
         this.resources = resources;
     }
+
+    @Override
+    public String getRequestId()
+    {
+        return requestId;
+    }
+
+    @Override
+    public void setRequestId(String requestId)
+    {
+        this.requestId = requestId;
+    }
+
+    @Override
+    public String getRequesterClientId()
+    {
+        return requesterClientId;
+    }
+
+    @Override
+    public void setRequesterClientId(String requesterClientId)
+    {
+        this.requesterClientId = requesterClientId;
+    }
+
 }

@@ -3,23 +3,23 @@ package org.eclipse.kapua.transport.mqtt;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.message.Message;
 import org.eclipse.kapua.transport.KapuaClientConnectOptions;
 import org.eclipse.kapua.transport.TransportClient;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttMessage, MqttClientCallback>
+public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttMessage, MqttMessage>
 {
     org.eclipse.paho.client.mqttv3.MqttClient pahoMqttClient   = null;
-
     List<MqttTopic>                           subscribedTopics = new ArrayList<MqttTopic>();
 
     //
@@ -30,7 +30,7 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
         throws KapuaException
     {
         try {
-            if (getClient() != null) {
+            if (getPahoClient() != null) {
                 throw new MqttClientException(MqttClientErrorCodes.CLIENT_ALREADY_CONNECTED,
                                               null,
                                               (Object[]) null);
@@ -62,8 +62,8 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
         try {
             unsubscribeAll();
 
-            if (getClient() != null) {
-                getClient().disconnect();
+            if (getPahoClient() != null) {
+                getPahoClient().disconnect();
             }
         }
         catch (MqttException e) {
@@ -79,12 +79,12 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
         throws KapuaException
     {
         try {
-            if (getClient() != null) {
-                if (getClient().isConnected()) {
+            if (getPahoClient() != null) {
+                if (getPahoClient().isConnected()) {
                     disconnectClient();
                 }
 
-                getClient().close();
+                getPahoClient().close();
                 pahoMqttClient = null;
             }
         }
@@ -99,7 +99,7 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
     public boolean isConnected()
     {
         try {
-            return getClient().isConnected();
+            return getPahoClient().isConnected();
         }
         catch (KapuaException e) {
             return false;
@@ -110,79 +110,115 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
     // Message management
     //
     @Override
-    public void publish(MqttMessage mqttMessage)
+    public MqttMessage send(MqttMessage mqttMessage, Long timeout)
         throws KapuaException
     {
-        MqttTopic mqttTopic = mqttMessage.getTopic();
+        List<MqttMessage> responses = new ArrayList<MqttMessage>();
+
+        synchronized (responses) {
+            sendInternal(mqttMessage, responses, timeout);
+
+            try {
+                responses.wait();
+            }
+            catch (InterruptedException e) {
+                Thread.interrupted();
+                throw new MqttClientException(MqttClientErrorCodes.CLIENT_CALLBACK_ERROR,
+                                              e,
+                                              (Object[]) null);
+            }
+
+        }
+
+        if (responses.size() == 0) {
+            throw new MqttClientException(MqttClientErrorCodes.CLIENT_TIMEOUT_EXCEPTION,
+                                          null,
+                                          new Object[] {
+                                                         mqttMessage.getRequestTopic()
+                                          });
+
+        }
+
+        return responses.get(0);
+    }
+
+    private void sendInternal(MqttMessage mqttMessage, List<MqttMessage> responses, Long timeout)
+        throws KapuaException
+    {
+
+        //
+        // Subscribe if necessary
+        if (mqttMessage.getResponseTopic() != null) {
+            MqttCallback mqttCallback = new MqttClientCallback(responses);
+            getPahoClient().setCallback(mqttCallback);
+            subscribe(mqttMessage.getResponseTopic());
+        }
+
+        //
+        // Publish message
+        MqttTopic mqttTopic = mqttMessage.getRequestTopic();
         MqttPayload mqttPayload = mqttMessage.getPayload();
         try {
-            getClient().publish(mqttTopic.getTopic(),
-                                mqttPayload.getBody(),
-                                0,
-                                false);
+            getPahoClient().publish(mqttTopic.getTopic(),
+                                    mqttPayload.getBody(),
+                                    0,
+                                    false);
         }
-        catch (MqttPersistenceException e) {
+        catch (MqttException | KapuaException e) {
             throw new MqttClientException(MqttClientErrorCodes.CLIENT_PUBLISH_ERROR,
                                           e,
                                           new Object[] { mqttTopic.getTopic(),
                                                          mqttPayload.getBody() });
         }
-        catch (MqttException e) {
-            throw new MqttClientException(MqttClientErrorCodes.CLIENT_PUBLISH_ERROR,
-                                          e,
-                                          new Object[] { mqttTopic.getTopic(),
-                                                         mqttPayload.getBody() });
-        }
-        catch (KapuaException e) {
-            throw new MqttClientException(MqttClientErrorCodes.CLIENT_PUBLISH_ERROR,
-                                          e,
-                                          new Object[] { mqttTopic.getTopic(),
-                                                         mqttPayload.getBody() });
+
+        //
+        // Wait if required
+        if (timeout != null &&
+            responses != null) {
+            Timer timeoutTimer = new Timer("timeoutTimer", true);
+
+            timeoutTimer.schedule(new TimerTask() {
+
+                @Override
+                public void run()
+                {
+                    if (responses != null) {
+                        responses.notifyAll();
+                    }
+                }
+            }, timeout);
         }
     }
 
-    @Override
-    public void subscribe(MqttTopic mqttTopic)
+    private void subscribe(MqttTopic mqttTopic)
         throws KapuaException
     {
         try {
-            getClient().subscribe(mqttTopic.getTopic());
+            getPahoClient().subscribe(mqttTopic.getTopic());
         }
-        catch (MqttException e) {
+        catch (MqttException | KapuaException e) {
             throw new MqttClientException(MqttClientErrorCodes.CLIENT_SUBSCRIBE_ERROR,
                                           e,
                                           new Object[] { mqttTopic.toString() });
         }
-        catch (KapuaException e) {
-            throw new MqttClientException(MqttClientErrorCodes.CLIENT_SUBSCRIBE_ERROR,
-                                          e,
-                                          new Object[] { mqttTopic.getTopic() });
-        }
     }
 
-    @Override
-    public void unsubscribe(MqttTopic mqttTopic)
+    private void unsubscribe(MqttTopic mqttTopic)
         throws KapuaException
     {
         try {
-            getClient().unsubscribe(mqttTopic.getTopic());
+            getPahoClient().unsubscribe(mqttTopic.getTopic());
         }
-        catch (MqttException e) {
+        catch (MqttException | KapuaException e) {
             throw new MqttClientException(MqttClientErrorCodes.CLIENT_UNSUBSCRIBE_ERROR,
                                           e,
                                           new Object[] { mqttTopic.toString() });
-        }
-        catch (KapuaException e) {
-            throw new MqttClientException(MqttClientErrorCodes.CLIENT_UNSUBSCRIBE_ERROR,
-                                          e,
-                                          new Object[] { mqttTopic.getTopic() });
         }
 
         subscribedTopics.remove(mqttTopic);
     }
 
-    @Override
-    public void unsubscribeAll()
+    private void unsubscribeAll()
         throws KapuaException
     {
         Iterator<MqttTopic> subscribptionIterator = subscribedTopics.iterator();
@@ -196,31 +232,16 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
     }
 
     @Override
-    public void newCallback(List<Message> messages, Class<Message> clazz)
-        throws KapuaException
-    {
-        MqttClientCallback transportClientCalback;
-        try {
-            transportClientCalback = new MqttClientCallback(messages, clazz);
-
-            getClient().setCallback(transportClientCalback);
-        }
-        catch (KapuaException e) {
-            throw new MqttClientException(MqttClientErrorCodes.CLIENT_CALLBACK_ERROR,
-                                          e,
-                                          (Object[]) null);
-        }
-    }
-
-    @Override
-    public void clearCallback()
+    public void clean()
         throws KapuaException
     {
         try {
-            getClient().setCallback(null);
+            getPahoClient().setCallback(null);
+            unsubscribeAll();
         }
         catch (KapuaException e) {
-            throw new MqttClientException(MqttClientErrorCodes.CLIENT_CALLBACK_ERROR,
+            terminateClient();
+            throw new MqttClientException(MqttClientErrorCodes.CLIENT_CLEAN_ERROR,
                                           e,
                                           (Object[]) null);
         }
@@ -234,7 +255,7 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
     public String getClientId()
     {
         try {
-            return getClient().getClientId();
+            return getPahoClient().getClientId();
         }
         catch (KapuaException e) {
             return null;
@@ -247,7 +268,7 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
         return MqttMessage.class;
     }
 
-    private org.eclipse.paho.client.mqttv3.MqttClient getClient()
+    private org.eclipse.paho.client.mqttv3.MqttClient getPahoClient()
         throws KapuaException
     {
         if (pahoMqttClient == null) {
@@ -258,5 +279,4 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
 
         return pahoMqttClient;
     }
-
 }

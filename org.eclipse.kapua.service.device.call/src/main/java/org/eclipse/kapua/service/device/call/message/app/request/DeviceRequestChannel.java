@@ -12,4 +12,12 @@ public interface DeviceRequestChannel extends DeviceAppChannel
 
     public void setResources(String[] resources);
 
+    public String getRequestId();
+
+    public void setRequestId(String requestId);
+
+    public String getRequesterClientId();
+
+    public void setRequesterClientId(String requesterClientId);
+
 }

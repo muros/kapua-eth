@@ -1,13 +1,12 @@
 package org.eclipse.kapua.message;
 
-import org.eclipse.kapua.KapuaException;
+import java.util.Map;
 
-public interface KapuaPayload
+public interface KapuaPayload extends Payload
 {
-    public byte[] toByteArray();
+    public Map<String, Object> getMetrics();
 
-    public void readFromByteArray(byte[] rawPayload)
-        throws KapuaException;
+    public byte[] getBody();
 
     public String toDisplayString();
 }

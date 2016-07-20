@@ -10,8 +10,14 @@ public class KuraMessage<C extends KuraChannel, P extends KuraPayload> implement
     protected P    payload;
     protected Date timestamp;
 
+    public KuraMessage()
+    {
+        super();
+    }
+
     public KuraMessage(C channel, Date timestamp, P payload)
     {
+        this();
         this.channel = channel;
         this.timestamp = timestamp;
         this.payload = payload;

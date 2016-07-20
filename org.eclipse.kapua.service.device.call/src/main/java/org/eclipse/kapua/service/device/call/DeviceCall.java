@@ -1,19 +1,26 @@
 package org.eclipse.kapua.service.device.call;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseChannel;
-import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseMessage;
-import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponsePayload;
+import org.eclipse.kapua.service.device.call.message.DeviceMessage;
 
 @SuppressWarnings("rawtypes")
-public interface DeviceCall<DRC extends DeviceResponseChannel, DRP extends DeviceResponsePayload, DRM extends DeviceResponseMessage, DC extends DeviceCallback>
+public interface DeviceCall<M extends DeviceMessage>
 {
-    public DRM send()
+    public M create()
         throws KapuaException;
 
-    public DRC sendAsync()
+    public M read()
         throws KapuaException;
 
-    public DRC sendAsync(DC kapuaDeviceCallHandler)
+    public M discover()
+        throws KapuaException;
+
+    public M delete()
+        throws KapuaException;
+
+    public M execute()
+        throws KapuaException;
+
+    public M write()
         throws KapuaException;
 }

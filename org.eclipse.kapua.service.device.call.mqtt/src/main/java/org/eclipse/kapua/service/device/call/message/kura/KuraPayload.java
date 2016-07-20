@@ -42,7 +42,7 @@ public class KuraPayload implements DevicePayload
         return position;
     }
 
-    protected void setPosition(DevicePosition position)
+    public void setPosition(DevicePosition position)
     {
         this.position = position;
     }
@@ -58,7 +58,7 @@ public class KuraPayload implements DevicePayload
         return body;
     }
 
-    protected void setBody(byte[] body)
+    public void setBody(byte[] body)
     {
         this.body = body;
     }
