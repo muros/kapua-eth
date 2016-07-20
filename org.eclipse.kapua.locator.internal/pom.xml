@@ -37,12 +37,14 @@
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- External dependencies -->
