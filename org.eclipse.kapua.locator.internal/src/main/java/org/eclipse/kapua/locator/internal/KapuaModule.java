@@ -57,12 +57,12 @@ public class KapuaModule extends AbstractModule
 					if (KapuaService.class.isAssignableFrom(kapuaObject)) {
 
 						bind(kapuaObject).toProvider(new KapuaServiceLoaderProvider(kapuaObject));
-						s_logger.info("Bound Kapua service "+serviceNameTrimmed);
+						s_logger.info("Bound Kapua service {}", serviceNameTrimmed);
 					}
 					else if (KapuaObjectFactory.class.isAssignableFrom(kapuaObject)) {
 
 						bind(kapuaObject).toProvider(new KapuaFactoryLoaderProvider(kapuaObject));
-						s_logger.info("Bound Kapua factory "+serviceNameTrimmed);
+						s_logger.info("Bound Kapua factory {}", serviceNameTrimmed);
 					}
 				}
 				catch (Exception e) {
