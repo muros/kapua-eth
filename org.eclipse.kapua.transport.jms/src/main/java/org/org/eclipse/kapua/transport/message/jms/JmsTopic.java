@@ -1,21 +1,21 @@
-package org.eclipse.kapua.transport.message.mqtt;
+package org.org.eclipse.kapua.transport.message.jms;
 
 import org.eclipse.kapua.transport.message.TransportChannel;
-import org.eclipse.kapua.transport.mqtt.setting.MqttClientSetting;
-import org.eclipse.kapua.transport.mqtt.setting.MqttClientSettingKeys;
+import org.org.eclipse.kapua.transport.jms.setting.JmsClientSetting;
+import org.org.eclipse.kapua.transport.jms.setting.JmsClientSettingKeys;
 
-public class MqttTopic implements TransportChannel
+public class JmsTopic implements TransportChannel
 {
-    private static String topicSeparator = MqttClientSetting.getInstance().getString(MqttClientSettingKeys.TRANSPORT_TOPIC_SEPARATOR);
+    private static String topicSeparator = JmsClientSetting.getInstance().getString(JmsClientSettingKeys.TRANSPORT_TOPIC_SEPARATOR);
 
     private String        topic;
 
-    public MqttTopic(String topic)
+    public JmsTopic(String topic)
     {
         this.topic = topic;
     }
 
-    public MqttTopic(String[] topicParts)
+    public JmsTopic(String[] topicParts)
     {
         //
         // Concatenate topic parts

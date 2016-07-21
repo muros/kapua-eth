@@ -181,6 +181,9 @@
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
     <module>org.eclipse.kapua.translator.kapua.kura</module>
+    <module>org.eclipse.kapua.service.device.management</module>
+    <module>org.eclipse.kapua.translator.kura.jms</module>
+    <module>org.eclipse.kapua.transport.jms</module>
   </modules>
 
     <issueManagement>
