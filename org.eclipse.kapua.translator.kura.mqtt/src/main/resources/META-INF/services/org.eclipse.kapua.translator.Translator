@@ -1,2 +1,2 @@
-org.eclipse.kapua.translator.kura.mqtt.TranslatorImpl
-org.eclipse.kapua.translator.mqtt.kura.TranslatorImpl
+org.eclipse.kapua.translator.kura.mqtt.TranslatorKuraMqtt
+org.eclipse.kapua.translator.mqtt.kura.TranslatorMqttKura

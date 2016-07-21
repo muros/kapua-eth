@@ -54,7 +54,7 @@ public class KapuaMessageImpl<C extends KapuaChannel, P extends KapuaPayload> im
 
     private KapuaPosition position;
 
-    private C             channel;
+    private C             semanticChannel;
 
     private P             payload;
 
@@ -66,7 +66,7 @@ public class KapuaMessageImpl<C extends KapuaChannel, P extends KapuaPayload> im
     public KapuaMessageImpl(C channel, P metrics)
     {
         this();
-        this.channel = channel;
+        this.semanticChannel = channel;
         this.payload = metrics;
     }
 
@@ -106,61 +106,73 @@ public class KapuaMessageImpl<C extends KapuaChannel, P extends KapuaPayload> im
         this.deviceId = deviceId;
     }
 
+    @Override
     public Date getReceivedOn()
     {
         return receivedOn;
     }
 
+    @Override
     public void setReceivedOn(Date receivedOn)
     {
         this.receivedOn = receivedOn;
     }
 
+    @Override
     public Date getSentOn()
     {
         return sentOn;
     }
 
+    @Override
     public void setSentOn(Date sentOn)
     {
         this.sentOn = sentOn;
     }
 
+    @Override
     public Date getCapturedOn()
     {
         return capturedOn;
     }
 
+    @Override
     public void setCapturedOn(Date capturedOn)
     {
         this.capturedOn = capturedOn;
     }
 
+    @Override
     public KapuaPosition getPosition()
     {
         return position;
     }
 
+    @Override
     public void setPosition(KapuaPosition position)
     {
         this.position = position;
     }
 
+    @Override
     public C getSemanticChannel()
     {
-        return channel;
+        return semanticChannel;
     }
 
-    public void setSemanticChannel(C channel)
+    @Override
+    public void setSemanticChannel(C semanticChannel)
     {
-        this.channel = channel;
+        this.semanticChannel = semanticChannel;
     }
 
+    @Override
     public P getPayload()
     {
         return payload;
     }
 
+    @Override
     public void setPayload(P payload)
     {
         this.payload = payload;

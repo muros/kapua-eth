@@ -1,9 +1,9 @@
 package org.eclipse.kapua.translator.mqtt.kura;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.message.device.app.response.KapuaResponseMessage;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
-import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponsePayload;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraPayload;
 import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
 import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
@@ -15,7 +15,7 @@ import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorImpl implements Translator<MqttTopic, KuraChannel, MqttPayload, KuraPayload, MqttMessage, KuraMessage>
+public class TranslatorResponseMqttKura implements Translator<MqttTopic, KuraChannel, MqttPayload, KuraPayload, MqttMessage, KuraMessage>
 {
     private final static String controlMessageClassifier = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_CONTROL_PREFIX);
 
@@ -77,7 +77,7 @@ public class TranslatorImpl implements Translator<MqttTopic, KuraChannel, MqttPa
     {
         byte[] mqttBody = mqttPayload.getBody();
 
-        KuraResponsePayload kuraResponsePayload = new KuraResponsePayload();
+        KuraPayload kuraResponsePayload = new KuraPayload();
         kuraResponsePayload.readFromByteArray(mqttBody);
 
         return kuraResponsePayload;
@@ -92,7 +92,7 @@ public class TranslatorImpl implements Translator<MqttTopic, KuraChannel, MqttPa
     @Override
     public Class<?> getClassTo()
     {
-        return KapuaResponseMessage.class;
+        return KuraResponseMessage.class;
     }
 
 }

@@ -7,9 +7,9 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
-import org.eclipse.kapua.service.device.management.commons.DeviceManagementMethod;
-import org.eclipse.kapua.service.device.management.commons.call.DeviceApplicationCall;
+import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationManagementResponseHandlers;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotListResult;
@@ -41,10 +41,10 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
 
         //
         // Do get
-        DeviceApplicationCall<DeviceSnapshotListResult> deviceApplicationCall = new DeviceApplicationCall<DeviceSnapshotListResult>(scopeId,
+        DeviceCallExecutor<DeviceSnapshotListResult> deviceApplicationCall = new DeviceCallExecutor<DeviceSnapshotListResult>(scopeId,
                                                                                                                                     deviceId,
                                                                                                                                     deviceSnapshotManagementAppId,
-                                                                                                                                    DeviceManagementMethod.GET,
+                                                                                                                                    KapuaMethod.GET,
                                                                                                                                     resources);
         deviceApplicationCall.setResponseHandler(new SnapshotManagementResponseHandlers.GET());
 
@@ -76,10 +76,10 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
 
         //
         // Do get
-        DeviceApplicationCall<DeviceConfiguration> deviceApplicationCall = new DeviceApplicationCall<DeviceConfiguration>(scopeId,
+        DeviceCallExecutor<DeviceConfiguration> deviceApplicationCall = new DeviceCallExecutor<DeviceConfiguration>(scopeId,
                                                                                                                           deviceId,
                                                                                                                           deviceSnapshotManagementAppId,
-                                                                                                                          DeviceManagementMethod.GET,
+                                                                                                                          KapuaMethod.GET,
                                                                                                                           resources);
         deviceApplicationCall.setResponseHandler(new ConfigurationManagementResponseHandlers.GET());
 
@@ -119,10 +119,10 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
 
         //
         // Do get
-        DeviceApplicationCall<Void> deviceApplicationCall = new DeviceApplicationCall<Void>(scopeId,
+        DeviceCallExecutor<Void> deviceApplicationCall = new DeviceCallExecutor<Void>(scopeId,
                                                                                             deviceId,
                                                                                             deviceSnapshotManagementAppId,
-                                                                                            DeviceManagementMethod.EXEC,
+                                                                                            KapuaMethod.EXEC,
                                                                                             resources);
         deviceApplicationCall.setResponseHandler(new SnapshotManagementResponseHandlers.EXEC());
 

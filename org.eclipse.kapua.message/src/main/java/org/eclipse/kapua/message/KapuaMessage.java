@@ -37,8 +37,10 @@ public interface KapuaMessage<C extends KapuaChannel, P extends KapuaPayload> ex
 
     public C getSemanticChannel();
 
-    public void setSemanticChannel(C semantiChannel);
+    public void setSemanticChannel(C semanticChannel);
 
     public P getPayload();
+
+    public void setPayload(P payload);
 
 }

@@ -26,18 +26,24 @@ import org.eclipse.kapua.message.KapuaPayload;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class KapuaPayloadImpl implements KapuaPayload
 {
-    private Map<String, Object> metrics;
+    private Map<String, Object> properties;
     private byte[]              body;
 
     public KapuaPayloadImpl()
     {
-        metrics = new HashMap<String, Object>();
+        properties = new HashMap<String, Object>();
     }
 
     @Override
-    public Map<String, Object> getMetrics()
+    public Map<String, Object> getProperties()
     {
-        return metrics;
+        return properties;
+    }
+
+    @Override
+    public void setProperties(Map<String, Object> properties)
+    {
+        this.properties = properties;
     }
 
     @Override
@@ -46,13 +52,19 @@ public class KapuaPayloadImpl implements KapuaPayload
         return body;
     }
 
+    @Override
+    public void setBody(byte[] body)
+    {
+        this.body = body;
+    }
+
     public String toDisplayString()
     {
         StringBuilder sb = new StringBuilder();
-        Iterator<String> hdrIterator = getMetrics().keySet().iterator();
+        Iterator<String> hdrIterator = getProperties().keySet().iterator();
         while (hdrIterator.hasNext()) {
             String hdrName = hdrIterator.next();
-            Object hdrValue = getMetrics().get(hdrName);
+            Object hdrValue = getProperties().get(hdrName);
             String hdrValueString = "";
             Class<?> type = hdrValue.getClass();
             if (type == Float.class) {

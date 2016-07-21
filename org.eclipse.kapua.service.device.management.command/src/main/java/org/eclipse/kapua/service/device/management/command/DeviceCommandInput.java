@@ -34,9 +34,9 @@ public interface DeviceCommandInput
 
     public String getWorkingDir();
 
-    public void setBytes(byte[] bytes);
+    public void setBody(byte[] bytes);
 
-    public byte[] getBytes();
+    public byte[] getBody();
 
     public void setEnvironment(String[] environment);
 
