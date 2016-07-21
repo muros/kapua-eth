@@ -2,37 +2,50 @@ package org.eclipse.kapua.transport.message.mqtt;
 
 import java.util.Date;
 
-import org.eclipse.kapua.transport.message.TransportMessage;
+import org.eclipse.kapua.transport.message.pubsub.PubSubTransportMessage;
 
 // FIXME: add QoS
-public class MqttMessage implements TransportMessage<MqttTopic, MqttPayload>
+public class MqttMessage implements PubSubTransportMessage<MqttTopic, MqttPayload>
 {
-    private MqttTopic   topic;
+    private MqttTopic   requestTopic;
+
+    private MqttTopic   responseTopic;
 
     private Date        timestamp;
 
     private MqttPayload payload;
 
-    public MqttMessage(MqttTopic topic, MqttPayload mqttPayload)
+    public MqttMessage(MqttTopic requestTopic, MqttTopic responseTopic, MqttPayload mqttPayload)
     {
-        this(topic, null, mqttPayload);
+        this(requestTopic, (Date) null, mqttPayload);
+        this.responseTopic = responseTopic;
     }
 
-    public MqttMessage(MqttTopic topic, Date receivedOn, MqttPayload payload)
+    public MqttMessage(MqttTopic requestTopic, Date receivedOn, MqttPayload payload)
     {
-        this.topic = topic;
+        this.requestTopic = requestTopic;
         this.timestamp = receivedOn;
         this.payload = payload;
     }
 
-    public MqttTopic getTopic()
+    public MqttTopic getRequestTopic()
     {
-        return topic;
+        return requestTopic;
     }
 
-    public void setTopic(MqttTopic topic)
+    public void setRequestTopic(MqttTopic requestTopic)
     {
-        this.topic = topic;
+        this.requestTopic = requestTopic;
+    }
+
+    public MqttTopic getResponseTopic()
+    {
+        return responseTopic;
+    }
+
+    public void setResponseTopic(MqttTopic responseTopic)
+    {
+        this.responseTopic = responseTopic;
     }
 
     public Date getTimestamp()

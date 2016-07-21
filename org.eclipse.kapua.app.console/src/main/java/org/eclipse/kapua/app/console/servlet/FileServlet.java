@@ -307,7 +307,7 @@ public class FileServlet extends EdcHttpServlet
             commandInput.setArguments(args);
             commandInput.setTimeout(timeout);
             commandInput.setWorkingDir("/tmp/");
-            commandInput.setBytes(data);
+            commandInput.setBody(data);
 
             DeviceCommandOutput deviceCommandOutput = deviceService.exec(KapuaEid.parseShortId(scopeIdString),
                                                                          KapuaEid.parseShortId(deviceIdString),

@@ -1,19 +1,29 @@
 package org.eclipse.kapua.service.device.call;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseChannel;
+import org.eclipse.kapua.service.device.call.message.app.request.DeviceRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseMessage;
-import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponsePayload;
 
 @SuppressWarnings("rawtypes")
-public interface DeviceCall<DRC extends DeviceResponseChannel, DRP extends DeviceResponsePayload, DRM extends DeviceResponseMessage, DC extends DeviceCallback>
+public interface DeviceCall<RQ extends DeviceRequestMessage, RS extends DeviceResponseMessage>
 {
-    public DRM send()
+    public RS read(RQ requestMessage, Long timeout)
         throws KapuaException;
 
-    public DRC sendAsync()
+    public RS create(RQ requestMessage, Long timeout)
         throws KapuaException;
 
-    public DRC sendAsync(DC kapuaDeviceCallHandler)
+    public RS write(RQ requestMessage, Long timeout)
         throws KapuaException;
+
+    public RS delete(RQ requestMessage, Long timeout)
+        throws KapuaException;
+
+    public RS execute(RQ requestMessage, Long timeout)
+        throws KapuaException;
+
+    public RS options(RQ requestMessage, Long timeout)
+        throws KapuaException;
+
+    public Class<RS> getBaseMessageClass();
 }

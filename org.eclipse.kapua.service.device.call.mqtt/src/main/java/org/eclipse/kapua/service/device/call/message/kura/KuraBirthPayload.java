@@ -14,9 +14,9 @@ package org.eclipse.kapua.service.device.call.message.kura;
 
 import java.util.Iterator;
 
-import org.eclipse.kapua.message.device.lifecycle.KapuaBirthPayload;
+import org.eclipse.kapua.service.device.call.message.DevicePayload;
 
-public class KuraBirthPayload extends KuraPayload implements KapuaBirthPayload
+public class KuraBirthPayload extends KuraPayload implements DevicePayload
 {
     private final static String UPTIME                 = "uptime";
     private final static String DISPLAY_NAME           = "display_name";
@@ -325,7 +325,6 @@ public class KuraBirthPayload extends KuraPayload implements KapuaBirthPayload
         return (String) metrics().get(MODEM_ICCID);
     }
 
-    @Override
     public String toDisplayString()
     {
         return new StringBuilder().append("[ getUptime()=").append(getUptime())

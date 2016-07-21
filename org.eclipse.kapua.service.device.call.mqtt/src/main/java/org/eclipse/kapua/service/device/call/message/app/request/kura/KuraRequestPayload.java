@@ -15,7 +15,7 @@ public class KuraRequestPayload extends KuraPayload implements DeviceRequestPayl
     @Override
     public void setRequesterClientId(String requesterClientId)
     {
-        metrics().put("resquester.client.id", requesterClientId);
+        metrics().put("requester.client.id", requesterClientId);
     }
 
     @Override

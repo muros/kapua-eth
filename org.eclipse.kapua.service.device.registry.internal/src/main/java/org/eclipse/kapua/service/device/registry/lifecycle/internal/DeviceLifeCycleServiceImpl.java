@@ -14,16 +14,14 @@ package org.eclipse.kapua.service.device.registry.lifecycle.internal;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.KapuaChannel;
 import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.KapuaPosition;
+import org.eclipse.kapua.message.device.lifecycle.KapuaBirthChannel;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthMessage;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthPayload;
 import org.eclipse.kapua.message.device.lifecycle.KapuaDisconnectMessage;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.account.Account;
-import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
@@ -42,29 +40,21 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         throws KapuaException
     {
         KapuaBirthPayload payload = message.getPayload();
-        KapuaChannel topic = message.getChannel();
-        KapuaPosition position = message.getPosition();
-        String accountName = topic.getScope();
-        String clientId = topic.getClientId();
-
-        //
-        // Account find
-        KapuaLocator locator = KapuaLocator.getInstance();
-        AccountService accountService = locator.getService(AccountService.class);
-        Account account = accountService.findByName(accountName);
-        KapuaId scopeId = account.getId();
+        KapuaBirthChannel channel = message.getSemanticChannel();
+        KapuaId scopeId = message.getScopeId();
+        KapuaId deviceId = message.getDeviceId();
+        String clientId = channel.getClientId();
 
         //
         // Device update
+        KapuaLocator locator = KapuaLocator.getInstance();
         DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
-        Device device = deviceRegistryService.findByClientId(scopeId,
-                                                             clientId);
+        Device device = deviceRegistryService.find(scopeId, deviceId);
 
         if (device == null) {
             DeviceFactory deviceFactory = locator.getFactory(DeviceFactory.class);
 
-            DeviceCreator deviceCreator = deviceFactory.newCreator(scopeId,
-                                                                   clientId);
+            DeviceCreator deviceCreator = deviceFactory.newCreator(scopeId, clientId);
 
             deviceCreator.setDisplayName(payload.getDisplayName());
             deviceCreator.setSerialNumber(payload.getSerialNumber());
@@ -113,8 +103,10 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         deviceEventCreator.setSentOn(message.getSentOn());
 
-        if (position != null)
+        KapuaPosition position = message.getPosition();
+        if (position != null) {
             deviceEventCreator.setPosition(position);
+        }
 
         deviceEventService.create(deviceEventCreator);
     }
@@ -124,22 +116,14 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         throws KapuaException
     {
         KapuaPayload payload = message.getPayload();
-        KapuaChannel channel = message.getChannel();
-        String accountName = channel.getScope();
-        String clientId = channel.getClientId();
-
-        //
-        // Account find
-        KapuaLocator locator = KapuaLocator.getInstance();
-        AccountService accountService = locator.getService(AccountService.class);
-        Account account = accountService.findByName(accountName);
-        KapuaId scopeId = account.getId();
+        KapuaId scopeId = message.getScopeId();
+        KapuaId deviceId = message.getDeviceId();
 
         //
         // Device update
+        KapuaLocator locator = KapuaLocator.getInstance();
         DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
-        Device device = deviceRegistryService.findByClientId(scopeId,
-                                                             clientId);
+        Device device = deviceRegistryService.find(scopeId, deviceId);
 
         //
         // Event create
@@ -153,8 +137,10 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         deviceEventCreator.setSentOn(message.getSentOn());
 
-        if (message.getPosition() != null)
-            deviceEventCreator.setPosition(message.getPosition());
+        KapuaPosition position = message.getPosition();
+        if (position != null) {
+            deviceEventCreator.setPosition(position);
+        }
 
         deviceEventService.create(deviceEventCreator);
     }
@@ -164,22 +150,14 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         throws KapuaException
     {
         KapuaPayload payload = message.getPayload();
-        KapuaChannel channel = message.getChannel();
-        String accountName = channel.getScope();
-        String clientId = channel.getClientId();
-
-        //
-        // Account find
-        KapuaLocator locator = KapuaLocator.getInstance();
-        AccountService accountService = locator.getService(AccountService.class);
-        Account account = accountService.findByName(accountName);
-        KapuaId scopeId = account.getId();
+        KapuaId scopeId = message.getScopeId();
+        KapuaId deviceId = message.getDeviceId();
 
         //
         // Device update
+        KapuaLocator locator = KapuaLocator.getInstance();
         DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
-        Device device = deviceRegistryService.findByClientId(scopeId,
-                                                             clientId);
+        Device device = deviceRegistryService.find(scopeId, deviceId);
 
         //
         // Event create
@@ -193,8 +171,10 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         deviceEventCreator.setSentOn(message.getReceivedOn());
 
-        if (message.getPosition() != null)
-            deviceEventCreator.setPosition(message.getPosition());
+        KapuaPosition position = message.getPosition();
+        if (position != null) {
+            deviceEventCreator.setPosition(position);
+        }
 
         deviceEventService.create(deviceEventCreator);
 
@@ -205,22 +185,14 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         throws KapuaException
     {
         KapuaPayload payload = message.getPayload();
-        KapuaChannel channel = message.getChannel();
-        String accountName = channel.getScope();
-        String clientId = channel.getClientId();
-
-        //
-        // Account find
-        KapuaLocator locator = KapuaLocator.getInstance();
-        AccountService accountService = locator.getService(AccountService.class);
-        Account account = accountService.findByName(accountName);
-        KapuaId scopeId = account.getId();
+        KapuaId scopeId = message.getScopeId();
+        KapuaId deviceId = message.getDeviceId();
 
         //
         // Device update
+        KapuaLocator locator = KapuaLocator.getInstance();
         DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
-        Device device = deviceRegistryService.findByClientId(scopeId,
-                                                             clientId);
+        Device device = deviceRegistryService.find(scopeId, deviceId);
 
         //
         // Event create
@@ -234,8 +206,10 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         deviceEventCreator.setSentOn(message.getReceivedOn());
 
-        if (message.getPosition() != null)
-            deviceEventCreator.setPosition(message.getPosition());
+        KapuaPosition position = message.getPosition();
+        if (position != null) {
+            deviceEventCreator.setPosition(position);
+        }
 
         deviceEventService.create(deviceEventCreator);
     }

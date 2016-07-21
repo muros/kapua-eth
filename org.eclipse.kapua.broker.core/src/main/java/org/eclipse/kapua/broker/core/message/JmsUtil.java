@@ -11,11 +11,6 @@ import javax.jms.Topic;
 import org.apache.activemq.command.ActiveMQMessage;
 import org.eclipse.kapua.broker.core.converter.KapuaConverter;
 import org.eclipse.kapua.broker.core.plugin.AclConstants;
-import org.eclipse.kapua.message.internal.KapuaInvalidMessageException;
-import org.eclipse.kapua.message.internal.KapuaInvalidTopicException;
-import org.eclipse.kapua.message.internal.KapuaMessage;
-import org.eclipse.kapua.message.internal.KapuaPayload;
-import org.eclipse.kapua.message.internal.KapuaTopic;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,7 +53,7 @@ public class JmsUtil {
      * @throws KapuaInvalidTopicException
      */
     public static CamelKapuaMessage convertToKapuaMessage(BytesMessage jmsMessage, KapuaId connectionId)
-        throws JMSException, KapuaInvalidTopicException
+        throws JMSException
     {
         String jmsTopic = jmsMessage.getStringProperty(Constants.PROPERTY_TOPIC_ORIG);
         Date queuedOn = new Date(jmsMessage.getLongProperty(Constants.PROPERTY_ENQUEUED_TIMESTAMP));
@@ -87,7 +82,7 @@ public class JmsUtil {
      * @throws KapuaInvalidTopicException
      */
     public static CamelKapuaMessage convertToKapuaMessage(byte[] messageBody, String jmsTopic, Date queuedOn, KapuaId connectionId)
-            throws JMSException, KapuaInvalidTopicException
+            throws JMSException
         {
     	String mqttTopic = convertJmsWildCardToMqtt(jmsTopic);
         KapuaTopic kapuaTopic = new KapuaTopic(mqttTopic);
@@ -122,10 +117,10 @@ public class JmsUtil {
                 try {
                     kapuaMsg = new KapuaMessage(kapuaTopic, queuedOn, uuid, KapuaPayload.buildFromByteArray(messageBody, jmsTopic));
                 }
-                catch (KapuaInvalidMessageException e) {
-                    logger.warn("Invalid KapuaMessage - account: {}, topic: {}", new Object[] { kapuaTopic.getAccount(), kapuaTopic.getFullTopic() }, e);
-                    kapuaMsg = new KapuaMessage(kapuaTopic, queuedOn, messageBody);
-                }
+//                catch (KapuaInvalidMessageException e) {
+//                    logger.warn("Invalid KapuaMessage - account: {}, topic: {}", new Object[] { kapuaTopic.getAccount(), kapuaTopic.getFullTopic() }, e);
+//                    kapuaMsg = new KapuaMessage(kapuaTopic, queuedOn, messageBody);
+//                }
                 catch (IOException e) {
                     logger.warn("IOException converting message - account: {}, topic: {}" + new Object[] { kapuaTopic.getAccount(), kapuaTopic.getFullTopic() }, e);
                     kapuaMsg = new KapuaMessage(kapuaTopic, queuedOn, messageBody);
@@ -157,7 +152,7 @@ public class JmsUtil {
      * @throws KapuaInvalidTopicException
      */
     public static CamelKapuaMessage convertToKapuaMessage(BytesMessage jmsMessage, String jmsTopic, Date queuedOn, KapuaId connectionId)
-        throws JMSException, KapuaInvalidTopicException
+        throws JMSException
     {
         byte[] payload = null;
         // TODO JMS message have no size limits!

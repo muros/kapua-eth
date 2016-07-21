@@ -1,14 +1,11 @@
 package org.eclipse.kapua.transport;
 
-import java.util.List;
-
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.message.Message;
 import org.eclipse.kapua.transport.message.TransportChannel;
 import org.eclipse.kapua.transport.message.TransportMessage;
 import org.eclipse.kapua.transport.message.TransportPayload;
 
-public interface TransportClient<C extends TransportChannel, P extends TransportPayload, M extends TransportMessage<C, P>, TB extends TransportCallback<M>>
+public interface TransportClient<C extends TransportChannel, P extends TransportPayload, MQ extends TransportMessage<C, P>, MS extends TransportMessage<C, P>>
 {
     //
     // Connection management
@@ -27,25 +24,10 @@ public interface TransportClient<C extends TransportChannel, P extends Transport
     //
     // Message management
     //
-    public void publish(M message)
+    public MS send(MQ message, Long timeout)
         throws KapuaException;
 
-    public void subscribe(C channel)
-        throws KapuaException;
-
-    public void unsubscribe(C channel)
-        throws KapuaException;
-
-    void unsubscribeAll()
-        throws KapuaException;
-
-    //
-    // Client callback management
-    //
-    public void newCallback(List<Message> responseContainer, Class<Message> clazz)
-        throws KapuaException;
-
-    public void clearCallback()
+    public void clean()
         throws KapuaException;
 
     //
@@ -53,5 +35,5 @@ public interface TransportClient<C extends TransportChannel, P extends Transport
     //
     public String getClientId();
 
-    public Class<M> getMessageClass();
+    public Class<MQ> getMessageClass();
 }

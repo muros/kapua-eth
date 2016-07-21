@@ -39,43 +39,23 @@ public class TransportClientPoolImpl<C extends TransportClient> extends GenericO
         setConfig(clientPoolConfig);
     }
 
-    // public static MqttClientPool getInstance()
-    // {
-    // return kapuaClientPoolInstance;
-    // }
-
     @Override
     public void returnObject(C kapuaClient)
     {
         //
         // Clean up callback
         try {
-            kapuaClient.clearCallback();
+            kapuaClient.clean();
         }
         catch (KapuaException e) {
             try {
                 kapuaClient.terminateClient();
             }
             catch (KapuaException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+                // FIXME: Manage exception
             }
-            // TODO Auto-generated catch block
+            // FIXME: Manage exception
             e.printStackTrace();
-        }
-
-        try {
-            kapuaClient.unsubscribeAll();
-        }
-        catch (Exception e) {
-            try {
-                kapuaClient.terminateClient();
-            }
-            catch (KapuaException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-            // TODO: handle exception
         }
 
         //

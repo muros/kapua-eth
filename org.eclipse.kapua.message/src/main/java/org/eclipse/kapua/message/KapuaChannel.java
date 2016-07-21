@@ -1,16 +1,10 @@
 package org.eclipse.kapua.message;
 
-public interface KapuaChannel
+import java.util.List;
+
+public interface KapuaChannel extends Channel
 {
-    public String getMessageClassification();
+    public List<String> getSemanticParts();
 
-    public void setMessageClassification(String messageClassification);
-
-    public String getScope();
-
-    public void setScope(String scope);
-
-    public String getClientId();
-
-    public void setClientId(String clientId);
+    public void setSemanticParts(List<String> semanticParts);
 }
