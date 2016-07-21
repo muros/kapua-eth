@@ -37,5 +37,4 @@ public interface DeviceCommandOutput
     public Boolean hasTimedout();
 
     public void setHasTimedout(Boolean hasTimedout);
-
 }

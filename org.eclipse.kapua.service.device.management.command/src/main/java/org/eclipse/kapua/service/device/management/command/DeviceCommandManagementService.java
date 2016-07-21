@@ -18,6 +18,6 @@ import org.eclipse.kapua.service.KapuaService;
 
 public interface DeviceCommandManagementService extends KapuaService
 {
-    public DeviceCommandOutput exec(KapuaId scopeId, KapuaId deviceId, DeviceCommandInput commandInput)
+    public DeviceCommandOutput exec(KapuaId scopeId, KapuaId deviceId, DeviceCommandInput commandInput, Long timeout)
         throws KapuaException;
 }

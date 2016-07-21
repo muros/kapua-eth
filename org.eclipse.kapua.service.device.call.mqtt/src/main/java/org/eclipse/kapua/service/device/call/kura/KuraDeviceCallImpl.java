@@ -18,78 +18,62 @@ import org.eclipse.kapua.transport.message.TransportMessage;
 import org.org.eclipse.kapua.transport.pooling.TransportClientPool;
 
 @SuppressWarnings("rawtypes")
-public class KuraDeviceCallImpl implements DeviceCall<KuraResponseMessage>
+public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraResponseMessage>
 {
-    private KuraRequestMessage requestMessage;
-    private KuraRequestChannel requestChannel;
-    private KuraRequestPayload requestPayload;
-
-    private Long               timeout;
-
-    public KuraDeviceCallImpl(KuraRequestMessage requestMessage)
+    public KuraDeviceCallImpl()
     {
-        this(requestMessage, null);
-    }
-
-    public KuraDeviceCallImpl(KuraRequestMessage requestMessage, Long timeout)
-    {
-        this.requestMessage = requestMessage;
-        this.requestChannel = requestMessage.getChannel();
-
-        this.timeout = timeout;
     }
 
     @Override
-    public KuraResponseMessage create()
+    public KuraResponseMessage create(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
         requestMessage.getChannel().setMethod("POST");
-
-        return send();
+        return send(requestMessage, timeout);
     }
 
     @Override
-    public KuraResponseMessage read()
+    public KuraResponseMessage read(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
         requestMessage.getChannel().setMethod("GET");
-        return send();
+        return send(requestMessage, timeout);
     }
 
     @Override
-    public KuraResponseMessage discover()
+    public KuraResponseMessage options(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
         requestMessage.getChannel().setMethod("GET");
-        return send();
+        return send(requestMessage, timeout);
     }
 
     @Override
-    public KuraResponseMessage delete()
+    public KuraResponseMessage delete(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
         requestMessage.getChannel().setMethod("DEL");
-        return send();
+        return send(requestMessage, timeout);
     }
 
     @Override
-    public KuraResponseMessage execute()
+    public KuraResponseMessage execute(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
         requestMessage.getChannel().setMethod("EXEC");
-        return send();
+        return send(requestMessage, timeout);
     }
 
     @Override
-    public KuraResponseMessage write()
+    public KuraResponseMessage write(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
         requestMessage.getChannel().setMethod("PUT");
-        return send();
+        return send(requestMessage, timeout);
     }
 
     @SuppressWarnings({ "unchecked" })
-    private KuraResponseMessage send()
+    private KuraResponseMessage send(KuraRequestMessage requestMessage, Long timeout)
         throws KuraMqttDeviceCallException
     {
         // Borrow a KapuaClient
@@ -141,6 +125,9 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraResponseMessage>
 
         KuraResponseMessage response = null;
         try {
+            KuraRequestChannel requestChannel = requestMessage.getChannel();
+            KuraRequestPayload requestPayload = requestMessage.getPayload();
+
             if (timeout != null) {
                 // FIXME: create an utilty class to use the same synchronized random instance to avoid duplicates
                 Random r = new Random();
@@ -176,5 +163,11 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraResponseMessage>
         }
 
         return response;
+    }
+
+    @Override
+    public Class<KuraResponseMessage> getBaseMessageClass()
+    {
+        return KuraResponseMessage.class;
     }
 }

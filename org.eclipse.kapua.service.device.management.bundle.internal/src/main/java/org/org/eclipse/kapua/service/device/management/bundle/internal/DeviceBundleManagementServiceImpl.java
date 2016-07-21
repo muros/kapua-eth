@@ -7,11 +7,11 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundleListResult;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundleManagementService;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
-import org.eclipse.kapua.service.device.management.commons.DeviceManagementMethod;
-import org.eclipse.kapua.service.device.management.commons.call.DeviceApplicationCall;
+import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
 
 public class DeviceBundleManagementServiceImpl implements DeviceBundleManagementService
 {
@@ -39,10 +39,10 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
 
         //
         // Do get
-        DeviceApplicationCall<DeviceBundleListResult> deviceApplicationCall = new DeviceApplicationCall<DeviceBundleListResult>(scopeId,
+        DeviceCallExecutor<DeviceBundleListResult> deviceApplicationCall = new DeviceCallExecutor<DeviceBundleListResult>(scopeId,
                                                                                                                                 deviceId,
                                                                                                                                 deviceBundleManagementAppId,
-                                                                                                                                DeviceManagementMethod.GET,
+                                                                                                                                KapuaMethod.GET,
                                                                                                                                 resources);
         deviceApplicationCall.setResponseHandler(new BundleManagementResponseHandlers.GET());
 
@@ -74,10 +74,10 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
 
         //
         // Do exec
-        DeviceApplicationCall<Void> deviceApplicationCall = new DeviceApplicationCall<Void>(scopeId,
+        DeviceCallExecutor<Void> deviceApplicationCall = new DeviceCallExecutor<Void>(scopeId,
                                                                                             deviceId,
                                                                                             deviceBundleManagementAppId,
-                                                                                            DeviceManagementMethod.EXEC,
+                                                                                            KapuaMethod.EXEC,
                                                                                             resources);
         deviceApplicationCall.setResponseHandler(new BundleManagementResponseHandlers.PUT());
 
@@ -109,10 +109,10 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
 
         //
         // Do exec
-        DeviceApplicationCall<Void> deviceApplicationCall = new DeviceApplicationCall<Void>(scopeId,
+        DeviceCallExecutor<Void> deviceApplicationCall = new DeviceCallExecutor<Void>(scopeId,
                                                                                             deviceId,
                                                                                             deviceBundleManagementAppId,
-                                                                                            DeviceManagementMethod.EXEC,
+                                                                                            KapuaMethod.EXEC,
                                                                                             resources);
         deviceApplicationCall.setResponseHandler(new BundleManagementResponseHandlers.PUT());
 

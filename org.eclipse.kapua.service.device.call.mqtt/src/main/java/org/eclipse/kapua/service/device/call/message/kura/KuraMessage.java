@@ -7,8 +7,8 @@ import org.eclipse.kapua.service.device.call.message.DeviceMessage;
 public class KuraMessage<C extends KuraChannel, P extends KuraPayload> implements DeviceMessage<C, P>
 {
     protected C    channel;
-    protected P    payload;
     protected Date timestamp;
+    protected P    payload;
 
     public KuraMessage()
     {

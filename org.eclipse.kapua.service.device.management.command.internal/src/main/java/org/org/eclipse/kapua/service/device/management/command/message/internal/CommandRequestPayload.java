@@ -2,25 +2,18 @@ package org.org.eclipse.kapua.service.device.management.command.message.internal
 
 import java.util.Vector;
 
-import org.eclipse.kapua.message.device.app.request.KapuaRequestPayload;
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.message.internal.KapuaPayloadImpl;
+import org.org.eclipse.kapua.service.device.management.command.internal.CommandProperties;
 
-public class DeviceCommandRequestPayload extends KapuaRequestPayload
+public class CommandRequestPayload extends KapuaPayloadImpl implements KapuaPayload
 {
-    public static final String METRIC_CMD      = "command.command";
-    public static final String METRIC_ARG      = "command.argument";
-    public static final String METRIC_ENVP     = "command.environment.pair";
-    public static final String METRIC_DIR      = "command.working.directory";
-    public static final String METRIC_STDIN    = "command.stdin";
-    public static final String METRIC_TOUT     = "command.timeout";
-    public static final String METRIC_ASYNC    = "command.run.async";
-    public static final String METRIC_PASSWORD = "command.password";
-
     public String[] getArguments()
     {
         Vector<String> v = new Vector<String>();
 
         for (int i = 0;; i++) {
-            String value = (String) getMetric(METRIC_ARG + i);
+            String value = (String) getProperties().get(CommandProperties.APP_PROPERTY_ARG.getValue() + i);
             if (value != null) {
                 v.add(value);
             }
@@ -41,7 +34,7 @@ public class DeviceCommandRequestPayload extends KapuaRequestPayload
     {
         if (arguments != null) {
             for (int i = 0; i < arguments.length; i++) {
-                addMetric(METRIC_ARG + i, arguments[i]);
+                getProperties().put(CommandProperties.APP_PROPERTY_ARG.getValue() + i, arguments[i]);
             }
         }
     }
@@ -51,7 +44,7 @@ public class DeviceCommandRequestPayload extends KapuaRequestPayload
         Vector<String> v = new Vector<String>();
 
         for (int i = 0;; i++) {
-            String value = (String) getMetric(METRIC_ENVP + i);
+            String value = (String) getProperties().get(CommandProperties.APP_PROPERTY_ENVP.getValue() + i);
             if (value != null) {
                 v.add(value);
             }
@@ -72,75 +65,62 @@ public class DeviceCommandRequestPayload extends KapuaRequestPayload
     {
         if (environmentPairs != null) {
             for (int i = 0; i < environmentPairs.length; i++) {
-                addMetric(METRIC_ENVP + i, environmentPairs[i]);
+                getProperties().put(CommandProperties.APP_PROPERTY_ENVP.getValue() + i, environmentPairs[i]);
             }
         }
     }
 
     public String getWorkingDir()
     {
-        return (String) getMetric(METRIC_DIR);
+        return (String) getProperties().get(CommandProperties.APP_PROPERTY_DIR.getValue());
     }
 
     public void setWorkingDir(String workingDir)
     {
         if (workingDir != null) {
-            addMetric(METRIC_DIR, workingDir);
+            getProperties().put(CommandProperties.APP_PROPERTY_DIR.getValue(), workingDir);
         }
     }
 
     public String getStdin()
     {
-        return (String) getMetric(METRIC_STDIN);
+        return (String) getProperties().get(CommandProperties.APP_PROPERTY_STDIN.getValue());
     }
 
     public void setStdin(String stdin)
     {
         if (stdin != null) {
-            addMetric(METRIC_STDIN, stdin);
+            getProperties().put(CommandProperties.APP_PROPERTY_STDIN.getValue(), stdin);
         }
     }
 
     public Integer getTimeout()
     {
-        return (Integer) getMetric(METRIC_TOUT);
+        return (Integer) getProperties().get(CommandProperties.APP_PROPERTY_TOUT.getValue());
     }
 
     public void setTimeout(int timeout)
     {
-        addMetric(METRIC_TOUT, Integer.valueOf(timeout));
+        getProperties().put(CommandProperties.APP_PROPERTY_TOUT.getValue(), Integer.valueOf(timeout));
     }
 
     public Boolean isRunAsync()
     {
-        return (Boolean) getMetric(METRIC_ASYNC);
+        return (Boolean) getProperties().get(CommandProperties.APP_PROPERTY_ASYNC.getValue());
     }
 
     public void setRunAsync(boolean runAsync)
     {
-        addMetric(METRIC_ASYNC, Boolean.valueOf(runAsync));
+        getProperties().put(CommandProperties.APP_PROPERTY_ASYNC.getValue(), Boolean.valueOf(runAsync));
     }
 
     public String getCommand()
     {
-        return (String) getMetric(METRIC_CMD);
-    }
-
-    public byte[] getZipBytes()
-    {
-        return getBody();
-    }
-
-    public void setZipBytes(byte[] zipBytes)
-    {
-        if (zipBytes != null) {
-            setBody(zipBytes);
-        }
+        return (String) getProperties().get(CommandProperties.APP_PROPERTY_CMD.getValue());
     }
 
     public void setPassword(String password)
     {
-        if (password != null && !password.isEmpty())
-            addMetric(METRIC_PASSWORD, password);
+        getProperties().put(CommandProperties.APP_PROPERTY_PASSWORD.getValue(), password);
     }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
+import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
 import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
@@ -16,7 +17,7 @@ import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorImpl implements Translator<KuraChannel, MqttTopic, KuraPayload, MqttPayload, KuraMessage, MqttMessage>
+public class TranslatorRequestKuraMqtt implements Translator<KuraChannel, MqttTopic, KuraPayload, MqttPayload, KuraMessage, MqttMessage>
 {
 
     @Override
@@ -25,7 +26,7 @@ public class TranslatorImpl implements Translator<KuraChannel, MqttTopic, KuraPa
     {
         //
         // Mqtt request topic
-        MqttTopic mqttTopic = translate(message.getChannel());
+        MqttTopic mqttRequestTopic = translate(message.getChannel());
 
         //
         // Mqtt response topic
@@ -38,7 +39,7 @@ public class TranslatorImpl implements Translator<KuraChannel, MqttTopic, KuraPa
 
         //
         // Mqtt message
-        MqttMessage mqttMessage = new MqttMessage(mqttTopic,
+        MqttMessage mqttMessage = new MqttMessage(mqttRequestTopic,
                                                   mqttResponseTopic,
                                                   mqttPayload);
 
@@ -97,7 +98,7 @@ public class TranslatorImpl implements Translator<KuraChannel, MqttTopic, KuraPa
     @Override
     public Class<?> getClassFrom()
     {
-        return KuraMessage.class;
+        return KuraRequestMessage.class;
     }
 
     @Override

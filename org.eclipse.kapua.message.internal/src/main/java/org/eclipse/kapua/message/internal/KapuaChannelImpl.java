@@ -12,35 +12,23 @@
  *******************************************************************************/
 package org.eclipse.kapua.message.internal;
 
+import java.util.List;
+
 import org.eclipse.kapua.message.KapuaChannel;
 
 public class KapuaChannelImpl implements KapuaChannel
 {
-    private String   clientId;
-    private String[] semanticParts;
+    private List<String> semanticParts;
 
     @Override
-    public String getClientId()
-    {
-        return clientId;
-    }
-
-    @Override
-    public void setClientId(String clientId)
-    {
-        this.clientId = clientId;
-    }
-
-    @Override
-    public String[] getSemanticParts()
+    public List<String> getSemanticParts()
     {
         return semanticParts;
     }
 
     @Override
-    public void setSemanticParts(String[] semanticParts)
+    public void setSemanticParts(List<String> semanticParts)
     {
         this.semanticParts = semanticParts;
     }
-
 }

@@ -1,15 +1,14 @@
 package org.eclipse.kapua.service.device.call.kura;
 
-import org.eclipse.kapua.service.device.call.KapuaDeviceCallFactory;
-import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
+import org.eclipse.kapua.service.device.call.DeviceCallFactory;
 
-public class KuraDeviceCallFactoryImpl implements KapuaDeviceCallFactory<KuraRequestMessage>
+public class KuraDeviceCallFactoryImpl implements DeviceCallFactory
 {
 
     @Override
-    public KuraDeviceCallImpl newDeviceCall(KuraRequestMessage requestDestination, Long timeout)
+    public KuraDeviceCallImpl newDeviceCall()
     {
-        return new KuraDeviceCallImpl(requestDestination, timeout);
+        return new KuraDeviceCallImpl();
     }
 
 }

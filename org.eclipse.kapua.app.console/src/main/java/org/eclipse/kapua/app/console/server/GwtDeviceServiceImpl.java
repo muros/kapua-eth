@@ -902,7 +902,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             commandInput.setStdin(gwtCommandInput.getStdin());
             commandInput.setTimeout(gwtCommandInput.getTimeout() != null ? gwtCommandInput.getTimeout().intValue() : 0);
             commandInput.setWorkingDir(gwtCommandInput.getWorkingDir());
-            commandInput.setBytes(gwtCommandInput.getZipBytes());
+            commandInput.setBody(gwtCommandInput.getZipBytes());
 
             KapuaId scopeId = KapuaEid.parseShortId(gwtDevice.getScopeId());
             KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());

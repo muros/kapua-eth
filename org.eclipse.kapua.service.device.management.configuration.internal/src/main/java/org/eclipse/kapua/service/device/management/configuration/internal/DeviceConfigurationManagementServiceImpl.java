@@ -12,9 +12,9 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
-import org.eclipse.kapua.service.device.management.commons.DeviceManagementMethod;
-import org.eclipse.kapua.service.device.management.commons.call.DeviceApplicationCall;
+import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
@@ -56,10 +56,10 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
 
         //
         // Do get
-        DeviceApplicationCall<DeviceConfiguration> deviceApplicationCall = new DeviceApplicationCall<DeviceConfiguration>(scopeId,
+        DeviceCallExecutor<DeviceConfiguration> deviceApplicationCall = new DeviceCallExecutor<DeviceConfiguration>(scopeId,
                                                                                                                           deviceId,
                                                                                                                           deviceConfigurationManagementAppId,
-                                                                                                                          DeviceManagementMethod.GET,
+                                                                                                                          KapuaMethod.GET,
                                                                                                                           resources);
         deviceApplicationCall.setResponseHandler(new ConfigurationManagementResponseHandlers.GET());
 
@@ -111,10 +111,10 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
 
         //
         // Do put
-        DeviceApplicationCall<Void> deviceApplicationCall = new DeviceApplicationCall<Void>(scopeId,
+        DeviceCallExecutor<Void> deviceApplicationCall = new DeviceCallExecutor<Void>(scopeId,
                                                                                             deviceId,
                                                                                             deviceConfigurationManagementAppId,
-                                                                                            DeviceManagementMethod.PUT,
+                                                                                            KapuaMethod.PUT,
                                                                                             resources);
         deviceApplicationCall.setRequestPayload(requestPayload);
         deviceApplicationCall.setResponseHandler(new ConfigurationManagementResponseHandlers.PUT());
@@ -162,10 +162,10 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
 
         //
         // Do put
-        DeviceApplicationCall<Void> deviceApplicationCall = new DeviceApplicationCall<Void>(scopeId,
+        DeviceCallExecutor<Void> deviceApplicationCall = new DeviceCallExecutor<Void>(scopeId,
                                                                                             deviceId,
                                                                                             deviceConfigurationManagementAppId,
-                                                                                            DeviceManagementMethod.PUT,
+                                                                                            KapuaMethod.PUT,
                                                                                             resources);
         deviceApplicationCall.setRequestPayload(requestPayload);
         deviceApplicationCall.setResponseHandler(new ConfigurationManagementResponseHandlers.PUT());

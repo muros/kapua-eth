@@ -1,4 +1,4 @@
-package org.eclipse.kapua.message.device.app.response;
+package org.eclipse.kapua.service.device.management.response;
 
 public enum KapuaResponseCode
 {
