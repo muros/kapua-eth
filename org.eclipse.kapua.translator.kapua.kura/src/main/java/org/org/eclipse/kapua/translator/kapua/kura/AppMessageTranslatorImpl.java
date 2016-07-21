@@ -7,15 +7,20 @@ import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.device.app.KapuaAppChannel;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
+import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
+import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
+import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
 import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
+import org.eclipse.kapua.service.device.management.request.KapuaRequestChannel;
+import org.eclipse.kapua.service.device.management.request.KapuaRequestMessage;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
 @SuppressWarnings("rawtypes")
-public class AppMessageTranslatorImpl implements Translator<KapuaAppChannel, KuraChannel, KapuaPayload, KuraPayload, KapuaMessage, KuraMessage>
+public class AppMessageTranslatorImpl implements Translator<KapuaRequestChannel, KuraRequestChannel, KapuaPayload, KuraRequestPayload, KapuaRequestMessage, KuraRequestMessage>
 {
     @Override
     public KuraMessage translate(KapuaMessage message)
