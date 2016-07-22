@@ -19,7 +19,7 @@ import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorDataKapuaKura implements Translator<KapuaChannel, KuraChannel, KapuaPayload, KuraPayload, KapuaMessage, KuraMessage>
+public class TranslatorDataKapuaKura implements Translator<KapuaMessage, KuraMessage>
 {
 
     @Override
@@ -56,7 +56,6 @@ public class TranslatorDataKapuaKura implements Translator<KapuaChannel, KuraCha
         return kuraMessage;
     }
 
-    @Override
     public KuraChannel translate(KapuaChannel kapuaChannel)
         throws KapuaException
     {
@@ -65,7 +64,6 @@ public class TranslatorDataKapuaKura implements Translator<KapuaChannel, KuraCha
         return kuraChannel;
     }
 
-    @Override
     public KuraPayload translate(KapuaPayload payload)
         throws KapuaException
     {
@@ -94,13 +92,13 @@ public class TranslatorDataKapuaKura implements Translator<KapuaChannel, KuraCha
     }
 
     @Override
-    public Class<?> getClassFrom()
+    public Class<KapuaMessage> getClassFrom()
     {
         return KapuaMessage.class;
     }
 
     @Override
-    public Class<?> getClassTo()
+    public Class<KuraMessage> getClassTo()
     {
         return KuraMessage.class;
     }

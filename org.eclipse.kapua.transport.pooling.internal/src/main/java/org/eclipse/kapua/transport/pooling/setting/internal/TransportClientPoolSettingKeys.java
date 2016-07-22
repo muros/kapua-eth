@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.org.eclipse.kapua.transport.pooling.setting.internal;
+package org.eclipse.kapua.transport.pooling.setting.internal;
 
 import org.eclipse.kapua.commons.setting.SettingKey;
 

@@ -14,7 +14,7 @@ import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorDataKuraMqtt implements Translator<KuraChannel, MqttTopic, KuraPayload, MqttPayload, KuraMessage, MqttMessage>
+public class TranslatorDataKuraMqtt implements Translator<KuraMessage, MqttMessage>
 {
     @Override
     public MqttMessage translate(KuraMessage message)
@@ -39,7 +39,6 @@ public class TranslatorDataKuraMqtt implements Translator<KuraChannel, MqttTopic
         return jmsMessage;
     }
 
-    @Override
     public MqttTopic translate(KuraChannel channel)
         throws KapuaException
     {
@@ -56,7 +55,6 @@ public class TranslatorDataKuraMqtt implements Translator<KuraChannel, MqttTopic
         return new MqttTopic(topicTokens.toArray(new String[0]));
     }
 
-    @Override
     public MqttPayload translate(KuraPayload payload)
         throws KapuaException
     {
@@ -64,13 +62,13 @@ public class TranslatorDataKuraMqtt implements Translator<KuraChannel, MqttTopic
     }
 
     @Override
-    public Class<?> getClassFrom()
+    public Class<KuraMessage> getClassFrom()
     {
         return KuraMessage.class;
     }
 
     @Override
-    public Class<?> getClassTo()
+    public Class<MqttMessage> getClassTo()
     {
         return MqttMessage.class;
     }

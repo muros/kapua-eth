@@ -21,7 +21,7 @@ import org.org.eclipse.kapua.service.device.management.command.message.internal.
 import org.org.eclipse.kapua.service.device.management.command.message.internal.CommandRequestMessage;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.CommandRequestPayload;
 
-public class TranslatorAppCommandKapuaKura implements Translator<CommandRequestChannel, KuraRequestChannel, CommandRequestPayload, KuraRequestPayload, CommandRequestMessage, KuraRequestMessage>
+public class TranslatorAppCommandKapuaKura implements Translator<CommandRequestMessage, KuraRequestMessage>
 {
     private static final String                              CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_CONTROL_PREFIX);
     private static Map<CommandAppProperties, CommandMetrics> propertiesDictionary;
@@ -76,8 +76,7 @@ public class TranslatorAppCommandKapuaKura implements Translator<CommandRequestC
         return kuraMessage;
     }
 
-    @Override
-    public KuraRequestChannel translate(CommandRequestChannel channel)
+    private KuraRequestChannel translate(CommandRequestChannel channel)
         throws KapuaException
     {
         KuraRequestChannel kuraRequestChannel = new KuraRequestChannel();
@@ -96,7 +95,6 @@ public class TranslatorAppCommandKapuaKura implements Translator<CommandRequestC
         return kuraRequestChannel;
     }
 
-    @Override
     public KuraRequestPayload translate(CommandRequestPayload payload)
         throws KapuaException
     {
@@ -115,13 +113,13 @@ public class TranslatorAppCommandKapuaKura implements Translator<CommandRequestC
     }
 
     @Override
-    public Class<?> getClassFrom()
+    public Class<CommandRequestMessage> getClassFrom()
     {
         return CommandRequestMessage.class;
     }
 
     @Override
-    public Class<?> getClassTo()
+    public Class<KuraRequestMessage> getClassTo()
     {
         return KuraRequestMessage.class;
     }

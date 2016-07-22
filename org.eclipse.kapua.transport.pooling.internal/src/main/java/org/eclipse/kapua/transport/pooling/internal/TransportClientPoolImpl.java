@@ -1,13 +1,13 @@
-package org.org.eclipse.kapua.transport.pooling.internal;
+package org.eclipse.kapua.transport.pooling.internal;
 
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.transport.TransportClient;
-import org.org.eclipse.kapua.transport.pooling.PooledTransportClientFactory;
-import org.org.eclipse.kapua.transport.pooling.TransportClientPool;
-import org.org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSetting;
-import org.org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSettingKeys;
+import org.eclipse.kapua.transport.pooling.PooledTransportClientFactory;
+import org.eclipse.kapua.transport.pooling.TransportClientPool;
+import org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSetting;
+import org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSettingKeys;
 
 @SuppressWarnings("rawtypes")
 public class TransportClientPoolImpl<C extends TransportClient> extends GenericObjectPool<C> implements TransportClientPool<C>

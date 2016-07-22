@@ -1,4 +1,4 @@
-package org.org.eclipse.kapua.transport.pooling.internal;
+package org.eclipse.kapua.transport.pooling.internal;
 
 import java.net.URI;
 
@@ -11,10 +11,10 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.transport.KapuaClientConnectOptions;
 import org.eclipse.kapua.transport.KapuaClientFactory;
 import org.eclipse.kapua.transport.TransportClient;
+import org.eclipse.kapua.transport.pooling.PooledTransportClientFactory;
+import org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSetting;
+import org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSettingKeys;
 import org.eclipse.kapua.transport.utils.ClientIdGenerator;
-import org.org.eclipse.kapua.transport.pooling.PooledTransportClientFactory;
-import org.org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSetting;
-import org.org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSettingKeys;
 
 @SuppressWarnings("rawtypes")
 public class PooledTransportClientFactoryImpl<C extends TransportClient, CO extends KapuaClientConnectOptions> extends BasePooledObjectFactory<C> implements PooledTransportClientFactory<C>

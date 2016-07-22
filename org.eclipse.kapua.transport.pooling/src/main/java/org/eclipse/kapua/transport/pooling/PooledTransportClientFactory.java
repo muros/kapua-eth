@@ -1,4 +1,4 @@
-package org.org.eclipse.kapua.transport.pooling;
+package org.eclipse.kapua.transport.pooling;
 
 import org.apache.commons.pool2.PooledObjectFactory;
 import org.eclipse.kapua.model.KapuaObjectFactory;

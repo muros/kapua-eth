@@ -15,7 +15,7 @@ import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.transport.TransportClient;
 import org.eclipse.kapua.transport.message.TransportMessage;
-import org.org.eclipse.kapua.transport.pooling.TransportClientPool;
+import org.eclipse.kapua.transport.pooling.TransportClientPool;
 
 @SuppressWarnings("rawtypes")
 public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraResponseMessage>
