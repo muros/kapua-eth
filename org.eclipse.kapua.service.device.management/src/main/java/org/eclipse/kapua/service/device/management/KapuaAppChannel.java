@@ -2,11 +2,11 @@ package org.eclipse.kapua.service.device.management;
 
 public interface KapuaAppChannel extends KapuaControlChannel
 {
-    public String getApp();
+    public KapuaAppProperties getApp();
 
-    public void setApp(String app);
+    public void setApp(KapuaAppProperties app);
 
-    public String getVersion();
+    public KapuaAppProperties getVersion();
 
-    public void setVersion(String version);
+    public void setVersion(KapuaAppProperties version);
 }

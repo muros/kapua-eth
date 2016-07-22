@@ -15,20 +15,15 @@ import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.transport.TransportClient;
 import org.eclipse.kapua.transport.message.TransportMessage;
-import org.org.eclipse.kapua.transport.pooling.TransportClientPool;
+import org.eclipse.kapua.transport.pooling.TransportClientPool;
 
 @SuppressWarnings("rawtypes")
 public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraResponseMessage>
 {
-    public KuraDeviceCallImpl()
-    {
-    }
-
     @Override
     public KuraResponseMessage create(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
-        requestMessage.getChannel().setMethod("POST");
         return send(requestMessage, timeout);
     }
 
@@ -36,7 +31,6 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     public KuraResponseMessage read(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
-        requestMessage.getChannel().setMethod("GET");
         return send(requestMessage, timeout);
     }
 
@@ -44,7 +38,6 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     public KuraResponseMessage options(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
-        requestMessage.getChannel().setMethod("GET");
         return send(requestMessage, timeout);
     }
 
@@ -52,7 +45,6 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     public KuraResponseMessage delete(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
-        requestMessage.getChannel().setMethod("DEL");
         return send(requestMessage, timeout);
     }
 
@@ -60,7 +52,6 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     public KuraResponseMessage execute(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
-        requestMessage.getChannel().setMethod("EXEC");
         return send(requestMessage, timeout);
     }
 
@@ -68,7 +59,6 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     public KuraResponseMessage write(KuraRequestMessage requestMessage, Long timeout)
         throws KapuaException
     {
-        requestMessage.getChannel().setMethod("PUT");
         return send(requestMessage, timeout);
     }
 
@@ -76,10 +66,11 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     private KuraResponseMessage send(KuraRequestMessage requestMessage, Long timeout)
         throws KuraMqttDeviceCallException
     {
+        //
         // Borrow a KapuaClient
         TransportClient transportClient = null;
         try {
-            // TODO:
+            // FIXME:
             // Device device = findByClientId(requestDest.getClientid();
             // DeviceConnection deviceConnection = findById(scopeId, device.getConnectionId());
             // kapuaClient = (KapuaClient) KapuaClientPool.getInstance(deviceConnection.getProtocol()).borrowObject();
@@ -103,19 +94,24 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
                                                   (Object[]) null);
         }
 
+        //
+        // Get Kura to transport translator for the request
         Translator translatorKuraTransport;
         try {
-            translatorKuraTransport = Translator.getTranslatorFor(KuraMessage.class, transportClient.getMessageClass());
+            translatorKuraTransport = Translator.getTranslatorFor(KuraRequestMessage.class,
+                                                                  transportClient.getMessageClass());
         }
         catch (KapuaException e) {
             throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
                                                   e,
                                                   (Object[]) null);
         }
-
+        //
+        // Get transport to Kura translator for the response
         Translator translatorTransportKura;
         try {
-            translatorTransportKura = Translator.getTranslatorFor(transportClient.getMessageClass(), KuraMessage.class);
+            translatorTransportKura = Translator.getTranslatorFor(transportClient.getMessageClass(),
+                                                                  KuraResponseMessage.class);
         }
         catch (KapuaException e) {
             throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
@@ -123,16 +119,19 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
                                                   (Object[]) null);
         }
 
+        //
+        // Make the request
         KuraResponseMessage response = null;
         try {
+
+            // Add requestId and requesterClientId to both payload and channel if response is expected
+            // Note: Adding to both payload and channel to let the translator choose what to do base on the transport used.
             KuraRequestChannel requestChannel = requestMessage.getChannel();
             KuraRequestPayload requestPayload = requestMessage.getPayload();
-
             if (timeout != null) {
                 // FIXME: create an utilty class to use the same synchronized random instance to avoid duplicates
                 Random r = new Random();
                 String requestId = String.valueOf(r.nextLong());
-                //
 
                 requestChannel.setRequestId(requestId);
                 requestChannel.setRequesterClientId(transportClient.getClientId());
@@ -144,9 +143,10 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
             //
             // Do send
             try {
-                KuraMessage kuraMessage = new KuraMessage(requestChannel, new Date(), requestPayload);
-                TransportMessage transportResponseMessage = transportClient.send((TransportMessage) translatorKuraTransport.translate(kuraMessage),
-                                                                                 timeout);
+                KuraMessage kuraMessage = new KuraMessage(requestChannel,
+                                                          new Date(),
+                                                          requestPayload);
+                TransportMessage transportResponseMessage = transportClient.send((TransportMessage) translatorKuraTransport.translate(kuraMessage), timeout);
                 response = (KuraResponseMessage) translatorTransportKura.translate(transportResponseMessage);
             }
             catch (KapuaException e) {

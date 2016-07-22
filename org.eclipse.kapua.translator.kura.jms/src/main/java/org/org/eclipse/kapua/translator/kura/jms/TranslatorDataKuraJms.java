@@ -14,7 +14,7 @@ import org.org.eclipse.kapua.transport.message.jms.JmsPayload;
 import org.org.eclipse.kapua.transport.message.jms.JmsTopic;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorDataKuraJms implements Translator<KuraChannel, JmsTopic, KuraPayload, JmsPayload, KuraMessage, JmsMessage>
+public class TranslatorDataKuraJms implements Translator<KuraMessage, JmsMessage>
 {
 
     @Override
@@ -40,7 +40,6 @@ public class TranslatorDataKuraJms implements Translator<KuraChannel, JmsTopic, 
         return jmsMessage;
     }
 
-    @Override
     public JmsTopic translate(KuraChannel channel)
         throws KapuaException
     {
@@ -57,7 +56,6 @@ public class TranslatorDataKuraJms implements Translator<KuraChannel, JmsTopic, 
         return new JmsTopic(topicTokens.toArray(new String[0]));
     }
 
-    @Override
     public JmsPayload translate(KuraPayload payload)
         throws KapuaException
     {
@@ -65,13 +63,13 @@ public class TranslatorDataKuraJms implements Translator<KuraChannel, JmsTopic, 
     }
 
     @Override
-    public Class<?> getClassFrom()
+    public Class<KuraMessage> getClassFrom()
     {
         return KuraMessage.class;
     }
 
     @Override
-    public Class<?> getClassTo()
+    public Class<JmsMessage> getClassTo()
     {
         return JmsMessage.class;
     }

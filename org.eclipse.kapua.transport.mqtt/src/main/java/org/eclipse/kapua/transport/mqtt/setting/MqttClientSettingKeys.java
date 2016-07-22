@@ -19,6 +19,8 @@ public enum MqttClientSettingKeys implements SettingKey
     TRANSPORT_PROTOCOL_VERSION("transport.protocol.version"),
 
     TRANSPORT_TOPIC_SEPARATOR("transport.topic.separator"),
+
+    SEND_TIMEOUT_MAX("send.timeout.max"),
     ;
 
     private String key;

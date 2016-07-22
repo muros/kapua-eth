@@ -1,39 +1,11 @@
 package org.org.eclipse.kapua.service.device.management.command.message.internal;
 
-import org.eclipse.kapua.message.internal.KapuaChannelImpl;
 import org.eclipse.kapua.service.device.management.KapuaMethod;
+import org.eclipse.kapua.service.device.management.commons.message.response.KapuaAppChannelImpl;
 import org.eclipse.kapua.service.device.management.request.KapuaRequestChannel;
 
-public class CommandRequestChannel extends KapuaChannelImpl implements KapuaRequestChannel
+public class CommandRequestChannel extends KapuaAppChannelImpl implements KapuaRequestChannel
 {
-
-    @Override
-    public String getApp()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setApp(String app)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public String getVersion()
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setVersion(String version)
-    {
-        // TODO Auto-generated method stub
-
-    }
 
     @Override
     public KapuaMethod getMethod()

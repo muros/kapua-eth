@@ -2,27 +2,34 @@ package org.eclipse.kapua.service.device.call.kura;
 
 public enum CommandMetrics
 {
-    APP_ID("COMMAND"),
-    APP_VERSION("1.0.0"),
+    APP_ID("CMD"),
+    APP_VERSION("V1"),
 
-    APP_PROPERTY_CMD("kapua.cmd.command"),
-    APP_PROPERTY_ARG("kapua.cmd.argument"),
-    APP_PROPERTY_ENVP("kapua.cmd.environment.pair"),
-    APP_PROPERTY_DIR("kapua.cmd.working.directory"),
-    APP_PROPERTY_STDIN("kapua.cmd.stdin"),
-    APP_PROPERTY_TOUT("kapua.cmd.timeout"),
-    APP_PROPERTY_ASYNC("kapua.cmd.run.async"),
-    APP_PROPERTY_PASSWORD("kapua.cmd.password"),
+    // Request
+    APP_METRIC_CMD("command.command"),
+    APP_METRIC_ARG("command.argument"),
+    APP_METRIC_ENVP("command.environment.pair"),
+    APP_METRIC_DIR("command.working.directory"),
+    APP_METRIC_STDIN("command.stdin"),
+    APP_METRIC_TOUT("command.timeout"),
+    APP_METRIC_ASYNC("command.run.async"),
+    APP_METRIC_PASSWORD("command.password"),
+
+    // Response
+    APP_METRIC_STDERR("command.stderr"),
+    APP_METRIC_STDOUT("command.stdout"),
+    APP_METRIC_EXIT_CODE("command.exit.code"),
+    APP_METRIC_TIMED_OUT("command.timedout"),
+
     ;
 
     private String value;
 
-    CommandProperties(String value)
+    CommandMetrics(String value)
     {
         this.value = value;
     }
 
-    @Override
     public String getValue()
     {
         return value;
