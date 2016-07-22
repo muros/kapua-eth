@@ -1,8 +1,8 @@
 package org.eclipse.kapua.broker.core.plugin;
 
-import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +27,14 @@ import org.apache.activemq.filter.DestinationMapEntry;
 import org.apache.activemq.security.AuthorizationEntry;
 import org.apache.activemq.security.DefaultAuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.support.SubjectThreadState;
-import org.apache.shiro.util.ThreadContext;
-import org.apache.shiro.util.ThreadState;
 import org.eclipse.kapua.KapuaErrorCode;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
-import org.eclipse.kapua.broker.core.metrics.MetricsService;
+import org.eclipse.kapua.broker.core.message.MessageConstants;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
-import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.metric.MetricsService;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
+import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -49,13 +47,17 @@ import org.eclipse.kapua.service.authentication.AuthenticationService;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationErrorCodes;
 import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationException;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.datastore.DatastoreDomain;
+import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnection;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionCreator;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionStatus;
+import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain;
 import org.eclipse.kapua.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +92,8 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private static long                            connectionWaitForToken              = 15000;
     private final static RateLimiter               CONNECTION_RATE_LIMITER             = RateLimiter.create(connectionRateLimit);
     private Runnable                               configurationUpdaterTask;
+    
+    private Map<String, ConnectorDescriptor>       connectorsDescriptorMap;
     
     private final static Map<String, ConnectionId> connectionMap                       = new ConcurrentHashMap<String, ConnectionId>();
 
@@ -130,10 +134,24 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     //mesage size
     private Histogram                              metricPublishMessageSizeAllowed;
     private Histogram                              metricPublishMessageSizeNotAllowed;
+    
+    AuthenticationService authenticationService = KapuaLocator.getInstance().getService(AuthenticationService.class);
+    AuthorizationService authorizationService = KapuaLocator.getInstance().getService(AuthorizationService.class);
+    PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
+    UsernamePasswordTokenFactory credentialsFactory = KapuaLocator.getInstance().getFactory(UsernamePasswordTokenFactory.class);
+	AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
+	UserService userService = KapuaLocator.getInstance().getService(UserService.class);
+    DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
+    DeviceConnectionFactory deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
 
     public KapuaSecurityBrokerFilter(Broker next) throws KapuaException
     {
         super(next);
+
+        connectorsDescriptorMap = new HashMap<String, ConnectorDescriptor>();
+        //TODO retrieve connector values from ???
+        connectorsDescriptorMap.put("kura", new ConnectorDescriptor("mqtt", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
+        connectorsDescriptorMap.put("kura", new ConnectorDescriptor("mqtts", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
 
     	// Initialize the metrics
         metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
@@ -307,18 +325,11 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     {
     	Context loginTotalContext = metricLoginAddConnectionTime.time();
     	
-        Subject currentSubject = (new Subject.Builder()).buildSubject();
-        ThreadState threadState = new SubjectThreadState(currentSubject);
-        threadState.bind();
-
         String username = info.getUserName();
         String password = info.getPassword();
         String clientId = info.getClientId();
         String clientIp = info.getClientIp();
         ConnectionId connectionId = info.getConnectionId();
-
-        AuthorizationService authorizationService = KapuaLocator.getInstance().getService(AuthorizationService.class);
-        AuthenticationService authenticationService = KapuaLocator.getInstance().getService(AuthenticationService.class);
 
         List<String> authDestinations = null;
         if (logger.isDebugEnabled()) {
@@ -327,9 +338,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         try {
             // Build KapuaUsername
 //            User username = User.parse(username);//KapuaUserName
-
-        	AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
-        	UserService userService = KapuaLocator.getInstance().getService(UserService.class);
 
             logger.info("User name {} - client id {}", new Object[]{username, clientId});
 
@@ -342,12 +350,11 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             loginPreCheckTimeContext.stop();
 
             Context loginShiroLoginTimeContext = metricLoginShiroLoginTime.time();
-            UsernamePasswordTokenFactory credentialsFactory = KapuaLocator.getInstance().getFactory(UsernamePasswordTokenFactory.class);
             AuthenticationCredentials credentials = credentialsFactory.newInstance(username, password.toCharArray());
             AccessToken accessToken = authenticationService.login(credentials);
 
-            KapuaId scopeId = new KapuaEid(new BigInteger("1"));//accessToken.getScopeId();
-            KapuaId userId = new KapuaEid(new BigInteger("2"));//accessToken.getId();
+            KapuaId scopeId = accessToken.getScopeId();
+            KapuaId userId = accessToken.getId();
             Account account = accountService.find(scopeId);
 			
             String accountName = account.getName();
@@ -383,17 +390,17 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 	Context loginNormalUserTimeContext = metricLoginNormalUserTime.time();
                 	metricLoginNormalUserAttempt.inc();
                     // 3-3) check permissions
-                	PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
                 	
                     Context loginCheckAccessTimeContext = metricLoginCheckAccessTime.time();
                     boolean[] hasPermissions = new boolean[]{
-                    		authorizationService.isPermitted(permissionFactory.newPermission("broker", "connect", scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newPermission("device", "manage", scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newPermission("data", "read", scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newPermission("data", "create", scopeId))
+                    		//TODO check the permissions... move them to a constants class?
+                    		authorizationService.isPermitted(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.connect, scopeId)),
+                    		authorizationService.isPermitted(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.write, scopeId)),
+                    		authorizationService.isPermitted(permissionFactory.newPermission(DatastoreDomain.DATA_STORE, Actions.read, scopeId)),
+                    		authorizationService.isPermitted(permissionFactory.newPermission(DatastoreDomain.DATA_STORE, Actions.write, scopeId))
                     };
                     if (!hasPermissions[AclConstants.BROKER_CONNECT_IDX]) {
-                        throw new KapuaIllegalAccessException(permissionFactory.newPermission("broker", "connect", scopeId).toString());
+                        throw new KapuaIllegalAccessException(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.connect, scopeId).toString());
                     }
                     loginCheckAccessTimeContext.stop();
 
@@ -402,7 +409,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
                     // 4) find device
                     Context loginFindClientIdTimeContext = metricLoginFindClientIdTime.time();
-                    DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
                     deviceConnection = deviceConnectionService.findByClientId(scopeId, clientId);
                     loginFindClientIdTimeContext.stop();
 
@@ -414,7 +420,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                     // Update map for stealing link detection on disconnect
                     connectionMap.put(fullClientId, info.getConnectionId());
                     if (deviceConnection==null) {
-                    	DeviceConnectionFactory deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
                     	DeviceConnectionCreator deviceConnectionCreator = deviceConnectionFactory.newCreator(scopeId);
                     	deviceConnectionCreator.setClientId(clientId);
                     	deviceConnectionCreator.setClientIp(clientIp);
@@ -474,8 +479,9 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 metricClientConnectedClient.inc();
             }
             logAuthDestinationToLog(authDestinations);
-
-            KapuaSecurityContext securityCtx = new KapuaSecurityContext(principal, authMap, (deviceConnection!=null ? deviceConnection.getId() : null));
+            
+            ConnectorDescriptor connectorDescriptor = connectorsDescriptorMap.get((((TransportConnector) context.getConnector()).getName()));
+            KapuaSecurityContext securityCtx = new KapuaSecurityContext(principal, authMap, (deviceConnection!=null ? deviceConnection.getId() : null), connectorDescriptor);
             context.setSecurityContext(securityCtx);
 
             // multiple account stealing link fix
@@ -500,16 +506,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                     metricLoginInvalidUserPassword.inc();
                     throw ce;
             	}
-//            	else if (errorCode.equals(KapuaAuthenticationErrorCodes. ||
-//            			errorCode.equals(KapuaAuthenticationErrorCodes. ||
-//    					errorCode.equals(KapuaAuthenticationErrorCodes.) {
-//    				logger.warn("Invalid client id for user {} - client id {} ({})", new Object[] { username, clientId, e.getMessage() });
-//                    // A-MQ will map InvalidClientIDException into a CONNECTION_REFUSED_IDENTIFIER_REJECTED message (see javadoc on top of this method)
-//                    InvalidClientIDException icid = new InvalidClientIDException("Connection refused or identifier rejected!");
-//                    icid.setStackTrace(e.getStackTrace());
-//                    metricLoginInvalidClientId.inc();
-//                    throw icid;
-//            	}
             	else if (errorCode.equals(KapuaAuthenticationErrorCodes.LOCKED_USERNAME) ||
             			errorCode.equals(KapuaAuthenticationErrorCodes.DISABLED_USERNAME) ||
     					errorCode.equals(KapuaAuthenticationErrorCodes.EXPIRED_CREDENTIALS)) {
@@ -571,11 +567,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         finally {
             // 7) logout
         	Context loginShiroLogoutTimeContext = metricLoginShiroLogoutTime.time();
-
         	authenticationService.logout();
-        	// DON'T remove that. Fix shiro exceptions due to the reuse of subject on a heavy stress on amq broker
-            ThreadContext.unbindSubject();
-            
             loginShiroLogoutTimeContext.stop();
             loginTotalContext.stop();
         }
@@ -589,11 +581,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         	Context loginRemoveConnectionTimeContext = metricLoginRemoveConnectionTime.time();
         	try {
         		
-        		Subject currentSubject = (new Subject.Builder()).buildSubject();
-                ThreadState threadState = new SubjectThreadState(currentSubject);
-                threadState.bind();
-                
-                
         		KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
         		
         		KapuaPrincipal kapuaPrincipal = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal());
@@ -602,12 +589,9 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         		String username = kapuaSecurityContext.getUserName();
         		String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
 
-        		AuthenticationService authenticationService = KapuaLocator.getInstance().getService(AuthenticationService.class);
-        		UsernamePasswordTokenFactory credentialsFactory = KapuaLocator.getInstance().getFactory(UsernamePasswordTokenFactory.class);
-        		AuthenticationCredentials credentials = credentialsFactory.newInstance("kapua-broker", "We!come12345".toCharArray());
-        		AccessToken accessToken = authenticationService.login(credentials);
-        		KapuaId scopeId = new KapuaEid(new BigInteger("1"));//accessToken.getScopeId();
-                KapuaId userId = new KapuaEid(new BigInteger("2"));//accessToken.getId();
+        		KapuaSession kapuaSession = KapuaSecurityUtils.getSession();
+        		KapuaId scopeId = kapuaSession.getScopeId();
+                KapuaId userId = kapuaSession.getUserId();
         		
         		// multiple account stealing link fix
         		String fullClientId = MessageFormat.format(AclConstants.MULTI_ACCOUNT_CLIENT_ID, accountId, clientId);
@@ -633,7 +617,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         			}
         			else {
         				KapuaId deviceConnectionId = kapuaSecurityContext.getConnectionId();
-        				DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
         				DeviceConnection deviceConnection = deviceConnectionService.findByClientId(scopeId, clientId);
         				//the device connection must be not null
         				
@@ -662,12 +645,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         	}
         	finally {
         		loginRemoveConnectionTimeContext.stop();
-        		
-        		AuthenticationService authenticationService = KapuaLocator.getInstance().getService(AuthenticationService.class);
         		authenticationService.logout();
-            	// DON'T remove that. Fix shiro exceptions due to the reuse of subject on a heavy stress on amq broker
-                ThreadContext.unbindSubject();
-                
         	}
         }
         super.removeConnection(context, info, error);
@@ -731,7 +709,8 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 // kapuaSecurityContext.getAuthorizedWriteDests().put(messageSend.getDestination(), messageSend.getDestination());
             }
             // }
-            messageSend.setProperty(AclConstants.HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
+            messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
+            messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTOR_DEVICE_PROTOCOL, kapuaSecurityContext.getConnectorDescriptor());
         }
         if (messageSend.getContent()!=null) {
         	metricPublishMessageSizeAllowed.update(messageSend.getContent().length);
@@ -1062,32 +1041,5 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     	String adminAccount = SystemSetting.getInstance().getString(SystemSettingKey.SYS_ADMIN_ACCOUNT);
     	return user.equals(adminAccount);
     }
-
-//    private void checkCrossClusterLogin(long clientAccountId, String accountName)
-//        throws KapuaException
-//    {
-//        //
-//        // Argument Validation
-//        ArgumentValidator.notNegative(clientAccountId, "clientAccountId");
-//
-//        //
-//        // Check if cross broker login
-//        AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
-//
-//        AccountDeploymentPlan deploymentPlan = accountService.getAccountDeploymentPlanTrusted(clientAccountId);
-//        if (deploymentPlan == null) {
-//            throw new KapuaException(KapuaErrorCode.INTERNAL_ERROR, null, "Cannot find deployment plan for account with id: " + clientAccountId);
-//        }
-//
-//        // If all data is retrieved, then check
-//        if (s_clusterId != deploymentPlan.getBrokerCluster().getId()) {
-//            if (clientAccountId != sAdminAccount.getId()) {
-//                logger.error("Cross cluster login check FAILED for account {}", accountName);
-//                throw new KapuaOperationNotAllowedException("Account not authorized for this cluster.");
-//            }
-//        }
-//
-//        logger.debug("Cross cluster login check PASSED for account {}", accountName);
-//    }
 
 }

@@ -12,10 +12,10 @@ import org.eclipse.kapua.broker.core.listener.CamelConstants;
 import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
 import org.eclipse.kapua.broker.core.message.CamelUtil;
 import org.eclipse.kapua.broker.core.message.JmsUtil;
-import org.eclipse.kapua.broker.core.plugin.AclConstants;
+import org.eclipse.kapua.broker.core.message.MessageConstants;
+import org.eclipse.kapua.broker.core.plugin.ConnectorDescriptor;
 import org.eclipse.kapua.commons.metric.MetricsService;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.internal.KapuaInvalidTopicException;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,28 +32,53 @@ public class KapuaConverter {
 	
 	private Counter metricConverterJmsMessage;
 	private Counter metricConverterJmsErrorMessage;
-	private Counter metricConverterMessage;
+	private Counter metricConverterDataMessage;
+	private Counter metricConverterBirthMessage;
 	private Counter metricConverterErrorMessage;
 	
 	public KapuaConverter() {
 		metricConverterJmsMessage      = metricsService.getCounter(METRIC_COMPONENT_NAME, "kapua", "jms", "messages", "count");
 		metricConverterJmsErrorMessage = metricsService.getCounter(METRIC_COMPONENT_NAME, "kapua", "jms", "messages", "error", "count");
-		metricConverterMessage         = metricsService.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "count");
+		metricConverterDataMessage     = metricsService.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "data", "count");
+		metricConverterBirthMessage    = metricsService.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "birth", "count");
 		metricConverterErrorMessage    = metricsService.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "error", "count");
 	}
  
 	@Converter
-	public CamelKapuaMessage convertTo(Exchange exchange, Object value) throws KapuaException {
-		metricConverterMessage.inc();
+	public CamelKapuaMessage<?> convertTo(Exchange exchange, Object value) throws KapuaException {
+		metricConverterDataMessage.inc();
 		//assume that the message is a Camel Jms message
 		org.apache.camel.component.jms.JmsMessage message = (org.apache.camel.component.jms.JmsMessage) exchange.getIn();
 		if ((Message)message.getJmsMessage() instanceof javax.jms.BytesMessage) {
 			try {
 		        Date queuedOn = new Date(message.getHeader(CamelConstants.JMS_HEADER_TIMESTAMP, Long.class));
-		        KapuaId connectionId = (KapuaId)message.getHeader(AclConstants.HEADER_KAPUA_CONNECTION_ID);
-				return JmsUtil.convertToKapuaMessage((byte[])value, CamelUtil.getTopic(message), queuedOn, connectionId);
+		        KapuaId connectionId = (KapuaId)message.getHeader(MessageConstants.HEADER_KAPUA_CONNECTION_ID);
+		        ConnectorDescriptor deviceProtocol = (ConnectorDescriptor)message.getHeader(MessageConstants.HEADER_KAPUA_CONNECTOR_DEVICE_PROTOCOL);
+				return JmsUtil.convertToCamelKapuaMessage(deviceProtocol, (byte[])value, CamelUtil.getTopic(message), queuedOn, connectionId);
 			} 
-			catch (JMSException | KapuaInvalidTopicException e) {
+			catch (JMSException e) {
+				metricConverterErrorMessage.inc();
+				logger.error("Exception converting message {}", e.getMessage(), e);
+				throw KapuaException.internalError(e, "Cannot convert the message type " + exchange.getIn().getClass());
+			}
+		}
+		metricConverterErrorMessage.inc();
+		throw KapuaException.internalError("Cannot convert the message - Wrong instance type: " + exchange.getIn().getClass());
+    }
+	
+	@Converter
+	public CamelKapuaMessage<?> convertToBirth(Exchange exchange, Object value) throws KapuaException {
+		metricConverterBirthMessage.inc();
+		//assume that the message is a Camel Jms message
+		org.apache.camel.component.jms.JmsMessage message = (org.apache.camel.component.jms.JmsMessage) exchange.getIn();
+		if ((Message)message.getJmsMessage() instanceof javax.jms.BytesMessage) {
+			try {
+		        Date queuedOn = new Date(message.getHeader(CamelConstants.JMS_HEADER_TIMESTAMP, Long.class));
+		        KapuaId connectionId = (KapuaId)message.getHeader(MessageConstants.HEADER_KAPUA_CONNECTION_ID);
+		        ConnectorDescriptor deviceProtocol = (ConnectorDescriptor)message.getHeader(MessageConstants.HEADER_KAPUA_CONNECTOR_DEVICE_PROTOCOL);
+				return JmsUtil.convertToCamelKapuaMessage(deviceProtocol, (byte[])value, CamelUtil.getTopic(message), queuedOn, connectionId);
+			} 
+			catch (JMSException e) {
 				metricConverterErrorMessage.inc();
 				logger.error("Exception converting message {}", e.getMessage(), e);
 				throw KapuaException.internalError(e, "Cannot convert the message type " + exchange.getIn().getClass());

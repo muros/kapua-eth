@@ -1,6 +1,6 @@
 package org.eclipse.kapua.broker.core.message;
 
-public class Constants {
+public class MessageConstants {
 
 	// used by login update info asynch
 	public static final String  METRIC_USERNAME                = "username";
@@ -13,11 +13,8 @@ public class Constants {
     // used by login update info asynch
     public static final String  METRIC_USER_ID                 = "userId";
     public static final String  METRIC_NODE_ID                 = "nodeId";
-    public static final String  METRIC_STATUS                  = "status";
-    public static final String  METRIC_LOGIN_ON                = "loginOn";
-    public static final String  METRIC_LOGIN_ATTEMPTS          = "loginAttempts";
-    public static final String  METRIC_LOGIN_ATTEMPTS_RESET_ON = "loginAttemptsResetOn";
-    public static final String  METRIC_LOCKED_ON               = "lockedOn";
-    public static final String  METRIC_UNLOCK_ON               = "unlockOn";
+    
+	public static final String HEADER_KAPUA_CONNECTION_ID  = "KAPUA_CONNECTION_ID";
+	public static final String HEADER_KAPUA_CONNECTOR_DEVICE_PROTOCOL = "KAPUA_DEVICE_PROTOCOL";
     
 }

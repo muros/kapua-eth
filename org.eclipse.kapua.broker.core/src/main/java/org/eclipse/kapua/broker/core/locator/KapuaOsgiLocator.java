@@ -24,27 +24,13 @@ public class KapuaOsgiLocator extends KapuaLocator {
 	
 	@Override
 	public <F extends KapuaObjectFactory> F getFactory(Class<F> factoryClass) {
-		//TODO check the exception type thrown
-//    	ServiceReference<F>[] serviceReferences;
-//		try {
-//			serviceReferences = (ServiceReference<F>[]) bundleContext.getAllServiceReferences(factoryClass.getName(), null);
-//		} catch (InvalidSyntaxException e) {
-//			logger.error("InvalidSyntaxException", e);
-//			throw new RuntimeException();
-//		}
-//		if (serviceReferences==null || serviceReferences.length<=0) {
-//			throw new RuntimeException();
-//		}
-//		ServiceReference<F> serviceReference = serviceReferences[0];
-		
 		try {
 			ServiceReference<F> serviceReference = bundleContext.getServiceReference(factoryClass);
 			if (serviceReference==null) {
 				logger.error("Cannot find registered factory {}", factoryClass);
 				throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, factoryClass);
 			}
-			F service = bundleContext.getService(serviceReference);
-			return service;
+			return bundleContext.getService(serviceReference);
 		}
 		catch (IllegalStateException | SecurityException | IllegalArgumentException e) {
 			logger.error("Erro during factory lookup", e);
@@ -60,8 +46,7 @@ public class KapuaOsgiLocator extends KapuaLocator {
 				logger.error("Cannot find registered service {}", serviceClass);
 				throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, serviceClass);
 			}
-	    	S service = bundleContext.getService(serviceReference);
-			return service;
+	    	return bundleContext.getService(serviceReference);
 		}
 		catch (IllegalStateException | SecurityException | IllegalArgumentException e) {
 			logger.error("Erro during service lookup", e);

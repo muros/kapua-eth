@@ -63,7 +63,7 @@ public class KapuaPrincipal implements Principal, java.io.Serializable {
         return clientId;
     }
 
-    @Override
+	@Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
