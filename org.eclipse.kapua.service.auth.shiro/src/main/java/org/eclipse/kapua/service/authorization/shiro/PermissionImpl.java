@@ -13,21 +13,20 @@
 package org.eclipse.kapua.service.authorization.shiro;
 
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Action;
-import org.eclipse.kapua.service.authorization.Domain;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.Permission;
 
 public class PermissionImpl implements Permission
 {
-    private Domain  domain;
-    private Action  action;
+    private String   domain;
+    private Actions  action;
     private KapuaId targetScopeId;
 
     private PermissionImpl()
     {
     }
 
-    public PermissionImpl(Domain domain, Action action, KapuaId targetScopeId)
+    public PermissionImpl(String domain, Actions action, KapuaId targetScopeId)
     {
         this();
         this.domain = domain;
@@ -36,25 +35,25 @@ public class PermissionImpl implements Permission
     }
 
     @Override
-    public void setDomain(Domain domain)
+    public void setDomain(String domain)
     {
         this.domain = domain;
     }
 
     @Override
-    public Domain getDomain()
+    public String getDomain()
     {
         return domain;
     }
 
     @Override
-    public void setAction(Action action)
+    public void setAction(Actions action)
     {
         this.action = action;
     }
 
     @Override
-    public Action getAction()
+    public Actions getAction()
     {
         return action;
     }
@@ -73,7 +72,7 @@ public class PermissionImpl implements Permission
 
     public String toString()
     {
-        StringBuilder sb = new StringBuilder(domain.name());
+        StringBuilder sb = new StringBuilder(domain);
 
         if (action != null) {
             sb.append(":")

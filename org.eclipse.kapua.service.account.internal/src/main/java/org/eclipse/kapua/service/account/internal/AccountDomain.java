@@ -1,8 +1,7 @@
 package org.eclipse.kapua.service.account.internal;
 
-import org.eclipse.kapua.service.authorization.Domain;
+public interface AccountDomain {
+	
+    String ACCOUNT = "account";
 
-public enum AccountDomain implements Domain
-{
-    account;
 }

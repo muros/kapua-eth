@@ -1,8 +1,7 @@
 package org.eclipse.kapua.service.authentication.credential.shiro;
 
-import org.eclipse.kapua.service.authorization.Domain;
+public interface CredentialDomain {
+	
+    String CREDENTIAL = "credential";
 
-public enum CredentialDomain implements Domain
-{
-    credential
 }

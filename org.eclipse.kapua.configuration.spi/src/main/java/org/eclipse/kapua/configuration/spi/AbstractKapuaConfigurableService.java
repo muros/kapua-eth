@@ -23,7 +23,6 @@ import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.Domain;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 import org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider;
@@ -32,10 +31,10 @@ public class AbstractKapuaConfigurableService implements KapuaConfigurableServic
 {
     private static final long serialVersionUID = 5267829733117676086L;
 
-    private Domain            domain           = null;
+    private String            domain           = null;
     private String            pid              = null;
 
-    protected AbstractKapuaConfigurableService(String pid, Domain domain)
+    protected AbstractKapuaConfigurableService(String pid, String domain)
     {
         this.pid = pid;
         this.domain = domain;
