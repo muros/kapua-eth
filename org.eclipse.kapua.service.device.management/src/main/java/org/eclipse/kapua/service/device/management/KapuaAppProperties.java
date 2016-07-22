@@ -1,6 +1,6 @@
 package org.eclipse.kapua.service.device.management;
 
-public interface KapuaProperties
+public interface KapuaAppProperties
 {
     public String getValue();
 }

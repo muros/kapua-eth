@@ -10,28 +10,18 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.transport.mqtt.setting;
+package org.eclipse.kapua.translator.exception;
 
-import org.eclipse.kapua.commons.setting.SettingKey;
+import org.eclipse.kapua.KapuaErrorCode;
 
-public enum MqttClientSettingKeys implements SettingKey
+public enum TranslatorErrorCodes implements KapuaErrorCode
 {
-    TRANSPORT_PROTOCOL_VERSION("transport.protocol.version"),
+    INVALID_MESSAGE,
 
-    TRANSPORT_TOPIC_SEPARATOR("transport.topic.separator"),
+    INVALID_CHANNEL,
+    INVALID_CHANNEL_CLASSIFIER,
+    INVALID_CHANNEL_APP_NAME,
+    INVALID_CHANNEL_APP_VERSION,
 
-    SEND_TIMEOUT_MAX("send.timeout.max"),
-    ;
-
-    private String key;
-
-    private MqttClientSettingKeys(String key)
-    {
-        this.key = key;
-    }
-
-    public String key()
-    {
-        return key;
-    }
+    INVALID_PAYLOAD,
 }

@@ -3,19 +3,19 @@ package org.eclipse.kapua.translator.mqtt.kura;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
-import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraPayload;
-import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
 import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
 import org.eclipse.kapua.translator.Translator;
+import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
+import org.eclipse.kapua.translator.exception.TranslatorException;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorResponseMqttKura implements Translator<MqttTopic, KuraChannel, MqttPayload, KuraPayload, MqttMessage, KuraMessage>
+public class TranslatorResponseMqttKura implements Translator<MqttTopic, KuraResponseChannel, MqttPayload, KuraPayload, MqttMessage, KuraMessage>
 {
     private final static String controlMessageClassifier = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_CONTROL_PREFIX);
 
@@ -25,7 +25,7 @@ public class TranslatorResponseMqttKura implements Translator<MqttTopic, KuraCha
     {
         //
         // Kura topic
-        KuraChannel kuraChannel = translate(mqttMessage.getRequestTopic());
+        KuraResponseChannel kuraChannel = translate(mqttMessage.getRequestTopic());
 
         //
         // Kura payload
@@ -44,29 +44,24 @@ public class TranslatorResponseMqttKura implements Translator<MqttTopic, KuraCha
     }
 
     @Override
-    public KuraChannel translate(MqttTopic mqttTopic)
+    public KuraResponseChannel translate(MqttTopic mqttTopic)
         throws KapuaException
     {
         String[] mqttTopicTokens = mqttTopic.getSplittedTopic();
 
-        KuraResponseChannel kuraResponseChannel;
-        if (controlMessageClassifier.equals(mqttTopicTokens[0])) {
-            kuraResponseChannel = new KuraResponseChannel(mqttTopicTokens[0],
-                                                          mqttTopicTokens[1],
-                                                          mqttTopicTokens[2]);
-
-            kuraResponseChannel.setAppId(mqttTopicTokens[3]);
-            kuraResponseChannel.setReplyPart(mqttTopicTokens[4]);
-            kuraResponseChannel.setRequestId(mqttTopicTokens[5]);
+        if (!controlMessageClassifier.equals(mqttTopicTokens[0])) {
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_CLASSIFIER,
+                                          null,
+                                          mqttTopicTokens[0]);
         }
-        else {
-            kuraResponseChannel = new KuraResponseChannel(mqttTopicTokens[0],
-                                                          mqttTopicTokens[1]);
 
-            kuraResponseChannel.setAppId(mqttTopicTokens[2]);
-            kuraResponseChannel.setReplyPart(mqttTopicTokens[3]);
-            kuraResponseChannel.setRequestId(mqttTopicTokens[4]);
-        }
+        KuraResponseChannel kuraResponseChannel = new KuraResponseChannel(mqttTopicTokens[0],
+                                                                          mqttTopicTokens[1],
+                                                                          mqttTopicTokens[2]);
+
+        kuraResponseChannel.setAppId(mqttTopicTokens[3]);
+        kuraResponseChannel.setReplyPart(mqttTopicTokens[4]);
+        kuraResponseChannel.setRequestId(mqttTopicTokens[5]);
 
         return kuraResponseChannel;
     }

@@ -12,6 +12,8 @@ import org.eclipse.kapua.transport.TransportClient;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
+import org.eclipse.kapua.transport.mqtt.setting.MqttClientSetting;
+import org.eclipse.kapua.transport.mqtt.setting.MqttClientSettingKeys;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -20,7 +22,7 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttMessage, MqttMessage>
 {
     org.eclipse.paho.client.mqttv3.MqttClient pahoMqttClient   = null;
-    List<MqttTopic>                           subscribedTopics = new ArrayList<MqttTopic>();
+    List<MqttTopic>                           subscribedTopics = new ArrayList<>();
 
     //
     // Connection management
@@ -102,6 +104,7 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
             return getPahoClient().isConnected();
         }
         catch (KapuaException e) {
+            // FIXME: add log
             return false;
         }
     }
@@ -113,13 +116,13 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
     public MqttMessage send(MqttMessage mqttMessage, Long timeout)
         throws KapuaException
     {
-        List<MqttMessage> responses = new ArrayList<MqttMessage>();
+        List<MqttMessage> responses = new ArrayList<>();
 
         synchronized (responses) {
             sendInternal(mqttMessage, responses, timeout);
 
             try {
-                responses.wait();
+                responses.wait(MqttClientSetting.getInstance().getLong(MqttClientSettingKeys.SEND_TIMEOUT_MAX));
             }
             catch (InterruptedException e) {
                 Thread.interrupted();
@@ -130,7 +133,7 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
 
         }
 
-        if (responses.size() == 0) {
+        if (responses.isEmpty()) {
             throw new MqttClientException(MqttClientErrorCodes.CLIENT_TIMEOUT_EXCEPTION,
                                           null,
                                           new Object[] {
@@ -145,7 +148,6 @@ public class MqttClient implements TransportClient<MqttTopic, MqttPayload, MqttM
     private void sendInternal(MqttMessage mqttMessage, List<MqttMessage> responses, Long timeout)
         throws KapuaException
     {
-
         //
         // Subscribe if necessary
         if (mqttMessage.getResponseTopic() != null) {
