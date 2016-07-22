@@ -6,18 +6,18 @@ import org.apache.commons.pool2.BasePooledObjectFactory;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.util.KapuaEnvironmentUtils;
+import org.eclipse.kapua.commons.util.SystemUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.transport.KapuaClientConnectOptions;
-import org.eclipse.kapua.transport.KapuaClientFactory;
 import org.eclipse.kapua.transport.TransportClient;
+import org.eclipse.kapua.transport.TransportClientConnectOptions;
+import org.eclipse.kapua.transport.TransportClientFactory;
 import org.eclipse.kapua.transport.pooling.PooledTransportClientFactory;
 import org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSetting;
 import org.eclipse.kapua.transport.pooling.setting.internal.TransportClientPoolSettingKeys;
 import org.eclipse.kapua.transport.utils.ClientIdGenerator;
 
 @SuppressWarnings("rawtypes")
-public class PooledTransportClientFactoryImpl<C extends TransportClient, CO extends KapuaClientConnectOptions> extends BasePooledObjectFactory<C> implements PooledTransportClientFactory<C>
+public class PooledTransportClientFactoryImpl<C extends TransportClient, CO extends TransportClientConnectOptions> extends BasePooledObjectFactory<C> implements PooledTransportClientFactory<C>
 {
     @SuppressWarnings("unchecked")
     @Override
@@ -29,19 +29,19 @@ public class PooledTransportClientFactoryImpl<C extends TransportClient, CO exte
         TransportClientPoolSetting clientPoolSettings = TransportClientPoolSetting.getInstance();
 
         // FIXME: remove these credentials!
-        String username = "kapua-sys";
-        char[] password = "We!come12345".toCharArray();
+        String username = "edcguest";
+        char[] password = "Welcome1".toCharArray();
         String clientId = ClientIdGenerator.next(clientPoolSettings.getString(TransportClientPoolSettingKeys.CLIENT_POOL_CLIENT_ID_PREFIX));
-        URI brokerURI = new URI(KapuaEnvironmentUtils.getBrokerURI());
+        URI brokerURI = SystemUtils.getBrokerURI();
 
         //
         // Get client factory
         KapuaLocator locator = KapuaLocator.getInstance();
-        KapuaClientFactory clientFactory = locator.getFactory(KapuaClientFactory.class);
+        TransportClientFactory clientFactory = locator.getFactory(TransportClientFactory.class);
 
         //
         // Get new client and connection options
-        KapuaClientConnectOptions connectOptions = clientFactory.newConnectOptions();
+        TransportClientConnectOptions connectOptions = clientFactory.newConnectOptions();
         connectOptions.setClientId(clientId);
         connectOptions.setUsername(username);
         connectOptions.setPassword(password);

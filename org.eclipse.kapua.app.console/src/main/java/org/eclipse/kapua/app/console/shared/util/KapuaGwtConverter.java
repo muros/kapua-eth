@@ -61,7 +61,7 @@ public class KapuaGwtConverter
         KapuaEnvironmentConfig envConfig = KapuaEnvironmentConfig.getInstance();
         String brokerURL = String.format(brokerUrlFormat,
                                          envConfig.getString(SystemSettingKey.BROKER_PROTOCOL),
-                                         envConfig.getString(SystemSettingKey.BROKER_DNS),
+                                         envConfig.getString(SystemSettingKey.BROKER_HOST),
                                          envConfig.getString(SystemSettingKey.BROKER_PORT));
         gwtAccount.setBrokerURL(brokerURL);
 

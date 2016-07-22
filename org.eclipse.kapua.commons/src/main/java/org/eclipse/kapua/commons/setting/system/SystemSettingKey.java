@@ -37,8 +37,8 @@ public enum SystemSettingKey implements SettingKey
     DB_TRUSTSTORE_URL("commons.db.trust.store.url"),
     DB_TRUSTSTORE_PWD("commons.db.trust.store.pwd"),
 
-    BROKER_PROTOCOL("broker.protocol"),
-    BROKER_DNS("broker.dns"),
+    BROKER_SCHEME("broker.scheme"),
+    BROKER_HOST("broker.host"),
     BROKER_PORT("broker.port"),
 
     OSGI_CONTEXT("commons.osgi.context");

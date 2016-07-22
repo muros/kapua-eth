@@ -5,7 +5,7 @@ import org.eclipse.kapua.transport.message.TransportChannel;
 import org.eclipse.kapua.transport.message.TransportMessage;
 import org.eclipse.kapua.transport.message.TransportPayload;
 
-public interface KapuaClientFactory<D extends TransportChannel, P extends TransportPayload, MQ extends TransportMessage<D, P>, MS extends TransportMessage<D, P>, C extends TransportClient<D, P, MQ, MS>, CO extends KapuaClientConnectOptions>
+public interface TransportClientFactory<D extends TransportChannel, P extends TransportPayload, MQ extends TransportMessage<D, P>, MS extends TransportMessage<D, P>, C extends TransportClient<D, P, MQ, MS>, CO extends TransportClientConnectOptions>
                                    extends KapuaObjectFactory
 {
     public C newInstance();

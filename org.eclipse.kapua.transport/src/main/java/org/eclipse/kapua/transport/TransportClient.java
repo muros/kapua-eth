@@ -10,7 +10,7 @@ public interface TransportClient<C extends TransportChannel, P extends Transport
     //
     // Connection management
     //
-    public void connectClient(KapuaClientConnectOptions options)
+    public void connectClient(TransportClientConnectOptions options)
         throws KapuaException;
 
     public void disconnectClient()
@@ -24,6 +24,9 @@ public interface TransportClient<C extends TransportChannel, P extends Transport
     //
     // Message management
     //
+    public void sendAndForget(MQ message)
+        throws KapuaException;
+
     public MS send(MQ message, Long timeout)
         throws KapuaException;
 

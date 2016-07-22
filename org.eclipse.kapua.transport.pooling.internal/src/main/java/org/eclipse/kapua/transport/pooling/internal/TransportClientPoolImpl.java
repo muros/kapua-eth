@@ -28,6 +28,8 @@ public class TransportClientPoolImpl<C extends TransportClient> extends GenericO
         clientPoolConfig.setMaxIdle(config.getInt(TransportClientPoolSettingKeys.CLIENT_POOL_SIZE_MAXIDLE));
         clientPoolConfig.setMaxTotal(config.getInt(TransportClientPoolSettingKeys.CLIENT_POOL_SIZE_MAXTOTAL));
 
+        clientPoolConfig.setMaxWaitMillis(config.getInt(TransportClientPoolSettingKeys.CLIENT_POOL_BORROW_WAIT_MAX));
+
         clientPoolConfig.setTestOnReturn(config.getBoolean(TransportClientPoolSettingKeys.CLIENT_POOL_ON_RETURN_TEST));
         clientPoolConfig.setTestOnBorrow(config.getBoolean(TransportClientPoolSettingKeys.CLIENT_POOL_ON_BORROW_TEST));
 

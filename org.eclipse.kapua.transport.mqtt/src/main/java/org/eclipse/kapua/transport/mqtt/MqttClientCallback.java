@@ -66,7 +66,9 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
         //
         // notify if all expected responses arrived
         if (expectedResponses == responses.size()) {
-            notifyAll();
+            synchronized (this) {
+                notifyAll();
+            }
         }
     }
 

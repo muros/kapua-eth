@@ -2,7 +2,7 @@ package org.eclipse.kapua.transport;
 
 import java.net.URI;
 
-public interface KapuaClientConnectOptions
+public interface TransportClientConnectOptions
 {
     public String getClientId();
 
