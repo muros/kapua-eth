@@ -9,7 +9,7 @@ import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSett
 
 public class KuraChannel implements DeviceChannel
 {
-    protected final static String destinationControlPrefix = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_CONTROL_PREFIX);
+    protected final static String destinationControlPrefix = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
 
     protected String              messageClassification;
     protected String              scopeNamespace;

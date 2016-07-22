@@ -20,7 +20,6 @@ public enum CommandMetrics
     APP_METRIC_STDOUT("command.stdout"),
     APP_METRIC_EXIT_CODE("command.exit.code"),
     APP_METRIC_TIMED_OUT("command.timedout"),
-
     ;
 
     private String value;

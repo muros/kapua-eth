@@ -56,7 +56,7 @@ public class TranslatorDataKapuaKura implements Translator<KapuaMessage, KuraMes
         return kuraMessage;
     }
 
-    public KuraChannel translate(KapuaChannel kapuaChannel)
+    private KuraChannel translate(KapuaChannel kapuaChannel)
         throws KapuaException
     {
         KuraChannel kuraChannel = new KuraChannel();
@@ -64,7 +64,7 @@ public class TranslatorDataKapuaKura implements Translator<KapuaMessage, KuraMes
         return kuraChannel;
     }
 
-    public KuraPayload translate(KapuaPayload payload)
+    private KuraPayload translate(KapuaPayload payload)
         throws KapuaException
     {
         KuraPayload kuraPayload = new KuraPayload();

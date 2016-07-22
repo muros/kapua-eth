@@ -15,7 +15,7 @@ import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
 public class TranslatorResponseMqttKura implements Translator<MqttMessage, KuraResponseMessage>
 {
-    private final static String controlMessageClassifier = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_CONTROL_PREFIX);
+    private static final String CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
 
     @Override
     public KuraResponseMessage translate(MqttMessage mqttMessage)
@@ -40,12 +40,12 @@ public class TranslatorResponseMqttKura implements Translator<MqttMessage, KuraR
         return kuraMessage;
     }
 
-    public KuraResponseChannel translate(MqttTopic mqttTopic)
+    private KuraResponseChannel translate(MqttTopic mqttTopic)
         throws KapuaException
     {
         String[] mqttTopicTokens = mqttTopic.getSplittedTopic();
 
-        if (!controlMessageClassifier.equals(mqttTopicTokens[0])) {
+        if (!CONTROL_MESSAGE_CLASSIFIER.equals(mqttTopicTokens[0])) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_CLASSIFIER,
                                           null,
                                           mqttTopicTokens[0]);
@@ -62,7 +62,7 @@ public class TranslatorResponseMqttKura implements Translator<MqttMessage, KuraR
         return kuraResponseChannel;
     }
 
-    public KuraResponsePayload translate(MqttPayload mqttPayload)
+    private KuraResponsePayload translate(MqttPayload mqttPayload)
         throws KapuaException
     {
         byte[] mqttBody = mqttPayload.getBody();
@@ -84,5 +84,4 @@ public class TranslatorResponseMqttKura implements Translator<MqttMessage, KuraR
     {
         return KuraResponseMessage.class;
     }
-
 }

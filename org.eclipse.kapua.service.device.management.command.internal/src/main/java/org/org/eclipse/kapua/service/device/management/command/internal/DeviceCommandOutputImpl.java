@@ -4,89 +4,84 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
 
 public class DeviceCommandOutputImpl implements DeviceCommandOutput
 {
+	
+	private String stdErr;
+	private String stdOut;
+	private String exceptionMessage;
+	private String exceptionStack;
+	private Integer exitCode;
+    private Boolean timedOut;
 
-    @Override
+	@Override
     public String getStderr()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return stdErr;
     }
 
     @Override
     public void setStderr(String stderr)
     {
-        // TODO Auto-generated method stub
-
+        this.stdErr= stderr;
     }
 
     @Override
     public String getStdout()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return stdOut;
     }
 
     @Override
     public void setStdout(String stdout)
     {
-        // TODO Auto-generated method stub
-
+        this.stdOut = stdout;
     }
 
     @Override
     public String getExceptionMessage()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return exceptionMessage;
     }
 
     @Override
     public void setExceptionMessage(String exceptionMessage)
     {
-        // TODO Auto-generated method stub
-
+        this.exceptionMessage= exceptionMessage;
     }
 
     @Override
     public String getExceptionStack()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return exceptionStack;
     }
 
     @Override
     public void setExceptionStack(String exceptionStack)
     {
-        // TODO Auto-generated method stub
-
+        this.exceptionStack = exceptionStack;
     }
 
     @Override
     public Integer getExitCode()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return exitCode;
     }
 
     @Override
     public void setExitCode(Integer exitCode)
     {
-        // TODO Auto-generated method stub
-
+        this.exitCode = exitCode;
     }
 
     @Override
     public Boolean hasTimedout()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return timedOut;
     }
 
     @Override
     public void setHasTimedout(Boolean hasTimedout)
     {
-        // TODO Auto-generated method stub
-
+       this.timedOut= hasTimedout;
     }
 
 }

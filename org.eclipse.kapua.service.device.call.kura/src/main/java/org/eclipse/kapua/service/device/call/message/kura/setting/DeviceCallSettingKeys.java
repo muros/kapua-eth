@@ -16,7 +16,7 @@ import org.eclipse.kapua.commons.setting.SettingKey;
 
 public enum DeviceCallSettingKeys implements SettingKey
 {
-    DESTINATION_CONTROL_PREFIX("destination.control.prefix"),
+    DESTINATION_MESSAGE_CLASSIFIER("destination.message.classifier"),
 
     DESTINATION_REPLY_PART("destination.reply.part");
 
