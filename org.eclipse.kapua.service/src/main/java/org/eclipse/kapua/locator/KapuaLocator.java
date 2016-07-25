@@ -29,26 +29,28 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class KapuaLocator
 {
-	
-	private static Logger logger = LoggerFactory.getLogger(KapuaLocator.class);
-	
-	private final static KapuaLocator instance = createInstance();
-	
-	//TODO do we need synchronization?
-	private static KapuaLocator createInstance() {
-		//TODO choose the right way to get this implementation as parameter
-		String locatorImplementation = System.getProperty("locator.impl.class");
-		if (locatorImplementation!=null && locatorImplementation.trim().length()>0) {
-			try {
-				return (KapuaLocator)Class.forName(locatorImplementation).newInstance();
-			} 
-			catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-				logger.info("An error occurred during Servicelocator initialization", e);
-			}
-		}
-		//proceed with the default service locator instantiation if env variable is null or some error occurred during the specific service locator instantiation
-		logger.info("initialize Servicelocator with the default instance... ");
-		ServiceLoader<KapuaLocator> serviceLocatorLoaders = ServiceLoader.load(KapuaLocator.class);
+
+    private static Logger             logger   = LoggerFactory.getLogger(KapuaLocator.class);
+
+    private final static KapuaLocator instance = createInstance();
+
+    // TODO do we need synchronization?
+    private static KapuaLocator createInstance()
+    {
+        logger.info("initializing Servicelocator instance... ");
+        // TODO choose the right way to get this implementation as parameter
+        String locatorImplementation = System.getProperty("locator.impl.class");
+        if (locatorImplementation != null && locatorImplementation.trim().length() > 0) {
+            try {
+                return (KapuaLocator) Class.forName(locatorImplementation).newInstance();
+            }
+            catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                logger.info("An error occurred during Servicelocator initialization", e);
+            }
+        }
+        // proceed with the default service locator instantiation if env variable is null or some error occurred during the specific service locator instantiation
+        logger.info("initialize Servicelocator with the default instance... ");
+        ServiceLoader<KapuaLocator> serviceLocatorLoaders = ServiceLoader.load(KapuaLocator.class);
         KapuaLocator kapuaServiceLocator = null;
         Iterator<KapuaLocator> serviceLocatorLoaderIterator = serviceLocatorLoaders.iterator();
         while (serviceLocatorLoaderIterator.hasNext()) {
@@ -60,29 +62,30 @@ public abstract class KapuaLocator
         }
         logger.info("initialize Servicelocator with the default instance... DONE");
         return kapuaServiceLocator;
-	}
-	
-	public static KapuaLocator getInstance() {
-		return instance;
-	}
-	
-//    public static KapuaLocator getInstance()
-//    {
-//        ServiceLoader<KapuaLocator> serviceLocatorLoaders = ServiceLoader.load(KapuaLocator.class);
-//
-//        KapuaLocator kapuaServiceLocator = null;
-//        Iterator<KapuaLocator> serviceLocatorLoaderIterator = serviceLocatorLoaders.iterator();
-//        while (serviceLocatorLoaderIterator.hasNext()) {
-//            kapuaServiceLocator = serviceLocatorLoaderIterator.next();
-//            break;
-//        }
-//
-//        if (kapuaServiceLocator == null) {
-//            throw new KapuaRuntimeException(KapuaRuntimeErrorCodes.SERVICE_LOCATOR_UNAVAILABLE);
-//        }
-//
-//        return kapuaServiceLocator;
-//    }
+    }
+
+    public static KapuaLocator getInstance()
+    {
+        return instance;
+    }
+
+    // public static KapuaLocator getInstance()
+    // {
+    // ServiceLoader<KapuaLocator> serviceLocatorLoaders = ServiceLoader.load(KapuaLocator.class);
+    //
+    // KapuaLocator kapuaServiceLocator = null;
+    // Iterator<KapuaLocator> serviceLocatorLoaderIterator = serviceLocatorLoaders.iterator();
+    // while (serviceLocatorLoaderIterator.hasNext()) {
+    // kapuaServiceLocator = serviceLocatorLoaderIterator.next();
+    // break;
+    // }
+    //
+    // if (kapuaServiceLocator == null) {
+    // throw new KapuaRuntimeException(KapuaRuntimeErrorCodes.SERVICE_LOCATOR_UNAVAILABLE);
+    // }
+    //
+    // return kapuaServiceLocator;
+    // }
 
     /**
      * Returns an instance of a KapuaService implementing the provided KapuaService class.

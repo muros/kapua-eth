@@ -25,8 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Action;
-import org.eclipse.kapua.service.authorization.Domain;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.permission.UserPermission;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -45,14 +44,13 @@ public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermi
     private KapuaEid          userId;
 
     @XmlElement(name = "domain")
-    @Enumerated(EnumType.STRING)
     @Column(name = "domain", nullable = false, updatable = false)
-    private Domain            domain;
+    private String            domain;
 
     @XmlElement(name = "action")
     @Enumerated(EnumType.STRING)
     @Column(name = "action", nullable = false, updatable = false)
-    private Action            action;
+    private Actions           action;
 
     @XmlElement(name = "targetScopeId")
     @Embedded
@@ -84,26 +82,26 @@ public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermi
     }
 
     @Override
-    public void setDomain(Domain domain)
+    public void setDomain(String domain)
     {
         this.domain = domain;
     }
 
     @Override
-    public Domain getDomain()
+    public String getDomain()
     {
         return domain;
     }
 
     @Override
-    public void setAction(Action action)
+    public void setAction(Actions action)
     {
         this.action = action;
 
     }
 
     @Override
-    public Action getAction()
+    public Actions getAction()
     {
         return action;
     }

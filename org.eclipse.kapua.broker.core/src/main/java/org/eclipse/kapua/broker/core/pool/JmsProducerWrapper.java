@@ -22,8 +22,10 @@ import javax.jms.MessageProducer;
 import javax.jms.Session;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
 import org.eclipse.kapua.broker.core.message.JmsUtil;
 import org.eclipse.kapua.broker.core.plugin.AclConstants;
+import org.eclipse.kapua.message.KapuaMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,6 +86,23 @@ public abstract class JmsProducerWrapper {
 		super.finalize();
 	}
 	
+//	/**
+//	 * Send a message (raw payload)
+//	 * @param vmSession
+//	 * @param topic
+//	 * @param payload
+//	 * @return
+//	 * @throws JMSException
+//	 */
+//	public void sendRawMessage(String mqttTopic, byte[] payload) throws JMSException {
+//        String jmsTopic = MessageFormat.format(AclConstants.VT_TOPIC_PREFIX_TEMPLATE, JmsUtil.convertMqttWildCardToJms(mqttTopic));
+//		Destination destination = session.createTopic(jmsTopic);
+//        BytesMessage message = session.createBytesMessage();
+//        message.setJMSDestination(destination);
+//        message.writeBytes(payload);
+//        producer.send(destination, message);
+//	}
+	
 	/**
 	 * Send a message (raw payload)
 	 * @param vmSession
@@ -92,13 +111,8 @@ public abstract class JmsProducerWrapper {
 	 * @return
 	 * @throws JMSException
 	 */
-	public void sendRawMessage(String mqttTopic, byte[] payload) throws JMSException {
-        String jmsTopic = MessageFormat.format(AclConstants.VT_TOPIC_PREFIX_TEMPLATE, JmsUtil.convertMqttWildCardToJms(mqttTopic));
-		Destination destination = session.createTopic(jmsTopic);
-        BytesMessage message = session.createBytesMessage();
-        message.setJMSDestination(destination);
-        message.writeBytes(payload);
-        producer.send(destination, message);
+	public void sendRawMessage(CamelKapuaMessage<?> message) throws JMSException {
+		//TODO
 	}
 
 }

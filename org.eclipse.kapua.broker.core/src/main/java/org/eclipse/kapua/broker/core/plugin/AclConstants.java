@@ -1,10 +1,9 @@
 package org.eclipse.kapua.broker.core.plugin;
 
 public class AclConstants {
-	
+
 	public static final String VT_TOPIC_PREFIX_TEMPLATE    = "VirtualTopic.{0}";
     public static final String VT_TOPIC_PREFIX             = "VirtualTopic.";
-    public static final String HEADER_KAPUA_CONNECTION_ID  = "KAPUA_CONNECTION_ID";
     
     /**
 	 * VM connector

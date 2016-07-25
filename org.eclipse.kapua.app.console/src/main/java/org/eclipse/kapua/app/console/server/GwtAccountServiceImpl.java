@@ -26,7 +26,7 @@ import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtAccountService;
 import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
-import org.eclipse.kapua.commons.util.KapuaEnvironmentUtils;
+import org.eclipse.kapua.commons.util.SystemUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
@@ -128,7 +128,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountCreatedOn", account.getCreatedOn().toString()));
             accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountCreatedBy", account.getCreatedBy().getShortId()));
 
-            accountPropertiesPairs.add(new GwtGroupedNVPair("deploymentInfo", "deploymentBrokerURL", KapuaEnvironmentUtils.getBrokerURI()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("deploymentInfo", "deploymentBrokerURL", SystemUtils.getBrokerURI()));
 
             accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationName", account.getOrganization().getName()));
             accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationPersonName", account.getOrganization().getPersonName()));

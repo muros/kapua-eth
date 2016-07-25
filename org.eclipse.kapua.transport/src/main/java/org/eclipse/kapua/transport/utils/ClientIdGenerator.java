@@ -4,10 +4,10 @@ import java.util.Random;
 
 public class ClientIdGenerator
 {
-    private static ClientIdGenerator instance          = new ClientIdGenerator();
-    private static String            generatedIdFormat = "%s-d%-%d";
+    private static final ClientIdGenerator instance          = new ClientIdGenerator();
+    private static final String            generatedIdFormat = "%s-%d-%d";
 
-    private Random                   random;
+    private Random                         random;
 
     private ClientIdGenerator()
     {
@@ -27,14 +27,14 @@ public class ClientIdGenerator
     public static String next(String prefix)
     {
         long timestamp = System.currentTimeMillis();
-        long random;
+        long randomNumber;
         synchronized (instance.random) {
-            random = Math.abs(instance.random.nextLong());
+            randomNumber = Math.abs(instance.random.nextLong());
         }
 
         return String.format(generatedIdFormat,
                              prefix,
                              timestamp,
-                             random);
+                             randomNumber);
     }
 }

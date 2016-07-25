@@ -28,6 +28,7 @@ public class KapuaSecurityContext extends SecurityContext {
     private KapuaPrincipal   principal;
     private KapuaId          connectionId;
     private Set<Principal>   principals;
+    private ConnectorDescriptor connectorDescriptor;
 
     private AuthorizationMap authMap;
     private boolean          hasDataView;
@@ -37,7 +38,8 @@ public class KapuaSecurityContext extends SecurityContext {
 
     public KapuaSecurityContext(KapuaPrincipal     principal,
                               AuthorizationMap authMap,
-                              KapuaId connectionId) {
+                              KapuaId connectionId,
+                              ConnectorDescriptor connectorDescriptor) {
         super(principal.getName());
 
         this.principal  = principal;
@@ -46,6 +48,7 @@ public class KapuaSecurityContext extends SecurityContext {
 
         this.authMap = authMap;
         this.connectionId = connectionId;
+        this.connectorDescriptor = connectorDescriptor;
     }
 
     public Principal getMainPrincipal() {
@@ -62,6 +65,10 @@ public class KapuaSecurityContext extends SecurityContext {
 
     public KapuaId getConnectionId() {
 		return connectionId;
+	}
+    
+    public ConnectorDescriptor getConnectorDescriptor() {
+		return connectorDescriptor;
 	}
 
 	public boolean hasDataView() {
