@@ -137,9 +137,6 @@
         <module>org.eclipse.kapua.transport.jms</module>
         <module>org.eclipse.kapua.transport.mqtt</module>
 
-        <module>org.eclipse.kapua.transport.pooling</module>
-        <module>org.eclipse.kapua.transport.pooling.internal</module>
-
         <module>org.eclipse.kapua.configuration.spi</module>
         <module>org.eclipse.kapua.locator.spi</module>
 

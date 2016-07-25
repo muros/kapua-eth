@@ -10,11 +10,11 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.transport.pooling.setting.internal;
+package org.eclipse.kapua.transport.mqtt.pooling.setting;
 
 import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum TransportClientPoolSettingKeys implements SettingKey
+public enum MqttClientPoolSettingKeys implements SettingKey
 {
     CLIENT_POOL_CLIENT_ID_PREFIX("client.pool.client.id.prefix"),
 
@@ -35,7 +35,7 @@ public enum TransportClientPoolSettingKeys implements SettingKey
 
     private String key;
 
-    private TransportClientPoolSettingKeys(String key)
+    private MqttClientPoolSettingKeys(String key)
     {
         this.key = key;
     }

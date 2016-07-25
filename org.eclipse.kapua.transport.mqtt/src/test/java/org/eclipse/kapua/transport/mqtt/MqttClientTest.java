@@ -55,7 +55,7 @@ public class MqttClientTest extends Assert
     }
 
     @Test
-    public void testMqttClientSend()
+    public void testMqttClientPublish()
         throws Exception
     {
         MqttClientConnectionOptions clientConnectOptions = new MqttClientConnectionOptions();
@@ -87,79 +87,12 @@ public class MqttClientTest extends Assert
                                                   new Date(),
                                                   mqttPayload);
 
-        MqttMessage responseMessage = null;
         try {
-            responseMessage = mqttClient.send(mqttMessage, null);
+            mqttClient.publish(mqttMessage);
         }
         catch (Exception e) {
             fail(e.getMessage());
         }
-
-        //
-        // Verify
-        assertNull("responseMessage", responseMessage);
-
-        //
-        // Disconnect
-        try {
-            mqttClient.disconnectClient();
-        }
-        catch (Exception e) {
-            fail(e.getMessage());
-        }
-        assertFalse("client.connected", mqttClient.isConnected());
-    }
-
-    @Test
-    public void testMqttClientSendReceiveSameClient()
-        throws Exception
-    {
-        MqttClientConnectionOptions clientConnectOptions = new MqttClientConnectionOptions();
-        clientConnectOptions.setClientId(ClientIdGenerator.next(MqttClientTest.class.getSimpleName()));
-        clientConnectOptions.setUsername(username);
-        clientConnectOptions.setPassword(password.toCharArray());
-        clientConnectOptions.setEndpointURI(SystemUtils.getBrokerURI());
-
-        //
-        // Connect
-        MqttClient mqttClient = new MqttClient();
-        try {
-            mqttClient.connectClient(clientConnectOptions);
-        }
-        catch (Exception e) {
-            fail(e.getMessage());
-        }
-
-        assertTrue("client.connected", mqttClient.isConnected());
-
-        //
-        // Send
-        String sendTopic = "$EDC/edcguest/" + mqttClient.getClientId() + "/" + MqttClientTest.class.getSimpleName() + "/testMqttClientSendTopic";
-
-        String testPayload = "testMqttClientSendPayload";
-        MqttTopic mqttTopic = new MqttTopic(sendTopic + "/request");
-        MqttTopic mqttResponseTopic = new MqttTopic(sendTopic + "/#");
-        MqttPayload mqttPayload = new MqttPayload(testPayload.getBytes());
-
-        MqttMessage mqttMessage = new MqttMessage(mqttTopic,
-                                                  new Date(),
-                                                  mqttPayload);
-        mqttMessage.setResponseTopic(mqttResponseTopic);
-
-        MqttMessage responseMessage = null;
-        try {
-            responseMessage = mqttClient.send(mqttMessage, 3000000L);
-        }
-        catch (Exception e) {
-            fail(e.getMessage());
-        }
-
-        //
-        // Verify
-        assertNotNull("responseMessage", responseMessage);
-        assertEquals("responseMessage.topic", responseMessage.getRequestTopic().getTopic(), mqttMessage.getRequestTopic().getTopic());
-        assertEquals("responseMessage.payload", responseMessage.getPayload().getBody(), responseMessage.getPayload().getBody());
-        assertEquals("responseMessage.payload", testPayload, new String(responseMessage.getPayload().getBody()));
 
         //
         // Disconnect

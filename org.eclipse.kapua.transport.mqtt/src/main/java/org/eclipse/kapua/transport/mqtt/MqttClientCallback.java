@@ -5,14 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.transport.TransportCallback;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 
-public class MqttClientCallback implements MqttCallback, TransportCallback<MqttMessage>
+public class MqttClientCallback implements MqttCallback
 {
     private List<MqttMessage> responses;
     private int               expectedResponses;
@@ -29,9 +28,6 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
     }
 
     @Override
-    /**
-     * Override from {@link org.eclipse.paho.client.mqttv3.MqttCallback}
-     */
     public void messageArrived(String stringTopic, org.eclipse.paho.client.mqttv3.MqttMessage message)
         throws Exception
     {
@@ -42,18 +38,6 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
                                                   mqttPayload);
 
         //
-        // Call the KapuaClientCallback
-        messageArrived(mqttMessage);
-    }
-
-    @Override
-    /**
-     * Override from {@link org.eclipse.kapua.transport.TransportCallback<MqttMessage>}
-     */
-    public void messageArrived(MqttMessage messageArrived)
-        throws KapuaException
-    {
-        //
         // Add to the received responses
         if (responses == null) {
             responses = new ArrayList<MqttMessage>();
@@ -61,7 +45,7 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
 
         //
         // Convert MqttMessage to the given device-levelMessage
-        responses.add(messageArrived);
+        responses.add(mqttMessage);
 
         //
         // notify if all expected responses arrived
@@ -85,7 +69,7 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
         //
         // Call the KapuaClientCallback
         try {
-            clientConnectionLost(cause);
+            throw new MqttClientException(MqttClientErrorCodes.CLIENT_CONNECTION_LOST, cause, (Object[]) null);
         }
         catch (KapuaException e) {
             // TODO Auto-generated catch block
@@ -95,12 +79,4 @@ public class MqttClientCallback implements MqttCallback, TransportCallback<MqttM
             notifyAll();
         }
     }
-
-    @Override
-    public void clientConnectionLost(Throwable cause)
-        throws KapuaException
-    {
-        throw new MqttClientException(MqttClientErrorCodes.CLIENT_CONNECTION_LOST, cause, (Object[]) null);
-    }
-
 }

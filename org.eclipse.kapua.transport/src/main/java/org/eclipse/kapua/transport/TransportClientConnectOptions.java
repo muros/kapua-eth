@@ -20,4 +20,7 @@ public interface TransportClientConnectOptions
 
     public void setEndpointURI(URI endpontURI);
 
+    // public X509Certificate getCertificate();
+    //
+    // public void setCertificate(X509Certificate certificate);
 }

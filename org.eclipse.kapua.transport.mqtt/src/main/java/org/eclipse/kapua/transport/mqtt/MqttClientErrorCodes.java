@@ -34,4 +34,6 @@ public enum MqttClientErrorCodes implements KapuaErrorCode
 
     CLIENT_NOT_CONNECTED,
     CLIENT_ALREADY_CONNECTED,
+
+    SEND_ERROR
 }

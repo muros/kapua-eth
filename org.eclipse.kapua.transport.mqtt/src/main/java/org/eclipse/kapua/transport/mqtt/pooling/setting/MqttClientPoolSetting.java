@@ -10,22 +10,22 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.transport.pooling.setting.internal;
+package org.eclipse.kapua.transport.mqtt.pooling.setting;
 
 import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 
-public class TransportClientPoolSetting extends AbstractKapuaSetting<TransportClientPoolSettingKeys>
+public class MqttClientPoolSetting extends AbstractKapuaSetting<MqttClientPoolSettingKeys>
 {
-    private static final String                 MQTT_CLIENT_CONFIG_RESOURCE = "client-pool-setting.properties";
+    private static final String                MQTT_CLIENT_CONFIG_RESOURCE = "mqtt-client-pool-setting.properties";
 
-    private static final TransportClientPoolSetting instance                    = new TransportClientPoolSetting();
+    private static final MqttClientPoolSetting instance                    = new MqttClientPoolSetting();
 
-    private TransportClientPoolSetting()
+    private MqttClientPoolSetting()
     {
         super(MQTT_CLIENT_CONFIG_RESOURCE);
     }
 
-    public static TransportClientPoolSetting getInstance()
+    public static MqttClientPoolSetting getInstance()
     {
         return instance;
     }

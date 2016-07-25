@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Random;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.device.call.DeviceCall;
 import org.eclipse.kapua.service.device.call.kura.exception.KuraMqttDeviceCallErrorCodes;
 import org.eclipse.kapua.service.device.call.kura.exception.KuraMqttDeviceCallException;
@@ -13,9 +14,9 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.translator.Translator;
-import org.eclipse.kapua.transport.TransportClient;
+import org.eclipse.kapua.transport.TransportClientFactory;
+import org.eclipse.kapua.transport.TransportFacade;
 import org.eclipse.kapua.transport.message.TransportMessage;
-import org.eclipse.kapua.transport.pooling.TransportClientPool;
 
 @SuppressWarnings("rawtypes")
 public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraResponseMessage>
@@ -66,64 +67,20 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     private KuraResponseMessage send(KuraRequestMessage requestMessage, Long timeout)
         throws KuraMqttDeviceCallException
     {
-        //
-        // Borrow a KapuaClient
-        TransportClient transportClient = null;
-        try {
-            // FIXME:
-            // Device device = findByClientId(requestDest.getClientid();
-            // DeviceConnection deviceConnection = findById(scopeId, device.getConnectionId());
-            // kapuaClient = (KapuaClient) KapuaClientPool.getInstance(deviceConnection.getProtocol()).borrowObject();
-
-            transportClient = (TransportClient) TransportClientPool.getInstance(/* MqttClient.class */).borrowObject();
-        }
-        catch (Exception e) {
-            if (transportClient != null) {
-                try {
-                    TransportClientPool.getInstance().returnObject(transportClient);
-                }
-                catch (Exception e1) {
-                    throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CLIENT_RETURN_ERROR,
-                                                          e,
-                                                          (Object[]) null);
-                }
-            }
-
-            throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CLIENT_BORROW_ERROR,
-                                                  e,
-                                                  (Object[]) null);
-        }
-
-        //
-        // Get Kura to transport translator for the request
-        Translator translatorKuraTransport;
-        try {
-            translatorKuraTransport = Translator.getTranslatorFor(KuraRequestMessage.class,
-                                                                  transportClient.getMessageClass());
-        }
-        catch (KapuaException e) {
-            throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
-                                                  e,
-                                                  (Object[]) null);
-        }
-        //
-        // Get transport to Kura translator for the response
-        Translator translatorTransportKura;
-        try {
-            translatorTransportKura = Translator.getTranslatorFor(transportClient.getMessageClass(),
-                                                                  KuraResponseMessage.class);
-        }
-        catch (KapuaException e) {
-            throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
-                                                  e,
-                                                  (Object[]) null);
-        }
-
-        //
-        // Make the request
         KuraResponseMessage response = null;
+        TransportFacade transportFacade = null;
         try {
+            //
+            // Borrow a KapuaClient
+            transportFacade = borrowClient();
 
+            //
+            // Get Kura to transport translator for the request and vice versa
+            Translator translatorKuraTransport = getTranslator(KuraRequestMessage.class, transportFacade.getMessageClass());
+            Translator translatorTransportKura = getTranslator(transportFacade.getMessageClass(), KuraResponseMessage.class);
+
+            //
+            // Make the request
             // Add requestId and requesterClientId to both payload and channel if response is expected
             // Note: Adding to both payload and channel to let the translator choose what to do base on the transport used.
             KuraRequestChannel requestChannel = requestMessage.getChannel();
@@ -134,10 +91,10 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
                 String requestId = String.valueOf(r.nextLong());
 
                 requestChannel.setRequestId(requestId);
-                requestChannel.setRequesterClientId(transportClient.getClientId());
+                requestChannel.setRequesterClientId(transportFacade.getClientId());
 
                 requestPayload.setRequestId(requestId);
-                requestPayload.setRequesterClientId(transportClient.getClientId());
+                requestPayload.setRequesterClientId(transportFacade.getClientId());
             }
 
             //
@@ -146,7 +103,7 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
                 KuraMessage kuraMessage = new KuraMessage(requestChannel,
                                                           new Date(),
                                                           requestPayload);
-                TransportMessage transportResponseMessage = transportClient.send((TransportMessage) translatorKuraTransport.translate(kuraMessage), timeout);
+                TransportMessage transportResponseMessage = transportFacade.sendSync((TransportMessage) translatorKuraTransport.translate(kuraMessage), timeout);
                 response = (KuraResponseMessage) translatorTransportKura.translate(transportResponseMessage);
             }
             catch (KapuaException e) {
@@ -157,6 +114,10 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
 
         }
         catch (KapuaException ke) {
+            if (transportFacade != null) {
+                transportFacade.clean();
+            }
+
             throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
                                                   ke,
                                                   (Object[]) null);
@@ -169,5 +130,47 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     public Class<KuraResponseMessage> getBaseMessageClass()
     {
         return KuraResponseMessage.class;
+    }
+
+    //
+    // Private methods
+    //
+    private TransportFacade borrowClient()
+        throws KuraMqttDeviceCallException
+    {
+        TransportFacade transportFacade;
+        try {
+            // FIXME:
+            // Device device = findByClientId(requestDest.getClientid();
+            // DeviceConnection deviceConnection = findById(scopeId, device.getConnectionId());
+            // kapuaClient = (KapuaClient) KapuaClientPool.getInstance(deviceConnection.getProtocol()).borrowObject();
+
+            // transportClient = (TransportClient) TransportClientPool.getInstance(/* MqttClient.class */).borrowObject();
+            KapuaLocator locator = KapuaLocator.getInstance();
+            TransportClientFactory transportClientFactory = locator.getFactory(TransportClientFactory.class);
+            transportFacade = transportClientFactory.getFacade(/* MqttClient.class */);
+        }
+        catch (Exception e) {
+            throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
+                                                  e,
+                                                  (Object[]) null);
+        }
+        return transportFacade;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Translator getTranslator(Class from, Class to)
+        throws KuraMqttDeviceCallException
+    {
+        Translator translator;
+        try {
+            translator = Translator.getTranslatorFor(from, to);
+        }
+        catch (KapuaException e) {
+            throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
+                                                  e,
+                                                  (Object[]) null);
+        }
+        return translator;
     }
 }
