@@ -1,9 +1,9 @@
 package org.org.eclipse.kapua.service.device.management.command.message.internal;
 
-import org.eclipse.kapua.message.KapuaChannel;
-import org.eclipse.kapua.message.internal.KapuaChannelImpl;
+import org.eclipse.kapua.service.device.management.commons.message.response.KapuaAppChannelImpl;
+import org.eclipse.kapua.service.device.management.response.KapuaResponseChannel;
 
-public class CommandResponseChannel extends KapuaChannelImpl implements KapuaChannel
+public class CommandResponseChannel extends KapuaAppChannelImpl implements KapuaResponseChannel
 {
 
 }

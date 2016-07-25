@@ -1,8 +1,7 @@
 package org.eclipse.kapua.service.device.management.commons;
 
-import org.eclipse.kapua.service.authorization.Domain;
+public interface DeviceManagementDomain {
+	
+    String DEVICE_MANAGEMENT = "device_management";
 
-public enum DeviceManagementDomain implements Domain
-{
-    device_management;
 }

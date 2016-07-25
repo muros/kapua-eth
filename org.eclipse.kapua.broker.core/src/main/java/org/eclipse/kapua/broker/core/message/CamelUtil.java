@@ -14,7 +14,7 @@ public class CamelUtil {
 	public static final Logger logger = LoggerFactory.getLogger(CamelUtil.class);
 	
 	public static String getTopic(org.apache.camel.Message message) throws JMSException {
-		String topicOrig =  message.getHeader(Constants.PROPERTY_TOPIC_ORIG, String.class);
+		String topicOrig =  message.getHeader(MessageConstants.PROPERTY_TOPIC_ORIG, String.class);
 		if (topicOrig!=null) {
 			return topicOrig;
 		}

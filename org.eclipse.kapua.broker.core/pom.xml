@@ -247,22 +247,23 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.metric</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.metric.internal</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.transport.jms</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.management.commons</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- activemq -->
@@ -318,5 +319,16 @@
             <artifactId>commons-pool2</artifactId>
 			<version>${commons.pool.version}</version>
         </dependency>
+        <!-- guice dependency injection -->
+        <dependency>
+		    <groupId>com.google.inject</groupId>
+		    <artifactId>guice</artifactId>
+		    <version>3.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.inject.extensions</groupId>
+		    <artifactId>guice-assistedinject</artifactId>
+		    <version>3.0</version>
+		</dependency>
 	</dependencies>
 </project>

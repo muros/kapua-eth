@@ -17,6 +17,7 @@ import org.eclipse.kapua.KapuaErrorCode;
 public enum DeviceManagementErrorCodes implements KapuaErrorCode
 {
     REQUEST_EXCEPTION,
+    REQUEST_BAD_METHOD,
 
     RESPONSE_PARSE_EXCEPTION,
 

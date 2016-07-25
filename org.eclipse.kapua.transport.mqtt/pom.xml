@@ -37,25 +37,28 @@
             <artifactId>org.eclipse.kapua.commons</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.translator</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
+        <!-- -->
         <!-- External dependencies -->
-        <!-- <dependency>
-            Object pooling for Mqtt clients
-            https://mvnrepository.com/artifact/org.apache.commons/commons-pool2
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-pool2</artifactId>
-            <version>2.4.2</version>
-        </dependency> -->
         <dependency>
             <!-- Paho MQTT client -->
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <version>1.0.2</version>
+        </dependency>
+        
+        <!--  -->
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.locator.spi</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

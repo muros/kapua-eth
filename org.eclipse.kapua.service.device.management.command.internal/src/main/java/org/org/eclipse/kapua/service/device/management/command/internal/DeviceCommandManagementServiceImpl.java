@@ -15,7 +15,6 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandManageme
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
-import org.eclipse.kapua.service.device.management.request.KapuaRequestMessage;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.CommandRequestChannel;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.CommandRequestMessage;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.CommandRequestPayload;
@@ -24,9 +23,6 @@ import org.org.eclipse.kapua.service.device.management.command.message.internal.
 
 public class DeviceCommandManagementServiceImpl implements DeviceCommandManagementService
 {
-    private static final String deviceAppCommandName    = "COMMAND";
-    private static final String deviceAppCommandVersion = "1.0.0";
-
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public DeviceCommandOutput exec(KapuaId scopeId, KapuaId deviceId, DeviceCommandInput commandInput, Long timeout)
@@ -43,13 +39,13 @@ public class DeviceCommandManagementServiceImpl implements DeviceCommandManageme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceManagementDomain.device_management, Actions.execute, scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.execute, scopeId));
 
         //
         // Prepare the request
         CommandRequestChannel commandRequestChannel = new CommandRequestChannel();
-        commandRequestChannel.setApp(deviceAppCommandName);
-        commandRequestChannel.setVersion(deviceAppCommandVersion);
+        commandRequestChannel.setApp(CommandAppProperties.APP_NAME);
+        commandRequestChannel.setVersion(CommandAppProperties.APP_VERSION);
         commandRequestChannel.setMethod(KapuaMethod.EXECUTE);
 
         CommandRequestPayload commandRequestPayload = new CommandRequestPayload();
@@ -71,7 +67,7 @@ public class DeviceCommandManagementServiceImpl implements DeviceCommandManageme
 
         //
         // Do exec
-        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor((KapuaRequestMessage) commandRequestMessage, timeout);
+        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(commandRequestMessage, timeout);
         CommandResponseMessage responseMessage = (CommandResponseMessage) deviceApplicationCall.send();
 
         //

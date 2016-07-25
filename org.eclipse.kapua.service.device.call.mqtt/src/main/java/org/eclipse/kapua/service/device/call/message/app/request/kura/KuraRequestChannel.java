@@ -1,14 +1,15 @@
 package org.eclipse.kapua.service.device.call.message.app.request.kura;
 
+import org.eclipse.kapua.service.device.call.DeviceMethod;
 import org.eclipse.kapua.service.device.call.message.app.kura.KuraAppChannel;
 import org.eclipse.kapua.service.device.call.message.app.request.DeviceRequestChannel;
 
 public class KuraRequestChannel extends KuraAppChannel implements DeviceRequestChannel
 {
-    private String   method;
-    private String[] resources;
-    private String   requestId;
-    private String   requesterClientId;
+    private DeviceMethod method;
+    private String[]     resources;
+    private String       requestId;
+    private String       requesterClientId;
 
     public KuraRequestChannel()
     {
@@ -26,13 +27,13 @@ public class KuraRequestChannel extends KuraAppChannel implements DeviceRequestC
     }
 
     @Override
-    public String getMethod()
+    public DeviceMethod getMethod()
     {
         return method;
     }
 
     @Override
-    public void setMethod(String method)
+    public void setMethod(DeviceMethod method)
     {
         this.method = method;
     }

@@ -2,9 +2,9 @@ package org.eclipse.kapua.transport.mqtt;
 
 import java.net.URI;
 
-import org.eclipse.kapua.transport.KapuaClientConnectOptions;
+import org.eclipse.kapua.transport.TransportClientConnectOptions;
 
-public class MqttClientConnectionOptions implements KapuaClientConnectOptions
+public class MqttClientConnectionOptions implements TransportClientConnectOptions
 {
     private String clientId;
     private String username;

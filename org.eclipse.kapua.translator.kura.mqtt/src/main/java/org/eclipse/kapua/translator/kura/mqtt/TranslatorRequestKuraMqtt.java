@@ -7,7 +7,6 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
-import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
@@ -16,12 +15,10 @@ import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
-@SuppressWarnings("rawtypes")
-public class TranslatorRequestKuraMqtt implements Translator<KuraChannel, MqttTopic, KuraPayload, MqttPayload, KuraMessage, MqttMessage>
+public class TranslatorRequestKuraMqtt implements Translator<KuraRequestMessage, MqttMessage>
 {
-
     @Override
-    public MqttMessage translate(KuraMessage message)
+    public MqttMessage translate(KuraRequestMessage message)
         throws KapuaException
     {
         //
@@ -48,7 +45,6 @@ public class TranslatorRequestKuraMqtt implements Translator<KuraChannel, MqttTo
         return mqttMessage;
     }
 
-    @Override
     public MqttTopic translate(KuraChannel channel)
         throws KapuaException
     {
@@ -88,7 +84,6 @@ public class TranslatorRequestKuraMqtt implements Translator<KuraChannel, MqttTo
         return new MqttTopic(topicTokens.toArray(new String[0]));
     }
 
-    @Override
     public MqttPayload translate(KuraPayload kuraPayload)
         throws KapuaException
     {
@@ -96,13 +91,13 @@ public class TranslatorRequestKuraMqtt implements Translator<KuraChannel, MqttTo
     }
 
     @Override
-    public Class<?> getClassFrom()
+    public Class<KuraRequestMessage> getClassFrom()
     {
         return KuraRequestMessage.class;
     }
 
     @Override
-    public Class<?> getClassTo()
+    public Class<MqttMessage> getClassTo()
     {
         return MqttMessage.class;
     }
