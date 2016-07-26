@@ -38,7 +38,6 @@ import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionFactory;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionService;
-import org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionDomain;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
@@ -70,7 +69,6 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             KapuaId scopeId = KapuaEid.parseShortId(gwtUserCreator.getScopeId());
             UserCreator userCreator = userFactory.newCreator(scopeId,
                                                              gwtUserCreator.getUsername());
-            userCreator.setRawPassword(gwtUserCreator.getPassword());
             userCreator.setDisplayName(gwtUserCreator.getDisplayName());
             userCreator.setEmail(gwtUserCreator.getEmail());
             userCreator.setPhoneNumber(gwtUserCreator.getPhoneNumber());
@@ -97,7 +95,7 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
                 String[] tokens = p.split(":");
                 if (tokens.length > 0) {
-                    userPermissionCreator.setDomain(UserPermissionDomain.user_permission);// FIXME: interface Domain does not work ????
+                    userPermissionCreator.setDomain(tokens[0]);
                 }
                 if (tokens.length > 1) {
                     userPermissionCreator.setAction(Actions.valueOf(tokens[1]));
@@ -176,7 +174,7 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
                     String[] tokens = p.split(":");
                     if (tokens.length > 0) {
-                        userPermissionCreator.setDomain(UserPermissionDomain.user_permission);// FIXME: interface Domain does not work ????
+                        userPermissionCreator.setDomain(tokens[0]);// FIXME: interface Domain does not work ????
                     }
                     if (tokens.length > 1) {
                         userPermissionCreator.setAction(Actions.valueOf(tokens[1]));

@@ -14,10 +14,12 @@ package org.eclipse.kapua.app.console.client;
 
 import java.util.Date;
 
+import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.util.ConsoleInfo;
 import org.eclipse.kapua.app.console.client.util.UserAgentUtils;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.service.GwtAuthorizationService;
+import org.eclipse.kapua.app.console.shared.service.GwtAuthorizationServiceAsync;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.extjs.gxt.ui.client.Style;

@@ -13,7 +13,6 @@
     <artifactId>org.eclipse.kapua.service.device.call.test</artifactId>
     <name>org.eclipse.kapua.service.device.call.test</name>
 
-
     <dependencies>
         <!-- -->
         <!-- Tested service interfaces -->

@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.shiro;
 
+import java.util.concurrent.Callable;
+
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -23,6 +25,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
@@ -74,12 +77,20 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
 
         //
         // Get the associated user by name
-        User user = null;
+        final User user;
         try {
-            user = userService.findByName(username);
+            user = KapuaSecurityUtils.doPriviledge(new Callable<User>() {
+
+                @Override
+                public User call()
+                    throws Exception
+                {
+                    return userService.findByName(username);
+                }
+            });
         }
-        catch (KapuaException ke) {
-            throw new ShiroException("Error while find user.", ke);
+        catch (Exception e) {
+            throw new ShiroException("Error while find user!", e);
         }
 
         //
@@ -94,12 +105,20 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
         KapuaPredicate predicate = new AttributePredicate<KapuaId>(UserPermissionPredicates.USER_ID, user.getId());
         query.setPredicate(predicate);
 
-        KapuaListResult<UserPermission> userPermissions;
+        final KapuaListResult<UserPermission> userPermissions;
         try {
-            userPermissions = userPermissionService.query(query);
+            userPermissions = KapuaSecurityUtils.doPriviledge(new Callable<KapuaListResult<UserPermission>>() {
+
+                @Override
+                public KapuaListResult<UserPermission> call()
+                    throws Exception
+                {
+                    return userPermissionService.query(query);
+                }
+            });
         }
-        catch (KapuaException e) {
-            throw new ShiroException(e);
+        catch (Exception e) {
+            throw new ShiroException("Error while find user permissions!", e);
         }
 
         //

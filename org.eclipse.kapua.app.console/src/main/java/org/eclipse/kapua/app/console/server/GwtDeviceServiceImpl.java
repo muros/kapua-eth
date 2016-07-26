@@ -35,9 +35,9 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.imaging.ImageFormats;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
-import org.eclipse.kapua.app.console.config.ConsoleConfig;
-import org.eclipse.kapua.app.console.config.ConsoleConfigKeys;
 import org.eclipse.kapua.app.console.server.util.EdcExceptionHandler;
+import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
+import org.eclipse.kapua.app.console.setting.ConsoleSetting;
 import org.eclipse.kapua.app.console.shared.GwtEdcException;
 import org.eclipse.kapua.app.console.shared.model.GwtBundleInfo;
 import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
@@ -67,6 +67,7 @@ import org.eclipse.kapua.model.config.metatype.Ticon;
 import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.config.metatype.Toption;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.model.query.predicate.KapuaAndPredicate;
 import org.eclipse.kapua.model.query.predicate.KapuaAttributePredicate.Operator;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundle;
@@ -93,7 +94,6 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
 import org.eclipse.kapua.service.device.registry.DeviceFactory;
-import org.eclipse.kapua.service.device.registry.DeviceListResult;
 import org.eclipse.kapua.service.device.registry.DevicePredicates;
 import org.eclipse.kapua.service.device.registry.DeviceQuery;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
@@ -106,7 +106,6 @@ import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionServ
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionStatus;
 import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
-import org.eclipse.kapua.service.device.registry.event.DeviceEventListResult;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventPredicates;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventQuery;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
@@ -337,7 +336,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
             deviceQuery.setPredicate(andPred);
 
-            DeviceListResult devices = deviceRegistryService.query(deviceQuery);
+            KapuaListResult<Device> devices = deviceRegistryService.query(deviceQuery);
 
             DeviceConnectionService deviceConnectionService = locator.getService(DeviceConnectionService.class);
             DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
@@ -359,7 +358,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
                 // Event infos
                 eventQuery.setPredicate(new AttributePredicate<KapuaId>(DeviceEventPredicates.DEVICE_ID, d.getId()));
-                DeviceEventListResult events = deviceEventService.query(eventQuery);
+                KapuaListResult<DeviceEvent> events = deviceEventService.query(eventQuery);
 
                 if (!events.isEmpty()) {
                     DeviceEvent lastEvent = events.get(0);
@@ -530,7 +529,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             query.setLimit(bplc.getLimit());
 
             // query execute
-            DeviceEventListResult deviceEvents = des.query(query);
+            KapuaListResult<DeviceEvent> deviceEvents = des.query(query);
 
             // prepare results
             for (DeviceEvent deviceEvent : deviceEvents) {
@@ -633,13 +632,14 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
             // get the configuration
             KapuaLocator locator = KapuaLocator.getInstance();
-            DeviceConfigurationManagementService deviceService = locator.getService(DeviceConfigurationManagementService.class);
+            DeviceConfigurationManagementService deviceConfiguratiomManagementService = locator.getService(DeviceConfigurationManagementService.class);
 
             KapuaId scopeId = KapuaEid.parseShortId(device.getScopeId());
             KapuaId deviceId = KapuaEid.parseShortId(device.getId());
-            DeviceConfiguration deviceConfigurations = deviceService.get(scopeId,
-                                                                         deviceId,
-                                                                         null);
+            DeviceConfiguration deviceConfigurations = deviceConfiguratiomManagementService.get(scopeId,
+                                                                                                deviceId,
+                                                                                                null,
+                                                                                                null);
             if (deviceConfigurations != null) {
 
                 // sort the list alphabetically by service name
@@ -655,8 +655,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                 });
 
                 // prepare results
-                ConsoleConfig consoleConfig = ConsoleConfig.getInstance();
-                List<String> serviceIgnore = consoleConfig.getList(String.class, ConsoleConfigKeys.DEVICE_CONFIGURATION_SERVICE_IGNORE);
+                ConsoleSetting consoleConfig = ConsoleSetting.getInstance();
+                List<String> serviceIgnore = consoleConfig.getList(String.class, ConsoleSettingKeys.DEVICE_CONFIGURATION_SERVICE_IGNORE);
                 for (DeviceComponentConfiguration config : deviceConfigurations.getComponentConfigurations()) {
 
                     // ignore items we want to hide
@@ -780,7 +780,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
             deviceConfigurationManagementService.put(scopeId,
                                                      deviceId,
-                                                     compConfig);
+                                                     compConfig,
+                                                     null);
 
             // //
             // // Add an additional delay after the configuration update
@@ -892,7 +893,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                 args[i++] = st.nextToken();
             }
 
-            DeviceCommandInput commandInput = deviceCommandFactory.newInputInstance();
+            DeviceCommandInput commandInput = deviceCommandFactory.newCommandInput();
             // commandInput.setArguments(gwtCommandInput.getArguments());
             commandInput.setArguments(args);
             // commandInput.setCommand(gwtCommandInput.getCommand());
@@ -943,7 +944,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId scopeId = KapuaEid.parseShortId(gwtDevice.getScopeId());
             KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
             DeviceSnapshotListResult snapshotIds = deviceSnapshotManagementService.get(scopeId,
-                                                                                       deviceId);
+                                                                                       deviceId,
+                                                                                       null);
             // sort them by most recent first
 
             // sort the list alphabetically by service name
@@ -986,7 +988,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
             deviceService.rollback(scopeId,
                                    deviceId,
-                                   String.valueOf(snapshot.getSnapshotId()));
+                                   String.valueOf(snapshot.getSnapshotId()),
+                                   null);
 
             // //
             // // Add an additional delay after the configuration update
@@ -1201,7 +1204,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
      */
     private void checkIconResource(Ticon icon)
     {
-        ConsoleConfig config = ConsoleConfig.getInstance();
+        ConsoleSetting config = ConsoleSetting.getInstance();
 
         String iconResource = icon.getResource();
 
@@ -1218,7 +1221,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                 //
                 // Tmp file name creation
                 String systemTmpDir = System.getProperty("java.io.tmpdir");
-                String iconResourcesTmpDir = config.getString(ConsoleConfigKeys.DEVICE_CONFIGURATION_ICON_FOLDER);
+                String iconResourcesTmpDir = config.getString(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_FOLDER);
                 String tmpFileName = Base64.encodeBase64String(MessageDigest.getInstance("MD5").digest(iconResource.getBytes("UTF-8")));
 
                 // Conversions needed got security reasons!
@@ -1252,7 +1255,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                 if (tmpFile.exists()) {
                     long lastModifiedDate = tmpFile.lastModified();
 
-                    long maxCacheTime = config.getLong(ConsoleConfigKeys.DEVICE_CONFIGURATION_ICON_CACHE_TIME);
+                    long maxCacheTime = config.getLong(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_CACHE_TIME);
 
                     if (System.currentTimeMillis() - lastModifiedDate > maxCacheTime) {
                         logger.info("Deleting old cached file: {}", tmpFile.toString());
@@ -1271,7 +1274,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                     // Length check
                     String contentLengthString = urlConnection.getHeaderField("Content-Length");
 
-                    long maxLength = config.getLong(ConsoleConfigKeys.DEVICE_CONFIGURATION_ICON_SIZE_MAX);
+                    long maxLength = config.getLong(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_SIZE_MAX);
 
                     try {
                         Long contentLength = Long.parseLong(contentLengthString);

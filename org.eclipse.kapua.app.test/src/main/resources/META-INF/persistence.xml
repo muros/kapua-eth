@@ -22,6 +22,7 @@
         
         <!-- Authorization -->
         <class>org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionImpl</class>
+        <class>org.eclipse.kapua.service.authentication.credential.shiro.CredentialImpl</class>
  
         <!-- Device -->
         <class>org.eclipse.kapua.service.device.registry.internal.DeviceImpl</class>
@@ -30,7 +31,6 @@
  
         <!-- Account -->
         <class>org.eclipse.kapua.service.account.internal.AccountImpl</class>
-        <class>org.eclipse.kapua.service.account.internal.ConfigurationImpl</class>
         <class>org.eclipse.kapua.service.account.internal.OrganizationImpl</class>
 
 		<properties>

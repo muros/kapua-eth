@@ -135,6 +135,7 @@
         <module>org.eclipse.kapua.transport</module>
         <module>org.eclipse.kapua.transport.jms</module>
         <module>org.eclipse.kapua.transport.mqtt</module>
+        <module>org.eclipse.kapua.transport.test</module>
 
         <module>org.eclipse.kapua.configuration.spi</module>
         <module>org.eclipse.kapua.locator.spi</module>
@@ -158,6 +159,7 @@
 
         <module>org.eclipse.kapua.service.device.call</module>
         <module>org.eclipse.kapua.service.device.call.kura</module>
+        <module>org.eclipse.kapua.service.device.call.test</module>
 
         <module>org.eclipse.kapua.service.device.management</module>
         <module>org.eclipse.kapua.service.device.management.configuration</module>
@@ -180,7 +182,7 @@
 
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
-    <module>org.eclipse.kapua.service.device.call.test</module>
+    <module>org.eclipse.kapua.service.device.management.command.test</module>
   </modules>
 
     <issueManagement>
