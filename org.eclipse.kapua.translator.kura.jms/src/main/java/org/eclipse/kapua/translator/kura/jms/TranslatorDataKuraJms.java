@@ -1,4 +1,4 @@
-package org.org.eclipse.kapua.translator.kura.jms;
+package org.eclipse.kapua.translator.kura.jms;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,9 +9,9 @@ import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
 import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 import org.eclipse.kapua.translator.Translator;
-import org.org.eclipse.kapua.transport.message.jms.JmsMessage;
-import org.org.eclipse.kapua.transport.message.jms.JmsPayload;
-import org.org.eclipse.kapua.transport.message.jms.JmsTopic;
+import org.eclipse.kapua.transport.message.jms.JmsMessage;
+import org.eclipse.kapua.transport.message.jms.JmsPayload;
+import org.eclipse.kapua.transport.message.jms.JmsTopic;
 
 @SuppressWarnings("rawtypes")
 public class TranslatorDataKuraJms implements Translator<KuraMessage, JmsMessage>

@@ -18,12 +18,10 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaNamedEntity;
@@ -75,20 +73,6 @@ public class UserImpl extends AbstractKapuaNamedEntity implements User
     @Column(name = "phone_number")
     private String            phoneNumber;
 
-    @XmlTransient
-    @Basic
-    @Column(name = "password")
-    private String            password;
-
-    @XmlTransient
-    @Basic
-    @Column(name = "salt")
-    private String            salt;
-
-    @XmlTransient
-    @Transient
-    private String            rawPassword;
-
     public UserImpl()
     {
         super();
@@ -139,30 +123,5 @@ public class UserImpl extends AbstractKapuaNamedEntity implements User
     public void setPhoneNumber(String phoneNumber)
     {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
-
-    public String getSalt()
-    {
-        return salt;
-    }
-
-    public String getRawPassword()
-    {
-        return this.rawPassword;
-    }
-
-    public void setRawPassword(String password)
-    {
-        this.rawPassword = password;
     }
 }

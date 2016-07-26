@@ -1,8 +1,8 @@
-package org.org.eclipse.kapua.transport.message.jms;
+package org.eclipse.kapua.transport.message.jms;
 
+import org.eclipse.kapua.transport.jms.setting.JmsClientSetting;
+import org.eclipse.kapua.transport.jms.setting.JmsClientSettingKeys;
 import org.eclipse.kapua.transport.message.TransportChannel;
-import org.org.eclipse.kapua.transport.jms.setting.JmsClientSetting;
-import org.org.eclipse.kapua.transport.jms.setting.JmsClientSettingKeys;
 
 public class JmsTopic implements TransportChannel
 {

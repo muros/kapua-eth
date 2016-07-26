@@ -1,4 +1,4 @@
-package org.org.eclipse.kapua.transport.message.jms;
+package org.eclipse.kapua.transport.message.jms;
 
 import org.eclipse.kapua.transport.message.TransportPayload;
 

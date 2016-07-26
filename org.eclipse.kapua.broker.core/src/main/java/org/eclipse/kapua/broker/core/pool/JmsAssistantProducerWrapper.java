@@ -33,7 +33,7 @@ import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.internal.KapuaChannelImpl;
 import org.eclipse.kapua.message.internal.KapuaMessageImpl;
 import org.eclipse.kapua.message.internal.KapuaPayloadImpl;
-import org.org.eclipse.kapua.transport.message.jms.JmsMessage;
+import org.eclipse.kapua.transport.message.jms.JmsMessage;
 
 /**
  * Broker assistant ({@link JmsProducerWrapper}) implementation

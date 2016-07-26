@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.org.eclipse.kapua.transport.jms.setting;
+package org.eclipse.kapua.transport.jms.setting;
 
 import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 

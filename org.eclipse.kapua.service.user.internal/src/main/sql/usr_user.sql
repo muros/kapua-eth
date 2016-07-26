@@ -10,8 +10,6 @@ CREATE TABLE usr_user (
   display_name           	VARCHAR(255),
   email                  	VARCHAR(255),
   phone_number           	VARCHAR(64),
-  password               	VARCHAR(255)  NOT NULL,
-  salt                   	VARCHAR(64),
   optlock               	INT UNSIGNED,
   attributes             	TEXT,  
   properties             	TEXT,  

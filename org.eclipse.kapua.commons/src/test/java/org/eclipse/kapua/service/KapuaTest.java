@@ -22,14 +22,16 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.AuthenticationService;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 
-public class KapuaTest
+public class KapuaTest extends Assert
 {
     protected static Random       random  = new Random();
     protected static KapuaLocator locator = KapuaLocator.getInstance();
 
     protected static KapuaId      adminUserId;
+    protected static KapuaId      adminScopeId;
 
     @BeforeClass
     public static void setUp()
@@ -47,7 +49,7 @@ public class KapuaTest
             //
             // Get current user Id
             adminUserId = KapuaSecurityUtils.getSession().getUserId();
-
+            adminScopeId = KapuaSecurityUtils.getSession().getScopeId();
         }
         catch (KapuaException exc) {
             exc.printStackTrace();
@@ -71,12 +73,25 @@ public class KapuaTest
     //
     // Test utility methods
     //
-
+    /**
+     * Generates a new random {@link String} of 10 chars with number and letters.
+     * 
+     * @return the generated {@link String}
+     */
     protected static String generateRandomString()
     {
         return generateRandomString(10, true, true);
     }
 
+    /**
+     * Generates a random {@link String} from the given parameters
+     * 
+     * @param chars length of the generated {@link String}
+     * @param letters whether or not use chars
+     * @param numbers whether or not use numbers
+     * 
+     * @return the generated {@link String}
+     */
     protected static String generateRandomString(int chars, boolean letters, boolean numbers)
     {
         return RandomStringUtils.random(chars, 0, 0, letters, numbers, null, random);

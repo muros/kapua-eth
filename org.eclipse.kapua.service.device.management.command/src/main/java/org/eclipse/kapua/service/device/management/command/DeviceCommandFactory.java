@@ -16,7 +16,7 @@ import org.eclipse.kapua.model.KapuaObjectFactory;
 
 public interface DeviceCommandFactory extends KapuaObjectFactory
 {
-    public DeviceCommandInput newInputInstance();
+    public DeviceCommandInput newCommandInput();
 
-    public DeviceCommandOutput newOutputInstance();
+    public DeviceCommandOutput newCommandOutput();
 }

@@ -28,13 +28,15 @@ import org.eclipse.kapua.service.user.UserCreator;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "accountId", "name", "rawPassword", "displayName", "email", "phoneNumber" })
+@XmlType(propOrder = { "accountId",
+                       "name",
+                       "rawPassword",
+                       "displayName",
+                       "email",
+                       "phoneNumber" })
 public class UserCreatorImpl extends AbstractKapuaNamedEntityCreator<User> implements UserCreator
 {
     private static final long serialVersionUID = 4664940282892151008L;
-
-    @XmlElement(name = "rawPassword")
-    private String            rawPassword;
 
     @XmlElement(name = "displayName")
     private String            displayName;
@@ -48,16 +50,6 @@ public class UserCreatorImpl extends AbstractKapuaNamedEntityCreator<User> imple
     public UserCreatorImpl(KapuaId accountId, String name)
     {
         super(accountId, name);
-    }
-
-    public String getRawPassword()
-    {
-        return this.rawPassword;
-    }
-
-    public void setRawPassword(String rawPassword)
-    {
-        this.rawPassword = rawPassword;
     }
 
     public String getDisplayName()

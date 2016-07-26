@@ -18,9 +18,9 @@ import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.call.message.DeviceMessage;
 import org.eclipse.kapua.translator.Translator;
-import org.org.eclipse.kapua.transport.message.jms.JmsMessage;
-import org.org.eclipse.kapua.transport.message.jms.JmsPayload;
-import org.org.eclipse.kapua.transport.message.jms.JmsTopic;
+import org.eclipse.kapua.transport.message.jms.JmsMessage;
+import org.eclipse.kapua.transport.message.jms.JmsPayload;
+import org.eclipse.kapua.transport.message.jms.JmsTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

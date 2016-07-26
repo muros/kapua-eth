@@ -156,13 +156,13 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
                     throws Exception
                 {
                     List<Credential> credentialList = credentialService.findByUserId(user.getScopeId(),
-                                                  user.getId());
-                    //TODO may be better to filter by credential type?
-                    if (credentialList!=null && !credentialList.isEmpty()) {
-                    	return credentialList.get(0);
+                                                                                     user.getId());
+                    // TODO may be better to filter by credential type?
+                    if (credentialList != null && !credentialList.isEmpty()) {
+                        return credentialList.get(0);
                     }
                     else {
-                    	throw new UnknownAccountException();
+                        throw new UnknownAccountException();
                     }
                 }
             });
@@ -170,7 +170,7 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
         catch (Exception e) {
             throw new ShiroException("Error while find credentials!", e);
         }
-        
+
         //
         // BuildAuthenticationInfo
         KapuaSimpleAuthenticationInfo info = new KapuaSimpleAuthenticationInfo(user,
