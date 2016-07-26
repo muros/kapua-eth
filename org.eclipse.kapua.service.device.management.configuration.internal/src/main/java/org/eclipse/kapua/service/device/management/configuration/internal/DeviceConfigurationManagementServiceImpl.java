@@ -22,6 +22,9 @@ import org.eclipse.kapua.service.device.management.configuration.DeviceComponent
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
 import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
 import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
@@ -94,6 +97,23 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
 
         }
+        
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(ConfigurationAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.READ);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
 
         return deviceConfiguration;
     }
@@ -156,6 +176,23 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         // Do put
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(configurationRequestMessage, timeout);
         ConfigurationResponseMessage responseMessage = (ConfigurationResponseMessage) deviceApplicationCall.send();
+        
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(ConfigurationAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.WRITE);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
 
     }
 
@@ -212,5 +249,21 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(configurationRequestMessage, timeout);
         ConfigurationResponseMessage responseMessage = (ConfigurationResponseMessage) deviceApplicationCall.send();
 
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(ConfigurationAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.WRITE);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
     }
 }

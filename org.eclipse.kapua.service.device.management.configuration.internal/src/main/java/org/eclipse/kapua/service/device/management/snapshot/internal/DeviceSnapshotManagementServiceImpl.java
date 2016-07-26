@@ -21,6 +21,9 @@ import org.eclipse.kapua.service.device.management.configuration.DeviceConfigura
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotListResult;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
 import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
 import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
@@ -93,6 +96,23 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
                                                 body);
         }
 
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(SnapshotAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.READ);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
+        
         return deviceSnapshots;
     }
 
@@ -160,6 +180,23 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
 
         }
+        
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(SnapshotAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.READ);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
 
         return deviceConfiguration;
     }
@@ -203,5 +240,22 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         // Do exec
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(snapshotRequestMessage, timeout);
         SnapshotResponseMessage responseMessage = (SnapshotResponseMessage) deviceApplicationCall.send();
+        
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(SnapshotAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.EXECUTE);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
     }
 }

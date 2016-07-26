@@ -11,7 +11,7 @@ import org.eclipse.kapua.message.Message;
 @SuppressWarnings("rawtypes")
 public interface Translator<FROM_M extends Message, TO_M extends Message>
 {
-    static ServiceLoader<Translator> translators = ServiceLoader.load(Translator.class);
+    static ServiceLoader<?> translators = ServiceLoader.load(Translator.class);
 
     @SuppressWarnings("unchecked")
     public static <FROM_M extends Message, TO_M extends Message, T extends Translator<FROM_M, TO_M>> T getTranslatorFor(Class<FROM_M> fromMessageClass,
