@@ -10,15 +10,15 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.kapua.service.device.call.test</artifactId>
-    <name>org.eclipse.kapua.service.device.call.test</name>
+    <artifactId>org.eclipse.kapua.transport.test</artifactId>
+    <name>org.eclipse.kapua.transport.test</name>
 
     <dependencies>
         <!-- -->
         <!-- Tested service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call</artifactId>
+            <artifactId>org.eclipse.kapua.transport</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
@@ -26,26 +26,17 @@
         <!-- Tested service implementations -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
+            <artifactId>org.eclipse.kapua.transport.mqtt</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-
+        
         <!-- -->
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.locator.spi</artifactId>
             <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.transport.mqtt</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.translator.kura.mqtt</artifactId>
-            <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

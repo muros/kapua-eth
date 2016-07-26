@@ -1,10 +1,11 @@
-package org.eclipse.kapua.transport.mqtt;
+package org.eclipse.kapua.transport.test;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.eclipse.kapua.transport.mqtt.MqttClient;
 import org.eclipse.kapua.transport.mqtt.pooling.MqttClientPool;
 import org.eclipse.kapua.transport.mqtt.pooling.PooledMqttClientFactory;
 import org.eclipse.kapua.transport.mqtt.pooling.setting.MqttClientPoolSetting;

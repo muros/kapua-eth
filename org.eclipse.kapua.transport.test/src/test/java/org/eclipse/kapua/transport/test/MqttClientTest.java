@@ -1,4 +1,4 @@
-package org.eclipse.kapua.transport.mqtt;
+package org.eclipse.kapua.transport.test;
 
 import java.util.Date;
 
@@ -6,6 +6,8 @@ import org.eclipse.kapua.commons.util.SystemUtils;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
+import org.eclipse.kapua.transport.mqtt.MqttClient;
+import org.eclipse.kapua.transport.mqtt.MqttClientConnectionOptions;
 import org.eclipse.kapua.transport.utils.ClientIdGenerator;
 import org.junit.Assert;
 import org.junit.Test;

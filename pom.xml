@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.eclipse.kapua</groupId>
@@ -66,7 +67,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -79,7 +80,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -92,7 +93,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -135,6 +136,7 @@
         <module>org.eclipse.kapua.transport</module>
         <module>org.eclipse.kapua.transport.jms</module>
         <module>org.eclipse.kapua.transport.mqtt</module>
+        <module>org.eclipse.kapua.transport.test</module>
 
         <module>org.eclipse.kapua.configuration.spi</module>
         <module>org.eclipse.kapua.locator.spi</module>
@@ -158,6 +160,7 @@
 
         <module>org.eclipse.kapua.service.device.call</module>
         <module>org.eclipse.kapua.service.device.call.kura</module>
+        <module>org.eclipse.kapua.service.device.call.test</module>
 
         <module>org.eclipse.kapua.service.device.management</module>
         <module>org.eclipse.kapua.service.device.management.configuration</module>
@@ -180,8 +183,7 @@
 
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
-    <module>org.eclipse.kapua.service.device.call.test</module>
-  </modules>
+    </modules>
 
     <issueManagement>
         <system>GitHub Issues</system>

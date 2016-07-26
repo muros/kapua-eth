@@ -24,16 +24,17 @@ public class KuraCallTest extends Assert
         DeviceCallFactory deviceCallFactory = locator.getFactory(DeviceCallFactory.class);
         DeviceCall deviceCall = deviceCallFactory.newDeviceCall();
 
-        KuraRequestChannel requestChannel = new KuraRequestChannel("$EDC", "edcguest", "asd");
+        KuraRequestChannel requestChannel = new KuraRequestChannel("$EDC", "edcguest", "00:60:0C:82:52:34");
         requestChannel.setAppId("CMD-V1");
         requestChannel.setMethod(KuraMethod.EXEC);
         requestChannel.setResources(new String[] { "command" });
 
         KuraRequestPayload requestPayload = new KuraRequestPayload();
+        // requestPayload.metrics().put(Kurame, value)
         requestPayload.metrics().put(CommandMetrics.APP_METRIC_CMD.getValue(), "ifconfig");
 
         KuraRequestMessage requestMessage = new KuraRequestMessage(requestChannel, new Date(), requestPayload);
 
-        deviceCall.execute(requestMessage, 3000000L);
+        deviceCall.execute(requestMessage, 120000L);
     }
 }

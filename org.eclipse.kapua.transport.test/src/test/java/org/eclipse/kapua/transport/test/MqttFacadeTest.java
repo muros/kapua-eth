@@ -1,4 +1,4 @@
-package org.eclipse.kapua.transport.mqtt;
+package org.eclipse.kapua.transport.test;
 
 import java.util.Date;
 
