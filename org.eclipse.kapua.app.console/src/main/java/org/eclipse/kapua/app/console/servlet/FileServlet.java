@@ -36,9 +36,9 @@ import org.apache.poi.util.IOUtils;
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.KapuaUnauthenticatedException;
-import org.eclipse.kapua.app.console.config.ConsoleConfig;
-import org.eclipse.kapua.app.console.config.ConsoleConfigKeys;
 import org.eclipse.kapua.app.console.server.KapuaRemoteServiceServlet;
+import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
+import org.eclipse.kapua.app.console.setting.ConsoleSetting;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.model.KapuaFormFields;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
@@ -290,7 +290,7 @@ public class FileServlet extends EdcHttpServlet
             byte[] data = fileItems.size() == 0 ? null : fileItems.get(0).get();
 
             DeviceCommandFactory deviceCommandFactory = locator.getFactory(DeviceCommandFactory.class);
-            DeviceCommandInput commandInput = deviceCommandFactory.newInputInstance();
+            DeviceCommandInput commandInput = deviceCommandFactory.newCommandInput();
 
             StringTokenizer st = new StringTokenizer(command);
             int count = st.countTokens();
@@ -384,9 +384,9 @@ public class FileServlet extends EdcHttpServlet
             filePathSb.append("/");
         }
 
-        ConsoleConfig config = ConsoleConfig.getInstance();
+        ConsoleSetting config = ConsoleSetting.getInstance();
 
-        filePathSb.append(config.getString(ConsoleConfigKeys.DEVICE_CONFIGURATION_ICON_FOLDER))
+        filePathSb.append(config.getString(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_FOLDER))
                   .append("/")
                   .append(id);
 
@@ -412,7 +412,7 @@ class UploadRequest extends ServletFileUpload
     public UploadRequest(DiskFileItemFactory diskFileItemFactory)
     {
         super(diskFileItemFactory);
-        setSizeMax(ConsoleConfig.getInstance().getLong(ConsoleConfigKeys.FILE_UPLOAD_SIZE_MAX));
+        setSizeMax(ConsoleSetting.getInstance().getLong(ConsoleSettingKeys.FILE_UPLOAD_SIZE_MAX));
         formFields = new HashMap<String, String>();
         fileItems = new ArrayList<FileItem>();
     }

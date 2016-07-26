@@ -12,38 +12,38 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.server;
 
-import java.math.BigInteger;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.app.console.config.ConsoleConfig;
-import org.eclipse.kapua.app.console.config.ConsoleConfigKeys;
 import org.eclipse.kapua.app.console.server.util.EdcExceptionHandler;
+import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
+import org.eclipse.kapua.app.console.setting.ConsoleSetting;
 import org.eclipse.kapua.app.console.shared.GwtEdcException;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
 import org.eclipse.kapua.app.console.shared.service.GwtAuthorizationService;
 import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
-import org.eclipse.kapua.commons.model.id.KapuaEid;
-import org.eclipse.kapua.commons.setting.KapuaEnvironmentConfig;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
+import org.eclipse.kapua.commons.security.KapuaSession;
+import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.authentication.AccessToken;
+import org.eclipse.kapua.service.account.internal.AccountDomain;
 import org.eclipse.kapua.service.authentication.AuthenticationCredentials;
 import org.eclipse.kapua.service.authentication.AuthenticationService;
-import org.eclipse.kapua.service.authentication.KapuaSession;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.Permission;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.device.registry.internal.DeviceDomain;
+import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserService;
 import org.slf4j.Logger;
@@ -138,65 +138,37 @@ public class GwtAuthorizationServiceImpl extends KapuaRemoteServiceServlet imple
 
         //
         // Get info from session
-        AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-        // KapuaSession kapuaSession = authenticationService.getCurrentSession();
-        KapuaSession kapuaSession = new KapuaSession() {
-
-            @Override
-            public AccessToken getTokenInfo()
-            {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public KapuaId getScopeId()
-            {
-                return new KapuaEid(new BigInteger("1"));
-            }
-
-            @Override
-            public String getCurrentUsername()
-            {
-                return "kapua-sys";
-            }
-
-            @Override
-            public KapuaId getCurrentUserId()
-            {
-                return new KapuaEid(new BigInteger("1"));
-            }
-        };
+        KapuaSession kapuaSession = KapuaSecurityUtils.getSession();
 
         //
         // Get user info
         UserService userService = locator.getService(UserService.class);
         User user = userService.find(kapuaSession.getScopeId(),
-                                     kapuaSession.getCurrentUserId());
+                                     kapuaSession.getUserId());
 
         //
         // Get permission info
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
 
-        boolean hasAccountCreate = authorizationService.isPermitted(permissionFactory.newPermission("account", "create", kapuaSession.getScopeId()));
-        boolean hasAccountRead = authorizationService.isPermitted(permissionFactory.newPermission("account", "read", kapuaSession.getScopeId()));
-        boolean hasAccountUpdate = authorizationService.isPermitted(permissionFactory.newPermission("account", "update", kapuaSession.getScopeId()));
-        boolean hasAccountDelete = authorizationService.isPermitted(permissionFactory.newPermission("account", "delete", kapuaSession.getScopeId()));
-        boolean hasAccountAll = authorizationService.isPermitted(permissionFactory.newPermission("account", null, null));
+        boolean hasAccountCreate = authorizationService.isPermitted(permissionFactory.newPermission(AccountDomain.ACCOUNT, Actions.write, kapuaSession.getScopeId()));
+        boolean hasAccountRead = authorizationService.isPermitted(permissionFactory.newPermission(AccountDomain.ACCOUNT, Actions.read, kapuaSession.getScopeId()));
+        boolean hasAccountUpdate = authorizationService.isPermitted(permissionFactory.newPermission(AccountDomain.ACCOUNT, Actions.write, kapuaSession.getScopeId()));
+        boolean hasAccountDelete = authorizationService.isPermitted(permissionFactory.newPermission(AccountDomain.ACCOUNT, Actions.delete, kapuaSession.getScopeId()));
+        boolean hasAccountAll = authorizationService.isPermitted(permissionFactory.newPermission(AccountDomain.ACCOUNT, null, null));
 
-        boolean hasDeviceCreate = authorizationService.isPermitted(permissionFactory.newPermission("device", "create", kapuaSession.getScopeId()));
-        boolean hasDeviceRead = authorizationService.isPermitted(permissionFactory.newPermission("device", "read", kapuaSession.getScopeId()));
-        boolean hasDeviceUpdate = authorizationService.isPermitted(permissionFactory.newPermission("device", "update", kapuaSession.getScopeId()));
-        boolean hasDeviceDelete = authorizationService.isPermitted(permissionFactory.newPermission("device", "delete", kapuaSession.getScopeId()));
-        boolean hasDeviceManage = authorizationService.isPermitted(permissionFactory.newPermission("device", "manage", kapuaSession.getScopeId()));
+        boolean hasDeviceCreate = authorizationService.isPermitted(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, kapuaSession.getScopeId()));
+        boolean hasDeviceRead = authorizationService.isPermitted(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.read, kapuaSession.getScopeId()));
+        boolean hasDeviceUpdate = authorizationService.isPermitted(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, kapuaSession.getScopeId()));
+        boolean hasDeviceDelete = authorizationService.isPermitted(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.delete, kapuaSession.getScopeId()));
+        boolean hasDeviceManage = authorizationService.isPermitted(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.write, kapuaSession.getScopeId()));
 
-        boolean hasDataRead = authorizationService.isPermitted(permissionFactory.newPermission("data", "read", kapuaSession.getScopeId()));
+        boolean hasDataRead = authorizationService.isPermitted(permissionFactory.newPermission("data", Actions.read, kapuaSession.getScopeId()));
 
-        boolean hasUserCreate = authorizationService.isPermitted(permissionFactory.newPermission("user", "create", kapuaSession.getScopeId()));
-        boolean hasUserRead = authorizationService.isPermitted(permissionFactory.newPermission("user", "read", kapuaSession.getScopeId()));
-        boolean hasUserUpdate = authorizationService.isPermitted(permissionFactory.newPermission("user", "update", kapuaSession.getScopeId()));
-        boolean hasUserDelete = authorizationService.isPermitted(permissionFactory.newPermission("user", "delete", kapuaSession.getScopeId()));
+        boolean hasUserCreate = authorizationService.isPermitted(permissionFactory.newPermission("user", Actions.write, kapuaSession.getScopeId()));
+        boolean hasUserRead = authorizationService.isPermitted(permissionFactory.newPermission("user", Actions.read, kapuaSession.getScopeId()));
+        boolean hasUserUpdate = authorizationService.isPermitted(permissionFactory.newPermission("user", Actions.write, kapuaSession.getScopeId()));
+        boolean hasUserDelete = authorizationService.isPermitted(permissionFactory.newPermission("user", Actions.delete, kapuaSession.getScopeId()));
 
         //
         // Get account info
@@ -213,14 +185,14 @@ public class GwtAuthorizationServiceImpl extends KapuaRemoteServiceServlet imple
         GwtSession gwtSession = new GwtSession();
 
         // Console info
-        KapuaEnvironmentConfig commonsConfig = KapuaEnvironmentConfig.getInstance();
+        SystemSetting commonsConfig = SystemSetting.getInstance();
         gwtSession.setVersion(commonsConfig.getString(SystemSettingKey.VERSION));
         gwtSession.setBuildVersion(commonsConfig.getString(SystemSettingKey.BUILD_VERSION));
         gwtSession.setBuildNumber(commonsConfig.getString(SystemSettingKey.BUILD_NUMBER));
 
         // Google Analytics in
-        ConsoleConfig consoleConfig = ConsoleConfig.getInstance();
-        gwtSession.setGoogleAnalyticsTrackingId(consoleConfig.getString(ConsoleConfigKeys.GOOGLE_ANALYTICS_TRACKING_ID));
+        ConsoleSetting consoleConfig = ConsoleSetting.getInstance();
+        gwtSession.setGoogleAnalyticsTrackingId(consoleConfig.getString(ConsoleSettingKeys.GOOGLE_ANALYTICS_TRACKING_ID));
 
         // User info
         gwtSession.setGwtUser(gwtUser);

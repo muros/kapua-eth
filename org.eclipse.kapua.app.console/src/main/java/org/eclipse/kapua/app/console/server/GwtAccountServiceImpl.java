@@ -29,6 +29,7 @@ import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.util.SystemUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
@@ -128,7 +129,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountCreatedOn", account.getCreatedOn().toString()));
             accountPropertiesPairs.add(new GwtGroupedNVPair("accountInfo", "accountCreatedBy", account.getCreatedBy().getShortId()));
 
-            accountPropertiesPairs.add(new GwtGroupedNVPair("deploymentInfo", "deploymentBrokerURL", SystemUtils.getBrokerURI()));
+            accountPropertiesPairs.add(new GwtGroupedNVPair("deploymentInfo", "deploymentBrokerURL", SystemUtils.getBrokerURI().toString()));
 
             accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationName", account.getOrganization().getName()));
             accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationPersonName", account.getOrganization().getPersonName()));
@@ -259,7 +260,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             AccountFactory accountFactory = locator.getFactory(AccountFactory.class);
             AccountQuery query = accountFactory.newQuery(scopeId);
 
-            AccountListResult list = accountService.query(query);
+            KapuaListResult<Account> list = accountService.query(query);
             for (Account account : list) {
                 gwtAccountList.add(KapuaGwtConverter.convert(account));
             }
@@ -281,11 +282,10 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
         AccountFactory accountFactory = locator.getFactory(AccountFactory.class);
 
         List<GwtAccount> gwtAccountList = new ArrayList<GwtAccount>();
-        AccountListResult list;
         try {
             AccountQuery query = accountFactory.newQuery(scopeId);
 
-            list = accountService.query(query);
+            KapuaListResult<Account> list = accountService.query(query);
             for (Account account : list) {
                 gwtAccountList.add(KapuaGwtConverter.convert(account));
             }

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.shared.util;
 
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import org.eclipse.kapua.KapuaException;
@@ -23,16 +24,15 @@ import org.eclipse.kapua.app.console.shared.model.GwtOrganization;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
 import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
-import org.eclipse.kapua.commons.setting.KapuaEnvironmentConfig;
-import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
+import org.eclipse.kapua.commons.util.SystemUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.model.query.predicate.KapuaAndPredicate;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.Organization;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnection;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory;
-import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionListResult;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionPredicates;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionQuery;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService;
@@ -57,13 +57,12 @@ public class KapuaGwtConverter
         gwtAccount.setParentAccountId(account.getScopeId() != null ? account.getScopeId().getShortId() : null);
         gwtAccount.setOptlock(account.getOptlock());
 
-        String brokerUrlFormat = "%s://%s:%s";
-        KapuaEnvironmentConfig envConfig = KapuaEnvironmentConfig.getInstance();
-        String brokerURL = String.format(brokerUrlFormat,
-                                         envConfig.getString(SystemSettingKey.BROKER_PROTOCOL),
-                                         envConfig.getString(SystemSettingKey.BROKER_HOST),
-                                         envConfig.getString(SystemSettingKey.BROKER_PORT));
-        gwtAccount.setBrokerURL(brokerURL);
+        try {
+            gwtAccount.setBrokerURL(SystemUtils.getBrokerURI().toString());
+        }
+        catch (URISyntaxException use) {
+            gwtAccount.setBrokerURL("");
+        }
 
         Properties accountProperties = account.getEntityProperties();
         gwtAccount.setDashboardPreferredTopic(accountProperties.getProperty("topic"));
@@ -126,7 +125,7 @@ public class KapuaGwtConverter
         gwtDevice.setBiosVersion(device.getBiosVersion());
         gwtDevice.setOsVersion(device.getOsVersion());
         gwtDevice.setJvmVersion(device.getJvmVersion());
-        gwtDevice.setOsgiVersion(device.getOsgiVersion());
+        gwtDevice.setOsgiVersion(device.getOsgiFrameworkVersion());
         gwtDevice.setAcceptEncoding(device.getAcceptEncoding());
         gwtDevice.setApplicationIdentifiers(device.getApplicationIdentifiers());
         gwtDevice.setGpsLatitude(device.getGpsLatitude());
@@ -162,7 +161,7 @@ public class KapuaGwtConverter
 
         query.setPredicate(andPredicate);
 
-        DeviceConnectionListResult deviceConnections = deviceConnectionService.query(query);
+        KapuaListResult<DeviceConnection> deviceConnections = deviceConnectionService.query(query);
 
         if (!deviceConnections.isEmpty()) {
             DeviceConnection connection = deviceConnections.get(0);

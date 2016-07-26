@@ -10,11 +10,11 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.app.console.config;
+package org.eclipse.kapua.app.console.setting;
 
-import org.eclipse.kapua.commons.setting.KapuaConfigKey;
+import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum ConsoleConfigKeys implements KapuaConfigKey
+public enum ConsoleSettingKeys implements SettingKey
 {
     GOOGLE_ANALYTICS_TRACKING_ID("google.analytics.trackingid"),
 
@@ -31,7 +31,7 @@ public enum ConsoleConfigKeys implements KapuaConfigKey
 
     private String key;
 
-    private ConsoleConfigKeys(String key)
+    private ConsoleSettingKeys(String key)
     {
         this.key = key;
     }

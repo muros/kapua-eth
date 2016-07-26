@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.kapua.app.console.config.ConsoleConfig;
-import org.eclipse.kapua.app.console.config.ConsoleConfigKeys;
+import org.eclipse.kapua.app.console.setting.ConsoleSetting;
+import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +41,8 @@ public class SkinServlet extends HttpServlet
         try {
 
             // check to see if we have an external resource directory configured
-            ConsoleConfig edcConfig = ConsoleConfig.getInstance();
-            String resourceDir = edcConfig.getString(ConsoleConfigKeys.SKIN_RESOURCE_DIR);
+            ConsoleSetting edcConfig = ConsoleSetting.getInstance();
+            String resourceDir = edcConfig.getString(ConsoleSettingKeys.SKIN_RESOURCE_DIR);
             if (resourceDir != null && resourceDir.trim().length() != 0) {
 
                 File fResourceDir = new File(resourceDir);

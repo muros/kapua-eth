@@ -24,8 +24,8 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.service.device.registry.Device;
-import org.eclipse.kapua.service.device.registry.DeviceListResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,7 +73,7 @@ public class DeviceExporterExcel extends DeviceExporter
     }
 
     @Override
-    public void append(DeviceListResult devices)
+    public void append(KapuaListResult<Device> devices)
         throws ServletException, IOException
     {
         Row row = null;

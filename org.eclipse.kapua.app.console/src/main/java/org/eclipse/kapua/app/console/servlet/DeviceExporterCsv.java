@@ -24,8 +24,8 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.service.device.registry.Device;
-import org.eclipse.kapua.service.device.registry.DeviceListResult;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -58,7 +58,7 @@ public class DeviceExporterCsv extends DeviceExporter
     }
 
     @Override
-    public void append(DeviceListResult devices)
+    public void append(KapuaListResult<Device> devices)
         throws ServletException, IOException
     {
         for (Device device : devices) {

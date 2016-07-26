@@ -10,24 +10,22 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.app.console.config;
+package org.eclipse.kapua.app.console.setting;
 
-import org.apache.commons.configuration.Configuration;
-import org.eclipse.kapua.commons.setting.AbstractKapuaConfig;
+import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 
-public class ConsoleConfig extends AbstractKapuaConfig<ConsoleConfigKeys>
+public class ConsoleSetting extends AbstractKapuaSetting<ConsoleSettingKeys>
 {
-    private static final ConsoleConfig instance;
-    static {
-        instance = new ConsoleConfig(ConsoleConfiguration.getConfiguration());
-    }
+    private static final String         CONSOLE_SETTING_RESOURCE = "console-setting.properties";
 
-    private ConsoleConfig(Configuration config)
+    private static final ConsoleSetting instance                 = new ConsoleSetting();
+
+    private ConsoleSetting()
     {
-        super(config);
+        super(CONSOLE_SETTING_RESOURCE);
     }
 
-    public static ConsoleConfig getInstance()
+    public static ConsoleSetting getInstance()
     {
         return instance;
     }

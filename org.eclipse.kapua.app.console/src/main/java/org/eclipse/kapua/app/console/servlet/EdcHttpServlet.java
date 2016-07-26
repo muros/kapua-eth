@@ -23,8 +23,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.FileCleanerCleanup;
 import org.apache.commons.io.FileCleaningTracker;
-import org.eclipse.kapua.app.console.config.ConsoleConfig;
-import org.eclipse.kapua.app.console.config.ConsoleConfigKeys;
+import org.eclipse.kapua.app.console.setting.ConsoleSetting;
+import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
 import org.eclipse.kapua.app.console.shared.model.KapuaFormFields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public class EdcHttpServlet extends HttpServlet
         ServletContext ctx = getServletContext();
         m_fileCleaningTracker = FileCleanerCleanup.getFileCleaningTracker(ctx);
 
-        int sizeThreshold = ConsoleConfig.getInstance().getInt(ConsoleConfigKeys.FILE_UPLOAD_INMEMORY_SIZE_THRESHOLD);
+        int sizeThreshold = ConsoleSetting.getInstance().getInt(ConsoleSettingKeys.FILE_UPLOAD_INMEMORY_SIZE_THRESHOLD);
         File repository = new File(System.getProperty("java.io.tmpdir"));
 
         s_logger.info("DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD: {}", DiskFileItemFactory.DEFAULT_SIZE_THRESHOLD);
