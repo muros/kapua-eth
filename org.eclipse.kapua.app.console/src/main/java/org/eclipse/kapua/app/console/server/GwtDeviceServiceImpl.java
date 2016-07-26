@@ -76,7 +76,7 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
-import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfigParamPassowrd;
+import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfigParamPassword;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
@@ -908,7 +908,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
             DeviceCommandOutput commandOutput = deviceCommandManagementService.exec(scopeId,
                                                                                     deviceId,
-                                                                                    commandInput);
+                                                                                    commandInput, null);
 
             if (commandOutput.getExceptionMessage() != null) {
                 gwtCommandOutput.setExceptionMessage(commandOutput.getExceptionMessage().replace("\n", "<br>"));
@@ -1103,7 +1103,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                     objValue = Boolean.parseBoolean(strValue);
                     break;
                 case PASSWORD:
-                    objValue = new DeviceComponentConfigParamPassowrd(strValue);
+                    objValue = new DeviceComponentConfigParamPassword(strValue);
                     break;
                 case CHAR:
                     objValue = Character.valueOf(strValue.charAt(0));
@@ -1171,9 +1171,9 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
             case PASSWORD:
                 for (String value : defaultValues) {
-                    values.add(new DeviceComponentConfigParamPassowrd(value));
+                    values.add(new DeviceComponentConfigParamPassword(value));
                 }
-                return values.toArray(new DeviceComponentConfigParamPassowrd[] {});
+                return values.toArray(new DeviceComponentConfigParamPassword[] {});
 
             case STRING:
                 return defaultValues;

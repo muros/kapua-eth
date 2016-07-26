@@ -65,7 +65,7 @@ public class TranslatorDataKuraKapua implements Translator<KuraMessage, KapuaMes
         throws KapuaException
     {
         KapuaChannel kapuaChannel = new KapuaChannelImpl();
-        kapuaChannel.setSemanticParts(channel.semanticChannelParts);
+        kapuaChannel.setSemanticParts(channel.getSemanticChannelParts());
 
         return kapuaChannel;
     }

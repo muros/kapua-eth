@@ -39,7 +39,7 @@ public class TranslatorDataKuraMqtt implements Translator<KuraMessage, MqttMessa
         return jmsMessage;
     }
 
-    public MqttTopic translate(KuraChannel channel)
+    private MqttTopic translate(KuraChannel channel)
         throws KapuaException
     {
         List<String> topicTokens = new ArrayList<>();
@@ -55,7 +55,7 @@ public class TranslatorDataKuraMqtt implements Translator<KuraMessage, MqttMessa
         return new MqttTopic(topicTokens.toArray(new String[0]));
     }
 
-    public MqttPayload translate(KuraPayload payload)
+    private MqttPayload translate(KuraPayload payload)
         throws KapuaException
     {
         return new MqttPayload(payload.toByteArray());

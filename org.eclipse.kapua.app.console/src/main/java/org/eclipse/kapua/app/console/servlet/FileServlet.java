@@ -128,7 +128,7 @@ public class FileServlet extends EdcHttpServlet
             DeviceConfiguration config = XmlUtil.unmarshal(xmlString, DeviceConfiguration.class);
             deviceService.put(KapuaEid.parseShortId(scopeIdString),
                               KapuaEid.parseShortId(deviceIdString),
-                              config);
+                              config, null);
 
             // //
             // // Add an additional delay after the configuration update
@@ -311,7 +311,7 @@ public class FileServlet extends EdcHttpServlet
 
             DeviceCommandOutput deviceCommandOutput = deviceService.exec(KapuaEid.parseShortId(scopeIdString),
                                                                          KapuaEid.parseShortId(deviceIdString),
-                                                                         commandInput);
+                                                                         commandInput, null);
             resp.setContentType("text/plain");
             if (deviceCommandOutput.getStderr() != null &&
                 deviceCommandOutput.getStderr().length() > 0) {

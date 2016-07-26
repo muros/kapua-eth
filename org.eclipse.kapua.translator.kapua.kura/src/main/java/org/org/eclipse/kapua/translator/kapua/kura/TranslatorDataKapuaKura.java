@@ -11,6 +11,7 @@ import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
+import org.eclipse.kapua.service.device.call.message.kura.KuraDataChannel;
 import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPosition;
@@ -56,15 +57,15 @@ public class TranslatorDataKapuaKura implements Translator<KapuaMessage, KuraMes
         return kuraMessage;
     }
 
-    public KuraChannel translate(KapuaChannel kapuaChannel)
+    private KuraDataChannel translate(KapuaChannel kapuaChannel)
         throws KapuaException
     {
-        KuraChannel kuraChannel = new KuraChannel();
+        KuraDataChannel kuraChannel = new KuraDataChannel();
         kuraChannel.setSemanticChannelParts(kapuaChannel.getSemanticParts());
         return kuraChannel;
     }
 
-    public KuraPayload translate(KapuaPayload payload)
+    private KuraPayload translate(KapuaPayload payload)
         throws KapuaException
     {
         KuraPayload kuraPayload = new KuraPayload();

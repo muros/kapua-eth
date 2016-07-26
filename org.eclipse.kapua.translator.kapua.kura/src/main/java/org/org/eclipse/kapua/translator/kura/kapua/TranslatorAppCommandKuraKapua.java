@@ -27,7 +27,7 @@ import org.org.eclipse.kapua.service.device.management.command.message.internal.
 
 public class TranslatorAppCommandKuraKapua implements Translator<KuraResponseMessage, CommandResponseMessage>
 {
-    private static final String                              CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_CONTROL_PREFIX);
+    private static final String                              CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<CommandMetrics, CommandAppProperties> metricsDictionary;
 
     private TranslatorAppCommandKuraKapua()
@@ -79,7 +79,7 @@ public class TranslatorAppCommandKuraKapua implements Translator<KuraResponseMes
         return kapuaMessage;
     }
 
-    public CommandResponseChannel translate(KuraResponseChannel channel)
+    private CommandResponseChannel translate(KuraResponseChannel channel)
         throws KapuaException
     {
 
@@ -105,13 +105,13 @@ public class TranslatorAppCommandKuraKapua implements Translator<KuraResponseMes
                                           appIdTokens[1]);
         }
 
-        kapuaChannel.setApp(CommandAppProperties.APP_NAME);
+        kapuaChannel.setAppName(CommandAppProperties.APP_NAME);
         kapuaChannel.setVersion(CommandAppProperties.APP_VERSION);
 
         return kapuaChannel;
     }
 
-    public CommandResponsePayload translate(KuraResponsePayload payload)
+    private CommandResponsePayload translate(KuraResponsePayload payload)
         throws KapuaException
     {
         CommandResponsePayload commandResponsePayload = new CommandResponsePayload();

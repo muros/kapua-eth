@@ -40,7 +40,7 @@ public class TranslatorDataKuraJms implements Translator<KuraMessage, JmsMessage
         return jmsMessage;
     }
 
-    public JmsTopic translate(KuraChannel channel)
+    private JmsTopic translate(KuraChannel channel)
         throws KapuaException
     {
         List<String> topicTokens = new ArrayList<String>();
@@ -56,7 +56,7 @@ public class TranslatorDataKuraJms implements Translator<KuraMessage, JmsMessage
         return new JmsTopic(topicTokens.toArray(new String[0]));
     }
 
-    public JmsPayload translate(KuraPayload payload)
+    private JmsPayload translate(KuraPayload payload)
         throws KapuaException
     {
         return new JmsPayload(payload.toByteArray());
