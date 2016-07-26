@@ -105,7 +105,7 @@ public class TranslatorAppCommandKuraKapua implements Translator<KuraResponseMes
                                           appIdTokens[1]);
         }
 
-        kapuaChannel.setApp(CommandAppProperties.APP_NAME);
+        kapuaChannel.setAppName(CommandAppProperties.APP_NAME);
         kapuaChannel.setVersion(CommandAppProperties.APP_VERSION);
 
         return kapuaChannel;

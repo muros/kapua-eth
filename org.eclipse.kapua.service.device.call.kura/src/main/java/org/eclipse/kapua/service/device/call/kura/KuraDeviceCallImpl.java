@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *      Eurotech - initial API and implementation
+ *******************************************************************************/
 package org.eclipse.kapua.service.device.call.kura;
 
 import java.util.Date;
@@ -12,7 +23,6 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
-import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.transport.TransportClientFactory;
 import org.eclipse.kapua.transport.TransportFacade;
@@ -100,9 +110,9 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
             //
             // Do send
             try {
-                KuraMessage kuraMessage = new KuraMessage(requestChannel,
-                                                          new Date(),
-                                                          requestPayload);
+                KuraRequestMessage kuraMessage = new KuraRequestMessage(requestChannel,
+                                                                        new Date(),
+                                                                        requestPayload);
                 TransportMessage transportResponseMessage = transportFacade.sendSync((TransportMessage) translatorKuraTransport.translate(kuraMessage), timeout);
                 response = (KuraResponseMessage) translatorTransportKura.translate(transportResponseMessage);
             }

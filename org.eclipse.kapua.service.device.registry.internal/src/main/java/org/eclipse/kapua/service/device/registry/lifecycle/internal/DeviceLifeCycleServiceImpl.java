@@ -99,7 +99,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 
         deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        deviceEventCreator.setEventType("BIRTH");
+        deviceEventCreator.setResource("BIRTH");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         deviceEventCreator.setSentOn(message.getSentOn());
 
@@ -133,7 +133,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 
         deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        deviceEventCreator.setEventType("DEATH");
+        deviceEventCreator.setResource("DEATH");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         deviceEventCreator.setSentOn(message.getSentOn());
 
@@ -167,7 +167,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 
         deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        deviceEventCreator.setEventType("MISSING");
+        deviceEventCreator.setResource("MISSING");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         deviceEventCreator.setSentOn(message.getReceivedOn());
 
@@ -202,7 +202,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 
         deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        deviceEventCreator.setEventType("APPLICATION");
+        deviceEventCreator.setResource("APPLICATION");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         deviceEventCreator.setSentOn(message.getReceivedOn());
 

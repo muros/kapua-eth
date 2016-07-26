@@ -36,11 +36,6 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.transport.pooling</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.translator</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
@@ -79,5 +74,6 @@
             <artifactId>protobuf-java</artifactId>
             <version>2.6.0</version>
         </dependency>
+        
     </dependencies>
 </project>

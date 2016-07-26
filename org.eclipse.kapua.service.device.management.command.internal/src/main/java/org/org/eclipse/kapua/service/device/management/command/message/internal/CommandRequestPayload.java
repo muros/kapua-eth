@@ -1,6 +1,18 @@
+/*******************************************************************************
+ * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *      Eurotech - initial API and implementation
+ *******************************************************************************/
 package org.org.eclipse.kapua.service.device.management.command.message.internal;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.kapua.message.internal.KapuaPayloadImpl;
 import org.eclipse.kapua.service.device.management.request.KapuaRequestPayload;
@@ -10,23 +22,23 @@ public class CommandRequestPayload extends KapuaPayloadImpl implements KapuaRequ
 {
     public String[] getArguments()
     {
-        Vector<String> v = new Vector<String>();
+        List<String> argumentsList = new ArrayList<>();
 
         for (int i = 0;; i++) {
             String value = (String) getProperties().get(CommandAppProperties.APP_PROPERTY_ARG.getValue() + i);
             if (value != null) {
-                v.add(value);
+                argumentsList.add(value);
             }
             else {
                 break;
             }
         }
 
-        if (v.isEmpty()) {
+        if (argumentsList.isEmpty()) {
             return null;
         }
         else {
-            return v.toArray(new String[v.size()]);
+            return argumentsList.toArray(new String[argumentsList.size()]);
         }
     }
 
@@ -41,7 +53,7 @@ public class CommandRequestPayload extends KapuaPayloadImpl implements KapuaRequ
 
     public String[] getEnvironmentPairs()
     {
-        Vector<String> v = new Vector<String>();
+        List<String> v = new ArrayList<>();
 
         for (int i = 0;; i++) {
             String value = (String) getProperties().get(CommandAppProperties.APP_PROPERTY_ENVP.getValue() + i);

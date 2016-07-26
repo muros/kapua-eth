@@ -30,7 +30,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
         ArgumentValidator.notNull(deviceEventCreator.getScopeId(), "deviceEventCreator.scopeId");
         ArgumentValidator.notNull(deviceEventCreator.getDeviceId(), "deviceEventCreator.deviceId");
         ArgumentValidator.notNull(deviceEventCreator.getReceivedOn(), "deviceEventCreator.receivedOn");
-        ArgumentValidator.notEmptyOrNull(deviceEventCreator.getEventType(), "deviceEventCreator.eventType");
+        ArgumentValidator.notEmptyOrNull(deviceEventCreator.getResource(), "deviceEventCreator.eventType");
 
         //
         // Check Access

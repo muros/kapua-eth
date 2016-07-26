@@ -9,13 +9,11 @@ import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSett
 
 public class KuraChannel implements DeviceChannel
 {
-    protected final static String destinationControlPrefix = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
+    protected static final String DESTINATION_CONTROL_PREFIX = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
 
     protected String              messageClassification;
     protected String              scopeNamespace;
     protected String              clientId;
-
-    public List<String>           semanticChannelParts     = new ArrayList<>();
 
     public KuraChannel()
     {
@@ -66,11 +64,6 @@ public class KuraChannel implements DeviceChannel
 
     public List<String> getSemanticChannelParts()
     {
-        return semanticChannelParts;
-    }
-
-    public void setSemanticChannelParts(List<String> semanticaChannelParts)
-    {
-        this.semanticChannelParts = semanticaChannelParts;
+        return new ArrayList<>();
     }
 }

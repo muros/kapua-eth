@@ -2,6 +2,7 @@ package org.eclipse.kapua.service.device.call.message.kura;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
@@ -25,6 +26,11 @@ public class KuraPayload implements DevicePayload
     protected DevicePosition      position;
     protected Map<String, Object> metrics;
     protected byte[]              body;
+
+    public KuraPayload()
+    {
+        metrics = new HashMap<>();
+    }
 
     public Date getTimestamp()
     {

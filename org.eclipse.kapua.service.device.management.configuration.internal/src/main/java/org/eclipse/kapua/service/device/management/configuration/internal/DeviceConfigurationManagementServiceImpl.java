@@ -1,16 +1,17 @@
 package org.eclipse.kapua.service.device.management.configuration.internal;
 
 import java.io.StringWriter;
+import java.util.Date;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.KapuaMessageFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
@@ -21,13 +22,18 @@ import org.eclipse.kapua.service.device.management.configuration.DeviceComponent
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
+import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
+import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
+import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
+import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
+import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
 
 public class DeviceConfigurationManagementServiceImpl implements DeviceConfigurationManagementService
 {
-    private static final String deviceConfigurationManagementAppId = "CONF-V1";
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String configurationComponentPid)
+    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String configurationComponentPid, Long timeout)
         throws KapuaException
     {
         //
@@ -44,30 +50,57 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
 
         //
         // Prepare the request
-        String[] resources;
-        if (configurationComponentPid != null) {
-            resources = new String[] { "configuration", configurationComponentPid };
-        }
-        else {
-            resources = new String[] { "configuration" };
-        }
+        ConfigurationRequestChannel configurationRequestChannel = new ConfigurationRequestChannel();
+        configurationRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
+        configurationRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        configurationRequestChannel.setMethod(KapuaMethod.READ);
+        configurationRequestChannel.setComponentId(configurationComponentPid);
+
+        ConfigurationRequestPayload configurationRequestPayload = new ConfigurationRequestPayload();
+
+        ConfigurationRequestMessage configurationRequestMessage = new ConfigurationRequestMessage();
+        configurationRequestMessage.setScopeId(scopeId);
+        configurationRequestMessage.setDeviceId(deviceId);
+        configurationRequestMessage.setCapturedOn(new Date());
+        configurationRequestMessage.setPayload(configurationRequestPayload);
+        configurationRequestMessage.setSemanticChannel(configurationRequestChannel);
 
         //
         // Do get
-        DeviceCallExecutor<DeviceConfiguration> deviceApplicationCall = new DeviceCallExecutor<DeviceConfiguration>(scopeId,
-                                                                                                                          deviceId,
-                                                                                                                          deviceConfigurationManagementAppId,
-                                                                                                                          KapuaMethod.GET,
-                                                                                                                          resources);
-        deviceApplicationCall.setResponseHandler(new ConfigurationManagementResponseHandlers.GET());
+        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(configurationRequestMessage, timeout);
+        ConfigurationResponseMessage responseMessage = (ConfigurationResponseMessage) deviceApplicationCall.send();
 
         //
-        // Return result
-        return deviceApplicationCall.send();
+        // Parse the response
+        ConfigurationResponsePayload responsePayload = responseMessage.getPayload();
+
+        DeviceManagementSetting config = DeviceManagementSetting.getInstance();
+        String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
+
+        String body = null;
+        try {
+            body = new String(responsePayload.getBody(), charEncoding);
+        }
+        catch (Exception e) {
+            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, responsePayload.getBody());
+
+        }
+
+        DeviceConfiguration deviceConfiguration = null;
+        try {
+            deviceConfiguration = XmlUtil.unmarshal(body, DeviceConfiguration.class);
+        }
+        catch (Exception e) {
+            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
+
+        }
+
+        return deviceConfiguration;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public void put(KapuaId scopeId, KapuaId deviceId, DeviceComponentConfiguration deviceComponentConfiguration)
+    public void put(KapuaId scopeId, KapuaId deviceId, DeviceComponentConfiguration deviceComponentConfiguration, Long timeout)
         throws KapuaException
     {
         //
@@ -86,9 +119,14 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
 
         //
         // Prepare the request
-        String[] resources = new String[] { "configuration", deviceComponentConfiguration.getComponentId() };
-        KapuaMessageFactory messageFactory = locator.getFactory(KapuaMessageFactory.class);
-        KapuaRequestPayload requestPayload = messageFactory.newRequestPayload();
+        ConfigurationRequestChannel configurationRequestChannel = new ConfigurationRequestChannel();
+        configurationRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
+        configurationRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        configurationRequestChannel.setMethod(KapuaMethod.WRITE);
+        configurationRequestChannel.setComponentId(deviceComponentConfiguration.getComponentId());
+
+        ConfigurationRequestPayload configurationRequestPayload = new ConfigurationRequestPayload();
+
         try {
             DeviceConfigurationFactory deviceConfigurationFactory = locator.getFactory(DeviceConfigurationFactory.class);
             DeviceConfiguration deviceConfiguration = deviceConfigurationFactory.newConfigurationInstance();
@@ -101,29 +139,29 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
             XmlUtil.marshal(deviceConfiguration, sw);
             byte[] requestBody = sw.toString().getBytes(charEncoding);
 
-            requestPayload.setBody(requestBody);
+            configurationRequestPayload.setBody(requestBody);
         }
         catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.REQUEST_EXCEPTION, e, deviceComponentConfiguration);
         }
 
+        ConfigurationRequestMessage configurationRequestMessage = new ConfigurationRequestMessage();
+        configurationRequestMessage.setScopeId(scopeId);
+        configurationRequestMessage.setDeviceId(deviceId);
+        configurationRequestMessage.setCapturedOn(new Date());
+        configurationRequestMessage.setPayload(configurationRequestPayload);
+        configurationRequestMessage.setSemanticChannel(configurationRequestChannel);
+
         //
         // Do put
-        DeviceCallExecutor<Void> deviceApplicationCall = new DeviceCallExecutor<Void>(scopeId,
-                                                                                            deviceId,
-                                                                                            deviceConfigurationManagementAppId,
-                                                                                            KapuaMethod.PUT,
-                                                                                            resources);
-        deviceApplicationCall.setRequestPayload(requestPayload);
-        deviceApplicationCall.setResponseHandler(new ConfigurationManagementResponseHandlers.PUT());
+        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(configurationRequestMessage, timeout);
+        ConfigurationResponseMessage responseMessage = (ConfigurationResponseMessage) deviceApplicationCall.send();
 
-        //
-        // Return result
-        deviceApplicationCall.send();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public void put(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration deviceConfiguration)
+    public void put(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration deviceConfiguration, Long timeout)
         throws KapuaException
     {
         //
@@ -141,9 +179,13 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
 
         //
         // Prepare the request
-        String[] resources = new String[] { "configuration" };
-        KapuaMessageFactory messageFactory = locator.getFactory(KapuaMessageFactory.class);
-        KapuaRequestPayload requestPayload = messageFactory.newRequestPayload();
+        ConfigurationRequestChannel configurationRequestChannel = new ConfigurationRequestChannel();
+        configurationRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
+        configurationRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        configurationRequestChannel.setMethod(KapuaMethod.WRITE);
+
+        ConfigurationRequestPayload configurationRequestPayload = new ConfigurationRequestPayload();
+
         try {
             DeviceManagementSetting deviceManagementConfig = DeviceManagementSetting.getInstance();
             String charEncoding = deviceManagementConfig.getString(DeviceManagementSettingKey.CHAR_ENCODING);
@@ -152,41 +194,23 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
             XmlUtil.marshal(deviceConfiguration, sw);
             byte[] requestBody = sw.toString().getBytes(charEncoding);
 
-            requestPayload.setBody(requestBody);
+            configurationRequestPayload.setBody(requestBody);
         }
         catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.REQUEST_EXCEPTION, e, deviceConfiguration);
         }
 
+        ConfigurationRequestMessage configurationRequestMessage = new ConfigurationRequestMessage();
+        configurationRequestMessage.setScopeId(scopeId);
+        configurationRequestMessage.setDeviceId(deviceId);
+        configurationRequestMessage.setCapturedOn(new Date());
+        configurationRequestMessage.setPayload(configurationRequestPayload);
+        configurationRequestMessage.setSemanticChannel(configurationRequestChannel);
+
         //
         // Do put
-        DeviceCallExecutor<Void> deviceApplicationCall = new DeviceCallExecutor<Void>(scopeId,
-                                                                                            deviceId,
-                                                                                            deviceConfigurationManagementAppId,
-                                                                                            KapuaMethod.PUT,
-                                                                                            resources);
-        deviceApplicationCall.setRequestPayload(requestPayload);
-        deviceApplicationCall.setResponseHandler(new ConfigurationManagementResponseHandlers.PUT());
+        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(configurationRequestMessage, timeout);
+        ConfigurationResponseMessage responseMessage = (ConfigurationResponseMessage) deviceApplicationCall.send();
 
-        //
-        // Make call
-        deviceApplicationCall.send();
     }
-
-    // @Override
-    // public void apply(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration configuration)
-    // throws KapuaException
-    // {
-    // // TODO Auto-generated method stub
-    //
-    // }
-
-    // @Override
-    // public void rollback(KapuaId scopeId, KapuaId deviceId, String configurationId)
-    // throws KapuaException
-    // {
-    // // TODO Auto-generated method stub
-    //
-    // }
-
 }

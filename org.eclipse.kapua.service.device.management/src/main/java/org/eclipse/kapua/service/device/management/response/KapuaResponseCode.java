@@ -2,8 +2,9 @@ package org.eclipse.kapua.service.device.management.response;
 
 public enum KapuaResponseCode
 {
-    ACCEPTED,
-    BAD_REQUEST,
-    NOT_FOUND,
-    INTERNAL_ERROR;
+    ACCEPTED, // 200
+              // 204
+    BAD_REQUEST, // 400
+    NOT_FOUND, // 404
+    INTERNAL_ERROR; // 500
 }

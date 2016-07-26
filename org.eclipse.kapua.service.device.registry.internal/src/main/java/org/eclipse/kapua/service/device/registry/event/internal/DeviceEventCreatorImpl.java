@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlElement;
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.device.management.KapuaMethod;
+import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 
@@ -23,14 +25,20 @@ public class DeviceEventCreatorImpl extends AbstractKapuaEntityCreator<DeviceEve
     @XmlElement(name = "sentOn")
     private Date              sentOn;
 
-    @XmlElement(name = "eventType")
-    private String            eventType;
+    @XmlElement(name = "position")
+    private KapuaPosition     position;
+
+    @XmlElement(name = "resource")
+    private String            resource;
+
+    @XmlElement(name = "action")
+    private KapuaMethod       action;
+
+    @XmlElement(name = "responseCode")
+    private KapuaResponseCode responseCode;
 
     @XmlElement(name = "eventMessage")
     private String            eventMessage;
-
-    @XmlElement(name = "position")
-    private KapuaPosition     position;
 
     protected DeviceEventCreatorImpl(KapuaId scopeId)
     {
@@ -74,15 +82,47 @@ public class DeviceEventCreatorImpl extends AbstractKapuaEntityCreator<DeviceEve
     }
 
     @Override
-    public String getEventType()
+    public KapuaPosition getPosition()
     {
-        return eventType;
+        return position;
     }
 
     @Override
-    public void setEventType(String eventType)
+    public void setPosition(KapuaPosition position)
     {
-        this.eventType = eventType;
+        this.position = position;
+    }
+
+    @Override
+    public String getResource()
+    {
+        return resource;
+    }
+
+    @Override
+    public void setResource(String resource)
+    {
+        this.resource = resource;
+    }
+
+    public KapuaMethod getAction()
+    {
+        return action;
+    }
+
+    public void setAction(KapuaMethod action)
+    {
+        this.action = action;
+    }
+
+    public KapuaResponseCode getResponseCode()
+    {
+        return responseCode;
+    }
+
+    public void setResponseCode(KapuaResponseCode responseCode)
+    {
+        this.responseCode = responseCode;
     }
 
     @Override
@@ -97,15 +137,4 @@ public class DeviceEventCreatorImpl extends AbstractKapuaEntityCreator<DeviceEve
         this.eventMessage = eventMessage;
     }
 
-    @Override
-    public KapuaPosition getPosition()
-    {
-        return position;
-    }
-
-    @Override
-    public void setPosition(KapuaPosition position)
-    {
-        this.position = position;
-    }
 }
