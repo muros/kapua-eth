@@ -9,35 +9,36 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
+import org.eclipse.kapua.service.device.call.kura.app.BundleMetrics;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
-import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
+import org.org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
+import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestChannel;
+import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestMessage;
+import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestPayload;
 
-public class TranslatorAppConfigurationKapuaKura implements Translator<ConfigurationRequestMessage, KuraRequestMessage>
+public class TranslatorAppBundleKapuaKura implements Translator<BundleRequestMessage, KuraRequestMessage>
 {
-    private static final String                                          CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<ConfigurationAppProperties, ConfigurationMetrics> propertiesDictionary;
+    private static final String                            CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
+    private static Map<BundleAppProperties, BundleMetrics> propertiesDictionary;
 
-    private TranslatorAppConfigurationKapuaKura()
+    private TranslatorAppBundleKapuaKura()
     {
         propertiesDictionary = new HashMap<>();
 
-        propertiesDictionary.put(ConfigurationAppProperties.APP_NAME, ConfigurationMetrics.APP_ID);
-        propertiesDictionary.put(ConfigurationAppProperties.APP_VERSION, ConfigurationMetrics.APP_VERSION);
+        propertiesDictionary.put(BundleAppProperties.APP_NAME, BundleMetrics.APP_ID);
+        propertiesDictionary.put(BundleAppProperties.APP_VERSION, BundleMetrics.APP_VERSION);
     }
 
     @Override
-    public KuraRequestMessage translate(ConfigurationRequestMessage message)
+    public KuraRequestMessage translate(BundleRequestMessage message)
         throws KapuaException
     {
         //
@@ -68,7 +69,7 @@ public class TranslatorAppConfigurationKapuaKura implements Translator<Configura
         return kuraMessage;
     }
 
-    private KuraRequestChannel translate(ConfigurationRequestChannel channel)
+    private KuraRequestChannel translate(BundleRequestChannel channel)
         throws KapuaException
     {
         KuraRequestChannel kuraRequestChannel = new KuraRequestChannel();
@@ -76,25 +77,32 @@ public class TranslatorAppConfigurationKapuaKura implements Translator<Configura
 
         // Build appId
         StringBuilder appIdSb = new StringBuilder();
-        appIdSb.append(propertiesDictionary.get(ConfigurationAppProperties.APP_NAME).getValue())
+        appIdSb.append(propertiesDictionary.get(BundleAppProperties.APP_NAME).getValue())
                .append("-")
-               .append(propertiesDictionary.get(ConfigurationAppProperties.APP_VERSION).getValue());
+               .append(propertiesDictionary.get(BundleAppProperties.APP_VERSION).getValue());
 
         kuraRequestChannel.setAppId(appIdSb.toString());
         kuraRequestChannel.setMethod(MethodDictionaryKapuaKura.get(channel.getMethod()));
 
         List<String> resources = new ArrayList<>();
-        resources.add("configuration");
-        String componentId = channel.getComponentId();
-        if (componentId != null) {
-            resources.add(componentId);
+        if (channel.getMethod().equals(KapuaMethod.READ)) {
+            resources.add("bundle");
+        } else if (channel.getMethod().equals(KapuaMethod.EXECUTE) && channel.isStart()) {
+            resources.add("start");
+        } else {
+            resources.add("stop");
+        }
+        
+        String bundleId = channel.getBundleId();
+        if (bundleId != null) {
+            resources.add(bundleId);
         }
         kuraRequestChannel.setResources(resources.toArray(new String[resources.size()]));
 
         return kuraRequestChannel;
     }
 
-    private KuraRequestPayload translate(ConfigurationRequestPayload payload)
+    private KuraRequestPayload translate(BundleRequestPayload payload)
         throws KapuaException
     {
         KuraRequestPayload kuraRequestPayload = new KuraRequestPayload();
@@ -105,9 +113,9 @@ public class TranslatorAppConfigurationKapuaKura implements Translator<Configura
     }
 
     @Override
-    public Class<ConfigurationRequestMessage> getClassFrom()
+    public Class<BundleRequestMessage> getClassFrom()
     {
-        return ConfigurationRequestMessage.class;
+        return BundleRequestMessage.class;
     }
 
     @Override

@@ -9,15 +9,17 @@
  * Contributors:
  *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.kura;
+package org.eclipse.kapua.service.device.call.kura.app;
 
-public enum ConfigurationMetrics
+public enum BundleMetrics
 {
-    APP_ID("CONF"), APP_VERSION("V1"),;
+    APP_ID("DEPLOY"), 
+    APP_VERSION("V1"),
+    ;
 
     private String value;
 
-    ConfigurationMetrics(String value)
+    BundleMetrics(String value)
     {
         this.value = value;
     }
