@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.eclipse.kapua</groupId>
@@ -66,7 +67,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -79,7 +80,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -92,7 +93,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -126,64 +127,105 @@
     </dependencies>
 
     <modules>
+        <!-- -->
+        <!-- Commons libs -->
         <module>org.eclipse.kapua.commons</module>
+
+        <!-- -->
+        <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
-
-        <module>org.eclipse.kapua.message</module>
-        <module>org.eclipse.kapua.message.internal</module>
-
-        <module>org.eclipse.kapua.transport</module>
-        <module>org.eclipse.kapua.transport.jms</module>
-        <module>org.eclipse.kapua.transport.mqtt</module>
-        <module>org.eclipse.kapua.transport.test</module>
-
-        <module>org.eclipse.kapua.configuration.spi</module>
         <module>org.eclipse.kapua.locator.spi</module>
 
+        <!-- -->
+        <!-- Configurable service -->
+
+        <module>org.eclipse.kapua.configuration.spi</module>
+
+        <!-- -->
+        <!-- Authentication and Authorization -->
         <module>org.eclipse.kapua.service.authentication</module>
         <module>org.eclipse.kapua.service.authorization</module>
 
         <module>org.eclipse.kapua.service.auth.shiro</module>
 
+        <!-- -->
+        <!-- User -->
         <module>org.eclipse.kapua.service.user</module>
         <module>org.eclipse.kapua.service.user.internal</module>
 
+        <!-- -->
+        <!-- Account -->
         <module>org.eclipse.kapua.service.account</module>
         <module>org.eclipse.kapua.service.account.internal</module>
 
+        <!-- -->
+        <!-- Device registry, device events and device connection -->
         <module>org.eclipse.kapua.service.device.registry</module>
         <module>org.eclipse.kapua.service.device.registry.internal</module>
 
+        <!-- -->
+        <!-- Datastore -->
         <module>org.eclipse.kapua.service.datastore</module>
         <module>org.eclipse.kapua.service.datastore.internal</module>
 
+        <!-- -->
+        <!-- Message -->
+        <module>org.eclipse.kapua.message</module>
+        <module>org.eclipse.kapua.message.internal</module>
+
+        <!-- -->
+        <!-- Device management transport layer -->
+        <module>org.eclipse.kapua.transport</module>
+        <module>org.eclipse.kapua.transport.jms</module>
+        <module>org.eclipse.kapua.transport.mqtt</module>
+        <module>org.eclipse.kapua.transport.test</module>
+
+        <!-- -->
+        <!-- Device management device layer -->
         <module>org.eclipse.kapua.service.device.call</module>
         <module>org.eclipse.kapua.service.device.call.kura</module>
         <module>org.eclipse.kapua.service.device.call.test</module>
 
+        <!-- -->
+        <!-- Device management platform layer -->
         <module>org.eclipse.kapua.service.device.management</module>
-        <module>org.eclipse.kapua.service.device.management.configuration</module>
-        <module>org.eclipse.kapua.service.device.management.configuration.internal</module>
-        <module>org.eclipse.kapua.service.device.management.deploy</module>
-        <module>org.eclipse.kapua.service.device.management.bundle</module>
-        <module>org.eclipse.kapua.service.device.management.bundle.internal</module>
-        <module>org.eclipse.kapua.service.device.management.command</module>
-        <module>org.eclipse.kapua.service.device.management.command.internal</module>
         <module>org.eclipse.kapua.service.device.management.commons</module>
 
+        <!-- Configurations -->
+
+        <module>org.eclipse.kapua.service.device.management.configuration</module>
+        <module>org.eclipse.kapua.service.device.management.configuration.internal</module>
+
+        <!-- Deploy -->
+        <module>org.eclipse.kapua.service.device.management.deploy</module>
+
+        <!-- Bundles -->
+        <module>org.eclipse.kapua.service.device.management.bundle</module>
+        <module>org.eclipse.kapua.service.device.management.bundle.internal</module>
+
+        <!-- Command -->
+        <module>org.eclipse.kapua.service.device.management.command</module>
+        <module>org.eclipse.kapua.service.device.management.command.internal</module>
+        <module>org.eclipse.kapua.service.device.management.command.test</module>
+
+        <!-- -->
+        <!-- Device management translators -->
         <module>org.eclipse.kapua.translator</module>
         <module>org.eclipse.kapua.translator.kapua.kura</module>
         <module>org.eclipse.kapua.translator.kura.mqtt</module>
         <module>org.eclipse.kapua.translator.kura.jms</module>
 
+        <!-- -->
+        <!-- Broker -->
         <module>org.eclipse.kapua.broker.core</module>
         <module>org.eclipse.kapua.broker.jdbc</module>
         <module>org.eclipse.kapua.broker.feature</module>
 
+        <!-- -->
+        <!-- Applications -->
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
-    <module>org.eclipse.kapua.service.device.management.command.test</module>
-  </modules>
+    </modules>
 
     <issueManagement>
         <system>GitHub Issues</system>
