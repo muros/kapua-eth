@@ -41,5 +41,13 @@
             <artifactId>org.eclipse.kapua.message</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        
+        <!--  -->
+        <!-- Internal dependency -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.device.management</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

@@ -130,11 +130,12 @@ public class MqttClient
     {
         try {
             getPahoClient().subscribe(mqttTopic.getTopic());
+            subscribedTopics.add(mqttTopic);
         }
         catch (MqttException | KapuaException e) {
             throw new MqttClientException(MqttClientErrorCodes.CLIENT_SUBSCRIBE_ERROR,
                                           e,
-                                          new Object[] { mqttTopic.toString() });
+                                          new Object[] { mqttTopic.getTopic() });
         }
     }
 
@@ -143,6 +144,7 @@ public class MqttClient
     {
         try {
             getPahoClient().unsubscribe(mqttTopic.getTopic());
+            subscribedTopics.remove(mqttTopic);
         }
         catch (MqttException | KapuaException e) {
             throw new MqttClientException(MqttClientErrorCodes.CLIENT_UNSUBSCRIBE_ERROR,

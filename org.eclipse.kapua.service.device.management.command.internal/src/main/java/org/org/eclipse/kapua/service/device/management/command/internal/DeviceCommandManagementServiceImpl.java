@@ -15,6 +15,9 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandManageme
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.CommandRequestChannel;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.CommandRequestMessage;
 import org.org.eclipse.kapua.service.device.management.command.message.internal.CommandRequestPayload;
@@ -59,8 +62,8 @@ public class DeviceCommandManagementServiceImpl implements DeviceCommandManageme
         commandRequestPayload.setBody(commandInput.getBody());
 
         CommandRequestMessage commandRequestMessage = new CommandRequestMessage();
-        // set scope id
-        // set device id
+        commandRequestMessage.setScopeId(scopeId);
+        commandRequestMessage.setDeviceId(deviceId);
         commandRequestMessage.setCapturedOn(new Date());
         commandRequestMessage.setPayload(commandRequestPayload);
         commandRequestMessage.setSemanticChannel(commandRequestChannel);
@@ -69,6 +72,23 @@ public class DeviceCommandManagementServiceImpl implements DeviceCommandManageme
         // Do exec
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(commandRequestMessage, timeout);
         CommandResponseMessage responseMessage = (CommandResponseMessage) deviceApplicationCall.send();
+
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(CommandAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.EXECUTE);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
 
         //
         // Parse the response

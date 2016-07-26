@@ -15,8 +15,6 @@ public class KuraChannel implements DeviceChannel
     protected String              scopeNamespace;
     protected String              clientId;
 
-    public List<String>           semanticChannelParts     = new ArrayList<>();
-
     public KuraChannel()
     {
     }
@@ -66,11 +64,6 @@ public class KuraChannel implements DeviceChannel
 
     public List<String> getSemanticChannelParts()
     {
-        return semanticChannelParts;
-    }
-
-    public void setSemanticChannelParts(List<String> semanticaChannelParts)
-    {
-        this.semanticChannelParts = semanticaChannelParts;
+        return new ArrayList<>();
     }
 }

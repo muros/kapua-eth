@@ -31,7 +31,7 @@ public class DeviceEventDAO extends ServiceDAO
         deviceConnection.setDeviceId(deviceEventCreator.getDeviceId());
         deviceConnection.setReceivedOn(deviceEventCreator.getReceivedOn());
         deviceConnection.setSentOn(deviceEventCreator.getSentOn());
-        deviceConnection.setEventType(deviceEventCreator.getEventType());
+        deviceConnection.setResource(deviceEventCreator.getResource());
         deviceConnection.setEventMessage(deviceEventCreator.getEventMessage());
         deviceConnection.setPosition(deviceEventCreator.getPosition());
 

@@ -85,9 +85,11 @@ public class DeviceCallExecutor<C extends KapuaRequestChannel, P extends KapuaRe
                                                     null,
                                                     requestMessage.getSemanticChannel().getMethod());
         }
-
+        
         Translator tClientToKapua = Translator.getTranslatorFor(deviceCall.getBaseMessageClass(),
                                                                 requestMessage.getResponseClass());
+        
+        responseMessage.
 
         return (RS) tClientToKapua.translate(responseMessage);
     }

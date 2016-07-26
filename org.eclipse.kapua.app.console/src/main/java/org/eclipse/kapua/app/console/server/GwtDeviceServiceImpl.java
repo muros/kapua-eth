@@ -364,7 +364,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                 if (!events.isEmpty()) {
                     DeviceEvent lastEvent = events.get(0);
 
-                    gwtDevice.setLastEventType(lastEvent.getEventType());
+                    gwtDevice.setLastEventType(lastEvent.getResource());
                     gwtDevice.setLastEventOn(lastEvent.getReceivedOn());
                 }
 
