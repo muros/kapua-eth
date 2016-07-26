@@ -207,11 +207,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.account.internal</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
@@ -232,27 +227,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.datastore.internal</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.registry</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.registry.internal</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		
