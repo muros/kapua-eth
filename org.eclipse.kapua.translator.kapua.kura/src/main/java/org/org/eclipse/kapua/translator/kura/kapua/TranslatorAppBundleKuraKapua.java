@@ -11,8 +11,9 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.kura.ResponseMetrics;
 import org.eclipse.kapua.service.device.call.kura.app.BundleMetrics;
-import org.eclipse.kapua.service.device.call.kura.model.KuraDeviceComponentConfiguration;
-import org.eclipse.kapua.service.device.call.kura.model.KuraDeviceConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.XmlBundleInfo;
+import org.eclipse.kapua.service.device.call.kura.model.XmlDeploymentPackage;
+import org.eclipse.kapua.service.device.call.kura.model.XmlDeploymentPackages;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponsePayload;
@@ -22,9 +23,11 @@ import org.eclipse.kapua.service.device.management.commons.exception.DeviceManag
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
-import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
-import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
+import org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentFactory;
+import org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentPackage;
+import org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentPackageListResult;
+import org.eclipse.kapua.service.device.management.deploy.DevicePackageBundleInfo;
+import org.eclipse.kapua.service.device.management.deploy.DevicePackageBundleInfoListResult;
 import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
@@ -62,7 +65,7 @@ public class TranslatorAppBundleKuraKapua implements Translator<KuraResponseMess
         DeviceRegistryService deviceService = locator.getService(DeviceRegistryService.class);
         Device device = deviceService.findByClientId(account.getId(), message.getChannel().getClientId());
 
-        BundleResponseChannel commandResponseChannel = translate(message.getChannel());
+        BundleResponseChannel bundleResponseChannel = translate(message.getChannel());
 
         //
         // Kura payload
@@ -73,7 +76,7 @@ public class TranslatorAppBundleKuraKapua implements Translator<KuraResponseMess
         BundleResponseMessage kapuaMessage = new BundleResponseMessage();
         kapuaMessage.setScopeId(account.getId());
         kapuaMessage.setDeviceId(device.getId());
-        kapuaMessage.setSemanticChannel(commandResponseChannel);
+        kapuaMessage.setSemanticChannel(bundleResponseChannel);
         kapuaMessage.setPayload(responsePayload);
         kapuaMessage.setCapturedOn(message.getPayload().getTimestamp());
         kapuaMessage.setSentOn(message.getPayload().getTimestamp());
@@ -133,45 +136,65 @@ public class TranslatorAppBundleKuraKapua implements Translator<KuraResponseMess
             body = new String(bundleResponsePayload.getBody(), charEncoding);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, bundleResponsePayload.getBody());
-
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          bundleResponsePayload.getBody());
         }
 
-        //TODO: 
-//        KuraDeviceConfiguration kuraDeviceBundles = null;
-//        try {
-//            kuraDeviceBundles = XmlUtil.unmarshal(body, KuraDeviceConfiguration.class);
-//        }
-//        catch (Exception e) {
-//            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
-//        }
-//
-//        try {
-//            KapuaLocator locator = KapuaLocator.getInstance();
-//            DeviceConfigurationFactory deviceConfigurationFactory = locator.getFactory(DeviceConfigurationFactory.class);
-//            DeviceConfiguration deviceConfiguration = deviceConfigurationFactory.newConfigurationInstance();
-//
-//            for (KuraDeviceComponentConfiguration kuraDeviceCompConf : kuraDeviceConfiguration.getConfigurations()) {
-//                String componentId = kuraDeviceCompConf.getComponentId();
-//                DeviceComponentConfiguration deviceComponentConfiguration = deviceConfigurationFactory.newComponentConfigurationInstance(componentId);
-//                deviceComponentConfiguration.setComponentName(kuraDeviceCompConf.getComponentName());
-//                deviceComponentConfiguration.setDefinition(kuraDeviceCompConf.getDefinition());
-//                deviceComponentConfiguration.setProperties(kuraDeviceCompConf.getProperties());
-//
-//                deviceConfiguration.getComponentConfigurations().add(deviceComponentConfiguration);
-//            }
-//
-//            StringWriter sw = new StringWriter();
-//            XmlUtil.marshal(deviceConfiguration, sw);
-//            byte[] requestBody = sw.toString().getBytes(charEncoding);
-//
-//            bundleResponsePayload.setBody(requestBody);
-//        }
-//        catch (Exception e) {
-//            throw new DeviceManagementException(DeviceManagementErrorCodes.REQUEST_EXCEPTION, e, (Object[]) null); // null for now
-//        }
+        XmlDeploymentPackages kuraDevicePackages = null;
+        try {
+            kuraDevicePackages = XmlUtil.unmarshal(body, XmlDeploymentPackages.class);
+        }
+        catch (Exception e) {
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          body);
+        }
+
+        translateBody(bundleResponsePayload, charEncoding, kuraDevicePackages);
 
         return bundleResponsePayload;
+    }
+
+    private void translateBody(BundleResponsePayload bundleResponsePayload, String charEncoding, XmlDeploymentPackages kuraDevicePackages)
+        throws DeviceManagementException
+    {
+        try {
+            KapuaLocator locator = KapuaLocator.getInstance();
+            DeviceDeploymentFactory deviceDeploymentFactory = locator.getFactory(DeviceDeploymentFactory.class);
+
+            XmlDeploymentPackage[] deploymentPackageArray = kuraDevicePackages.getDeploymentPackages();
+            DeviceDeploymentPackageListResult deviceDeploymentPackages = deviceDeploymentFactory.newDeviceDeploymentPackageListResultInstance();
+            
+            for (XmlDeploymentPackage deploymentPackage : deploymentPackageArray) {
+                DeviceDeploymentPackage deviceDeploymentPackage = deviceDeploymentFactory.newDeviceDeploymentPackageInstance();
+                deviceDeploymentPackage.setName(deploymentPackage.getName());
+                deviceDeploymentPackage.setVersion(deploymentPackage.getVersion());
+                
+                DevicePackageBundleInfoListResult devicePackageBundleInfos = deviceDeploymentFactory.newDevicePackageBundleInfoListResultInstance();
+                XmlBundleInfo[] bundleInfoArray = deploymentPackage.getBundleInfos();
+                for (XmlBundleInfo bundleInfo : bundleInfoArray) {
+                    DevicePackageBundleInfo devicePackageBundleInfo = deviceDeploymentFactory.newDevicePackageBundleInfoInstance();
+                    devicePackageBundleInfo.setName(bundleInfo.getName());
+                    devicePackageBundleInfo.setVersion(bundleInfo.getVersion());
+                    
+                    // Add the new DevicePackageBundleInfo object to the corresponding list
+                    devicePackageBundleInfos.add(devicePackageBundleInfo);
+                }
+                
+                // Add the new DeviceDeploymentPackage object to the corresponding list
+                deviceDeploymentPackages.add(deviceDeploymentPackage);
+            }
+
+            StringWriter sw = new StringWriter();
+            XmlUtil.marshal(deviceDeploymentPackages, sw);
+            byte[] requestBody = sw.toString().getBytes(charEncoding);
+
+            bundleResponsePayload.setBody(requestBody);
+        }
+        catch (Exception e) {
+            throw new DeviceManagementException(DeviceManagementErrorCodes.REQUEST_EXCEPTION, e, (Object[]) null); // null for now
+        }
     }
 
     @Override
@@ -185,5 +208,4 @@ public class TranslatorAppBundleKuraKapua implements Translator<KuraResponseMess
     {
         return BundleResponseMessage.class;
     }
-
 }

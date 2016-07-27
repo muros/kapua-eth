@@ -134,8 +134,9 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
             body = new String(snapshotResponsePayload.getBody(), charEncoding);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, snapshotResponsePayload.getBody());
-
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          snapshotResponsePayload.getBody());
         }
 
         XmlSnapshotIdResult snapshotIdResult = null;
@@ -143,9 +144,19 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
             snapshotIdResult = XmlUtil.unmarshal(body, XmlSnapshotIdResult.class);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          body);
         }
         
+        translateBody(snapshotResponsePayload, charEncoding, snapshotIdResult);
+        
+        return snapshotResponsePayload;
+    }
+
+    private void translateBody(SnapshotResponsePayload snapshotResponsePayload, String charEncoding, XmlSnapshotIdResult snapshotIdResult)
+        throws TranslatorException
+    {
         try {
             KapuaLocator locator = KapuaLocator.getInstance();
             DeviceSnapshotFactory deviceSnapshotFactory = locator.getFactory(DeviceSnapshotFactory.class);
@@ -164,10 +175,10 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
             snapshotResponsePayload.setBody(requestBody);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.REQUEST_EXCEPTION, e, (Object[]) null); //null for now
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          (Object[]) null); //null for now
         }
-        
-        return snapshotResponsePayload;
     }
 
     @Override
@@ -181,5 +192,4 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
     {
         return SnapshotResponseMessage.class;
     }
-
 }

@@ -74,7 +74,9 @@ public class TranslatorAppSnapshotKapuaKura implements Translator<SnapshotReques
 
         // Build appId
         StringBuilder appIdSb = new StringBuilder();
-        appIdSb.append(propertiesDictionary.get(SnapshotAppProperties.APP_NAME).getValue()).append("-").append(propertiesDictionary.get(SnapshotAppProperties.APP_VERSION).getValue());
+        appIdSb.append(propertiesDictionary.get(SnapshotAppProperties.APP_NAME).getValue())
+               .append("-")
+               .append(propertiesDictionary.get(SnapshotAppProperties.APP_VERSION).getValue());
 
         kuraRequestChannel.setAppId(appIdSb.toString());
         kuraRequestChannel.setMethod(MethodDictionaryKapuaKura.get(channel.getMethod()));

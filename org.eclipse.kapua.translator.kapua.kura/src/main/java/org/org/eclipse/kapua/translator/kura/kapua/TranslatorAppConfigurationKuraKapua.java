@@ -18,8 +18,6 @@ import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraRespo
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponsePayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
-import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
-import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
@@ -133,8 +131,9 @@ public class TranslatorAppConfigurationKuraKapua implements Translator<KuraRespo
             body = new String(configurationResponsePayload.getBody(), charEncoding);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, configurationResponsePayload.getBody());
-
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          configurationResponsePayload.getBody());
         }
 
         KuraDeviceConfiguration kuraDeviceConfiguration = null;
@@ -142,9 +141,19 @@ public class TranslatorAppConfigurationKuraKapua implements Translator<KuraRespo
             kuraDeviceConfiguration = XmlUtil.unmarshal(body, KuraDeviceConfiguration.class);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          body);
         }
         
+        translateBody(configurationResponsePayload, charEncoding, kuraDeviceConfiguration);
+        
+        return configurationResponsePayload;
+    }
+
+    private void translateBody(ConfigurationResponsePayload configurationResponsePayload, String charEncoding, KuraDeviceConfiguration kuraDeviceConfiguration)
+        throws TranslatorException
+    {
         try {
             KapuaLocator locator = KapuaLocator.getInstance();
             DeviceConfigurationFactory deviceConfigurationFactory = locator.getFactory(DeviceConfigurationFactory.class);
@@ -167,11 +176,10 @@ public class TranslatorAppConfigurationKuraKapua implements Translator<KuraRespo
             configurationResponsePayload.setBody(requestBody);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.REQUEST_EXCEPTION, e, (Object[]) null); //null for now
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          (Object[]) null); //TODO: null for now?
         }
-        
-
-        return configurationResponsePayload;
     }
 
     @Override

@@ -11,15 +11,20 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.call.kura.app;
 
-public enum ConfigurationMetrics
+public enum DeployMetrics
 {
-    APP_ID("CONF"), 
+    APP_ID("DEPLOY"), 
     APP_VERSION("V1"),
+    
+    // Request
+    APP_METRIC_DEPLOY_URL("deploy.url"),
+    APP_METRIC_DEPLOY_FILENAME("deploy.filename"),
+    
     ;
 
     private String value;
 
-    ConfigurationMetrics(String value)
+    DeployMetrics(String value)
     {
         this.value = value;
     }
