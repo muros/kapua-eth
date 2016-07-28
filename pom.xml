@@ -139,6 +139,7 @@
 
         <module>org.eclipse.kapua.configuration.spi</module>
         <module>org.eclipse.kapua.locator.spi</module>
+        <module>org.eclipse.kapua.locator.guice</module>
 
         <module>org.eclipse.kapua.service.authentication</module>
         <module>org.eclipse.kapua.service.authorization</module>
