@@ -1,7 +1,10 @@
 package org.eclipse.kapua.service.device.management.snapshot.internal;
 
+import java.util.Date;
+
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
@@ -10,17 +13,29 @@ import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
+import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
+import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationManagementResponseHandlers;
+import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotListResult;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
+import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
+import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
+import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
+import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
+import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
 
 public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManagementService
 {
-    private static final String deviceSnapshotManagementAppId = "CONF-V1";
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public DeviceSnapshotListResult get(KapuaId scopeId, KapuaId deviceId)
+    public DeviceSnapshotListResult get(KapuaId scopeId, KapuaId deviceId, Long timeout)
         throws KapuaException
     {
         //
@@ -37,24 +52,73 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
 
         //
         // Prepare the request
-        String[] resources = new String[] { "snapshots" };
+        SnapshotRequestChannel snapshotRequestChannel = new SnapshotRequestChannel();
+        snapshotRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
+        snapshotRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        snapshotRequestChannel.setMethod(KapuaMethod.READ);
+
+        SnapshotRequestPayload snapshotRequestPayload = new SnapshotRequestPayload();
+
+        SnapshotRequestMessage snapshotRequestMessage = new SnapshotRequestMessage();
+        snapshotRequestMessage.setScopeId(scopeId);
+        snapshotRequestMessage.setDeviceId(deviceId);
+        snapshotRequestMessage.setCapturedOn(new Date());
+        snapshotRequestMessage.setPayload(snapshotRequestPayload);
+        snapshotRequestMessage.setSemanticChannel(snapshotRequestChannel);
 
         //
         // Do get
-        DeviceCallExecutor<DeviceSnapshotListResult> deviceApplicationCall = new DeviceCallExecutor<DeviceSnapshotListResult>(scopeId,
-                                                                                                                                    deviceId,
-                                                                                                                                    deviceSnapshotManagementAppId,
-                                                                                                                                    KapuaMethod.GET,
-                                                                                                                                    resources);
-        deviceApplicationCall.setResponseHandler(new SnapshotManagementResponseHandlers.GET());
+        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(snapshotRequestMessage, timeout);
+        SnapshotResponseMessage responseMessage = (SnapshotResponseMessage) deviceApplicationCall.send();
+
+        SnapshotResponsePayload responsePayload = responseMessage.getPayload();
+
+        DeviceManagementSetting config = DeviceManagementSetting.getInstance();
+        String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
+
+        String body = null;
+        try {
+            body = new String(responsePayload.getBody(), charEncoding);
+        }
+        catch (Exception e) {
+            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION,
+                                                e,
+                                                responsePayload.getBody());
+        }
+
+        DeviceSnapshotListResult deviceSnapshots = null;
+        try {
+            deviceSnapshots = XmlUtil.unmarshal(body, DeviceSnapshotListResult.class);
+        }
+        catch (Exception e) {
+            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION,
+                                                e,
+                                                body);
+        }
 
         //
-        // Return result
-        return deviceApplicationCall.send();
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(SnapshotAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.READ);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
+        
+        return deviceSnapshots;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String snapshotId)
+    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String snapshotId, Long timeout)
         throws KapuaException
     {
         //
@@ -72,32 +136,74 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
 
         //
         // Prepare the request
-        String[] resources = new String[] { "snapshots", snapshotId };
+        SnapshotRequestChannel snapshotRequestChannel = new SnapshotRequestChannel();
+        snapshotRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
+        snapshotRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        snapshotRequestChannel.setMethod(KapuaMethod.READ);
+        snapshotRequestChannel.setSnapshotId(snapshotId);
+
+        SnapshotRequestPayload snapshotRequestPayload = new SnapshotRequestPayload();
+
+        SnapshotRequestMessage snapshotRequestMessage = new SnapshotRequestMessage();
+        snapshotRequestMessage.setScopeId(scopeId);
+        snapshotRequestMessage.setDeviceId(deviceId);
+        snapshotRequestMessage.setCapturedOn(new Date());
+        snapshotRequestMessage.setPayload(snapshotRequestPayload);
+        snapshotRequestMessage.setSemanticChannel(snapshotRequestChannel);
 
         //
         // Do get
-        DeviceCallExecutor<DeviceConfiguration> deviceApplicationCall = new DeviceCallExecutor<DeviceConfiguration>(scopeId,
-                                                                                                                          deviceId,
-                                                                                                                          deviceSnapshotManagementAppId,
-                                                                                                                          KapuaMethod.GET,
-                                                                                                                          resources);
-        deviceApplicationCall.setResponseHandler(new ConfigurationManagementResponseHandlers.GET());
+        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(snapshotRequestMessage, timeout);
+        SnapshotResponseMessage responseMessage = (SnapshotResponseMessage) deviceApplicationCall.send();
 
         //
-        // Return result
-        return deviceApplicationCall.send();
+        // Parse the response
+        SnapshotResponsePayload responsePayload = responseMessage.getPayload();
+
+        DeviceManagementSetting config = DeviceManagementSetting.getInstance();
+        String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
+
+        String body = null;
+        try {
+            body = new String(responsePayload.getBody(), charEncoding);
+        }
+        catch (Exception e) {
+            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, responsePayload.getBody());
+
+        }
+
+        DeviceConfiguration deviceConfiguration = null;
+        try {
+            deviceConfiguration = XmlUtil.unmarshal(body, DeviceConfiguration.class);
+        }
+        catch (Exception e) {
+            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
+
+        }
+        
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(SnapshotAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.READ);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
+
+        return deviceConfiguration;
     }
 
-    // @Override
-    // public void exec(KapuaId scopeId, KapuaId deviceid, DeviceConfiguration snapshotId)
-    // throws KapuaException
-    // {
-    // // TODO Auto-generated method stub
-    //
-    // }
-
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public void rollback(KapuaId scopeId, KapuaId deviceId, String snapshotId)
+    public void rollback(KapuaId scopeId, KapuaId deviceId, String snapshotId, Long timeout)
         throws KapuaException
     {
         //
@@ -115,20 +221,41 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
 
         //
         // Prepare the request
-        String[] resources = new String[] { "snapshots", snapshotId };
+        SnapshotRequestChannel snapshotRequestChannel = new SnapshotRequestChannel();
+        snapshotRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
+        snapshotRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        snapshotRequestChannel.setMethod(KapuaMethod.EXECUTE);
+        snapshotRequestChannel.setSnapshotId(snapshotId);
+
+        SnapshotRequestPayload snapshotRequestPayload = new SnapshotRequestPayload();
+
+        SnapshotRequestMessage snapshotRequestMessage = new SnapshotRequestMessage();
+        snapshotRequestMessage.setScopeId(scopeId);
+        snapshotRequestMessage.setDeviceId(deviceId);
+        snapshotRequestMessage.setCapturedOn(new Date());
+        snapshotRequestMessage.setPayload(snapshotRequestPayload);
+        snapshotRequestMessage.setSemanticChannel(snapshotRequestChannel);
 
         //
-        // Do get
-        DeviceCallExecutor<Void> deviceApplicationCall = new DeviceCallExecutor<Void>(scopeId,
-                                                                                            deviceId,
-                                                                                            deviceSnapshotManagementAppId,
-                                                                                            KapuaMethod.EXEC,
-                                                                                            resources);
-        deviceApplicationCall.setResponseHandler(new SnapshotManagementResponseHandlers.EXEC());
-
+        // Do exec
+        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(snapshotRequestMessage, timeout);
+        SnapshotResponseMessage responseMessage = (SnapshotResponseMessage) deviceApplicationCall.send();
+        
         //
-        // Return result
-        deviceApplicationCall.send();
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(SnapshotAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.EXECUTE);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
     }
-
 }

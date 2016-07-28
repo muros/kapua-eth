@@ -14,7 +14,12 @@ package org.eclipse.kapua.service.device.management.configuration;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "configurations")
 public interface DeviceConfiguration
 {
+    @XmlElement(name = "configuration")
     public List<DeviceComponentConfiguration> getComponentConfigurations();
 }

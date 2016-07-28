@@ -53,7 +53,8 @@ public class DeviceSnapshotsServlet extends HttpServlet
             DeviceSnapshotManagementService deviceSnapshotManagementService = locator.getService(DeviceSnapshotManagementService.class);
             DeviceConfiguration conf = deviceSnapshotManagementService.get(KapuaEid.parseShortId(account),
                                                                            KapuaEid.parseShortId(clientId),
-                                                                           snapshotId);
+                                                                           snapshotId,
+                                                                           null);
 
             String contentDispositionFormat = "attachment; filename*=UTF-8''%s_%s_%s.xml; ";
 

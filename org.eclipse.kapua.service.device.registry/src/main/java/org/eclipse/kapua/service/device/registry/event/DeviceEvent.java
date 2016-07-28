@@ -5,6 +5,8 @@ import java.util.Date;
 import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.device.management.KapuaMethod;
+import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 
 public interface DeviceEvent extends KapuaEntity
 {
@@ -27,15 +29,24 @@ public interface DeviceEvent extends KapuaEntity
 
     public void setReceivedOn(Date receivedOn);
 
-    public String getEventType();
+    public KapuaPosition getPosition();
 
-    public void setEventType(String eventType);
+    public void setPosition(KapuaPosition position);
+
+    public String getResource();
+
+    public void setResource(String resource);
+
+    public KapuaMethod getAction();
+
+    public void setAction(KapuaMethod action);
+
+    public KapuaResponseCode getResponseCode();
+
+    public void setResponseCode(KapuaResponseCode responseCode);
 
     public String getEventMessage();
 
     public void setEventMessage(String eventMessage);
 
-    public KapuaPosition getPosition();
-
-    public void setPosition(KapuaPosition position);
 }

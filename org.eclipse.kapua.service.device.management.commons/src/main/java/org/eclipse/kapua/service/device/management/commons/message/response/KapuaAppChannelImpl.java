@@ -8,46 +8,44 @@ import org.eclipse.kapua.service.device.management.KapuaAppProperties;
 public abstract class KapuaAppChannelImpl implements KapuaAppChannel
 {
 
+	private List<String> semanticParts;
+	private KapuaAppProperties appName;
+	private KapuaAppProperties appVersion;
+	
     @Override
     public List<String> getSemanticParts()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return semanticParts;
     }
 
     @Override
-    public void setSemanticParts(List<String> semanticParts)
+    public void setSemanticParts(List<String> semanticParts) 
     {
-        // TODO Auto-generated method stub
-
+        this.semanticParts = semanticParts;
     }
 
     @Override
-    public KapuaAppProperties getApp()
+    public KapuaAppProperties getAppName()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return appName;
     }
 
     @Override
-    public void setApp(KapuaAppProperties appName)
+    public void setAppName(KapuaAppProperties appName) //do I have to keep it as a KapuaAppProperties?
     {
-        // TODO Auto-generated method stub
-
+        this.appName = appName;
     }
 
     @Override
     public KapuaAppProperties getVersion()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return appVersion;
     }
 
     @Override
-    public void setVersion(KapuaAppProperties version)
+    public void setVersion(KapuaAppProperties appVersion)
     {
-        // TODO Auto-generated method stub
-
+        this.appVersion = appVersion;
     }
 
 }

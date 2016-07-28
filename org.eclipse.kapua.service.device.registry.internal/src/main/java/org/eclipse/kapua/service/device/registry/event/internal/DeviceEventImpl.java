@@ -8,6 +8,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -18,6 +20,8 @@ import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.device.management.KapuaMethod;
+import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 
 @Entity
@@ -43,16 +47,6 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     @Column(name = "sent_on", updatable = false)
     private Date              sentOn;
 
-    @XmlElement(name = "eventType")
-    @Basic
-    @Column(name = "event_type", updatable = false, nullable = false)
-    private String            eventType;
-
-    @XmlElement(name = "eventMessage")
-    @Lob
-    @Column(name = "event_message", updatable = false, nullable = false)
-    private String            eventMessage;
-
     @XmlElement(name = "position")
     @Embedded
     @AttributeOverrides({
@@ -67,6 +61,26 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
                           @AttributeOverride(name = "status", column = @Column(name = "pos_status", updatable = false))
     })
     private KapuaPosition     position;
+
+    @XmlElement(name = "resource")
+    @Basic
+    @Column(name = "resource", updatable = false, nullable = false)
+    private String            resource;
+
+    @XmlElement(name = "action")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "action", updatable = false, nullable = false)
+    private KapuaMethod       action;
+
+    @XmlElement(name = "responseCode")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "responseCode", updatable = false, nullable = false)
+    private KapuaResponseCode responseCode;
+
+    @XmlElement(name = "eventMessage")
+    @Lob
+    @Column(name = "event_message", updatable = false, nullable = false)
+    private String            eventMessage;
 
     public DeviceEventImpl(KapuaId scopeId)
     {
@@ -110,15 +124,47 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     }
 
     @Override
-    public String getEventType()
+    public KapuaPosition getPosition()
     {
-        return eventType;
+        return position;
     }
 
     @Override
-    public void setEventType(String eventType)
+    public void setPosition(KapuaPosition position)
     {
-        this.eventType = eventType;
+        this.position = position;
+    }
+
+    @Override
+    public String getResource()
+    {
+        return resource;
+    }
+
+    @Override
+    public void setResource(String resource)
+    {
+        this.resource = resource;
+    }
+
+    public KapuaMethod getAction()
+    {
+        return action;
+    }
+
+    public void setAction(KapuaMethod action)
+    {
+        this.action = action;
+    }
+
+    public KapuaResponseCode getResponseCode()
+    {
+        return responseCode;
+    }
+
+    public void setResponseCode(KapuaResponseCode responseCode)
+    {
+        this.responseCode = responseCode;
     }
 
     @Override
@@ -131,18 +177,6 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     public void setEventMessage(String eventMessage)
     {
         this.eventMessage = eventMessage;
-    }
-
-    @Override
-    public KapuaPosition getPosition()
-    {
-        return position;
-    }
-
-    @Override
-    public void setPosition(KapuaPosition position)
-    {
-        this.position = position;
     }
 
 }

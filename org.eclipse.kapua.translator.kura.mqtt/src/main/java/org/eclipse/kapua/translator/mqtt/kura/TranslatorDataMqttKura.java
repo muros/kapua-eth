@@ -37,7 +37,7 @@ public class TranslatorDataMqttKura implements Translator<MqttMessage, KuraMessa
         return kuraMessage;
     }
 
-    public KuraChannel translate(MqttTopic topic)
+    private KuraChannel translate(MqttTopic topic)
         throws KapuaException
     {
         String[] mqttTopicTokens = topic.getSplittedTopic();
@@ -48,7 +48,7 @@ public class TranslatorDataMqttKura implements Translator<MqttMessage, KuraMessa
         return kuraResponseChannel;
     }
 
-    public KuraPayload translate(MqttPayload payload)
+    private KuraPayload translate(MqttPayload payload)
         throws KapuaException
     {
         byte[] jmsBody = payload.getBody();

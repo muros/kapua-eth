@@ -19,10 +19,6 @@ import org.eclipse.kapua.model.KapuaNamedEntityCreator;
  */
 public interface UserCreator extends KapuaNamedEntityCreator<User>
 {
-    public String getRawPassword();
-
-    public void setRawPassword(String rawPassword);
-
     public String getDisplayName();
 
     public void setDisplayName(String displayName);

@@ -20,9 +20,15 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
+import org.eclipse.kapua.service.account.internal.AccountDomain;
 import org.eclipse.kapua.service.authentication.AuthenticationCredentials;
 import org.eclipse.kapua.service.authentication.AuthenticationService;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
+import org.eclipse.kapua.service.authentication.credential.CredentialCreator;
+import org.eclipse.kapua.service.authentication.credential.CredentialFactory;
+import org.eclipse.kapua.service.authentication.credential.CredentialService;
+import org.eclipse.kapua.service.authentication.credential.CredentialType;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionFactory;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionService;
@@ -31,6 +37,7 @@ import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
 import org.eclipse.kapua.service.user.UserQuery;
 import org.eclipse.kapua.service.user.UserService;
+import org.eclipse.kapua.service.user.internal.UserDomain;
 
 /**
  * Hello world!
@@ -81,11 +88,20 @@ public class KapuaTestApp
             KapuaId scopeId = adminUser.getScopeId();
             UserFactory userFactory = locator.getFactory(UserFactory.class);
             UserCreator userCreator = userFactory.newCreator(scopeId, "user-" + scopeId.getShortId() + "-" + System.currentTimeMillis());
-            userCreator.setRawPassword("We!come12345");
             userCreator.setDisplayName("Test Display Name");
             userCreator.setEmail("test@email.com");
             userCreator.setPhoneNumber("+1 555 123 4567");
             User user = userService.create(userCreator);
+
+            //
+            // Test create user credentials
+            CredentialService credentialService = locator.getService(CredentialService.class);
+            CredentialFactory credentialFactory = locator.getFactory(CredentialFactory.class);
+            CredentialCreator credentialCreator = credentialFactory.newCreator(user.getScopeId(),
+                                                                               user.getId(),
+                                                                               CredentialType.PASSWORD,
+                                                                               "We!come12345");
+            credentialService.create(credentialCreator);
 
             //
             // Test update user
@@ -94,15 +110,13 @@ public class KapuaTestApp
 
             //
             // Test create user permission
-            createPermission(scopeId, user.getId(), "account", "create", scopeId);
-            createPermission(scopeId, user.getId(), "account", "read", scopeId);
-            createPermission(scopeId, user.getId(), "account", "update", scopeId);
-            createPermission(scopeId, user.getId(), "account", "delete", scopeId);
+            createPermission(scopeId, user.getId(), AccountDomain.ACCOUNT, Actions.write, scopeId);
+            createPermission(scopeId, user.getId(), AccountDomain.ACCOUNT, Actions.read, scopeId);
+            createPermission(scopeId, user.getId(), AccountDomain.ACCOUNT, Actions.delete, scopeId);
 
-            createPermission(scopeId, user.getId(), "user", "create", scopeId);
-            createPermission(scopeId, user.getId(), "user", "read", scopeId);
-            createPermission(scopeId, user.getId(), "user", "update", scopeId);
-            createPermission(scopeId, user.getId(), "user", "delete", scopeId);
+            createPermission(scopeId, user.getId(), UserDomain.USER, Actions.write, scopeId);
+            createPermission(scopeId, user.getId(), UserDomain.USER, Actions.read, scopeId);
+            createPermission(scopeId, user.getId(), UserDomain.USER, Actions.delete, scopeId);
 
             UserQuery userQuery = userFactory.newQuery(scopeId);
             KapuaListResult<User> userList = userService.query(userQuery);
@@ -125,7 +139,8 @@ public class KapuaTestApp
 
             //
             // Test BCrypt performance
-            AuthenticationCredentials credentials = credentialsFactory.newInstance(user.getName(), userCreator.getRawPassword().toCharArray());
+            AuthenticationCredentials credentials = credentialsFactory.newInstance(user.getName(),
+                                                                                   credentialCreator.getCredentialPlainKey().toCharArray());
 
             long startTime = System.currentTimeMillis();
             for (int i = 0; i < 100; i++) {
@@ -143,7 +158,7 @@ public class KapuaTestApp
         }
     }
 
-    private static void createPermission(KapuaId scopeId, KapuaId userId, String domain, String action, KapuaId targetScopeId)
+    private static void createPermission(KapuaId scopeId, KapuaId userId, String domain, Actions action, KapuaId targetScopeId)
         throws KapuaException
     {
         UserPermissionCreator userPermissionCreator = userPermissionFactory.newCreator(scopeId);

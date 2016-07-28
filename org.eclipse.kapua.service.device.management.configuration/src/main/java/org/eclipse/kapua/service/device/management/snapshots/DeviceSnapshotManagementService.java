@@ -7,12 +7,12 @@ import org.eclipse.kapua.service.device.management.configuration.DeviceConfigura
 
 public interface DeviceSnapshotManagementService extends KapuaService
 {
-    public DeviceSnapshotListResult get(KapuaId scopeId, KapuaId deviceid)
+    public DeviceSnapshotListResult get(KapuaId scopeId, KapuaId deviceid, Long timeout)
         throws KapuaException;
 
-    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String snapshotId)
+    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String snapshotId, Long timeout)
         throws KapuaException;
 
-    public void rollback(KapuaId scopeId, KapuaId deviceid, String snapshotId)
+    public void rollback(KapuaId scopeId, KapuaId deviceid, String snapshotId, Long timeout)
         throws KapuaException;
 }

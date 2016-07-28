@@ -1,5 +1,6 @@
 package org.eclipse.kapua.translator;
 
+import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import org.eclipse.kapua.KapuaException;
@@ -10,7 +11,7 @@ import org.eclipse.kapua.message.Message;
 @SuppressWarnings("rawtypes")
 public interface Translator<FROM_M extends Message, TO_M extends Message>
 {
-    static ServiceLoader<Translator> translators = ServiceLoader.load(Translator.class);
+    static ServiceLoader<?> translators = ServiceLoader.load(Translator.class);
 
     @SuppressWarnings("unchecked")
     public static <FROM_M extends Message, TO_M extends Message, T extends Translator<FROM_M, TO_M>> T getTranslatorFor(Class<FROM_M> fromMessageClass,
@@ -20,10 +21,12 @@ public interface Translator<FROM_M extends Message, TO_M extends Message>
 
         T translator = null;
 
-        for (Translator<FROM_M, TO_M> t : translators) {
-            if (t.getClassFrom().equals(fromMessageClass) &&
-                t.getClassTo().equals(toMessageClass)) {
-                translator = (T) t;
+        Iterator<T> translatorIterator = (Iterator<T>) translators.iterator();
+        while (translatorIterator.hasNext()) {
+            translator = translatorIterator.next();
+            if (translator.getClassFrom().equals(fromMessageClass) &&
+                translator.getClassTo().equals(toMessageClass)) {
+                break;
             }
         }
 

@@ -47,6 +47,11 @@ public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Cred
     @Column(name = "credential_key", updatable = false, nullable = false)
     private String            credentialKey;
 
+    public CredentialImpl()
+    {
+        super();
+    }
+
     public CredentialImpl(KapuaId scopeId, KapuaId userId, CredentialType credentialType, String credentialKey)
     {
         super(scopeId);
