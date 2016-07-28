@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.authorization.permission.shiro;
+package org.eclipse.kapua.service.authorization.role.shiro;
 
 import java.util.Set;
 
@@ -26,36 +26,37 @@ import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
-import org.eclipse.kapua.service.authorization.permission.UserPermission;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionListResult;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionService;
+import org.eclipse.kapua.service.authorization.role.Role;
+import org.eclipse.kapua.service.authorization.role.RoleCreator;
+import org.eclipse.kapua.service.authorization.role.RoleListResult;
+import org.eclipse.kapua.service.authorization.role.RoleService;
 
-public class UserPermissionServiceImpl implements UserPermissionService
+public class RoleServiceImpl implements RoleService
 {
 
     @Override
-    public UserPermission create(UserPermissionCreator userPermissionCreator)
+    public Role create(RoleCreator roleCreator)
         throws KapuaException
     {
-        ArgumentValidator.notNull(userPermissionCreator, "userPermissionCreator");
-        ArgumentValidator.notNull(userPermissionCreator.getPermission(), "userPermissionCreator.permission");
+        ArgumentValidator.notNull(roleCreator, "roleCreator");
+        ArgumentValidator.notEmptyOrNull(roleCreator.getName(), "roleCreator.name");
+        ArgumentValidator.notNull(roleCreator.getPermissions(), "roleCreator.permissions");
 
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.USER_PERMISSION, Actions.write, userPermissionCreator.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.write, roleCreator.getScopeId()));
 
         //
         // Do create
-        UserPermission permission = null;
+        Role role = null;
         EntityManager em = JpaUtils.getEntityManager();
         try {
             JpaUtils.beginTransaction(em);
 
-            permission = UserPermissionDAO.create(em, userPermissionCreator);
+            role = RoleDAO.create(em, roleCreator);
 
             JpaUtils.commit(em);
         }
@@ -67,34 +68,34 @@ public class UserPermissionServiceImpl implements UserPermissionService
             JpaUtils.close(em);
         }
 
-        return permission;
+        return role;
     }
 
     @Override
-    public void delete(UserPermission permission)
+    public void delete(Role role)
         throws KapuaException
     {
-        ArgumentValidator.notNull(permission, "permission");
+        ArgumentValidator.notNull(role, "role");
 
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.USER_PERMISSION, Actions.write, permission.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.delete, role.getScopeId()));
 
         //
         // Do delete
         EntityManager em = JpaUtils.getEntityManager();
         try {
-            KapuaId permissionId = permission.getId();
+            KapuaId roleId = role.getId();
 
-            if (UserPermissionDAO.find(em, permissionId) == null) {
-                throw new KapuaEntityNotFoundException(UserPermission.TYPE, permissionId);
+            if (RoleDAO.find(em, roleId) == null) {
+                throw new KapuaEntityNotFoundException(Role.TYPE, roleId);
             }
 
             JpaUtils.beginTransaction(em);
-            UserPermissionDAO.delete(em, permissionId);
+            RoleDAO.delete(em, roleId);
             JpaUtils.commit(em);
         }
         catch (KapuaException e) {
@@ -107,25 +108,25 @@ public class UserPermissionServiceImpl implements UserPermissionService
     }
 
     @Override
-    public UserPermission find(KapuaId scopeId, KapuaId permissionId)
+    public Role find(KapuaId scopeId, KapuaId roleId)
         throws KapuaException
     {
         ArgumentValidator.notNull(scopeId, "accountId");
-        ArgumentValidator.notNull(permissionId, "permissionId");
+        ArgumentValidator.notNull(roleId, "roleId");
 
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.USER_PERMISSION, Actions.read, scopeId));
+        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.read, scopeId));
 
         //
         // Do find
-        UserPermission permission = null;
+        Role role = null;
         EntityManager em = JpaUtils.getEntityManager();
         try {
-            permission = UserPermissionDAO.find(em, permissionId);
+            role = RoleDAO.find(em, roleId);
         }
         catch (Exception e) {
             throw JpaUtils.toKapuaException(e);
@@ -133,11 +134,11 @@ public class UserPermissionServiceImpl implements UserPermissionService
         finally {
             JpaUtils.close(em);
         }
-        return permission;
+        return role;
     }
 
     @Override
-    public UserPermissionListResult query(KapuaQuery<UserPermission> query)
+    public RoleListResult query(KapuaQuery<Role> query)
         throws KapuaException
     {
         ArgumentValidator.notNull(query, "query");
@@ -148,14 +149,14 @@ public class UserPermissionServiceImpl implements UserPermissionService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.USER_PERMISSION, Actions.read, query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.read, query.getScopeId()));
 
         //
         // Do query
-        UserPermissionListResult result = null;
+        RoleListResult result = null;
         EntityManager em = JpaUtils.getEntityManager();
         try {
-            result = UserPermissionDAO.query(em, query);
+            result = RoleDAO.query(em, query);
         }
         catch (Exception e) {
             throw JpaUtils.toKapuaException(e);
@@ -168,7 +169,7 @@ public class UserPermissionServiceImpl implements UserPermissionService
     }
 
     @Override
-    public long count(KapuaQuery<UserPermission> query)
+    public long count(KapuaQuery<Role> query)
         throws KapuaException
     {
         ArgumentValidator.notNull(query, "query");
@@ -179,14 +180,14 @@ public class UserPermissionServiceImpl implements UserPermissionService
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.USER_PERMISSION, Actions.read, query.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.read, query.getScopeId()));
 
         //
         // Do count
         long count = 0;
         EntityManager em = JpaUtils.getEntityManager();
         try {
-            count = UserPermissionDAO.count(em, query);
+            count = RoleDAO.count(em, query);
         }
         catch (Exception e) {
             throw JpaUtils.toKapuaException(e);
@@ -199,7 +200,7 @@ public class UserPermissionServiceImpl implements UserPermissionService
     }
 
     @Override
-    public UserPermissionListResult merge(Set<UserPermissionCreator> newPermissions)
+    public RoleListResult merge(Set<RoleCreator> newPermissions)
         throws KapuaException
     {
         // TODO Auto-generated method stub

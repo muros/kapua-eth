@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Actions;
+import org.eclipse.kapua.service.authorization.Permission;
 import org.eclipse.kapua.service.authorization.permission.UserPermission;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
 
@@ -27,14 +27,7 @@ public class UserPermissionCreatorImpl extends AbstractKapuaEntityCreator<UserPe
     @XmlElement(name = "userId")
     private KapuaId           userId;
 
-    @XmlElement(name = "domain")
-    private String            domain;
-
-    @XmlElement(name = "action")
-    private Actions           action;
-
-    @XmlElement(name = "targetScopeId")
-    private KapuaId           targetScopeId;
+    private Permission        permission;
 
     public UserPermissionCreatorImpl(KapuaId scopeId)
     {
@@ -54,39 +47,15 @@ public class UserPermissionCreatorImpl extends AbstractKapuaEntityCreator<UserPe
     }
 
     @Override
-    public void setDomain(String domain)
+    public void setPermission(Permission permission)
     {
-        this.domain = domain;
+        this.permission = permission;
     }
 
     @Override
-    public String getDomain()
+    public Permission getPermission()
     {
-        return domain;
+        return permission;
     }
 
-    @Override
-    public void setAction(Actions action)
-    {
-        this.action = action;
-    }
-
-    @Override
-    public Actions getAction()
-    {
-        return action;
-    }
-
-    @Override
-    public void setTargetScopeId(KapuaId targetScopeId)
-    {
-        this.targetScopeId = targetScopeId;
-
-    }
-
-    @Override
-    public KapuaId getTargetScopeId()
-    {
-        return targetScopeId;
-    }
 }

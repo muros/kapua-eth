@@ -12,18 +12,47 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.shiro;
 
+import java.io.Serializable;
+
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+
+import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.Permission;
 
-public class PermissionImpl implements Permission
+@Embeddable
+@XmlAccessorType(XmlAccessType.FIELD)
+public class PermissionImpl implements Permission, Serializable
 {
-    private String   domain;
-    private Actions  action;
-    private KapuaId targetScopeId;
+    private static final long serialVersionUID = 1480557438886065675L;
 
-    private PermissionImpl()
+    @Basic
+    @Column(name = "domain", nullable = false, updatable = false)
+    private String            domain;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "action", nullable = false, updatable = false)
+    private Actions           action;
+
+    @Embedded
+    @AttributeOverrides({
+                          @AttributeOverride(name = "eid", column = @Column(name = "target_scope_id", updatable = false))
+    })
+    private KapuaEid          targetScopeId;
+
+    protected PermissionImpl()
     {
+        super();
     }
 
     public PermissionImpl(String domain, Actions action, KapuaId targetScopeId)
@@ -31,7 +60,9 @@ public class PermissionImpl implements Permission
         this();
         this.domain = domain;
         this.action = action;
-        this.targetScopeId = targetScopeId;
+        if (targetScopeId != null) {
+            this.targetScopeId = new KapuaEid(targetScopeId.getId());
+        }
     }
 
     @Override
@@ -61,7 +92,7 @@ public class PermissionImpl implements Permission
     @Override
     public void setTargetScopeId(KapuaId targetScopeId)
     {
-        this.targetScopeId = targetScopeId;
+        this.targetScopeId = new KapuaEid(targetScopeId.getId());
     }
 
     @Override

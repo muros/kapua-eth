@@ -10,26 +10,26 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.authorization.permission;
+package org.eclipse.kapua.service.authorization.role;
+
+import java.util.Set;
 
 import org.eclipse.kapua.model.KapuaEntity;
-import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Permission;
 
-public interface UserPermission extends KapuaEntity
+public interface Role extends KapuaEntity
 {
-    public static final String TYPE = "userPermission";
+    public static final String TYPE = "role";
 
     default public String getType()
     {
         return TYPE;
     }
 
-    public void setUserId(KapuaId userId);
+    public void setName(String name);
 
-    public KapuaId getUserId();
+    public String getName();
 
-    public void setPermission(Permission permission);
+    public void setPermissions(Set<RolePermission> permissions);
 
-    public Permission getPermission();
+    public Set<RolePermission> getPermissions();
 }

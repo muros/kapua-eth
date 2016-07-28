@@ -126,9 +126,9 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         for (UserPermission userPermission : userPermissions) {
 
-            Permission p = permissionFactory.newPermission(userPermission.getDomain(),
-                                                           userPermission.getAction(),
-                                                           userPermission.getTargetScopeId());
+            Permission p = permissionFactory.newPermission(userPermission.getPermission().getDomain(),
+                                                           userPermission.getPermission().getAction(),
+                                                           userPermission.getPermission().getTargetScopeId());
 
             logger.trace("Username: {} has permission: {}", username, p);
             info.addStringPermission(p.toString());

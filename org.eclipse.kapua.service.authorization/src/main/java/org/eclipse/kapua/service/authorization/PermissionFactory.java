@@ -15,10 +15,13 @@ package org.eclipse.kapua.service.authorization;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authorization.role.RolePermission;
 
 public interface PermissionFactory extends KapuaObjectFactory
 {
     public Permission newPermission(String domain, Actions action, KapuaId targetScopeId);
+
+    public RolePermission newRolePermission(KapuaId scopeId, String domain, Actions action, KapuaId targetScopeId);
 
     public Permission parseString(String stringPermission)
         throws KapuaException;
