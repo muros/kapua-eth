@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.locator.internal;
+package org.eclipse.kapua.locator.guice;
 
 import org.eclipse.kapua.KapuaException;
 

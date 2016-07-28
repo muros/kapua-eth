@@ -10,5 +10,6 @@
 #     Eurotech - initial API and implementation
 #
 #
-org.eclipse.kapua.service.user.UserService
-org.eclipse.kapua.service.user.UserFactory
+org.eclipse.kapua.service.user.UserService,ServiceLoaderProvider
+org.eclipse.kapua.service.user.UserFactory,OsgiServiceLoaderProvider
+org.eclipse.kapua.service.user.UserFactory,ProxyOsgiServiceLoaderProvider

@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.locator.internal;
+package org.eclipse.kapua.locator.guice;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -57,7 +57,7 @@ public class KapuaModule extends AbstractModule
 					if (KapuaService.class.isAssignableFrom(kapuaObject)) {
 
 						bind(kapuaObject).toProvider(new KapuaServiceLoaderProvider(kapuaObject));
-						s_logger.info("Bound Kapua service {}", serviceNameTrimmed);
+						s_logger.info("Bound Kapua service {}", serviceNameTrimmed);						
 					}
 					else if (KapuaObjectFactory.class.isAssignableFrom(kapuaObject)) {
 

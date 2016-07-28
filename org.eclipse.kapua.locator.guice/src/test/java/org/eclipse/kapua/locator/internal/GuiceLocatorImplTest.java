@@ -15,6 +15,7 @@ package org.eclipse.kapua.locator.internal;
 import static org.junit.Assert.*;
 
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.locator.guice.GuiceLocatorImpl;
 import org.eclipse.kapua.service.user.UserService;
 import org.junit.Test;
 

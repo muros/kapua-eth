@@ -15,8 +15,8 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>org.eclipse.kapua.locator.internal</artifactId>
-	<name>org.eclipse.kapua.locator.internal</name>
+	<artifactId>org.eclipse.kapua.locator.guice</artifactId>
+	<name>org.eclipse.kapua.locator.guice</name>
 
 	<dependencies>
 		<!-- Implemented service interfaces -->
