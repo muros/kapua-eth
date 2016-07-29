@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.model.query;
 
-import org.eclipse.kapua.service.datastore.StorableQuery;
 import org.eclipse.kapua.service.datastore.model.AssetInfo;
 
 public interface AssetInfoQuery extends StorableQuery<AssetInfo>

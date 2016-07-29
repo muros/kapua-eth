@@ -12,12 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.model.query;
 
-import org.eclipse.kapua.service.datastore.StorableQuery;
 import org.eclipse.kapua.service.datastore.model.TopicInfo;
 
 public interface TopicInfoQuery extends StorableQuery<TopicInfo>
 {
-    public String getPrefix();
-
-    public TopicInfoQuery setPrefix(String prefix);
 }

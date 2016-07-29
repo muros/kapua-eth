@@ -18,8 +18,10 @@ import org.eclipse.kapua.service.KapuaService;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
+import org.eclipse.kapua.service.datastore.model.MessageListResult;
 import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
+import org.eclipse.kapua.service.datastore.model.query.MessageQuery;
 
 public interface MessageStoreService extends KapuaService,
                                      KapuaConfigurableService
@@ -33,6 +35,12 @@ public interface MessageStoreService extends KapuaService,
     public Message find(KapuaId scopeId, StorableId id, MessageFetchStyle fetchStyle)
         throws KapuaException;
 
-    public StorableResultList<Message> query(KapuaId scopeId, StorableQuery<Message> query)
+    public MessageListResult query(KapuaId scopeId, MessageQuery query)
+        throws KapuaException;
+
+    public long count(KapuaId scopeId, MessageQuery query)
+        throws KapuaException;
+    
+    public void delete(KapuaId scopeId, MessageQuery query)
         throws KapuaException;
 }

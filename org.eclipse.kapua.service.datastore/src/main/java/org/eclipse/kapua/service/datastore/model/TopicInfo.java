@@ -14,13 +14,15 @@ package org.eclipse.kapua.service.datastore.model;
 
 import java.util.Date;
 
-import org.eclipse.kapua.service.datastore.Storable;
-
 public interface TopicInfo extends Storable
 {
-    public Topic getMessageTopic();
-
-    public Date getLastMessageTimestamp();
+    public StorableId getId();
+    
+    public String getScope();
 
     public String getFullTopicName();
+    
+    public Date getLastMessageTimestamp();
+    
+    public StorableId getLastMessageId();
 }

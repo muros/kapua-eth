@@ -14,19 +14,44 @@ package org.eclipse.kapua.service.datastore.internal.model;
 
 import java.util.Date;
 
-import org.eclipse.kapua.service.datastore.model.Topic;
+import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.TopicInfo;
 
 public class TopicInfoImpl implements TopicInfo
 {
-    private Topic  topic;
+    private StorableId id;
+    private String scope;
+    private StorableId lastMsgId;
     private Date   lastMsgTimestamp;
     private String fullTopicName;
 
-    @Override
-    public Topic getMessageTopic()
+    public TopicInfoImpl(String scope, StorableId id)
     {
-        return topic;
+        this.scope= scope;
+        this.id = id;
+    }
+    
+    @Override
+    public StorableId getId()
+    {
+        return id;
+    }
+
+    @Override
+    public String getScope()
+    {
+        return scope;
+    }
+
+    @Override
+    public StorableId getLastMessageId()
+    {
+        return this.lastMsgId;
+    }
+
+    public void setLastMessageId(StorableId lastMsgId)
+    {
+        this.lastMsgId = lastMsgId;
     }
 
     @Override
@@ -35,10 +60,19 @@ public class TopicInfoImpl implements TopicInfo
         return lastMsgTimestamp;
     }
 
+    public void setLastMessageTimestamp(Date lastMsgTimestamp)
+    {
+        this.lastMsgTimestamp = lastMsgTimestamp;
+    }
+
     @Override
     public String getFullTopicName()
     {
         return fullTopicName;
     }
-
+    
+    public void setFullTopicName(String fullTopicName)
+    {
+        this.fullTopicName = fullTopicName;
+    }
 }

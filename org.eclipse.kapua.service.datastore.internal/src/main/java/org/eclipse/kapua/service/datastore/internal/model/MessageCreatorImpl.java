@@ -16,11 +16,10 @@ import java.util.Date;
 
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.Payload;
-import org.eclipse.kapua.service.datastore.model.Topic;
 
 public class MessageCreatorImpl implements MessageCreator
 {
-    private Topic   topic;
+    private String   topic;
     private Date    timestamp;
     private Date    receivedOn;
     private Payload payload;
@@ -50,13 +49,13 @@ public class MessageCreatorImpl implements MessageCreator
     }
 
     @Override
-    public Topic getTopic()
+    public String getTopic()
     {
         return topic;
     }
 
     @Override
-    public void setTopic(Topic topic)
+    public void setTopic(String topic)
     {
         this.topic = topic;
     }

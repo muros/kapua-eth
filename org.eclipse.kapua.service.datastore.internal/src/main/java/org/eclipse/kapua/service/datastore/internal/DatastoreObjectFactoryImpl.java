@@ -17,13 +17,11 @@ import org.eclipse.kapua.service.datastore.internal.model.MessageCreatorImpl;
 import org.eclipse.kapua.service.datastore.internal.model.MessageImpl;
 import org.eclipse.kapua.service.datastore.internal.model.PayloadImpl;
 import org.eclipse.kapua.service.datastore.internal.model.PositionImpl;
-import org.eclipse.kapua.service.datastore.internal.model.TopicImpl;
 import org.eclipse.kapua.service.datastore.model.AssetInfo;
 import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.Payload;
 import org.eclipse.kapua.service.datastore.model.Position;
-import org.eclipse.kapua.service.datastore.model.Topic;
 import org.eclipse.kapua.service.datastore.model.TopicInfo;
 import org.eclipse.kapua.service.datastore.model.query.AssetInfoQuery;
 import org.eclipse.kapua.service.datastore.model.query.MessageQuery;
@@ -42,12 +40,6 @@ public class DatastoreObjectFactoryImpl implements DatastoreObjectFactory
     public MessageQuery newStorableMessageQuery()
     {
         return null;
-    }
-
-    @Override
-    public Topic newTopic()
-    {
-        return new TopicImpl();
     }
 
     @Override

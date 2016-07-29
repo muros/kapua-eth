@@ -27,7 +27,7 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.sort.SortOrder;
 
@@ -169,7 +169,7 @@ public class EsTypeDAO
         return response;
     }
 
-    public void deleteByQuery(BoolQueryBuilder boolQuery)
+    public void deleteByQuery(QueryBuilder query)
     {
 
         TimeValue queryTimeout = TimeValue.timeValueMillis(EsUtils.getQueryTimeout());
@@ -182,7 +182,7 @@ public class EsTypeDAO
                                                    .addSort("_doc", SortOrder.ASC)
                                                    .setVersion(true)
                                                    .setScroll(scrollTimeout)
-                                                   .setQuery(boolQuery)
+                                                   .setQuery(query)
                                                    .setSize(100)
                                                    .get(queryTimeout);
 
