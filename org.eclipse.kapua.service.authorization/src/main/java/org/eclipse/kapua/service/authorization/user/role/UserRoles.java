@@ -10,26 +10,28 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.authorization.user.role.shiro;
+package org.eclipse.kapua.service.authorization.user.role;
 
+import java.util.Set;
+
+import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleCreator;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleFactory;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleQuery;
+import org.eclipse.kapua.service.authorization.role.Role;
 
-public class UserRoleFactoryImpl implements UserRoleFactory
+public interface UserRoles extends KapuaEntity
 {
+    public static final String TYPE = "userRole";
 
-    @Override
-    public UserRoleCreator newCreator(KapuaId scopeId)
+    default public String getType()
     {
-        return new UserRoleCreatorImpl(scopeId);
+        return TYPE;
     }
 
-    @Override
-    public UserRoleQuery newQuery(KapuaId scopeId)
-    {
-        return new UserRoleQueryImpl(scopeId);
-    }
+    public void setUserId(KapuaId userId);
 
+    public KapuaId getUserId();
+
+    public void setRoles(Set<Role> roles);
+
+    public Set<Role> getRoles();
 }

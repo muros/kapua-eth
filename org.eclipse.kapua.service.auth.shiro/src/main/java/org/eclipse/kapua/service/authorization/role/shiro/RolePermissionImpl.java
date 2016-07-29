@@ -30,7 +30,7 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
     @Embedded
     private PermissionImpl    permission;
 
-    public RolePermissionImpl()
+    protected RolePermissionImpl()
     {
         super();
     }
