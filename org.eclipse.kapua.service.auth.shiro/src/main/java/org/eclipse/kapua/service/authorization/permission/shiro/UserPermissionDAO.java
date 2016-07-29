@@ -30,9 +30,7 @@ public class UserPermissionDAO extends ServiceDAO
         UserPermission permission = new UserPermissionImpl(creator.getScopeId());
 
         permission.setUserId(creator.getUserId());
-        permission.setDomain(creator.getDomain());
-        permission.setAction(creator.getAction());
-        permission.setTargetScopeId(creator.getTargetScopeId());
+        permission.setPermission(creator.getPermission());
 
         return ServiceDAO.create(em, permission);
     }

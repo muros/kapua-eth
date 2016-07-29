@@ -51,6 +51,11 @@ public class KapuaEid implements KapuaId, Serializable
         return eid;
     }
 
+    protected void setId(BigInteger eid)
+    {
+        this.eid = eid;
+    }
+
     public String toString()
     {
         return eid.toString();

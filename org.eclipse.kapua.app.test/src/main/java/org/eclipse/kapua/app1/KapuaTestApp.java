@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.app1;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.KapuaException;
@@ -29,9 +32,17 @@ import org.eclipse.kapua.service.authentication.credential.CredentialFactory;
 import org.eclipse.kapua.service.authentication.credential.CredentialService;
 import org.eclipse.kapua.service.authentication.credential.CredentialType;
 import org.eclipse.kapua.service.authorization.Actions;
+import org.eclipse.kapua.service.authorization.Permission;
+import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionFactory;
 import org.eclipse.kapua.service.authorization.permission.UserPermissionService;
+import org.eclipse.kapua.service.authorization.role.Role;
+import org.eclipse.kapua.service.authorization.role.RoleCreator;
+import org.eclipse.kapua.service.authorization.role.RoleFactory;
+import org.eclipse.kapua.service.authorization.role.RolePermission;
+import org.eclipse.kapua.service.authorization.role.RoleService;
+import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
@@ -49,6 +60,10 @@ public class KapuaTestApp
 
     private static UserPermissionService        userPermissionService = locator.getService(UserPermissionService.class);
     private static UserPermissionFactory        userPermissionFactory = locator.getFactory(UserPermissionFactory.class);
+    private static PermissionFactory            permissionFactory     = locator.getFactory(PermissionFactory.class);
+
+    private static RoleService                  roleService           = locator.getService(RoleService.class);
+    private static RoleFactory                  roleFactory           = locator.getFactory(RoleFactory.class);
 
     private static AuthenticationService        authenticationService = locator.getService(AuthenticationService.class);
     private static UsernamePasswordTokenFactory credentialsFactory    = locator.getFactory(UsernamePasswordTokenFactory.class);
@@ -130,6 +145,42 @@ public class KapuaTestApp
             System.err.println("");
 
             //
+            // Test create role
+            Set<RolePermission> permissions = new HashSet<>();
+            permissions.add(permissionFactory.newRolePermission(scopeId, AccountDomain.ACCOUNT, Actions.write, scopeId));
+            permissions.add(permissionFactory.newRolePermission(scopeId, AccountDomain.ACCOUNT, Actions.read, scopeId));
+            permissions.add(permissionFactory.newRolePermission(scopeId, DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.read, scopeId));
+
+            RoleCreator roleCreator = roleFactory.newCreator(scopeId);
+            roleCreator.setName("role-" + scopeId.getShortId() + "-" + System.currentTimeMillis());
+            roleCreator.setPermissions(permissions);
+
+            Role role = roleService.create(roleCreator);
+
+            System.err.println("Role Created:");
+            System.err.println("Name: " + role.getName());
+            System.err.println("Permissions:");
+            for (RolePermission p : role.getPermissions()) {
+                System.err.println("\t" + p.toString());
+            }
+            System.err.println("");
+
+            role = roleService.find(role.getScopeId(), role.getId());
+            System.err.println("Role Found:");
+            System.err.println("Name: " + role.getName());
+            System.err.println("Permissions:");
+            for (RolePermission p : role.getPermissions()) {
+                System.err.println("\t" + p.toString());
+            }
+
+            //
+            // Test delete role
+            roleService.delete(role);
+
+            role = roleService.find(role.getScopeId(), role.getId());
+            System.err.println("Role Deleted?? " + (role == null));
+
+            //
             // Test logout
             authenticationService.logout();
             subject = SecurityUtils.getSubject();
@@ -142,15 +193,16 @@ public class KapuaTestApp
             AuthenticationCredentials credentials = credentialsFactory.newInstance(user.getName(),
                                                                                    credentialCreator.getCredentialPlainKey().toCharArray());
 
+            int tries = 1;
             long startTime = System.currentTimeMillis();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < tries; i++) {
                 authenticationService.login(credentials);
                 authenticationService.logout();
             }
             long endTime = System.currentTimeMillis();
 
             System.err.println("Time taken for 100 logins: " + (endTime - startTime) / 1000 + "s");
-            System.err.println("Avg time for 100 logins:   " + (endTime - startTime) / 100 + "ms");
+            System.err.println("Avg time for 100 logins:   " + (endTime - startTime) / tries + "ms");
         }
         catch (KapuaException e) {
             // TODO Auto-generated catch block
@@ -163,9 +215,10 @@ public class KapuaTestApp
     {
         UserPermissionCreator userPermissionCreator = userPermissionFactory.newCreator(scopeId);
         userPermissionCreator.setUserId(userId);
-        userPermissionCreator.setDomain(domain);
-        userPermissionCreator.setAction(action);
-        userPermissionCreator.setTargetScopeId(targetScopeId);
+
+        Permission permission = permissionFactory.newPermission(domain, action, targetScopeId);
+        userPermissionCreator.setPermission(permission);
+
         userPermissionService.create(userPermissionCreator);
     }
 }

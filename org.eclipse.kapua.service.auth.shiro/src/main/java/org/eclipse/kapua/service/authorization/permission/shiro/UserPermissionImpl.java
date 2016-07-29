@@ -17,19 +17,18 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Actions;
+import org.eclipse.kapua.service.authorization.Permission;
 import org.eclipse.kapua.service.authorization.permission.UserPermission;
+import org.eclipse.kapua.service.authorization.shiro.PermissionImpl;
 import org.hibernate.annotations.DynamicUpdate;
 
-@Entity(name = "Permission")
+@Entity(name = "UserPermission")
 @Table(name = "athz_permission")
 @DynamicUpdate
 public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermission
@@ -43,30 +42,22 @@ public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermi
     })
     private KapuaEid          userId;
 
-    @XmlElement(name = "domain")
-    @Column(name = "domain", nullable = false, updatable = false)
-    private String            domain;
-
-    @XmlElement(name = "action")
-    @Enumerated(EnumType.STRING)
-    @Column(name = "action", nullable = false, updatable = false)
-    private Actions           action;
-
-    @XmlElement(name = "targetScopeId")
     @Embedded
     @AttributeOverrides({
-                          @AttributeOverride(name = "eid", column = @Column(name = "target_scope_id", updatable = false))
+                          @AttributeOverride(name = "domain", column = @Column(name = "domain", nullable = false, updatable = false)),
+                          @AttributeOverride(name = "action", column = @Column(name = "action", nullable = false, updatable = false)),
+                          @AttributeOverride(name = "targetScopeId", column = @Column(name = "target_scope_id", nullable = false, updatable = false))
     })
-    private KapuaEid          targetScopeId;
+    private PermissionImpl    permission;
 
     public UserPermissionImpl()
     {
         super();
     }
 
-    public UserPermissionImpl(KapuaId accountId)
+    public UserPermissionImpl(KapuaId scopeId)
     {
-        super(accountId);
+        super(scopeId);
     }
 
     @Override
@@ -82,55 +73,14 @@ public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermi
     }
 
     @Override
-    public void setDomain(String domain)
+    public void setPermission(Permission permission)
     {
-        this.domain = domain;
+        this.permission = (PermissionImpl) permission;
     }
 
     @Override
-    public String getDomain()
+    public Permission getPermission()
     {
-        return domain;
-    }
-
-    @Override
-    public void setAction(Actions action)
-    {
-        this.action = action;
-
-    }
-
-    @Override
-    public Actions getAction()
-    {
-        return action;
-    }
-
-    @Override
-    public void setTargetScopeId(KapuaId targetScopeId)
-    {
-        this.targetScopeId = (KapuaEid) targetScopeId;
-    }
-
-    @Override
-    public KapuaId getTargetScopeId()
-    {
-        return targetScopeId;
-    }
-
-    @Override
-    public String toString()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append(domain);
-        if (action != null) {
-            sb.append(":")
-              .append(action);
-        }
-        if (targetScopeId != null) {
-            sb.append(":")
-              .append(targetScopeId.getId());
-        }
-        return sb.toString();
+        return permission;
     }
 }

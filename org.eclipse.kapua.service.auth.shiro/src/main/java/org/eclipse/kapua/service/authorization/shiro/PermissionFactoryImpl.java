@@ -21,6 +21,8 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.Permission;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.role.RolePermission;
+import org.eclipse.kapua.service.authorization.role.shiro.RolePermissionImpl;
 
 public class PermissionFactoryImpl implements PermissionFactory
 {
@@ -28,6 +30,12 @@ public class PermissionFactoryImpl implements PermissionFactory
     public Permission newPermission(String domain, Actions action, KapuaId targetScopeId)
     {
         return new PermissionImpl(domain, action, targetScopeId);
+    }
+
+    @Override
+    public RolePermission newRolePermission(KapuaId scopeId, String domain, Actions action, KapuaId targetScopeId)
+    {
+        return new RolePermissionImpl(scopeId, domain, action, targetScopeId);
     }
 
     @Override
@@ -44,11 +52,10 @@ public class PermissionFactoryImpl implements PermissionFactory
         // Build the new Permission
         String domain = st.nextToken();
 
-        String actionStr = null;
+        Actions action = null;
         if (iTokensCount > 1) {
-            actionStr = st.nextToken();
+            action = Actions.valueOf(st.nextToken());
         }
-        Actions action = Actions.valueOf(actionStr);
 
         KapuaId scopeTargetId = null;
         if (iTokensCount > 2) {
