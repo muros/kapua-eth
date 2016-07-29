@@ -48,7 +48,7 @@
                         <target>1.8</target>
                     </configuration>
                 </plugin>
-                <!--This plugin's configuration is used to store Eclipse 
+                <!--This plugin's configuration is used to store Eclipse
                     m2e settings only. It has no influence on the Maven build itself. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
@@ -226,6 +226,7 @@
         <!-- Applications -->
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
+        <module>org.eclipse.kapua.app.api</module>
   </modules>
 
     <issueManagement>
