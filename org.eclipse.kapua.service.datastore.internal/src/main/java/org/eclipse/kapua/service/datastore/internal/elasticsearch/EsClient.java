@@ -15,8 +15,8 @@ package org.eclipse.kapua.service.datastore.internal.elasticsearch;
 import java.net.UnknownHostException;
 import java.util.Map;
 
-import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSetting;
-import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSettingKeys;
+import org.eclipse.kapua.service.datastore.internal.setting.DatastoreSettingKey;
+import org.eclipse.kapua.service.datastore.internal.setting.DatastoreSettings;
 import org.elasticsearch.client.Client;
 
 
@@ -28,8 +28,8 @@ public class EsClient {
 		// TODO read hostname and port from configurations
 		if (client == null) 
 		{
-	        KapuaDatastoreSetting config = KapuaDatastoreSetting.getInstance();
-	        Map<String, String> map = config.getMap(String.class, KapuaDatastoreSettingKeys.ELASTICSEARCH_NODES, "[0-9]+");
+	        DatastoreSettings config = DatastoreSettings.getInstance();
+	        Map<String, String> map = config.getMap(String.class, DatastoreSettingKey.ELASTICSEARCH_NODES, "[0-9]+");
 	        String[] esNodes = new String[] {};
 	        if (map != null)
 	            esNodes = map.values().toArray(new String[] {});

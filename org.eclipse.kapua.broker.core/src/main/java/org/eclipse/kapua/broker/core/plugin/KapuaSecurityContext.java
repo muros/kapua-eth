@@ -16,19 +16,23 @@ import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.activemq.command.ConnectionId;
 import org.apache.activemq.security.AuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authentication.KapuaPrincipal;
 
 /**
  * Kapua security context implementation of amq broker {@link SecurityContext}
  *
  */
 public class KapuaSecurityContext extends SecurityContext {
+	
     private KapuaPrincipal   principal;
     private KapuaId          connectionId;
     private Set<Principal>   principals;
     private ConnectorDescriptor connectorDescriptor;
+    private ConnectionId     brokerConnectionId;
 
     private AuthorizationMap authMap;
     private boolean          hasDataView;
@@ -39,6 +43,7 @@ public class KapuaSecurityContext extends SecurityContext {
     public KapuaSecurityContext(KapuaPrincipal     principal,
                               AuthorizationMap authMap,
                               KapuaId connectionId,
+                              ConnectionId brokerConnectionId,
                               ConnectorDescriptor connectorDescriptor) {
         super(principal.getName());
 
@@ -49,6 +54,7 @@ public class KapuaSecurityContext extends SecurityContext {
         this.authMap = authMap;
         this.connectionId = connectionId;
         this.connectorDescriptor = connectorDescriptor;
+        this.brokerConnectionId = brokerConnectionId;
     }
 
     public Principal getMainPrincipal() {
@@ -65,6 +71,10 @@ public class KapuaSecurityContext extends SecurityContext {
 
     public KapuaId getConnectionId() {
 		return connectionId;
+	}
+    
+    public ConnectionId getBrokerConnectionId() {
+		return brokerConnectionId;
 	}
     
     public ConnectorDescriptor getConnectorDescriptor() {

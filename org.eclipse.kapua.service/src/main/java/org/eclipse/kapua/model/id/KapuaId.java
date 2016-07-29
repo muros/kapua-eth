@@ -12,10 +12,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.model.id;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Base64;
 
-public interface KapuaId
+public interface KapuaId extends Serializable
 {
     public BigInteger getId();
 

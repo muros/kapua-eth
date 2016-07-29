@@ -34,10 +34,12 @@ import org.eclipse.kapua.service.authentication.credential.CredentialFactory;
 import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
 import org.eclipse.kapua.service.authentication.credential.CredentialService;
 import org.eclipse.kapua.service.authentication.credential.CredentialType;
-import org.eclipse.kapua.service.authorization.Actions;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionFactory;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionService;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.Permission;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionCreator;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionService;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
@@ -88,21 +90,28 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
             UserPermissionService userPermissionService = locator.getService(UserPermissionService.class);
             UserPermissionFactory userPermissionFactory = locator.getFactory(UserPermissionFactory.class);
+            PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
 
             for (String p : permissions) {
                 UserPermissionCreator userPermissionCreator = userPermissionFactory.newCreator(user.getScopeId());
                 userPermissionCreator.setUserId(scopeId);
 
                 String[] tokens = p.split(":");
+                String domain = null;
+                Actions action = null;
+                KapuaId targetScopeId = null;
                 if (tokens.length > 0) {
-                    userPermissionCreator.setDomain(tokens[0]);
+                    domain = tokens[0];
                 }
                 if (tokens.length > 1) {
-                    userPermissionCreator.setAction(Actions.valueOf(tokens[1]));
+                    action = Actions.valueOf(tokens[1]);
                 }
                 if (tokens.length > 2) {
-                    userPermissionCreator.setTargetScopeId(KapuaEid.parseShortId(tokens[2]));
+                    targetScopeId = KapuaEid.parseShortId(tokens[2]);
                 }
+
+                Permission permission = permissionFactory.newPermission(domain, action, targetScopeId);
+                userPermissionCreator.setPermission(permission);
 
                 userPermissionService.create(userPermissionCreator);
             }
@@ -166,6 +175,7 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
 
                 UserPermissionService userPermissionService = locator.getService(UserPermissionService.class);
                 UserPermissionFactory userPermissionFactory = locator.getFactory(UserPermissionFactory.class);
+                PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
 
                 Set<UserPermissionCreator> newUserPermissions = new HashSet<UserPermissionCreator>();
                 for (String p : newPermissions) {
@@ -173,15 +183,21 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
                     userPermissionCreator.setUserId(scopeId);
 
                     String[] tokens = p.split(":");
+                    String domain = null;
+                    Actions action = null;
+                    KapuaId targetScopeId = null;
                     if (tokens.length > 0) {
-                        userPermissionCreator.setDomain(tokens[0]);// FIXME: interface Domain does not work ????
+                        domain = tokens[0];
                     }
                     if (tokens.length > 1) {
-                        userPermissionCreator.setAction(Actions.valueOf(tokens[1]));
+                        action = Actions.valueOf(tokens[1]);
                     }
                     if (tokens.length > 2) {
-                        userPermissionCreator.setTargetScopeId(KapuaEid.parseShortId(tokens[2]));
+                        targetScopeId = KapuaEid.parseShortId(tokens[2]);
                     }
+
+                    Permission permission = permissionFactory.newPermission(domain, action, targetScopeId);
+                    userPermissionCreator.setPermission(permission);
 
                     userPermissionService.create(userPermissionCreator);
                 }

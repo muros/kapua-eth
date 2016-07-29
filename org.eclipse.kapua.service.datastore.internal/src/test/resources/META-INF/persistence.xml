@@ -21,16 +21,10 @@
         <class>org.eclipse.kapua.service.user.internal.UserImpl</class>
         
         <!-- Authorization -->
-        <class>org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionImpl</class>
- 
-        <!-- Device -->
-        <class>org.eclipse.kapua.service.device.registry.internal.DeviceImpl</class>
-        <class>org.eclipse.kapua.service.device.registry.connection.internal.DeviceConnectionImpl</class>
-        <class>org.eclipse.kapua.service.device.registry.event.internal.DeviceEventImpl</class>
+        <class>org.eclipse.kapua.service.authorization.user.permission.shiro.UserPermissionImpl</class>
  
         <!-- Account -->
         <class>org.eclipse.kapua.service.account.internal.AccountImpl</class>
-        <class>org.eclipse.kapua.service.account.internal.ConfigurationImpl</class>
         <class>org.eclipse.kapua.service.account.internal.OrganizationImpl</class>
         
 		<properties>

@@ -14,8 +14,6 @@ package org.eclipse.kapua.service.datastore.model;
 
 import java.util.Date;
 
-import org.eclipse.kapua.service.datastore.StorableCreator;
-
 public interface MessageCreator extends StorableCreator<Message>
 {
     public Date getTimestamp();
@@ -26,9 +24,9 @@ public interface MessageCreator extends StorableCreator<Message>
 
     public void setReceivedOn(Date receivedOn);
 
-    public Topic getTopic();
+    public String getTopic();
 
-    public void setTopic(Topic topic);
+    public void setTopic(String topic);
 
     public Payload getPayload();
 

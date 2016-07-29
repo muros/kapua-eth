@@ -108,7 +108,13 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
             });
         }
         catch (Exception e) {
-            throw new ShiroException("Error while find user!", e);
+        	//to preserve the original exception messaage (if possible)
+        	if (e instanceof AuthenticationException) {
+				throw (AuthenticationException) e;
+			}
+			else {
+				throw new ShiroException("Error while find user!", e);
+			}
         }
 
         // Check existence
@@ -136,7 +142,13 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
             });
         }
         catch (Exception e) {
-            throw new ShiroException("Error while find account!", e);
+        	//to preserve the original exception messaage (if possible)
+        	if (e instanceof AuthenticationException) {
+				throw (AuthenticationException) e;
+			}
+			else {
+				throw new ShiroException("Error while find account!", e);
+			}
         }
 
         // Check existence
@@ -168,11 +180,16 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
             });
         }
         catch (Exception e) {
-            throw new ShiroException("Error while find credentials!", e);
+        	if (e instanceof AuthenticationException) {
+				throw (AuthenticationException) e;
+			}
+			else {
+				throw new ShiroException("Error while find credentials!", e);
+			}
         }
 
         //
-        // BuildAuthenticationInfo
+        // BuildAuthenticationInfo8
         KapuaSimpleAuthenticationInfo info = new KapuaSimpleAuthenticationInfo(user,
                                                                                credential,
                                                                                account,

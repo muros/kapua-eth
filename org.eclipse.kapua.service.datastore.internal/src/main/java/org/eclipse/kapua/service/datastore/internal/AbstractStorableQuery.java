@@ -12,14 +12,23 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.internal;
 
-import org.eclipse.kapua.service.datastore.Storable;
-import org.eclipse.kapua.service.datastore.StorableQuery;
+import org.eclipse.kapua.service.datastore.model.Storable;
+import org.eclipse.kapua.service.datastore.model.query.MessageFetchStyle;
+import org.eclipse.kapua.service.datastore.model.query.SortDirection;
+import org.eclipse.kapua.service.datastore.model.query.StorablePredicate;
+import org.eclipse.kapua.service.datastore.model.query.StorableQuery;
 
-public abstract class AbstractStorableQuery<E extends Storable> implements StorableQuery<E>
+public abstract class AbstractStorableQuery<S extends Storable> implements StorableQuery<S>
 {
-    private int    limit;
-    private Object keyOffset;
-    private int    indexOffset;
+    private StorablePredicate predicate = null;
+
+    private int               limit;
+    private Object            keyOffset;
+    private int               indexOffset;
+    private boolean           askTotalCount = false;
+    private SortDirection     sortStyle     = SortDirection.DESC;
+    private MessageFetchStyle fetchStyle    = MessageFetchStyle.METADATA_HEADERS_PAYLOAD;
+
 
     public AbstractStorableQuery()
     {
@@ -28,26 +37,38 @@ public abstract class AbstractStorableQuery<E extends Storable> implements Stora
         indexOffset = 0;
     }
 
+    @Override
+    public StorablePredicate getPredicate()
+    {
+        return this.predicate;
+    }
+
+    @Override
+    public void setPredicate(StorablePredicate predicate)
+    {
+        this.predicate = predicate;
+    }
+
     public Object getKeyOffset()
     {
         return keyOffset;
     }
 
-    public StorableQuery<E> setKeyOffset(Object offset)
+    public void setKeyOffset(Object offset)
     {
         this.keyOffset = offset;
-        return this;
     }
 
-    public int getIndexOffset()
+    @Override
+    public int getOffset()
     {
         return indexOffset;
     }
 
-    public StorableQuery<E> setIndexOffset(int offset)
+    @Override
+    public void setOffset(int offset)
     {
         this.indexOffset = offset;
-        return this;
     }
 
     public int addIndexOffset(int delta)
@@ -56,14 +77,64 @@ public abstract class AbstractStorableQuery<E extends Storable> implements Stora
         return indexOffset;
     }
 
-    public StorableQuery<E> setLimit(int limit)
+    @Override
+    public void setLimit(int limit)
     {
         this.limit = limit;
-        return this;
     }
 
+    @Override
     public int getLimit()
     {
         return limit;
+    }
+
+    @Override
+    public boolean isAskTotalCount()
+    {
+        return askTotalCount;
+    }
+
+    @Override
+    public void setAskTotalCount(boolean askTotalCount)
+    {
+        this.askTotalCount = askTotalCount;
+    }
+
+    @Override
+    public MessageFetchStyle getFetchStyle()
+    {
+        return this.fetchStyle;
+    }
+
+    @Override
+    public void setFetchStyle(MessageFetchStyle fetchStyle)
+    {
+        this.fetchStyle = fetchStyle;
+    }
+
+    @Override
+    public SortDirection getSort()
+    {
+        return this.sortStyle;
+    }
+
+    @Override
+    public void setSort(SortDirection sortStyle)
+    {
+        this.sortStyle = sortStyle;
+    }
+    
+    @Override
+    public void copy(StorableQuery<S> query)
+    {
+        this.setAskTotalCount(query.isAskTotalCount());
+        this.setLimit(query.getLimit());
+        this.setOffset(query.getOffset());
+        this.setPredicate(query.getPredicate());
+        // TODO extend copy to predicate (not by ref as now)
+        this.setPredicate(query.getPredicate());
+        this.setFetchStyle(query.getFetchStyle());
+        this.setSort(query.getSort());
     }
 }

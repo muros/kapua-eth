@@ -36,11 +36,15 @@ import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.commons.util.KapuaEidGenerator;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
 @Access(AccessType.FIELD)
 @XmlAccessorType(XmlAccessType.FIELD)
+@DynamicInsert
+@DynamicUpdate
 public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
 {
     @XmlElement(name = "id")
@@ -76,7 +80,9 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
     public AbstractKapuaEntity(KapuaId scopeId)
     {
         this();
-        this.scopeId = (KapuaEid) scopeId;
+        if (scopeId != null) {
+            this.scopeId = new KapuaEid(scopeId.getId());
+        }
     }
 
     public KapuaId getScopeId()

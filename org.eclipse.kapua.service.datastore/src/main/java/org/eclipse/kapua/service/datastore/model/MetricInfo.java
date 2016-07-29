@@ -12,22 +12,35 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.model;
 
-import org.eclipse.kapua.service.datastore.Storable;
+import java.util.Date;
 
-public interface MetricInfo<T> extends Storable
+public interface MetricInfo extends Storable
 {
+    public StorableId getId();
+    
+    public String getScope();
+
+    public String getFullTopicName();
+
+    public void setFullTopicName(String topic);
+
     public String getName();
 
-    public Class<T> getType();
+    public void setName(String name);
 
-    public boolean isOfType(Class<?> type);
+    public String getType();
 
-    public T getValue();
+    public void setType(String type);
 
-    public void setValue(T value);
+    public <T> T getValue(Class<T> clazz);
 
-    public String getUuid();
+    public <T> void setValue(T value);
 
-    public void setUuid(String uuid);
+    public StorableId getLastMessageId();
 
+    public void setLastMessageId(StorableId lastMessageId);
+
+    public Date getLastMessageTimestamp();
+
+    public void setLastMessageTimestamp(Date lastMessageTimestamp);
 }

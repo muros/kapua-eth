@@ -30,13 +30,13 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.model.query.predicate.KapuaPredicate;
-import org.eclipse.kapua.service.authorization.Permission;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
-import org.eclipse.kapua.service.authorization.permission.UserPermission;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionFactory;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionQuery;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionService;
-import org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionPredicates;
+import org.eclipse.kapua.service.authorization.permission.Permission;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermission;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionQuery;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionService;
+import org.eclipse.kapua.service.authorization.user.permission.shiro.UserPermissionPredicates;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserService;
 import org.slf4j.Logger;
@@ -90,7 +90,13 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
             });
         }
         catch (Exception e) {
-            throw new ShiroException("Error while find user!", e);
+        	//to preserve the original exception messaage (if possible)
+        	if (e instanceof AuthenticationException) {
+				throw (AuthenticationException) e;
+			}
+			else {
+				throw new ShiroException("Error while find user!", e);
+			}
         }
 
         //
@@ -118,7 +124,13 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
             });
         }
         catch (Exception e) {
-            throw new ShiroException("Error while find user permissions!", e);
+        	//to preserve the original exception messaage (if possible)
+        	if (e instanceof AuthenticationException) {
+				throw (AuthenticationException) e;
+			}
+			else {
+				throw new ShiroException("Error while find permissions!", e);
+			}
         }
 
         //
@@ -126,9 +138,9 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         for (UserPermission userPermission : userPermissions) {
 
-            Permission p = permissionFactory.newPermission(userPermission.getDomain(),
-                                                           userPermission.getAction(),
-                                                           userPermission.getTargetScopeId());
+            Permission p = permissionFactory.newPermission(userPermission.getPermission().getDomain(),
+                                                           userPermission.getPermission().getAction(),
+                                                           userPermission.getPermission().getTargetScopeId());
 
             logger.trace("Username: {} has permission: {}", username, p);
             info.addStringPermission(p.toString());

@@ -36,8 +36,8 @@ import org.apache.commons.imaging.ImageFormats;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
 import org.eclipse.kapua.app.console.server.util.EdcExceptionHandler;
-import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
 import org.eclipse.kapua.app.console.setting.ConsoleSetting;
+import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
 import org.eclipse.kapua.app.console.shared.GwtEdcException;
 import org.eclipse.kapua.app.console.shared.model.GwtBundleInfo;
 import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
@@ -560,7 +560,9 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             DeviceBundleListResult bundles = null;
             KapuaId scopeId = KapuaEid.parseShortId(device.getScopeId());
             KapuaId id = KapuaEid.parseShortId(device.getId());
-            bundles = deviceBundleManagementService.get(scopeId, id);
+            bundles = deviceBundleManagementService.get(scopeId,
+                                                        id,
+                                                        null);
 
             for (DeviceBundle bundle : bundles) {
 
@@ -595,7 +597,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId deviceId = KapuaEid.parseShortId(device.getId());
             deviceBundleManagementService.start(scopeId,
                                                 deviceId,
-                                                String.valueOf(pair.getId()));
+                                                String.valueOf(pair.getId()),
+                                                null);
         }
         catch (Throwable t) {
             EdcExceptionHandler.handle(t);
@@ -617,7 +620,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId deviceId = KapuaEid.parseShortId(device.getId());
             deviceBundleManagementService.stop(scopeId,
                                                deviceId,
-                                               String.valueOf(pair.getId()));
+                                               String.valueOf(pair.getId()),
+                                               null);
         }
         catch (Throwable t) {
             EdcExceptionHandler.handle(t);
@@ -812,7 +816,9 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
             KapuaId scopeId = KapuaEid.parseShortId(gwtDevice.getScopeId());
             KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
-            DeviceDeploymentPackageListResult deploymentPackages = deviceService.get(scopeId, deviceId);
+            DeviceDeploymentPackageListResult deploymentPackages = deviceService.get(scopeId,
+                                                                                     deviceId,
+                                                                                     null);
 
             for (DeviceDeploymentPackage deploymentPackage : deploymentPackages) {
                 GwtDeploymentPackage gwtPkg = new GwtDeploymentPackage();
@@ -860,7 +866,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
             deviceDeployMangamentService.uninstall(scopeId,
                                                    deviceId,
-                                                   packageName);
+                                                   packageName,
+                                                   null);
         }
         catch (Throwable t) {
             EdcExceptionHandler.handle(t);

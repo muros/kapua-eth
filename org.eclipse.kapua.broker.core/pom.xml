@@ -67,6 +67,11 @@
 							org.eclipse.kapua|org.eclipse.kapua.configuration.spi;
 							org.eclipse.kapua|org.eclipse.kapua.locator.spi;
 							org.eclipse.kapua|org.eclipse.kapua.message;
+							org.eclipse.kapua|org.eclipse.kapua.translator;
+							org.eclipse.kapua|org.eclipse.kapua.translator.kura.jms;
+							org.eclipse.kapua|org.eclipse.kapua.translator.kapua.kura;
+							org.eclipse.kapua|org.eclipse.kapua.transport;
+							org.eclipse.kapua|org.eclipse.kapua.transport.jms;
 							org.eclipse.kapua|org.eclipse.kapua.service;
 							org.eclipse.kapua|org.eclipse.kapua.service.account;
 							org.eclipse.kapua|org.eclipse.kapua.service.account.internal;
@@ -75,8 +80,11 @@
 							org.eclipse.kapua|org.eclipse.kapua.service.authorization;
 							org.eclipse.kapua|org.eclipse.kapua.service.datastore;
 							org.eclipse.kapua|org.eclipse.kapua.service.datastore.internal;
+							org.eclipse.kapua|org.eclipse.kapua.service.device.call;
+							org.eclipse.kapua|org.eclipse.kapua.service.device.call.kura;
 							org.eclipse.kapua|org.eclipse.kapua.service.device.registry;
 							org.eclipse.kapua|org.eclipse.kapua.service.device.registry.internal;
+							org.eclipse.kapua|org.eclipse.kapua.service.device.management;
 							org.eclipse.kapua|org.eclipse.kapua.service.user;
 							org.eclipse.kapua|org.eclipse.kapua.service.user.internal;
 						    inline=true
@@ -88,7 +96,8 @@
 							org.eclipse.kapua.broker.core.plugin,
 							org.eclipse.kapua.broker.core.threadfactory,
 							org.eclipse.kapua.commons.metric,
-							org.eclipse.kapua.commons.metric.internal
+							org.eclipse.kapua.commons.metric.internal,
+							org.eclipse.kapua.transport.message.jms
 						</Export-Package>
 						<Import-Package>
 							com.codahale.metrics;version="[3.1,4)",
@@ -172,8 +181,6 @@
 		</plugins>
 	</build>
 	
-	
-	
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
@@ -207,6 +214,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.account.internal</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
@@ -227,7 +239,27 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.datastore.internal</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.call</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.registry</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.registry.internal</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -235,10 +267,40 @@
 			<artifactId>org.eclipse.kapua.service.user</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.translator</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.translator.kapua.kura</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.translator.kura.jms</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.transport</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.transport.jms</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.management</artifactId>
 			<version>0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

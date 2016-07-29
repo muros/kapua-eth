@@ -7,9 +7,9 @@ import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
@@ -19,16 +19,16 @@ import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagem
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotListResult;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
 
 public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManagementService
 {
@@ -112,7 +112,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
 
         deviceEventService.create(deviceEventCreator);
-        
+
         return deviceSnapshots;
     }
 
@@ -180,7 +180,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
 
         }
-        
+
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
@@ -240,7 +240,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         // Do exec
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(snapshotRequestMessage, timeout);
         SnapshotResponseMessage responseMessage = (SnapshotResponseMessage) deviceApplicationCall.send();
-        
+
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);

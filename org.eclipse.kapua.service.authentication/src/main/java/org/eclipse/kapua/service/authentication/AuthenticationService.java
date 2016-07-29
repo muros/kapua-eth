@@ -27,4 +27,8 @@ public interface AuthenticationService extends KapuaService
 
     public void logout()
         throws KapuaException;
+    
+    public AccessToken getToken(String tokenId) 
+    	throws KapuaException;
+
 }

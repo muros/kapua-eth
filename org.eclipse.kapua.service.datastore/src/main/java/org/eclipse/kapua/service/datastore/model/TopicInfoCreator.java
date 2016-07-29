@@ -12,9 +12,13 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.model;
 
-import org.eclipse.kapua.service.datastore.StorableCreator;
+import java.util.Date;
 
 public interface TopicInfoCreator extends StorableCreator<TopicInfo>
 {
-
+    public String getFullTopicName();
+    
+    public Date getLastMessageTimestamp();
+    
+    public StorableId getLastMessageId();
 }

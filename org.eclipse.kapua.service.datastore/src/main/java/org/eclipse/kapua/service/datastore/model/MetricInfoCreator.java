@@ -12,9 +12,23 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.model;
 
-import org.eclipse.kapua.service.datastore.StorableCreator;
+import java.util.Date;
 
-public interface MetricInfoCreator<T> extends StorableCreator<MetricInfo<T>>
+public interface MetricInfoCreator extends StorableCreator<MetricInfo>
 {
+    public void setFullTopicName(String topic);
 
+    public StorableId getLastMessageId();
+
+    public String getName();
+
+    public String getType();
+
+    public <T> T getValue();
+
+    public <T> void setValue(T value);
+
+    public String getFullTopicName();
+
+    public Date getLastMessageTimestamp();
 }

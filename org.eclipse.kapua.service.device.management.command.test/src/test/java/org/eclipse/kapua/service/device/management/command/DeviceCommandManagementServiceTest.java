@@ -18,12 +18,13 @@ import org.eclipse.kapua.service.authentication.credential.CredentialCreator;
 import org.eclipse.kapua.service.authentication.credential.CredentialFactory;
 import org.eclipse.kapua.service.authentication.credential.CredentialService;
 import org.eclipse.kapua.service.authentication.credential.CredentialType;
-import org.eclipse.kapua.service.authorization.Actions;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionCreator;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionFactory;
-import org.eclipse.kapua.service.authorization.permission.UserPermissionService;
-import org.eclipse.kapua.service.device.call.kura.CommandMetrics;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionCreator;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory;
+import org.eclipse.kapua.service.authorization.user.permission.UserPermissionService;
 import org.eclipse.kapua.service.device.call.kura.ResponseMetrics;
+import org.eclipse.kapua.service.device.call.kura.app.CommandMetrics;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
@@ -127,9 +128,13 @@ public class DeviceCommandManagementServiceTest extends Assert
         UserPermissionService userPermissionService = locator.getService(UserPermissionService.class);
         UserPermissionFactory userPermissionFactory = locator.getFactory(UserPermissionFactory.class);
         UserPermissionCreator userPermissionCreator = userPermissionFactory.newCreator(account.getId());
-        userPermissionCreator.setDomain(DeviceLifecycleDomain.DEVICE_LIFECYCLE);
-        userPermissionCreator.setAction(Actions.connect);
-        userPermissionCreator.setTargetScopeId(account.getId());
+
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+
+        userPermissionCreator.setPermission(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE,
+                                                                            Actions.connect,
+                                                                            account.getId()));
+
         userPermissionService.create(userPermissionCreator);
 
         //

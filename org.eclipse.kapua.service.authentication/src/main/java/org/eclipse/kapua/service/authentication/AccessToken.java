@@ -13,9 +13,22 @@
 package org.eclipse.kapua.service.authentication;
 
 import org.eclipse.kapua.model.KapuaEntity;
+import org.eclipse.kapua.model.id.KapuaId;
 
 public interface AccessToken extends KapuaEntity
 {
+	
+	public static final String TYPE = "accessToken";
+
+    default public String getType()
+    {
+        return TYPE;
+    }
+    
     public String getTokenId();
+    
+    public KapuaId getUserScopeId();
+	
+	public KapuaId getUserId();
 
 }

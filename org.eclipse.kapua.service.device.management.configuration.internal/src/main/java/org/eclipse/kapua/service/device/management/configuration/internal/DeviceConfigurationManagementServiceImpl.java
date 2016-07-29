@@ -8,9 +8,9 @@ import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
@@ -22,14 +22,14 @@ import org.eclipse.kapua.service.device.management.configuration.DeviceComponent
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
 
 public class DeviceConfigurationManagementServiceImpl implements DeviceConfigurationManagementService
 {
@@ -97,7 +97,7 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
 
         }
-        
+
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
@@ -176,7 +176,7 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         // Do put
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(configurationRequestMessage, timeout);
         ConfigurationResponseMessage responseMessage = (ConfigurationResponseMessage) deviceApplicationCall.send();
-        
+
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);

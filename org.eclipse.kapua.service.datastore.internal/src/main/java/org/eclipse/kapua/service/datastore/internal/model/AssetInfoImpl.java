@@ -15,22 +15,64 @@ package org.eclipse.kapua.service.datastore.internal.model;
 import java.util.Date;
 
 import org.eclipse.kapua.service.datastore.model.AssetInfo;
+import org.eclipse.kapua.service.datastore.model.StorableId;
 
 public class AssetInfoImpl implements AssetInfo
 {
+    private StorableId id;
+    private String scope;
+    private String asset;
+    private Date lastMessageTimestamp;
+    private StorableId lastMessageId;
+   
+    public AssetInfoImpl(String scope, StorableId id)
+    {
+        this.scope = scope;
+        this.id = id;
+    }
+
+    @Override
+    public String getScope()
+    {
+        return scope;
+    }
+    
+    @Override
+    public StorableId getId()
+    {
+        return id;
+    }
 
     @Override
     public String getAsset()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return asset;
+    }
+
+    public void setAsset(String asset)
+    {
+        this.asset = asset;
+    }
+
+    @Override
+    public StorableId getLastMessageId()
+    {
+        return lastMessageId;
+    }
+
+    public void setLastMessageId(StorableId lastMessageId)
+    {
+        this.lastMessageId = lastMessageId;
     }
 
     @Override
     public Date getLastMessageTimestamp()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return lastMessageTimestamp;
     }
 
+    public void setLastMessageTimestamp(Date lastMessageTimestamp)
+    {
+        this.lastMessageTimestamp = lastMessageTimestamp;
+    }
 }

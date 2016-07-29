@@ -12,13 +12,20 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.deploy;
 
+//TODO: Needs annotation. First verify if possible with JAXB or EclipseLink MOXy
 public interface DeviceDeploymentPackage
 {
 
     public String getName();
+    
+    public void setName(String dpName);
 
     public String getVersion();
+    
+    public void setVersion(String dpVersion);
 
     public DevicePackageBundleInfoListResult getBundleInfos();
+    
+    public void setBundleInfos(DevicePackageBundleInfoListResult packageInfoList);
 
 }
