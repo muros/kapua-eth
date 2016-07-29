@@ -12,23 +12,27 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication;
 
-import org.eclipse.kapua.model.KapuaEntity;
+import java.security.Principal;
+
 import org.eclipse.kapua.model.id.KapuaId;
 
-public interface AccessToken extends KapuaEntity
-{
-	
-	public static final String TYPE = "accessToken";
+/**
+ * Kapua {@link Principal} implementation
+ * TODO it's an object used by both authorization and authentication... should leave it in authentication module?
+ *
+ */
+public interface KapuaPrincipal extends Principal, java.io.Serializable {
 
-    default public String getType()
-    {
-        return TYPE;
-    }
+    public String getName();
     
     public String getTokenId();
     
-    public KapuaId getUserScopeId();
-	
-	public KapuaId getUserId();
+    public KapuaId getUserId();
+
+    public KapuaId getAccountId();
+
+    public String getClientIp();
+
+    public String getClientId();
 
 }

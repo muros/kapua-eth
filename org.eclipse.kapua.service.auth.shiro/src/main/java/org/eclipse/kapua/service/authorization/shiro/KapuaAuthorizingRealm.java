@@ -90,7 +90,13 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
             });
         }
         catch (Exception e) {
-            throw new ShiroException("Error while find user!", e);
+        	//to preserve the original exception messaage (if possible)
+        	if (e instanceof AuthenticationException) {
+				throw (AuthenticationException) e;
+			}
+			else {
+				throw new ShiroException("Error while find user!", e);
+			}
         }
 
         //
@@ -118,7 +124,13 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
             });
         }
         catch (Exception e) {
-            throw new ShiroException("Error while find user permissions!", e);
+        	//to preserve the original exception messaage (if possible)
+        	if (e instanceof AuthenticationException) {
+				throw (AuthenticationException) e;
+			}
+			else {
+				throw new ShiroException("Error while find permissions!", e);
+			}
         }
 
         //

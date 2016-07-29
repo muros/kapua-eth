@@ -22,12 +22,9 @@ import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
 import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool;
 import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerWrapper;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.KapuaChannel;
-import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthMessage;
 import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool.DESTINATIONS;
-import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +53,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage<?>
 	private static final String[] DISCONNECT_SEMANTIC_TOPIC = new String[]{"MQTT", "DISCONNECT"};
 	private static final String[] PROVISION_SEMANTIC_TOPIC  = new String[]{"MQTT", "PROV"};
 
-	private final static DeviceLifeCycleService deviceLifeCycleService = KapuaLocator.getInstance().getService(DeviceLifeCycleService.class);
+	private static DeviceLifeCycleService deviceLifeCycleService = KapuaLocator.getInstance().getService(DeviceLifeCycleService.class);
 	
 	//metrics
 	private Counter metricDeviceMessage;

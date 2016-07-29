@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +28,7 @@ import org.apache.activemq.filter.DestinationMapEntry;
 import org.apache.activemq.security.AuthorizationEntry;
 import org.apache.activemq.security.DefaultAuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
+import org.apache.shiro.ShiroException;
 import org.eclipse.kapua.KapuaErrorCode;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
@@ -44,6 +46,7 @@ import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.authentication.AccessToken;
 import org.eclipse.kapua.service.authentication.AuthenticationCredentials;
 import org.eclipse.kapua.service.authentication.AuthenticationService;
+import org.eclipse.kapua.service.authentication.KapuaPrincipal;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationErrorCodes;
 import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationException;
@@ -135,23 +138,22 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private Histogram                              metricPublishMessageSizeAllowed;
     private Histogram                              metricPublishMessageSizeNotAllowed;
     
-    AuthenticationService authenticationService = KapuaLocator.getInstance().getService(AuthenticationService.class);
-    AuthorizationService authorizationService = KapuaLocator.getInstance().getService(AuthorizationService.class);
-    PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
-    UsernamePasswordTokenFactory credentialsFactory = KapuaLocator.getInstance().getFactory(UsernamePasswordTokenFactory.class);
-	AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
-	UserService userService = KapuaLocator.getInstance().getService(UserService.class);
-    DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
-    DeviceConnectionFactory deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
+    private AuthenticationService authenticationService = KapuaLocator.getInstance().getService(AuthenticationService.class);
+    private AuthorizationService authorizationService = KapuaLocator.getInstance().getService(AuthorizationService.class);
+    private PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
+    private UsernamePasswordTokenFactory credentialsFactory = KapuaLocator.getInstance().getFactory(UsernamePasswordTokenFactory.class);
+    private AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
+    private DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
+    private DeviceConnectionFactory deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
 
     public KapuaSecurityBrokerFilter(Broker next) throws KapuaException
     {
         super(next);
 
         connectorsDescriptorMap = new HashMap<String, ConnectorDescriptor>();
-        //TODO retrieve connector values from ???
-        connectorsDescriptorMap.put("kura", new ConnectorDescriptor("mqtt", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
-        connectorsDescriptorMap.put("kura", new ConnectorDescriptor("mqtts", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
+        //TODO retrieve connector values from ??? (the key is the connector name)
+        connectorsDescriptorMap.put("mqtt", new ConnectorDescriptor("mqtt", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
+        connectorsDescriptorMap.put("mqtts", new ConnectorDescriptor("mqtts", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
 
     	// Initialize the metrics
         metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
@@ -354,12 +356,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             AccessToken accessToken = authenticationService.login(credentials);
 
             KapuaId scopeId = accessToken.getScopeId();
-            KapuaId userId = accessToken.getId();
+            KapuaId userId = accessToken.getUserId();
             Account account = accountService.find(scopeId);
 			
             String accountName = account.getName();
-//            KapuaSession kapuaSession = authSrv.getCurrentSession();
-//            User currentUser = kapuaSession.getUser();
             loginShiroLoginTimeContext.stop();
 
             // if a user acts as a child MOVED INSIDE KapuaAuthorizingRealm otherwise through REST API and console this @accountName won't work
@@ -372,11 +372,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             // multiple account stealing link fix
             String fullClientId = MessageFormat.format(AclConstants.MULTI_ACCOUNT_CLIENT_ID, scopeId.getId().longValue(), clientId);
 
-            KapuaPrincipal principal = new KapuaPrincipal(username,
-										            scopeId.getId().longValue(),
+            KapuaPrincipal principal = new KapuaPrincipalImpl(accessToken,
+            										username,
                                                     clientId,
-                                                    clientIp,
-                                                    connectionId);
+                                                    clientIp);
             DeviceConnection deviceConnection = null;
             // 3) check authorization
             DefaultAuthorizationMap authMap = null;
@@ -481,7 +480,12 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             logAuthDestinationToLog(authDestinations);
             
             ConnectorDescriptor connectorDescriptor = connectorsDescriptorMap.get((((TransportConnector) context.getConnector()).getName()));
-            KapuaSecurityContext securityCtx = new KapuaSecurityContext(principal, authMap, (deviceConnection!=null ? deviceConnection.getId() : null), connectorDescriptor);
+            KapuaSecurityContext securityCtx = new KapuaSecurityContext(
+            		principal, 
+            		authMap, 
+            		(deviceConnection!=null ? deviceConnection.getId() : null), 
+            		connectionId,
+            		connectorDescriptor);
             context.setSecurityContext(securityCtx);
 
             // multiple account stealing link fix
@@ -490,7 +494,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
         catch (Exception e) {
         	metricLoginFailure.inc();
-        	
         	
         	// fix ENTMQ-731
             if (e instanceof KapuaAuthenticationException) {
@@ -585,7 +588,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         		
         		KapuaPrincipal kapuaPrincipal = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal());
         		String clientId = kapuaPrincipal.getClientId();
-        		long accountId = kapuaPrincipal.getAccountId();
+        		KapuaId accountId = kapuaPrincipal.getAccountId();
         		String username = kapuaSecurityContext.getUserName();
         		String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
 
@@ -617,21 +620,70 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         			}
         			else {
         				KapuaId deviceConnectionId = kapuaSecurityContext.getConnectionId();
-        				DeviceConnection deviceConnection = deviceConnectionService.findByClientId(scopeId, clientId);
+        				
+        				DeviceConnection deviceConnection = null;
+        				try {
+        					deviceConnection = KapuaSecurityUtils.doPriviledge(new Callable<DeviceConnection>() {
+
+        		                @Override
+        		                public DeviceConnection call()
+        		                    throws Exception
+        		                {
+        		                    return deviceConnectionService.findByClientId(scopeId, clientId);
+        		                }
+        		            });
+        		        }
+        		        catch (Exception e) {
+        		            throw new ShiroException("Error while updating the device connection!", e);
+        		        }
         				//the device connection must be not null
         				
         				// cleanup stealing link detection map
         				connectionMap.remove(fullClientId);
+        				
+        				final DeviceConnection deviceConnectionToUpdate = deviceConnection;
 						if (error == null) {
 							// update device connection
-							deviceConnection.setStatus(DeviceConnectionStatus.DISCONNECTED);
-	        				deviceConnectionService.update(deviceConnection);
+							deviceConnectionToUpdate.setStatus(DeviceConnectionStatus.DISCONNECTED);
+							
+							
+							try {
+	        					KapuaSecurityUtils.doPriviledge(new Callable<Void>() {
+
+	        		                @Override
+	        		                public Void call()
+	        		                    throws Exception
+	        		                {
+	        		                	deviceConnectionService.update(deviceConnectionToUpdate);
+	        		                	return (Void) null;
+	        		                }
+	        		            });
+	        		        }
+	        		        catch (Exception e) {
+	        		            throw new ShiroException("Error while updating the device connection status!", e);
+	        		        }
 						}
 						else {
 							// send missing message
 							// update device connection
-							deviceConnection.setStatus(DeviceConnectionStatus.MISSING);
-	        				deviceConnectionService.update(deviceConnection);
+							deviceConnectionToUpdate.setStatus(DeviceConnectionStatus.MISSING);
+	        				
+							try {
+	        					KapuaSecurityUtils.doPriviledge(new Callable<Void>() {
+
+	        		                @Override
+	        		                public Void call()
+	        		                    throws Exception
+	        		                {
+	        		                	deviceConnectionService.update(deviceConnectionToUpdate);
+	        		                	return (Void) null;
+	        		                }
+	        		            });
+	        		        }
+	        		        catch (Exception e) {
+	        		            throw new ShiroException("Error while updating the device connection status!", e);
+	        		        }
+							
 						}
         			}
         			metricClientDisconnectionClient.inc();
@@ -693,7 +745,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                                                           kapuaSecurityContext.getUserName(),
                                                           ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal()).getClientId(),
                                                           ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal()).getClientIp(),
-                                                          ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal()).getConnectionId(),
+                                                          kapuaSecurityContext.getConnectionId(),
                                                           messageSend.getDestination());
                     logger.warn(message);
                     metricPublishMessageSizeNotAllowed.update(messageSend.getSize());
@@ -779,7 +831,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                                                           kapuaSecurityContext.getUserName(),
                                                           ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal()).getClientId(),
                                                           ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal()).getClientIp(),
-                                                          ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal()).getConnectionId(),
+                                                          kapuaSecurityContext.getConnectionId(),
                                                           info.getDestination());
                     logger.warn(message);
                     subscribeNotAllowedMessages.inc();
