@@ -10,9 +10,8 @@ import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.device.call.kura.ConfigurationMetrics;
 import org.eclipse.kapua.service.device.call.kura.ResponseMetrics;
-import org.eclipse.kapua.service.device.call.kura.SnapshotMetrics;
+import org.eclipse.kapua.service.device.call.kura.app.SnapshotMetrics;
 import org.eclipse.kapua.service.device.call.kura.model.XmlSnapshotIdResult;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
@@ -24,6 +23,9 @@ import org.eclipse.kapua.service.device.management.commons.exception.DeviceManag
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseChannel;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
 import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.service.device.management.snapshot.internal.SnapshotAppProperties;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshot;
@@ -34,9 +36,6 @@ import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
 
 public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMessage, SnapshotResponseMessage>
 {
@@ -101,13 +100,13 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
 
         String[] appIdTokens = channel.getAppId().split("-");
 
-        if (!ConfigurationMetrics.APP_ID.getValue().equals(appIdTokens[0])) {
+        if (!SnapshotMetrics.APP_ID.getValue().equals(appIdTokens[0])) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_APP_NAME,
                                           null,
                                           appIdTokens[0]);
         }
 
-        if (!ConfigurationMetrics.APP_VERSION.getValue().equals(appIdTokens[1])) {
+        if (!SnapshotMetrics.APP_VERSION.getValue().equals(appIdTokens[1])) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_APP_VERSION,
                                           null,
                                           appIdTokens[1]);
@@ -135,8 +134,9 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
             body = new String(snapshotResponsePayload.getBody(), charEncoding);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, snapshotResponsePayload.getBody());
-
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          snapshotResponsePayload.getBody());
         }
 
         XmlSnapshotIdResult snapshotIdResult = null;
@@ -144,9 +144,19 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
             snapshotIdResult = XmlUtil.unmarshal(body, XmlSnapshotIdResult.class);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          body);
         }
         
+        translateBody(snapshotResponsePayload, charEncoding, snapshotIdResult);
+        
+        return snapshotResponsePayload;
+    }
+
+    private void translateBody(SnapshotResponsePayload snapshotResponsePayload, String charEncoding, XmlSnapshotIdResult snapshotIdResult)
+        throws TranslatorException
+    {
         try {
             KapuaLocator locator = KapuaLocator.getInstance();
             DeviceSnapshotFactory deviceSnapshotFactory = locator.getFactory(DeviceSnapshotFactory.class);
@@ -165,10 +175,10 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
             snapshotResponsePayload.setBody(requestBody);
         }
         catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.REQUEST_EXCEPTION, e, (Object[]) null); //null for now
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                          e,
+                                          (Object[]) null); //null for now
         }
-        
-        return snapshotResponsePayload;
     }
 
     @Override
@@ -182,5 +192,4 @@ public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMe
     {
         return SnapshotResponseMessage.class;
     }
-
 }

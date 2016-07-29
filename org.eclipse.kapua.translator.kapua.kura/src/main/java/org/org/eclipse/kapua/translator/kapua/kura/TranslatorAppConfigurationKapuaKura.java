@@ -9,19 +9,19 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.device.call.kura.ConfigurationMetrics;
+import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
 
 public class TranslatorAppConfigurationKapuaKura implements Translator<ConfigurationRequestMessage, KuraRequestMessage>
 {
@@ -85,9 +85,9 @@ public class TranslatorAppConfigurationKapuaKura implements Translator<Configura
 
         List<String> resources = new ArrayList<>();
         resources.add("configuration");
-        String snapshotId = channel.getComponentId();
-        if (snapshotId != null) {
-            resources.add(snapshotId);
+        String componentId = channel.getComponentId();
+        if (componentId != null) {
+            resources.add(componentId);
         }
         kuraRequestChannel.setResources(resources.toArray(new String[resources.size()]));
 

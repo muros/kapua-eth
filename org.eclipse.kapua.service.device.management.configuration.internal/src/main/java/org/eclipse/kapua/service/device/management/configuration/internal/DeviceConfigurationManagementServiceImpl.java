@@ -22,14 +22,14 @@ import org.eclipse.kapua.service.device.management.configuration.DeviceComponent
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
 
 public class DeviceConfigurationManagementServiceImpl implements DeviceConfigurationManagementService
 {
@@ -97,7 +97,7 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
 
         }
-        
+
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
@@ -176,7 +176,7 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         // Do put
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(configurationRequestMessage, timeout);
         ConfigurationResponseMessage responseMessage = (ConfigurationResponseMessage) deviceApplicationCall.send();
-        
+
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);

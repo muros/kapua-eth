@@ -18,15 +18,15 @@ import org.eclipse.kapua.service.KapuaService;
 
 public interface DeviceDeployManagementService extends KapuaService
 {
-    public DeviceDeploymentPackageListResult get(KapuaId scopeId, KapuaId deviceId)
+    public DeviceDeploymentPackageListResult get(KapuaId scopeId, KapuaId deviceId, Long timeout)
         throws KapuaException;
 
-    public void install(KapuaId scopeId, KapuaId deviceId, String name, byte[] deviceDeploymentPackage)
+    public void install(KapuaId scopeId, KapuaId deviceId, String name, byte[] deviceDeploymentPackage, Long timeout)
         throws KapuaException;
 
-    public void install(KapuaId scopeId, KapuaId deviceId, String deviceDeploymentPackageUrl)
+    public void install(KapuaId scopeId, KapuaId deviceId, String deviceDeploymentPackageUrl, Long timeout)
         throws KapuaException;
 
-    public void uninstall(KapuaId scopeId, KapuaId deviceId, String deviceDeploymentPackageId)
+    public void uninstall(KapuaId scopeId, KapuaId deviceId, String deviceDeploymentPackageId, Long timeout)
         throws KapuaException;
 }

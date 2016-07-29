@@ -198,6 +198,7 @@
 
         <!-- Deploy -->
         <module>org.eclipse.kapua.service.device.management.deploy</module>
+        <module>org.eclipse.kapua.service.device.management.deploy.internal</module>
 
         <!-- Bundles -->
         <module>org.eclipse.kapua.service.device.management.bundle</module>
