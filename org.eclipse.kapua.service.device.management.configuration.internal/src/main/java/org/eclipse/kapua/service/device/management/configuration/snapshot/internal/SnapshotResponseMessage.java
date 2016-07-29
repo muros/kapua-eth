@@ -1,11 +1,10 @@
-package org.org.eclipse.kapua.service.device.management.configuration.message.internal;
+package org.eclipse.kapua.service.device.management.configuration.snapshot.internal;
 
 import org.eclipse.kapua.message.internal.KapuaMessageImpl;
 import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.service.device.management.response.KapuaResponseMessage;
 
-public class ConfigurationResponseMessage extends KapuaMessageImpl<ConfigurationResponseChannel, ConfigurationResponsePayload>
-                                          implements KapuaResponseMessage<ConfigurationResponseChannel, ConfigurationResponsePayload>
+public class SnapshotResponseMessage extends KapuaMessageImpl<SnapshotResponseChannel, SnapshotResponsePayload>implements KapuaResponseMessage<SnapshotResponseChannel, SnapshotResponsePayload>
 {
     private KapuaResponseCode responseCode;
 

@@ -24,15 +24,15 @@ import org.eclipse.kapua.service.device.management.configuration.DeviceComponent
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseChannel;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
 import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
 
 public class TranslatorAppConfigurationKuraKapua implements Translator<KuraResponseMessage, ConfigurationResponseMessage>
 {

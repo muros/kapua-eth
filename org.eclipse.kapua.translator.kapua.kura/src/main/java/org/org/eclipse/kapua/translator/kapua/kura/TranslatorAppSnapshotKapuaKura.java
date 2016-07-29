@@ -15,13 +15,13 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
 import org.eclipse.kapua.service.device.management.snapshot.internal.SnapshotAppProperties;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
 
 public class TranslatorAppSnapshotKapuaKura implements Translator<SnapshotRequestMessage, KuraRequestMessage>
 {

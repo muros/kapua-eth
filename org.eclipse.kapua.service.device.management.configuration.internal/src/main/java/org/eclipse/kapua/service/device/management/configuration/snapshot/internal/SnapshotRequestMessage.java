@@ -1,4 +1,4 @@
-package org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal;
+package org.eclipse.kapua.service.device.management.configuration.snapshot.internal;
 
 import org.eclipse.kapua.message.internal.KapuaMessageImpl;
 import org.eclipse.kapua.service.device.management.request.KapuaRequestMessage;

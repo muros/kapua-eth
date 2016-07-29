@@ -1,13 +1,13 @@
-package org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal;
+package org.eclipse.kapua.service.device.management.configuration.message.internal;
 
 import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.commons.message.response.KapuaAppChannelImpl;
 import org.eclipse.kapua.service.device.management.request.KapuaRequestChannel;
 
-public class SnapshotRequestChannel extends KapuaAppChannelImpl implements KapuaRequestChannel
+public class ConfigurationRequestChannel extends KapuaAppChannelImpl implements KapuaRequestChannel
 {
     private KapuaMethod method;
-    private String      snapshotId;
+    private String      componentId;
 
     @Override
     public KapuaMethod getMethod()
@@ -21,13 +21,13 @@ public class SnapshotRequestChannel extends KapuaAppChannelImpl implements Kapua
         this.method = method;
     }
 
-    public String getSnapshotId()
+    public String getComponentId()
     {
-        return snapshotId;
+        return componentId;
     }
 
-    public void setSnapshotId(String snapshotId)
+    public void setComponentId(String componentId)
     {
-        this.snapshotId = snapshotId;
+        this.componentId = componentId;
     }
 }

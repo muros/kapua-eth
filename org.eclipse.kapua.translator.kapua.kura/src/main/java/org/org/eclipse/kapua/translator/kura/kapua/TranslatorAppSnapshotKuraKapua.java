@@ -23,6 +23,9 @@ import org.eclipse.kapua.service.device.management.commons.exception.DeviceManag
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseChannel;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
+import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
 import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.service.device.management.snapshot.internal.SnapshotAppProperties;
 import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshot;
@@ -33,9 +36,6 @@ import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
 
 public class TranslatorAppSnapshotKuraKapua implements Translator<KuraResponseMessage, SnapshotResponseMessage>
 {

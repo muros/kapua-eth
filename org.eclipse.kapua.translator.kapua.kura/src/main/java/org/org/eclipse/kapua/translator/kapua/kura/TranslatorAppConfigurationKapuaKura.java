@@ -16,12 +16,12 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
-import org.org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestPayload;
 
 public class TranslatorAppConfigurationKapuaKura implements Translator<ConfigurationRequestMessage, KuraRequestMessage>
 {
