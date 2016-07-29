@@ -67,7 +67,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -80,7 +80,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -93,7 +93,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -135,6 +135,7 @@
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
         <module>org.eclipse.kapua.locator.spi</module>
+        <module>org.eclipse.kapua.locator.guice</module>
 
         <!-- -->
         <!-- Configurable service -->
@@ -225,7 +226,7 @@
         <!-- Applications -->
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
-    </modules>
+  </modules>
 
     <issueManagement>
         <system>GitHub Issues</system>
