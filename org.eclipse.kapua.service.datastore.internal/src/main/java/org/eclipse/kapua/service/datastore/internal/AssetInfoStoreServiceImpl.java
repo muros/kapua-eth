@@ -21,10 +21,10 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.Permission;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.Permission;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.datastore.AssetInfoStoreService;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsClient;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsMessageField;
@@ -67,26 +67,26 @@ public class AssetInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
         authorizationService = locator.getService(AuthorizationService.class);
         permissionFactory = locator.getFactory(PermissionFactory.class);
     }
-//
-//    @Override
-//    public StorableId store(KapuaId scopeId, AssetInfoCreator creator)
-//        throws KapuaException
-//    {
-//        // TODO DAOs are ready, need to evaluate if this functionality
-//        // have to be available or not. Currently entries are added by
-//        // the message service directy
-//        throw KapuaException.internalError("Not implemented");
-//    }
-//
-//    @Override
-//    public StorableId update(KapuaId scopeId, AssetInfo assetInfo)
-//        throws KapuaException
-//    {
-//        // TODO DAOs are ready, need to evaluate if this functionality
-//        // have to be available or not. Currently entries are updated by
-//        // the message service directy
-//        throw KapuaException.internalError("Not implemented");
-//    }
+    //
+    // @Override
+    // public StorableId store(KapuaId scopeId, AssetInfoCreator creator)
+    // throws KapuaException
+    // {
+    // // TODO DAOs are ready, need to evaluate if this functionality
+    // // have to be available or not. Currently entries are added by
+    // // the message service directy
+    // throw KapuaException.internalError("Not implemented");
+    // }
+    //
+    // @Override
+    // public StorableId update(KapuaId scopeId, AssetInfo assetInfo)
+    // throws KapuaException
+    // {
+    // // TODO DAOs are ready, need to evaluate if this functionality
+    // // have to be available or not. Currently entries are updated by
+    // // the message service directy
+    // throw KapuaException.internalError("Not implemented");
+    // }
 
     @Override
     public void delete(KapuaId scopeId, StorableId id)

@@ -40,7 +40,7 @@ public interface MessageStoreService extends KapuaService,
 
     public long count(KapuaId scopeId, MessageQuery query)
         throws KapuaException;
-    
+
     public void delete(KapuaId scopeId, MessageQuery query)
         throws KapuaException;
 }

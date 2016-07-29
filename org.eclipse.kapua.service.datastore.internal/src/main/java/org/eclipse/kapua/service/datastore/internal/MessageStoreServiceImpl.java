@@ -15,7 +15,6 @@ package org.eclipse.kapua.service.datastore.internal;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,15 +30,13 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.permission.Permission;
+import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.datastore.MessageStoreService;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsClient;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsDatastoreException;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsDocumentBuilder;
-import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsMessageField;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsMetric;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsMetricDocumentBuilder;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsSchema;
@@ -56,10 +53,7 @@ import org.eclipse.kapua.service.datastore.internal.model.MessageImpl;
 import org.eclipse.kapua.service.datastore.internal.model.MessageListResultImpl;
 import org.eclipse.kapua.service.datastore.internal.model.MetricsIndexBy;
 import org.eclipse.kapua.service.datastore.internal.model.StorableIdImpl;
-import org.eclipse.kapua.service.datastore.internal.model.query.AndPredicateImpl;
 import org.eclipse.kapua.service.datastore.internal.model.query.AssetInfoQueryImpl;
-import org.eclipse.kapua.service.datastore.internal.model.query.IdsPredicateImpl;
-import org.eclipse.kapua.service.datastore.internal.model.query.MessageQueryImpl;
 import org.eclipse.kapua.service.datastore.internal.model.query.MetricInfoQueryImpl;
 import org.eclipse.kapua.service.datastore.internal.model.query.TopicInfoQueryImpl;
 import org.eclipse.kapua.service.datastore.internal.model.query.TopicMatchPredicateImpl;
@@ -270,7 +264,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
 
             if (true)
                 throw KapuaException.internalError("Method not implemented.");
-            
+
             return null;
         }
         catch (Exception exc) {
@@ -405,11 +399,11 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         // Check Access
 
         // TODO add enum for actions
-//        Permission permission = permissionFactory.newPermission(DatastoreDomain.data, action, scopeId);
-//        authorizationService.checkPermission(permission);
-//
-//        Account account = accountService.find(scopeId);
-//        return account.getName();
+        // Permission permission = permissionFactory.newPermission(DatastoreDomain.data, action, scopeId);
+        // authorizationService.checkPermission(permission);
+        //
+        // Account account = accountService.find(scopeId);
+        // return account.getName();
         if (false)
             throw KapuaException.internalError("Impossible exception");
     }
@@ -575,21 +569,22 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
             }
         }
     }
-    
-    private void resetCache(String accountName, String topic) 
-            throws Exception {
+
+    private void resetCache(String accountName, String topic)
+        throws Exception
+    {
 
         boolean isAnyAsset;
         boolean isAssetToDelete = false;
         String semTopic;
 
         if (topic != null) {
-            
+
             // determine if we should delete an asset if topic = account/asset/#
             KapuaTopic kapuaTopic = new KapuaTopic(topic);
             isAnyAsset = kapuaTopic.isAnyAsset();
             semTopic = kapuaTopic.getSemanticTopic();
-            
+
             if (semTopic.isEmpty() && !isAnyAsset)
                 isAssetToDelete = true;
         }
@@ -605,64 +600,63 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         int pageSize = 1000;
         int offset = 0;
         long totalHits = 1;
-        
+
         MetricInfoQueryImpl metricQuery = new MetricInfoQueryImpl();
-        metricQuery.setLimit(pageSize+1);
+        metricQuery.setLimit(pageSize + 1);
         metricQuery.setOffset(offset);
-        
+
         TopicMatchPredicateImpl topicPredicate = new TopicMatchPredicateImpl();
         topicPredicate.setExpression(topic);
         metricQuery.setPredicate(topicPredicate);
-        
+
         // Remove metrics
         while (totalHits > 0) {
             MetricInfoListResult metrics = EsMetricDAO.connection(EsClient.getcurrent())
-                                            .instance(everyIndex, EsSchema.METRIC_TYPE_NAME)
-                                            .query(metricQuery);
+                                                      .instance(everyIndex, EsSchema.METRIC_TYPE_NAME)
+                                                      .query(metricQuery);
 
-            totalHits = metrics.size();            
+            totalHits = metrics.size();
             LocalCache<String, Boolean> metricsCache = DatastoreCacheManager.getInstance().getMetricsCache();
-            long toBeProcessed =  totalHits > pageSize ? pageSize : totalHits;
+            long toBeProcessed = totalHits > pageSize ? pageSize : totalHits;
 
-            for (int i = 0; i < toBeProcessed; i++) 
-            {
+            for (int i = 0; i < toBeProcessed; i++) {
                 String id = metrics.get(i).getId().toString();
                 if (metricsCache.get(id))
-                   metricsCache.remove(id);
+                    metricsCache.remove(id);
             }
-            
+
             if (totalHits > pageSize)
                 offset += (pageSize + 1);
         }
-        
+
         logger.debug(String.format("Removed cached topic metrics for [%s]", topic));
-        
+
         EsMetricDAO.connection(EsClient.getcurrent())
-                        .instance(everyIndex, EsSchema.METRIC_TYPE_NAME)
-                        .deleteByQuery(metricQuery);
+                   .instance(everyIndex, EsSchema.METRIC_TYPE_NAME)
+                   .deleteByQuery(metricQuery);
 
         logger.debug(String.format("Removed topic metrics for [%s]", topic));
         //
-        
+
         TopicInfoQueryImpl topicQuery = new TopicInfoQueryImpl();
-        topicQuery.setLimit(pageSize+1);
+        topicQuery.setLimit(pageSize + 1);
         topicQuery.setOffset(offset);
-        
+
         topicPredicate = new TopicMatchPredicateImpl();
         topicPredicate.setExpression(topic);
         topicQuery.setPredicate(topicPredicate);
-        
+
         // Remove topic
         offset = 0;
         totalHits = 1;
         while (totalHits > 0) {
             TopicInfoListResult topics = EsTopicDAO.connection(EsClient.getcurrent())
-                                      .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
-                                      .query(topicQuery);
-            
+                                                   .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
+                                                   .query(topicQuery);
+
             totalHits = topics.size();
             LocalCache<String, Boolean> topicsCache = DatastoreCacheManager.getInstance().getTopicsCache();
-            long toBeProcessed =  totalHits > pageSize ? pageSize : totalHits;
+            long toBeProcessed = totalHits > pageSize ? pageSize : totalHits;
 
             for (int i = 0; i < toBeProcessed; i++) {
                 String id = topics.get(0).getId().toString();
@@ -672,23 +666,23 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
             if (totalHits > pageSize)
                 offset += (pageSize + 1);
         }
-        
+
         logger.debug(String.format("Removed cached topics for [%s]", topic));
-        
+
         EsTopicDAO.connection(EsClient.getcurrent())
                   .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
                   .deleteByQuery(topicQuery);
-        
+
         logger.debug(String.format("Removed topics for [%s]", topic));
         //
 
         // Remove asset
         if (isAssetToDelete) {
-            
+
             AssetInfoQueryImpl assetQuery = new AssetInfoQueryImpl();
-            assetQuery.setLimit(pageSize+1);
+            assetQuery.setLimit(pageSize + 1);
             assetQuery.setOffset(offset);
-            
+
             topicPredicate = new TopicMatchPredicateImpl();
             topicPredicate.setExpression(topic);
             assetQuery.setPredicate(topicPredicate);
@@ -697,12 +691,12 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
             totalHits = 1;
             while (totalHits > 0) {
                 AssetInfoListResult assets = EsAssetDAO.connection(EsClient.getcurrent())
-                                          .instance(everyIndex, EsSchema.ASSET_TYPE_NAME)
-                                          .query(assetQuery);
-                
+                                                       .instance(everyIndex, EsSchema.ASSET_TYPE_NAME)
+                                                       .query(assetQuery);
+
                 totalHits = assets.size();
                 LocalCache<String, Boolean> assetsCache = DatastoreCacheManager.getInstance().getAssetsCache();
-                long toBeProcessed =  totalHits > pageSize ? pageSize : totalHits;
+                long toBeProcessed = totalHits > pageSize ? pageSize : totalHits;
 
                 for (int i = 0; i < toBeProcessed; i++) {
                     String id = assets.get(i).getId().toString();
@@ -712,13 +706,13 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
                 if (totalHits > pageSize)
                     offset += (pageSize + 1);
             }
-            
+
             logger.debug(String.format("Removed cached assets for [%s]", topic));
-            
+
             EsAssetDAO.connection(EsClient.getcurrent())
                       .instance(everyIndex, EsSchema.ASSET_TYPE_NAME)
                       .deleteByQuery(assetQuery);
-            
+
             logger.debug(String.format("Removed assets for [%s]", topic));
         }
     }

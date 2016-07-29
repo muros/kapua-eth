@@ -21,10 +21,10 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.Permission;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.Permission;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.datastore.TopicInfoStoreService;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsClient;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsMessageField;
@@ -50,13 +50,13 @@ import org.slf4j.LoggerFactory;
 
 public class TopicInfoStoreServiceImpl extends AbstractKapuaConfigurableService implements TopicInfoStoreService
 {
-    private static final long serialVersionUID = 7839070776817998600L;
+    private static final long   serialVersionUID = 7839070776817998600L;
 
     // @SuppressWarnings("unused")
-    private static final Logger logger            = LoggerFactory.getLogger(TopicInfoStoreServiceImpl.class);
+    private static final Logger logger           = LoggerFactory.getLogger(TopicInfoStoreServiceImpl.class);
 
-    private static final long   DAY_SECS          = 24 * 60 * 60;
-    private static final long   DAY_MILLIS        = DAY_SECS * 1000;
+    private static final long   DAY_SECS         = 24 * 60 * 60;
+    private static final long   DAY_MILLIS       = DAY_SECS * 1000;
 
     private AccountService      accountService;
     AuthorizationService        authorizationService;
@@ -72,26 +72,26 @@ public class TopicInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
         authorizationService = locator.getService(AuthorizationService.class);
         permissionFactory = locator.getFactory(PermissionFactory.class);
     }
-//
-//    @Override
-//    public StorableId store(KapuaId scopeId, TopicInfoCreator creator)
-//        throws KapuaException
-//    {
-//        // TODO DAOs are ready, need to evaluate if this functionality
-//        // have to be available or not. Currently entries are added by
-//        // the message service directy
-//        throw KapuaException.internalError("Not implemented");
-//    }
-//
-//    @Override
-//    public StorableId update(KapuaId scopeId, TopicInfo creator)
-//        throws KapuaException
-//    {
-//        // TODO DAOs are ready, need to evaluate if this functionality
-//        // have to be available or not. Currently entries are added by
-//        // the message service directy
-//        throw KapuaException.internalError("Not implemented");
-//    }
+    //
+    // @Override
+    // public StorableId store(KapuaId scopeId, TopicInfoCreator creator)
+    // throws KapuaException
+    // {
+    // // TODO DAOs are ready, need to evaluate if this functionality
+    // // have to be available or not. Currently entries are added by
+    // // the message service directy
+    // throw KapuaException.internalError("Not implemented");
+    // }
+    //
+    // @Override
+    // public StorableId update(KapuaId scopeId, TopicInfo creator)
+    // throws KapuaException
+    // {
+    // // TODO DAOs are ready, need to evaluate if this functionality
+    // // have to be available or not. Currently entries are added by
+    // // the message service directy
+    // throw KapuaException.internalError("Not implemented");
+    // }
 
     @Override
     public void delete(KapuaId scopeId, StorableId id)
@@ -119,23 +119,23 @@ public class TopicInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
 
         try {
             String everyIndex = EsUtils.getAnyIndexName(scopeName);
-            
+
             TopicInfo topicInfo = this.find(scopeId, id);
-            
+
             MessageQueryImpl mqi = new MessageQueryImpl();
             TopicMatchPredicateImpl predicate = new TopicMatchPredicateImpl(topicInfo.getFullTopicName());
             mqi.setPredicate(predicate);
             EsMessageDAO.connection(EsClient.getcurrent())
-                    .instance(everyIndex, EsSchema.MESSAGE_TYPE_NAME)
-                    .setListener(null)
-                    .deleteByQuery(mqi);
-            
+                        .instance(everyIndex, EsSchema.MESSAGE_TYPE_NAME)
+                        .setListener(null)
+                        .deleteByQuery(mqi);
+
             MetricInfoQueryImpl miqi = new MetricInfoQueryImpl();
             mqi.setPredicate(predicate);
             EsMetricDAO.connection(EsClient.getcurrent())
-                    .instance(everyIndex, EsSchema.METRIC_TYPE_NAME)
-                    .setListener(null)
-                    .deleteByQuery(miqi);
+                       .instance(everyIndex, EsSchema.METRIC_TYPE_NAME)
+                       .setListener(null)
+                       .deleteByQuery(miqi);
 
             EsTopicDAO.connection(EsClient.getcurrent())
                       .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
@@ -208,8 +208,8 @@ public class TopicInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
             String everyIndex = EsUtils.getAnyIndexName(scopeName);
             TopicInfoListResult result = null;
             result = EsTopicDAO.connection(EsClient.getcurrent())
-                                 .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
-                                 .query(query);
+                               .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
+                               .query(query);
 
             return result;
         }
@@ -248,8 +248,8 @@ public class TopicInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
             String everyIndex = EsUtils.getAnyIndexName(scopeName);
             long result;
             result = EsTopicDAO.connection(EsClient.getcurrent())
-                                 .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
-                                 .count(query);
+                               .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
+                               .count(query);
 
             return result;
         }
@@ -284,31 +284,29 @@ public class TopicInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
             return;
         }
 
-        try 
-        {
+        try {
             String everyIndex = EsUtils.getAnyIndexName(scopeName);
-            
+
             TopicInfoListResult topics = this.query(scopeId, query);
-            
-            for(TopicInfo topicInfo:topics)
-            {
-                //TODO Improve performances
+
+            for (TopicInfo topicInfo : topics) {
+                // TODO Improve performances
                 MessageQueryImpl mqi = new MessageQueryImpl();
                 TopicMatchPredicateImpl predicate = new TopicMatchPredicateImpl(topicInfo.getFullTopicName());
                 mqi.setPredicate(predicate);
                 EsMessageDAO.connection(EsClient.getcurrent())
-                        .instance(everyIndex, EsSchema.MESSAGE_TYPE_NAME)
-                        .setListener(null)
-                        .deleteByQuery(mqi);
-                
+                            .instance(everyIndex, EsSchema.MESSAGE_TYPE_NAME)
+                            .setListener(null)
+                            .deleteByQuery(mqi);
+
                 MetricInfoQueryImpl miqi = new MetricInfoQueryImpl();
                 mqi.setPredicate(predicate);
                 EsMetricDAO.connection(EsClient.getcurrent())
-                        .instance(everyIndex, EsSchema.METRIC_TYPE_NAME)
-                        .setListener(null)
-                        .deleteByQuery(miqi);
+                           .instance(everyIndex, EsSchema.METRIC_TYPE_NAME)
+                           .setListener(null)
+                           .deleteByQuery(miqi);
             }
-            
+
             EsTopicDAO.connection(EsClient.getcurrent())
                       .instance(everyIndex, EsSchema.TOPIC_TYPE_NAME)
                       .deleteByQuery(query);
@@ -331,7 +329,7 @@ public class TopicInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
         Permission permission = permissionFactory.newPermission(DatastoreDomain.DATASTORE, action, scopeId);
         authorizationService.checkPermission(permission);
     }
-    
+
     private AccountInfo getAccountServicePlan(KapuaId scopeId)
         throws KapuaException
     {

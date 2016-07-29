@@ -22,14 +22,14 @@ import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.query.AssetInfoQuery;
 
 public interface AssetInfoStoreService extends KapuaService,
-                                   KapuaConfigurableService
+                                       KapuaConfigurableService
 {
-//    public StorableId store(KapuaId scopeId, AssetInfoCreator creator)
-//        throws KapuaException;
-//
-//    public StorableId update(KapuaId scopeId, AssetInfo assetInfo)
-//            throws KapuaException;
-//
+    // public StorableId store(KapuaId scopeId, AssetInfoCreator creator)
+    // throws KapuaException;
+    //
+    // public StorableId update(KapuaId scopeId, AssetInfo assetInfo)
+    // throws KapuaException;
+    //
     public void delete(KapuaId scopeId, StorableId id)
         throws KapuaException;
 

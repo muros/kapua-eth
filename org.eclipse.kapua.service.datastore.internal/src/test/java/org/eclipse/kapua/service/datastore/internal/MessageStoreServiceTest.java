@@ -31,8 +31,6 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.authentication.AuthenticationService;
-import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.eclipse.kapua.service.datastore.DatastoreObjectFactory;
 import org.eclipse.kapua.service.datastore.MessageStoreService;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
@@ -48,48 +46,48 @@ import org.slf4j.LoggerFactory;
 public class MessageStoreServiceTest
 {
     @SuppressWarnings("unused")
-    private static final Logger s_logger = LoggerFactory.getLogger(MessageStoreServiceTest.class);
+    private static final Logger   s_logger = LoggerFactory.getLogger(MessageStoreServiceTest.class);
 
-    protected static Random       random  = new Random();
-    protected static KapuaLocator locator = KapuaLocator.getInstance();
+    protected static Random       random   = new Random();
+    protected static KapuaLocator locator  = KapuaLocator.getInstance();
 
     protected static KapuaId      adminUserId;
 
     @BeforeClass
     public static void setUp()
     {
-//        try {
-//            //
-//            // Login
-//            String username = "kapua-sys";
-//            String password = "We!come12345";
-//
-//            AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-//            UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
-//            authenticationService.login(credentialsFactory.newInstance(username, password.toCharArray()));
-//
-//            //
-//            // Get current user Id
-//            adminUserId = KapuaSecurityUtils.getSession().getUserId();
-//
-//        }
-//        catch (KapuaException exc) {
-//            exc.printStackTrace();
-//        }
+        // try {
+        // //
+        // // Login
+        // String username = "kapua-sys";
+        // String password = "We!come12345";
+        //
+        // AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+        // UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
+        // authenticationService.login(credentialsFactory.newInstance(username, password.toCharArray()));
+        //
+        // //
+        // // Get current user Id
+        // adminUserId = KapuaSecurityUtils.getSession().getUserId();
+        //
+        // }
+        // catch (KapuaException exc) {
+        // exc.printStackTrace();
+        // }
     }
 
     @AfterClass
     public static void tearDown()
     {
-//        try {
-//            KapuaLocator locator = KapuaLocator.getInstance();
-//            AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-//
-//            authenticationService.logout();
-//        }
-//        catch (KapuaException exc) {
-//            exc.printStackTrace();
-//        }
+        // try {
+        // KapuaLocator locator = KapuaLocator.getInstance();
+        // AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+        //
+        // authenticationService.logout();
+        // }
+        // catch (KapuaException exc) {
+        // exc.printStackTrace();
+        // }
     }
 
     @Test

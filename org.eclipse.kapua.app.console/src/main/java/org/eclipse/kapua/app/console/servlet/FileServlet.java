@@ -37,8 +37,8 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.KapuaUnauthenticatedException;
 import org.eclipse.kapua.app.console.server.KapuaRemoteServiceServlet;
-import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
 import org.eclipse.kapua.app.console.setting.ConsoleSetting;
+import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.model.KapuaFormFields;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
@@ -194,7 +194,8 @@ public class FileServlet extends EdcHttpServlet
                 s_logger.info("Installing deployment package at URL: {}", packageDownloadUrl);
                 deviceDeployManagementService.install(KapuaEid.parseShortId(scopeIdString),
                                                       KapuaEid.parseShortId(deviceIdString),
-                                                      packageDownloadUrl);
+                                                      packageDownloadUrl,
+                                                      null);
             }
             else if (reqPathInfo.endsWith("upload")) {
 
@@ -216,7 +217,8 @@ public class FileServlet extends EdcHttpServlet
                 deviceDeployManagementService.install(KapuaEid.parseShortId(scopeIdString),
                                                       KapuaEid.parseShortId(deviceIdString),
                                                       filename,
-                                                      data);
+                                                      data,
+                                                      null);
             }
             else {
                 resp.sendError(404);
