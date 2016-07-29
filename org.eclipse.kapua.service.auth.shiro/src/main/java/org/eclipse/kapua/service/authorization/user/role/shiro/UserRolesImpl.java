@@ -17,7 +17,6 @@ import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -25,7 +24,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
@@ -47,8 +45,7 @@ public class UserRolesImpl extends AbstractKapuaEntity implements UserRoles
     })
     private KapuaEid          userId;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @OrderBy("name DESC")
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "athz_user_role_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleImpl>     roles;
 
