@@ -21,7 +21,7 @@
         <class>org.eclipse.kapua.service.user.internal.UserImpl</class>
         
         <!-- Authorization -->
-        <class>org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionImpl</class>
+        <class>org.eclipse.kapua.service.authorization.user.permission.shiro.UserPermissionImpl</class>
  
         <!-- Device -->
         <class>org.eclipse.kapua.service.device.registry.internal.DeviceImpl</class>

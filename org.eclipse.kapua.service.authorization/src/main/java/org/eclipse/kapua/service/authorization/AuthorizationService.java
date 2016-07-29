@@ -14,6 +14,7 @@ package org.eclipse.kapua.service.authorization;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.KapuaService;
+import org.eclipse.kapua.service.authorization.permission.Permission;
 
 /**
  * AuthenticationService exposes APIs to manage User object under an Account.

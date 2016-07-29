@@ -22,7 +22,7 @@ public interface RoleCreator extends KapuaEntityCreator<Role>
 
     public String getName();
 
-    public void setPermissions(Set<RolePermission> permissions);
+    public void setRoles(Set<RolePermission> permissions);
 
-    public Set<RolePermission> getPermissions();
+    public Set<RolePermission> getRoles();
 }

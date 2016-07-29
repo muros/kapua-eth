@@ -23,9 +23,9 @@ import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.authorization.role.Role;
 import org.eclipse.kapua.service.authorization.role.RoleCreator;
 import org.eclipse.kapua.service.authorization.role.RoleListResult;
@@ -40,7 +40,7 @@ public class RoleServiceImpl implements RoleService
     {
         ArgumentValidator.notNull(roleCreator, "roleCreator");
         ArgumentValidator.notEmptyOrNull(roleCreator.getName(), "roleCreator.name");
-        ArgumentValidator.notNull(roleCreator.getPermissions(), "roleCreator.permissions");
+        ArgumentValidator.notNull(roleCreator.getRoles(), "roleCreator.permissions");
 
         //
         // Check Access

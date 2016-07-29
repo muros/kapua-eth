@@ -34,10 +34,10 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.authorization.Action;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.permission.Action;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 
 /**
  * Implementation class for the AccountService interface.

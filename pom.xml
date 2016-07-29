@@ -139,7 +139,6 @@
 
         <!-- -->
         <!-- Configurable service -->
-
         <module>org.eclipse.kapua.configuration.spi</module>
 
         <!-- -->
@@ -167,7 +166,7 @@
         <!-- -->
         <!-- Datastore -->
         <module>org.eclipse.kapua.service.datastore</module>
-        <module>org.eclipse.kapua.service.datastore.internal</module>
+        <!-- <module>org.eclipse.kapua.service.datastore.internal</module> -->
 
         <!-- -->
         <!-- Message -->

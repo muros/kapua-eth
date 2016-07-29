@@ -21,9 +21,9 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.config.ComponentConfiguration;
 import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 import org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider;
 

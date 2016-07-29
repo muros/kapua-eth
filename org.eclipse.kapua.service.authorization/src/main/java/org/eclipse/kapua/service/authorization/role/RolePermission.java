@@ -14,7 +14,7 @@ package org.eclipse.kapua.service.authorization.role;
 
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Permission;
+import org.eclipse.kapua.service.authorization.permission.Permission;
 
 public interface RolePermission extends KapuaEntity
 {

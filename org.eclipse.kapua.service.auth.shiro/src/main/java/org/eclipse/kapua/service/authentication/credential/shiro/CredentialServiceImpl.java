@@ -17,9 +17,9 @@ import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
 import org.eclipse.kapua.service.authentication.credential.CredentialPredicates;
 import org.eclipse.kapua.service.authentication.credential.CredentialQuery;
 import org.eclipse.kapua.service.authentication.credential.CredentialService;
-import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.PermissionFactory;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 
 public class CredentialServiceImpl implements CredentialService
 {

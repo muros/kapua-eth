@@ -30,7 +30,7 @@ public class RoleDAO extends ServiceDAO
         Role role = new RoleImpl(creator.getScopeId());
 
         role.setName(creator.getName());
-        role.setPermissions(creator.getPermissions());
+        role.setPermissions(creator.getRoles());
 
         return ServiceDAO.create(em, role);
     }

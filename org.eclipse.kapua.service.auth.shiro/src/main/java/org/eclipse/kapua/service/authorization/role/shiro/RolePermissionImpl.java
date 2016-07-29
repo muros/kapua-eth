@@ -10,10 +10,10 @@ import javax.persistence.Table;
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.Actions;
-import org.eclipse.kapua.service.authorization.Permission;
+import org.eclipse.kapua.service.authorization.permission.Actions;
+import org.eclipse.kapua.service.authorization.permission.Permission;
+import org.eclipse.kapua.service.authorization.permission.shiro.PermissionImpl;
 import org.eclipse.kapua.service.authorization.role.RolePermission;
-import org.eclipse.kapua.service.authorization.shiro.PermissionImpl;
 
 @Entity(name = "RolePermission")
 @Table(name = "athz_role_permission")
