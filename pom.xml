@@ -226,6 +226,7 @@
         <!-- Applications -->
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
+        <module>org.eclipse.kapua.app.api</module>
   </modules>
 
     <licenses>
