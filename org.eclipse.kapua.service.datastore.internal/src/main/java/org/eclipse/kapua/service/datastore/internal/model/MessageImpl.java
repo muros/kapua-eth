@@ -17,12 +17,11 @@ import java.util.Date;
 import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.Payload;
 import org.eclipse.kapua.service.datastore.model.StorableId;
-import org.eclipse.kapua.service.datastore.model.Topic;
 
 public class MessageImpl implements Message
 {
     private StorableId  id;
-    private Topic   topic;
+    private String   topic;
     private Date    timestamp;
     private Date    receivedOn;
     private Payload payload;
@@ -31,9 +30,14 @@ public class MessageImpl implements Message
     {
     }
 
-    public MessageImpl(String uuid, Date timestamp, Topic topic)
+    public MessageImpl(StorableId id)
     {
-        this.id = null;
+        this.id = id;
+    }
+
+    public MessageImpl(StorableId id, Date timestamp, String topic)
+    {
+        this.id = id;
         this.timestamp = timestamp;
         this.topic = topic;
     }
@@ -45,21 +49,14 @@ public class MessageImpl implements Message
     }
 
     @Override
-    public Topic getTopic()
+    public String getTopic()
     {
         return this.topic;
     }
 
-    @Override
-    public void setTopic(Topic topic)
+    public void setTopic(String topic)
     {
         this.topic = topic;
-    }
-
-    @Override
-    public String getFullTopic()
-    {
-        return this.topic.getTopicName();
     }
 
     @Override
@@ -68,7 +65,6 @@ public class MessageImpl implements Message
         return this.timestamp;
     }
 
-    @Override
     public void setTimestamp(Date timestamp)
     {
         this.timestamp = timestamp;
@@ -80,7 +76,6 @@ public class MessageImpl implements Message
         return this.receivedOn;
     }
 
-    @Override
     public void setReceivedOn(Date receivedOn)
     {
         this.receivedOn = receivedOn;
@@ -97,7 +92,6 @@ public class MessageImpl implements Message
         return this.payload;
     }
 
-    @Override
     public void setPayload(Payload payload)
     {
         this.payload = payload;

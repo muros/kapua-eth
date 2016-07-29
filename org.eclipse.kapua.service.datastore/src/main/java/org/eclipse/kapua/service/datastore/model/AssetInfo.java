@@ -14,11 +14,15 @@ package org.eclipse.kapua.service.datastore.model;
 
 import java.util.Date;
 
-import org.eclipse.kapua.service.datastore.Storable;
-
 public interface AssetInfo extends Storable
 {
+    public StorableId getId();
+    
     public String getAsset();
+    
+    public String getScope();
+
+    public StorableId getLastMessageId();
 
     public Date getLastMessageTimestamp();
 }

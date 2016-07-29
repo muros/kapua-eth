@@ -14,27 +14,15 @@ package org.eclipse.kapua.service.datastore.model;
 
 import java.util.Date;
 
-import org.eclipse.kapua.service.datastore.Storable;
-
 public interface Message extends Storable
 {
     public StorableId getId();
 
     public Date getTimestamp();
 
-    public void setTimestamp(Date timestamp);
-
     public Date getReceivedOn();
 
-    public void setReceivedOn(Date receivedOn);
-
-    public Topic getTopic();
-
-    public void setTopic(Topic topic);
-
-    public String getFullTopic();
+    public String getTopic();
 
     public Payload getPayload();
-
-    public void setPayload(Payload payload);
 }

@@ -18,7 +18,6 @@ import org.eclipse.kapua.service.datastore.model.Message;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.Payload;
 import org.eclipse.kapua.service.datastore.model.Position;
-import org.eclipse.kapua.service.datastore.model.Topic;
 import org.eclipse.kapua.service.datastore.model.TopicInfo;
 import org.eclipse.kapua.service.datastore.model.query.AssetInfoQuery;
 import org.eclipse.kapua.service.datastore.model.query.MessageQuery;
@@ -31,8 +30,6 @@ public interface DatastoreObjectFactory extends KapuaObjectFactory
     public MessageCreator newMessageCreator();
 
     public MessageQuery newStorableMessageQuery();
-
-    public Topic newTopic();
 
     public Payload newPayload();
 

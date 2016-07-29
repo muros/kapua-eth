@@ -33,8 +33,8 @@ import org.elasticsearch.common.xcontent.XContentFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.kapua.service.datastore.internal.elasticsearch.EsMetric;
-import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSetting;
-import org.eclipse.kapua.service.datastore.internal.setting.KapuaDatastoreSettingKeys;
+import org.eclipse.kapua.service.datastore.internal.setting.DatastoreSettingKey;
+import org.eclipse.kapua.service.datastore.internal.setting.DatastoreSettings;
 
 public class EsSchema
 {
@@ -81,38 +81,38 @@ public class EsSchema
     public final static String  TOPIC_TIMESTAMP                 = "timestamp";
     public final static String  TOPIC_MESSAGE_ID                = "message_id";
 
-    public final static String  TOPIC_METRIC_TYPE_NAME          = "topic_metric";
-    public final static String  TOPIC_METRIC_SEM_NAME           = "sem_topic";
-    public final static String  TOPIC_METRIC_ASSET              = "asset_name";
-    public final static String  TOPIC_METRIC_ACCOUNT            = "account";
-    public final static String  TOPIC_METRIC_MTR                = "metric";
-    public final static String  TOPIC_METRIC_MTR_NAME           = "name";
-    public final static String  TOPIC_METRIC_MTR_NAME_FULL      = "metric.name";
-    public final static String  TOPIC_METRIC_MTR_TYPE           = "type";
-    public final static String  TOPIC_METRIC_MTR_TYPE_FULL      = "metric.type";
-    public final static String  TOPIC_METRIC_MTR_VALUE          = "value";
-    public final static String  TOPIC_METRIC_MTR_VALUE_FULL     = "metric.value";
-    public final static String  TOPIC_METRIC_MTR_TIMESTAMP      = "timestamp";
-    public final static String  TOPIC_METRIC_MTR_TIMESTAMP_FULL = "metric.timestamp";
-    public final static String  TOPIC_METRIC_MTR_MSG_ID         = "message_id";
-    public final static String  TOPIC_METRIC_MTR_MSG_ID_FULL    = "metric.message_id";
+    public final static String  METRIC_TYPE_NAME            = "metric";
+    public final static String  METRIC_SEM_NAME             = "sem_topic";
+    public final static String  METRIC_ASSET                = "asset_name";
+    public final static String  METRIC_ACCOUNT              = "account";
+    public final static String  METRIC_MTR                  = "metric";
+    public final static String  METRIC_MTR_NAME             = "name";
+    public final static String  METRIC_MTR_NAME_FULL        = "metric.name";
+    public final static String  METRIC_MTR_TYPE             = "type";
+    public final static String  METRIC_MTR_TYPE_FULL        = "metric.type";
+    public final static String  METRIC_MTR_VALUE            = "value";
+    public final static String  METRIC_MTR_VALUE_FULL       = "metric.value";
+    public final static String  METRIC_MTR_TIMESTAMP        = "timestamp";
+    public final static String  METRIC_MTR_TIMESTAMP_FULL   = "metric.timestamp";
+    public final static String  METRIC_MTR_MSG_ID           = "message_id";
+    public final static String  METRIC_MTR_MSG_ID_FULL      = "metric.message_id";
 
-    public final static String  ASSET_TYPE_NAME                 = "asset";
-    public final static String  ASSET_NAME                      = "asset_name";
-    public final static String  ASSET_ACCOUNT                   = "account";
-    public final static String  ASSET_TIMESTAMP                 = "timestamp";
-    public final static String  ASSET_MESSAGE_ID                = "message_id";
-
-    public final static String  ASSET_TOPIC_TYPE_NAME           = "asset_topic";
-    public final static String  ASSET_TOPIC_AS_NAME             = "asset_name";
-    public final static String  ASSET_TOPIC_ACCOUNT             = "account";
-    public final static String  ASSET_TOPIC_TPC                 = "topic";
-    public final static String  ASSET_TOPIC_TPC_NAME            = "name";
-    public final static String  ASSET_TOPIC_TPC_NAME_FULL       = "topic.name";
-    public final static String  ASSET_TOPIC_TPC_TIMESTAMP       = "timestmp";
-    public final static String  ASSET_TOPIC_TPC_TIMESTAMP_FULL  = "topic.timestmp";
-    public final static String  ASSET_TOPIC_TPC_MSG_ID          = "message_id";
-    public final static String  ASSET_TOPIC_TPC_MSG_ID_FULL     = "topic.message_id";
+    public final static String  ASSET_TYPE_NAME             = "asset";
+    public final static String  ASSET_NAME                  = "asset_name";
+    public final static String  ASSET_ACCOUNT               = "account";
+    public final static String  ASSET_TIMESTAMP             = "timestamp";
+    public final static String  ASSET_MESSAGE_ID            = "message_id";
+//
+//    public final static String  ASSET_TOPIC_TYPE_NAME           = "asset_topic";
+//    public final static String  ASSET_TOPIC_AS_NAME             = "asset_name";
+//    public final static String  ASSET_TOPIC_ACCOUNT             = "account";
+//    public final static String  ASSET_TOPIC_TPC                 = "topic";
+//    public final static String  ASSET_TOPIC_TPC_NAME            = "name";
+//    public final static String  ASSET_TOPIC_TPC_NAME_FULL       = "topic.name";
+//    public final static String  ASSET_TOPIC_TPC_TIMESTAMP       = "timestmp";
+//    public final static String  ASSET_TOPIC_TPC_TIMESTAMP_FULL  = "topic.timestmp";
+//    public final static String  ASSET_TOPIC_TPC_MSG_ID          = "message_id";
+//    public final static String  ASSET_TOPIC_TPC_MSG_ID_FULL     = "topic.message_id";
 
     /**
      * @author stefano.morson
@@ -125,9 +125,8 @@ public class EsSchema
         // Info fields does not change within the same account name
         private String                messageTypeName;
         private String                topicTypeName;
-        private String                topicMetricTypeName;
+        private String                metricTypeName;
         private String                assetTypeName;
-        private String                assetTopicTypeName;
         private String                indexName;
         private String                edcIndexName;
         //
@@ -147,9 +146,8 @@ public class EsSchema
         {
             messageTypeName = MESSAGE_TYPE_NAME;
             topicTypeName = TOPIC_TYPE_NAME;
-            topicMetricTypeName = TOPIC_METRIC_TYPE_NAME;
+            metricTypeName = METRIC_TYPE_NAME;
             assetTypeName = ASSET_TYPE_NAME;
-            assetTopicTypeName = ASSET_TOPIC_TYPE_NAME;
 
             messageMappingsCache = new HashMap<String, EsMetric>(100);
         }
@@ -174,19 +172,14 @@ public class EsSchema
             return this.topicTypeName;
         }
 
-        public String getTopicMetricTypeName()
+        public String getMetricTypeName()
         {
-            return this.topicMetricTypeName;
+            return this.metricTypeName;
         }
 
         public String getAssetTypeName()
         {
             return this.assetTypeName;
-        }
-
-        public String getAssetTopicTypeName()
-        {
-            return this.assetTopicTypeName;
         }
     }
 
@@ -198,8 +191,8 @@ public class EsSchema
         throws IOException
     {
 
-        KapuaDatastoreSetting config = KapuaDatastoreSetting.getInstance();
-        String idxRefreshInterval = config.getString(KapuaDatastoreSettingKeys.ELASTICSEARCH_IDX_REFRESH_INTERVAL);
+        DatastoreSettings config = DatastoreSettings.getInstance();
+        String idxRefreshInterval = config.getString(DatastoreSettingKey.ELASTICSEARCH_IDX_REFRESH_INTERVAL);
 
         XContentBuilder builder = XContentFactory.jsonBuilder()
         .startObject()
@@ -246,13 +239,60 @@ public class EsSchema
 
         return builder;
     }
+//
+//    private XContentBuilder getAssetTopicTypeBuilder(boolean allEnable, boolean sourceEnable)
+//        throws IOException
+//    {
+//        XContentBuilder builder = XContentFactory.jsonBuilder()
+//         .startObject()
+//             .startObject(ASSET_TOPIC_TYPE_NAME)
+//                 .startObject("_source")
+//                     .field("enabled", sourceEnable)
+//                 .endObject()
+//                 .startObject("_all")
+//                     .field("enabled", allEnable)
+//                 .endObject()
+//                 .startObject("properties")
+//                     .startObject(ASSET_TOPIC_AS_NAME)
+//                         .field("type", "string")
+//                         .field("index", "not_analyzed")
+//                     .endObject()
+//                     .startObject(ASSET_TOPIC_ACCOUNT)
+//                         .field("type", "string")
+//                         .field("index", "not_analyzed")
+//                     .endObject()
+//                     .startObject(ASSET_TOPIC_TPC)
+//                         .field("type", "object")
+//                         .field("enabled", true)
+//                         .field("dynamic", false)
+//                         .field("include_in_all", false)
+//                         .startObject("properties")
+//                             .startObject(ASSET_TOPIC_TPC_NAME)
+//                                 .field("type", "string")
+//                                 .field("index", "not_analyzed")
+//                             .endObject()
+//                             .startObject(ASSET_TOPIC_TPC_TIMESTAMP)
+//                                 .field("type", "date")
+//                             .endObject()
+//                             .startObject(ASSET_TOPIC_TPC_MSG_ID)
+//                                 .field("type", "string")
+//                                 .field("index", "not_analyzed")
+//                             .endObject()
+//                         .endObject() // End of properties
+//                     .endObject() // End of topics
+//                 .endObject() // End Of Properties
+//             .endObject() // End of type
+//         .endObject();
+//
+//        return builder;
+//    }
 
-    private XContentBuilder getAssetTopicTypeBuilder(boolean allEnable, boolean sourceEnable)
+    private XContentBuilder getMetricTypeBuilder(boolean allEnable, boolean sourceEnable)
         throws IOException
     {
         XContentBuilder builder = XContentFactory.jsonBuilder()
          .startObject()
-             .startObject(ASSET_TOPIC_TYPE_NAME)
+             .startObject(METRIC_TYPE_NAME)
                  .startObject("_source")
                      .field("enabled", sourceEnable)
                  .endObject()
@@ -260,87 +300,40 @@ public class EsSchema
                      .field("enabled", allEnable)
                  .endObject()
                  .startObject("properties")
-                     .startObject(ASSET_TOPIC_AS_NAME)
+                     .startObject(METRIC_ACCOUNT)
                          .field("type", "string")
                          .field("index", "not_analyzed")
                      .endObject()
-                     .startObject(ASSET_TOPIC_ACCOUNT)
+                     .startObject(METRIC_ASSET)
                          .field("type", "string")
                          .field("index", "not_analyzed")
                      .endObject()
-                     .startObject(ASSET_TOPIC_TPC)
+                     .startObject(METRIC_SEM_NAME)
+                         .field("type", "string")
+                         .field("index", "not_analyzed")
+                     .endObject()
+                     .startObject(METRIC_MTR)
                          .field("type", "object")
                          .field("enabled", true)
                          .field("dynamic", false)
                          .field("include_in_all", false)
                          .startObject("properties")
-                             .startObject(ASSET_TOPIC_TPC_NAME)
+                             .startObject(METRIC_MTR_NAME)
                                  .field("type", "string")
                                  .field("index", "not_analyzed")
                              .endObject()
-                             .startObject(ASSET_TOPIC_TPC_TIMESTAMP)
+                             .startObject(METRIC_MTR_TYPE)
+                                 .field("type", "string")
+                                 .field("index", "not_analyzed")
+                             .endObject()
+                             .startObject(METRIC_MTR_VALUE)
+                                 .field("type", "string")
+                                 .field("index", "not_analyzed")
+                             .endObject()
+                             .startObject(METRIC_MTR_TIMESTAMP)
                                  .field("type", "date")
                              .endObject()
-                             .startObject(ASSET_TOPIC_TPC_MSG_ID)
-                                 .field("type", "string")
-                                 .field("index", "not_analyzed")
-                             .endObject()
-                         .endObject() // End of properties
-                     .endObject() // End of topics
-                 .endObject() // End Of Properties
-             .endObject() // End of type
-         .endObject();
-
-        return builder;
-    }
-
-    private XContentBuilder getTopicMetricTypeBuilder(boolean allEnable, boolean sourceEnable)
-        throws IOException
-    {
-        XContentBuilder builder = XContentFactory.jsonBuilder()
-         .startObject()
-             .startObject(TOPIC_METRIC_TYPE_NAME)
-                 .startObject("_source")
-                     .field("enabled", sourceEnable)
-                 .endObject()
-                 .startObject("_all")
-                     .field("enabled", allEnable)
-                 .endObject()
-                 .startObject("properties")
-                     .startObject(TOPIC_METRIC_ACCOUNT)
-                         .field("type", "string")
-                         .field("index", "not_analyzed")
-                     .endObject()
-                     .startObject(TOPIC_METRIC_ASSET)
-                         .field("type", "string")
-                         .field("index", "not_analyzed")
-                     .endObject()
-                     .startObject(TOPIC_METRIC_SEM_NAME)
-                         .field("type", "string")
-                         .field("index", "not_analyzed")
-                     .endObject()
-                     .startObject(TOPIC_METRIC_MTR)
-                         .field("type", "object")
-                         .field("enabled", true)
-                         .field("dynamic", false)
-                         .field("include_in_all", false)
-                         .startObject("properties")
-                             .startObject(TOPIC_METRIC_MTR_NAME)
-                                 .field("type", "string")
-                                 .field("index", "not_analyzed")
-                             .endObject()
-                             .startObject(TOPIC_METRIC_MTR_TYPE)
-                                 .field("type", "string")
-                                 .field("index", "not_analyzed")
-                             .endObject()
-                             .startObject(TOPIC_METRIC_MTR_VALUE)
-                                 .field("type", "string")
-                                 .field("index", "not_analyzed")
-                             .endObject()
-                             .startObject(TOPIC_METRIC_MTR_TIMESTAMP)
-                                 .field("type", "date")
-                             .endObject()
-                             .startObject(TOPIC_METRIC_MTR_MSG_ID)
+                             .startObject(METRIC_MTR_MSG_ID)
                                  .field("type", "string")
                                  .field("index", "not_analyzed")
                              .endObject()
@@ -588,7 +581,7 @@ public class EsSchema
         }
     }
 
-    private void initTopicMetricMappings(String indexName, boolean allEnable, boolean sourceEnable)
+    private void initMetricMappings(String indexName, boolean allEnable, boolean sourceEnable)
         throws IOException, EsDatastoreException
     {
 
@@ -599,10 +592,10 @@ public class EsSchema
         GetMappingsResponse mappingsResponse = esClient.admin().indices().getMappings(mappingsRequest).actionGet();
         ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> mappings = mappingsResponse.getMappings();
         ImmutableOpenMap<String, MappingMetaData> map = mappings.get(indexName);
-        MappingMetaData metadata = map.get(TOPIC_METRIC_TYPE_NAME);
+        MappingMetaData metadata = map.get(METRIC_TYPE_NAME);
         if (metadata == null) {
-            XContentBuilder builder = this.getTopicMetricTypeBuilder(allEnable, sourceEnable);
-            esClient.admin().indices().preparePutMapping(indexName).setType(TOPIC_METRIC_TYPE_NAME).setSource(builder).execute().actionGet();
+            XContentBuilder builder = this.getMetricTypeBuilder(allEnable, sourceEnable);
+            esClient.admin().indices().preparePutMapping(indexName).setType(METRIC_TYPE_NAME).setSource(builder).execute().actionGet();
             s_logger.trace("Topic_metric mapping created: " + builder.string());
         }
     }
@@ -625,25 +618,25 @@ public class EsSchema
             s_logger.trace("Asset mapping created: " + builder.string());
         }
     }
-
-    private void initAssetTopicMappings(String indexName, boolean allEnable, boolean sourceEnable)
-        throws IOException, EsDatastoreException
-    {
-
-        Client esClient = EsClient.getcurrent();
-
-        // Check message type mapping
-        GetMappingsRequest mappingsRequest = new GetMappingsRequest().indices(indexName);
-        GetMappingsResponse mappingsResponse = esClient.admin().indices().getMappings(mappingsRequest).actionGet();
-        ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> mappings = mappingsResponse.getMappings();
-        ImmutableOpenMap<String, MappingMetaData> map = mappings.get(indexName);
-        MappingMetaData metadata = map.get(ASSET_TOPIC_TYPE_NAME);
-        if (metadata == null) {
-            XContentBuilder builder = this.getAssetTopicTypeBuilder(allEnable, sourceEnable);
-            esClient.admin().indices().preparePutMapping(indexName).setType(ASSET_TOPIC_TYPE_NAME).setSource(builder).execute().actionGet();
-            s_logger.trace("Asset_topic mapping created: " + builder.string());
-        }
-    }
+//
+//    private void initAssetTopicMappings(String indexName, boolean allEnable, boolean sourceEnable)
+//        throws IOException, EsDatastoreException
+//    {
+//
+//        Client esClient = EsClient.getcurrent();
+//
+//        // Check message type mapping
+//        GetMappingsRequest mappingsRequest = new GetMappingsRequest().indices(indexName);
+//        GetMappingsResponse mappingsResponse = esClient.admin().indices().getMappings(mappingsRequest).actionGet();
+//        ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> mappings = mappingsResponse.getMappings();
+//        ImmutableOpenMap<String, MappingMetaData> map = mappings.get(indexName);
+//        MappingMetaData metadata = map.get(ASSET_TOPIC_TYPE_NAME);
+//        if (metadata == null) {
+//            XContentBuilder builder = this.getAssetTopicTypeBuilder(allEnable, sourceEnable);
+//            esClient.admin().indices().preparePutMapping(indexName).setType(ASSET_TOPIC_TYPE_NAME).setSource(builder).execute().actionGet();
+//            s_logger.trace("Asset_topic mapping created: " + builder.string());
+//        }
+//    }
 
     private Map<String, EsMetric> getMessageMappingDiffs(Metadata currentMetadata, Map<String, EsMetric> esMetrics)
     {
@@ -739,9 +732,8 @@ public class EsSchema
                 s_logger.info("Metadata index created: " + newEdcMetadataIdx);
 
                 this.initTopicMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
-                this.initTopicMetricMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
+                this.initMetricMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
                 this.initAssetMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
-                this.initAssetTopicMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
             }
 
             currentMetadata.indexName = newIndex;

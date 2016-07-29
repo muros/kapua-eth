@@ -301,6 +301,36 @@ public class EsUtils {
 		
 		throw new IllegalArgumentException(String.format("Unknown type [%s]", edcType));
 	}
+    
+    public static String convertToKapuaType(String esType) {
+        
+        if (esType.equals(ES_TYPE_STRING))
+            return "string";
+        
+        if (esType.equals(ES_TYPE_INTEGER))
+            return "int";
+        
+        if (esType.equals(ES_TYPE_LONG))
+            return "long";
+        
+        if (esType.equals(ES_TYPE_FLOAT))
+            return "float";
+        
+        if (esType.equals(ES_TYPE_DOUBLE))
+            return "double";
+        
+        if (esType.equals(ES_TYPE_BOOL))
+            return "boolean";
+        
+        if (esType.equals(ES_TYPE_DATE)) 
+            return "date";
+        
+        if (esType.equals(ES_TYPE_BINARY)) {
+            return "base64Binary";
+        }
+        
+        throw new IllegalArgumentException(String.format("Unknown type [%s]", esType));
+    }
 
 	public static Object convertToEdcObject(String type, String value) throws ParseException {
 		
