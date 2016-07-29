@@ -35,11 +35,7 @@ import org.eclipse.kapua.service.user.UserService;
  */
 public class UserServiceImpl implements UserService
 {
-	@Inject
-	private AuthorizationService authorizationService;
-	
     @Override
-    @AuditInterceptor
     public User create(UserCreator userCreator)
         throws KapuaException
     {
@@ -47,15 +43,15 @@ public class UserServiceImpl implements UserService
         // Argument Validation
         ArgumentValidator.notNull(userCreator.getScopeId().getId(), "scopeId");
         ArgumentValidator.notEmptyOrNull(userCreator.getName(), "name");
-        ArgumentValidator.notEmptyOrNull(userCreator.getRawPassword(), "rawPassword");
+//        ArgumentValidator.notEmptyOrNull(userCreator.getRawPassword(), "rawPassword");
         ArgumentValidator.match(userCreator.getName(), ArgumentValidator.NAME_REGEXP, "name");
-        ArgumentValidator.match(userCreator.getRawPassword(), ArgumentValidator.PASSWORD_REGEXP, "rawPassword");
+//        ArgumentValidator.match(userCreator.getRawPassword(), ArgumentValidator.PASSWORD_REGEXP, "rawPassword");
         ArgumentValidator.match(userCreator.getEmail(), ArgumentValidator.EMAIL_REGEXP, "email");
 
         //
         // Check Access
-//        KapuaLocator locator = KapuaLocator.getInstance();
-//        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.write, userCreator.getScopeId()));
 

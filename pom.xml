@@ -156,8 +156,10 @@
         <module>org.eclipse.kapua.service.device.registry.internal</module>
 
         <module>org.eclipse.kapua.service.datastore</module>
+	<!--
+		TODO: need to fix compilation errors 
         <module>org.eclipse.kapua.service.datastore.internal</module>
-
+ 	 -->
         <module>org.eclipse.kapua.service.device.call</module>
         <module>org.eclipse.kapua.service.device.call.kura</module>
         <module>org.eclipse.kapua.service.device.call.test</module>

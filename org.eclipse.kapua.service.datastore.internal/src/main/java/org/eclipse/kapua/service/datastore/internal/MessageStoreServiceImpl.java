@@ -21,6 +21,8 @@ import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
+import org.eclipse.kapua.service.authorization.Action;
+import org.eclipse.kapua.service.authorization.Actions;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.Permission;
 import org.eclipse.kapua.service.authorization.PermissionFactory;
@@ -54,7 +56,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         //
         // Check Access
         // TODO temporary
-        String scopeName = this.checkDataAccess(scopeId, MessageStoreServiceAction.CREATE);
+        String scopeName = this.checkDataAccess(scopeId, Actions.write);
         return new StorableIdImpl(esMessageStoreService.store(scopeName, messageCreator));
     }
 
@@ -72,7 +74,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     {
         //
         // Check Access
-        String scopeName = this.checkDataAccess(scopeId, MessageStoreServiceAction.READ);
+        String scopeName = this.checkDataAccess(scopeId, Actions.read);
         return esMessageStoreService.find(scopeName, id.toString(), fetchStyle);
     }
 
@@ -90,7 +92,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     //
     // -----------------------------------------------------------------------------------------
 
-    private String checkDataAccess(KapuaId scopeId, AccessAction action)
+    private String checkDataAccess(KapuaId scopeId, Action action)
         throws KapuaException
     {
         //
@@ -103,7 +105,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
         Account account = accountService.find(scopeId);
 
         // TODO add enum for actions
-        Permission permission = permissionFactory.newPermission("data", action.key(), account.getId());
+        Permission permission = permissionFactory.newPermission("data", action, account.getId());
         authorizationService.checkPermission(permission);
         
         return account.getName();

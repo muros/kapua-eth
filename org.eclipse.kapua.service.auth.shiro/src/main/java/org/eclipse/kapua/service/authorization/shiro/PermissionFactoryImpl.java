@@ -44,10 +44,11 @@ public class PermissionFactoryImpl implements PermissionFactory
         // Build the new Permission
         String domain = st.nextToken();
 
-        String action = null;
+        String actionStr = null;
         if (iTokensCount > 1) {
-            action = st.nextToken();
+            actionStr = st.nextToken();
         }
+        Actions action = Actions.valueOf(actionStr);
 
         KapuaId scopeTargetId = null;
         if (iTokensCount > 2) {
@@ -60,8 +61,7 @@ public class PermissionFactoryImpl implements PermissionFactory
             }
         }
 
-        // Permission p = new PermissionImpl(domain, action, scopeTargetId);
-        return null;
+        return new PermissionImpl(domain, action, scopeTargetId);
     }
 
 }
