@@ -27,10 +27,9 @@ import org.eclipse.kapua.service.authorization.PermissionFactory;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 import org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider;
 
-public class AbstractKapuaConfigurableService implements KapuaConfigurableService, Serializable
+@SuppressWarnings("serial")
+public abstract class AbstractKapuaConfigurableService implements KapuaConfigurableService, Serializable
 {
-    private static final long serialVersionUID = 5267829733117676086L;
-
     private String            domain           = null;
     private String            pid              = null;
 
