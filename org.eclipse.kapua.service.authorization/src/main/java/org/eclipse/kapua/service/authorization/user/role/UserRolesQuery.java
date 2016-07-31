@@ -12,12 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.user.role;
 
-import org.eclipse.kapua.model.KapuaObjectFactory;
-import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.model.query.KapuaQuery;
 
-public interface UserRoleFactory extends KapuaObjectFactory
+public interface UserRolesQuery extends KapuaQuery<UserRoles>
 {
-    public UserRoleCreator newCreator(KapuaId scopeId);
-
-    public UserRoleQuery newQuery(KapuaId scopeId);
 }

@@ -12,8 +12,19 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.user.role;
 
-import org.eclipse.kapua.model.query.KapuaQuery;
+import java.util.Set;
 
-public interface UserRoleQuery extends KapuaQuery<UserRole>
+import org.eclipse.kapua.model.KapuaEntityCreator;
+import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authorization.role.Role;
+
+public interface UserRolesCreator extends KapuaEntityCreator<UserRoles>
 {
+    public void setUserId(KapuaId userId);
+
+    public KapuaId getUserId();
+
+    public void setRoles(Set<Role> roles);
+
+    public Set<Role> getRoles();
 }

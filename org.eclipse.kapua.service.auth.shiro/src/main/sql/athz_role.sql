@@ -7,7 +7,6 @@ CREATE TABLE athz_role (
   name 						VARCHAR(255)  NOT NULL,
   
   PRIMARY KEY (id),
-  INDEX idx_userScopeId (scope_id),
   
   UNIQUE INDEX idx_roleName (scope_id, name)
   

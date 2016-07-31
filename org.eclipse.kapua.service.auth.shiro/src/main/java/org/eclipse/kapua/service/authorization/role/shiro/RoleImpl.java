@@ -21,20 +21,26 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.role.Role;
 import org.eclipse.kapua.service.authorization.role.RolePermission;
+import org.eclipse.kapua.service.authorization.user.role.shiro.UserRolesImpl;
 
 @Entity(name = "Role")
 @Table(name = "athz_role")
 public class RoleImpl extends AbstractKapuaEntity implements Role
 {
     private static final long       serialVersionUID = -3760818776351242930L;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<UserRolesImpl>      roles;
 
     @XmlElement(name = "name")
     @Basic
@@ -48,6 +54,16 @@ public class RoleImpl extends AbstractKapuaEntity implements Role
     protected RoleImpl()
     {
         super();
+    }
+
+    public RoleImpl(Role role)
+    {
+        super(role.getScopeId());
+        super.id = (KapuaEid) role.getId();
+        super.createdOn = role.getCreatedOn();
+        super.createdBy = (KapuaEid) role.getCreatedBy();
+        setName(role.getName());
+        setPermissions(role.getPermissions());
     }
 
     public RoleImpl(KapuaId scopeId)

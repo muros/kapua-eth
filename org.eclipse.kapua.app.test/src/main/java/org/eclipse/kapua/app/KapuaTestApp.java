@@ -42,9 +42,12 @@ import org.eclipse.kapua.service.authorization.role.RoleService;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionCreator;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionService;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleCreator;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleFactory;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleService;
+import org.eclipse.kapua.service.authorization.user.role.UserRoles;
+import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
+import org.eclipse.kapua.service.authorization.user.role.UserRolesFactory;
+import org.eclipse.kapua.service.authorization.user.role.UserRolesService;
+import org.eclipse.kapua.service.device.registry.connection.internal.DeviceConnectionDomain;
+import org.eclipse.kapua.service.device.registry.internal.DeviceDomain;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
@@ -68,8 +71,8 @@ public class KapuaTestApp
     private static RoleService                  roleService           = locator.getService(RoleService.class);
     private static RoleFactory                  roleFactory           = locator.getFactory(RoleFactory.class);
 
-    private static UserRoleService              userRoleService       = locator.getService(UserRoleService.class);
-    private static UserRoleFactory              userRoleFactory       = locator.getFactory(UserRoleFactory.class);
+    private static UserRolesService             userRoleService       = locator.getService(UserRolesService.class);
+    private static UserRolesFactory             userRoleFactory       = locator.getFactory(UserRolesFactory.class);
 
     private static AuthenticationService        authenticationService = locator.getService(AuthenticationService.class);
     private static UsernamePasswordTokenFactory credentialsFactory    = locator.getFactory(UsernamePasswordTokenFactory.class);
@@ -171,6 +174,8 @@ public class KapuaTestApp
             }
             System.err.println("");
 
+            //
+            // Test find role and permissions
             role = roleService.find(role.getScopeId(), role.getId());
             System.err.println("Role Found:");
             System.err.println("Name: " + role.getName());
@@ -181,14 +186,41 @@ public class KapuaTestApp
 
             //
             // Test assign role to user
-            Set<KapuaId> rolesId = new HashSet<>();
-            rolesId.add(role.getId());
+            permissions = new HashSet<>();
+            permissions.add(permissionFactory.newRolePermission(scopeId, DeviceDomain.DEVICE, Actions.read, scopeId));
+            permissions.add(permissionFactory.newRolePermission(scopeId, DeviceDomain.DEVICE, Actions.write, scopeId));
+            permissions.add(permissionFactory.newRolePermission(scopeId, DeviceConnectionDomain.DEVICE_CONNECTION, Actions.read, scopeId));
+            permissions.add(permissionFactory.newRolePermission(scopeId, DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.read, scopeId));
 
-            UserRoleCreator userRoleCreator = userRoleFactory.newCreator(scopeId);
-            userRoleCreator.setUserId(user.getId());
-            userRoleCreator.setRoles(rolesId);
+            roleCreator = roleFactory.newCreator(scopeId);
+            roleCreator.setName("role-" + scopeId.getShortId() + "-" + System.currentTimeMillis());
+            roleCreator.setRoles(permissions);
 
-            userRoleService.create(userRoleCreator);
+            Role role1 = roleService.create(roleCreator);
+
+            Set<Role> roles = new HashSet<>();
+            roles.add(role);
+            roles.add(role1);
+
+            UserRolesCreator userRolesCreator = userRoleFactory.newCreator(scopeId);
+            userRolesCreator.setUserId(user.getId());
+            userRolesCreator.setRoles(roles);
+
+            UserRoles userRoles = userRoleService.create(userRolesCreator);
+
+            //
+            // Test find role assigned
+            userRoles = userRoleService.find(scopeId, userRoles.getId());
+            System.err.println("UserRole Found:");
+            System.err.println("UserId: " + userRoles.getUserId());
+            System.err.println("Assigned roles Found:");
+            for (Role r : userRoles.getRoles()) {
+                System.err.println("\tName: " + r.getName());
+                System.err.println("\tPermissions:");
+                for (RolePermission p : r.getPermissions()) {
+                    System.err.println("\t\t" + p.toString());
+                }
+            }
 
             //
             // Test delete role

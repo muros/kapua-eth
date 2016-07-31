@@ -12,9 +12,24 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.user.role;
 
-import org.eclipse.kapua.model.query.KapuaListResult;
+import org.eclipse.kapua.model.KapuaEntity;
+import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.authorization.permission.Permission;
 
-public interface UserRoleListResult extends KapuaListResult<UserRole>
+public interface UserRolesPermission extends KapuaEntity
 {
+    public static final String TYPE = "rolePermission";
 
+    default public String getType()
+    {
+        return TYPE;
+    }
+
+    public void setRoleId(KapuaId roleId);
+
+    public KapuaId getRoleId();
+
+    public void setPermission(Permission permission);
+
+    public Permission getPermission();
 }

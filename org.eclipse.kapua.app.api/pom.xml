@@ -1,16 +1,9 @@
 <?xml version="1.0"?>
-<!--
-    Copyright (c) 2011, 2016 Eurotech and/or its affiliates
-
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
-
-    Contributors:
-        Eurotech - initial API and implementation
-
- -->
+<!-- Copyright (c) 2011, 2016 Eurotech and/or its affiliates All rights reserved. 
+    This program and the accompanying materials are made available under the 
+    terms of the Eclipse Public License v1.0 which accompanies this distribution, 
+    and is available at http://www.eclipse.org/legal/epl-v10.html Contributors: 
+    Eurotech - initial API and implementation -->
 
 <project
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
@@ -24,133 +17,98 @@
 
     <artifactId>org.eclipse.kapua.app.api</artifactId>
     <name>org.eclipse.kapua.app.api</name>
-    <url>http://maven.apache.org</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.enunciate</groupId>
+                    <artifactId>maven-enunciate-plugin</artifactId>
+                    <version>1.28</version>
+                    <configuration>
+                        <configFile>enunciate.xml</configFile>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>process-test-sources</phase>
+                            <goals>
+                                <goal>docs</goal>
+                            </goals>
+                            <configuration>
+                                <docsDir>${project.build.directory}/docs/docs</docsDir>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
 
     <dependencies>
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.31</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.4</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>1.12</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>1.12</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-servlet</artifactId>
-			<version>1.12</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atmosphere</groupId>
-			<artifactId>atmosphere-runtime</artifactId>
-			<version>0.9.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.atmosphere</groupId>
-			<artifactId>atmosphere-jersey</artifactId>
-			<version>0.9.5</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.visualization</groupId>
-			<artifactId>visualization-datasource</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.jersey-test-framework</groupId>
-			<artifactId>jersey-test-framework-external</artifactId>
-			<version>1.12</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.31</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>1.12</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-servlet</artifactId>
+            <version>1.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-runtime</artifactId>
+            <version>0.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-jersey</artifactId>
+            <version>0.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.visualization</groupId>
+            <artifactId>visualization-datasource</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.jersey-test-framework</groupId>
+            <artifactId>jersey-test-framework-external</artifactId>
+            <version>1.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.codehaus.enunciate</groupId>
-					<artifactId>maven-enunciate-plugin</artifactId>
-					<version>1.28</version>
-					<configuration>
-						<configFile>enunciate.xml</configFile>
-					</configuration>
-					<executions>
-						<execution>
-							<phase>process-test-sources</phase>
-							<goals>
-								<goal>docs</goal>
-							</goals>
-							<configuration>
-								<docsDir>${project.build.directory}/docs/docs</docsDir>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
-					<executions>
-						<execution>
-							<id>default-compile</id>
-							<phase>compile</phase>
-							<goals>
-								<goal>compile</goal>
-							</goals>
-							<configuration>
-								<source>1.8</source>
-								<target>1.8</target>
-							</configuration>
-						</execution>
-						<execution>
-							<id>default-testCompile</id>
-							<phase>test-compile</phase>
-							<goals>
-								<goal>testCompile</goal>
-							</goals>
-							<configuration>
-								<source>1.8</source>
-								<target>1.8</target>
-							</configuration>
-						</execution>
-					</executions>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 </project>

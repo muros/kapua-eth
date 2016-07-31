@@ -18,43 +18,43 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.service.internal.ServiceDAO;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
-import org.eclipse.kapua.service.authorization.user.role.UserRole;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleCreator;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleListResult;
+import org.eclipse.kapua.service.authorization.user.role.UserRoles;
+import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
+import org.eclipse.kapua.service.authorization.user.role.UserRolesListResult;
 
-public class UserRoleDAO extends ServiceDAO
+public class UserRolesDAO extends ServiceDAO
 {
-    public static UserRole create(EntityManager em, UserRoleCreator creator)
+    public static UserRoles create(EntityManager em, UserRolesCreator creator)
         throws KapuaException
     {
-        UserRole userRole = new UserRoleImpl(creator.getScopeId());
+        UserRoles userRole = new UserRolesImpl(creator.getScopeId());
 
         userRole.setUserId(creator.getUserId());
-        userRole.setRolesIds(creator.getRoles());
+        userRole.setRoles(creator.getRoles());
 
         return ServiceDAO.create(em, userRole);
     }
 
-    public static UserRole find(EntityManager em, KapuaId userRoleId)
+    public static UserRoles find(EntityManager em, KapuaId userRoleId)
     {
-        return em.find(UserRoleImpl.class, userRoleId);
+        return em.find(UserRolesImpl.class, userRoleId);
     }
 
     public static void delete(EntityManager em, KapuaId userRoleId)
     {
-        ServiceDAO.delete(em, UserRoleImpl.class, userRoleId);
+        ServiceDAO.delete(em, UserRolesImpl.class, userRoleId);
     }
 
-    public static UserRoleListResult query(EntityManager em, KapuaQuery<UserRole> userRoleQuery)
+    public static UserRolesListResult query(EntityManager em, KapuaQuery<UserRoles> userRoleQuery)
         throws KapuaException
     {
-        return ServiceDAO.query(em, UserRole.class, UserRoleImpl.class, new UserRoleListResultImpl(), userRoleQuery);
+        return ServiceDAO.query(em, UserRoles.class, UserRolesImpl.class, new UserRolesListResultImpl(), userRoleQuery);
     }
 
-    public static long count(EntityManager em, KapuaQuery<UserRole> userRoleQuery)
+    public static long count(EntityManager em, KapuaQuery<UserRoles> userRoleQuery)
         throws KapuaException
     {
-        return ServiceDAO.count(em, UserRole.class, UserRoleImpl.class, userRoleQuery);
+        return ServiceDAO.count(em, UserRoles.class, UserRolesImpl.class, userRoleQuery);
     }
 
 }

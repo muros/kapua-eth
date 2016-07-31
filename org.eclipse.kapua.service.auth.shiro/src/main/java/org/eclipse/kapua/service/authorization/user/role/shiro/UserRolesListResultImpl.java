@@ -13,10 +13,10 @@
 package org.eclipse.kapua.service.authorization.user.role.shiro;
 
 import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
-import org.eclipse.kapua.service.authorization.user.role.UserRole;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleListResult;
+import org.eclipse.kapua.service.authorization.user.role.UserRoles;
+import org.eclipse.kapua.service.authorization.user.role.UserRolesListResult;
 
-public class UserRoleListResultImpl extends KapuaListResultImpl<UserRole> implements UserRoleListResult
+public class UserRolesListResultImpl extends KapuaListResultImpl<UserRoles> implements UserRolesListResult
 {
     private static final long serialVersionUID = 2231053707705207563L;
 }

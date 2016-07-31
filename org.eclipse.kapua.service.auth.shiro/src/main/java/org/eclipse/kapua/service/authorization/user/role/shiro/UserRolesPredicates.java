@@ -12,21 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.user.role.shiro;
 
-import org.eclipse.kapua.commons.model.query.predicate.AbstractKapuaQuery;
-import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.user.role.UserRole;
-import org.eclipse.kapua.service.authorization.user.role.UserRoleQuery;
-
-public class UserRoleQueryImpl extends AbstractKapuaQuery<UserRole> implements UserRoleQuery
+public class UserRolesPredicates
 {
-    public UserRoleQueryImpl()
-    {
-        super();
-    }
-
-    public UserRoleQueryImpl(KapuaId scopeId)
-    {
-        this();
-        setScopeId(scopeId);
-    }
+    public static final String ROLE_NAME = "name";
 }

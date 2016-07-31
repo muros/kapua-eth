@@ -17,21 +17,25 @@ import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.authorization.user.role.UserRole;
+import org.eclipse.kapua.service.authorization.role.Role;
+import org.eclipse.kapua.service.authorization.role.shiro.RoleImpl;
+import org.eclipse.kapua.service.authorization.user.role.UserRoles;
 
 @Entity(name = "UserRole")
 @Table(name = "athz_user_role")
-public class UserRoleImpl extends AbstractKapuaEntity implements UserRole
+public class UserRolesImpl extends AbstractKapuaEntity implements UserRoles
 {
     private static final long serialVersionUID = -3760818776351242930L;
 
@@ -41,20 +45,16 @@ public class UserRoleImpl extends AbstractKapuaEntity implements UserRole
     })
     private KapuaEid          userId;
 
-    // @OneToMany(fetch = FetchType.EAGER)
-    @ElementCollection()
-    @CollectionTable(name = "athz_user_role")
-    // @AssociationOverrides({
-    // @AssociationOverride(name = "eid", joinColumns = @JoinColumn(name = "role_id"))
-    // })
-    private Set<RoleId>       rolesIds;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "athz_user_role_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<RoleImpl>     roles;
 
-    protected UserRoleImpl()
+    protected UserRolesImpl()
     {
         super();
     }
 
-    public UserRoleImpl(KapuaId scopeId)
+    public UserRolesImpl(KapuaId scopeId)
     {
         super(scopeId);
     }
@@ -72,53 +72,28 @@ public class UserRoleImpl extends AbstractKapuaEntity implements UserRole
     }
 
     @Override
-    public void setRolesIds(Set<KapuaId> rolesIds)
+    public void setRoles(Set<Role> roles)
     {
-        Set<RoleId> rolesTmp = new HashSet<>();
+        Set<RoleImpl> rolesTmp = new HashSet<>();
 
-        for (KapuaId id : rolesIds) {
-            rolesTmp.add(new RoleId(id.getId()));
+        for (Role r : roles) {
+            RoleImpl role = new RoleImpl(r);
+            rolesTmp.add(role);
         }
-        this.rolesIds = rolesTmp;
+
+        this.roles = rolesTmp;
     }
 
     @Override
-    public Set<KapuaId> getRolesIds()
+    public Set<Role> getRoles()
     {
-        Set<KapuaId> rolesTmp = new HashSet<>();
+        Set<Role> rolesTmp = new HashSet<>();
 
-        for (KapuaId r : rolesIds) {
+        for (Role r : roles) {
             rolesTmp.add(r);
         }
 
         return rolesTmp;
     }
-
-    // public void setRoles(Set<Role> roles)
-    // {
-    // Set<RoleImpl> rolesTmp = new HashSet<>();
-    //
-    // for (Role r : roles) {
-    // RoleImpl role = new RoleImpl(r.getScopeId());
-    // role.setName(r.getName());
-    // role.setPermissions(r.getPermissions());
-    //
-    // rolesTmp.add(role);
-    // }
-    //
-    // this.roles = rolesTmp;
-    // }
-    //
-    // @Override
-    // public Set<Role> getRoles()
-    // {
-    // Set<Role> rolesTmp = new HashSet<>();
-    //
-    // for (Role r : roles) {
-    // rolesTmp.add(r);
-    // }
-    //
-    // return rolesTmp;
-    // }
 
 }
