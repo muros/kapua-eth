@@ -27,4 +27,5 @@ public enum KapuaErrorCodes implements KapuaErrorCode
     OPTIMISTIC_LOCKING,
     UNAUTHENTICATED,
     INTERNAL_ERROR,
+    OPERATION_NOT_SUPPORTED
 }
