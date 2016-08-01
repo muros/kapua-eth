@@ -9,6 +9,10 @@ import org.eclipse.kapua.service.datastore.model.MetricInfoListResult;
 import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.service.datastore.model.query.MetricInfoQuery;
 
+/**
+ * Service dedicated for storing and reading named device metrics. Metric is an arbitrary named value. We usually
+ * keep only the most recent value of the metric.
+ */
 public interface MetricInfoStoreService extends KapuaService,
                                     KapuaConfigurableService
 {
