@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.kapua.service.authorization.permission.UserPermissionService">
-   <implementation class="org.eclipse.kapua.service.authorization.permission.shiro.UserPermissionServiceImpl"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.kapua.service.authorization.user.permission.UserPermissionService">
+   <implementation class="org.eclipse.kapua.service.authorization.user.permission.shiro.UserPermissionServiceImpl"/>
    <service>
-      <provide interface="org.eclipse.kapua.service.authorization.permission.UserPermissionService"/>
+      <provide interface="org.eclipse.kapua.service.authorization.user.permission.UserPermissionService"/>
    </service>
 </scr:component>

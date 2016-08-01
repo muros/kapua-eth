@@ -16,6 +16,11 @@
 	<feature name="kapua-broker" version="${project.version}" description="Kapua Broker Feature">
 	    <feature>karaf-framework</feature>
 	    
+	    <!-- required by Camel -->
+	    <feature>spring-dm</feature>
+	    <feature>spring-tx</feature>
+	    <feature>spring-jdbc</feature>
+	    <feature>spring-jms</feature>
 	    <!-- Camel -->
 		<feature>camel</feature>
 		<feature>camel-core</feature>
