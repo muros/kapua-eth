@@ -29,6 +29,7 @@ import org.apache.activemq.security.AuthorizationEntry;
 import org.apache.activemq.security.DefaultAuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.AuthenticationException;
 import org.eclipse.kapua.KapuaErrorCode;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
@@ -61,7 +62,7 @@ import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFact
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionStatus;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain;
-import org.eclipse.kapua.service.user.UserService;
+import org.eclipse.kapua.service.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -357,7 +358,29 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
             KapuaId scopeId = accessToken.getScopeId();
             KapuaId userId = accessToken.getUserId();
-            Account account = accountService.find(scopeId);
+            
+            
+            final Account account;
+            try {
+            	account = KapuaSecurityUtils.doPriviledge(new Callable<Account>() {
+
+                    @Override
+                    public Account call()
+                        throws Exception
+                    {
+                        return accountService.find(scopeId);
+                    }
+                });
+            }
+            catch (Exception e) {
+            	//to preserve the original exception message (if possible)
+            	if (e instanceof AuthenticationException) {
+    				throw (AuthenticationException) e;
+    			}
+    			else {
+    				throw new ShiroException("Error while find account!", e);
+    			}
+            }
 			
             String accountName = account.getName();
             loginShiroLoginTimeContext.stop();

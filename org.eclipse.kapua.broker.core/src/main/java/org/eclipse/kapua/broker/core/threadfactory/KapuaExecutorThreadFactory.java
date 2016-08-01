@@ -28,6 +28,7 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 	private String factoryStringId;
 	private final String name;
 	private final List<String> threadPoolNameMatcher;
+	private boolean boundShiroContext;
 
 	public KapuaExecutorThreadFactory(String name, List<String> threadPoolNameMatcher, boolean rootThreadGroup) {
 		this.name = name;
@@ -45,7 +46,8 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 				//main contains at least one thread—the JVM-created main thread that executes byte-code instructions in the main() method.
 				if (currentTg.getParent().getParent() != null) {
 					currentTg = currentTg.getParent();
-				} else {
+				} 
+				else {
 					break;
 				}
 			}
@@ -59,6 +61,13 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 				.append(hashCode()).toString();
 		logger.info("Created {} - [{}]", new Object[]{threadFactoryClassName, factoryStringId});
 		
+		//TODO add configurations
+		//read settings
+		boundShiroContext = true;
+		
+		logger.info("Configurations: ");
+		logger.info("Bound shiro context: {}", boundShiroContext);
+		
 		metricThreadCreationRequest = metricsService.getCounter("kapua_executor_thread_factory", "thread_creation_request", "count");
 	}
 
@@ -68,7 +77,7 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 				.append("_")
 				.append(COUNTER.incrementAndGet()).toString();
 		logger.info("Instantiate thread name [{}]...", threadName);
-		Thread answer = new Thread(tdg, new RunnableWrapper(runnable), threadName);
+		Thread answer = new Thread(tdg, new RunnableWrapper(runnable, boundShiroContext), threadName);
 		answer.setDaemon(false);
 		logger.info("Instantiate thread name [{}] -> [{}] DONE", threadName, answer);
 		return answer;
