@@ -40,22 +40,30 @@
 				<configuration>
 					<instructions>
 						<Service-Component>
+							OSGI-INF/accountFactory.xml,
 							OSGI-INF/accountService.xml,
 							OSGI-INF/authenticationService.xml,
 							OSGI-INF/authorizationService.xml,
+							OSGI-INF/credentialFactory.xml,
 							OSGI-INF/credentialService.xml,
-							OSGI-INF/deviceConnectionFactoryService.xml,
+							OSGI-INF/deviceConnectionFactory.xml,
 							OSGI-INF/deviceConnectionService.xml,
+							OSGI-INF/deviceEventFactory.xml,
 							OSGI-INF/deviceEventService.xml,
-							OSGI-INF/deviceEventFactoryService.xml,
-							OSGI-INF/deviceFactoryService.xml,
+							OSGI-INF/deviceFactory.xml,
 							OSGI-INF/deviceLifeCycleService.xml,
 							OSGI-INF/deviceRegistryService.xml,
+							OSGI-INF/kapuaConfigurationProviderService.xml,
 							OSGI-INF/metricService.xml,
-							OSGI-INF/permissionFactoryService.xml,
-							OSGI-INF/usernamePasswordTokenFactoryService.xml,
+							OSGI-INF/permissionFactory.xml,
+							OSGI-INF/roleFactory.xml,
+							OSGI-INF/roleService.xml,
+							OSGI-INF/userFactory.xml,
+							OSGI-INF/usernamePasswordTokenFactory.xml,
+							OSGI-INF/userPermissionFactory.xml,
 							OSGI-INF/userPermissionService.xml,
-							OSGI-INF/userPermissionFactoryService.xml,
+							OSGI-INF/userRoleFactory.xml,
+							OSGI-INF/userRoleService.xml,
 							OSGI-INF/userService.xml
 						</Service-Component>
 						<Embed-Transitive>true</Embed-Transitive> 

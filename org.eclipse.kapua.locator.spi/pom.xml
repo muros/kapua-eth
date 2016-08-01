@@ -46,5 +46,15 @@
             <artifactId>commons-configuration</artifactId>
             <version>1.9</version>
         </dependency>
+        
+        <!-- Optional dependency -->
+		<dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>4.3.1</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 </project>
