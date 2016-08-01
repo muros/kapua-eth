@@ -70,8 +70,9 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account
     @Column(name = "parent_account_path", nullable = false)
     private String            parentAccountPath;
 
-    public AccountImpl()
+    protected AccountImpl()
     {
+        super();
     }
 
     public AccountImpl(KapuaId scopeId, String name)

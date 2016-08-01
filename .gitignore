@@ -84,12 +84,24 @@ local.properties
 # Code Recommenders
 .recommenders/
 
+# SonarLint folders
+.sonarlint/
+
 # IDEA
 .idea/
 **/*.iml
 
-# Os X index files
-.DS_Store
+#
+# Embedded derby DB
+# 
+derby.log
 
-# SonarLint folders
-.sonarlint/
+#
+# Velocity
+#
+velocity.log
+
+#
+# Os X index files
+#
+.DS_Store

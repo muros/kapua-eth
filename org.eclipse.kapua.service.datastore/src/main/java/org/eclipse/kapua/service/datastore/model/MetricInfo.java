@@ -14,6 +14,10 @@ package org.eclipse.kapua.service.datastore.model;
 
 import java.util.Date;
 
+/**
+ * Information about device metric value. Metric is an arbitrary named value. We usually
+ * keep only the most recent value of the metric.
+ */
 public interface MetricInfo extends Storable
 {
     public StorableId getId();
