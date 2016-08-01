@@ -1,309 +1,302 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.eclipse.kapua</groupId>
-	<artifactId>kapua</artifactId>
-	<version>0.1-SNAPSHOT</version>
-	<name>kapua</name>
-	<packaging>pom</packaging>
+    <groupId>org.eclipse.kapua</groupId>
+    <artifactId>kapua</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <name>kapua</name>
+    <packaging>pom</packaging>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
-					<executions>
-						<execution>
-							<id>default-compile</id>
-							<phase>compile</phase>
-							<goals>
-								<goal>compile</goal>
-							</goals>
-							<configuration>
-								<source>1.8</source>
-								<target>1.8</target>
-							</configuration>
-						</execution>
-						<execution>
-							<id>default-testCompile</id>
-							<phase>test-compile</phase>
-							<goals>
-								<goal>testCompile</goal>
-							</goals>
-							<configuration>
-								<source>1.8</source>
-								<target>1.8</target>
-							</configuration>
-						</execution>
-					</executions>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>license-maven-plugin</artifactId>
-					<version>1.9</version>
-					<executions>
-						<execution>
-							<id>default-cli</id>
-							<configuration>
-								<licenseMerges>
-									<licenseMerge>The Apache Software License, Version 2.0|AL 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache License 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache Public License 2.0</licenseMerge>
-									<licenseMerge>The Apache Software License, Version 2.0|Apache 2</licenseMerge>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <executions>
+                        <execution>
+                            <id>default-compile</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <configuration>
+                                <source>1.8</source>
+                                <target>1.8</target>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>default-testCompile</id>
+                            <phase>test-compile</phase>
+                            <goals>
+                                <goal>testCompile</goal>
+                            </goals>
+                            <configuration>
+                                <source>1.8</source>
+                                <target>1.8</target>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>1.9</version>
+                    <executions>
+                        <execution>
+                            <id>default-cli</id>
+                            <configuration>
+                                <licenseMerges>
+                                    <licenseMerge>The Apache Software License, Version 2.0|AL 2.0</licenseMerge>
+                                    <licenseMerge>The Apache Software License, Version 2.0|Apache License 2.0</licenseMerge>
+                                    <licenseMerge>The Apache Software License, Version 2.0|Apache License, Version 2.0</licenseMerge>
+                                    <licenseMerge>The Apache Software License, Version 2.0|Apache Public License 2.0</licenseMerge>
+                                    <licenseMerge>The Apache Software License, Version 2.0|Apache 2</licenseMerge>
 
-									<licenseMerge>Eclipse Distribution License Version 1.0|Eclipse Distribution License v. 1.0</licenseMerge>
-									<licenseMerge>Eclipse Distribution License Version 1.0|Eclipse Distribution License (EDL), Version 1.0</licenseMerge>
+                                    <licenseMerge>Eclipse Distribution License Version 1.0|Eclipse Distribution License v. 1.0</licenseMerge>
+                                    <licenseMerge>Eclipse Distribution License Version 1.0|Eclipse Distribution License (EDL), Version 1.0</licenseMerge>
 
-<!-- 									
-									<licenseMerge>EPL 1.0|Eclipse Public License Version 1.0</licenseMerge>
-									<licenseMerge>EPL 1.0|Eclipse Public License - Version 1.0</licenseMerge>
-									<licenseMerge>EPL 1.0|Eclipse Public License (EPL), Version 1.0</licenseMerge>
-									<licenseMerge>EPL 1.0|Eclipse Public License v1.0</licenseMerge>
-									<licenseMerge>CCDL 1.0|Common Development and Distribution License (CDDL) v1.0</licenseMerge>
-									<licenseMerge>CCDL 1.0|Common Development and Distribution License</licenseMerge>
-									<licenseMerge>CCDL 1.1</licenseMerge>
- -->								</licenseMerges>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-antrun-plugin</artifactId>
-										<versionRange>[1.3,)</versionRange>
-										<goals>
-											<goal>run</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>build-helper-maven-plugin</artifactId>
-										<versionRange>[1.7,)</versionRange>
-										<goals>
-											<goal>add-source</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.jacoco</groupId>
-										<artifactId>jacoco-maven-plugin</artifactId>
-										<versionRange>[0.5,)</versionRange>
-										<goals>
-											<goal>prepare-agent</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
+                                    <!-- <licenseMerge>EPL 1.0|Eclipse Public License Version 1.0</licenseMerge> <licenseMerge>EPL 1.0|Eclipse Public License - Version 1.0</licenseMerge> <licenseMerge>EPL 
+                                        1.0|Eclipse Public License (EPL), Version 1.0</licenseMerge> <licenseMerge>EPL 1.0|Eclipse Public License v1.0</licenseMerge> <licenseMerge>CCDL 1.0|Common Development and Distribution License (CDDL) v1.0</licenseMerge> 
+                                        <licenseMerge>CCDL 1.0|Common Development and Distribution License</licenseMerge> <licenseMerge>CCDL 1.1</licenseMerge> -->
+                                </licenseMerges>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-antrun-plugin</artifactId>
+                                        <versionRange>[1.3,)</versionRange>
+                                        <goals>
+                                            <goal>run</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>build-helper-maven-plugin</artifactId>
+                                        <versionRange>[1.7,)</versionRange>
+                                        <goals>
+                                            <goal>add-source</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.jacoco</groupId>
+                                        <artifactId>jacoco-maven-plugin</artifactId>
+                                        <versionRange>[0.5,)</versionRange>
+                                        <goals>
+                                            <goal>prepare-agent</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
-	<dependencies>
-		<dependency>
-			<!-- Logger stuff -->
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.4</version>
-		</dependency>
-		<dependency>
-			<!-- Logger stuff -->
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.4</version>
-		</dependency>
-		<dependency>
-			<!-- JUnit stuff -->
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <!-- Logger stuff -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <!-- Logger stuff -->
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <!-- JUnit stuff -->
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-	<modules>
-		<!-- -->
-		<!-- Commons libs -->
-		<module>org.eclipse.kapua.commons</module>
+    <modules>
+        <!-- -->
+        <!-- Commons libs -->
+        <module>org.eclipse.kapua.commons</module>
 
-		<!-- -->
-		<!-- Service locator -->
-		<module>org.eclipse.kapua.service</module>
-		<module>org.eclipse.kapua.locator.spi</module>
-		<module>org.eclipse.kapua.locator.guice</module>
+        <!-- -->
+        <!-- Service locator -->
+        <module>org.eclipse.kapua.service</module>
+        <module>org.eclipse.kapua.locator.spi</module>
+        <module>org.eclipse.kapua.locator.guice</module>
 
-		<!-- -->
-		<!-- Configurable service -->
-		<module>org.eclipse.kapua.configuration.spi</module>
+        <!-- -->
+        <!-- Configurable service -->
+        <module>org.eclipse.kapua.configuration.spi</module>
 
-		<!-- -->
-		<!-- Authentication and Authorization -->
-		<module>org.eclipse.kapua.service.authentication</module>
-		<module>org.eclipse.kapua.service.authorization</module>
+        <!-- -->
+        <!-- Authentication and Authorization -->
+        <module>org.eclipse.kapua.service.authentication</module>
+        <module>org.eclipse.kapua.service.authorization</module>
 
-		<module>org.eclipse.kapua.service.auth.shiro</module>
+        <module>org.eclipse.kapua.service.auth.shiro</module>
 
-		<!-- -->
-		<!-- User -->
-		<module>org.eclipse.kapua.service.user</module>
-		<module>org.eclipse.kapua.service.user.internal</module>
+        <!-- -->
+        <!-- User -->
+        <module>org.eclipse.kapua.service.user</module>
+        <module>org.eclipse.kapua.service.user.internal</module>
 
-		<!-- -->
-		<!-- Account -->
-		<module>org.eclipse.kapua.service.account</module>
-		<module>org.eclipse.kapua.service.account.internal</module>
+        <!-- -->
+        <!-- Account -->
+        <module>org.eclipse.kapua.service.account</module>
+        <module>org.eclipse.kapua.service.account.internal</module>
 
-		<!-- -->
-		<!-- Device registry, device events and device connection -->
-		<module>org.eclipse.kapua.service.device.registry</module>
-		<module>org.eclipse.kapua.service.device.registry.internal</module>
+        <!-- -->
+        <!-- Device registry, device events and device connection -->
+        <module>org.eclipse.kapua.service.device.registry</module>
+        <module>org.eclipse.kapua.service.device.registry.internal</module>
 
-		<!-- -->
-		<!-- Datastore -->
-		<module>org.eclipse.kapua.service.datastore</module>
-		<module>org.eclipse.kapua.service.datastore.internal</module>
+        <!-- -->
+        <!-- Datastore -->
+        <module>org.eclipse.kapua.service.datastore</module>
+        <module>org.eclipse.kapua.service.datastore.internal</module>
 
-		<!-- -->
-		<!-- Message -->
-		<module>org.eclipse.kapua.message</module>
-		<module>org.eclipse.kapua.message.internal</module>
+        <!-- -->
+        <!-- Message -->
+        <module>org.eclipse.kapua.message</module>
+        <module>org.eclipse.kapua.message.internal</module>
 
-		<!-- -->
-		<!-- Device management transport layer -->
-		<module>org.eclipse.kapua.transport</module>
-		<module>org.eclipse.kapua.transport.jms</module>
-		<module>org.eclipse.kapua.transport.mqtt</module>
-		<module>org.eclipse.kapua.transport.test</module>
+        <!-- -->
+        <!-- Device management transport layer -->
+        <module>org.eclipse.kapua.transport</module>
+        <module>org.eclipse.kapua.transport.jms</module>
+        <module>org.eclipse.kapua.transport.mqtt</module>
+        <module>org.eclipse.kapua.transport.test</module>
 
-		<!-- -->
-		<!-- Device management device layer -->
-		<module>org.eclipse.kapua.service.device.call</module>
-		<module>org.eclipse.kapua.service.device.call.kura</module>
-		<module>org.eclipse.kapua.service.device.call.test</module>
+        <!-- -->
+        <!-- Device management device layer -->
+        <module>org.eclipse.kapua.service.device.call</module>
+        <module>org.eclipse.kapua.service.device.call.kura</module>
+        <module>org.eclipse.kapua.service.device.call.test</module>
 
-		<!-- -->
-		<!-- Device management platform layer -->
-		<module>org.eclipse.kapua.service.device.management</module>
-		<module>org.eclipse.kapua.service.device.management.commons</module>
+        <!-- -->
+        <!-- Device management platform layer -->
+        <module>org.eclipse.kapua.service.device.management</module>
+        <module>org.eclipse.kapua.service.device.management.commons</module>
 
-		<!-- Configurations -->
+        <!-- Configurations -->
 
-		<module>org.eclipse.kapua.service.device.management.configuration</module>
-		<module>org.eclipse.kapua.service.device.management.configuration.internal</module>
+        <module>org.eclipse.kapua.service.device.management.configuration</module>
+        <module>org.eclipse.kapua.service.device.management.configuration.internal</module>
 
-		<!-- Deploy -->
-		<module>org.eclipse.kapua.service.device.management.deploy</module>
-		<module>org.eclipse.kapua.service.device.management.deploy.internal</module>
+        <!-- Deploy -->
+        <module>org.eclipse.kapua.service.device.management.deploy</module>
+        <module>org.eclipse.kapua.service.device.management.deploy.internal</module>
 
-		<!-- Bundles -->
-		<module>org.eclipse.kapua.service.device.management.bundle</module>
-		<module>org.eclipse.kapua.service.device.management.bundle.internal</module>
+        <!-- Bundles -->
+        <module>org.eclipse.kapua.service.device.management.bundle</module>
+        <module>org.eclipse.kapua.service.device.management.bundle.internal</module>
 
-		<!-- Command -->
-		<module>org.eclipse.kapua.service.device.management.command</module>
-		<module>org.eclipse.kapua.service.device.management.command.internal</module>
-		<module>org.eclipse.kapua.service.device.management.command.test</module>
+        <!-- Command -->
+        <module>org.eclipse.kapua.service.device.management.command</module>
+        <module>org.eclipse.kapua.service.device.management.command.internal</module>
+        <module>org.eclipse.kapua.service.device.management.command.test</module>
 
-		<!-- -->
-		<!-- Device management translators -->
-		<module>org.eclipse.kapua.translator</module>
-		<module>org.eclipse.kapua.translator.kapua.kura</module>
-		<module>org.eclipse.kapua.translator.kura.mqtt</module>
-		<module>org.eclipse.kapua.translator.kura.jms</module>
+        <!-- -->
+        <!-- Device management translators -->
+        <module>org.eclipse.kapua.translator</module>
+        <module>org.eclipse.kapua.translator.kapua.kura</module>
+        <module>org.eclipse.kapua.translator.kura.mqtt</module>
+        <module>org.eclipse.kapua.translator.kura.jms</module>
 
-		<!-- -->
-		<!-- Broker -->
-		<module>org.eclipse.kapua.broker.core</module>
-		<module>org.eclipse.kapua.broker.jdbc</module>
-		<module>org.eclipse.kapua.broker.feature</module>
+        <!-- -->
+        <!-- Broker -->
+        <module>org.eclipse.kapua.broker.core</module>
+        <module>org.eclipse.kapua.broker.jdbc</module>
+        <module>org.eclipse.kapua.broker.feature</module>
 
-		<!-- -->
-		<!-- Applications -->
-		<module>org.eclipse.kapua.app.test</module>
-		<module>org.eclipse.kapua.app.console</module>
-		<module>org.eclipse.kapua.app.api</module>
-	</modules>
+        <!-- -->
+        <!-- Applications -->
+        <module>org.eclipse.kapua.app.test</module>
+        <module>org.eclipse.kapua.app.console</module>
+        <module>org.eclipse.kapua.app.api</module>
+    </modules>
 
-	<licenses>
-		<license>
-			<name>Eclipse Public License (EPL), Version 1.0</name>
-			<url>http://www.eclipse.org/legal/epl-v10.html</url>
-			<distribution>repo</distribution>
-		</license>
-		<license>
-			<name>Eclipse Distribution License (EDL), Version 1.0</name>
-			<url>http://www.eclipse.org/org/documents/edl-v10.html</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>Eclipse Public License (EPL), Version 1.0</name>
+            <url>http://www.eclipse.org/legal/epl-v10.html</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <name>Eclipse Distribution License (EDL), Version 1.0</name>
+            <url>http://www.eclipse.org/org/documents/edl-v10.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<scm>
-		<url>https://github.com/eurotech/kapua.git</url>
-		<connection>scm:git:ssh://git@github.com/eurotech/kapua.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/eurotech/kapua.git</developerConnection>
-	</scm>
+    <scm>
+        <url>https://github.com/eurotech/kapua.git</url>
+        <connection>scm:git:ssh://git@github.com/eurotech/kapua.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/eurotech/kapua.git</developerConnection>
+    </scm>
 
-	<issueManagement>
-		<system>GitHub Issues</system>
-		<url>https://github.com/eurotech/kapua/issues/</url>
-	</issueManagement>
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/eurotech/kapua/issues/</url>
+    </issueManagement>
 
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>https://eurotech.ci.cloudbees.com/</url>
-	</ciManagement>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://eurotech.ci.cloudbees.com/</url>
+    </ciManagement>
 
-	<mailingLists>
-		<mailingList>
-			<name>edcdev@eurotech.com</name>
-		</mailingList>
-	</mailingLists>
+    <mailingLists>
+        <mailingList>
+            <name>edcdev@eurotech.com</name>
+        </mailingList>
+    </mailingLists>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>cloudbees-private-snapshot-repository</id>
-			<url>dav:https://repository-eurotech.forge.cloudbees.com/private/</url>
-		</snapshotRepository>
-		<site>
-			<id>cloudbees-private-release-repository</id>
-			<url>dav:https://repository-eurotech.forge.cloudbees.com/private/edc/</url>
-		</site>
-	</distributionManagement>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>cloudbees-private-snapshot-repository</id>
+            <url>dav:https://repository-eurotech.forge.cloudbees.com/private/</url>
+        </snapshotRepository>
+        <site>
+            <id>cloudbees-private-release-repository</id>
+            <url>dav:https://repository-eurotech.forge.cloudbees.com/private/edc/</url>
+        </site>
+    </distributionManagement>
 
 </project>
