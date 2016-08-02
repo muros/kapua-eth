@@ -32,9 +32,11 @@ import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.imaging.ImageFormats;
-import org.apache.commons.imaging.ImageReadException;
-import org.apache.commons.imaging.Imaging;
+
+
+import org.apache.sanselan.ImageFormat;
+import org.apache.sanselan.Sanselan;
+
 import org.eclipse.kapua.app.console.server.util.EdcExceptionHandler;
 import org.eclipse.kapua.app.console.setting.ConsoleSetting;
 import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
@@ -1323,27 +1325,22 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                     logger.info("Downloaded file: {}", tmpFile.toString());
 
                     // Image metadata content checks
-                    ImageFormats imgFormat = (ImageFormats) Imaging.guessFormat(tmpFile);
+                    ImageFormat imgFormat = (ImageFormat) Sanselan.guessFormat(tmpFile);
 
-                    switch (imgFormat) {
-                        case BMP:
-                        case GIF:
-                        case JPEG:
-                        case PNG:
-                        {
-                            logger.info("Detected image format: {}", imgFormat.name());
-                        }
-                            break;
-                        case UNKNOWN:
-                        {
+                    if (imgFormat.equals(ImageFormat.IMAGE_FORMAT_BMP) ||
+                        imgFormat.equals(ImageFormat.IMAGE_FORMAT_GIF) ||
+                        imgFormat.equals(ImageFormat.IMAGE_FORMAT_JPEG) ||
+                        imgFormat.equals(ImageFormat.IMAGE_FORMAT_PNG)) {
+                            logger.info("Detected image format: {}", imgFormat.name);
+                    }
+                    else if (imgFormat.equals(ImageFormat.IMAGE_FORMAT_UNKNOWN)) {
                             logger.error("Unknown file format for URL: {}", iconResource);
                             throw new IOException("Unknown file format for URL: " + iconResource);
-                        }
-                        default:
-                        {
-                            logger.error("Usupported file format ({}) for URL: {}", imgFormat, iconResource);
-                            throw new IOException("Unknown file format for URL: {}" + iconResource);
-                        }
+                    }
+                    else
+                    {
+                        logger.error("Usupported file format ({}) for URL: {}", imgFormat, iconResource);
+                        throw new IOException("Unknown file format for URL: {}" + iconResource);
                     }
 
                     logger.info("Image validation passed for URL: {}", iconResource);
