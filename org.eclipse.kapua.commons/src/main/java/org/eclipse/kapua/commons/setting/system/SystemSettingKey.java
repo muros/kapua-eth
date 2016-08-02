@@ -25,17 +25,27 @@ public enum SystemSettingKey implements SettingKey
 
     CHAR_ENCODING("character.encoding"),
 
-    DB_URL("commons.db.url"),
+    DB_NAME("commons.db.name"),
     DB_USERNAME("commons.db.username"),
     DB_PASSWORD("commons.db.password"),
-    DB_MAX_SIZE("commons.db.max_size"),
-    DB_MIN_SIZE("commons.db.min_size"),
-    DB_INCREMENT("commons.db.acquire_increment"),
-    DB_TIMEOUT("commons.db.timeout"),
-    DB_USESSL("commons.db.ssl"),
-    DB_VERIFYSSL("commons.db.sslverify"),
-    DB_TRUSTSTORE_URL("commons.db.trust.store.url"),
-    DB_TRUSTSTORE_PWD("commons.db.trust.store.pwd"),
+
+    DB_CONNECTION_SCHEME("commons.db.connection.scheme"),
+    DB_CONNECTION_HOST("commons.db.connection.host"),
+    DB_CONNECTION_PORT("commons.db.connection.port"),
+    DB_CONNECTION_USESSL("commons.db.connection.useSsl"),
+    DB_CONNECTION_VERIFYSSL("commons.db.connection.sslVerify"),
+    DB_CONNECTION_TRUSTSTORE_URL("commons.db.connection.trust.store.url"),
+    DB_CONNECTION_TRUSTSTORE_PWD("commons.db.connection.trust.store.pwd"),
+
+    DB_USE_TIMEZIONE("commons.db.useTimezone"),
+    DB_USE_LEGACY_DATETIME_CODE("commons.db.useLegacyDatetimeCode"),
+    DB_SERVER_TIMEZONE("commons.db.serverTimezone"),
+    DB_CHAR_ENCODING("commons.db.characterEncoding"),
+
+    DB_POOL_SIZE_INITIAL("commons.db.pool.size.initial"),
+    DB_POOL_SIZE_MIN("commons.db.pool.size.min"),
+    DB_POOL_SIZE_MAX("commons.db.pool.size.max"),
+    DB_POOL_BORROW_TIMEOUT("commons.db.pool.borrow.timeout"),
 
     BROKER_SCHEME("broker.scheme"),
     BROKER_HOST("broker.host"),

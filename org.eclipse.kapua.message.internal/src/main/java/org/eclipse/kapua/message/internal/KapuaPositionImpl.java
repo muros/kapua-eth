@@ -15,6 +15,7 @@ package org.eclipse.kapua.message.internal;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.persistence.Embeddable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -30,6 +31,7 @@ import org.eclipse.kapua.message.KapuaPosition;
  */
 @XmlRootElement(name = "position")
 @XmlAccessorType(XmlAccessType.FIELD)
+@Embeddable
 public class KapuaPositionImpl implements KapuaPosition
 {
     /**

@@ -1,6 +1,17 @@
 DROP TABLE IF EXISTS act_account;
-DROP TABLE IF EXISTS athz_permission;
+
 DROP TABLE IF EXISTS usr_user;
+
+DROP TABLE IF EXISTS atht_credential;
+
+DROP TABLE IF EXISTS athz_permission;
+DROP TABLE IF EXISTS athz_user_permission;
+
+DROP TABLE IF EXISTS athz_role;
+DROP TABLE IF EXISTS athz_role_permission;
+DROP TABLE IF EXISTS athz_user_role;
+DROP TABLE IF EXISTS athz_user_role_roles;
+
 DROP TABLE IF EXISTS dvc_device;
 DROP TABLE IF EXISTS dvc_device_event;
 DROP TABLE IF EXISTS dvc_device_connection;
@@ -125,8 +136,6 @@ CREATE TABLE usr_user (
   display_name           	VARCHAR(255),
   email                  	VARCHAR(255),
   phone_number           	VARCHAR(64),
-  password               	VARCHAR(255)  NOT NULL,
-  salt                   	VARCHAR(64),
   optlock               	INT UNSIGNED,
   attributes             	TEXT,  
   properties             	TEXT,  
@@ -135,10 +144,124 @@ CREATE TABLE usr_user (
   INDEX idx_userScopeId (scope_id)  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `usr_user` (`scope_id`, `id`, `name`, `created_on`, `created_by`, `modified_on`, `modified_by`, `status`, `display_name`, `email`, `phone_number`, `password`, `salt`, `optlock`, `attributes`, `properties`) 
-		VALUES (1, 1, 'kapua-sys',    UTC_TIMESTAMP(), 1, UTC_TIMESTAMP(), 1, 'ENABLED', 'Kapua Sysadmin', 'kapua-sys@eclipse.org',    '+1 555 123 4567', '$2a$12$cIW.D14SAka9SnNPVQVMUOLy2CYOEXDhEZ2KEeAeoLJmHeciWeht.', NULL, 0, NULL, NULL),
-		       (1, 2, 'kapua-broker', UTC_TIMESTAMP(), 1, UTC_TIMESTAMP(), 1, 'ENABLED', 'Kapua Broker',   'kapua-broker@eclipse.org', '+1 555 123 4567', '$2a$12$cIW.D14SAka9SnNPVQVMUOLy2CYOEXDhEZ2KEeAeoLJmHeciWeht.', NULL, 0, NULL, NULL);
-                
+INSERT INTO `usr_user` (`scope_id`, `id`, `name`, `created_on`, `created_by`, `modified_on`, `modified_by`, `status`, `display_name`, `email`, `phone_number`, `optlock`, `attributes`, `properties`) 
+		VALUES (1, 1, 'kapua-sys',    UTC_TIMESTAMP(), 1, UTC_TIMESTAMP(), 1, 'ENABLED', 'Kapua Sysadmin', 'kapua-sys@eclipse.org',    '+1 555 123 4567', 0, NULL, NULL),
+		       (1, 2, 'kapua-broker', UTC_TIMESTAMP(), 1, UTC_TIMESTAMP(), 1, 'ENABLED', 'Kapua Broker',   'kapua-broker@eclipse.org', '+1 555 123 4567', 0, NULL, NULL);
+
+CREATE TABLE atht_credential (
+  scope_id             		BIGINT(21) 	  UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
+  created_on             	TIMESTAMP(3)  NOT NULL,
+  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
+  modified_on            	TIMESTAMP(3),
+  modified_by            	BIGINT(21)    UNSIGNED,
+  
+  user_id 					BIGINT(21) 	  UNSIGNED NOT NULL,
+  credential_type			VARCHAR(64)	  NOT NULL,
+  credential_key			VARCHAR(255)  NOT NULL,
+  
+  optlock               	INT UNSIGNED,
+  attributes             	TEXT,  
+  properties             	TEXT,  
+  PRIMARY KEY (id),
+  INDEX idx_userScopeId (scope_id),
+  INDEX idx_scopeIduserId (scope_id, user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO atht_credential (`scope_id`, `id`, `created_on`, `created_by`, `modified_on`, `modified_by`, `user_id`, `credential_type`, `credential_key`, `optlock`) 
+		VALUES ('1', '1', '2016-07-01 14:24:01.000', '1', '2016-07-01 14:24:01.000', '1', '1', 'PASSWORD', '$2a$12$cIW.D14SAka9SnNPVQVMUOLy2CYOEXDhEZ2KEeAeoLJmHeciWeht.', '0'),
+			   ('1', '2', '2016-07-01 14:24:01.000', '1', '2016-07-01 14:24:01.000', '1', '2', 'PASSWORD', '$2a$12$cIW.D14SAka9SnNPVQVMUOLy2CYOEXDhEZ2KEeAeoLJmHeciWeht.', '0');
+
+CREATE TABLE athz_user_permission (
+  scope_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
+  created_on             	TIMESTAMP(3)  DEFAULT 0,
+  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
+  
+  user_id					BIGINT(21) 	  UNSIGNED NOT NULL,
+  domain					VARCHAR(64)   NOT NULL,
+  action					VARCHAR(64),
+  target_scope_id		    BIGINT(21),
+  
+  PRIMARY KEY (id),
+  
+  UNIQUE INDEX idx_permissionScopeId (scope_id, user_id, domain, action, target_scope_id)
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO athz_user_permission (`scope_id`, `id`, `created_on`, `created_by`, `user_id`, `domain`) 
+		VALUES 	('1', '1', '2016-07-29 15:01:11.000', '1', '1', 'account'),
+			   	('1', '2', '2016-07-29 15:01:11.000', '1', '1', 'user'),
+				('1', '3', '2016-07-29 15:01:11.000', '1', '1', 'device-event'),
+				('1', '4', '2016-07-29 15:01:11.000', '1', '1', 'device-connection'),
+				('1', '5', '2016-07-29 15:01:11.000', '1', '1', 'device'),
+				('1', '6', '2016-07-29 15:01:11.000', '1', '1', 'data'),
+				('1', '7', '2016-07-29 15:01:11.000', '1', '1', 'broker'),
+				('1', '8', '2016-07-29 15:01:11.000', '1', '1', 'credential'),
+				('1', '9', '2016-07-29 15:01:11.000', '1', '1', 'role'),
+				('1', '10', '2016-07-29 15:01:11.000', '1', '1', 'user_permission'),
+				
+				('1', '101', '2016-07-29 15:01:11.000', '1', '2', 'account'),
+				('1', '102', '2016-07-29 15:01:11.000', '1', '2', 'user'),
+				('1', '103', '2016-07-29 15:01:11.000', '1', '2', 'device-event'),
+				('1', '104', '2016-07-29 15:01:11.000', '1', '2', 'device-connection'),
+				('1', '105', '2016-07-29 15:01:11.000', '1', '2', 'device'),
+				('1', '106', '2016-07-29 15:01:11.000', '1', '2', 'data'),
+				('1', '107', '2016-07-29 15:01:11.000', '1', '2', 'broker'),
+				('1', '108', '2016-07-29 15:01:11.000', '1', '2', 'credential'),
+				('1', '109', '2016-07-29 15:01:11.000', '1', '2', 'role'),
+				('1', '110', '2016-07-29 15:01:11.000', '1', '2', 'user_permission');
+			   
+CREATE TABLE athz_role (
+  scope_id             		BIGINT(21) 	  UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
+  created_on             	TIMESTAMP(3)  NOT NULL,
+  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
+  
+  name 						VARCHAR(255)  NOT NULL,
+  
+  PRIMARY KEY (id),
+  
+  UNIQUE INDEX idx_roleName (scope_id, name)
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE athz_role_permission (
+  scope_id             		BIGINT(21) 	  UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
+  created_on             	TIMESTAMP(3)  NOT NULL,
+  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
+
+  role_id             	    BIGINT(21) 	  UNSIGNED,
+  domain					VARCHAR(64)   NOT NULL,
+  action					VARCHAR(64),
+  target_scope_id		    BIGINT(21),
+  
+  PRIMARY KEY (id),
+  UNIQUE INDEX idx_permissionScopeId (role_id, domain, action, target_scope_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+				
+CREATE TABLE athz_user_role (
+  scope_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
+  id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
+  created_on             	TIMESTAMP(3)  DEFAULT 0,
+  created_by             	BIGINT(21)    UNSIGNED NOT NULL,
+  
+  user_id					BIGINT(21) 	  UNSIGNED NOT NULL,
+  
+  PRIMARY KEY (id),
+  UNIQUE INDEX idx_permissionScopeId (scope_id, user_id)
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE athz_user_role_roles (
+  user_id					BIGINT(21) 	  UNSIGNED NOT NULL,
+  role_id					BIGINT(21) 	  UNSIGNED NOT NULL,
+  
+  PRIMARY KEY (user_id, role_id)
+  
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE dvc_device (
   scope_id             	    BIGINT(21) 	    UNSIGNED NOT NULL,
   id                     	BIGINT(21) 	    UNSIGNED NOT NULL,

@@ -31,7 +31,6 @@ import org.eclipse.kapua.commons.model.AbstractKapuaNamedEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.Organization;
-import org.hibernate.annotations.DynamicUpdate;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -42,7 +41,6 @@ import org.hibernate.annotations.DynamicUpdate;
                 @NamedQuery(name = "Account.findChildAccountsRecursive", query = "SELECT a FROM Account a WHERE a.parentAccountPath LIKE :parentAccountPath ORDER BY a.name")
 })
 @Table(name = "act_account")
-@DynamicUpdate
 public class AccountImpl extends AbstractKapuaNamedEntity implements Account
 {
     private static final long serialVersionUID = 8530992430658117928L;

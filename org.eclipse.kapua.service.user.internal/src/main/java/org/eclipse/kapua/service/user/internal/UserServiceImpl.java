@@ -43,9 +43,9 @@ public class UserServiceImpl implements UserService
         // Argument Validation
         ArgumentValidator.notNull(userCreator.getScopeId().getId(), "scopeId");
         ArgumentValidator.notEmptyOrNull(userCreator.getName(), "name");
-//        ArgumentValidator.notEmptyOrNull(userCreator.getRawPassword(), "rawPassword");
+        // ArgumentValidator.notEmptyOrNull(userCreator.getRawPassword(), "rawPassword");
         ArgumentValidator.match(userCreator.getName(), ArgumentValidator.NAME_REGEXP, "name");
-//        ArgumentValidator.match(userCreator.getRawPassword(), ArgumentValidator.PASSWORD_REGEXP, "rawPassword");
+        // ArgumentValidator.match(userCreator.getRawPassword(), ArgumentValidator.PASSWORD_REGEXP, "rawPassword");
         ArgumentValidator.match(userCreator.getEmail(), ArgumentValidator.EMAIL_REGEXP, "email");
 
         //

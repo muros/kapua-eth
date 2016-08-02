@@ -31,13 +31,11 @@ import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnection;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionStatus;
-import org.hibernate.annotations.DynamicUpdate;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity(name = "DeviceConnection")
 @Table(name = "dvc_device_connection")
-@DynamicUpdate
 public class DeviceConnectionImpl extends AbstractKapuaUpdatableEntity implements DeviceConnection
 {
     private static final long      serialVersionUID = 8928343233144731836L;

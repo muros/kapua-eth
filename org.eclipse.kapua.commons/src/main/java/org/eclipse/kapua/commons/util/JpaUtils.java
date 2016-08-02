@@ -13,10 +13,8 @@
 package org.eclipse.kapua.commons.util;
 
 import java.math.BigInteger;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,22 +24,17 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.persistence.RollbackException;
 import javax.persistence.spi.PersistenceProvider;
-import javax.sql.DataSource;
 
-import org.eclipse.kapua.KapuaDuplicateNameException;
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.KapuaIllegalNullArgumentException;
 import org.eclipse.kapua.KapuaOptimisticLockingException;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.jpa.internal.EntityManagerFactoryImpl;
+//import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mchange.v2.c3p0.C3P0Registry;
-import com.mchange.v2.c3p0.PooledDataSource;
-import com.mysql.jdbc.AbandonedConnectionCleanupThread;
+//import com.mchange.v2.c3p0.C3P0Registry;
+//import com.mchange.v2.c3p0.PooledDataSource;
 
 /**
  * Utility class for JPA operations
@@ -60,35 +53,83 @@ public class JpaUtils
         try {
 
             SystemSetting config = SystemSetting.getInstance();
-            String dbUrl = config.get(String.class, SystemSettingKey.DB_URL);
-            dbUrl = dbUrl + "?useTimezone=true&useLegacyDatetimeCode=false&serverTimezone=UTC&characterEncoding=UTF-8";
+            // String dbUrl = config.get(String.class, SystemSettingKey.DB_URL);
+            // dbUrl = dbUrl + "?useTimezone=true&useLegacyDatetimeCode=false&serverTimezone=UTC&characterEncoding=UTF-8";
 
+            // Mandatory connection parameters
+            String dbName = config.getString(SystemSettingKey.DB_NAME);
+            String dbConnectionScheme = config.getString(SystemSettingKey.DB_CONNECTION_SCHEME);
+            String dbConnectionHost = config.getString(SystemSettingKey.DB_CONNECTION_HOST);
+            String dbConnectionPort = config.getString(SystemSettingKey.DB_CONNECTION_PORT);
+
+            StringBuilder dbConnectionString = new StringBuilder().append(dbConnectionScheme)
+                                                                  .append("://")
+                                                                  .append(dbConnectionHost)
+                                                                  .append(":")
+                                                                  .append(dbConnectionPort)
+                                                                  .append("/")
+                                                                  .append(dbName)
+                                                                  .append("?");
+
+            // Optional connection parameters
+            String useTimezone = config.getString(SystemSettingKey.DB_USE_TIMEZIONE);
+            if (useTimezone != null) {
+                dbConnectionString.append("useTimezone=")
+                                  .append(useTimezone)
+                                  .append("&");
+            }
+
+            String useLegacyDatetimeCode = config.getString(SystemSettingKey.DB_USE_LEGACY_DATETIME_CODE);
+            if (useLegacyDatetimeCode != null) {
+                dbConnectionString.append("useLegacyDatetimeCode=")
+                                  .append(useLegacyDatetimeCode)
+                                  .append("&");
+            }
+
+            String serverTimezone = config.getString(SystemSettingKey.DB_SERVER_TIMEZONE);
+            if (serverTimezone != null) {
+                dbConnectionString.append("serverTimezone=")
+                                  .append(serverTimezone)
+                                  .append("&");
+            }
+
+            String characterEncoding = config.getString(SystemSettingKey.DB_CHAR_ENCODING);
+            if (characterEncoding != null) {
+                dbConnectionString.append("characterEncoding=")
+                                  .append(characterEncoding)
+                                  .append("&");
+            }
+
+            // This deletes the trailing '?' or '&'
+            dbConnectionString.deleteCharAt(dbConnectionString.length() - 1);
+
+            //
+            // JPA configuration overrides
             Map<String, Object> configOverrides = new HashMap<String, Object>();
-            configOverrides.put("javax.persistence.spi.PersistenceProvider", "org.hibernate.jpa.HibernatePersistenceProvider");
-            configOverrides.put("hibernate.connection.url", dbUrl);
-            configOverrides.put("hibernate.connection.username", config.getString(SystemSettingKey.DB_USERNAME));
-            configOverrides.put("hibernate.connection.password", config.getString(SystemSettingKey.DB_PASSWORD));
-            configOverrides.put("hibernate.c3p0.dataSourceName", DATASOURCE_NAME);
-            configOverrides.put("hibernate.c3p0.min_size", config.getInt(SystemSettingKey.DB_MIN_SIZE));
-            configOverrides.put("hibernate.c3p0.max_size", config.getInt(SystemSettingKey.DB_MAX_SIZE));
-            configOverrides.put("hibernate.c3p0.acquire_increment", config.getString(SystemSettingKey.DB_INCREMENT));
-            configOverrides.put("hibernate.c3p0.timeout", config.getInt(SystemSettingKey.DB_TIMEOUT));
-            configOverrides.put("hibernate.connection.zeroDateTimeBehavior", "convertToNull");
+            configOverrides.put("eclipselink.connection-pool.default.url", dbConnectionString.toString());
+            configOverrides.put("eclipselink.connection-pool.default.user", config.getString(SystemSettingKey.DB_USERNAME));
+            configOverrides.put("eclipselink.connection-pool.default.password", config.getString(SystemSettingKey.DB_PASSWORD));
+
+            configOverrides.put("eclipselink.connection-pool.default.dataSourceName", DATASOURCE_NAME);
+            configOverrides.put("eclipselink.connection-pool.default.initial", config.getString(SystemSettingKey.DB_POOL_SIZE_INITIAL));
+            configOverrides.put("eclipselink.connection-pool.default.min", config.getString(SystemSettingKey.DB_POOL_SIZE_MIN));
+            configOverrides.put("eclipselink.connection-pool.default.max", config.getString(SystemSettingKey.DB_POOL_SIZE_MAX));
+            configOverrides.put("eclipselink.connection-pool.default.wait", config.getString(SystemSettingKey.DB_POOL_BORROW_TIMEOUT));
 
             if (config.getBoolean(SystemSettingKey.OSGI_CONTEXT)) {
                 // OSGi JPA
                 // Could get this by wiring up OsgiTestBundleActivator as well.
                 org.osgi.framework.Bundle thisBundle = org.osgi.framework.FrameworkUtil.getBundle(JpaUtils.class);
                 org.osgi.framework.BundleContext context = thisBundle.getBundleContext();
-                s_logger.info(">>> Bundle context: " + context);
+                s_logger.info(">>> Bundle context: {}", context);
 
                 @SuppressWarnings("rawtypes")
                 org.osgi.framework.ServiceReference serviceReference = context.getServiceReference(PersistenceProvider.class.getName());
-                s_logger.info(">>> Service Reference: " + serviceReference);
+                s_logger.info(">>> Service Reference: {}", serviceReference);
 
                 @SuppressWarnings("unchecked")
                 PersistenceProvider persistenceProvider = (PersistenceProvider) context.getService(serviceReference);
-                s_logger.info(">>> Persistence Provider: " + persistenceProvider);
+                s_logger.info(">>> Persistence Provider: {}", persistenceProvider);
 
                 s_emf = persistenceProvider.createEntityManagerFactory("kapua", configOverrides);
             }
@@ -96,7 +137,7 @@ public class JpaUtils
 
                 // Standalone JPA
                 s_emf = Persistence.createEntityManagerFactory("kapua", configOverrides);
-                ((EntityManagerFactoryImpl) s_emf).getSessionFactory().getSettings();
+                // ((EntityManagerFactoryImpl) s_emf).getSessionFactory().getSettings();
             }
         }
         catch (Throwable ex) {
@@ -123,45 +164,46 @@ public class JpaUtils
     {
     }
 
-    /**
-     * Returns a reference to the DataSource used by Hibernate
-     */
-    public static DataSource getDataSource()
-        throws KapuaException
-    {
-        return C3P0Registry.pooledDataSourceByName(DATASOURCE_NAME);
-    }
+    // /**
+    // * Returns a reference to the DataSource used by Hibernate
+    // */
+    // public static DataSource getDataSource()
+    // throws KapuaException
+    // {
+    // return C3P0Registry.pooledDataSourceByName(DATASOURCE_NAME);
+    // }
 
     public static void cleanUpDataSource()
         throws Exception
     {
+        // //
+        // // C3p0 clean up
+        // @SuppressWarnings("unchecked")
+        // Set<PooledDataSource> pooledDataSourceSet = (Set<PooledDataSource>) C3P0Registry.getPooledDataSources();
+        // for (PooledDataSource dataSource : pooledDataSourceSet) {
+        // try {
+        // s_logger.info("Closing PooledDataSource: {}...", dataSource.getDataSourceName());
+        // dataSource.close();
+        // s_logger.info("Closed PooledDataSource: {}!", dataSource.getDataSourceName());
         //
-        // C3p0 clean up
-        @SuppressWarnings("unchecked")
-        Set<PooledDataSource> pooledDataSourceSet = (Set<PooledDataSource>) C3P0Registry.getPooledDataSources();
-        for (PooledDataSource dataSource : pooledDataSourceSet) {
-            try {
-                s_logger.info("Closing PooledDataSource: {}...", dataSource.getDataSourceName());
-                dataSource.close();
-                s_logger.info("Closed PooledDataSource: {}!", dataSource.getDataSourceName());
-
-            }
-            catch (SQLException e) {
-                s_logger.error("Error while closing PooledDataSource: " + dataSource.getDataSourceName(), e);
-            }
-
-        }
+        // }
+        // catch (SQLException e) {
+        // s_logger.error("Error while closing PooledDataSource: " + dataSource.getDataSourceName(), e);
+        // }
+        //
+        // }
 
         //
         // JDBC AbandonedConnectionCleanupThread clean up
-        try {
-            s_logger.info("Closing AbandonedConnectionCleanupThread...");
-            AbandonedConnectionCleanupThread.shutdown();
-            s_logger.info("Closed AbandonedConnectionCleanupThread!");
-        }
-        catch (InterruptedException e) {
-            s_logger.error("Error while closing AbandonedConnectionCleanupThread", e);
-        }
+        // FIXME: close clean up thread.
+        // try {
+        // s_logger.info("Closing AbandonedConnectionCleanupThread...");
+        // AbandonedConnectionCleanupThread.shutdown();
+        // s_logger.info("Closed AbandonedConnectionCleanupThread!");
+        // }
+        // catch (InterruptedException e) {
+        // s_logger.error("Error while closing AbandonedConnectionCleanupThread", e);
+        // }
     }
 
     /**
@@ -276,59 +318,60 @@ public class JpaUtils
             if (t instanceof RollbackException) {
                 t = t.getCause();
             }
-            if (t instanceof ConstraintViolationException) {
-
-                // Handle Unique Constraints Exception
-                ConstraintViolationException cve = (ConstraintViolationException) t;
-
-                int sqlErrorCode = cve.getErrorCode();
-                String sqlErrorMsg = cve.getSQLState();
-                switch (sqlErrorCode) {
-
-                    // SQL Error: 1062, SQLState: 23000 - ER_DUP_KEYNAME - Unique Constraints Exception
-                    case 1062:
-                        if ("23000".equals(sqlErrorMsg)) {
-
-                            //
-                            // Extract the constraint name
-                            // e.g. SQL Message: Duplicate entry 'test_account_1,322,584,746,357' for key 'uc_accountName'
-                            String message = cve.getSQLException().getMessage();
-                            String[] parts = message.split("'");
-                            String constraintName = parts[parts.length - 1];
-
-                            //
-                            // populate the duplicated field name
-                            String duplicateNameField = s_uniqueConstraints.get(constraintName);
-                            if (duplicateNameField != null) {
-                                ee = new KapuaDuplicateNameException(duplicateNameField);
-                            }
-                        }
-                        break;
-
-                    // SQL Error: 1048, SQLSTATE: 23000 - ER_BAD_NULL_ERROR - Not Null Violation
-                    case 1048:
-                        if ("23000".equals(sqlErrorMsg)) {
-
-                            //
-                            // Extract the name of the null attribute
-                            // e.g. SQL Message: Column '%s' cannot be null
-                            String message = cve.getSQLException().getMessage();
-                            String[] parts = message.split("'");
-                            String columnName = null;
-                            if (parts.length == 3) {
-                                columnName = parts[1];
-                            }
-
-                            //
-                            // populate the null field name
-                            if (columnName != null) {
-                                ee = new KapuaIllegalNullArgumentException(columnName);
-                            }
-
-                        }
-                        break;
-                }
-            }
+            // FIXME: find the constraint violation exception in eclipse LINK
+            // if (t instanceof ConstraintViolationException) {
+            //
+            // // Handle Unique Constraints Exception
+            // ConstraintViolationException cve = (ConstraintViolationException) t;
+            //
+            // int sqlErrorCode = cve.getErrorCode();
+            // String sqlErrorMsg = cve.getSQLState();
+            // switch (sqlErrorCode) {
+            //
+            // // SQL Error: 1062, SQLState: 23000 - ER_DUP_KEYNAME - Unique Constraints Exception
+            // case 1062:
+            // if ("23000".equals(sqlErrorMsg)) {
+            //
+            // //
+            // // Extract the constraint name
+            // // e.g. SQL Message: Duplicate entry 'test_account_1,322,584,746,357' for key 'uc_accountName'
+            // String message = cve.getSQLException().getMessage();
+            // String[] parts = message.split("'");
+            // String constraintName = parts[parts.length - 1];
+            //
+            // //
+            // // populate the duplicated field name
+            // String duplicateNameField = s_uniqueConstraints.get(constraintName);
+            // if (duplicateNameField != null) {
+            // ee = new KapuaDuplicateNameException(duplicateNameField);
+            // }
+            // }
+            // break;
+            //
+            // // SQL Error: 1048, SQLSTATE: 23000 - ER_BAD_NULL_ERROR - Not Null Violation
+            // case 1048:
+            // if ("23000".equals(sqlErrorMsg)) {
+            //
+            // //
+            // // Extract the name of the null attribute
+            // // e.g. SQL Message: Column '%s' cannot be null
+            // String message = cve.getSQLException().getMessage();
+            // String[] parts = message.split("'");
+            // String columnName = null;
+            // if (parts.length == 3) {
+            // columnName = parts[1];
+            // }
+            //
+            // //
+            // // populate the null field name
+            // if (columnName != null) {
+            // ee = new KapuaIllegalNullArgumentException(columnName);
+            // }
+            //
+            // }
+            // break;
+            // }
+            // }
         }
         // Handle all other Exceptions
         if (ee == null) {

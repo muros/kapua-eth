@@ -4,7 +4,7 @@ CREATE TABLE athz_role_permission (
   created_on             	TIMESTAMP(3)  NOT NULL,
   created_by             	BIGINT(21)    UNSIGNED NOT NULL,
 
-  role_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
+  role_id             	    BIGINT(21) 	  UNSIGNED,
   domain					VARCHAR(64)   NOT NULL,
   action					VARCHAR(64),
   target_scope_id		    BIGINT(21),

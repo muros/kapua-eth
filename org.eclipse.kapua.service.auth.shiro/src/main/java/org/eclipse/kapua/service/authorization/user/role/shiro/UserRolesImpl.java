@@ -46,7 +46,7 @@ public class UserRolesImpl extends AbstractKapuaEntity implements UserRoles
     private KapuaEid          userId;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "athz_user_role_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "athz_user_role_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<RoleImpl>     roles;
 
     protected UserRolesImpl()

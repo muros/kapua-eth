@@ -26,11 +26,9 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.permission.Permission;
 import org.eclipse.kapua.service.authorization.permission.shiro.PermissionImpl;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermission;
-import org.hibernate.annotations.DynamicUpdate;
 
 @Entity(name = "UserPermission")
 @Table(name = "athz_user_permission")
-@DynamicUpdate
 public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermission
 {
     private static final long serialVersionUID = -3760818776351242930L;
@@ -43,11 +41,6 @@ public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermi
     private KapuaEid          userId;
 
     @Embedded
-    @AttributeOverrides({
-                          @AttributeOverride(name = "domain", column = @Column(name = "domain", nullable = false, updatable = false)),
-                          @AttributeOverride(name = "action", column = @Column(name = "action", nullable = false, updatable = false)),
-                          @AttributeOverride(name = "targetScopeId", column = @Column(name = "target_scope_id", nullable = false, updatable = false))
-    })
     private PermissionImpl    permission;
 
     public UserPermissionImpl()

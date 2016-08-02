@@ -48,7 +48,7 @@ public class RoleImpl extends AbstractKapuaEntity implements Role
     private String                  name;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Set<RolePermissionImpl> permissions;
 
     protected RoleImpl()

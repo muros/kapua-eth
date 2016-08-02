@@ -36,7 +36,6 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
 import org.eclipse.kapua.service.device.registry.DeviceEventType;
 import org.eclipse.kapua.service.device.registry.DeviceStatus;
-import org.hibernate.annotations.DynamicUpdate;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -91,7 +90,6 @@ import org.hibernate.annotations.DynamicUpdate;
 })
 @Entity(name = "Device")
 @Table(name = "dvc_device")
-@DynamicUpdate
 public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
 {
     private static final long     serialVersionUID = 7688047426522474413L;

@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlElement;
 import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.message.KapuaPosition;
+import org.eclipse.kapua.message.internal.KapuaPositionImpl;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.management.KapuaMethod;
 import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
@@ -60,7 +61,7 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
                           @AttributeOverride(name = "satellites", column = @Column(name = "pos_satellites", updatable = false)),
                           @AttributeOverride(name = "status", column = @Column(name = "pos_status", updatable = false))
     })
-    private KapuaPosition     position;
+    private KapuaPositionImpl position;
 
     @XmlElement(name = "resource")
     @Basic
@@ -81,6 +82,11 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     @Lob
     @Column(name = "event_message", updatable = false, nullable = false)
     private String            eventMessage;
+
+    protected DeviceEventImpl()
+    {
+        super();
+    }
 
     public DeviceEventImpl(KapuaId scopeId)
     {
@@ -132,7 +138,16 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     @Override
     public void setPosition(KapuaPosition position)
     {
-        this.position = position;
+        this.position = new KapuaPositionImpl();
+        this.position.setAltitude(position.getAltitude());
+        this.position.setHeading(position.getHeading());
+        this.position.setLatitude(position.getLatitude());
+        this.position.setLongitude(position.getLongitude());
+        this.position.setPrecision(position.getPrecision());
+        this.position.setSatellites(position.getSatellites());
+        this.position.setSpeed(position.getSpeed());
+        this.position.setStatus(position.getStatus());
+        this.position.setTimestamp(position.getTimestamp());
     }
 
     @Override

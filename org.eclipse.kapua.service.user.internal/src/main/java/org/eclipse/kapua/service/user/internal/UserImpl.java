@@ -28,7 +28,6 @@ import org.eclipse.kapua.commons.model.AbstractKapuaNamedEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserStatus;
-import org.hibernate.annotations.DynamicUpdate;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -48,7 +47,6 @@ import org.hibernate.annotations.DynamicUpdate;
 })
 @Entity(name = "User")
 @Table(name = "usr_user")
-@DynamicUpdate
 public class UserImpl extends AbstractKapuaNamedEntity implements User
 {
     private static final long serialVersionUID = 4029650117581681503L;

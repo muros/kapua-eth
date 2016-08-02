@@ -19,13 +19,11 @@ import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.credential.Credential;
 import org.eclipse.kapua.service.authentication.credential.CredentialType;
-import org.hibernate.annotations.DynamicUpdate;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity(name = "Credential")
 @Table(name = "atht_credential")
-@DynamicUpdate
 public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Credential
 {
     private static final long serialVersionUID = -7921424688644169175L;
