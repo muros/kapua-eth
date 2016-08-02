@@ -77,6 +77,8 @@ import org.elasticsearch.index.engine.DocumentAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService implements MessageStoreService
 {
     private static final long    serialVersionUID  = 4142282449826005424L;
@@ -86,8 +88,8 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
 
     private static final KapuaLocator locator = KapuaLocator.getInstance();
 
-    private static final long    DAY_SECS          = 24 * 60 * 60;
-    private static final long    DAY_MILLIS        = DAY_SECS * 1000;
+    private static final long    DAY_SECS          = DAYS.toSeconds(1);
+    private static final long    DAY_MILLIS        = DAYS.toMillis(1);
     private static final long    EUROTECH_TTL_DAYS = 30;
     private static final long    EUROTECH_TTL_SECS = EUROTECH_TTL_DAYS * DAY_SECS;
 
@@ -100,7 +102,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
 
     private final Object         metadataUpdateSync;
 
-    MessageStoreServiceImpl(AccountService accountService, AuthorizationService authorizationService,
+    public MessageStoreServiceImpl(AccountService accountService, AuthorizationService authorizationService,
                                       PermissionFactory permissionFactory, EsSchema esSchema,
                                       int maxTopicDepth, Object metadataUpdateSync) {
         // TODO pass a correct pid and a correct domain
