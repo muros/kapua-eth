@@ -205,7 +205,7 @@
 	</bean>
 	
 	<!-- THREADS POOL FACTORY -->
-	<!-- list of start pool name for which the EdcExecutorThreadFactory will replace the ThreadFactory with our implementation -->
+	<!-- list of start pool name for which the ExecutorThreadFactory will replace the ThreadFactory with our implementation -->
 	<util:list id="executorThreadFactoryMatcherList" list-class="java.util.ArrayList" value-type="java.lang.String" >
        <value>kapuaExecutorPool</value> <!-- listener for our pojo endpoint -->
        <value>JmsConsumer</value>   <!-- pool used by the camel rout that subscribing amq topics -->
@@ -238,15 +238,9 @@
         	CamelExceptionCaught
         	(others useful fields CamelMulticastIndex - CamelMessageHistory - CamelCreatedTimestamp)
         	-->
-        <errorHandler id="lifeCycleMessageErrorHandler" 
+        <errorHandler id="mainRouteMessageErrorHandler" 
             type="DeadLetterChannel"
-            deadLetterUri="bean:errorMessageListener?method=lifeCycleMessage"
-            useOriginalMessage="true">
-            <redeliveryPolicy maximumRedeliveries="1" />
-        </errorHandler>
-        <errorHandler id="serviceMessageErrorHandler" 
-            type="DeadLetterChannel"
-            deadLetterUri="bean:errorMessageListener?method=processServiceMessage"
+            deadLetterUri="bean:errorMessageListener?method=processMessage"
             useOriginalMessage="true">
             <redeliveryPolicy maximumRedeliveries="1" />
         </errorHandler>
@@ -280,32 +274,36 @@
         
         BEFORE CHANGING THESE parameters please run stress test (to check the cpu load) and the qa tests EdcCamelRouteIT (to check the messages persistence)
         -->
-		<route id="lifeCycleRoute" errorHandlerRef="lifeCycleMessageErrorHandler" >
-			<from uri="activemq:queue:Consumer.eurotech:systemlisteners:EXACTLY_ONCE.VirtualTopic.$EDC.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=10&amp;maxConcurrentConsumers=20" />
-            <bean ref="kapuaConverter" method="convertTo"/>
-			<choice id="lifeCycleBirthChoice">
-	            <!-- application birth $EDC/+/+/MQTT/BA/BIRTH -->
-	            <when id="lifeCycleBirthFilter">
-	            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\..*'</simple>
-	                <multicast>
-		                <to uri="bean:deviceMessageListener?method=processMessage" />
-	                </multicast>
+		<route errorHandlerRef="mainRouteMessageErrorHandler" >
+			<from uri="activemq:queue:Consumer.eurotech:mainRoutelisteners:EXACTLY_ONCE.VirtualTopic.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=30&amp;maxConcurrentConsumers=30" />
+			<bean ref="kapuaConverter" method="convertTo"/>
+			
+			<log message="BODY: ${header.JMSDestination}" loggingLevel="WARN" />
+            <choice id="choice">
+            	<when id="systemMessageFilter">
+	            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\..*'</simple>
+	            	<log message="BODY: ${header.JMSDestination}" loggingLevel="WARN" />
+            		<choice id="choice">
+		            	<when id="birthMessageFilter">
+			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.BIRTH\..*'</simple>
+				            <bean ref="kapuaConverter" method="convertToBirth"/>
+				            <log message="BODY: ${header.JMSDestination}" loggingLevel="WARN" />
+			                <multicast>
+				                <to uri="bean:deviceMessageListener?method=processBirthMessage" />
+			                </multicast>
+			            </when>
+		            	<otherwise>
+		            		<bean ref="kapuaConverter" method="convertTo"/>
+			  				<to uri="bean:errorMessageListener?method=processUnmatchedMessage" />
+				  		</otherwise>
+		            </choice>
 	            </when>
-	            <otherwise>
+	            <!-- otherwise data messages -->
+            	<otherwise>
+            		<bean ref="kapuaConverter" method="convertTo"/>
 	  				<to uri="bean:errorMessageListener?method=processUnmatchedMessage" />
 		  		</otherwise>
-	       </choice>
+            </choice>
 	   </route>
-        <!-- service endpoint -->
-		<route id="serviceRoute" errorHandlerRef="serviceMessageErrorHandler" >
-		    <!-- check kapua-config file beofre changes this queue name (see amq.broker.queue.service.name) -->
-		    <from uri="activemq:queue:EdcService" />
-		    <multicast executorServiceRef="serviceThreads" >
-                <pipeline>
-                    <bean ref="kapuaConverter" method="convertTo"/>
-		            <to uri="bean:serviceMessageListener?method=processMessage" />
-		        </pipeline>
-		    </multicast>
-		</route>
 	</camelContext>
 </beans>
