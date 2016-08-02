@@ -8,7 +8,7 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
- *     Red Hat - API documentation
+ *     Red Hat - API documentation, refactoring
  *
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.model;
@@ -28,22 +28,22 @@ public interface MessageCreator extends StorableCreator<Message>
      *
      * Cannot be null.
      */
-    public Date getTimestamp();
+    Date getTimestamp();
 
     /**
      * Setter for timestamp. Cannot be null.
      */
-    public void setTimestamp(Date timestamp);
+    void setTimestamp(Date timestamp);
 
-    public Date getReceivedOn();
+    Date getReceivedOn();
 
-    public void setReceivedOn(Date receivedOn);
+    void setReceivedOn(Date receivedOn);
 
-    public String getTopic();
+    String getTopic();
 
-    public void setTopic(String topic);
+    void setTopic(String topic);
 
-    public Payload getPayload();
+    Payload getPayload();
 
-    public void setPayload(Payload payload);
+    void setPayload(Payload payload);
 }
