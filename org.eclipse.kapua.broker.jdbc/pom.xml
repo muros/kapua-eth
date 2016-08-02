@@ -25,7 +25,7 @@
     <properties>
         <!-- SQL properties -->
         <hibernate.version>4.3.5.Final</hibernate.version>
-        <c3p0.version>0.9.2.1</c3p0.version>
+        <c3p0.version>0.9.5</c3p0.version>
         <c3p0-commons.version>0.2.3.4</c3p0-commons.version>
         <mysql.version>5.1.31</mysql.version>
         <maven-assembly-plugin.version>2.2</maven-assembly-plugin.version>

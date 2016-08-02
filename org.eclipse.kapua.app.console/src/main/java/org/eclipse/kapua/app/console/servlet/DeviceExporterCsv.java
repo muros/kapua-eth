@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.service.device.registry.Device;
 
-import au.com.bytecode.opencsv.CSVWriter;
+import com.opencsv.CSVWriter;
 
 public class DeviceExporterCsv extends DeviceExporter
 {
