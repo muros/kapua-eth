@@ -20,6 +20,11 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.service.KapuaService;
 
+/**
+ * {@link KapuaLocator} implementation to be used in single classloader environment.
+ * It loads services via {@link ServiceLoader}
+ *
+ */
 public class LocatorImpl extends KapuaLocator
 {
     @Override

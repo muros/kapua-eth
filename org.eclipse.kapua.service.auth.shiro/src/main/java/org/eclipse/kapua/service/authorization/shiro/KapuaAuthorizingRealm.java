@@ -90,7 +90,7 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
             });
         }
         catch (Exception e) {
-        	//to preserve the original exception messaage (if possible)
+        	//to preserve the original exception message (if possible)
         	if (e instanceof AuthenticationException) {
 				throw (AuthenticationException) e;
 			}
@@ -124,7 +124,7 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
             });
         }
         catch (Exception e) {
-        	//to preserve the original exception messaage (if possible)
+        	//to preserve the original exception message (if possible)
         	if (e instanceof AuthenticationException) {
 				throw (AuthenticationException) e;
 			}

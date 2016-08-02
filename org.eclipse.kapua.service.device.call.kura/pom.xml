@@ -60,19 +60,19 @@
             <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
-            <version>2.4.2</version>
+            <version>2.3</version>
         </dependency>
         <dependency>
             <!-- Paho MQTT client -->
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-            <version>1.0.2</version>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <!-- Google protobuf for message encoding -->
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>2.6.0</version>
+            <version>2.6.1</version>
         </dependency>
         
     </dependencies>

@@ -24,23 +24,27 @@ public class RunnableWrapper implements Runnable {
 	private UsernamePasswordTokenFactory credentialsFactory = KapuaLocator.getInstance().getFactory(UsernamePasswordTokenFactory.class);
 	
 	private Runnable runnable;
+	private boolean boundShiroContext;
 	
-	public RunnableWrapper(Runnable runnable) {
+	public RunnableWrapper(Runnable runnable, boolean boundShiroContext) {
 		this.runnable = runnable;
+		this.boundShiroContext = boundShiroContext;
 	}
 	
 	@Override
 	public void run() {
 		try {
-			logger.info("login inside runnable [{}]", this);
+			logger.info("Starting runnable {} inside Thread {} - {}", new Object[]{this, Thread.currentThread().getId(), Thread.currentThread().getName()});
 			AccessToken accessToken = authenticationService.login(getAuthenticationCredentials());
 			//if the auth service is local and is implemented by shiro the runnable must be bound with the shiro subject
-			if (true) {
+			if (boundShiroContext) {
+				logger.info("Bound Shiro context to runnable {} inside Thread {} - {}", new Object[]{this, Thread.currentThread().getId(), Thread.currentThread().getName()});
 				org.apache.shiro.subject.Subject shiroSubject = org.apache.shiro.SecurityUtils.getSubject();
 				shiroSubject.associateWith(runnable);
 			}
 			//otherwise keep kapua session bound with the thread context
 			else {
+				logger.info("Bound Kapua session to runnable {} inside Thread {} - {}", new Object[]{this, Thread.currentThread().getId(), Thread.currentThread().getName()});
 				KapuaSession session = new KapuaSession(accessToken, accessToken.getScopeId(), accessToken.getScopeId(), accessToken.getId(), "kapua-sys");
 				KapuaSecurityUtils.setSession(session);
 			}
@@ -51,6 +55,7 @@ public class RunnableWrapper implements Runnable {
 		runnable.run();
 	}
 
+	//TODO choose how create authentication credentials for the runnable
 	private AuthenticationCredentials getAuthenticationCredentials() {
 		String username = "kapua-sys";
 		String password = "We!come12345";
