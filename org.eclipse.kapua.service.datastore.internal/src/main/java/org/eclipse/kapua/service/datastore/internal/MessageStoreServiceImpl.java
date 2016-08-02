@@ -8,6 +8,7 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
+ *     Red Hat - refactoring
  *
  *******************************************************************************/
 package org.eclipse.kapua.service.datastore.internal;
@@ -83,35 +84,41 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     // @SuppressWarnings("unused")
     private static final Logger  logger            = LoggerFactory.getLogger(MessageStoreServiceImpl.class);
 
+    private static final KapuaLocator locator = KapuaLocator.getInstance();
+
     private static final long    DAY_SECS          = 24 * 60 * 60;
     private static final long    DAY_MILLIS        = DAY_SECS * 1000;
     private static final long    EUROTECH_TTL_DAYS = 30;
     private static final long    EUROTECH_TTL_SECS = EUROTECH_TTL_DAYS * DAY_SECS;
 
-    private AccountService       accountService;
-    private AuthorizationService authorizationService;
-    private PermissionFactory    permissionFactory;
+    private final AccountService accountService;
+    private final AuthorizationService authorizationService;
+    private final PermissionFactory permissionFactory;
 
     private final EsSchema       esSchema;
-    private int                  maxTopicDepth;
+    private final int            maxTopicDepth;
 
     private final Object         metadataUpdateSync;
 
-    public MessageStoreServiceImpl()
-    {
+    MessageStoreServiceImpl(AccountService accountService, AuthorizationService authorizationService,
+                                      PermissionFactory permissionFactory, EsSchema esSchema,
+                                      int maxTopicDepth, Object metadataUpdateSync) {
         // TODO pass a correct pid and a correct domain
         super("PID", DatastoreDomain.DATASTORE);
+        this.accountService = accountService;
+        this.authorizationService = authorizationService;
+        this.permissionFactory = permissionFactory;
+        this.esSchema = esSchema;
+        this.maxTopicDepth = maxTopicDepth;
+        this.metadataUpdateSync = metadataUpdateSync;
+    }
 
-        KapuaLocator locator = KapuaLocator.getInstance();
-        accountService = locator.getService(AccountService.class);
-        authorizationService = locator.getService(AuthorizationService.class);
-        permissionFactory = locator.getFactory(PermissionFactory.class);
 
-        esSchema = new EsSchema();
-        DatastoreSettings config = DatastoreSettings.getInstance();
-        maxTopicDepth = config.getInt(DatastoreSettingKey.CONFIG_TOPIC_MAX_DEPTH);
-
-        metadataUpdateSync = new Object();
+    public MessageStoreServiceImpl()
+    {
+        this(locator.getService(AccountService.class), locator.getService(AuthorizationService.class),
+                locator.getFactory(PermissionFactory.class), new EsSchema(),
+                DatastoreSettings.getInstance().getInt(DatastoreSettingKey.CONFIG_TOPIC_MAX_DEPTH), new Object());
     }
 
     @Override
