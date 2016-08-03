@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependencies versions -->
+        <commons-configuration.version>1.9</commons-configuration.version>
         <guava.version>18.0</guava.version>
         <guice.version>4.1.0</guice.version>
         <junit.version>4.11</junit.version>
@@ -145,6 +146,11 @@
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>${guice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>${commons-configuration.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
