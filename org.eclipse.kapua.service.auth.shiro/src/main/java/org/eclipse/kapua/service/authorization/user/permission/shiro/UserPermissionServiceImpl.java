@@ -19,13 +19,13 @@ import javax.persistence.EntityManager;
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
+import org.eclipse.kapua.service.authorization.shiro.AuthorizationEntityManagerFactory;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermission;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionCreator;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionListResult;
@@ -51,20 +51,20 @@ public class UserPermissionServiceImpl implements UserPermissionService
         //
         // Do create
         UserPermission permission = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
-            JpaUtils.beginTransaction(em);
+            AuthorizationEntityManagerFactory.beginTransaction(em);
 
             permission = UserPermissionDAO.create(em, userPermissionCreator);
 
-            JpaUtils.commit(em);
+            AuthorizationEntityManagerFactory.commit(em);
         }
         catch (Exception e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            AuthorizationEntityManagerFactory.rollback(em);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
 
         return permission;
@@ -85,7 +85,7 @@ public class UserPermissionServiceImpl implements UserPermissionService
 
         //
         // Do delete
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
             KapuaId permissionId = permission.getId();
 
@@ -93,16 +93,16 @@ public class UserPermissionServiceImpl implements UserPermissionService
                 throw new KapuaEntityNotFoundException(UserPermission.TYPE, permissionId);
             }
 
-            JpaUtils.beginTransaction(em);
+            AuthorizationEntityManagerFactory.beginTransaction(em);
             UserPermissionDAO.delete(em, permissionId);
-            JpaUtils.commit(em);
+            AuthorizationEntityManagerFactory.commit(em);
         }
         catch (KapuaException e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            AuthorizationEntityManagerFactory.rollback(em);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
     }
 
@@ -123,15 +123,15 @@ public class UserPermissionServiceImpl implements UserPermissionService
         //
         // Do find
         UserPermission permission = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
             permission = UserPermissionDAO.find(em, permissionId);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
         return permission;
     }
@@ -153,15 +153,15 @@ public class UserPermissionServiceImpl implements UserPermissionService
         //
         // Do query
         UserPermissionListResult result = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
             result = UserPermissionDAO.query(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
 
         return result;
@@ -184,15 +184,15 @@ public class UserPermissionServiceImpl implements UserPermissionService
         //
         // Do count
         long count = 0;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
             count = UserPermissionDAO.count(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
 
         return count;

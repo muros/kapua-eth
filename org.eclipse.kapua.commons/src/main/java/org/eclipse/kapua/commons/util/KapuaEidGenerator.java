@@ -15,10 +15,6 @@ package org.eclipse.kapua.commons.util;
 
 import java.math.BigInteger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
-import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 
 public final class KapuaEidGenerator {
@@ -36,14 +32,16 @@ public final class KapuaEidGenerator {
      */
     public static KapuaEid generate() throws ExceptionInInitializerError {
         KapuaEid id = null;
-        EntityManager em = null;
+        // try {
+        // id = new KapuaEid(JpaUtils.generateUuidShort());
+        id = new KapuaEid(new BigInteger(String.valueOf(System.currentTimeMillis())));
+        // }
+        // catch (KapuaException pe) {
+        // throw new KapuaRuntimeException(KapuaCommonsErrorCodes.ID_GENERATION_ERROR, pe);
+        // }
+
         try {
-            em = JpaUtils.getEntityManager();
-
-            Query q = em.createNativeQuery(NEW_UUID_SHORT);
-            BigInteger bigIntId = (BigInteger) q.getSingleResult();
-
-            id = new KapuaEid(bigIntId);
+            Thread.sleep(1);
         }
         catch (Exception pe) {
             throw new KapuaRuntimeException(KapuaCommonsErrorCodes.ID_GENERATION_ERROR, pe);
@@ -51,7 +49,7 @@ public final class KapuaEidGenerator {
         finally {
             if(em != null) {
                 JpaUtils.close(em);
-            }
+        }
         }
 
         return id;

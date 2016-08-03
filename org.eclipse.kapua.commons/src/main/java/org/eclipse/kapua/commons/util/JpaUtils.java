@@ -15,13 +15,13 @@ package org.eclipse.kapua.commons.util;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.OptimisticLockException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import javax.persistence.RollbackException;
 import javax.persistence.spi.PersistenceProvider;
 
@@ -33,28 +33,24 @@ import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import com.mchange.v2.c3p0.C3P0Registry;
-//import com.mchange.v2.c3p0.PooledDataSource;
-
 /**
  * Utility class for JPA operations
  */
 public class JpaUtils
 {
-    private static final Logger               s_logger            = LoggerFactory.getLogger(JpaUtils.class);
+    private static final Logger              LOG                     = LoggerFactory.getLogger(JpaUtils.class);
+    private static final String              QUERY_SELECT_UUID_SHORT = "SELECT UUID_SHORT() FROM DUAL";
 
-    private static final String               DATASOURCE_NAME     = "kapua-dbpool";
+    private static final Map<String, String> s_uniqueConstraints     = new HashMap<>();
+    private EntityManagerFactory             entityManagerFactory;
 
-    private static final Map<String, String>  s_uniqueConstraints = new HashMap<String, String>();
-    private static final EntityManagerFactory s_emf;
-
-    static {
+    protected JpaUtils(String persistenceUnitName, String datasourceName, Map<String, String> uniqueConstraints)
+    {
+        //
         // Initialize the EntityManagerFactory
         try {
 
             SystemSetting config = SystemSetting.getInstance();
-            // String dbUrl = config.get(String.class, SystemSettingKey.DB_URL);
-            // dbUrl = dbUrl + "?useTimezone=true&useLegacyDatetimeCode=false&serverTimezone=UTC&characterEncoding=UTF-8";
 
             // Mandatory connection parameters
             String dbName = config.getString(SystemSettingKey.DB_NAME);
@@ -110,7 +106,7 @@ public class JpaUtils
             configOverrides.put("eclipselink.connection-pool.default.user", config.getString(SystemSettingKey.DB_USERNAME));
             configOverrides.put("eclipselink.connection-pool.default.password", config.getString(SystemSettingKey.DB_PASSWORD));
 
-            configOverrides.put("eclipselink.connection-pool.default.dataSourceName", DATASOURCE_NAME);
+            configOverrides.put("eclipselink.connection-pool.default.dataSourceName", datasourceName);
             configOverrides.put("eclipselink.connection-pool.default.initial", config.getString(SystemSettingKey.DB_POOL_SIZE_INITIAL));
             configOverrides.put("eclipselink.connection-pool.default.min", config.getString(SystemSettingKey.DB_POOL_SIZE_MIN));
             configOverrides.put("eclipselink.connection-pool.default.max", config.getString(SystemSettingKey.DB_POOL_SIZE_MAX));
@@ -121,78 +117,42 @@ public class JpaUtils
                 // Could get this by wiring up OsgiTestBundleActivator as well.
                 org.osgi.framework.Bundle thisBundle = org.osgi.framework.FrameworkUtil.getBundle(JpaUtils.class);
                 org.osgi.framework.BundleContext context = thisBundle.getBundleContext();
-                s_logger.info(">>> Bundle context: {}", context);
+                LOG.info(">>> Bundle context: {}", context);
 
                 @SuppressWarnings("rawtypes")
                 org.osgi.framework.ServiceReference serviceReference = context.getServiceReference(PersistenceProvider.class.getName());
-                s_logger.info(">>> Service Reference: {}", serviceReference);
+                LOG.info(">>> Service Reference: {}", serviceReference);
 
                 @SuppressWarnings("unchecked")
                 PersistenceProvider persistenceProvider = (PersistenceProvider) context.getService(serviceReference);
-                s_logger.info(">>> Persistence Provider: {}", persistenceProvider);
+                LOG.info(">>> Persistence Provider: {}", persistenceProvider);
 
-                s_emf = persistenceProvider.createEntityManagerFactory("kapua", configOverrides);
+                entityManagerFactory = persistenceProvider.createEntityManagerFactory(persistenceUnitName,
+                                                                                      configOverrides);
             }
             else {
 
                 // Standalone JPA
-                s_emf = Persistence.createEntityManagerFactory("kapua", configOverrides);
-                // ((EntityManagerFactoryImpl) s_emf).getSessionFactory().getSettings();
+                entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName,
+                                                                              configOverrides);
             }
         }
         catch (Throwable ex) {
-            ex.printStackTrace();
-            s_logger.error("Error creating EntityManagerFactory", ex);
+            LOG.error("Error creating EntityManagerFactory", ex);
             throw new ExceptionInInitializerError(ex);
         }
 
         //
-        // Initialize the Unique Constraints Maps
-        s_uniqueConstraints.put("uc_accountName", "accountName");
-        s_uniqueConstraints.put("uc_accountNamespace", "accountNamespace");
-        s_uniqueConstraints.put("uc_organizationName", "organizationName");
-        s_uniqueConstraints.put("uc_organizationEmail", "organizationEmail");
-        s_uniqueConstraints.put("uc_userName", "userName");
-        s_uniqueConstraints.put("uc_userEmail", "userEmail");
-        s_uniqueConstraints.put("uc_ruleName", "ruleName");
-        s_uniqueConstraints.put("uc_clientId", "clientId");
-        s_uniqueConstraints.put("uc_displayName", "displayName");
-        s_uniqueConstraints.put("uc_domainName", "domainName");
+        // Set unique constrains for this persistence unit
+        // FIXME: this is needed? With EclipseLink we lost the ConstraintViolationException.
+        for (Entry<String, String> uc : uniqueConstraints.entrySet()) {
+            s_uniqueConstraints.put(uc.getKey(), uc.getValue());
+        }
     }
-
-    private JpaUtils()
-    {
-    }
-
-    // /**
-    // * Returns a reference to the DataSource used by Hibernate
-    // */
-    // public static DataSource getDataSource()
-    // throws KapuaException
-    // {
-    // return C3P0Registry.pooledDataSourceByName(DATASOURCE_NAME);
-    // }
 
     public static void cleanUpDataSource()
         throws Exception
     {
-        // //
-        // // C3p0 clean up
-        // @SuppressWarnings("unchecked")
-        // Set<PooledDataSource> pooledDataSourceSet = (Set<PooledDataSource>) C3P0Registry.getPooledDataSources();
-        // for (PooledDataSource dataSource : pooledDataSourceSet) {
-        // try {
-        // s_logger.info("Closing PooledDataSource: {}...", dataSource.getDataSourceName());
-        // dataSource.close();
-        // s_logger.info("Closed PooledDataSource: {}!", dataSource.getDataSourceName());
-        //
-        // }
-        // catch (SQLException e) {
-        // s_logger.error("Error while closing PooledDataSource: " + dataSource.getDataSourceName(), e);
-        // }
-        //
-        // }
-
         //
         // JDBC AbandonedConnectionCleanupThread clean up
         // FIXME: close clean up thread.
@@ -208,11 +168,16 @@ public class JpaUtils
 
     /**
      * Returns an EntityManager instance.
+     * 
+     * @return An entity manager for the persistence unit.
+     * @throws KapuaException If {@link EntityManagerFactory#createEntityManager()} cannot create the {@link EntityManager}
+     * 
+     * @since 1.0.0
      */
-    public static EntityManager getEntityManager()
+    public EntityManager createEntityManager()
         throws KapuaException
     {
-        EntityManager em = s_emf.createEntityManager();
+        EntityManager em = entityManagerFactory.createEntityManager();
         if (em == null) {
             throw KapuaException.internalError("Cannot create an EntityManager");
         }
@@ -220,13 +185,20 @@ public class JpaUtils
     }
 
     /**
-     * Opens a Jpa Transaction.
+     * Opens a Jpa Transaction.<br/>
+     * <br/>
+     * The transaction MUST be closed after being commited or rollbacked, using {@link JpaUtils#close(EntityManager)}
+     * 
+     * @param em The {@link EntityManager} on which start the transaction.
+     * @throws KapuaException if given {@link EntityManager} is {@code null}
+     * 
+     * @since 1.0.0
      */
     public static void beginTransaction(EntityManager em)
         throws KapuaException
     {
         if (em == null) {
-            throw KapuaException.internalError("null EntityManager");
+            throw KapuaException.internalError(new NullPointerException(), "null EntityManager");
         }
         em.getTransaction().begin();
     }
@@ -263,7 +235,7 @@ public class JpaUtils
             }
         }
         catch (Exception e) {
-            s_logger.warn("Rollback Error", e);
+            LOG.warn("Rollback Error", e);
         }
     }
 
@@ -280,11 +252,18 @@ public class JpaUtils
         }
     }
 
-    public static long getUuidShort(EntityManager em)
+    public static BigInteger generateUuidShort()
+        throws KapuaException
     {
-        Query q = em.createNativeQuery("SELECT UUID_SHORT() FROM DUAL");
-        BigInteger bi = (BigInteger) q.getSingleResult();
-        return bi.longValue();
+        return null;
+        //
+        // EntityManager em = entityManagerFactory.createEntityManager();
+        // if (em == null) {
+        // throw KapuaException.internalError("Cannot create an EntityManager");
+        // }
+        //
+        // Query q = em.createNativeQuery(QUERY_SELECT_UUID_SHORT);
+        // return (BigInteger) q.getSingleResult();
     }
 
     /**

@@ -18,7 +18,6 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -31,6 +30,7 @@ import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionCrea
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionListResult;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionPredicates;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService;
+import org.eclipse.kapua.service.device.registry.internal.DeviceEntityManagerFactory;
 
 /**
  * DeviceConnectionService exposes APIs to retrieve Device connections under a scope.
@@ -60,21 +60,21 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         //
         // Create the connection
         DeviceConnection deviceConnection = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
-            JpaUtils.beginTransaction(em);
+            DeviceEntityManagerFactory.beginTransaction(em);
 
             deviceConnection = DeviceConnectionDAO.create(em, deviceConnectionCreator);
-            JpaUtils.commit(em);
+            DeviceEntityManagerFactory.commit(em);
 
             deviceConnection = DeviceConnectionDAO.find(em, deviceConnection.getId());
         }
         catch (Exception e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            DeviceEntityManagerFactory.rollback(em);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return deviceConnection;
@@ -100,22 +100,22 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         //
         // Do update
         DeviceConnection deviceConnectionUpdated = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             if (DeviceConnectionDAO.find(em, deviceConnection.getId()) == null) {
                 throw new KapuaEntityNotFoundException(DeviceConnection.TYPE, deviceConnection.getId());
             }
 
-            JpaUtils.beginTransaction(em);
+            DeviceEntityManagerFactory.beginTransaction(em);
             deviceConnectionUpdated = DeviceConnectionDAO.update(em, deviceConnection);
-            JpaUtils.commit(em);
+            DeviceEntityManagerFactory.commit(em);
         }
         catch (Exception e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            DeviceEntityManagerFactory.rollback(em);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return deviceConnectionUpdated;
@@ -140,15 +140,15 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         //
         // Do find
         DeviceConnection deviceConnection = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             deviceConnection = DeviceConnectionDAO.find(em, entityId);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return deviceConnection;
@@ -199,15 +199,15 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         //
         // Do Query
         DeviceConnectionListResult result = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             result = DeviceConnectionDAO.query(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return result;
@@ -232,15 +232,15 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         //
         // Do count
         long count = 0;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             count = DeviceConnectionDAO.count(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return count;
@@ -265,7 +265,7 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
 
         //
         // Do delete
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             KapuaId deviceConnectionId = deviceConnection.getId();
 
@@ -273,16 +273,16 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
                 throw new KapuaEntityNotFoundException(DeviceConnection.TYPE, deviceConnectionId);
             }
 
-            JpaUtils.beginTransaction(em);
+            DeviceEntityManagerFactory.beginTransaction(em);
             DeviceConnectionDAO.delete(em, deviceConnectionId);
-            JpaUtils.commit(em);
+            DeviceEntityManagerFactory.commit(em);
         }
         catch (Exception e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            DeviceEntityManagerFactory.rollback(em);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
     }
 

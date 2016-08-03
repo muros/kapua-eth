@@ -18,7 +18,6 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalArgumentException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -60,23 +59,23 @@ public class UserServiceImpl implements UserService
         //
         // Do create
         User user = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getEntityManager();
         try {
 
-            JpaUtils.beginTransaction(em);
+            UserEntityManagerFactory.beginTransaction(em);
 
             user = UserDAO.create(em, userCreator);
 
             user = UserDAO.find(em, user.getId());
-            JpaUtils.commit(em);
+            UserEntityManagerFactory.commit(em);
 
         }
         catch (Exception pe) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(pe);
+            UserEntityManagerFactory.rollback(em);
+            throw UserEntityManagerFactory.toKapuaException(pe);
         }
         finally {
-            JpaUtils.close(em);
+            UserEntityManagerFactory.close(em);
         }
 
         return user;
@@ -104,7 +103,7 @@ public class UserServiceImpl implements UserService
         //
         // Do update
         User userUpdated = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getEntityManager();
         try {
 
             User currentUser = UserDAO.find(em, user.getId());
@@ -112,18 +111,18 @@ public class UserServiceImpl implements UserService
                 throw new KapuaEntityNotFoundException(User.TYPE, user.getId());
             }
 
-            JpaUtils.beginTransaction(em);
+            UserEntityManagerFactory.beginTransaction(em);
             UserDAO.update(em, user);
-            JpaUtils.commit(em);
+            UserEntityManagerFactory.commit(em);
 
             userUpdated = UserDAO.find(em, user.getId());
         }
         catch (Exception pe) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(pe);
+            UserEntityManagerFactory.rollback(em);
+            throw UserEntityManagerFactory.toKapuaException(pe);
         }
         finally {
-            JpaUtils.close(em);
+            UserEntityManagerFactory.close(em);
         }
 
         return userUpdated;
@@ -145,7 +144,7 @@ public class UserServiceImpl implements UserService
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.write, user.getScopeId()));
 
         // Do the delete
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getEntityManager();
         try {
             KapuaId userId = user.getId();
 
@@ -160,16 +159,16 @@ public class UserServiceImpl implements UserService
             // FIXME-KAPUA: Ask the Authorization Service
             // UserDAO.checkForLastAccountAdministratorDelete(em, userx);
 
-            JpaUtils.beginTransaction(em);
+            UserEntityManagerFactory.beginTransaction(em);
             UserDAO.delete(em, userId);
-            JpaUtils.commit(em);
+            UserEntityManagerFactory.commit(em);
         }
         catch (Exception pe) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(pe);
+            UserEntityManagerFactory.rollback(em);
+            throw UserEntityManagerFactory.toKapuaException(pe);
         }
         finally {
-            JpaUtils.close(em);
+            UserEntityManagerFactory.close(em);
         }
     }
 
@@ -189,15 +188,15 @@ public class UserServiceImpl implements UserService
 
         // Do the find
         User user = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getEntityManager();
         try {
             user = UserDAO.find(em, userId);
         }
         catch (Exception pe) {
-            throw JpaUtils.toKapuaException(pe);
+            throw UserEntityManagerFactory.toKapuaException(pe);
         }
         finally {
-            JpaUtils.close(em);
+            UserEntityManagerFactory.close(em);
         }
 
         return user;
@@ -212,15 +211,15 @@ public class UserServiceImpl implements UserService
 
         // Do the find
         User user = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getEntityManager();
         try {
             user = UserDAO.findByName(em, name);
         }
         catch (Exception pe) {
-            throw JpaUtils.toKapuaException(pe);
+            throw UserEntityManagerFactory.toKapuaException(pe);
         }
         finally {
-            JpaUtils.close(em);
+            UserEntityManagerFactory.close(em);
         }
 
         //
@@ -252,15 +251,15 @@ public class UserServiceImpl implements UserService
         //
         // Do count
         UserListResult result = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getEntityManager();
         try {
             result = UserDAO.query(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw UserEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            UserEntityManagerFactory.close(em);
         }
 
         return result;
@@ -282,15 +281,15 @@ public class UserServiceImpl implements UserService
         //
         // Do count
         long count = 0;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getEntityManager();
         try {
             count = UserDAO.count(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw UserEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            UserEntityManagerFactory.close(em);
         }
 
         return count;

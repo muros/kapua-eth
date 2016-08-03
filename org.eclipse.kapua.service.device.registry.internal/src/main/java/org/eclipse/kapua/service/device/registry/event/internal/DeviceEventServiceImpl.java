@@ -5,7 +5,6 @@ import javax.persistence.EntityManager;
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -16,6 +15,7 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventListResult;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
+import org.eclipse.kapua.service.device.registry.internal.DeviceEntityManagerFactory;
 
 public class DeviceEventServiceImpl implements DeviceEventService
 {
@@ -42,21 +42,21 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Create the event
         DeviceEvent deviceEvent = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
-            JpaUtils.beginTransaction(em);
+            DeviceEntityManagerFactory.beginTransaction(em);
 
             deviceEvent = DeviceEventDAO.create(em, deviceEventCreator);
-            JpaUtils.commit(em);
+            DeviceEntityManagerFactory.commit(em);
 
             deviceEvent = DeviceEventDAO.find(em, deviceEvent.getId());
         }
         catch (Exception e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            DeviceEntityManagerFactory.rollback(em);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return deviceEvent;
@@ -81,15 +81,15 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Do find
         DeviceEvent deviceEvent = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             deviceEvent = DeviceEventDAO.find(em, entityId);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return deviceEvent;
@@ -114,15 +114,15 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Do Query
         DeviceEventListResult result = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             result = DeviceEventDAO.query(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return result;
@@ -147,15 +147,15 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Do count
         long count = 0;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             count = DeviceEventDAO.count(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
 
         return count;
@@ -180,7 +180,7 @@ public class DeviceEventServiceImpl implements DeviceEventService
 
         //
         // Do delete
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
             KapuaId deviceEventId = deviceEvent.getId();
 
@@ -188,16 +188,16 @@ public class DeviceEventServiceImpl implements DeviceEventService
                 throw new KapuaEntityNotFoundException(DeviceEvent.TYPE, deviceEventId);
             }
 
-            JpaUtils.beginTransaction(em);
+            DeviceEntityManagerFactory.beginTransaction(em);
             DeviceEventDAO.delete(em, deviceEventId);
-            JpaUtils.commit(em);
+            DeviceEntityManagerFactory.commit(em);
         }
         catch (Exception e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            DeviceEntityManagerFactory.rollback(em);
+            throw DeviceEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            DeviceEntityManagerFactory.close(em);
         }
     }
 }

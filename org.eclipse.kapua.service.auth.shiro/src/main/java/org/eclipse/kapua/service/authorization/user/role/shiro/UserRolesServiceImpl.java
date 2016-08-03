@@ -19,7 +19,6 @@ import javax.persistence.EntityManager;
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -28,6 +27,7 @@ import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.authorization.role.Role;
 import org.eclipse.kapua.service.authorization.role.shiro.RoleDomain;
+import org.eclipse.kapua.service.authorization.shiro.AuthorizationEntityManagerFactory;
 import org.eclipse.kapua.service.authorization.user.role.UserRoles;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesListResult;
@@ -54,20 +54,20 @@ public class UserRolesServiceImpl implements UserRolesService
         //
         // Do create
         UserRoles userRole = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
-            JpaUtils.beginTransaction(em);
+            AuthorizationEntityManagerFactory.beginTransaction(em);
 
             userRole = UserRolesDAO.create(em, userRoleCreator);
 
-            JpaUtils.commit(em);
+            AuthorizationEntityManagerFactory.commit(em);
         }
         catch (Exception e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            AuthorizationEntityManagerFactory.rollback(em);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
 
         return userRole;
@@ -88,7 +88,7 @@ public class UserRolesServiceImpl implements UserRolesService
 
         //
         // Do delete
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
             KapuaId userRoleId = userRole.getId();
 
@@ -96,16 +96,16 @@ public class UserRolesServiceImpl implements UserRolesService
                 throw new KapuaEntityNotFoundException(Role.TYPE, userRoleId);
             }
 
-            JpaUtils.beginTransaction(em);
+            AuthorizationEntityManagerFactory.beginTransaction(em);
             UserRolesDAO.delete(em, userRoleId);
-            JpaUtils.commit(em);
+            AuthorizationEntityManagerFactory.commit(em);
         }
         catch (KapuaException e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            AuthorizationEntityManagerFactory.rollback(em);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
     }
 
@@ -126,15 +126,15 @@ public class UserRolesServiceImpl implements UserRolesService
         //
         // Do find
         UserRoles userRole = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
             userRole = UserRolesDAO.find(em, userRoleId);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
         return userRole;
     }
@@ -156,15 +156,15 @@ public class UserRolesServiceImpl implements UserRolesService
         //
         // Do query
         UserRolesListResult result = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
             result = UserRolesDAO.query(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
 
         return result;
@@ -187,15 +187,15 @@ public class UserRolesServiceImpl implements UserRolesService
         //
         // Do count
         long count = 0;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
             count = UserRolesDAO.count(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw AuthorizationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthorizationEntityManagerFactory.close(em);
         }
 
         return count;

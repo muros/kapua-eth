@@ -231,8 +231,7 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
     })
     private KapuaEid              preferredUserId;
 
-    @SuppressWarnings("unused")
-    private DeviceImpl()
+    protected DeviceImpl()
     {
         super();
     }

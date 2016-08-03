@@ -6,7 +6,6 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.JpaUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -17,6 +16,7 @@ import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
 import org.eclipse.kapua.service.authentication.credential.CredentialPredicates;
 import org.eclipse.kapua.service.authentication.credential.CredentialQuery;
 import org.eclipse.kapua.service.authentication.credential.CredentialService;
+import org.eclipse.kapua.service.authentication.shiro.AuthenticationEntityManagerFactory;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
@@ -46,21 +46,21 @@ public class CredentialServiceImpl implements CredentialService
         //
         // Do create
         Credential credential = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
         try {
-            JpaUtils.beginTransaction(em);
+            AuthenticationEntityManagerFactory.beginTransaction(em);
 
             credential = CredentialDAO.create(em, credentialCreator);
 
             credential = CredentialDAO.find(em, credential.getId());
-            JpaUtils.commit(em);
+            AuthenticationEntityManagerFactory.commit(em);
         }
         catch (Exception pe) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(pe);
+            AuthenticationEntityManagerFactory.rollback(em);
+            throw AuthenticationEntityManagerFactory.toKapuaException(pe);
         }
         finally {
-            JpaUtils.close(em);
+            AuthenticationEntityManagerFactory.close(em);
         }
 
         return credential;
@@ -89,7 +89,7 @@ public class CredentialServiceImpl implements CredentialService
         //
         // Do update
         Credential credentialUpdated = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
         try {
 
             Credential currentUser = CredentialDAO.find(em, credential.getId());
@@ -99,18 +99,18 @@ public class CredentialServiceImpl implements CredentialService
 
             // Passing attributes??
 
-            JpaUtils.beginTransaction(em);
+            AuthenticationEntityManagerFactory.beginTransaction(em);
             CredentialDAO.update(em, credential);
-            JpaUtils.commit(em);
+            AuthenticationEntityManagerFactory.commit(em);
 
             credentialUpdated = CredentialDAO.find(em, credential.getId());
         }
         catch (Exception pe) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(pe);
+            AuthenticationEntityManagerFactory.rollback(em);
+            throw AuthenticationEntityManagerFactory.toKapuaException(pe);
         }
         finally {
-            JpaUtils.close(em);
+            AuthenticationEntityManagerFactory.close(em);
         }
 
         return credentialUpdated;
@@ -134,15 +134,15 @@ public class CredentialServiceImpl implements CredentialService
         //
         // Do find
         Credential credential = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
         try {
             credential = CredentialDAO.find(em, credentialId);
         }
         catch (Exception pe) {
-            throw JpaUtils.toKapuaException(pe);
+            throw AuthenticationEntityManagerFactory.toKapuaException(pe);
         }
         finally {
-            JpaUtils.close(em);
+            AuthenticationEntityManagerFactory.close(em);
         }
 
         return credential;
@@ -167,15 +167,15 @@ public class CredentialServiceImpl implements CredentialService
         //
         // Do count
         CredentialListResult result = null;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
         try {
             result = CredentialDAO.query(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw AuthenticationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthenticationEntityManagerFactory.close(em);
         }
 
         return result;
@@ -200,15 +200,15 @@ public class CredentialServiceImpl implements CredentialService
         //
         // Do count
         long count = 0;
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
         try {
             count = CredentialDAO.count(em, query);
         }
         catch (Exception e) {
-            throw JpaUtils.toKapuaException(e);
+            throw AuthenticationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthenticationEntityManagerFactory.close(em);
         }
 
         return count;
@@ -233,7 +233,7 @@ public class CredentialServiceImpl implements CredentialService
 
         //
         // Do delete
-        EntityManager em = JpaUtils.getEntityManager();
+        EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
         try {
             KapuaId credentialId = credential.getId();
 
@@ -241,16 +241,16 @@ public class CredentialServiceImpl implements CredentialService
                 throw new KapuaEntityNotFoundException(Credential.TYPE, credentialId);
             }
 
-            JpaUtils.beginTransaction(em);
+            AuthenticationEntityManagerFactory.beginTransaction(em);
             CredentialDAO.delete(em, credentialId);
-            JpaUtils.commit(em);
+            AuthenticationEntityManagerFactory.commit(em);
         }
         catch (Exception e) {
-            JpaUtils.rollback(em);
-            throw JpaUtils.toKapuaException(e);
+            AuthenticationEntityManagerFactory.rollback(em);
+            throw AuthenticationEntityManagerFactory.toKapuaException(e);
         }
         finally {
-            JpaUtils.close(em);
+            AuthenticationEntityManagerFactory.close(em);
         }
     }
 

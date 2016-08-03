@@ -13,17 +13,12 @@
  -->
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
 	version="2.0">
-	<persistence-unit name="kapua-account" transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="kapua-user" transaction-type="RESOURCE_LOCAL">
 
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         
-        <!-- Account -->
-        <class>org.eclipse.kapua.service.account.internal.AccountImpl</class>
-        <class>org.eclipse.kapua.service.account.internal.OrganizationImpl</class>
+        <!-- User -->
+        <class>org.eclipse.kapua.service.user.internal.UserImpl</class>
 
-		<properties>
-			<!-- <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" /> -->
-			<property name="javax.persistence.lock.timeout" value="1000" />
-		</properties>
 	</persistence-unit>
 </persistence>

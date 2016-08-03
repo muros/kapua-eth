@@ -72,8 +72,7 @@ public class DeviceConnectionImpl extends AbstractKapuaUpdatableEntity implement
     @Column(name = "server_ip")
     private String                 serverIp;
 
-    @SuppressWarnings("unused")
-    private DeviceConnectionImpl()
+    protected DeviceConnectionImpl()
     {
         super();
     }
