@@ -8,7 +8,7 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
- *     Red Hat - fixed class encapsulation
+` *     Red Hat - fixed class encapsulation, exception handling and contract
  *
  *******************************************************************************/
 package org.eclipse.kapua.commons.util;
@@ -22,12 +22,19 @@ import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 
 public final class KapuaEidGenerator {
+
     private static final String NEW_UUID_SHORT = "SELECT UUID_SHORT()";
 
     private KapuaEidGenerator() {
     }
 
-    public static KapuaEid generate() {
+    /**
+     * Generates new Kapua EID.
+     *
+     * @return new Kapua EID instance
+     * @throws ExceptionInInitializerError if underlying persistence store cannot be initialized
+     */
+    public static KapuaEid generate() throws ExceptionInInitializerError {
         KapuaEid id = null;
         EntityManager em = null;
         try {
@@ -42,7 +49,9 @@ public final class KapuaEidGenerator {
             throw new KapuaRuntimeException(KapuaCommonsErrorCodes.ID_GENERATION_ERROR, pe);
         }
         finally {
-            JpaUtils.close(em);
+            if(em != null) {
+                JpaUtils.close(em);
+            }
         }
 
         return id;

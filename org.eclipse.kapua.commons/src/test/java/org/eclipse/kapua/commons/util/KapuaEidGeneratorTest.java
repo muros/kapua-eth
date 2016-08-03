@@ -8,6 +8,7 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
+ *     Red Hat - improved test coverage
  *
  *******************************************************************************/
 package org.eclipse.kapua.commons.util;
@@ -17,11 +18,11 @@ import static org.junit.Assert.*;
 import org.eclipse.kapua.KapuaException;
 import org.junit.Test;
 
-public class KapuaEidGeneratorTest 
-{
-	@Test
-	public void test() throws KapuaException 
-	{
+public class KapuaEidGeneratorTest {
+
+	@Test(expected = ExceptionInInitializerError.class)
+	public void shouldNotInitializeIfProviderIsNotAvailable() throws KapuaException {
 		assertNotNull(KapuaEidGenerator.generate());
 	}
+
 }
