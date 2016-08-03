@@ -330,7 +330,8 @@ public class ServiceDAO
         }
         if (attrValue instanceof Object[]) {
             Object[] attrValues = (Object[]) attrValue;
-            In inExpr = cb.in(entityRoot.get(entityType.getSingularAttribute(attrName)));
+            Expression<?> inPredicate = entityRoot.get(entityType.getSingularAttribute(attrName));
+            In inExpr = cb.in(inPredicate);
             for (Object value : attrValues) {
                 inExpr.value(value);
             }
