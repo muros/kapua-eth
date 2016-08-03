@@ -31,14 +31,9 @@ public class GuiceLocatorImpl extends KapuaLocator
     @Override
     public <S extends KapuaService> S getService(Class<S> serviceClass) {
         try {
-            S kapuaService = s_injector.getInstance(serviceClass);
-            if (kapuaService == null) {
-                throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, serviceClass);
-            }
-
-            return kapuaService;
+            return s_injector.getInstance(serviceClass);
         } catch (ConfigurationException e) {
-            return null;
+            throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, serviceClass);
         }
     }
 
