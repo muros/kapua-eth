@@ -45,28 +45,29 @@ public class KapuaModule extends AbstractModule
 			String services = ResourceUtils.readResource(servicesUrl);
 			br = new BufferedReader( new StringReader(services));		
 			
-			String serviceNameTrimmed = null; 
+			String trimmedServiceLine = null;
 			for (String serviceName = br.readLine(); serviceName != null; serviceName = br.readLine()) {
 				
-				serviceNameTrimmed = serviceName.trim(); 
-				if (serviceNameTrimmed.length() == 0 || serviceNameTrimmed.startsWith(COMMENT_PREFIX)) {
+				trimmedServiceLine = serviceName.trim();
+				if (trimmedServiceLine.length() == 0 || trimmedServiceLine.startsWith(COMMENT_PREFIX)) {
 					continue;
 				}
-				try {
-					Class<?> kapuaObject = Class.forName(serviceNameTrimmed);
-					if (KapuaService.class.isAssignableFrom(kapuaObject)) {
+				String serviceClassName = serviceName.substring(0, trimmedServiceLine.indexOf(','));
 
+
+				try {
+					Class<?> kapuaObject = Class.forName(serviceClassName);
+					if (KapuaService.class.isAssignableFrom(kapuaObject)) {
 						bind(kapuaObject).toProvider(new KapuaServiceLoaderProvider(kapuaObject));
-						s_logger.info("Bound Kapua service {}", serviceNameTrimmed);						
+						s_logger.info("Bound Kapua service {}", serviceClassName);
 					}
 					else if (KapuaObjectFactory.class.isAssignableFrom(kapuaObject)) {
-
 						bind(kapuaObject).toProvider(new KapuaFactoryLoaderProvider(kapuaObject));
-						s_logger.info("Bound Kapua factory {}", serviceNameTrimmed);
+						s_logger.info("Bound Kapua factory {}", serviceClassName);
 					}
 				}
 				catch (Exception e) {
-					s_logger.error("Cannot load Kapua service/factory "+serviceNameTrimmed, e);
+					s_logger.error("Cannot load Kapua service/factory "+trimmedServiceLine, e);
 				}
 			}
 		}
