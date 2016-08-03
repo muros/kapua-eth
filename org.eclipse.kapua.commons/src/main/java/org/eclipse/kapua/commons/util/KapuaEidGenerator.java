@@ -8,6 +8,7 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
+ *     Red Hat - fixed class encapsulation
  *
  *******************************************************************************/
 package org.eclipse.kapua.commons.util;
@@ -20,12 +21,13 @@ import javax.persistence.Query;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 
-public class KapuaEidGenerator
-{
+public final class KapuaEidGenerator {
     private static final String NEW_UUID_SHORT = "SELECT UUID_SHORT()";
 
-    public static KapuaEid generate()
-    {
+    private KapuaEidGenerator() {
+    }
+
+    public static KapuaEid generate() {
         KapuaEid id = null;
         EntityManager em = null;
         try {
