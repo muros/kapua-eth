@@ -88,7 +88,7 @@ public abstract class KapuaLocator
      * Returns an instance of a KapuaService implementing the provided KapuaService class.
      * 
      * @param serviceClass - class of the service whose instance is required.
-     * @return
+     * @return service instance. Null if service is not available.
      */
     public abstract <S extends KapuaService> S getService(Class<S> serviceClass);
 
