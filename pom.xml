@@ -13,6 +13,7 @@
 
         <!-- Dependencies versions -->
         <guava.version>18.0</guava.version>
+        <guice.version>4.1.0</guice.version>
         <junit.version>4.11</junit.version>
         <slf4j.version>1.7.2</slf4j.version>
     </properties>
@@ -139,6 +140,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>${guice.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
