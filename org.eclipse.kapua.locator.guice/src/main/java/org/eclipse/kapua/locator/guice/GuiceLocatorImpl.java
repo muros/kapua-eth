@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.locator.guice;
 
+import com.google.inject.ConfigurationException;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.KapuaObjectFactory;
@@ -28,14 +29,17 @@ public class GuiceLocatorImpl extends KapuaLocator
 	}
 	
     @Override
-    public <S extends KapuaService> S getService(Class<S> serviceClass)
-    {
-    	S kapuaService = s_injector.getInstance(serviceClass);
-        if (kapuaService == null) {
-            throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, serviceClass);
+    public <S extends KapuaService> S getService(Class<S> serviceClass) {
+        try {
+            S kapuaService = s_injector.getInstance(serviceClass);
+            if (kapuaService == null) {
+                throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, serviceClass);
+            }
+
+            return kapuaService;
+        } catch (ConfigurationException e) {
+            return null;
         }
-    	
-    	return kapuaService;
     }
 
     @Override

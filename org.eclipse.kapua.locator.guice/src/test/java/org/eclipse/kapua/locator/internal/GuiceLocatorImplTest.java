@@ -8,6 +8,7 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
+ *     Red Hat - improved tests coverage
  *
  *******************************************************************************/
 package org.eclipse.kapua.locator.internal;
@@ -16,18 +17,28 @@ import static org.junit.Assert.*;
 
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.locator.guice.GuiceLocatorImpl;
+import org.eclipse.kapua.service.KapuaService;
 import org.eclipse.kapua.service.user.UserService;
 import org.junit.Test;
 
 public class GuiceLocatorImplTest {
 
+	KapuaLocator locator = GuiceLocatorImpl.getInstance();
+
 	@Test
-	public void test() 
+	public void shouldLoadUserService()
 	{
-		KapuaLocator kl = GuiceLocatorImpl.getInstance();
-		UserService  us = kl.getService(UserService.class);
+		UserService  us = locator.getService(UserService.class);
 		System.out.println("User service loadaed:"+us);
 		assertNotNull(us);
 	}
+
+	@Test
+	public void shouldNotLoadNotRegisteredService() {
+		MyService myService = locator.getService(MyService.class);
+		assertNull(myService);
+	}
+
+	static interface MyService extends KapuaService {}
 
 }
