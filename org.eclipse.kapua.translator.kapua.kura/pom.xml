@@ -99,19 +99,10 @@
             <artifactId>org.eclipse.kapua.service.device.management.deploy.internal</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-
-
 		<dependency>
-		<!-- moxy jaxb dependency -->
 			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>eclipselink</artifactId>
-			<version>2.5.0-RC1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.eclipse.persistence</groupId>
-					<artifactId>commonj.sdo</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>org.eclipse.persistence.moxy</artifactId>
+			<version>2.6.3</version>
 		</dependency>
     </dependencies>
 </project>
