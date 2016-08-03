@@ -35,6 +35,9 @@ import org.eclipse.kapua.service.user.UserService;
  */
 public class UserServiceImpl implements UserService
 {
+
+    private final KapuaLocator locator = KapuaLocator.getInstance();
+
     @Override
     public User create(UserCreator userCreator)
         throws KapuaException
@@ -50,7 +53,6 @@ public class UserServiceImpl implements UserService
 
         //
         // Check Access
-        KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.write, userCreator.getScopeId()));
@@ -95,7 +97,6 @@ public class UserServiceImpl implements UserService
 
         //
         // Check Access
-        KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.write, user.getScopeId()));
@@ -139,7 +140,6 @@ public class UserServiceImpl implements UserService
 
         //
         // Check Access
-        KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.write, user.getScopeId()));
@@ -183,7 +183,6 @@ public class UserServiceImpl implements UserService
 
         //
         // Check Access
-        KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.read, accountId));
@@ -227,7 +226,6 @@ public class UserServiceImpl implements UserService
         //
         // Check Access
         if (user != null) {
-            KapuaLocator locator = KapuaLocator.getInstance();
             AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
             PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
             authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.read, user.getScopeId()));
@@ -247,7 +245,6 @@ public class UserServiceImpl implements UserService
 
         //
         // Check Access
-        KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.read, query.getScopeId()));
@@ -278,7 +275,6 @@ public class UserServiceImpl implements UserService
 
         //
         // Check Access
-        KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.read, query.getScopeId()));
