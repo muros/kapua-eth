@@ -17,24 +17,26 @@ import java.math.BigInteger;
 
 import javax.persistence.Query;
 
-import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 
-public final class KapuaEidGenerator {
+public final class KapuaEidGenerator
+{
+    private static final String QUERY_SELECT_UUID_SHORT = "SELECT UUID_SHORT() FROM DUAL";
 
-    private static final String NEW_UUID_SHORT = "SELECT UUID_SHORT()";
-
-    private KapuaEidGenerator() {
+    private KapuaEidGenerator()
+    {
     }
 
     /**
      * Generates new Kapua EID.
      *
      * @return new Kapua EID instance
-     * @throws ExceptionInInitializerError if underlying persistence store cannot be initialized
+     * @throws KapuaRuntimeException if underlying persistence store cannot be initialized
      */
-    public static KapuaEid generate() throws ExceptionInInitializerError {
+    public static KapuaEid generate()
+        throws ExceptionInInitializerError
+    {
         KapuaEid id = null;
         EntityManager em = null;
         try {
@@ -48,9 +50,9 @@ public final class KapuaEidGenerator {
             throw new KapuaRuntimeException(KapuaCommonsErrorCodes.ID_GENERATION_ERROR, pe);
         }
         finally {
-            if(em != null) {
-                JpaUtils.close(em);
-        }
+            if (em != null) {
+                em.close();
+            }
         }
 
         return id;
