@@ -175,6 +175,15 @@ public class KapuaTestApp
             System.err.println("");
 
             //
+            // Test duplicate role name
+            try {
+                roleService.create(roleCreator);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //
             // Test find role and permissions
             role = roleService.find(role.getScopeId(), role.getId());
             System.err.println("Role Found:");

@@ -3,17 +3,16 @@ package org.eclipse.kapua.service.authorization.shiro;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.util.EntityManager;
 
-public class AuthorizationEntityManagerFactory extends org.eclipse.kapua.commons.util.JpaUtils
+public class AuthorizationEntityManagerFactory extends org.eclipse.kapua.commons.util.AbstractEntityManagerFactory
 {
     private static final String                      PERSISTENCE_UNIT_NAME = "kapua-authorization";
     private static final String                      DATASOURCE_NAME       = "kapua-dbpool";
     private static final Map<String, String>         s_uniqueConstraints   = new HashMap<>();
 
-    private static AuthorizationEntityManagerFactory t                     = new AuthorizationEntityManagerFactory();
+    private static AuthorizationEntityManagerFactory instance              = new AuthorizationEntityManagerFactory();
 
     private AuthorizationEntityManagerFactory()
     {
@@ -25,6 +24,6 @@ public class AuthorizationEntityManagerFactory extends org.eclipse.kapua.commons
     public static EntityManager getEntityManager()
         throws KapuaException
     {
-        return t.createEntityManager();
+        return instance.createEntityManager();
     }
 }

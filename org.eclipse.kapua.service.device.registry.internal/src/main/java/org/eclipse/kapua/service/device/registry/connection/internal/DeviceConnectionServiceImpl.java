@@ -12,12 +12,12 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.connection.internal;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -62,19 +62,19 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         DeviceConnection deviceConnection = null;
         EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
-            DeviceEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
 
             deviceConnection = DeviceConnectionDAO.create(em, deviceConnectionCreator);
-            DeviceEntityManagerFactory.commit(em);
+            em.commit();
 
             deviceConnection = DeviceConnectionDAO.find(em, deviceConnection.getId());
         }
         catch (Exception e) {
-            DeviceEntityManagerFactory.rollback(em);
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return deviceConnection;
@@ -106,16 +106,16 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
                 throw new KapuaEntityNotFoundException(DeviceConnection.TYPE, deviceConnection.getId());
             }
 
-            DeviceEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             deviceConnectionUpdated = DeviceConnectionDAO.update(em, deviceConnection);
-            DeviceEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (Exception e) {
-            DeviceEntityManagerFactory.rollback(em);
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return deviceConnectionUpdated;
@@ -145,10 +145,10 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
             deviceConnection = DeviceConnectionDAO.find(em, entityId);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return deviceConnection;
@@ -204,10 +204,10 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
             result = DeviceConnectionDAO.query(em, query);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return result;
@@ -237,10 +237,10 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
             count = DeviceConnectionDAO.count(em, query);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return count;
@@ -273,16 +273,16 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
                 throw new KapuaEntityNotFoundException(DeviceConnection.TYPE, deviceConnectionId);
             }
 
-            DeviceEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             DeviceConnectionDAO.delete(em, deviceConnectionId);
-            DeviceEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (Exception e) {
-            DeviceEntityManagerFactory.rollback(em);
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
     }
 

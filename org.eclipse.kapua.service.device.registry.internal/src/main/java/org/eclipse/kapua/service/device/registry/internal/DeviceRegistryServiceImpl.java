@@ -12,12 +12,12 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.internal;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -57,19 +57,19 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         Device device = null;
         EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
-            DeviceEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
 
             device = DeviceDAO.create(em, deviceCreator);
-            DeviceEntityManagerFactory.commit(em);
+            em.commit();
 
             device = DeviceDAO.find(em, device.getId());
         }
         catch (Exception e) {
-            DeviceEntityManagerFactory.rollback(em);
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return device;
@@ -133,18 +133,18 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
             device.setPreferredUserId(device.getPreferredUserId());
 
             // Update
-            DeviceEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             DeviceDAO.update(em, device);
-            DeviceEntityManagerFactory.commit(em);
+            em.commit();
 
             deviceUpdated = DeviceDAO.find(em, device.getId());
         }
         catch (Exception e) {
-            DeviceEntityManagerFactory.rollback(em);
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return deviceUpdated;
@@ -174,10 +174,10 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
             device = DeviceDAO.find(em, entityId);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return device;
@@ -207,10 +207,10 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
             result = DeviceDAO.query(em, query);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return result;
@@ -240,10 +240,10 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
             count = DeviceDAO.count(em, query);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return count;
@@ -276,16 +276,16 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
                 throw new KapuaEntityNotFoundException(Device.TYPE, deviceId);
             }
 
-            DeviceEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             DeviceDAO.delete(em, deviceId);
-            DeviceEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (Exception e) {
-            DeviceEntityManagerFactory.rollback(em);
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
     }
 

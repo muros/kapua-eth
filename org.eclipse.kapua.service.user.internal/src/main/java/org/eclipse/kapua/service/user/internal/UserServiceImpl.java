@@ -12,12 +12,12 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.user.internal;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalArgumentException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -62,20 +62,20 @@ public class UserServiceImpl implements UserService
         EntityManager em = UserEntityManagerFactory.getEntityManager();
         try {
 
-            UserEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
 
             user = UserDAO.create(em, userCreator);
 
             user = UserDAO.find(em, user.getId());
-            UserEntityManagerFactory.commit(em);
+            em.commit();
 
         }
         catch (Exception pe) {
-            UserEntityManagerFactory.rollback(em);
-            throw UserEntityManagerFactory.toKapuaException(pe);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
         }
         finally {
-            UserEntityManagerFactory.close(em);
+            em.close();
         }
 
         return user;
@@ -111,18 +111,18 @@ public class UserServiceImpl implements UserService
                 throw new KapuaEntityNotFoundException(User.TYPE, user.getId());
             }
 
-            UserEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             UserDAO.update(em, user);
-            UserEntityManagerFactory.commit(em);
+            em.commit();
 
             userUpdated = UserDAO.find(em, user.getId());
         }
         catch (Exception pe) {
-            UserEntityManagerFactory.rollback(em);
-            throw UserEntityManagerFactory.toKapuaException(pe);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
         }
         finally {
-            UserEntityManagerFactory.close(em);
+            em.close();
         }
 
         return userUpdated;
@@ -159,16 +159,16 @@ public class UserServiceImpl implements UserService
             // FIXME-KAPUA: Ask the Authorization Service
             // UserDAO.checkForLastAccountAdministratorDelete(em, userx);
 
-            UserEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             UserDAO.delete(em, userId);
-            UserEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (Exception pe) {
-            UserEntityManagerFactory.rollback(em);
-            throw UserEntityManagerFactory.toKapuaException(pe);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
         }
         finally {
-            UserEntityManagerFactory.close(em);
+            em.close();
         }
     }
 
@@ -193,10 +193,10 @@ public class UserServiceImpl implements UserService
             user = UserDAO.find(em, userId);
         }
         catch (Exception pe) {
-            throw UserEntityManagerFactory.toKapuaException(pe);
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
         }
         finally {
-            UserEntityManagerFactory.close(em);
+            em.close();
         }
 
         return user;
@@ -216,10 +216,10 @@ public class UserServiceImpl implements UserService
             user = UserDAO.findByName(em, name);
         }
         catch (Exception pe) {
-            throw UserEntityManagerFactory.toKapuaException(pe);
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
         }
         finally {
-            UserEntityManagerFactory.close(em);
+            em.close();
         }
 
         //
@@ -256,10 +256,10 @@ public class UserServiceImpl implements UserService
             result = UserDAO.query(em, query);
         }
         catch (Exception e) {
-            throw UserEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            UserEntityManagerFactory.close(em);
+            em.close();
         }
 
         return result;
@@ -286,10 +286,10 @@ public class UserServiceImpl implements UserService
             count = UserDAO.count(em, query);
         }
         catch (Exception e) {
-            throw UserEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            UserEntityManagerFactory.close(em);
+            em.close();
         }
 
         return count;

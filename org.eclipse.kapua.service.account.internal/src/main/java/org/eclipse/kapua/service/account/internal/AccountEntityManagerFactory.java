@@ -3,11 +3,10 @@ package org.eclipse.kapua.service.account.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.util.EntityManager;
 
-public class AccountEntityManagerFactory extends org.eclipse.kapua.commons.util.JpaUtils
+public class AccountEntityManagerFactory extends org.eclipse.kapua.commons.util.AbstractEntityManagerFactory
 {
     private static final String                PERSISTENCE_UNIT_NAME = "kapua-account";
     private static final String                DATASOURCE_NAME       = "kapua-dbpool";

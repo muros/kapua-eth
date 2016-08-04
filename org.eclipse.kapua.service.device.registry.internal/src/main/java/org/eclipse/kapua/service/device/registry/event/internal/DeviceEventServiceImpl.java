@@ -1,10 +1,10 @@
 package org.eclipse.kapua.service.device.registry.event.internal;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -44,19 +44,19 @@ public class DeviceEventServiceImpl implements DeviceEventService
         DeviceEvent deviceEvent = null;
         EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
-            DeviceEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
 
             deviceEvent = DeviceEventDAO.create(em, deviceEventCreator);
-            DeviceEntityManagerFactory.commit(em);
+            em.commit();
 
             deviceEvent = DeviceEventDAO.find(em, deviceEvent.getId());
         }
         catch (Exception e) {
-            DeviceEntityManagerFactory.rollback(em);
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return deviceEvent;
@@ -86,10 +86,10 @@ public class DeviceEventServiceImpl implements DeviceEventService
             deviceEvent = DeviceEventDAO.find(em, entityId);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return deviceEvent;
@@ -119,10 +119,10 @@ public class DeviceEventServiceImpl implements DeviceEventService
             result = DeviceEventDAO.query(em, query);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return result;
@@ -152,10 +152,10 @@ public class DeviceEventServiceImpl implements DeviceEventService
             count = DeviceEventDAO.count(em, query);
         }
         catch (Exception e) {
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
 
         return count;
@@ -188,16 +188,16 @@ public class DeviceEventServiceImpl implements DeviceEventService
                 throw new KapuaEntityNotFoundException(DeviceEvent.TYPE, deviceEventId);
             }
 
-            DeviceEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             DeviceEventDAO.delete(em, deviceEventId);
-            DeviceEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (Exception e) {
-            DeviceEntityManagerFactory.rollback(em);
-            throw DeviceEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            DeviceEntityManagerFactory.close(em);
+            em.close();
         }
     }
 }

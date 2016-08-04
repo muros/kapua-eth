@@ -14,7 +14,6 @@ package org.eclipse.kapua.service.account.internal;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import org.eclipse.kapua.KapuaEntityNotFoundException;
@@ -25,6 +24,8 @@ import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.configuration.spi.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -57,7 +58,6 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
     public Account create(AccountCreator accountCreator)
         throws KapuaException
     {
-
         //
         // Validation of the fields
         ArgumentValidator.notNull(accountCreator, "accountCreator");
@@ -88,7 +88,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         EntityManager em = AccountEntityManagerFactory.getEntityManager();
         try {
 
-            AccountEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
 
             account = AccountDAO.create(em, accountCreator);
 
@@ -100,14 +100,14 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
 
             AccountDAO.update(em, account);
 
-            AccountEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (Exception pe) {
-            AccountEntityManagerFactory.rollback(em);
-            throw AccountEntityManagerFactory.toKapuaException(pe);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
 
         //
@@ -123,7 +123,6 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
     public Account update(Account account)
         throws KapuaException
     {
-
         //
         // Validation of the fields
         ArgumentValidator.notNull(account.getId(), "id");
@@ -144,7 +143,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         EntityManager em = AccountEntityManagerFactory.getEntityManager();
         try {
 
-            Account oldAccount = em.find(AccountImpl.class, account.getId());
+            Account oldAccount = AccountDAO.find(em, account.getId());
 
             if (oldAccount == null) {
                 throw new KapuaEntityNotFoundException(Account.TYPE, account.getId());
@@ -163,19 +162,18 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             }
 
             // Update
-            AccountEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
 
-            em.merge(account);
-            em.flush();
+            AccountDAO.update(em, account);
 
-            AccountEntityManagerFactory.commit(em);
+            em.commit();
         }
-        catch (Exception pe) {
-            AccountEntityManagerFactory.rollback(em);
-            throw AccountEntityManagerFactory.toKapuaException(pe);
+        catch (Exception e) {
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
 
         return find(account.getScopeId(), account.getId());
@@ -234,16 +232,16 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
                 throw new KapuaIllegalAccessException(action.name());
             }
 
-            AccountEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             AccountDAO.delete(em, accountId);
-            AccountEntityManagerFactory.commit(em);
+            em.commit();
         }
-        catch (Exception pe) {
-            AccountEntityManagerFactory.rollback(em);
-            throw AccountEntityManagerFactory.toKapuaException(pe);
+        catch (Exception e) {
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
     }
 
@@ -309,11 +307,11 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         try {
             account = AccountDAO.findByName(em, name);
         }
-        catch (Exception pe) {
-            throw AccountEntityManagerFactory.toKapuaException(pe);
+        catch (Exception e) {
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
 
         //
@@ -371,12 +369,12 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             result.addAll(q.getResultList());
 
         }
-        catch (Exception pe) {
-            AccountEntityManagerFactory.rollback(em);
-            throw AccountEntityManagerFactory.toKapuaException(pe);
+        catch (Exception e) {
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
 
         return result;
@@ -404,10 +402,10 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             result = AccountDAO.query(em, query);
         }
         catch (Exception e) {
-            throw AccountEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
 
         return result;
@@ -435,10 +433,10 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             count = AccountDAO.count(em, query);
         }
         catch (Exception e) {
-            throw AccountEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
 
         return count;
@@ -464,13 +462,13 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         Account account = null;
         EntityManager em = AccountEntityManagerFactory.getEntityManager();
         try {
-            account = em.find(AccountImpl.class, accountId);
+            account = AccountDAO.find(em, accountId);
         }
-        catch (Exception pe) {
-            throw AccountEntityManagerFactory.toKapuaException(pe);
+        catch (Exception e) {
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
         return account;
     }
@@ -492,11 +490,11 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             q.setParameter("scopeId", accountId);
             accounts = q.getResultList();
         }
-        catch (Exception pe) {
-            throw AccountEntityManagerFactory.toKapuaException(pe);
+        catch (Exception e) {
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AccountEntityManagerFactory.close(em);
+            em.close();
         }
         return accounts;
     }

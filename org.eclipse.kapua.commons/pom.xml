@@ -51,7 +51,6 @@
             <version>2.6.3</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>

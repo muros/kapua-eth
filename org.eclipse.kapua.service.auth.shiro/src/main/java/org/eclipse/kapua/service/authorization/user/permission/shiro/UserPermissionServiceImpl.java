@@ -14,11 +14,11 @@ package org.eclipse.kapua.service.authorization.user.permission.shiro;
 
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -53,18 +53,18 @@ public class UserPermissionServiceImpl implements UserPermissionService
         UserPermission permission = null;
         EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
-            AuthorizationEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
 
             permission = UserPermissionDAO.create(em, userPermissionCreator);
 
-            AuthorizationEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (Exception e) {
-            AuthorizationEntityManagerFactory.rollback(em);
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
 
         return permission;
@@ -93,16 +93,16 @@ public class UserPermissionServiceImpl implements UserPermissionService
                 throw new KapuaEntityNotFoundException(UserPermission.TYPE, permissionId);
             }
 
-            AuthorizationEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             UserPermissionDAO.delete(em, permissionId);
-            AuthorizationEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (KapuaException e) {
-            AuthorizationEntityManagerFactory.rollback(em);
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
     }
 
@@ -128,10 +128,10 @@ public class UserPermissionServiceImpl implements UserPermissionService
             permission = UserPermissionDAO.find(em, permissionId);
         }
         catch (Exception e) {
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
         return permission;
     }
@@ -158,10 +158,10 @@ public class UserPermissionServiceImpl implements UserPermissionService
             result = UserPermissionDAO.query(em, query);
         }
         catch (Exception e) {
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
 
         return result;
@@ -189,10 +189,10 @@ public class UserPermissionServiceImpl implements UserPermissionService
             count = UserPermissionDAO.count(em, query);
         }
         catch (Exception e) {
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
 
         return count;

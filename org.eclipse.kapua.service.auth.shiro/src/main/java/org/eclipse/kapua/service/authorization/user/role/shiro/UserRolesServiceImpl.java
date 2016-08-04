@@ -14,11 +14,11 @@ package org.eclipse.kapua.service.authorization.user.role.shiro;
 
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
+import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -56,18 +56,18 @@ public class UserRolesServiceImpl implements UserRolesService
         UserRoles userRole = null;
         EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
-            AuthorizationEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
 
             userRole = UserRolesDAO.create(em, userRoleCreator);
 
-            AuthorizationEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (Exception e) {
-            AuthorizationEntityManagerFactory.rollback(em);
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
 
         return userRole;
@@ -96,16 +96,16 @@ public class UserRolesServiceImpl implements UserRolesService
                 throw new KapuaEntityNotFoundException(Role.TYPE, userRoleId);
             }
 
-            AuthorizationEntityManagerFactory.beginTransaction(em);
+            em.beginTransaction();
             UserRolesDAO.delete(em, userRoleId);
-            AuthorizationEntityManagerFactory.commit(em);
+            em.commit();
         }
         catch (KapuaException e) {
-            AuthorizationEntityManagerFactory.rollback(em);
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
     }
 
@@ -131,10 +131,10 @@ public class UserRolesServiceImpl implements UserRolesService
             userRole = UserRolesDAO.find(em, userRoleId);
         }
         catch (Exception e) {
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
         return userRole;
     }
@@ -161,10 +161,10 @@ public class UserRolesServiceImpl implements UserRolesService
             result = UserRolesDAO.query(em, query);
         }
         catch (Exception e) {
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
 
         return result;
@@ -192,10 +192,10 @@ public class UserRolesServiceImpl implements UserRolesService
             count = UserRolesDAO.count(em, query);
         }
         catch (Exception e) {
-            throw AuthorizationEntityManagerFactory.toKapuaException(e);
+            throw KapuaExceptionUtils.convertPersistenceException(e);
         }
         finally {
-            AuthorizationEntityManagerFactory.close(em);
+            em.close();
         }
 
         return count;
