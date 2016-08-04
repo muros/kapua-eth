@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.commons.metric;
+package org.eclipse.kapua.service.metric;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.KapuaService;

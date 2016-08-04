@@ -21,219 +21,56 @@
 
 	<artifactId>org.eclipse.kapua.broker.core</artifactId>
 	<name>org.eclipse.kapua.broker.core</name>
-	<packaging>bundle</packaging>
+	<packaging>jar</packaging>
 
 	<properties>
 		<camel.version>2.15.1</camel.version>
 		<activemq.version>5.11.0</activemq.version>
-        <shiro.version>1.2.3</shiro.version>
         <commons.pool.version>2.3</commons.pool.version>
 	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.5.4</version>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Service-Component>
-							OSGI-INF/accountFactory.xml,
-							OSGI-INF/accountService.xml,
-							OSGI-INF/authenticationService.xml,
-							OSGI-INF/authorizationService.xml,
-							OSGI-INF/credentialFactory.xml,
-							OSGI-INF/credentialService.xml,
-							OSGI-INF/deviceConnectionFactory.xml,
-							OSGI-INF/deviceConnectionService.xml,
-							OSGI-INF/deviceEventFactory.xml,
-							OSGI-INF/deviceEventService.xml,
-							OSGI-INF/deviceFactory.xml,
-							OSGI-INF/deviceLifeCycleService.xml,
-							OSGI-INF/deviceRegistryService.xml,
-							OSGI-INF/kapuaConfigurationProviderService.xml,
-							OSGI-INF/metricService.xml,
-							OSGI-INF/permissionFactory.xml,
-							OSGI-INF/roleFactory.xml,
-							OSGI-INF/roleService.xml,
-							OSGI-INF/userFactory.xml,
-							OSGI-INF/usernamePasswordTokenFactory.xml,
-							OSGI-INF/userPermissionFactory.xml,
-							OSGI-INF/userPermissionService.xml,
-							OSGI-INF/userRoleFactory.xml,
-							OSGI-INF/userRoleService.xml,
-							OSGI-INF/userService.xml
-						</Service-Component>
-						<Embed-Transitive>true</Embed-Transitive> 
-						<Embed-Dependency>
-							com.google.protobuf|protobuf-java;
-							org.apache.shiro|shiro-core;
-							org.apache.shiro|shiro-web;
-							org.eclipse.kapua|org.eclipse.kapua.commons;
-							org.eclipse.kapua|org.eclipse.kapua.configuration.spi;
-							org.eclipse.kapua|org.eclipse.kapua.locator.spi;
-							org.eclipse.kapua|org.eclipse.kapua.message;
-							org.eclipse.kapua|org.eclipse.kapua.translator;
-							org.eclipse.kapua|org.eclipse.kapua.translator.kura.jms;
-							org.eclipse.kapua|org.eclipse.kapua.translator.kapua.kura;
-							org.eclipse.kapua|org.eclipse.kapua.transport;
-							org.eclipse.kapua|org.eclipse.kapua.transport.jms;
-							org.eclipse.kapua|org.eclipse.kapua.service;
-							org.eclipse.kapua|org.eclipse.kapua.service.account;
-							org.eclipse.kapua|org.eclipse.kapua.service.account.internal;
-							org.eclipse.kapua|org.eclipse.kapua.service.auth.shiro;
-							org.eclipse.kapua|org.eclipse.kapua.service.authentication;
-							org.eclipse.kapua|org.eclipse.kapua.service.authorization;
-							org.eclipse.kapua|org.eclipse.kapua.service.datastore;
-							org.eclipse.kapua|org.eclipse.kapua.service.datastore.internal;
-							org.eclipse.kapua|org.eclipse.kapua.service.device.call;
-							org.eclipse.kapua|org.eclipse.kapua.service.device.call.kura;
-							org.eclipse.kapua|org.eclipse.kapua.service.device.registry;
-							org.eclipse.kapua|org.eclipse.kapua.service.device.registry.internal;
-							org.eclipse.kapua|org.eclipse.kapua.service.device.management;
-							org.eclipse.kapua|org.eclipse.kapua.service.user;
-							org.eclipse.kapua|org.eclipse.kapua.service.user.internal;
-						    inline=true
-	                    </Embed-Dependency>
-						<Export-Package>
-							org.eclipse.kapua.broker.core,
-							org.eclipse.kapua.broker.core.converter,
-							org.eclipse.kapua.broker.core.listener,
-							org.eclipse.kapua.broker.core.plugin,
-							org.eclipse.kapua.broker.core.threadfactory,
-							org.eclipse.kapua.commons.metric,
-							org.eclipse.kapua.commons.metric.internal,
-							org.eclipse.kapua.transport.message.jms
-						</Export-Package>
-						<Import-Package>
-							com.codahale.metrics;version="[3.1,4)",
-							com.google.common.cache;version="[18.0,19)",
-							com.google.common.hash;version="[18.0,19)",
-							com.google.common.util.concurrent;version="[18.0,19)",
-							com.mchange.v2.c3p0,
-							com.mysql.jdbc;version="[5.1,6)",
-							javax.crypto,
-							javax.crypto.spec,
-							javax.jms,
-							javax.naming,
-							javax.naming.directory,
-							javax.naming.ldap,
-							javax.persistence;version="[2.1,3)",
-							javax.persistence.criteria;version="[2.1,3)",
-							javax.persistence.metamodel;version="[2.1,3)",
-							javax.persistence.spi;version="[2.1,3)",
-							javax.security.auth.login,
-							javax.sql,
-							javax.xml.bind,
-							javax.xml.bind.annotation,
-							javax.xml.bind.annotation.adapters,
-							javax.xml.namespace,
-							org.apache.activemq,
-							org.apache.activemq.broker,
-							org.apache.activemq.broker.region,
-							org.apache.activemq.command,
-							org.apache.activemq.security,
-							org.apache.activemq.thread,
-							org.apache.activemq.util,
-							org.apache.camel;version="[2.15,3)",
-							org.apache.camel.component.jms;version="[2.15,3)",
-							org.apache.camel.impl;version="[2.15,3)",
-							org.apache.camel.spi;version="[2.15,3)",
-							org.apache.camel.util.concurrent;version="[2.15,3)",
-							org.apache.commons.beanutils;version="[1.8,2)",
-							org.apache.commons.configuration;version="[1.9,2)",
-							org.apache.commons.pool2;version="2.3",
-							org.apache.commons.pool2.impl;version="2.3",
-							org.elasticsearch.action,
-							org.elasticsearch.action.admin.indices.create,
-							org.elasticsearch.action.admin.indices.exists.indices,
-							org.elasticsearch.action.admin.indices.mapping.get,
-							org.elasticsearch.action.admin.indices.mapping.put,
-							org.elasticsearch.action.bulk,
-							org.elasticsearch.action.delete,
-							org.elasticsearch.action.index,
-							org.elasticsearch.action.search,
-							org.elasticsearch.action.support.master.info,
-							org.elasticsearch.action.support.replication,
-							org.elasticsearch.action.update,
-							org.elasticsearch.client,
-							org.elasticsearch.client.transport,
-							org.elasticsearch.cluster.metadata,
-							org.elasticsearch.common,
-							org.elasticsearch.common.collect,
-							org.elasticsearch.common.settings,
-							org.elasticsearch.common.transport,
-							org.elasticsearch.common.unit,
-							org.elasticsearch.common.xcontent,
-							org.elasticsearch.index.engine,
-							org.elasticsearch.index.query,
-							org.elasticsearch.search,
-							org.elasticsearch.search.sort,
-							org.hibernate.annotations;version="[4.3,5)",
-							org.hibernate.cfg;version="[4.3,5)",
-							org.hibernate.exception;version="[4.3,5)",
-							org.hibernate.internal;version="[4.3,5)",
-							org.hibernate.jpa.internal;version="[4.3,5)",
-							org.mindrot.jbcrypt,
-							org.osgi.framework,
-							org.slf4j,
-							<!-- added manually -->
-							org.hibernate.proxy;version="[4.3,5)",
-							javassist.util.proxy
-						</Import-Package>
-					</instructions>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-	
 	<dependencies>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.commons</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.configuration.spi</artifactId>
 			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.locator.spi</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.message</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.account</artifactId>
 			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.account.internal</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.authentication</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
@@ -244,77 +81,74 @@
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.datastore</artifactId>
 			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.datastore.internal</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.call</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.registry</artifactId>
 			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.registry.internal</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user</artifactId>
 			<version>0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.translator</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.translator.kapua.kura</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.translator.kura.jms</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.transport</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.transport.jms</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.management</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.management.commons</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 		<!-- activemq -->
 		<dependency>
@@ -334,17 +168,12 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-core</artifactId>
             <version>${camel.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-jms</artifactId>
             <version>${camel.version}</version>
-        </dependency>
-        <!-- OSGI -->
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>4.3.1</version>
             <scope>provided</scope>
         </dependency>
         <!-- misc -->
@@ -356,21 +185,13 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
 			<version>${commons.pool.version}</version>
+			<scope>provided</scope>
         </dependency>
-        <!-- guice dependency injection -->
-        <dependency>
-		    <groupId>com.google.inject</groupId>
-		    <artifactId>guice</artifactId>
-		</dependency>
-		<dependency>
-		    <groupId>com.google.inject.extensions</groupId>
-		    <artifactId>guice-assistedinject</artifactId>
-		    <version>${guice.version}</version>
-		</dependency>
 	</dependencies>
 </project>

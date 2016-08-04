@@ -14,9 +14,9 @@ import org.eclipse.kapua.broker.core.message.CamelUtil;
 import org.eclipse.kapua.broker.core.message.JmsUtil;
 import org.eclipse.kapua.broker.core.message.MessageConstants;
 import org.eclipse.kapua.broker.core.plugin.ConnectorDescriptor;
-import org.eclipse.kapua.commons.metric.MetricsService;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.metric.MetricsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

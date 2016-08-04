@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.kapua.service.device.registry.DeviceRegistryService">
-   <implementation class="org.eclipse.kapua.service.device.registry.internal.DeviceRegistryServiceImpl"/>
-   <service>
-      <provide interface="org.eclipse.kapua.service.device.registry.DeviceRegistryService"/>
-   </service>
-</scr:component>

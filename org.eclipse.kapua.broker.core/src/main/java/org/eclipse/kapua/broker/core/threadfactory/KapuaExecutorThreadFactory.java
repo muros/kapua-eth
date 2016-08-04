@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.kapua.commons.metric.MetricsService;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.service.metric.MetricsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

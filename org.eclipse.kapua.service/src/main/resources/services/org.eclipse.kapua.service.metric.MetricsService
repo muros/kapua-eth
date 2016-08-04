@@ -7,20 +7,6 @@
 # http://www.eclipse.org/legal/epl-v10.html
 #
 # Contributors:
-#     Eurotech - initial API and implementation
-#
+#      Eurotech - initial API and implementation
 ###############################################################################
-
-#
-# This file contains the valid users who can log into JBoss A-MQ.
-# Each line has to be of the format:
-#
-# USER=PASSWORD,ROLE1,ROLE2,...
-#
-# All users and roles entered in this file are available after JBoss A-MQ startup
-# and modifiable via the JAAS command group. These users reside in a JAAS domain
-# with the name "karaf"..
-#
-# You must have at least one users to be able to access JBoss A-MQ resources
-
-admin=admin,admin
+org.eclipse.kapua.commons.metric.MetricsServiceImpl

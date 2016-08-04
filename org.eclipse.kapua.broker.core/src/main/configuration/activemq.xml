@@ -1,0 +1,280 @@
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://activemq.apache.org/schema/core
+         http://activemq.apache.org/schema/core/activemq-core.xsd
+         http://camel.apache.org/schema/spring
+         http://camel.apache.org/schema/spring/camel-spring-2.15.1.xsd
+         http://www.springframework.org/schema/util
+         http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+<!--
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                http://camel.apache.org/schema/spring
+                http://camel.apache.org/schema/spring/camel-spring-2.15.1.xsd
+                http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+-->
+
+
+    <!-- Allows us to use system properties as variables in this configuration file -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>file:${activemq.conf}/credentials.properties</value>
+        </property>
+    </bean>
+
+   <!-- Allows accessing the server log -->
+    <bean id="logQuery" class="io.fabric8.insight.log.log4j.Log4jLogQuery"
+          lazy-init="false" scope="singleton"
+          init-method="start" destroy-method="stop">
+    </bean>
+
+        <!-- ==============================================================
+                        AMQ CONNECTION POOL
+         ==============================================================  -->
+        <!-- Configure the ActiveMQ broker connection -->
+        <!-- we can use also the tcp regular connection. it should be no performance difference! -->
+        <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+                <property name="brokerURL" value="vm://kapua?create=false" />
+        </bean>
+
+        <bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+                <property name="targetConnectionFactory" ref="amqConnectionFactory" />
+        </bean>
+
+        <bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+                <property name="connectionFactory" ref="cachingConnectionFactory" />
+                <!-- we can remove this setting because is overwritten by the concurrent consumer on jms route -->
+                <property name="concurrentConsumers" value="10" />
+                <property name="cacheLevelName" value="CACHE_CONSUMER" />
+        </bean>
+
+        <bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+                <property name="configuration" ref="jmsConfig" />
+        </bean>
+    <!--  create connection pooling!!! -->
+
+        <!-- Converter -->
+        <bean id="kapuaConverter" class="org.eclipse.kapua.broker.core.converter.KapuaConverter" />
+
+        <!-- Consumer -->
+        <!-- ASSISTANTS -->
+        <bean id="deviceMessageListener" class="org.eclipse.kapua.broker.core.listener.DeviceMessageListener" >
+        </bean>
+        <!-- ERROR -->
+        <bean id="errorMessageListener" class="org.eclipse.kapua.broker.core.listener.ErrorMessageListener" >
+        </bean>
+
+        <!-- THREADS POOL FACTORY -->
+        <!-- list of start pool name for which the EdcExecutorThreadFactory will replace the ThreadFactory with our implementation -->
+        <util:list id="executorThreadFactoryMatcherList" list-class="java.util.ArrayList" value-type="java.lang.String" >
+       <value>kapuaExecutorPool</value> <!-- listener for our pojo endpoint -->
+       <value>JmsConsumer</value>   <!-- pool used by the camel rout that subscribing amq topics -->
+    </util:list>
+    <bean id="kapuaExecutorThreadFactory" class="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadFactory" >
+        <constructor-arg index="0" type="java.lang.String" value="KapuaxecutorThreadFactory" />
+        <constructor-arg index="1" type="java.util.List" ref="executorThreadFactoryMatcherList" />
+        <constructor-arg index="2" type="boolean" value="true" /> <!-- is rootThreadGroup -->
+    </bean>
+    <bean id="kapuaExecutorThreadPoolFactory" class="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadPoolFactory" >
+        <constructor-arg index="0" type="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadFactory" ref="kapuaExecutorThreadFactory" />
+    </bean>
+
+    <broker xmlns="http://activemq.apache.org/schema/core" brokerName="kapua" dataDirectory="${activemq.data}">
+
+        <destinationPolicy>
+            <policyMap>
+              <policyEntries>
+                <policyEntry topic=">" >
+                    <!-- The constantPendingMessageLimitStrategy is used to prevent
+                         slow topic consumers to block producers and affect other consumers
+                         by limiting the number of messages that are retained
+                         For more information, see:
+
+                         http://activemq.apache.org/slow-consumer-handling.html
+
+                    -->
+                  <pendingMessageLimitStrategy>
+                    <constantPendingMessageLimitStrategy limit="1000"/>
+                  </pendingMessageLimitStrategy>
+                </policyEntry>
+              </policyEntries>
+            </policyMap>
+        </destinationPolicy>
+
+
+        <!--
+            The managementContext is used to configure how ActiveMQ is exposed in
+            JMX. By default, ActiveMQ uses the MBean server that is started by
+            the JVM. For more information, see:
+
+            http://activemq.apache.org/jmx.html
+        -->
+        <managementContext>
+            <managementContext createConnector="false"/>
+        </managementContext>
+
+        <!--
+            Configure message persistence for the broker. The default persistence
+            mechanism is the KahaDB store (identified by the kahaDB tag).
+            For more information, see:
+
+            http://activemq.apache.org/persistence.html
+        -->
+        <persistenceAdapter>
+            <kahaDB directory="${activemq.data}/kahadb"/>
+        </persistenceAdapter>
+
+ <plugins>
+            <bean xmlns="http://www.springframework.org/schema/beans"
+                  id="kapuaBrokerPlugin"
+                  class="org.eclipse.kapua.broker.core.KapuaBrokerSecurityPlugin" />
+            <discardingDLQBrokerPlugin dropAll="true"
+                                       dropTemporaryTopics="true"
+                                       dropTemporaryQueues="true" />
+        </plugins>
+          <!--
+            The systemUsage controls the maximum amount of space the broker will
+            use before disabling caching and/or slowing down producers. For more information, see:
+            http://activemq.apache.org/producer-flow-control.html
+          -->
+          <systemUsage>
+            <systemUsage>
+                <memoryUsage>
+                    <memoryUsage percentOfJvmHeap="70" />
+                </memoryUsage>
+                <storeUsage>
+                    <storeUsage limit="100 gb"/>
+                </storeUsage>
+                <tempUsage>
+                    <tempUsage limit="50 gb"/>
+                </tempUsage>
+            </systemUsage>
+        </systemUsage>
+
+        <!--
+            The transport connectors expose ActiveMQ over a given protocol to
+            clients and other brokers. For more information, see:
+
+            http://activemq.apache.org/configuring-transports.html
+        -->
+        <transportConnectors>
+            <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
+            <transportConnector name="openwire" uri="tcp://0.0.0.0:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600&amp;transport.publishDollarTopics=true&amp;transport.subscriptionStrategy=mqtt-virtual-topic-subscriptions"/>
+            <transportConnector name="amqp" uri="amqp://0.0.0.0:5672?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600&amp;transport.publishDollarTopics=true&amp;transport.subscriptionStrategy=mqtt-virtual-topic-subscriptions"/>
+            <transportConnector name="mqtt" uri="mqtt://0.0.0.0:1883?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600&amp;transport.publishDollarTopics=true&amp;transport.subscriptionStrategy=mqtt-virtual-topic-subscriptions"/>
+            <transportConnector name="ws" uri="ws://0.0.0.0:61614?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600&amp;transport.publishDollarTopics=true&amp;transport.subscriptionStrategy=mqtt-virtual-topic-subscriptions"/>
+        </transportConnectors>
+
+        <!-- destroy the spring context on shutdown to stop jetty -->
+        <shutdownHooks>
+            <bean xmlns="http://www.springframework.org/schema/beans" class="org.apache.activemq.hooks.SpringContextHook" />
+        </shutdownHooks>
+
+    </broker>
+
+    <!--
+        Enable web consoles, REST and Ajax APIs and demos
+        The web consoles requires by default login, you can disable this in the jetty.xml file
+
+        Take a look at ${ACTIVEMQ_HOME}/conf/jetty.xml for more details
+    -->
+    <import resource="jetty.xml"/>
+
+
+    <camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring" >
+        <!-- the beans are defined as spring bean so check if it's possible to remove the package scan at all. Remove also the endpoint annotation from the pojo endpoints and all should works. Otherwise send to Dejan a simplified example -->
+
+    <!-- exception/error handler -->
+            <!--
+            by default the errorHandler forward the message to a dead letter queue but in that way we lose the failure end point
+            deadLetterUri="activemq:queue:processedMessageWithError"
+            if we forward the message directly to an end point with the exchange in the signature
+            deadLetterUri="bean:errorMessagePojo?method=processMessage"
+            we have these properties evaluated (in the exchange field)
+            CamelFailureRouteId
+            CamelFailureEndpoint
+            CamelExceptionCaught
+            (others useful fields CamelMulticastIndex - CamelMessageHistory - CamelCreatedTimestamp)
+            -->
+
+            <!-- Executor thread pool
+            Please check the EdcExecutorThreadPoolFactory comments before modify the threadName attributes
+
+    <threadPool id="serviceThreads"
+            threadName="kapuaExecutorPoolServiceProcessor"
+            poolSize="3"
+            maxPoolSize="5"
+            maxQueueSize="2" />
+-->
+
+    <!--
+    WARNING!!!
+    check the JmsConstants.VT_EDCADMIN_CLIENTID_PREFIX used by the EdcInactiveSecurityPlugin before changing the consumer name in the subscriprtions
+
+    ===
+    For the transaction/acknowledge mode please follow http://stackoverflow.com/questions/13498652/camel-jms-client-acknowledge-mode
+
+    OK. After some some debugging and scanning throug source code I've found out that Camel uses spring MessageListenerContainers.
+    The AbstractMessageListenerContainer, in case of CLIENT_AKNOWLEDGE mode, invokes comitIfNecessary method acknowledging message.
+    This happens only AFTER registered MessageListener processes message succesfully (no exceptions)
+
+    Camel uses EndpointMessageListener which, eventually, invokes process method of next processor (or Producer) down the route.
+    As this is classic chain of responsibilities, if any processor down the route throws exception or sets exception on the Exchange,
+    it will be re-thrown by EndpointMessageListener preventing the AbstractMessageListener to acknowledge message.
+
+    So the camel-jms connections CONFIGURATION TESTED are:
+    acknowledgementModeName=CLIENT_ACKNOWLEDGE
+    transacted=false
+
+    BEFORE CHANGING THESE parameters please run stress test (to check the cpu load) and the qa tests EdcCamelRouteIT (to check the messages persistence)
+    -->
+            <route id="lifeCycleRoute" >
+
+
+
+                    <from uri="activemq:queue:Consumer.eurotech:systemlisteners:EXACTLY_ONCE.VirtualTopic.$EDC.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=10&amp;maxConcurrentConsumers=20" />
+  <to uri="bean:serviceMessageListener?method=processMessage" />
+
+  <!--
+
+        <bean ref="kapuaConverter" method="convertTo"/>
+                    <choice id="lifeCycleBirthChoice">
+                 application birth $EDC/+/+/MQTT/BA/BIRTH
+                <when id="lifeCycleBirthFilter">
+                    <simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\..*'</simple>
+                    <multicast>
+                            <to uri="bean:deviceMessageListener?method=processMessage" />
+                    </multicast>
+                </when>
+                <otherwise>
+                                    <to uri="bean:errorMessageListener?method=processUnmatchedMessage" />
+                            </otherwise>
+           </choice>
+       </route>
+     service endpoint
+            <route id="serviceRoute" errorHandlerRef="serviceMessageErrorHandler" >
+                 check kapua-config file beofre changes this queue name (see amq.broker.queue.service.name)
+                <from uri="activemq:queue:EdcService" />
+                <multicast executorServiceRef="serviceThreads" >
+            <pipeline>
+                <bean ref="kapuaConverter" method="convertTo"/>
+
+                    </pipeline>
+                </multicast>
+
+
+
+                -->
+            </route>
+    </camelContext>
+
+</beans>
