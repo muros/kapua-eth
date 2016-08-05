@@ -30,14 +30,13 @@
 
     <repositories>
         <repository>
-            <id>cloudbees-private-release-plugin-repository</id>
-            <name>Eurotech Cloudbees private release plugin repository</name>
-            <url>https://repository-eurotech.forge.cloudbees.com/private/</url>
-        </repository>
-        <repository>
-            <id>jboss-repo</id>
-            <name>jboss-repo</name>
-            <url>https://repository.jboss.org/nexus/content/groups/m2-proxy/</url>
+            <id>kura_addons</id>
+            <name>Kura Addons Maven Repository</name>
+            <url>https://raw.github.com/eurotech/kura_addons/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
 
