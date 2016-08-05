@@ -1,6 +1,6 @@
 Broker activeMQ standalone without karaf
 
-download ActiveMQ 5.11.0 from http://activemq.apache.org/activemq-5110-release.html
+download ActiveMQ 5.11.0 from http://activemq.apache.org/activemq-5110-release.html (direct link http://archive.apache.org/dist/activemq/5.11.0/apache-activemq-5.11.0-bin.tar.gz)
 
 unzip the file (under /usr/lib directory for example)
 create the kapua directory under lib
