@@ -24,9 +24,6 @@
     <!-- otherwise eclipse complains (Google plugin bug?)               -->
     <!-- inherits name='com.google.gwt.junit.JUnit' />                  -->
 
-    <inherits name="org.atmosphere.gwt.Common" />
-    <inherits name="org.atmosphere.gwt.Client" />
-
     <!-- Inherit the default GWT style sheet. You can change            -->
     <!-- the theme of your GWT application by uncommenting              -->
     <!-- any one of the following lines.                                -->

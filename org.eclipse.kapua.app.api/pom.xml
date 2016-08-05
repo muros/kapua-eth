@@ -76,16 +76,6 @@
             <version>1.12</version>
         </dependency>
         <dependency>
-            <groupId>org.atmosphere</groupId>
-            <artifactId>atmosphere-runtime</artifactId>
-            <version>0.9.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.atmosphere</groupId>
-            <artifactId>atmosphere-jersey</artifactId>
-            <version>0.9.5</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.visualization</groupId>
             <artifactId>visualization-datasource</artifactId>
             <version>1.1.1</version>
@@ -93,7 +83,6 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
