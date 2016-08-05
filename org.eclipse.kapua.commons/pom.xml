@@ -37,11 +37,8 @@
             <artifactId>commons-configuration</artifactId>
         </dependency>
         <dependency>
-            <!-- Java driver for MariaDB -->
-            <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>1.4.6</version>
         </dependency>
         <dependency>
             <!-- JPA implementation provider -->
