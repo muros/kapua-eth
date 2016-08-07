@@ -49,6 +49,8 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
+  # config.vm.synced_folder "../../org.eclipse.kapua.broker.core/target/lib", "/usr/local/activemq/apache-activemq-5.11.0/lib/kapua-broker-core"
+  # config.vm.synced_folder "../../org.eclipse.kapua.broker.jdbc/target/lib", "/usr/local/activemq/apache-activemq-5.11.0/lib/kapua-broker-jdbc"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
