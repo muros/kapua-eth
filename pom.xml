@@ -22,7 +22,7 @@
         
         <!-- -->
         <!-- Database configuration for local installs and tests -->
-        <!-- Database host address is the one exported by the vagrant file  -->
+        <!-- Database host address is the one exported by the dev-tools/src/vagrant/Vagrantfile  -->        
 		<db.host>192.168.33.10</db.host>
 		<db.name>kapuadb</db.name>        
 		<db.url>jdbc:mariadb://${db.host}:3306/${db.name}</db.url>
@@ -32,6 +32,16 @@
     </properties>
 
     <build>
+    	<resources>
+      		<resource>
+        		<directory>src/main/resources</directory>
+        		<filtering>false</filtering>
+      		</resource>
+      		<resource>
+        		<directory>src/test/resources</directory>
+        		<filtering>true</filtering>
+      		</resource>
+      	</resources>
         <pluginManagement>
             <plugins>
                 <plugin>

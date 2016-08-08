@@ -101,7 +101,7 @@
 				<executions>
 					<execution>
 						<id>create-schema</id>
-						<phase>test-compile</phase>
+						<phase>prepare-test-resources</phase>
 						<goals>
 							<goal>execute</goal>
 						</goals>
