@@ -213,6 +213,7 @@
             <artifactId>gwt-log</artifactId>
             <version>3.1.8</version>
         </dependency>
+
         <dependency>
             <groupId>org.moxieapps.gwt</groupId>
             <artifactId>highcharts</artifactId>

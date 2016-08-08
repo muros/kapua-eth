@@ -19,7 +19,7 @@ CREATE TABLE dvc_device (
   firmware_version          VARCHAR(255),
   os_version                VARCHAR(255),
   jvm_version               VARCHAR(255),
-  osgi_framework_version    VARCHAR(255),
+  osgi_version              VARCHAR(255),
   app_framework_version     VARCHAR(255),
   app_identifiers           VARCHAR(1024),
   accept_encoding           VARCHAR(255),
@@ -37,6 +37,9 @@ CREATE TABLE dvc_device (
   properties             	TEXT,   
   PRIMARY KEY (scope_id, id),   -- primary key needs to include the partitioning key
   CONSTRAINT uc_clientId UNIQUE (scope_id, client_id),
+  CONSTRAINT uc_imei UNIQUE (scope_id, imei),
+  CONSTRAINT uc_imsi UNIQUE (scope_id, imsi),
+  CONSTRAINT uc_iccid UNIQUE (scope_id, iccid),
   INDEX idx_serialNumber (scope_id, serial_number),
   INDEX idx_displayName (scope_id, display_name),
   INDEX idx_status_id (scope_id, status, client_id),
