@@ -6,8 +6,6 @@ CREATE TABLE athz_role (
   
   name 						VARCHAR(255)  NOT NULL,
   
-  PRIMARY KEY (id),
-  
-  UNIQUE INDEX idx_roleName (scope_id, name)
-  
+  PRIMARY KEY (id),  
+  UNIQUE INDEX idx_roleName (scope_id, name)  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

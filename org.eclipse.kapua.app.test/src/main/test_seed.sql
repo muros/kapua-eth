@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS act_account;
-
 DROP TABLE IF EXISTS usr_user;
+
 
 DROP TABLE IF EXISTS atht_credential;
 

@@ -13,6 +13,7 @@ CREATE TABLE atht_credential (
   optlock               	INT UNSIGNED,
   attributes             	TEXT,  
   properties             	TEXT,  
+  
   PRIMARY KEY (id),
   INDEX idx_userScopeId (scope_id),
   INDEX idx_scopeIduserId (scope_id, user_id)

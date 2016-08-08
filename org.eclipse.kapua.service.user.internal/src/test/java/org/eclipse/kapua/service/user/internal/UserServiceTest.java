@@ -46,7 +46,6 @@ public class UserServiceTest extends Assert
         // prepare the UserCreator
         long now = (new Date()).getTime();
         String username = MessageFormat.format("aaa_test_username_{0,number,#}", now);
-        String password = "We!come12345";
         String userEmail = MessageFormat.format("testuser_{0,number,#}@organization.com", now);
         String displayName = MessageFormat.format("User Display Name {0}", now);
 

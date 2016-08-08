@@ -84,4 +84,52 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-schema</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<autocommit>true</autocommit>
+							<srcFiles>
+								<srcFile>src/main/sql/atht_credential_drop.sql</srcFile>
+								<srcFile>src/main/sql/athz_permission_drop.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_permission_drop.sql</srcFile>
+								<srcFile>src/main/sql/athz_role_drop.sql</srcFile>
+								<srcFile>src/main/sql/athz_role_permission_drop.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_role_drop.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_role_roles_drop.sql</srcFile>
+
+								<srcFile>src/main/sql/atht_credential_create.sql</srcFile>
+								<srcFile>src/main/sql/athz_permission_create.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_permission_create.sql</srcFile>
+								<srcFile>src/main/sql/athz_role_create.sql</srcFile>
+								<srcFile>src/main/sql/athz_role_permission_create.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_role_create.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_role_roles_create.sql</srcFile>
+
+								<srcFile>src/main/sql/atht_credential_seed.sql</srcFile>
+								<srcFile>src/main/sql/athz_permission_seed.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_permission_seed.sql</srcFile>
+								<srcFile>src/main/sql/athz_role_seed.sql</srcFile>								
+								<srcFile>src/main/sql/athz_role_permission_seed.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_role_seed.sql</srcFile>
+								<srcFile>src/main/sql/athz_user_role_roles_seed.sql</srcFile>
+							
+							</srcFiles>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+    
 </project>
