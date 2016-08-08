@@ -1,4 +1,4 @@
-INSERT INTO `edcdb`.`act_account` ( 
+INSERT INTO `kapuadb`.`act_account` ( 
 	`scope_id`,
 	`id`,
 	`name`,

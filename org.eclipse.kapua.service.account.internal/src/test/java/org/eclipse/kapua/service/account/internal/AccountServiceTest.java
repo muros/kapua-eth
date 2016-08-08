@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account.internal;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.math.BigInteger;
 import java.util.Date;
 
@@ -22,12 +19,12 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.KapuaTest;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.account.Organization;
+import org.eclipse.kapua.test.KapuaTest;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;

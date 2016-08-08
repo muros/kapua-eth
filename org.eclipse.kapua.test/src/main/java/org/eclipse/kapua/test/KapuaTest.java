@@ -1,3 +1,4 @@
+package org.eclipse.kapua.test;
 /*******************************************************************************
  * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
  *
@@ -10,7 +11,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service;
+
 
 import java.util.Random;
 

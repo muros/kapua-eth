@@ -94,10 +94,11 @@ Vagrant.configure("2") do |config|
      # allow remote access (required to access from our private network host. Note that this is completely insecure if used in any other way)
      mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
-     mysql -u root -ppassword -e "CREATE USER 'kapua'@'%' IDENTIFIED BY 'kapua'"
      mysql -u root -ppassword -e "CREATE DATABASE kapuadb DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"
-     mysql -u root -ppassword -e "GRANT ALL ON kapua TO 'kapua'@'localhost';" kapuadb
-     mysql -u root -ppassword -e "GRANT ALL ON kapua TO 'kapua'@'%';" kapuadb
+     mysql -u root -ppassword -e "CREATE USER 'kapua'@'localhost' IDENTIFIED BY 'kapua'"
+     mysql -u root -ppassword -e "CREATE USER 'kapua'@'%' IDENTIFIED BY 'kapua'"
+     mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON kapuadb.* TO 'kapua'@'localhost';"
+     mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON kapuadb.* TO 'kapua'@'%';"
 
      # Maridb access to the external world
      sudo sed -i 's/127\.0\.0\.1/0\.0\.0\.0/' /etc/mysql//my.cnf

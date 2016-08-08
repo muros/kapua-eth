@@ -19,6 +19,16 @@
         <junit.version>4.11</junit.version>
         <mariadb.version>1.4.6</mariadb.version>
         <slf4j.version>1.7.2</slf4j.version>
+        
+        <!-- -->
+        <!-- Database configuration for local installs and tests -->
+        <!-- Database host address is the one exported by the vagrant file  -->
+		<db.host>192.168.33.10</db.host>
+		<db.name>kapuadb</db.name>        
+		<db.url>jdbc:mariadb://${db.host}:3306/${db.name}</db.url>
+        <db.username>kapua</db.username>
+        <db.password>kapua</db.password>
+        
     </properties>
 
     <build>
@@ -56,6 +66,24 @@
                         <target>1.8</target>
                     </configuration>
                 </plugin>
+			    <plugin>
+        			<groupId>org.codehaus.mojo</groupId>
+        			<artifactId>sql-maven-plugin</artifactId>
+        			<version>1.5</version>
+        			<dependencies>
+				        <dependency>
+				            <groupId>org.mariadb.jdbc</groupId>
+				            <artifactId>mariadb-java-client</artifactId>
+				            <version>${mariadb.version}</version>
+				        </dependency>
+				    </dependencies>
+				    <configuration>
+                    	<driver>org.mariadb.jdbc.Driver</driver>
+						<url>${db.url}</url>
+                        <username>${db.username}</username>
+                        <password>${db.password}</password>
+                    </configuration>                    
+				</plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>license-maven-plugin</artifactId>
@@ -302,6 +330,10 @@
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
         <module>org.eclipse.kapua.app.api</module>
+
+        <!-- -->
+        <!-- Test Framework -->
+        <module>org.eclipse.kapua.test</module>
     </modules>
 
     <licenses>

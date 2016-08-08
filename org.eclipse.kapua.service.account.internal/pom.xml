@@ -1,96 +1,122 @@
 <?xml version="1.0"?>
-<!--
-    Copyright (c) 2011, 2016 Eurotech and/or its affiliates
-   
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
-   
-    Contributors:
-        Eurotech - initial API and implementation
-   
- -->
+<!-- Copyright (c) 2011, 2016 Eurotech and/or its affiliates All rights reserved. 
+	This program and the accompanying materials are made available under the 
+	terms of the Eclipse Public License v1.0 which accompanies this distribution, 
+	and is available at http://www.eclipse.org/legal/epl-v10.html Contributors: 
+	Eurotech - initial API and implementation -->
 
 <project
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua</artifactId>
-        <version>0.1-SNAPSHOT</version>
-    </parent>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.eclipse.kapua</groupId>
+		<artifactId>kapua</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>org.eclipse.kapua.service.account.internal</artifactId>
-    <name>org.eclipse.kapua.service.account.internal</name>
+	<artifactId>org.eclipse.kapua.service.account.internal</artifactId>
+	<name>org.eclipse.kapua.service.account.internal</name>
 
-    <dependencies>
-        <!-- -->
-        <!-- Implemented service interfaces -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
+	<dependencies>
+		<!-- -->
+		<!-- Implemented service interfaces -->
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.account</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
 
-        <!-- -->
-        <!-- Required service interfaces -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
+		<!-- -->
+		<!-- Required service interfaces -->
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.authorization</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
 
-        <!-- -->
-        <!-- Internal dependencies -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.commons</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.configuration.spi</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
+		<!-- -->
+		<!-- Internal dependencies -->
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.commons</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.configuration.spi</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
 
-        <!-- -->
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.spi</artifactId>
-            <version>0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+		<!-- -->
+		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.test</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.locator.spi</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authentication</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.authentication</artifactId>
+			<version>0.1-SNAPSHOT</version>
+		</dependency>
 
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
-            <version>0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user</artifactId>
-            <version>0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.user</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-            <version>0.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
 
-    </dependencies>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>create-schema</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<autocommit>true</autocommit>
+							<srcFiles>
+								<srcFile>src/main/sql/act_account_drop.sql</srcFile>
+								<srcFile>src/main/sql/act_account_create.sql</srcFile>
+								<srcFile>src/main/sql/act_account_seed.sql</srcFile>
+							</srcFiles>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
