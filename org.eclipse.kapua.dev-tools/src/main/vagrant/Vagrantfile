@@ -131,7 +131,7 @@ Vagrant.configure("2") do |config|
      sudo rm elasticsearch-2.3.4.tar.gz
 
      # elasticsearch post-install setup
-     ./elasticsearch-2.3.4/bin/elasticsearch -d --cluster.name kapua-datastore
+     /usr/local/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch -d --cluster.name kapua-datastore
 
      #install tomcat8
      sudo mkdir -p /usr/local/tomcat
