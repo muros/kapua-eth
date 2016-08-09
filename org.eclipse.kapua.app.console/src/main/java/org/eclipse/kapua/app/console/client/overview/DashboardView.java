@@ -107,7 +107,6 @@ public class DashboardView extends LayoutContainer
         GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DASHBOARD_REFRESH);
         if (rendered) {
             m_centerOverviewView.refresh();
-            m_bottomOverviewView.refreshAll();
         }
     }
 
