@@ -77,10 +77,10 @@
         <url-pattern>/console/SSLfile/*</url-pattern>
         <url-pattern>/console/gwtComet/*</url-pattern>
         <url-pattern>/console/vpn_connection</url-pattern>
-        <url-pattern>/console/SimCardGroupMigrationTest</url-pattern>
-        <!-- Every mount point except /console/skin/* should be listed here and below  -->      
+        <url-pattern>/console/SimCardGroupMigrationTest</url-pattern>  
 	</filter-mapping>
-	<filter>
+	
+    <filter>
 	    <filter-name>jetty-gzip</filter-name>
 	    <filter-class>org.mortbay.servlet.GzipFilter</filter-class>
 	</filter>
@@ -125,13 +125,13 @@
         <url-pattern>/console/exporter_device_event/*</url-pattern>
         <url-pattern>/console/setting/*</url-pattern>
         <url-pattern>/console/vpn_connection</url-pattern>
-<!--
+   <!--
    Do not include the following URL patterns for gzip
    compression as it breaks the existing functionality.          
         <url-pattern>/console/file/*</url-pattern>
         <url-pattern>/console/SSLfile/*</url-pattern>
         <url-pattern>/console/gwtComet/*</url-pattern>        
- -->        
+    -->        
 	</filter-mapping>
 
 	<!-- Default page to serve -->
@@ -145,83 +145,9 @@
 		<session-timeout>30</session-timeout>
 	</session-config>
 
-
+    <!--  -->
 	<!-- Servlets -->
-	
-	<servlet>
-		<description>AtmosphereServlet</description>
-		<servlet-name>AtmosphereServlet</servlet-name>
-		<servlet-class>org.atmosphere.cpr.AtmosphereServlet</servlet-class>
-
- 		<init-param>
-            <param-name>org.atmosphere.cpr.broadcaster.shareableThreadPool</param-name>
-            <param-value>true</param-value>
-        </init-param>
-
-		<init-param>
-            <param-name>org.atmosphere.cpr.broadcaster.maxProcessingThreads</param-name>
-            <param-value>50</param-value>
-        </init-param>
-		
-		<init-param>
-            <param-name>org.atmosphere.cpr.broadcaster.maxAsyncWriteThreads</param-name>
-            <param-value>50</param-value>
-        </init-param>
-
-		<init-param>
-			<!-- prevent deadlocks -->
-			<param-name>org.atmosphere.disableOnStateEvent</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		
-		<init-param>
-            <description>whether or not to use HTTP sessions</description>
-            <param-name>org.atmosphere.cpr.sessionSupport</param-name>
-            <param-value>false</param-value>
-        </init-param>
-        
-        <init-param>
-            <param-name>org.atmosphere.cpr.AtmosphereResource.writeHeader</param-name>
-            <param-value>true</param-value>
-        </init-param>
-				
-		<init-param>
-			<param-name>org.atmosphere.useNative</param-name>
-			<param-value>false</param-value>
-		</init-param>
-
-		<init-param>
-			<param-name>org.atmosphere.useBlocking</param-name>
-			<param-value>true</param-value>
-		</init-param>
-
-		<init-param>
-			<param-name>org.atmosphere.useWebSocket</param-name>
-			<param-value>false</param-value>
-		</init-param>
-        
-        <init-param>
-            <description>A broadcaster is destroyed when no resources are subscribed to it anymore</description>
-            <param-name>org.atmosphere.cpr.BroadcasterLifeCyclePolicy</param-name>
-            <param-value>EMPTY_DESTROY</param-value>
-        </init-param>
-        
-        <!-- 30 mins 1800000 -->
-        <init-param>
-            <param-name>org.atmosphere.cpr.CometSupport.maxInactiveActivity</param-name>
-            <param-value>120000</param-value>
-        </init-param>
-        
-        <load-on-startup>0</load-on-startup>
-        
-        <!--Uncomment if you want to use Servlet 3.0 Async Support -->
-		<async-supported>false</async-supported>        
-        
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AtmosphereServlet</servlet-name>
-		<url-pattern>/console/gwtComet/*</url-pattern>
-	</servlet-mapping>
+	<!--  -->
 
 	<!-- XSRF servlet support -->
 	<servlet>
@@ -253,8 +179,6 @@
         <servlet-name>deviceExporterServlet</servlet-name>
         <url-pattern>/console/exporter_device/*</url-pattern>
     </servlet-mapping>
-
-   
 
 	<servlet>
         <servlet-name>deviceSnapshotsServlet</servlet-name>
@@ -315,21 +239,6 @@
     </servlet-mapping>
 
 	
-
-	
-	<!-- Servlet to test sim group migration -->
-
-	    
-    <!-- 
-        !!! IMPORTANT NOTE !!!
-        !!!    READ THIS   !!!
-        For every new servlet added, make SURE to cover
-        the mount point with the Shiro, ELBHttps and Logger Filter
-        defined at the top of the file.
-    -->          
-
-
-
 	<!-- 
       |
       |  Error Pages

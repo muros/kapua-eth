@@ -13,8 +13,6 @@
 package org.eclipse.kapua.app.console.client;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
-import org.eclipse.kapua.app.console.client.mqtt.MqttMessageDispatcher;
-import org.eclipse.kapua.app.console.client.mqtt.MqttMessageDispatcherCreator;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.client.util.ConsoleInfo;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
@@ -154,14 +152,6 @@ public class NorthView extends LayoutContainer
                     public void onSuccess(Void arg0)
                     {
                         ConsoleInfo.display("Info", "Logged out!");
-
-                        // clean up atmosphere on the client side
-                        MqttMessageDispatcher mqttMessageDispatcher = new MqttMessageDispatcherCreator(currentSession).getMqttMessageDispatcher();
-                        if (mqttMessageDispatcher != null) {
-                            mqttMessageDispatcher.unregisterAllCallbacks();
-                            mqttMessageDispatcher.shutdown();
-                            mqttMessageDispatcher = null;
-                        }
 
                         Window.Location.reload();
                     }

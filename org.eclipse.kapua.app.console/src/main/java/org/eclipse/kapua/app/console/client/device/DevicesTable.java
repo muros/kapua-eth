@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
-import org.eclipse.kapua.app.console.client.mqtt.MqttConsoleCallback;
-import org.eclipse.kapua.app.console.client.mqtt.MqttMessageDispatcher;
-import org.eclipse.kapua.app.console.client.mqtt.MqttMessageDispatcherCreator;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
@@ -28,8 +25,6 @@ import org.eclipse.kapua.app.console.client.util.UserAgentUtils;
 import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceQueryPredicates;
-import org.eclipse.kapua.app.console.shared.model.GwtEdcPublish;
-import org.eclipse.kapua.app.console.shared.model.GwtMqttTopic;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
@@ -37,7 +32,6 @@ import org.eclipse.kapua.app.console.shared.service.GwtDeviceServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.Scroll;
 import com.extjs.gxt.ui.client.Style.SelectionMode;
@@ -87,7 +81,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
-public class DevicesTable extends LayoutContainer implements MqttConsoleCallback
+public class DevicesTable extends LayoutContainer
 {
     private final ConsoleMessages                         MSGS             = GWT.create(ConsoleMessages.class);
 
@@ -111,9 +105,6 @@ public class DevicesTable extends LayoutContainer implements MqttConsoleCallback
     private Button                                        m_deleteDeviceButton;
     private Button                                        m_export;
 
-    private ToggleButton                                  m_toggleLive;
-    private boolean                                       liveProcess;
-
     private ToggleButton                                  m_toggleFilter;
 
     private ContentPanel                                  m_filterPanel;
@@ -123,17 +114,12 @@ public class DevicesTable extends LayoutContainer implements MqttConsoleCallback
     private BasePagingLoader<PagingLoadResult<GwtDevice>> m_loader;
     private GwtDeviceQueryPredicates                      m_filterPredicates;
 
-    private String[]                                      m_subscriptions;
-    private int                                           m_subscriptionId;
-    private MqttMessageDispatcher                         m_mqttMessageDispatcher;
-
     public DevicesTable(DevicesView deviceView,
                         GwtSession currentSession,
                         ContentPanel filterPanel)
     {
         m_devicesView = deviceView;
         m_currentSession = currentSession;
-        m_subscriptionId = -1;
         m_filterPredicates = new GwtDeviceQueryPredicates();
         m_filterPanel = filterPanel;
     }
@@ -221,37 +207,6 @@ public class DevicesTable extends LayoutContainer implements MqttConsoleCallback
                                      });
         m_refreshButton.setEnabled(true);
         m_devicesToolBar.add(m_refreshButton);
-        m_devicesToolBar.add(new SeparatorToolItem());
-
-        //
-        // Live Button
-        m_toggleLive = new ToggleButton(MSGS.live(), new SelectionListener<ButtonEvent>() {
-            @Override
-            public void componentSelected(ButtonEvent ce)
-            {
-                if (!liveProcess) {
-                    if (m_toggleLive.isPressed()) {
-                        liveProcess = true;
-
-                        GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_LIVE_ON);
-                        refresh(m_filterPredicates);
-
-                        liveProcess = false;
-                    }
-                    else {
-                        liveProcess = true;
-
-                        GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_LIVE_OFF);
-                        unsubscribe();
-
-                        liveProcess = false;
-                    }
-                }
-            }
-        });
-        m_toggleLive.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.live()));
-        m_toggleLive.toggle(false);
-        m_devicesToolBar.add(m_toggleLive);
         m_devicesToolBar.add(new SeparatorToolItem());
 
         //
@@ -631,12 +586,6 @@ public class DevicesTable extends LayoutContainer implements MqttConsoleCallback
     {
         m_filterPredicates = predicates;
         m_loader.load();
-
-        // register for live update of the graph
-        if (m_toggleLive.isPressed() && m_subscriptionId == -1) {
-            subscribe();
-        }
-
         m_pagingToolBar.enable();
     }
 
@@ -842,142 +791,12 @@ public class DevicesTable extends LayoutContainer implements MqttConsoleCallback
 
     // --------------------------------------------------------------------------------------
     //
-    // Subscription Management APIs
-    //
-    // --------------------------------------------------------------------------------------
-
-    public void subscribe()
-    {
-        Log.debug("attempting subscription");
-
-        // clean-up
-        unsubscribe();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("$EDC/");
-        sb.append(m_currentSession.getSelectedAccount().getName());
-        sb.append("/+/BA/#");
-
-        m_subscriptions = new String[] { sb.toString() };
-
-        if (m_mqttMessageDispatcher == null) {
-            Log.debug("instantiating MqttMessageDispatcher");
-            m_mqttMessageDispatcher = new MqttMessageDispatcherCreator(m_currentSession).getMqttMessageDispatcher();
-        }
-
-        // By default, use the broker assigned for the account
-        String brokerUrl = m_currentSession.getSelectedAccount().getBrokerURL();
-
-        m_subscriptionId = m_mqttMessageDispatcher.registerCallback(brokerUrl, this, m_subscriptions);
-    }
-
-    public void unsubscribe()
-    {
-        Log.debug("attempting unsubscribe");
-
-        if (m_mqttMessageDispatcher != null) {
-            Log.debug("Nullifying MqttMessageDispatcher");
-            m_mqttMessageDispatcher.unregisterCallback(m_subscriptionId);
-            m_mqttMessageDispatcher.shutdown();
-            m_subscriptionId = -1;
-            m_mqttMessageDispatcher = null;
-        }
-    }
-
-    public void cleanSubscription()
-    {
-        if (m_toggleLive != null) {
-            m_toggleLive.toggle(false);
-        }
-        unsubscribe();
-    }
-
-    // --------------------------------------------------------------------------------------
-    //
-    // MQTT Callbacks
-    //
-    // --------------------------------------------------------------------------------------
-
-    public void connectionLost()
-    {
-        Log.debug("connection lost!");
-    }
-
-    public void publishArrived(GwtEdcPublish publish)
-    {
-
-        GwtMqttTopic gwtTopic = publish.getGwtMqttTopic();
-        String topic = gwtTopic.getUnescapedFullTopic();
-        Log.debug("PUBLISH ARRIVED ON TOPIC: " + topic);
-
-        String[] parts = topic.split("/");
-        if (parts.length < 5) {
-            return;
-        }
-        String accountName = parts[1];
-        String clientId = parts[2];
-
-        ListStore<GwtDevice> store = m_devicesGrid.getStore();
-        final GwtDevice oldDevice = store.findModel(accountName + ":" + clientId);
-        if (oldDevice != null) {
-            //
-            // the updated device is already in the table:
-            // refresh only that row!
-            gwtDeviceService.findDevice(oldDevice.getScopeId(),
-                                        oldDevice.getClientId(),
-                                        new AsyncCallback<GwtDevice>() {
-                                            public void onFailure(Throwable caught)
-                                            {
-                                                FailureHandler.handle(caught);
-                                            }
-
-                                            public void onSuccess(GwtDevice newDevice)
-                                            {
-                                                // capture selection
-                                                GwtDevice selectedDevice = m_devicesGrid.getSelectionModel().getSelectedItem();
-
-                                                // update the row
-                                                SwappableListStore<GwtDevice> store = (SwappableListStore<GwtDevice>) m_devicesGrid.getStore();
-                                                store.swapModelInstance(oldDevice, newDevice);
-                                                store.update(newDevice);
-                                                if (selectedDevice != null && selectedDevice.getClientId().equals(newDevice.getClientId())) {
-                                                    m_devicesGrid.getSelectionModel().select(newDevice, false);
-                                                    m_devicesGrid.getView().focusRow(m_devicesGrid.getStore().indexOf(newDevice));
-                                                }
-                                            }
-                                        });
-        }
-        else {
-            //
-            // the updated device is not in the table.
-            refresh(m_filterPredicates);
-        }
-    }
-
-    public void published(int messageId)
-    {
-        Log.debug("published: " + messageId);
-    }
-
-    public void subscribed(int messageId)
-    {
-        Log.debug("subscribed: " + messageId);
-    }
-
-    public void unsubscribed(int messageId)
-    {
-        Log.debug("unsubscribed: " + messageId);
-    }
-
-    // --------------------------------------------------------------------------------------
-    //
     // Unload of the GXT Component
     //
     // --------------------------------------------------------------------------------------
 
     public void onUnload()
     {
-        unsubscribe();
         super.onUnload();
     }
 }

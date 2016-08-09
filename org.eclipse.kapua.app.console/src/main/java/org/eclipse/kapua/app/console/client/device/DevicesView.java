@@ -133,7 +133,6 @@ public class DevicesView extends LayoutContainer
         m_tabMap.addListener(Events.Select, new Listener<ComponentEvent>() {
             public void handleEvent(ComponentEvent be)
             {
-                m_deviceTable.cleanSubscription();
                 m_deviceMap.refresh(new GwtDeviceQueryPredicates());
             }
         });
@@ -170,7 +169,6 @@ public class DevicesView extends LayoutContainer
 
     public void onUnload()
     {
-        m_deviceTable.unsubscribe();
         super.onUnload();
     }
 
