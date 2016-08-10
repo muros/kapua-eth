@@ -10,32 +10,38 @@
 #     Eurotech - initial API and implementation
 #
 #
-org.eclipse.kapua.service.account.AccountFactory
-org.eclipse.kapua.service.account.AccountService
-org.eclipse.kapua.service.authentication.AuthenticationService
-org.eclipse.kapua.service.authentication.credential.CredentialFactory
-org.eclipse.kapua.service.authentication.credential.CredentialService
-org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory
-org.eclipse.kapua.service.authorization.AuthorizationService
-org.eclipse.kapua.service.authorization.permission.PermissionFactory
-org.eclipse.kapua.service.authorization.role.RoleService
-org.eclipse.kapua.service.authorization.role.RoleFactory
-org.eclipse.kapua.service.authorization.user.permission.UserPermissionService
-org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory
-org.eclipse.kapua.service.authorization.user.role.UserRolesFactory
-org.eclipse.kapua.service.authorization.user.role.UserRolesService
-org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider
-org.eclipse.kapua.service.datastore.DatastoreObjectFactory
-org.eclipse.kapua.service.datastore.MessageStoreService
-org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService
-org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory
-org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService
-org.eclipse.kapua.service.device.registry.DeviceRegistryService
-org.eclipse.kapua.service.device.registry.event.DeviceEventFactory
-org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService
-org.eclipse.kapua.service.metric.MetricsService
-org.eclipse.kapua.service.user.UserFactory
-org.eclipse.kapua.service.user.UserService
+org.eclipse.kapua.service.account.AccountFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.account.AccountService,ServiceLoaderProvider
+org.eclipse.kapua.service.authentication.AuthenticationService,ServiceLoaderProvider
+org.eclipse.kapua.service.authentication.credential.CredentialFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.authentication.credential.CredentialService,ServiceLoaderProvider
+org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.authorization.AuthorizationService,ServiceLoaderProvider
+org.eclipse.kapua.service.authorization.permission.PermissionFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.authorization.role.RoleService,ServiceLoaderProvider
+org.eclipse.kapua.service.authorization.role.RoleFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.authorization.user.permission.UserPermissionService,ServiceLoaderProvider
+org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.authorization.user.role.UserRolesFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.authorization.user.role.UserRolesService,ServiceLoaderProvider
+org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider,ServiceLoaderProvider
+org.eclipse.kapua.service.datastore.DatastoreObjectFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.datastore.MessageStoreService,ServiceLoaderProvider
+org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService,ServiceLoaderProvider
+org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService,ServiceLoaderProvider
+org.eclipse.kapua.service.device.registry.DeviceFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.device.registry.DeviceRegistryService,ServiceLoaderProvider
+org.eclipse.kapua.service.device.registry.event.DeviceEventFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.device.registry.event.DeviceEventService,ServiceLoaderProvider
+org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService,ServiceLoaderProvider
+org.eclipse.kapua.service.metric.MetricsService,ServiceLoaderProvider
+org.eclipse.kapua.service.user.UserFactory,ServiceLoaderProvider
+org.eclipse.kapua.service.user.UserService,ServiceLoaderProvider
+
+#DEMO CODE
+#org.eclipse.kapua.service.user.UserService,ServiceLoaderProvider
+#org.eclipse.kapua.service.user.UserFactory,OsgiServiceLoaderProvider
 
 # We need to comment out this line, as Guice injector doesn't support multiple provider at this point
 # org.eclipse.kapua.service.user.UserFactory,ProxyOsgiServiceLoaderProvider

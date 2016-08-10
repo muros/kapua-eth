@@ -127,7 +127,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
         Subject currentUser = SecurityUtils.getSubject();
 
         if (currentUser.isAuthenticated()) {
-        	logger.info("Thread already authenticated Current thread {} - {}", new Object[]{Thread.currentThread().getId(), Thread.currentThread().getName()});
+        	logger.info("Thread already authenticated for thread {} - {}", new Object[]{Thread.currentThread().getId(), Thread.currentThread().getName()});
             throw new KapuaAuthenticationException(KapuaAuthenticationErrorCodes.SUBJECT_ALREADY_LOGGED);
         }
 
@@ -141,8 +141,6 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
             UsernamePasswordToken shiroToken = new UsernamePasswordToken(usernamePasswordToken.getUsername(),
                                                                          usernamePasswordToken.getPassword());
             try {
-            	logger.info("LOGIN for Thread ===> Current thread {} - {}", new Object[]{Thread.currentThread().getId(), Thread.currentThread().getName()});
-            	
                 currentUser.login(shiroToken);
 
                 Subject shiroSubject = SecurityUtils.getSubject();

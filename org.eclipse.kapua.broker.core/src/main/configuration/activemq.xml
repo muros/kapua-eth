@@ -19,19 +19,6 @@
 <!-- ============================================================== -->
 <!--                     TEST CODE                                  -->
 <!-- ============================================================== -->
-	<!-- LIST OF INSTALLED AMQ FEATURES:
-	[installed  ] [2.5.0                ] xml-specs-api                           camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel                                   camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel-core                              camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel-spring                            camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel-blueprint                         camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel-amqp                              camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel-jdbc                              camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel-jms                               camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel-kafka                             camel-2.15.1.redhat-621084
-	[installed  ] [2.15.1.redhat-621084 ] camel-sql                               camel-2.15.1.redhat-621084
-	[installed  ] [1.2.0.redhat-621084  ] camel-amq                               fabric-1.2.0.redhat-621084
-	 -->
 	<!-- ==============================================================
 			AMQP CLIENT AND CONNECTION POOL TEST
 	 ==============================================================  -->
@@ -75,7 +62,7 @@
 	<!-- ==============================================================
 			!!!AMQP CLIENT AND CONNECTION POOL WORKING!!!
 	 ==============================================================  -->
-	<!-- WORKING CONNECTION POOLING with A-MQ 6.2.1 (camel 2.15.1-red-hat) to fuse 6.2.1 (camel 2.15.1-red-hat) Dejan will check for amqp version because this one it's the oldest.
+	<!-- WORKING CONNECTION POOLING with A-MQ 6.2.1 (camel 2.15.1-red-hat) to fuse 6.2.1 (camel 2.15.1-red-hat).
 	<bean id="myConnectionFactory" class="org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl" factory-method="createFromURL">
 			<constructor-arg index="0" type="java.lang.String" value="amqp://guest:guest@localhost:6000/forwardedTopic" />
 	</bean>
@@ -203,7 +190,7 @@
        <value>JmsConsumer</value>   <!-- pool used by the camel route that subscribing kapua topics -->
     </util:list>
     <bean id="kapuaExecutorThreadFactory" class="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadFactory" >
-        <constructor-arg index="0" type="java.lang.String" value="KapuaxecutorThreadFactory" />
+        <constructor-arg index="0" type="java.lang.String" value="kapuaExecutorThreadFactory" />
         <constructor-arg index="1" type="java.util.List" ref="executorThreadFactoryMatcherList" />
         <constructor-arg index="2" type="boolean" value="true" /> <!-- is rootThreadGroup -->
     </bean>
@@ -212,7 +199,7 @@
     </bean>
 
 	<camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring" >
-	    <!-- the beans are defined as spring bean so check if it's possible to remove the package scan at all. Remove also the endpoint annotation from the pojo endpoints and all should works. Otherwise send to Dejan a simplified example -->
+	    <!-- the beans are defined as spring bean so check if it's possible to remove the package scan at all. Remove also the endpoint annotation from the pojo endpoints and all should works. -->
 		<packageScan>
 		  <package>org.ecplise.kapua</package>
 		  <excludes>**.*Excluded*</excludes>
@@ -367,13 +354,6 @@
                                  advisoryWhenFull="true"
                                  gcInactiveDestinations="true"
                                  inactiveTimeoutBeforeGC="300000">
-                        <!--
-                            Fuse MQ Enterprise has another cursor implementation, the VM cursor, which can be significantly faster in some cases.
-                            With the VM cursor, incoming messages are inserted directly into the cursor, bypassing the message store
-                            (the messages are also, concurrently, inserted into the message store).
-                            This works well if the consumers are fast and are able to keep up with the flow of messages.
-                            https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/PersTuning-vmCursor.html
-                        -->
                         <pendingSubscriberPolicy>
                             <vmCursor />
                         </pendingSubscriberPolicy>
@@ -397,7 +377,6 @@
                 indexCacheSize—(default 10000) specifies the size of the cache in units of pages (where one page is 4 KB by default).
                 https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/PersTuning-KahaDB.html
             -->
-            <!-- about concurrentStoreAndDispatchTopics="false" see RedHat case 01377085 and https://issues.apache.org/jira/browse/AMQ-2864 -->
             <kahaDB directory="${activemq.data}/kahadb"
                     journalMaxFileLength="32mb"
                     concurrentStoreAndDispatchQueues="true"

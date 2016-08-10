@@ -28,7 +28,7 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 	private String factoryStringId;
 	private final String name;
 	private final List<String> threadPoolNameMatcher;
-	private boolean boundShiroContext;
+	private boolean useLocalShiro;
 
 	public KapuaExecutorThreadFactory(String name, List<String> threadPoolNameMatcher, boolean rootThreadGroup) {
 		this.name = name;
@@ -63,10 +63,11 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 		
 		//TODO add configurations
 		//read settings
-		boundShiroContext = true;
+		//for the meaning of this flag please see the KapuaRunnableWrapper
+		useLocalShiro = true;
 		
 		logger.info("Configurations: ");
-		logger.info("Bound shiro context: {}", boundShiroContext);
+		logger.info("Use local Apache Shiro: {}", useLocalShiro);
 		
 		metricThreadCreationRequest = metricsService.getCounter("kapua_executor_thread_factory", "thread_creation_request", "count");
 	}
@@ -76,14 +77,20 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 		String threadName = new StringBuilder().append(name)
 				.append("_")
 				.append(COUNTER.incrementAndGet()).toString();
-		logger.info("Instantiate thread name [{}]...", threadName);
-		Thread answer = new Thread(tdg, new RunnableWrapper(runnable, boundShiroContext), threadName);
+		logger.info("Instantiate new thread {} from thread {} ...", new Object[]{threadName, Thread.currentThread().getName()});
+		Thread answer = new Thread(tdg, new KapuaRunnableWrapper(runnable, threadName, useLocalShiro, Thread.currentThread().getName().startsWith(name)), threadName);
 		answer.setDaemon(false);
-		logger.info("Instantiate thread name [{}] -> [{}] DONE", threadName, answer);
+		logger.info("Instantiate new thread {} -> [{}] DONE", threadName, answer);
 		return answer;
 	}
 	
-	public boolean isMatchingPattern(String threadPoolName) {
+	/**
+	 * Check if the thread pool name starts with one of the reserved words (threadPoolNameMatcher).
+	 * In that case the {@link KapuaExecutorThreadPoolFactory} returns a different thread factory object.
+	 * @param threadPoolName
+	 * @return
+	 */
+	public boolean threadPoolIsMatchingPattern(String threadPoolName) {
 		if (threadPoolName!=null) {
 			for (String str : threadPoolNameMatcher) {
 				logger.info("Check the thread pool name [{}] for prefix [{}]", new Object[]{threadPoolName, str});
@@ -95,7 +102,7 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 		}
 		return false;
 	}
-
+	
 	public String getName() {
 		return name;
 	}

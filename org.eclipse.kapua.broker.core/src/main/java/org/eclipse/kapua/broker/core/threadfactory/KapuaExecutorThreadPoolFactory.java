@@ -71,7 +71,7 @@ public class KapuaExecutorThreadPoolFactory extends DefaultThreadPoolFactory {
     	if (threadFactory instanceof CamelThreadFactory) {
 			CamelThreadFactory camelThreadFactory = (CamelThreadFactory) threadFactory;
 			String name = camelThreadFactory.getName();
-			if (kapuaThreadFactory.isMatchingPattern(name)) {
+			if (kapuaThreadFactory.threadPoolIsMatchingPattern(name)) {
 				s_logger.info("Replace thread factory for thread factory name {} with KapuaThreadFactory implementation", name);
 				return kapuaThreadFactory;
 			}
