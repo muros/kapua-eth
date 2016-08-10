@@ -23,18 +23,20 @@ import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.google.gwt.user.client.Element;
 
-public class CenterOverviewView extends LayoutContainer {
+public class CenterOverviewView extends LayoutContainer
+{
 
-    private GwtSession m_currentSession;
+    private GwtSession       m_currentSession;
 
     private LastMessagesView m_lastMessagesView;
-    private LastDataReceivedChartView m_lastDataReceivedChartView;
 
-    public CenterOverviewView(GwtSession currentSession) {
+    public CenterOverviewView(GwtSession currentSession)
+    {
         m_currentSession = currentSession;
     }
 
-    protected void onRender(final Element parent, int index) {
+    protected void onRender(final Element parent, int index)
+    {
         super.onRender(parent, index);
 
         setLayout(new FitLayout());
@@ -75,16 +77,14 @@ public class CenterOverviewView extends LayoutContainer {
         centerPanel.setBorders(false);
         centerPanel.setHeaderVisible(false);
         centerPanel.setLayout(new FitLayout());
-        m_lastDataReceivedChartView = new LastDataReceivedChartView(m_currentSession);
-        centerPanel.add(m_lastDataReceivedChartView);
 
         layoutContainer.add(centerPanel, centerData);
     }
 
-    public void refresh() {
+    public void refresh()
+    {
         if (rendered) {
             m_lastMessagesView.refresh();
-            m_lastDataReceivedChartView.refresh();
         }
     }
 }
