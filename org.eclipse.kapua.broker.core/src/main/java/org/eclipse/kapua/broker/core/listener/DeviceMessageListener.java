@@ -22,8 +22,10 @@ import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
 import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool;
 import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerWrapper;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthMessage;
+import org.eclipse.kapua.message.device.lifecycle.KapuaDisconnectMessage;
 import org.eclipse.kapua.broker.core.pool.JmsAssistantProducerPool.DESTINATIONS;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 import org.slf4j.Logger;
@@ -58,7 +60,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage<?>
 	//metrics
 	private Counter metricDeviceMessage;
 	private Counter metricDeviceBirthMessage;
-	private Counter metricDeviceDcMessage;
+	private Counter metricDeviceDisconnectMessage;
 	private Counter metricDeviceMissingMessage;
 	private Counter metricDeviceAppsMessage;
 	private Counter metricDeviceUnknownMessage;
@@ -70,7 +72,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage<?>
 		metricDeviceMessage          = registerCounter("messages", "count");
 		//direct
 		metricDeviceBirthMessage       = registerCounter("messages", "birth", "count");
-		metricDeviceDcMessage          = registerCounter("messages", "dc", "count");
+		metricDeviceDisconnectMessage  = registerCounter("messages", "dc", "count");
 		metricDeviceMissingMessage     = registerCounter("messages", "missing", "count");
 		metricDeviceAppsMessage        = registerCounter("messages", "apps", "count");
 		metricDeviceUnknownMessage     = registerCounter("messages", "unknown", "count");
@@ -117,6 +119,120 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage<?>
 		catch (KapuaException e) {
 			metricDeviceErrorMessage.inc();
 			logger.error("Error while processing device birth life-cycle event", e);
+			return;			    
+		}
+    }
+	
+	public void processDisconnectMessage(CamelKapuaMessage<KapuaDisconnectMessage> disconnectMessage) {
+		try {
+			deviceLifeCycleService.death(disconnectMessage.getConnectionId(), disconnectMessage.getMessage());
+			metricDeviceDisconnectMessage.inc();
+			//republish BA
+			Date now = new Date();
+			KapuaPayload kapuaPayload = disconnectMessage.getMessage().getPayload();
+			kapuaPayload.getProperties().put("server_event_time", Long.toString(now.getTime()));
+			
+//			birthMessage.getMessage().setSemanticChannel(BIRTH_SEMANTIC_TOPIC);
+			try {
+                logger.debug("MESSAGE: {}", kapuaPayload);
+                JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.NO_DESTINATION);
+                JmsAssistantProducerWrapper producer = null;
+                try {
+                    producer = pool.borrowObject();
+                    producer.sendRawMessage(disconnectMessage);
+                }
+                finally {
+                    pool.returnObject(producer);
+                }
+            } 
+			catch (JMSException e) {
+                logger.error("An error occurred while publishing disconnect event: {}", e.getMessage());
+                return;
+            }
+            catch (Throwable t) {
+                logger.warn("Cannot send disconnect life cycle message {}! {}", new Object[]{disconnectMessage.getMessage().getSemanticChannel().toString(), t.getMessage()}, t);
+                return;
+            }
+		}
+		catch (KapuaException e) {
+			metricDeviceErrorMessage.inc();
+			logger.error("Error while processing device disconnect life-cycle event", e);
+			return;			    
+		}
+    }
+	
+	public void processAppsMessage(CamelKapuaMessage<KapuaBirthMessage> appsMessage) {
+		try {
+			deviceLifeCycleService.applications(appsMessage.getConnectionId(), appsMessage.getMessage());
+			metricDeviceAppsMessage.inc();
+			//republish BA
+			Date now = new Date();
+			KapuaPayload kapuaPayload = appsMessage.getMessage().getPayload();
+			kapuaPayload.getProperties().put("server_event_time", Long.toString(now.getTime()));
+			
+//			birthMessage.getMessage().setSemanticChannel(BIRTH_SEMANTIC_TOPIC);
+			try {
+                logger.debug("MESSAGE: {}", kapuaPayload);
+                JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.NO_DESTINATION);
+                JmsAssistantProducerWrapper producer = null;
+                try {
+                    producer = pool.borrowObject();
+                    producer.sendRawMessage(appsMessage);
+                }
+                finally {
+                    pool.returnObject(producer);
+                }
+            } 
+			catch (JMSException e) {
+                logger.error("An error occurred while publishing apps event: {}", e.getMessage());
+                return;
+            }
+            catch (Throwable t) {
+                logger.warn("Cannot send apps life cycle message {}! {}", new Object[]{appsMessage.getMessage().getSemanticChannel().toString(), t.getMessage()}, t);
+                return;
+            }
+		}
+		catch (KapuaException e) {
+			metricDeviceErrorMessage.inc();
+			logger.error("Error while processing device apps life-cycle event", e);
+			return;			    
+		}
+    }
+	
+	public void processMissingMessage(CamelKapuaMessage<KapuaMessage> missingMessage) {
+		try {
+			deviceLifeCycleService.missing(missingMessage.getConnectionId(), missingMessage.getMessage());
+			metricDeviceMissingMessage.inc();
+			//republish BA
+			Date now = new Date();
+			KapuaPayload kapuaPayload = missingMessage.getMessage().getPayload();
+			kapuaPayload.getProperties().put("server_event_time", Long.toString(now.getTime()));
+			
+//			birthMessage.getMessage().setSemanticChannel(BIRTH_SEMANTIC_TOPIC);
+			try {
+                logger.debug("MESSAGE: {}", kapuaPayload);
+                JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.NO_DESTINATION);
+                JmsAssistantProducerWrapper producer = null;
+                try {
+                    producer = pool.borrowObject();
+                    producer.sendRawMessage(missingMessage);
+                }
+                finally {
+                    pool.returnObject(producer);
+                }
+            } 
+			catch (JMSException e) {
+                logger.error("An error occurred while publishing missing event: {}", e.getMessage());
+                return;
+            }
+            catch (Throwable t) {
+                logger.warn("Cannot send missing life cycle message {}! {}", new Object[]{missingMessage.getMessage().getSemanticChannel().toString(), t.getMessage()}, t);
+                return;
+            }
+		}
+		catch (KapuaException e) {
+			metricDeviceErrorMessage.inc();
+			logger.error("Error while processing device missing life-cycle event", e);
 			return;			    
 		}
     }
