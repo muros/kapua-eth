@@ -25,8 +25,6 @@ import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.account.Organization;
 import org.eclipse.kapua.test.KapuaTest;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +37,6 @@ public class AccountServiceTest extends KapuaTest
     @SuppressWarnings("unused")
     private static final Logger s_logger = LoggerFactory.getLogger(AccountServiceTest.class);
 
-    @BeforeClass
-    public static void beforeClass() {
-        enableH2Connection();
-    }
-
-    @Ignore
     @Test
     public void testCreate()
         throws Exception
@@ -76,7 +68,6 @@ public class AccountServiceTest extends KapuaTest
         assertNotNull(account.getModifiedBy());
     }
 
-    @Ignore
     @Test
     public void testUpdate()
         throws Exception
@@ -117,7 +108,6 @@ public class AccountServiceTest extends KapuaTest
         assertNotNull(account.getModifiedBy());
     }
 
-    @Ignore
     @Test
     public void testDelete()
         throws Exception
@@ -145,7 +135,6 @@ public class AccountServiceTest extends KapuaTest
         assertTrue(account == null);
     }
 
-    @Ignore
     @Test
     public void testFind()
         throws Exception
@@ -175,7 +164,6 @@ public class AccountServiceTest extends KapuaTest
         assertTrue(account.getOrganization().getEmail().equals(accountCreator.getOrganizationEmail()));
     }
 
-    @Ignore
     @Test
     public void testConfiguration()
         throws Exception

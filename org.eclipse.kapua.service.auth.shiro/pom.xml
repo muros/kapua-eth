@@ -59,6 +59,12 @@
             <artifactId>org.eclipse.kapua.commons</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- -->
         <!-- External dependencies -->
@@ -79,7 +85,7 @@
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
+            <artifactId>org.eclipse.kapua.test</artifactId>
             <version>0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>

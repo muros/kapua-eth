@@ -36,12 +36,11 @@ public class AuthenticationServiceTest
     /**
      * We should ignore this test until build process is fixed.
      */
-    @Ignore
     @Test
     public void testLoginAndLogout()
         throws Exception
     {
-        String username = "admin";
+        String username = "kapua-sys";
         char[] password = "We!come12345".toCharArray();
 
         KapuaLocator locator = KapuaLocator.getInstance();
