@@ -39,6 +39,7 @@ import org.eclipse.kapua.service.datastore.model.Position;
 import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +91,7 @@ public class MessageStoreServiceTest
         // }
     }
 
+    @Ignore
     @Test
     public void testStore()
         throws Exception
