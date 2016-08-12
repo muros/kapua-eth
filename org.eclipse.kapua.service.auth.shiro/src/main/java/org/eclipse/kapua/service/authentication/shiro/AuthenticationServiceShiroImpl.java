@@ -162,6 +162,10 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
 
                 KapuaSecurityUtils.setSession(kapuaSession);
                 addSession(kapuaSession);
+                
+                //TODO workaround to fix the null kapua session on webconsole requests. to be removed and substitute with getToken?
+                shiroSubject.getSession().setAttribute("KapuaSession", kapuaSession);
+                
                 return kapuaSession.getAccessToken();
             }
             catch (ShiroException se) {
