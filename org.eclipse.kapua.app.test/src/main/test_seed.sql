@@ -283,7 +283,7 @@ CREATE TABLE dvc_device (
   firmware_version          VARCHAR(255),
   os_version                VARCHAR(255),
   jvm_version               VARCHAR(255),
-  osgi_version              VARCHAR(255),
+  osgi_framework_version    VARCHAR(255),
   app_framework_version     VARCHAR(255),
   app_identifiers           VARCHAR(1024),
   accept_encoding           VARCHAR(255),
