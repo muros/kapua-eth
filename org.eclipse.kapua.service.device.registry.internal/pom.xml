@@ -101,36 +101,40 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>sql-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>create-schema</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<autocommit>true</autocommit>
-							<srcFiles>
-								<srcFile>src/main/sql/dvc_device_drop.sql</srcFile>
-								<srcFile>src/main/sql/dvc_device_event_drop.sql</srcFile>			
-								<srcFile>src/main/sql/dvc_device_connection_drop.sql</srcFile>
 
-								<srcFile>src/main/sql/dvc_device_create.sql</srcFile>
-								<srcFile>src/main/sql/dvc_device_event_create.sql</srcFile>
-								<srcFile>src/main/sql/dvc_device_connection_create.sql</srcFile>
-							</srcFiles>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-    
+    <profiles>
+        <profile>
+            <id>sql</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>create-schema</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <autocommit>true</autocommit>
+                                    <srcFiles>
+                                        <srcFile>src/main/sql/dvc_device_drop.sql</srcFile>
+                                        <srcFile>src/main/sql/dvc_device_event_drop.sql</srcFile>
+                                        <srcFile>src/main/sql/dvc_device_connection_drop.sql</srcFile>
+
+                                        <srcFile>src/main/sql/dvc_device_create.sql</srcFile>
+                                        <srcFile>src/main/sql/dvc_device_event_create.sql</srcFile>
+                                        <srcFile>src/main/sql/dvc_device_connection_create.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     
 </project>
