@@ -196,6 +196,19 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Internal dependencies -->
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>org.eclipse.kapua.service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>org.eclipse.kapua.service.authentication</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- External dependencies -->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
