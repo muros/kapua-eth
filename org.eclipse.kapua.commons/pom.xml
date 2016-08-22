@@ -84,14 +84,6 @@
             <artifactId>jmx_prometheus_javaagent</artifactId>
             <version>0.5</version>
         </dependency>
-
-        <!-- Testing dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
         
 </project>
