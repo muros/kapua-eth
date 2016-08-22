@@ -8,13 +8,16 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
+ *     Red Hat - loading test services
  *
  *******************************************************************************/
 package org.eclipse.kapua.locator.spi;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 
+import com.google.common.collect.ImmutableList;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.KapuaObjectFactory;
@@ -30,20 +33,19 @@ public class LocatorImpl extends KapuaLocator
     @Override
     public <S extends KapuaService> S getService(Class<S> serviceClass)
     {
-        ServiceLoader<S> serviceLoaders = ServiceLoader.load(serviceClass);
+        List<S> serviceCandidates = ImmutableList.copyOf(ServiceLoader.load(serviceClass).iterator());
 
-        S kapuaService = null;
-        Iterator<S> serviceLoaderIterator = serviceLoaders.iterator();
-        while (serviceLoaderIterator.hasNext()) {
-            kapuaService = serviceLoaderIterator.next();
-            break;
-        }
-
-        if (kapuaService == null) {
+        if(serviceCandidates.isEmpty()) {
             throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, serviceClass);
+        }  else if(serviceCandidates.size() > 1) {
+            for (S service : serviceCandidates) {
+                if (service.getClass().isAnnotationPresent(TestService.class)) {
+                    return service;
+                }
+            }
         }
 
-        return kapuaService;
+        return serviceCandidates.get(0);
     }
 
     @Override
