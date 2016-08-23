@@ -17,6 +17,8 @@
 
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         
+        <class>org.eclipse.kapua.commons.configuration.ServiceConfigImpl</class>
+        
 		<properties>
 			<!-- <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" /> -->
 			<property name="javax.persistence.lock.timeout" value="1000" />

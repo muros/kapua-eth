@@ -24,7 +24,7 @@ import java.util.UUID;
 import org.eclipse.kapua.KapuaErrorCodes;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.cache.LocalCache;
-import org.eclipse.kapua.commons.service.internal.AbstractKapuaConfigurableService;
+import org.eclipse.kapua.commons.configuration.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.KapuaDateUtils;
 import org.eclipse.kapua.locator.KapuaLocator;

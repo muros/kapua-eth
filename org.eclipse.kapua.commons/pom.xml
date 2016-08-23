@@ -56,4 +56,35 @@
  		</dependency>
 
     </dependencies>
+ 
+	<profiles>
+		<profile>
+			<id>sql</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>sql-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>create-schema</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>execute</goal>
+								</goals>
+								<configuration>
+									<autocommit>true</autocommit>
+									<srcFiles>
+										<srcFile>src/main/sql/sys_configuration_drop.sql</srcFile>
+										<srcFile>src/main/sql/sys_configuration_create.sql</srcFile>
+									</srcFiles>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+        
 </project>

@@ -20,6 +20,7 @@ import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.KapuaIllegalArgumentException;
+import org.eclipse.kapua.commons.configuration.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.commons.service.internal.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
