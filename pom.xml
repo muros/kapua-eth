@@ -385,6 +385,7 @@
         <!-- -->
         <!-- Broker -->
         <module>org.eclipse.kapua.broker.core</module>
+        <module>org.eclipse.kapua.broker.deployment</module>
 
         <!-- -->
         <!-- Applications -->
