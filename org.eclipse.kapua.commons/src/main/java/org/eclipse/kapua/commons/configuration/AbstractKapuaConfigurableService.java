@@ -13,7 +13,6 @@
 package org.eclipse.kapua.commons.configuration;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
@@ -22,7 +21,6 @@ import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.commons.service.internal.ServiceDAO;
 import org.eclipse.kapua.commons.util.EntityManager;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.config.ComponentConfiguration;
 import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.predicate.KapuaAttributePredicate.Operator;

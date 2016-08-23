@@ -12,21 +12,16 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.configuration;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "pid" })
 public class ServiceConfigCreatorImpl extends AbstractKapuaEntityCreator<ServiceConfig>
                                       implements ServiceConfigCreator
 {
+    private static final long serialVersionUID = 7508550960304732465L;
+
     @XmlElement(name = "pid")
     private String pid;
 
