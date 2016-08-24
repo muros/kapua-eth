@@ -19,27 +19,22 @@
 	<name>org.eclipse.kapua.locator.guice</name>
 
 	<dependencies>
-		<!-- Implemented service interfaces -->
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-
 		<!-- Internal dependencies -->
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.commons</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<artifactId>org.eclipse.kapua.service</artifactId>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.commons</artifactId>
+		</dependency>
+
+		<!-- Internal testing dependencies -->
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user</artifactId>
-			<version>0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
