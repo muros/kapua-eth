@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.eclipse.kapua</groupId>
+        <artifactId>kapua</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>org.eclipse.kapua.service.generator.id.sequence</artifactId>
+    <name>org.eclipse.kapua.service.generator.id.sequence</name>
+
+    <dependencies>
+        <!-- -->
+        <!-- Implemented service interfaces -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.generator.id</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- -->
+        <!-- Internal dependencies -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.commons</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- -->
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.locator.spi</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

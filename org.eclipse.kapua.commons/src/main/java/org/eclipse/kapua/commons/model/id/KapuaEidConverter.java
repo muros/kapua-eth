@@ -16,8 +16,6 @@ import java.math.BigInteger;
 
 import javax.persistence.AttributeConverter;
 
-//import javax.persistence.AttributeConverter;
-
 public class KapuaEidConverter implements AttributeConverter<KapuaEid, BigInteger>
 {
     @Override

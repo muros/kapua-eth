@@ -15,9 +15,9 @@ package org.eclipse.kapua.service.user.internal;
 import java.text.MessageFormat;
 import java.util.Date;
 
-import org.eclipse.kapua.commons.util.KapuaEidGenerator;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.generator.id.IdGeneratorService;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
@@ -50,7 +50,9 @@ public class UserServiceTest extends Assert
         String displayName = MessageFormat.format("User Display Name {0}", now);
 
         // KapuaPeid accountPeid = KapuaEidGenerator.generate();//
-        KapuaId scopeId = KapuaEidGenerator.generate();
+        KapuaLocator locator = KapuaLocator.getInstance();
+        IdGeneratorService idGeneratorService = locator.getService(IdGeneratorService.class);
+        KapuaId scopeId = idGeneratorService.generate();
 
         KapuaLocator serviceLocator = KapuaLocator.getInstance();
         UserFactory kapuaEntityCreatorFactory = serviceLocator.getFactory(UserFactory.class);

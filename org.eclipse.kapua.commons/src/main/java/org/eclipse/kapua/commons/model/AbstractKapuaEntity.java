@@ -33,9 +33,10 @@ import javax.xml.bind.annotation.XmlElement;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
-import org.eclipse.kapua.commons.util.KapuaEidGenerator;
+import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.generator.id.IdGeneratorService;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -105,8 +106,11 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
     protected void prePersistsAction()
         throws KapuaException
     {
-        this.id = KapuaEidGenerator.generate();
-        this.createdBy = (KapuaEid) KapuaSecurityUtils.getSession().getUserId();
+        KapuaLocator locator = KapuaLocator.getInstance();
+        IdGeneratorService idGenerator = locator.getService(IdGeneratorService.class);
+
+        this.id = new KapuaEid(idGenerator.generate().getId());
+        this.createdBy = new KapuaEid(KapuaSecurityUtils.getSession().getUserId().getId());
         this.createdOn = new Date();
     }
 }
