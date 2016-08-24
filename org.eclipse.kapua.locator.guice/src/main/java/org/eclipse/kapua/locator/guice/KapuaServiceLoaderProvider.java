@@ -12,9 +12,10 @@
  *******************************************************************************/
 package org.eclipse.kapua.locator.guice;
 
-import java.util.Iterator;
+import java.util.List;
 import java.util.ServiceLoader;
 
+import com.google.common.collect.ImmutableList;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.service.KapuaService;
 
@@ -34,18 +35,19 @@ public class KapuaServiceLoaderProvider<S extends KapuaService> implements Provi
 		if (service != null) { 
 			return service;
 		}
-		
-		ServiceLoader<S> serviceLoaders = ServiceLoader.load(serviceClass);
-		Iterator<S> serviceLoaderIterator = serviceLoaders.iterator();
-		while (serviceLoaderIterator.hasNext()) {
-			service = serviceLoaderIterator.next();
-			break;
+
+		List<S> serviceCandidates = ImmutableList.copyOf(ServiceLoader.load(serviceClass).iterator());
+
+		if(serviceCandidates.isEmpty()) {
+			throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, serviceClass);
+		}  else if(serviceCandidates.size() > 1) {
+			for (S service : serviceCandidates) {
+				if (service.getClass().isAnnotationPresent(TestService.class)) {
+					return service;
+				}
+			}
 		}
 
-		if (service == null) {
-			throw new KapuaRuntimeException(KapuaLocatorErrorCodes.SERVICE_UNAVAILABLE, serviceClass);
-		}
-		
-		return service;
-	}	
+		return serviceCandidates.get(0);
+	}
 }
