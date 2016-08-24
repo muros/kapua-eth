@@ -17,92 +17,10 @@
 // Generated on: 2012.11.25 at 06:05:15 PM CET
 //
 
+
 package org.eclipse.kapua.model.config.metatype;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
-import javax.xml.bind.annotation.XmlType;
+public interface Tscalar {
 
-/**
- * <p>
- * Java class for Tscalar.
- *
- * <p>
- * The following schema fragment specifies the expected content contained within this class.
- * <p>
- * 
- * <pre>
- * &lt;simpleType name="Tscalar">
- *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="String"/>
- *     &lt;enumeration value="Long"/>
- *     &lt;enumeration value="Double"/>
- *     &lt;enumeration value="Float"/>
- *     &lt;enumeration value="Integer"/>
- *     &lt;enumeration value="Byte"/>
- *     &lt;enumeration value="Char"/>
- *     &lt;enumeration value="Boolean"/>
- *     &lt;enumeration value="Short"/>
- *     &lt;enumeration value="Password"/>
- *   &lt;/restriction>
- * &lt;/simpleType>
- * </pre>
- *
- */
-@XmlEnum
-@XmlType(name = "Tscalar")
-public enum Tscalar
-{
-    @XmlEnumValue("String")
-    STRING("String"),
-
-    @XmlEnumValue("Long")
-    LONG("Long"),
-
-    @XmlEnumValue("Double")
-    DOUBLE("Double"),
-
-    @XmlEnumValue("Float")
-    FLOAT("Float"),
-
-    @XmlEnumValue("Integer")
-    INTEGER("Integer"),
-
-    @XmlEnumValue("Byte")
-    BYTE("Byte"),
-
-    @XmlEnumValue("Char")
-    CHAR("Char"),
-
-    @XmlEnumValue("Boolean")
-    BOOLEAN("Boolean"),
-
-    @XmlEnumValue("Short")
-    SHORT("Short"),
-
-    @XmlEnumValue("Password")
-    PASSWORD("Password");
-
-    private final String value;
-
-    Tscalar(String v)
-    {
-        value = v;
-    }
-
-    public String value()
-    {
-        return value;
-    }
-
-    public static Tscalar fromValue(String v)
-    {
-        for (Tscalar c : Tscalar.values()) {
-            if (c.value.equals(v)) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException(v);
-    }
-
+    public String value();
 }

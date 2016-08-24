@@ -686,7 +686,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                                 gwtParam.setId(ad.getId());
                                 gwtParam.setName(ad.getName());
                                 gwtParam.setDescription(ad.getDescription());
-                                gwtParam.setType(GwtConfigParameterType.valueOf(ad.getType().name()));
+                                gwtParam.setType(GwtConfigParameterType.valueOf(ad.getType().value()));
                                 gwtParam.setRequired(ad.isRequired());
                                 gwtParam.setCardinality(ad.getCardinality());
                                 if (ad.getOption() != null && ad.getOption().size() > 0) {

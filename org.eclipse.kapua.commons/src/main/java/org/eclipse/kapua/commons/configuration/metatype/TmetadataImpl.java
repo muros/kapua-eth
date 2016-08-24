@@ -35,23 +35,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.kapua.model.config.metatype.Tdesignate;
+import org.eclipse.kapua.model.config.metatype.Tmetadata;
+import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.w3c.dom.Element;
 
 
 /**
- * <p>Java class for Tobject complex type.
+ * <p>Java class for Tmetadata complex type.
  *
  * <p>The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
- * &lt;complexType name="Tobject">
+ * &lt;complexType name="Tmetadata">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Attribute" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tattribute" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="OCD" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tocd" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="Designate" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tdesignate" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="ocdref" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="localization" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;anyAttribute/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -60,49 +64,81 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="Object", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name="MetaData", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tobject", propOrder = {
-    "attribute",
+@XmlType(name = "Tmetadata", propOrder = {
+    "ocd",
+    "designate",
     "any"
 })
-public class Tobject {
-    @XmlElement(name = "Attribute", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<Tattribute> attribute;
+public class TmetadataImpl implements Tmetadata {
+    @XmlElement(name = "OCD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+    protected List<TocdImpl> ocd;
+    @XmlElement(name = "Designate", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+    protected List<TdesignateImpl> designate;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
-    @XmlAttribute(name = "ocdref", required = true)
-    protected String ocdref;
+    @XmlAttribute(name = "localization")
+    protected String localization;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
-     * Gets the value of the attribute property.
+     * Gets the value of the ocd property.
      *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the attribute property.
+     * This is why there is not a <CODE>set</CODE> method for the ocd property.
      *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getAttribute().add(newItem);
+     *    getOCD().add(newItem);
      * </pre>
      *
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Tattribute }
+     * {@link TocdImpl }
      *
      *
      */
-    public List<Tattribute> getAttribute() {
-        if (attribute == null) {
-            attribute = new ArrayList<Tattribute>();
+    public List<Tocd> getOCD() {
+        if (ocd == null) {
+            ocd = new ArrayList<TocdImpl>();
         }
-        return new ArrayList<Tattribute>(this.attribute);
+        return new ArrayList<Tocd>(this.ocd);
+    }
+
+    /**
+     * Gets the value of the designate property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the designate property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getDesignate().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link TdesignateImpl }
+     *
+     *
+     */
+    public List<Tdesignate> getDesignate() {
+        if (designate == null) {
+            designate = new ArrayList<TdesignateImpl>();
+        }
+        return new ArrayList<Tdesignate>(this.designate);
     }
 
     /**
@@ -136,27 +172,27 @@ public class Tobject {
     }
 
     /**
-     * Gets the value of the ocdref property.
+     * Gets the value of the localization property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public String getOcdref() {
-        return ocdref;
+    public String getLocalization() {
+        return localization;
     }
 
     /**
-     * Sets the value of the ocdref property.
+     * Sets the value of the localization property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setOcdref(String value) {
-        this.ocdref = value;
+    public void setLocalization(String value) {
+        this.localization = value;
     }
 
     /**

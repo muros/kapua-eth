@@ -20,6 +20,7 @@
 
 package org.eclipse.kapua.commons.configuration.metatype;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,29 +31,29 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.kapua.model.config.metatype.Ticon;
 import org.w3c.dom.Element;
 
 
 /**
- * <p>Java class for Tmetadata complex type.
+ * <p>Java class for Ticon complex type.
  *
  * <p>The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
- * &lt;complexType name="Tmetadata">
+ * &lt;complexType name="Ticon">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="OCD" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tocd" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;element name="Designate" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tdesignate" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;any processContents='lax' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="localization" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="resource" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="size" use="required" type="{http://www.w3.org/2001/XMLSchema}positiveInteger" />
  *       &lt;anyAttribute/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -61,82 +62,21 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="MetaData", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name="Icon", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tmetadata", propOrder = {
-    "ocd",
-    "designate",
+@XmlType(name = "Ticon", propOrder = {
     "any"
 })
-public class Tmetadata {
-    @XmlElement(name = "OCD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<Tocd> ocd;
-    @XmlElement(name = "Designate", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<Tdesignate> designate;
+public class TiconImpl implements Ticon {
     @XmlAnyElement(lax = true)
     protected List<Object> any;
-    @XmlAttribute(name = "localization")
-    protected String localization;
+    @XmlAttribute(name = "resource", required = true)
+    protected String resource;
+    @XmlAttribute(name = "size", required = true)
+    @XmlSchemaType(name = "positiveInteger")
+    protected BigInteger size;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
-
-    /**
-     * Gets the value of the ocd property.
-     *
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the ocd property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getOCD().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Tocd }
-     *
-     *
-     */
-    public List<Tocd> getOCD() {
-        if (ocd == null) {
-            ocd = new ArrayList<Tocd>();
-        }
-        return new ArrayList<Tocd>(this.ocd);
-    }
-
-    /**
-     * Gets the value of the designate property.
-     *
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the designate property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getDesignate().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Tdesignate }
-     *
-     *
-     */
-    public List<Tdesignate> getDesignate() {
-        if (designate == null) {
-            designate = new ArrayList<Tdesignate>();
-        }
-        return new ArrayList<Tdesignate>(this.designate);
-    }
 
     /**
      * Gets the value of the any property.
@@ -169,27 +109,51 @@ public class Tmetadata {
     }
 
     /**
-     * Gets the value of the localization property.
+     * Gets the value of the resource property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public String getLocalization() {
-        return localization;
+    public String getResource() {
+        return resource;
     }
 
     /**
-     * Sets the value of the localization property.
+     * Sets the value of the resource property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setLocalization(String value) {
-        this.localization = value;
+    public void setResource(String value) {
+        this.resource = value;
+    }
+
+    /**
+     * Gets the value of the size property.
+     *
+     * @return
+     *     possible object is
+     *     {@link BigInteger }
+     *
+     */
+    public BigInteger getSize() {
+        return size;
+    }
+
+    /**
+     * Sets the value of the size property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link BigInteger }
+     *
+     */
+    public void setSize(BigInteger value) {
+        this.size = value;
     }
 
     /**

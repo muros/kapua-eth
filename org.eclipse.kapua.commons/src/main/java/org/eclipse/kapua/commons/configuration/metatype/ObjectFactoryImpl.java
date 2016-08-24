@@ -41,7 +41,7 @@ import javax.xml.namespace.QName;
  *
  */
 @XmlRegistry
-public class ObjectFactory {
+public class ObjectFactoryImpl {
 
     private final static QName _MetaData_QNAME = new QName("http://www.osgi.org/xmlns/metatype/v1.2.0", "MetaData");
 
@@ -49,80 +49,80 @@ public class ObjectFactory {
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.eurotech.framework.core.configuration.metatype
      *
      */
-    public ObjectFactory() {
+    public ObjectFactoryImpl() {
     }
 
     /**
-     * Create an instance of {@link Ticon }
+     * Create an instance of {@link TiconImpl }
      *
      */
-    public Ticon createTicon() {
-        return new Ticon();
+    public TiconImpl createTicon() {
+        return new TiconImpl();
     }
 
     /**
-     * Create an instance of {@link Tattribute }
+     * Create an instance of {@link TattributeImpl }
      *
      */
-    public Tattribute createTattribute() {
-        return new Tattribute();
+    public TattributeImpl createTattribute() {
+        return new TattributeImpl();
     }
 
     /**
-     * Create an instance of {@link Tmetadata }
+     * Create an instance of {@link TmetadataImpl }
      *
      */
-    public Tmetadata createTmetadata() {
-        return new Tmetadata();
+    public TmetadataImpl createTmetadata() {
+        return new TmetadataImpl();
     }
 
     /**
-     * Create an instance of {@link Tdesignate }
+     * Create an instance of {@link TdesignateImpl }
      *
      */
-    public Tdesignate createTdesignate() {
-        return new Tdesignate();
+    public TdesignateImpl createTdesignate() {
+        return new TdesignateImpl();
     }
 
     /**
-     * Create an instance of {@link Tad }
+     * Create an instance of {@link TadImpl }
      *
      */
-    public Tad createTad() {
-        return new Tad();
+    public TadImpl createTad() {
+        return new TadImpl();
     }
 
     /**
-     * Create an instance of {@link Tobject }
+     * Create an instance of {@link TobjectImpl }
      *
      */
-    public Tobject createTobject() {
-        return new Tobject();
+    public TobjectImpl createTobject() {
+        return new TobjectImpl();
     }
 
     /**
-     * Create an instance of {@link Tocd }
+     * Create an instance of {@link TocdImpl }
      *
      */
-    public Tocd createTocd() {
-        return new Tocd();
+    public TocdImpl createTocd() {
+        return new TocdImpl();
     }
 
     /**
-     * Create an instance of {@link Toption }
+     * Create an instance of {@link ToptionImpl }
      *
      */
-    public Toption createToption() {
-        return new Toption();
+    public ToptionImpl createToption() {
+        return new ToptionImpl();
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Tmetadata }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link TmetadataImpl }{@code >}}
      *
      */
     @XmlElementDecl(namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0", name = "MetaData")
-    public JAXBElement<Tmetadata> createMetaData(Tmetadata value) {
-        return new JAXBElement<Tmetadata>(_MetaData_QNAME, Tmetadata.class, null, value);
+    public JAXBElement<TmetadataImpl> createMetaData(TmetadataImpl value) {
+        return new JAXBElement<TmetadataImpl>(_MetaData_QNAME, TmetadataImpl.class, null, value);
     }
 
 }

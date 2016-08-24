@@ -35,26 +35,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.kapua.model.config.metatype.Tattribute;
+import org.eclipse.kapua.model.config.metatype.Tobject;
 import org.w3c.dom.Element;
 
 
 /**
- * <p>Java class for Tocd complex type.
+ * <p>Java class for Tobject complex type.
  *
  * <p>The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
- * &lt;complexType name="Tocd">
+ * &lt;complexType name="Tobject">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="AD" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tad" maxOccurs="unbounded"/>
- *         &lt;element name="Icon" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Ticon" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="Attribute" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tattribute" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="description" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="id" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="ocdref" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;anyAttribute/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -63,85 +62,49 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="OCD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name="Object", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tocd", propOrder = {
-    "ad",
-    "icon",
+@XmlType(name = "Tobject", propOrder = {
+    "attribute",
     "any"
 })
-public class Tocd {
-    @XmlElement(name = "AD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0", required=true)
-    protected List<Tad> ad;
-    @XmlElement(name = "Icon", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<Ticon> icon;
+public class TobjectImpl implements Tobject {
+    @XmlElement(name = "Attribute", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+    protected List<TattributeImpl> attribute;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
-    @XmlAttribute(name = "description")
-    protected String description;
-    @XmlAttribute(name = "id", required = true)
-    protected String id;
+    @XmlAttribute(name = "ocdref", required = true)
+    protected String ocdref;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
-     * Gets the value of the ad property.
+     * Gets the value of the attribute property.
      *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the ad property.
+     * This is why there is not a <CODE>set</CODE> method for the attribute property.
      *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getAD().add(newItem);
+     *    getAttribute().add(newItem);
      * </pre>
      *
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Tad }
+     * {@link TattributeImpl }
      *
      *
      */
-    public List<Tad> getAD() {
-        if (ad == null) {
-            ad = new ArrayList<Tad>();
+    public List<Tattribute> getAttribute() {
+        if (attribute == null) {
+            attribute = new ArrayList<TattributeImpl>();
         }
-        return new ArrayList<Tad>(this.ad);
-    }
-
-    /**
-     * Gets the value of the icon property.
-     *
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the icon property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getIcon().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Ticon }
-     *
-     *
-     */
-    public List<Ticon> getIcon() {
-        if (icon == null) {
-            icon = new ArrayList<Ticon>();
-        }
-        return new ArrayList<Ticon>(this.icon);
+        return new ArrayList<Tattribute>(this.attribute);
     }
 
     /**
@@ -175,75 +138,27 @@ public class Tocd {
     }
 
     /**
-     * Gets the value of the name property.
+     * Gets the value of the ocdref property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public String getName() {
-        return name;
+    public String getOcdref() {
+        return ocdref;
     }
 
     /**
-     * Sets the value of the name property.
+     * Sets the value of the ocdref property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the description property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets the value of the description property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    /**
-     * Gets the value of the id property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setId(String value) {
-        this.id = value;
+    public void setOcdref(String value) {
+        this.ocdref = value;
     }
 
     /**

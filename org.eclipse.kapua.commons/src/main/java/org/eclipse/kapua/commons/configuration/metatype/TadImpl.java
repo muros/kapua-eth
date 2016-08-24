@@ -35,6 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.kapua.model.config.metatype.Tad;
+import org.eclipse.kapua.model.config.metatype.Toption;
+import org.eclipse.kapua.model.config.metatype.Tscalar;
 import org.w3c.dom.Element;
 
 
@@ -74,9 +77,9 @@ import org.w3c.dom.Element;
     "option",
     "any"
 })
-public class Tad {
+public class TadImpl implements Tad {
     @XmlElement(name = "Option", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<Toption> option;
+    protected List<ToptionImpl> option;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
     @XmlAttribute(name = "name")
@@ -86,7 +89,7 @@ public class Tad {
     @XmlAttribute(name = "id", required = true)
     protected String id;
     @XmlAttribute(name = "type", required = true)
-    protected Tscalar type;
+    protected TscalarImpl type;
     @XmlAttribute(name = "cardinality")
     protected Integer cardinality;
     @XmlAttribute(name = "min")
@@ -118,13 +121,13 @@ public class Tad {
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Toption }
+     * {@link ToptionImpl }
      *
      *
      */
     public List<Toption> getOption() {
         if (option == null) {
-            option = new ArrayList<Toption>();
+            option = new ArrayList<ToptionImpl>();
         }
         return new ArrayList<Toption>(this.option);
     }
@@ -236,10 +239,10 @@ public class Tad {
      *
      * @return
      *     possible object is
-     *     {@link Tscalar }
+     *     {@link TscalarImpl }
      *
      */
-    public Tscalar getType() {
+    public TscalarImpl getType() {
         return type;
     }
 
@@ -248,11 +251,11 @@ public class Tad {
      *
      * @param value
      *     allowed object is
-     *     {@link Tscalar }
+     *     {@link TscalarImpl }
      *
      */
     public void setType(Tscalar value) {
-        this.type = value;
+        this.type = (TscalarImpl)value;
     }
 
     /**

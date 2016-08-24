@@ -12,10 +12,11 @@ public class ServiceConfigDAO extends ServiceDAO
             throws KapuaException
         {
             //
-            // Create User
+            // Create service configuration
             ServiceConfigImpl serviceConfigImpl = new ServiceConfigImpl(serviceConfigCreator.getScopeId());
 
             serviceConfigImpl.setPid(serviceConfigCreator.getPid());
+            serviceConfigImpl.setConfigurations(serviceConfigCreator.getConfigurations());
 
             return ServiceDAO.create(em, serviceConfigImpl);
         }
@@ -24,7 +25,7 @@ public class ServiceConfigDAO extends ServiceDAO
             throws KapuaException
         {
             //
-            // Update user
+            // Update service configuration
             ServiceConfigImpl serviceConfigImpl = (ServiceConfigImpl) serviceConfig;
 
             return ServiceDAO.update(em, ServiceConfigImpl.class, serviceConfigImpl);

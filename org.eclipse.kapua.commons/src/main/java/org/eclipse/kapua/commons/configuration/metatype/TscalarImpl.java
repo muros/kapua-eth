@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+import org.eclipse.kapua.model.config.metatype.Tscalar;
+
 
 /**
  * <p>Java class for Tscalar.
@@ -50,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlEnum
 @XmlType(name = "Tscalar")
-public enum Tscalar {
+public enum TscalarImpl implements Tscalar {
     @XmlEnumValue("String")
     STRING("String"),
     @XmlEnumValue("Long")
@@ -73,16 +75,17 @@ public enum Tscalar {
     PASSWORD("Password");
     private final String value;
 
-    Tscalar(String v) {
+    TscalarImpl(String v) {
         value = v;
     }
 
+    @Override
     public String value() {
         return value;
     }
 
-    public static Tscalar fromValue(String v) {
-        for (Tscalar c: Tscalar.values()) {
+    public static TscalarImpl fromValue(String v) {
+        for (TscalarImpl c: TscalarImpl.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

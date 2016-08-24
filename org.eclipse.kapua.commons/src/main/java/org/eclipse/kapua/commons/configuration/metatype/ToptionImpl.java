@@ -30,32 +30,28 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyAttribute;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.kapua.model.config.metatype.Toption;
 import org.w3c.dom.Element;
 
 
 /**
- * <p>Java class for Tdesignate complex type.
+ * <p>Java class for Toption complex type.
  *
  * <p>The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
- * &lt;complexType name="Tdesignate">
+ * &lt;complexType name="Toption">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Object" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tobject"/>
  *         &lt;any processContents='lax' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="pid" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="factoryPid" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="bundle" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="optional" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
- *       &lt;attribute name="merge" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
+ *       &lt;attribute name="label" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="value" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;anyAttribute/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -64,53 +60,20 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="Designate", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name="Option", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tdesignate", propOrder = {
-    "object",
+@XmlType(name = "Toption", propOrder = {
     "any"
 })
-public class Tdesignate {
-    @XmlElement(name = "Object", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
-    protected Tobject object;
+public class ToptionImpl implements Toption {
     @XmlAnyElement(lax = true)
     protected List<Object> any;
-    @XmlAttribute(name = "pid")
-    protected String pid;
-    @XmlAttribute(name = "factoryPid")
-    protected String factoryPid;
-    @XmlAttribute(name = "bundle")
-    protected String bundle;
-    @XmlAttribute(name = "optional")
-    protected Boolean optional;
-    @XmlAttribute(name = "merge")
-    protected Boolean merge;
+    @XmlAttribute(name = "label", required = true)
+    protected String label;
+    @XmlAttribute(name = "value", required = true)
+    protected String value;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
-
-    /**
-     * Gets the value of the object property.
-     *
-     * @return
-     *     possible object is
-     *     {@link Tobject }
-     *
-     */
-    public Tobject getObject() {
-        return object;
-    }
-
-    /**
-     * Sets the value of the object property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link Tobject }
-     *
-     */
-    public void setObject(Tobject value) {
-        this.object = value;
-    }
 
     /**
      * Gets the value of the any property.
@@ -143,131 +106,51 @@ public class Tdesignate {
     }
 
     /**
-     * Gets the value of the pid property.
+     * Gets the value of the label property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public String getPid() {
-        return pid;
+    public String getLabel() {
+        return label;
     }
 
     /**
-     * Sets the value of the pid property.
+     * Sets the value of the label property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setPid(String value) {
-        this.pid = value;
+    public void setLabel(String value) {
+        this.label = value;
     }
 
     /**
-     * Gets the value of the factoryPid property.
+     * Gets the value of the value property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public String getFactoryPid() {
-        return factoryPid;
+    public String getValue() {
+        return value;
     }
 
     /**
-     * Sets the value of the factoryPid property.
+     * Sets the value of the value property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setFactoryPid(String value) {
-        this.factoryPid = value;
-    }
-
-    /**
-     * Gets the value of the bundle property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getBundle() {
-        return bundle;
-    }
-
-    /**
-     * Sets the value of the bundle property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setBundle(String value) {
-        this.bundle = value;
-    }
-
-    /**
-     * Gets the value of the optional property.
-     *
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *
-     */
-    public boolean isOptional() {
-        if (optional == null) {
-            return false;
-        } else {
-            return optional;
-        }
-    }
-
-    /**
-     * Sets the value of the optional property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *
-     */
-    public void setOptional(Boolean value) {
-        this.optional = value;
-    }
-
-    /**
-     * Gets the value of the merge property.
-     *
-     * @return
-     *     possible object is
-     *     {@link Boolean }
-     *
-     */
-    public boolean isMerge() {
-        if (merge == null) {
-            return false;
-        } else {
-            return merge;
-        }
-    }
-
-    /**
-     * Sets the value of the merge property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link Boolean }
-     *
-     */
-    public void setMerge(Boolean value) {
-        this.merge = value;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     /**

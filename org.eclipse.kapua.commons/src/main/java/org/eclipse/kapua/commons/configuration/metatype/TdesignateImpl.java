@@ -35,24 +35,29 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
+import org.eclipse.kapua.model.config.metatype.Tdesignate;
+import org.eclipse.kapua.model.config.metatype.Tobject;
 import org.w3c.dom.Element;
 
 
 /**
- * <p>Java class for Tattribute complex type.
+ * <p>Java class for Tdesignate complex type.
  *
  * <p>The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
- * &lt;complexType name="Tattribute">
+ * &lt;complexType name="Tdesignate">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Value" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
- *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="Object" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tobject"/>
+ *         &lt;any processContents='lax' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="adref" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="content" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="pid" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="factoryPid" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="bundle" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="optional" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
+ *       &lt;attribute name="merge" type="{http://www.w3.org/2001/XMLSchema}boolean" default="false" />
  *       &lt;anyAttribute/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -61,51 +66,52 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="Attribute", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name="Designate", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tattribute", propOrder = {
-    "value",
+@XmlType(name = "Tdesignate", propOrder = {
+    "object",
     "any"
 })
-public class Tattribute {
-    @XmlElement(name = "Value", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<String> value;
+public class TdesignateImpl implements Tdesignate {
+    @XmlElement(name = "Object", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
+    protected TobjectImpl object;
     @XmlAnyElement(lax = true)
     protected List<Object> any;
-    @XmlAttribute(name = "adref", required = true)
-    protected String adref;
-    @XmlAttribute(name = "content")
-    protected String content;
+    @XmlAttribute(name = "pid")
+    protected String pid;
+    @XmlAttribute(name = "factoryPid")
+    protected String factoryPid;
+    @XmlAttribute(name = "bundle")
+    protected String bundle;
+    @XmlAttribute(name = "optional")
+    protected Boolean optional;
+    @XmlAttribute(name = "merge")
+    protected Boolean merge;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
-     * Gets the value of the value property.
+     * Gets the value of the object property.
      *
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the value property.
-     *
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getValue().add(newItem);
-     * </pre>
-     *
-     *
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link String }
-     *
+     * @return
+     *     possible object is
+     *     {@link TobjectImpl }
      *
      */
-    public List<String> getValue() {
-        if (value == null) {
-            value = new ArrayList<String>();
-        }
-        return this.value;
+    public Tobject getObject() {
+        return object;
+    }
+
+    /**
+     * Sets the value of the object property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link TobjectImpl }
+     *
+     */
+    public void setObject(Tobject value) {
+        this.object = (TobjectImpl)value;
     }
 
     /**
@@ -139,51 +145,131 @@ public class Tattribute {
     }
 
     /**
-     * Gets the value of the adref property.
+     * Gets the value of the pid property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public String getAdref() {
-        return adref;
+    public String getPid() {
+        return pid;
     }
 
     /**
-     * Sets the value of the adref property.
+     * Sets the value of the pid property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setAdref(String value) {
-        this.adref = value;
+    public void setPid(String value) {
+        this.pid = value;
     }
 
     /**
-     * Gets the value of the content property.
+     * Gets the value of the factoryPid property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public String getContent() {
-        return content;
+    public String getFactoryPid() {
+        return factoryPid;
     }
 
     /**
-     * Sets the value of the content property.
+     * Sets the value of the factoryPid property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setContent(String value) {
-        this.content = value;
+    public void setFactoryPid(String value) {
+        this.factoryPid = value;
+    }
+
+    /**
+     * Gets the value of the bundle property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getBundle() {
+        return bundle;
+    }
+
+    /**
+     * Sets the value of the bundle property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setBundle(String value) {
+        this.bundle = value;
+    }
+
+    /**
+     * Gets the value of the optional property.
+     *
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *
+     */
+    public boolean isOptional() {
+        if (optional == null) {
+            return false;
+        } else {
+            return optional;
+        }
+    }
+
+    /**
+     * Sets the value of the optional property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *
+     */
+    public void setOptional(Boolean value) {
+        this.optional = value;
+    }
+
+    /**
+     * Gets the value of the merge property.
+     *
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *
+     */
+    public boolean isMerge() {
+        if (merge == null) {
+            return false;
+        } else {
+            return merge;
+        }
+    }
+
+    /**
+     * Sets the value of the merge property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *
+     */
+    public void setMerge(Boolean value) {
+        this.merge = value;
     }
 
     /**

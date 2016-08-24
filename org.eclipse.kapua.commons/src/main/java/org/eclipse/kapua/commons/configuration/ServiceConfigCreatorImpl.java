@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.configuration;
 
+import java.util.Properties;
+
 import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
@@ -25,19 +27,35 @@ public class ServiceConfigCreatorImpl extends AbstractKapuaEntityCreator<Service
     @XmlElement(name = "pid")
     private String pid;
 
+    @XmlElement(name = "configurations")
+    private Properties configurations;
+    
     protected ServiceConfigCreatorImpl(KapuaId scopeId)
     {
         super(scopeId);
-        // TODO Auto-generated constructor stub
     }
 
+    @Override
     public String getPid()
     {
         return pid;
     }
 
+    @Override
     public void setPid(String pid)
     {
         this.pid = pid;
+    }
+
+    @Override
+    public Properties getConfigurations()
+    {
+        return this.configurations;
+    }
+
+    @Override
+    public void setConfigurations(Properties configurations)
+    {
+        this.configurations = configurations;
     }
 }

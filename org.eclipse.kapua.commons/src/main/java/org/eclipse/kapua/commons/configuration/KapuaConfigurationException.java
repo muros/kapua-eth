@@ -1,0 +1,59 @@
+package org.eclipse.kapua.commons.configuration;
+
+import org.eclipse.kapua.KapuaException;
+
+public class KapuaConfigurationException extends KapuaException 
+{
+    private static final String KAPUA_ERROR_MESSAGES  = "kapua-configuration-service-error-messages";
+
+    /**
+     * Builds a new KapuaException instance based on the supplied KapuaErrorCode.
+     * 
+     * @param code
+     * @param t
+     * @param arguments
+     */
+    public KapuaConfigurationException(KapuaConfigurationErrorCodes code) {
+        super(code);
+    }
+
+    /**
+     * Builds a new KapuaException instance based on the supplied KapuaErrorCode 
+     * and optional arguments for the associated exception message.
+     * 
+     * @param code
+     * @param arguments
+     */
+    public KapuaConfigurationException(KapuaConfigurationErrorCodes code, Object... arguments) {
+        super(code, arguments);
+    }
+
+    /**
+     * Builds a new KapuaAccountException instance based on the supplied KapuaAccountErrorCode, 
+     * an Throwable cause, and optional arguments for the associated exception message.
+     * 
+     * @param code
+     * @param t
+     * @param arguments
+     */
+    public KapuaConfigurationException(KapuaConfigurationErrorCodes code, Throwable cause, Object... arguments) {
+        super(code, cause, arguments);
+    }
+
+    /**
+     * Factory method to build an KapuaAccountException with the KapuaAccountErrorCode.INTERNAL_ERROR, 
+     * and optional arguments for the associated exception message.
+     * 
+     * @param cause
+     * @param message
+     * @return
+     */
+    public static KapuaConfigurationException internalError(String message) {
+        return new KapuaConfigurationException(KapuaConfigurationErrorCodes.INTERNAL_ERROR, null, message);
+    }
+
+    @Override
+    protected String getKapuaErrorMessagesBundle() {
+        return KAPUA_ERROR_MESSAGES; 
+    }
+}
