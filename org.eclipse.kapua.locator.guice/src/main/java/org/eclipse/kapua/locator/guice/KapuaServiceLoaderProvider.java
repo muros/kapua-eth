@@ -23,13 +23,24 @@ import com.google.inject.Provider;
 
 public class KapuaServiceLoaderProvider<S extends KapuaService> implements Provider<S> 
 {
-	private Class<S> serviceClass;
-	private S        service;
-	
-	public KapuaServiceLoaderProvider(Class<S> serviceClass) {
+	private final Class<S> serviceClass;
+	private final S service;
+
+	public KapuaServiceLoaderProvider(Class<S> serviceClass, S service) {
 		this.serviceClass = serviceClass;
+		this.service = service;
 	}
-	
+
+	public KapuaServiceLoaderProvider(Class<S> serviceClass) {
+		this(serviceClass, null);
+	}
+
+	public KapuaServiceLoaderProvider(S service) {
+		this(null, service);
+	}
+
+	// Implemented operations
+
 	public synchronized S get()
 	{		
 		if (service != null) { 
@@ -50,4 +61,5 @@ public class KapuaServiceLoaderProvider<S extends KapuaService> implements Provi
 
 		return serviceCandidates.get(0);
 	}
+
 }
