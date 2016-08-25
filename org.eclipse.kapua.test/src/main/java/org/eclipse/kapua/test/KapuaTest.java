@@ -24,42 +24,48 @@ import org.eclipse.kapua.service.authentication.AuthenticationService;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 
 public class KapuaTest extends Assert
 {
+
+    private static boolean isInitialized;
+
     protected static Random       random  = new Random();
     protected static KapuaLocator locator = KapuaLocator.getInstance();
 
     protected static KapuaId      adminUserId;
     protected static KapuaId      adminScopeId;
 
-    @BeforeClass
-    public static void setUp()
+    @Before
+    public void setUp()
     {
-        try {
-            //
-            // Login
-            String username = "kapua-sys";
-            String password = "We!come12345";
+        if(!isInitialized) {
+            try {
+                //
+                // Login
+                String username = "kapua-sys";
+                String password = "We!come12345";
 
-            AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
-            UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
-            authenticationService.login(credentialsFactory.newInstance(username, password.toCharArray()));
+                AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
+                UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
+                authenticationService.login(credentialsFactory.newInstance(username, password.toCharArray()));
 
-            //
-            // Get current user Id
-            adminUserId = KapuaSecurityUtils.getSession().getUserId();
-            adminScopeId = KapuaSecurityUtils.getSession().getScopeId();
-        }
-        catch (KapuaException exc) {
-            exc.printStackTrace();
+                //
+                // Get current user Id
+                adminUserId = KapuaSecurityUtils.getSession().getUserId();
+                adminScopeId = KapuaSecurityUtils.getSession().getScopeId();
+            } catch (KapuaException exc) {
+                exc.printStackTrace();
+            }
+            isInitialized = true;
         }
     }
 
     @AfterClass
     public static void tearDown()
     {
+        isInitialized = false;
         try {
             KapuaLocator locator = KapuaLocator.getInstance();
             AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
