@@ -33,6 +33,9 @@ public class KapuaModule extends AbstractModule
 	private static final Logger s_logger = LoggerFactory.getLogger(KapuaModule.class);
 	
 	private static final String SERVICE_RESOURCE = "locator.services";
+
+	private static final String SERVICE_TEST_RESOURCE = "locator.test.services";
+
 	private static final String COMMENT_PREFIX   = "#";
 	
 	
@@ -42,7 +45,7 @@ public class KapuaModule extends AbstractModule
 	{
 		BufferedReader br = null;
 		try {
-			List<URL> servicesDefinitions = ImmutableList.of(getClass().getClassLoader().getResource(SERVICE_RESOURCE), getClass().getClassLoader().getResource("locator.test.services"));
+			List<URL> servicesDefinitions = ImmutableList.of(getClass().getClassLoader().getResource(SERVICE_RESOURCE), getClass().getClassLoader().getResource(SERVICE_TEST_RESOURCE));
 
 			for (URL servicesUrl : servicesDefinitions) {
 				String services = ResourceUtils.readResource(servicesUrl);
@@ -55,16 +58,15 @@ public class KapuaModule extends AbstractModule
 					if (trimmedServiceLine.length() == 0 || trimmedServiceLine.startsWith(COMMENT_PREFIX)) {
 						continue;
 					}
-					String serviceClassName = serviceName.substring(0, trimmedServiceLine.indexOf(','));
 
 					try {
-						Class<?> kapuaObject = Class.forName(serviceClassName);
+						Class<?> kapuaObject = Class.forName(trimmedServiceLine);
 						if (KapuaService.class.isAssignableFrom(kapuaObject)) {
 							bind(kapuaObject).toProvider(new KapuaServiceLoaderProvider(kapuaObject));
-							s_logger.info("Bound Kapua service {}", serviceClassName);
+							s_logger.info("Bound Kapua service {}", trimmedServiceLine);
 						} else if (KapuaObjectFactory.class.isAssignableFrom(kapuaObject)) {
 							bind(kapuaObject).toProvider(new KapuaFactoryLoaderProvider(kapuaObject));
-							s_logger.info("Bound Kapua factory {}", serviceClassName);
+							s_logger.info("Bound Kapua factory {}", trimmedServiceLine);
 						}
 					} catch (Exception e) {
 						s_logger.error("Cannot load Kapua service/factory " + trimmedServiceLine, e);
@@ -81,4 +83,5 @@ public class KapuaModule extends AbstractModule
 			if (br != null) try { br.close(); } catch (Exception e) {}
 		}
 	}
+
 }

@@ -10,4 +10,4 @@
 #       Red Hat - initial implementation
 #################################################################################
 
-org.eclipse.kapua.locator.internal.GuiceLocatorImplTest$MyTestableService,ServiceLoaderProvider
+org.eclipse.kapua.locator.internal.GuiceLocatorImplTest$MyTestableService
