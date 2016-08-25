@@ -15,7 +15,9 @@ package org.eclipse.kapua.locator.guice;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import org.eclipse.kapua.KapuaErrorCodes;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.commons.util.ResourceUtils;
@@ -40,34 +42,33 @@ public class KapuaModule extends AbstractModule
 	{
 		BufferedReader br = null;
 		try {
-			
-			URL servicesUrl = ResourceUtils.getResource(SERVICE_RESOURCE);
-			String services = ResourceUtils.readResource(servicesUrl);
-			br = new BufferedReader( new StringReader(services));		
-			
-			String trimmedServiceLine = null;
-			for (String serviceName = br.readLine(); serviceName != null; serviceName = br.readLine()) {
-				
-				trimmedServiceLine = serviceName.trim();
-				if (trimmedServiceLine.length() == 0 || trimmedServiceLine.startsWith(COMMENT_PREFIX)) {
-					continue;
-				}
-				String serviceClassName = serviceName.substring(0, trimmedServiceLine.indexOf(','));
+			List<URL> servicesDefinitions = ImmutableList.of(getClass().getClassLoader().getResource(SERVICE_RESOURCE), getClass().getClassLoader().getResource("locator.test.services"));
 
+			for (URL servicesUrl : servicesDefinitions) {
+				String services = ResourceUtils.readResource(servicesUrl);
+				br = new BufferedReader(new StringReader(services));
 
-				try {
-					Class<?> kapuaObject = Class.forName(serviceClassName);
-					if (KapuaService.class.isAssignableFrom(kapuaObject)) {
-						bind(kapuaObject).toProvider(new KapuaServiceLoaderProvider(kapuaObject));
-						s_logger.info("Bound Kapua service {}", serviceClassName);
+				String trimmedServiceLine = null;
+				for (String serviceName = br.readLine(); serviceName != null; serviceName = br.readLine()) {
+
+					trimmedServiceLine = serviceName.trim();
+					if (trimmedServiceLine.length() == 0 || trimmedServiceLine.startsWith(COMMENT_PREFIX)) {
+						continue;
 					}
-					else if (KapuaObjectFactory.class.isAssignableFrom(kapuaObject)) {
-						bind(kapuaObject).toProvider(new KapuaFactoryLoaderProvider(kapuaObject));
-						s_logger.info("Bound Kapua factory {}", serviceClassName);
+					String serviceClassName = serviceName.substring(0, trimmedServiceLine.indexOf(','));
+
+					try {
+						Class<?> kapuaObject = Class.forName(serviceClassName);
+						if (KapuaService.class.isAssignableFrom(kapuaObject)) {
+							bind(kapuaObject).toProvider(new KapuaServiceLoaderProvider(kapuaObject));
+							s_logger.info("Bound Kapua service {}", serviceClassName);
+						} else if (KapuaObjectFactory.class.isAssignableFrom(kapuaObject)) {
+							bind(kapuaObject).toProvider(new KapuaFactoryLoaderProvider(kapuaObject));
+							s_logger.info("Bound Kapua factory {}", serviceClassName);
+						}
+					} catch (Exception e) {
+						s_logger.error("Cannot load Kapua service/factory " + trimmedServiceLine, e);
 					}
-				}
-				catch (Exception e) {
-					s_logger.error("Cannot load Kapua service/factory "+trimmedServiceLine, e);
 				}
 			}
 		}
