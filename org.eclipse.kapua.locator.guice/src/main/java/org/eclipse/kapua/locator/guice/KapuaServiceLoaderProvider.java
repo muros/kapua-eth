@@ -20,11 +20,18 @@ import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.service.KapuaService;
 
 import com.google.inject.Provider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class KapuaServiceLoaderProvider<S extends KapuaService> implements Provider<S> 
-{
+public class KapuaServiceLoaderProvider<S extends KapuaService> implements Provider<S> {
+
+	private final static Logger LOG = LoggerFactory.getLogger(KapuaServiceLoaderProvider.class);
+
 	private final Class<S> serviceClass;
+
 	private final S service;
+
+	// Constructors
 
 	public KapuaServiceLoaderProvider(Class<S> serviceClass, S service) {
 		this.serviceClass = serviceClass;
@@ -43,7 +50,8 @@ public class KapuaServiceLoaderProvider<S extends KapuaService> implements Provi
 
 	public synchronized S get()
 	{		
-		if (service != null) { 
+		if (service != null) {
+			LOG.debug("Provider has been configured to return service instance: {}", service);
 			return service;
 		}
 
@@ -54,6 +62,7 @@ public class KapuaServiceLoaderProvider<S extends KapuaService> implements Provi
 		}  else if(serviceCandidates.size() > 1) {
 			for (S service : serviceCandidates) {
 				if (service.getClass().isAnnotationPresent(TestService.class)) {
+					LOG.debug("Found test service implementtation: {}", service);
 					return service;
 				}
 			}
