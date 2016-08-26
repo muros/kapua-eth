@@ -10,8 +10,32 @@
 #     Eurotech - initial API and implementation
 #
 #
-org.eclipse.kapua.service.user.UserService
+org.eclipse.kapua.service.account.AccountFactory
+org.eclipse.kapua.service.account.AccountService
+org.eclipse.kapua.service.authentication.AuthenticationService
+org.eclipse.kapua.service.authentication.credential.CredentialFactory
+org.eclipse.kapua.service.authentication.credential.CredentialService
+org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory
+org.eclipse.kapua.service.authorization.AuthorizationService
+org.eclipse.kapua.service.authorization.permission.PermissionFactory
+org.eclipse.kapua.service.authorization.role.RoleService
+org.eclipse.kapua.service.authorization.role.RoleFactory
+org.eclipse.kapua.service.authorization.user.permission.UserPermissionService
+org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory
+org.eclipse.kapua.service.authorization.user.role.UserRolesFactory
+org.eclipse.kapua.service.authorization.user.role.UserRolesService
+org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider
+org.eclipse.kapua.service.datastore.DatastoreObjectFactory
+org.eclipse.kapua.service.datastore.MessageStoreService
+org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService
+org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory
+org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService
+org.eclipse.kapua.service.device.registry.DeviceRegistryService
+org.eclipse.kapua.service.device.registry.event.DeviceEventFactory
+org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService
+org.eclipse.kapua.service.metric.MetricsService
 org.eclipse.kapua.service.user.UserFactory
+org.eclipse.kapua.service.user.UserService
 
 # We need to comment out this line, as Guice injector doesn't support multiple provider at this point
 # org.eclipse.kapua.service.user.UserFactory,ProxyOsgiServiceLoaderProvider
