@@ -13,6 +13,7 @@
 
         <!-- Dependencies versions -->
         <commons-configuration.version>1.9</commons-configuration.version>
+        <eclipselink.version>2.6.3</eclipselink.version>
         <guava.version>18.0</guava.version>
         <guice.version>4.1.0</guice.version>
         <javax-inject.version>1</javax-inject.version>
@@ -248,6 +249,11 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>eclipselink</artifactId>
+                <version>${eclipselink.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.mariadb.jdbc</groupId>
