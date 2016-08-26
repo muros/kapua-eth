@@ -6,6 +6,20 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
+
+  #change memory amount if needed. This configuration is valid for the virtual box provider
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 1024
+    v.cpus = 2
+  end
+
+  #share the kapua directory with the vagrant machine to allow the activemq broker to access to the kapua code (jars)
+  config.vm.synced_folder "~/dev/git/kapua", "/kapua",
+     owner: "vagrant",
+     group: "vagrant",
+     mount_options: ["dmode=775,fmode=664"]
+
+
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
@@ -91,6 +105,7 @@ Vagrant.configure("2") do |config|
      # update
      sudo apt-get update -y
 
+     #uncomment this section to have mariadb instead of m
      # install mariadb no password prompt
      sudo debconf-set-selections <<< 'mariadb-server-10.0 mysql-server/root_password password password'
      sudo debconf-set-selections <<< 'mariadb-server-10.0 mysql-server/root_password_again password password'
@@ -101,15 +116,23 @@ Vagrant.configure("2") do |config|
      # allow remote access (required to access from our private network host. Note that this is completely insecure if used in any other way)
      mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
-     mysql -u root -ppassword -e "CREATE DATABASE kapuadb DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;"
-     mysql -u root -ppassword -e "CREATE USER 'kapua'@'localhost' IDENTIFIED BY 'kapua'"
-     mysql -u root -ppassword -e "CREATE USER 'kapua'@'%' IDENTIFIED BY 'kapua'"
-     mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON kapuadb.* TO 'kapua'@'localhost';"
-     mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON kapuadb.* TO 'kapua'@'%';"
+     mysql -u root -ppassword -e "CREATE DATABASE kapuadb DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+          CREATE USER 'kapua'@'localhost' IDENTIFIED BY 'kapua';
+          GRANT ALL PRIVILEGES ON *.* TO 'kapua'@'localhost' WITH GRANT OPTION;
+          CREATE USER 'kapua'@'%' IDENTIFIED BY 'kapua';
+          GRANT ALL PRIVILEGES ON *.* TO 'kapua'@'%' WITH GRANT OPTION;
+          FLUSH PRIVILEGES;"
 
      # Maridb access to the external world
      sudo sed -i 's/127\.0\.0\.1/0\.0\.0\.0/' /etc/mysql//my.cnf
      sudo /etc/init.d/mysql restart
+
+     #H2 sql
+#     wget http://repo2.maven.org/maven2/com/h2database/h2/1.4.192/h2-1.4.192.jar;
+#     mv h2-1.4.192.jar lib/kapua/
+#     sudo chown -R vagrant /kapua
+     #start h2 sql db
+#     java -jar h2-1.4.192.jar -webAllowOthers -tcpAllowOthers -tcpPort 3306 -tcpIp localhost &
 
      # install oracle jdk 8
      sudo add-apt-repository -y ppa:webupd8team/java
@@ -123,11 +146,34 @@ Vagrant.configure("2") do |config|
      sudo wget http://archive.apache.org/dist/activemq/5.11.0/apache-activemq-5.11.0-bin.tar.gz -P /usr/local/activemq
      cd /usr/local/activemq
      sudo tar zxvf apache-activemq-5.11.0-bin.tar.gz
-     sudo chown -R vagrant apache-activemq-5.11.0
      sudo rm apache-activemq-5.11.0-bin.tar.gz
 
-     ### activemq post-install setup
+     ### configure activemq
      # Kapua jars and activemq.xml need to be added before starting the activemq instance...
+	   # config file
+	   cd apache-activemq-5.11.0
+	   rm conf/activemq.xml
+	   rm conf/log4j.properties
+	   ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/activemq.xml conf/activemq.xml
+	   ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/log4j.properties conf/log4j.properties
+     cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/*.sh .
+     chmod 555 update_kapua_jars.sh
+     chmod 555 start_broker.sh
+     echo 'remove old guava jars'
+     rm ./lib/optional/guava-*.*
+     # enable debug
+     sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
+     
+     ### activemq post-install setup
+     # change the owner and the group of activemq to vagrant
+     sudo chown -R vagrant ../apache-activemq-5.11.0
+     sudo chgrp -R vagrant ../apache-activemq-5.11.0
+
+     #database seeding (and create schema)
+     echo 'seedind database'
+     for name in $(find /kapua -name '*_drop.sql' | grep -Ev 'test|console|api'); do echo invoke drop sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+     for name in $(find /kapua -name '*_create.sql' | grep -Ev 'test|console|api'); do echo invoke create sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+     for name in $(find /kapua -name '*_seed.sql' | grep -Ev 'test|console|api'); do echo invoke seed sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
 
      # install Elasticsearch
      sudo mkdir -p /usr/local/elasticsearch

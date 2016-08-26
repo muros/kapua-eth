@@ -1,3 +1,15 @@
+IMPORTANT:
+the startup script for the vagrant machine creates symbolic links for all the dependencies needed by the broker so PLEASE RUN run the following modules build with the 
+	dependency:copy-dependencies
+maven goal
+1) broker.core 
+2) locator.guice
+
+replace the guice locator module implementation with your own (if you re using a different locator implementation)
+
+
+===========================================
+DRAFT (replaced by the vagrant machine)
 Broker activeMQ standalone without karaf
 
 download ActiveMQ 5.11.0 from http://activemq.apache.org/activemq-5110-release.html (direct link http://archive.apache.org/dist/activemq/5.11.0/apache-activemq-5.11.0-bin.tar.gz)
