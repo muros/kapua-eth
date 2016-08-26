@@ -6,19 +6,11 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-
-  #change memory amount if needed. This configuration is valid for the virtual box provider
-  config.vm.provider "virtualbox" do |v|
-    v.memory = 1024
-    v.cpus = 2
-  end
-
   #share the kapua directory with the vagrant machine to allow the activemq broker to access to the kapua code (jars)
   config.vm.synced_folder "~/dev/git/kapua", "/kapua",
      owner: "vagrant",
      group: "vagrant",
      mount_options: ["dmode=775,fmode=664"]
-
 
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
