@@ -67,6 +67,13 @@ Vagrant.configure("2") do |config|
   #
   # View the documentation for the provider you are using for more
   # information on available options.
+  config.vm.provider "virtualbox" do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = false
+  
+    # Customize the amount of memory on the VM:
+    vb.memory = "2048"
+  end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
   # such as FTP and Heroku are also available. See the documentation at
@@ -131,7 +138,16 @@ Vagrant.configure("2") do |config|
      sudo rm elasticsearch-2.3.4.tar.gz
 
      # elasticsearch post-install setup
-     /usr/local/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch -d --cluster.name kapua-datastore
+     
+     cd /usr/local/elasticsearch/elasticsearch-2.3.4/config
+     echo "" >> elasticsearch.yml
+     echo "#---------------------------" >> elasticsearch.yml
+     echo "network.host: 0.0.0.0" >> elasticsearch.yml
+     echo "#---------------------------" >> elasticsearch.yml
+     echo "" >> elasticsearch.yml
+     
+     # Elasticsearch 2.3.4 post install
+     su --login -c "/usr/local/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch -d --cluster.name kapua-datastore" vagrant
 
      #install tomcat8
      sudo mkdir -p /usr/local/tomcat
@@ -142,7 +158,8 @@ Vagrant.configure("2") do |config|
      sudo rm apache-tomcat-8.5.4.tar.gz
 
      # tomcat 8.5.4 post install
-     /usr/local/tomcat/apache-tomcat-8.5.4/bin/startup.sh
+     su --login -c "/usr/local/tomcat/apache-tomcat-8.5.4/bin/startup.sh" vagrant
+     
 
   SHELL
 end
