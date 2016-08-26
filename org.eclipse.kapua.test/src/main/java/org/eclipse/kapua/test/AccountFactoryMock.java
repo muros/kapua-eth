@@ -1,10 +1,12 @@
 package org.eclipse.kapua.test;
 
+import org.eclipse.kapua.locator.spi.TestService;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountQuery;
 
+@TestService
 public class AccountFactoryMock implements AccountFactory
 {
 

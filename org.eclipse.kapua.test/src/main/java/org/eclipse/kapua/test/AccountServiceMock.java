@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.locator.spi.TestService;
 import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
@@ -16,6 +17,7 @@ import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountService;
 
+@TestService
 public class AccountServiceMock implements AccountService
 {
     private AccountMock kapuaRootAccount;

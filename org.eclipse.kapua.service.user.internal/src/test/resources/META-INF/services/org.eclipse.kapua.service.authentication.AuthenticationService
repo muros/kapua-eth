@@ -9,4 +9,4 @@
 #  Contributors:
 #       Eurotech - initial API and implementation
 #################################################################################
-org.eclipse.kapua.service.datastore.internal.DatastoreLocatorTest
+org.eclipse.kapua.test.AuthenticationServiceMock

@@ -9,4 +9,4 @@
 #  Contributors:
 #       Eurotech - initial API and implementation
 #################################################################################
-org.eclipse.kapua.service.user.internal.UserLocatorTest
+org.eclipse.kapua.test.AuthenticationServiceMock

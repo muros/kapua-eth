@@ -29,6 +29,7 @@ import org.eclipse.kapua.service.datastore.model.Payload;
 import org.eclipse.kapua.service.datastore.model.Position;
 import org.eclipse.kapua.service.datastore.model.StorableId;
 import org.eclipse.kapua.test.KapuaTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,7 @@ public class MessageStoreServiceTest extends KapuaTest
     @SuppressWarnings("unused")
     private static final Logger   s_logger = LoggerFactory.getLogger(MessageStoreServiceTest.class);
     
+    @Ignore
     @Test
     public void testStore()
         throws Exception

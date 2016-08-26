@@ -1,12 +1,14 @@
 package org.eclipse.kapua.test;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.locator.spi.TestService;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.Permission;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.authorization.role.RolePermission;
 
+@TestService
 public class PermissionFactoryMock implements PermissionFactory
 {
 

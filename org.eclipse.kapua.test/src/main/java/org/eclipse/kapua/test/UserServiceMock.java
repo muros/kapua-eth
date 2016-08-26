@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.locator.spi.TestService;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.user.User;
@@ -14,6 +15,7 @@ import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserListResult;
 import org.eclipse.kapua.service.user.UserService;
 
+@TestService
 public class UserServiceMock implements UserService
 {
     private UserMock kapuaSysUser;
