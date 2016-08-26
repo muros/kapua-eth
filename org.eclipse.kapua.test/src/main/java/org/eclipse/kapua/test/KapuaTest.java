@@ -25,11 +25,14 @@ import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.eclipse.kapua.commons.setting.system.SystemSettingKey.DB_JDBC_CONNECTION_URL_RESOLVER;
 
-public class KapuaTest extends Assert
-{
+public class KapuaTest extends Assert {
+
+    private static final Logger LOG = LoggerFactory.getLogger(KapuaTest.class);
 
     private static boolean isInitialized;
 
@@ -40,9 +43,10 @@ public class KapuaTest extends Assert
     protected static KapuaId      adminScopeId;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
+        LOG.debug("Setting up test...");
         if(!isInitialized) {
+            LOG.debug("Kapua test context is not initialized. Initializing...");
             try {
                 //
                 // Login
@@ -67,6 +71,7 @@ public class KapuaTest extends Assert
     @AfterClass
     public static void tearDown()
     {
+        LOG.debug("Stopping Kapua test context.");
         isInitialized = false;
         try {
             KapuaLocator locator = KapuaLocator.getInstance();
