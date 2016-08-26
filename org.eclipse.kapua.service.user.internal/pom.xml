@@ -76,9 +76,9 @@
                                 <configuration>
                                     <autocommit>true</autocommit>
                                     <srcFiles>
-                                        <srcFile>src/main/sql/H2/usr_user_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/usr_user_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/usr_user_seed.sql</srcFile>
+                                        <srcFile>src/main/sql/usr_user_drop.sql</srcFile>
+                                        <srcFile>src/main/sql/usr_user_create.sql</srcFile>
+                                        <srcFile>src/main/sql/usr_user_seed.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>

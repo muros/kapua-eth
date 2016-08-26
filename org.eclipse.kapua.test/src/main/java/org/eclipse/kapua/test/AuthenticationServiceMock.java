@@ -17,7 +17,6 @@ public class AuthenticationServiceMock implements AuthenticationService
 
     public AuthenticationServiceMock()
     {
-        
     }
     
     @Override
