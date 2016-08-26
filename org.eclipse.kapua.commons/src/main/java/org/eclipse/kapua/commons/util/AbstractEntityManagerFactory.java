@@ -22,6 +22,7 @@ import javax.persistence.spi.PersistenceProvider;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.DefaultConfigurableJdbcConnectionUrlResolver;
+import org.eclipse.kapua.commons.jpa.H2JdbcConnectionUrlResolver;
 import org.eclipse.kapua.commons.jpa.JdbcConnectionUrlResolver;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
@@ -38,18 +39,25 @@ public abstract class AbstractEntityManagerFactory
     private static final Map<String, String> s_uniqueConstraints = new HashMap<>();
     private EntityManagerFactory             entityManagerFactory;
 
-    private final JdbcConnectionUrlResolver jdbcConnectionUrlResolver = new DefaultConfigurableJdbcConnectionUrlResolver();
+    private final JdbcConnectionUrlResolver jdbcConnectionUrlResolver;
 
     protected AbstractEntityManagerFactory(String persistenceUnitName,
                                            String datasourceName,
-                                           Map<String, String> uniqueConstraints)
-    {
+                                           Map<String, String> uniqueConstraints) {
+        SystemSetting config = SystemSetting.getInstance();
+
+        String connectionUrlResolverType = config.getString(SystemSettingKey.DB_JDBC_CONNECTION_URL_RESOLVER, "DEFAULT");
+        if(connectionUrlResolverType.equals("DEFAULT")) {
+            jdbcConnectionUrlResolver = new DefaultConfigurableJdbcConnectionUrlResolver();
+        } else if (connectionUrlResolverType.equals("H2")) {
+            jdbcConnectionUrlResolver = new H2JdbcConnectionUrlResolver();
+        } else {
+            throw new IllegalArgumentException("Unknown JDBC connection URL resolver type: " + connectionUrlResolverType);
+        }
+
         //
         // Initialize the EntityManagerFactory
         try {
-            SystemSetting config = SystemSetting.getInstance();
-
-            //
             // JPA configuration overrides
             Map<String, Object> configOverrides = new HashMap<String, Object>();
             configOverrides.put("eclipselink.connection-pool.default.url", jdbcConnectionUrlResolver.connectionUrl());

@@ -25,6 +25,8 @@ public enum SystemSettingKey implements SettingKey
 
     CHAR_ENCODING("character.encoding"),
 
+    DB_JDBC_CONNECTION_URL_RESOLVER("commons.db.jdbcConnectionUrlResolver"),
+
     DB_NAME("commons.db.name"),
     DB_USERNAME("commons.db.username"),
     DB_PASSWORD("commons.db.password"),
