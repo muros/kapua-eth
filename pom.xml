@@ -16,7 +16,6 @@
         <eclipselink.version>2.6.3</eclipselink.version>
         <guava.version>18.0</guava.version>
         <guice.version>4.1.0</guice.version>
-        <javax-inject.version>1</javax-inject.version>
         <junit.version>4.11</junit.version>
         <mariadb.version>1.4.6</mariadb.version>
         <slf4j.version>1.7.2</slf4j.version>
@@ -239,11 +238,6 @@
                 <groupId>commons-configuration</groupId>
                 <artifactId>commons-configuration</artifactId>
                 <version>${commons-configuration.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.inject</groupId>
-                <artifactId>javax.inject</artifactId>
-                <version>${javax-inject.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
