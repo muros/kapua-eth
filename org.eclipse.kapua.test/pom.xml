@@ -49,12 +49,16 @@
             <artifactId>org.eclipse.kapua.commons</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-        
-        <!-- Testing dependencies -->
+
+        <!-- External dependencies -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-        </dependency>        
+        </dependency>
 
     </dependencies>
 </project>

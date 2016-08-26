@@ -16,7 +16,7 @@ public class H2JdbcConnectionUrlResolver implements JdbcConnectionUrlResolver {
 
     @Override
     public String connectionUrl() {
-        return "jdbc:h2:tcp://localhost/mem:db1;MODE=MySQL";
+        return "jdbc:h2:mem:kapua;MODE=MySQL";
     }
 
 }

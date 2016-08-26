@@ -26,6 +26,8 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 
+import static org.eclipse.kapua.commons.setting.system.SystemSettingKey.DB_JDBC_CONNECTION_URL_RESOLVER;
+
 public class KapuaTest extends Assert
 {
 
@@ -103,4 +105,9 @@ public class KapuaTest extends Assert
     {
         return RandomStringUtils.random(chars, 0, 0, letters, numbers, null, random);
     }
+
+    protected static void enableH2Connection() {
+        System.setProperty(DB_JDBC_CONNECTION_URL_RESOLVER.key(), "H2");
+    }
+
 }
