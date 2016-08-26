@@ -9,4 +9,4 @@
 #  Contributors:
 #       Eurotech - initial API and implementation
 #################################################################################
-org.eclipse.kapua.service.authentication.shiro.AuthShiroLocatorTest
+org.eclipse.kapua.test.UserFactoryMock
