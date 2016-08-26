@@ -25,6 +25,7 @@ import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.account.Organization;
 import org.eclipse.kapua.test.KapuaTest;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -37,6 +38,11 @@ public class AccountServiceTest extends KapuaTest
 {
     @SuppressWarnings("unused")
     private static final Logger s_logger = LoggerFactory.getLogger(AccountServiceTest.class);
+
+    @BeforeClass
+    public static void beforeClass() {
+        enableH2Connection();
+    }
 
     @Ignore
     @Test
