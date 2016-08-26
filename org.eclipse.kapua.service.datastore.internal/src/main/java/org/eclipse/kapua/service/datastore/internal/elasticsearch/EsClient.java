@@ -46,7 +46,7 @@ public class EsClient {
 	        if (nodeParts.length > 1)
 	            esPort = nodeParts[1];
 	        
-			client = EsUtils.getEsClient(esHost, Integer.parseInt(esPort));
+			client = EsUtils.getEsClient(esHost, Integer.parseInt(esPort), config.getString(DatastoreSettingKey.ELASTICSEARCH_CLUSTER));
 		}
 		return client;
 	}

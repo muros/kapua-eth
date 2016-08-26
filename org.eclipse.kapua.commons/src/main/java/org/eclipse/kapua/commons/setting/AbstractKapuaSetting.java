@@ -70,10 +70,11 @@ public abstract class AbstractKapuaSetting<K extends SettingKey>
     {
         Map<String, V> map = new HashMap<String, V>();
         Configuration subsetConfig = config.subset(prefixKey.key());
+        DataConfiguration subsetDataConfig = new DataConfiguration(subsetConfig);
         for (Iterator<String> it = subsetConfig.getKeys(); it.hasNext();) {
             String key = it.next();
             if (Pattern.matches(regex, key)) {
-                map.put(key, ((DataConfiguration) subsetConfig).get(valueType, key));
+                map.put(key, subsetDataConfig.get(valueType, key));
             }
         }
         return map;
@@ -83,9 +84,10 @@ public abstract class AbstractKapuaSetting<K extends SettingKey>
     {
         Map<String, V> map = new HashMap<String, V>();
         Configuration subsetConfig = config.subset(prefixKey.key());
+        DataConfiguration subsetDataConfig = new DataConfiguration(subsetConfig);
         for (Iterator<String> it = subsetConfig.getKeys(); it.hasNext();) {
             String key = it.next();
-            map.put(key, ((DataConfiguration) subsetConfig).get(valueType, key));
+            map.put(key, subsetDataConfig.get(valueType, key));
         }
         return map;
     }
