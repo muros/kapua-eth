@@ -96,7 +96,7 @@ public abstract class AbstractEntityManagerFactory
      * 
      * @since 1.0.0
      */
-    protected EntityManager createEntityManager()
+    public EntityManager createEntityManager()
         throws KapuaException
     {
         return new EntityManager(entityManagerFactory.createEntityManager());

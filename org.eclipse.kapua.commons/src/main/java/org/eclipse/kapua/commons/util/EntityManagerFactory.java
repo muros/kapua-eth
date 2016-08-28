@@ -9,15 +9,11 @@
  * Contributors:
  *     Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.commons.configuration;
+package org.eclipse.kapua.commons.util;
 
-import org.eclipse.kapua.KapuaErrorCode;
+import org.eclipse.kapua.KapuaException;
 
-public enum KapuaConfigurationErrorCodes implements KapuaErrorCode {
-    
-    INTERNAL_ERROR,
-    ILLEGAL_ARGUMENT,
-    OPERATION_NOT_ALLOWED,
-    ATTRIBUTE_INVALID,
-    REQUIRED_ATTRIBUTE_MISSING;
+public interface EntityManagerFactory
+{
+    public EntityManager createEntityManager() throws KapuaException;
 }

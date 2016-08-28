@@ -59,8 +59,7 @@ public class AssetInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
 
     public AssetInfoStoreServiceImpl()
     {
-        // TODO pass a correct pid and a correct domain
-        super("PID", DatastoreDomain.DATASTORE);
+        super(AssetInfoStoreService.class.getName(), DatastoreDomain.DATASTORE, DatastoreEntityManagerFactory.getInstance());
 
         KapuaLocator locator = KapuaLocator.getInstance();
         accountService = locator.getService(AccountService.class);

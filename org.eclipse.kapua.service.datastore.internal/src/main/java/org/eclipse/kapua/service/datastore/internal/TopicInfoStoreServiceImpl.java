@@ -64,8 +64,7 @@ public class TopicInfoStoreServiceImpl extends AbstractKapuaConfigurableService 
 
     public TopicInfoStoreServiceImpl()
     {
-        // TODO pass a correct pid and a correct domain
-        super("PID", DatastoreDomain.DATASTORE);
+        super(TopicInfoStoreService.class.getName(), DatastoreDomain.DATASTORE, DatastoreEntityManagerFactory.getInstance());
 
         KapuaLocator locator = KapuaLocator.getInstance();
         accountService = locator.getService(AccountService.class);

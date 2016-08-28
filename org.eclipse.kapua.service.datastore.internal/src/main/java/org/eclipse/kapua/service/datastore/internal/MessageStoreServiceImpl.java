@@ -105,8 +105,8 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
     public MessageStoreServiceImpl(AccountService accountService, AuthorizationService authorizationService,
                                       PermissionFactory permissionFactory, EsSchema esSchema,
                                       int maxTopicDepth, Object metadataUpdateSync) {
-        // TODO pass a correct pid and a correct domain
-        super("PID", DatastoreDomain.DATASTORE);
+
+        super(MessageStoreService.class.getName(), DatastoreDomain.DATASTORE, DatastoreEntityManagerFactory.getInstance());
         this.accountService = accountService;
         this.authorizationService = authorizationService;
         this.permissionFactory = permissionFactory;

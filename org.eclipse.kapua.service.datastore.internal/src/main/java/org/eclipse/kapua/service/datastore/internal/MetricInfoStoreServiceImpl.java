@@ -47,8 +47,7 @@ public class MetricInfoStoreServiceImpl extends AbstractKapuaConfigurableService
 
     public MetricInfoStoreServiceImpl()
     {
-        // TODO pass a correct pid and a correct domain
-        super("PID", DatastoreDomain.DATASTORE);
+        super(MetricInfoStoreService.class.getName(), DatastoreDomain.DATASTORE, DatastoreEntityManagerFactory.getInstance());
 
         KapuaLocator locator = KapuaLocator.getInstance();
         accountService = locator.getService(AccountService.class);

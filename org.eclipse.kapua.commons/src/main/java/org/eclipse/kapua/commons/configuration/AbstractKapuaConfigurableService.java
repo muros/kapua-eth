@@ -24,18 +24,19 @@ import java.util.Properties;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.configuration.metatype.TmetadataImpl;
 import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
-import org.eclipse.kapua.commons.service.internal.ServiceDAO;
 import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.EntityManagerFactory;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.commons.util.ResourceUtils;
 import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.config.metatype.Tad;
-import org.eclipse.kapua.model.config.metatype.Tmetadata;
 import org.eclipse.kapua.model.config.metatype.Tocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.predicate.KapuaAttributePredicate.Operator;
@@ -49,13 +50,14 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
 {
     private String domain = null;
     private String pid    = null;
+    private EntityManagerFactory entityManagerFactory;
 
     private static TmetadataImpl readMetadata(String pid)
         throws IOException, Exception, XMLStreamException, FactoryConfigurationError
     {
         TmetadataImpl metaData = null;
         StringBuilder sbMetatypeXmlName = new StringBuilder();
-        sbMetatypeXmlName.append("META-INF/metatype/").append(pid).append(".xml");
+        sbMetatypeXmlName.append("META-INF/metatypes/").append(pid).append(".xml");
 
         String metatypeXmlName = sbMetatypeXmlName.toString();
         URL metatypeXmlURL = ResourceUtils.getResource(metatypeXmlName);
@@ -100,9 +102,10 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
                 Object objectValue = property.getValue();
                 String stringValue = StringUtil.valueToString(objectValue);
                 if (stringValue != null) {
-                    String result = TadValidator.validate(attrDef, stringValue);
+                    ValueTokenizer tokenizer = new ValueTokenizer(stringValue);
+                    String result = tokenizer.validate(attrDef);
                     if (result != null && !result.isEmpty()) {
-                        throw new KapuaConfigurationException(KapuaConfigurationErrorCodes.CONFIGURATION_ATTRIBUTE_INVALID, null, attrDef.getId() + ": " + result);
+                        throw new KapuaConfigurationException(KapuaConfigurationErrorCodes.ATTRIBUTE_INVALID, attrDef.getId() + ": " + result);
                     }
                 }
 
@@ -116,7 +119,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
                         if (updatedProps.get(attrDef.getId()) == null) {
                             // if the default one is not defined, throw
                             // exception.
-                            throw new KapuaConfigurationException(KapuaConfigurationErrorCodes.CONFIGURATION_REQUIRED_ATTRIBUTE_MISSING, attrDef.getId());
+                            throw new KapuaConfigurationException(KapuaConfigurationErrorCodes.REQUIRED_ATTRIBUTE_MISSING, attrDef.getId());
                         }
                     }
                 }
@@ -135,46 +138,71 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
     
     private static Map<String, Object> toValues(Tocd ocd, Properties props) throws KapuaException
     {
-        if (props == null)
-            return null;
-        
         List<Tad> ads = ocd.getAD();
-        Map<String, Tad> tadMap = new HashMap<String, Tad>();
-        for(Tad ad:ads)
-            tadMap.put(ad.getId(), ad);
-        
         Map<String, Object> values = new HashMap<String, Object>();
-        for(Entry<Object, Object> entry:props.entrySet())
+        for (Tad ad : ads)
         {
-            if (!tadMap.containsKey(entry.getKey()))
-                throw KapuaException.internalError("Unknown property");
-            
-            Tad tad = tadMap.get(entry.getKey());
-            values.put((String)entry.getKey(), StringUtil.stringToValue(tad.getType().value(), props.getProperty((String)entry.getKey())));
+            String valueStr = props == null ? ad.getDefault() : props.getProperty(ad.getId(), ad.getDefault());
+            Object value = StringUtil.stringToValue(ad.getType().value(), valueStr);
+            values.put(ad.getId(), value);
         }
-        
+
         return values;
     }
+
+    private ServiceConfig create(EntityManager em, ServiceConfig serviceConfig)
+        throws KapuaException
+    {
+        try {
+
+            em.beginTransaction();
+
+            ServiceConfig newServiceConfig = ServiceConfigDAO.create(em, serviceConfig);
+            newServiceConfig = ServiceConfigDAO.find(em, newServiceConfig.getId());
+            em.commit();
+            return newServiceConfig;
+        }
+        catch (Exception pe) {
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
+        }
+        finally {
+            em.close();
+        }
+        
+    }
     
-    protected AbstractKapuaConfigurableService(String pid, String domain)
+    private ServiceConfig update(EntityManager em, ServiceConfig serviceConfig)
+        throws KapuaException
+    {
+        try {
+
+            ServiceConfig theServiceConfig = ServiceConfigDAO.find(em, serviceConfig.getId());
+            if (theServiceConfig == null) {
+                throw new KapuaEntityNotFoundException(ServiceConfig.TYPE, serviceConfig.getId());
+            }
+
+            em.beginTransaction();
+            ServiceConfigDAO.update(em, serviceConfig);
+            em.commit();
+
+            ServiceConfig updServiceConfig = ServiceConfigDAO.find(em, serviceConfig.getId());
+            return updServiceConfig;
+        }
+        catch (Exception pe) {
+            em.rollback();
+            throw KapuaExceptionUtils.convertPersistenceException(pe);
+        }
+        finally {
+            em.close();
+        }
+    }
+    
+    protected AbstractKapuaConfigurableService(String pid, String domain , EntityManagerFactory entityFactory)
     {
         this.pid = pid;
         this.domain = domain;
-    }
-
-    public static void main(String[] args)
-    {
-        try {
-            Properties props = new Properties();
-            props.setProperty("publish.qos", "122");
-            Tmetadata metadata = readMetadata("AbstractKapuaConfigurableService");
-            List<Tocd> ocds = metadata.getOCD();
-            toValues(ocds.get(0), props);
-        }
-        catch (FactoryConfigurationError | Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        this.entityManagerFactory = entityFactory;
     }
 
     @Override
@@ -200,7 +228,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
             return null;
         }
         catch (Exception e) {
-            throw KapuaException.internalError(e.getMessage());
+            throw KapuaConfigurationException.internalError(e);
         }
     }
 
@@ -220,13 +248,14 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         ServiceConfigQueryImpl query = new ServiceConfigQueryImpl(scopeId);
         query.setPredicate(predicate);
 
-        EntityManager em = ServiceConfigEntityFactory.getEntityManager();
-        ServiceConfigListResult result = ServiceDAO.query(em, ServiceConfig.class, ServiceConfigImpl.class, new ServiceConfigListResultImpl(), query);
-        if (result == null || result.size() == 0)
-            throw KapuaException.internalError("Record not found");
+        Properties properties = null;
+        EntityManager em = this.entityManagerFactory.createEntityManager();
+        ServiceConfigListResult result = ServiceConfigDAO.query(em, ServiceConfig.class, ServiceConfigImpl.class, new ServiceConfigListResultImpl(), query);
+        if (result != null && result.size() > 0)
+            properties = result.get(0).getConfigurations();
 
         Tocd ocd = this.getConfigMetadata();
-        return toValues(ocd, result.get(0).getConfigurations());
+        return toValues(ocd, properties);
     }
 
     @Override
@@ -251,19 +280,22 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         query.setPredicate(predicate);
 
         ServiceConfig serviceConfig = null;
-        EntityManager em = ServiceConfigEntityFactory.getEntityManager();
+        EntityManager em = this.entityManagerFactory.createEntityManager();
         ServiceConfigListResultImpl result = ServiceConfigDAO.query(em, ServiceConfig.class, ServiceConfigImpl.class, new ServiceConfigListResultImpl(), query);
+
+        // In not exists create then return
         if (result == null || result.size() == 0) {
             ServiceConfigImpl serviceConfigNew = new ServiceConfigImpl(scopeId);
             serviceConfigNew.setPid(this.pid);
             serviceConfigNew.setConfigurations(props);
-            serviceConfig = ServiceDAO.create(em, serviceConfigNew);
+            serviceConfig = this.create(em, serviceConfigNew);
             return;
         }
 
+        // If exists update it
         serviceConfig = result.get(0);
         serviceConfig.setConfigurations(props);
-        ServiceDAO.update(em, ServiceConfig.class, serviceConfig);
+        this.update(em, serviceConfig);
         return;
     }
 }

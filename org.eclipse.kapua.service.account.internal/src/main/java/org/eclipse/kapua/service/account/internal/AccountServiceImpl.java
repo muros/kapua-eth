@@ -48,8 +48,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
 
     public AccountServiceImpl()
     {
-        // TODO pass a correct pid and domain
-        super("org.eclipse.kapua.service.account.internal.AccountServiceImpl", AccountDomain.ACCOUNT);
+        super(AccountService.class.getName(), AccountDomain.ACCOUNT, AccountEntityManagerFactory.getInstance());
     }
 
     /**
@@ -86,7 +85,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         //
         // Create the account
         Account account = null;
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
 
             em.beginTransaction();
@@ -141,7 +140,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
 
         //
         // Update the Account
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
 
             Account oldAccount = AccountDAO.find(em, account.getId());
@@ -213,7 +212,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
 
         //
         // Delete the Account
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
             KapuaId accountId = account.getId();
 
@@ -304,7 +303,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         //
         // Do the find
         Account account = null;
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
             account = AccountDAO.findByName(em, name);
         }
@@ -360,7 +359,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.ACCOUNT, Actions.read, account.getId()));
 
         AccountListResult result = null;
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
             TypedQuery<Account> q;
             q = em.createNamedQuery("Account.findChildAccountsRecursive", Account.class);
@@ -398,7 +397,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         //
         // Do count
         KapuaListResultImpl<Account> result = null;
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
             result = AccountDAO.query(em, query);
         }
@@ -429,7 +428,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         //
         // Do count
         long count = 0;
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
             count = AccountDAO.count(em, query);
         }
@@ -461,7 +460,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         //
         // Do the find
         Account account = null;
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
             account = AccountDAO.find(em, accountId);
         }
@@ -485,7 +484,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         //
         // Do the find
         List<Account> accounts = null;
-        EntityManager em = AccountEntityManagerFactory.getEntityManager();
+        EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
             TypedQuery<Account> q = em.createNamedQuery("Account.findChildAccounts", Account.class);
             q.setParameter("scopeId", accountId);
