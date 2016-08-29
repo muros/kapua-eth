@@ -15,6 +15,8 @@ import org.eclipse.kapua.KapuaException;
 
 public class KapuaConfigurationException extends KapuaException 
 {
+    private static final long serialVersionUID = -5191015333552703367L;
+
     private static final String KAPUA_ERROR_MESSAGES  = "kapua-configuration-service-error-messages";
 
     /**
