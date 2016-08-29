@@ -119,13 +119,6 @@ Vagrant.configure("2") do |config|
      sudo sed -i 's/127\.0\.0\.1/0\.0\.0\.0/' /etc/mysql//my.cnf
      sudo /etc/init.d/mysql restart
 
-     #H2 sql
-#     wget http://repo2.maven.org/maven2/com/h2database/h2/1.4.192/h2-1.4.192.jar;
-#     mv h2-1.4.192.jar lib/kapua/
-#     sudo chown -R vagrant /kapua
-     #start h2 sql db
-#     java -jar h2-1.4.192.jar -webAllowOthers -tcpAllowOthers -tcpPort 3306 -tcpIp localhost &
-
      # install oracle jdk 8
      sudo add-apt-repository -y ppa:webupd8team/java
      sudo apt-get update
@@ -162,10 +155,10 @@ Vagrant.configure("2") do |config|
      sudo chgrp -R vagrant ../apache-activemq-5.11.0
 
      #database seeding (and create schema)
-     echo 'seedind database'
-     for name in $(find /kapua -name '*_drop.sql' | grep -Ev 'test|console|api'); do echo invoke drop sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
-     for name in $(find /kapua -name '*_create.sql' | grep -Ev 'test|console|api'); do echo invoke create sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
-     for name in $(find /kapua -name '*_seed.sql' | grep -Ev 'test|console|api'); do echo invoke seed sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+     # echo 'seedind database'
+     # for name in $(find /kapua -name '*_drop.sql' | grep -Ev 'test|console|api'); do echo invoke drop sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+     # for name in $(find /kapua -name '*_create.sql' | grep -Ev 'test|console|api'); do echo invoke create sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+     # for name in $(find /kapua -name '*_seed.sql' | grep -Ev 'test|console|api'); do echo invoke seed sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
 
      # install Elasticsearch
      sudo mkdir -p /usr/local/elasticsearch
