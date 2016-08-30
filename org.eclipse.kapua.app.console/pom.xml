@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.spi</artifactId>
+            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
