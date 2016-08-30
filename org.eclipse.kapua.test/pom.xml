@@ -61,39 +61,39 @@
                         <driver>org.h2.Driver</driver>
                         <detail>true</detail>
                         <srcFiles>
-                        	<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/act_account_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/act_account_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/act_account_seed.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/atht_credential_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/atht_credential_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/atht_credential_seed.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_permission_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_permission_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_permission_seed.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_seed.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_permission_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_permission_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_permission_seed.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_permission_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_permission_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_permission_seed.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_seed.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_roles_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_roles_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_roles_seed.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_connection_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_connection_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_event_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_event_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/usr_user_drop.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/usr_user_create.sql</srcFile>
-							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/usr_user_seed.sql</srcFile>                   
+                        	<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/atht_credential_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/atht_credential_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/atht_credential_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_permission_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_permission_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_permission_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_permission_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_permission_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_permission_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_permission_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_permission_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_permission_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_role_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_role_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_role_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_role_roles_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_role_roles_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_user_role_roles_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/H2/dvc_device_connection_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/H2/dvc_device_connection_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/H2/dvc_device_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/H2/dvc_device_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/H2/dvc_device_event_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/H2/dvc_device_event_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/H2/usr_user_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/H2/usr_user_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/H2/usr_user_seed.sql</srcFile>                   
 			            </srcFiles>
                         <autocommit>true</autocommit>
                     </configuration>
