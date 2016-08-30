@@ -26,5 +26,16 @@
     <name>org.eclipse.kapua.service</name>
 
     <dependencies>
+    	<!-- metrics -->
+        <dependency>
+            <groupId>io.dropwizard.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+            <version>3.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus.jmx</groupId>
+            <artifactId>jmx_prometheus_javaagent</artifactId>
+            <version>0.5</version>
+        </dependency>
     </dependencies>
 </project>

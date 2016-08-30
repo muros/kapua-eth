@@ -17,15 +17,26 @@ import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.service.KapuaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 public class GuiceLocatorImpl extends KapuaLocator
 {
+	
+	private static final Logger logger = LoggerFactory.getLogger(GuiceLocatorImpl.class);
+	
 	private static Injector s_injector = null;
 	static {
-	    s_injector = Guice.createInjector(new KapuaModule());
+		try {
+			s_injector = Guice.createInjector(new KapuaModule());
+		}
+		catch (Throwable e) {
+			logger.error("Cannot instantiate injector {}", e.getMessage(), e);
+			throw e;
+		}
 	}
 	
     @Override

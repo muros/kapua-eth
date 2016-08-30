@@ -35,7 +35,6 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.broker.core.message.MessageConstants;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
-import org.eclipse.kapua.commons.metric.MetricsService;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
@@ -62,7 +61,7 @@ import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFact
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService;
 import org.eclipse.kapua.service.device.registry.connection.DeviceConnectionStatus;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain;
-import org.eclipse.kapua.service.user.User;
+import org.eclipse.kapua.service.metric.MetricsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,8 +100,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     
     private final static Map<String, ConnectionId> connectionMap                       = new ConcurrentHashMap<String, ConnectionId>();
 
-    //metrics section
-    private MetricsService                         metricsService;
     //login
     private Counter                                metricLoginSuccess;
     private Counter                                metricLoginRateLimited;
@@ -146,7 +143,8 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     private AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
     private DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
     private DeviceConnectionFactory deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
-
+    private MetricsService metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
+    
     public KapuaSecurityBrokerFilter(Broker next) throws KapuaException
     {
         super(next);
@@ -156,8 +154,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         connectorsDescriptorMap.put("mqtt", new ConnectorDescriptor("mqtt", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
         connectorsDescriptorMap.put("mqtts", new ConnectorDescriptor("mqtts", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
 
-    	// Initialize the metrics
-        metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
         //login
         metricLoginSuccess              = metricsService.getCounter("security", "login", "success", "count");
         metricLoginRateLimited          = metricsService.getCounter("security", "login", "rate_limit", "count");

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2011, 2016 Eurotech and/or its affiliates
+
+    All rights reserved. This program and the accompanying materials
+    are made available under the terms of the Eclipse Public License v1.0
+    which accompanies this distribution, and is available at
+    http://www.eclipse.org/legal/epl-v10.html
+  -->
+<assembly>
+    <id>unix-bin</id>
+
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <fileSets>
+        <!-- Expanded ActiveMQ Runtime -->
+        <fileSet>
+            <outputDirectory>/</outputDirectory>
+            <directory>target/dependencies/unix/apache-activemq-${activemq.version}</directory>
+            <excludes>
+                <exclude>conf/activemq.xml</exclude>
+                <exclude>conf/log4j.properties</exclude>
+                <exclude>lib/optional/guava*</exclude>
+            </excludes>
+        </fileSet>
+
+        <fileSet>
+            <outputDirectory>conf/</outputDirectory>
+            <directory>src/main/resources/conf</directory>
+        </fileSet>
+
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>lib/extra</outputDirectory>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
+            <includes>
+                <include>com.google.guava:guava</include>
+                <include>com.google.inject:guice</include>
+                <include>javax.inject:javax.inject</include>
+                <include>aopalliance:aopalliance</include>
+                <include>org.eclipse.persistence:javax.persistence</include>
+                <include>commons-configuration:commons-configuration</include>
+                <include>de.svenkubiak:jBCrypt</include>
+                <include>io.dropwizard.metrics:metrics-core</include>
+                <include>io.dropwizard.metrics:metrics-annotation</include>
+
+                <include>${pom.groupId}:org.eclipse.kapua.commons</include>
+                <include>${pom.groupId}:org.eclipse.kapua.configuration.spi</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service</include>
+                <include>${pom.groupId}:org.eclipse.kapua.locator.guice</include>
+                <include>${pom.groupId}:org.eclipse.kapua.broker.core</include>
+                <include>${pom.groupId}:org.eclipse.kapua.message.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.auth.shiro</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.registry</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.registry.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.user</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.user.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.authentication</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.authorization</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.datastore</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.datastore.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.account</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration.internal</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+
+</assembly>

@@ -15,6 +15,7 @@ package org.eclipse.kapua.commons.metric;
 import java.text.MessageFormat;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.service.metric.MetricsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

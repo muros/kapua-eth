@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.kapua.commons.metric.MetricsService">
-   <implementation class="org.eclipse.kapua.commons.metric.MetricsServiceImpl"/>
-   <service>
-      <provide interface="org.eclipse.kapua.commons.metric.MetricsService"/>
-   </service>
-</scr:component>
