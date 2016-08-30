@@ -26,12 +26,15 @@ public class KapuaWebFilter extends ShiroFilter {
 		//TODO workaround to fix the null kapua session on webconsole requests. to be removed and substitute with getToken or another solution?
 		Subject shiroSubject = SecurityUtils.getSubject();
         KapuaSession kapuaSession = (KapuaSession)shiroSubject.getSession().getAttribute("KapuaSession");
-        KapuaSecurityUtils.setSession(kapuaSession);
+        try {
+        	KapuaSecurityUtils.setSession(kapuaSession);
 		
-        super.executeChain(request, response, origChain);
-
-        //unbind kapua session
-        KapuaSecurityUtils.clearSession();
+        	super.executeChain(request, response, origChain);
+        }
+        finally {
+        	//unbind kapua session
+        	KapuaSecurityUtils.clearSession();
+        }
     }
 
 }
