@@ -11,7 +11,7 @@
     <id>unix-bin</id>
 
     <formats>
-        <format>zip</format>
+        <format>tar.gz</format>
     </formats>
 
     <fileSets>
@@ -45,10 +45,13 @@
                 <include>javax.inject:javax.inject</include>
                 <include>aopalliance:aopalliance</include>
                 <include>org.eclipse.persistence:javax.persistence</include>
+                <include>org.eclipse.persistence:eclipselink</include>
                 <include>commons-configuration:commons-configuration</include>
                 <include>org.springframework.security:spring-security-core</include>
                 <include>io.dropwizard.metrics:metrics-core</include>
                 <include>io.dropwizard.metrics:metrics-annotation</include>
+                <!-- TODO is there a better way to import jdbc driver at runtime -->
+                <include>org.mariadb.jdbc:mariadb-java-client</include>
 
                 <include>${pom.groupId}:org.eclipse.kapua.commons</include>
                 <include>${pom.groupId}:org.eclipse.kapua.configuration.spi</include>

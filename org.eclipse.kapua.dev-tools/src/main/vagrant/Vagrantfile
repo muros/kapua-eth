@@ -113,10 +113,8 @@ Vagrant.configure("2") do |config|
 	 	CREATE USER IF NOT EXISTS kapua PASSWORD 'kapua'; \
 	 	GRANT ALL ON SCHEMA kapuadb TO kapua;"
 
-	 ######################
-     ### ActiveMQ setup ###
-     ######################
-     
+
+     # activemq post-install setup
      # change the owner and the group of activemq to vagrant
      sudo chown -R vagrant /usr/local/activemq/apache-activemq-5.14.0
      sudo chgrp -R vagrant /usr/local/activemq/apache-activemq-5.14.0
