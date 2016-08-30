@@ -39,14 +39,16 @@ public class MessageStoreServiceTest extends KapuaTest
     @SuppressWarnings("unused")
     private static final Logger   s_logger = LoggerFactory.getLogger(MessageStoreServiceTest.class);
     
-    @Ignore
+    private long accountSerial = (new Date()).getTime();
+    private String testAccount = String.format("test-%d", accountSerial);
+    
     @Test
     public void testStore()
         throws Exception
     {
         KapuaId scopeId = new KapuaEid(BigInteger.valueOf(1));
-        long accountSerial = (new Date()).getTime();
-        AccountCreator accountCreator = this.getTestAccountCreator(scopeId, accountSerial);
+//        long accountSerial = (new Date()).getTime();
+//        AccountCreator accountCreator = this.getTestAccountCreator(scopeId, accountSerial);
 
         MessageStoreService messageStoreService = locator.getService(MessageStoreService.class);
         DatastoreObjectFactory dsObjectFactory = locator.getFactory(DatastoreObjectFactory.class);
@@ -60,7 +62,8 @@ public class MessageStoreServiceTest extends KapuaTest
         messageCreator.setTimestamp(now);
         messageCreator.setReceivedOn(now);
 
-        String topicName = String.format("%s/CLIENT001/APP01", accountCreator.getName());
+//        String topicName = String.format("%s/CLIENT001/APP01", accountCreator.getName());
+        String topicName = String.format("%s/CLIENT001/APP01", testAccount);
         messageCreator.setTopic(topicName);
 
         metrics.put("metric_long", 1L);
@@ -84,6 +87,7 @@ public class MessageStoreServiceTest extends KapuaTest
         assertTrue(!messageId.toString().isEmpty());
     }
 
+/*
     private AccountCreator getTestAccountCreator(KapuaId scopeId, long random)
     {
         KapuaLocator locator = KapuaLocator.getInstance();
@@ -99,4 +103,5 @@ public class MessageStoreServiceTest extends KapuaTest
 
         return accountCreator;
     }
+*/
 }
