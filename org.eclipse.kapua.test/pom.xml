@@ -34,89 +34,29 @@
                 <version>1.1</version>
                 <executions>
                     <execution>
-                        <id>start</id>
+                        <id>do-it-before</id>
                         <phase>pre-integration-test</phase>
                         <goals>
-                            <goal>execute</goal>
+                            <goal>exec</goal>
                         </goals>
+		                <configuration>
+		                    <executable>./startup.sh</executable>
+		                    <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/testScript/</workingDirectory>
+		                </configuration>
                     </execution>
-                </executions>
-                <configuration>
-                    <executable>/Users/riccardomodanese/dev/git/kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/startup.sh</executable>
-                    <arguments>
-                        <argument>none</argument>
-                    </arguments>
-                    <workingDirectory>${basedir}/src/main/resources/</workingDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <id>retrieve-config</id>
+                	<execution>
+                        <id>do-it-after</id>
                         <phase>post-integration-test</phase>
                         <goals>
-                            <goal>execute</goal>
+                            <goal>exec</goal>
                         </goals>
+		                <configuration>
+		                    <executable>./shutdown.sh</executable>
+		                    <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/testScript/</workingDirectory>
+		                </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <executable>/Users/riccardomodanese/dev/git/kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/shutdown.sh</executable>
-                    <arguments>
-                        <argument>none</argument>
-                    </arguments>
-                    <workingDirectory>${basedir}/src/main/resources/</workingDirectory>
-                </configuration>
             </plugin>
-        <!--
-	    	<plugin>
-            <! Run with:
-                mvn bash:run
-                mvn install
-            >
-            <groupId>com.atlassian.maven.plugins</groupId>
-            <artifactId>bash-maven-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <executions>
-                <execution>
-                    <id>test</id>
-                    <phase>integration-test</phase>
-                    <goals>
-                        <goal>run</goal>
-                    </goals>
-                </execution>
-            </executions>
-            <configuration>
-                <script>
-                    # Here you can execute shell commands
-                    echo "Tomcat will start"
-                    /Users/riccardomodanese/dev/git/kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/startup.sh
-                </script>
-            </configuration>
-        </plugin>
-	        <plugin>
-		        <artifactId>maven-invoker-plugin</artifactId>
-		        <version>2.0.0</version>
-		        <configuration>
-		        	<debug>true</debug>
-		          	<projectsDirectory>src/it</projectsDirectory>
-		          	<preBuildHookScript>setup.bsh</preBuildHookScript>
-		          	<postBuildHookScript>verify.bsh</postBuildHookScript>
-		        </configuration>
-		        <executions>
-		        	<execution>
-		            	<id>integration-test</id>
-		            		<goals>
-		              			<goal>run</goal>
-		            		</goals>
-		          	</execution>
-		       	</executions>
-	      	</plugin>
-	      	-->
-	      	
-	      	
 	    	<!-- DATABASE -->
 	    	<plugin>
 	            <groupId>org.codehaus.mojo</groupId>
@@ -190,21 +130,23 @@
 	                    </configuration>
 	                </execution>
 	                <execution>
-	                        <id>drop-db-after-test</id>
-	                        <phase>post-integration-test</phase>
-	                        <goals>
-	                            <goal>execute</goal>
-	                        </goals>
-	                        <configuration>
-	                            <orderFile>ascending</orderFile>
-	                            <fileset>
-	                                <basedir>${basedir}/src/test/resources/sql</basedir>
-	                                <includes>
-	                                    <include>drop-int-test-data.sql</include>
-	                                </includes>
-	                            </fileset>
-	                        </configuration>
-	                    </execution>
+                        <id>drop-db-after-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+	                        <url>jdbc:h2:file:${basedir}/kapuadb</url>
+	                        <driver>org.h2.Driver</driver>
+	                        <detail>true</detail>
+	                        <srcFiles>
+	                        	<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_drop.sql</srcFile>
+								<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_create.sql</srcFile>
+								<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_seed.sql</srcFile>
+				            </srcFiles>
+	                        <autocommit>true</autocommit>
+	                    </configuration>
+                    </execution>
 	                <!--  Drop test data after running the tests include hereafter -->
 				</executions>
 	        </plugin>
@@ -228,39 +170,6 @@
 		          	</execution>
 		        </executions>
 			</plugin>
-<!-- 
-	    	
-		    <plugin>
-			  <groupId>net.ju-n.maven.plugins</groupId>
-			  <artifactId>vagrant-maven-plugin</artifactId>
-			  <version>1.0.2</version>
-			  <executions>
-			
-			    < Before tests: import box, start VM  > 
-			    <execution>
-			      <id>setup-and-start-vagrant-vm</id>
-			      <phase>pre-integration-test</phase>
-			      <goals>
-			        <goal>up</goal>
-			      </goals>
-			      <configuration>
-			        <vm>/Users/riccardomodanese/dev/git/kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/Vagrantfile</vm>
-			      </configuration>
-			    </execution>
-			
-			    < After tests: shut down, destroy VM  > 
-			    <execution>
-			      <id>destroy-vagrant-vm</id>
-			      <phase>post-integration-test</phase>
-			      <goals>
-			        <goal>destroy</goal>
-			      </goals>
-			    </execution>
-			
-			  </executions>
-			</plugin>
-			
-			 -->
 		</plugins>
 	</build>
 	
