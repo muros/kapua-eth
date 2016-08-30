@@ -114,36 +114,36 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
             // FIXME: check preferred userid consistency
 
             // Passing attributes
-            device.setStatus(device.getStatus());
-            device.setDisplayName(device.getDisplayName());
-            device.setLastEventOn(device.getLastEventOn());
-            device.setLastEventType(device.getLastEventType());
-            device.setSerialNumber(device.getSerialNumber());
-            device.setModelId(device.getModelId());
-            device.setImei(device.getImei());
-            device.setImsi(device.getImsi());
-            device.setIccid(device.getIccid());
-            device.setBiosVersion(device.getBiosVersion());
-            device.setFirmwareVersion(device.getFirmwareVersion());
-            device.setOsVersion(device.getOsVersion());
-            device.setJvmVersion(device.getJvmVersion());
-            device.setOsgiFrameworkVersion(device.getOsgiFrameworkVersion());
-            device.setApplicationFrameworkVersion(device.getApplicationFrameworkVersion());
-            device.setApplicationIdentifiers(device.getApplicationIdentifiers());
-            device.setAcceptEncoding(device.getAcceptEncoding());
-            device.setGpsLongitude(device.getGpsLongitude());
-            device.setGpsLatitude(device.getGpsLatitude());
-            device.setCustomAttribute1(device.getCustomAttribute1());
-            device.setCustomAttribute2(device.getCustomAttribute2());
-            device.setCustomAttribute3(device.getCustomAttribute3());
-            device.setCustomAttribute4(device.getCustomAttribute4());
-            device.setCustomAttribute5(device.getCustomAttribute5());
-            device.setCredentialsMode(device.getCredentialsMode());
-            device.setPreferredUserId(device.getPreferredUserId());
+            currentDevice.setStatus(device.getStatus());
+            currentDevice.setDisplayName(device.getDisplayName());
+            currentDevice.setLastEventOn(device.getLastEventOn());
+            currentDevice.setLastEventType(device.getLastEventType());
+            currentDevice.setSerialNumber(device.getSerialNumber());
+            currentDevice.setModelId(device.getModelId());
+            currentDevice.setImei(device.getImei());
+            currentDevice.setImsi(device.getImsi());
+            currentDevice.setIccid(device.getIccid());
+            currentDevice.setBiosVersion(device.getBiosVersion());
+            currentDevice.setFirmwareVersion(device.getFirmwareVersion());
+            currentDevice.setOsVersion(device.getOsVersion());
+            currentDevice.setJvmVersion(device.getJvmVersion());
+            currentDevice.setOsgiFrameworkVersion(device.getOsgiFrameworkVersion());
+            currentDevice.setApplicationFrameworkVersion(device.getApplicationFrameworkVersion());
+            currentDevice.setApplicationIdentifiers(device.getApplicationIdentifiers());
+            currentDevice.setAcceptEncoding(device.getAcceptEncoding());
+            currentDevice.setGpsLongitude(device.getGpsLongitude());
+            currentDevice.setGpsLatitude(device.getGpsLatitude());
+            currentDevice.setCustomAttribute1(device.getCustomAttribute1());
+            currentDevice.setCustomAttribute2(device.getCustomAttribute2());
+            currentDevice.setCustomAttribute3(device.getCustomAttribute3());
+            currentDevice.setCustomAttribute4(device.getCustomAttribute4());
+            currentDevice.setCustomAttribute5(device.getCustomAttribute5());
+            currentDevice.setCredentialsMode(device.getCredentialsMode());
+            currentDevice.setPreferredUserId(device.getPreferredUserId());
 
             // Update
             em.beginTransaction();
-            DeviceDAO.update(em, device);
+            DeviceDAO.update(em, currentDevice);
             em.commit();
 
             deviceUpdated = DeviceDAO.find(em, device.getId());
