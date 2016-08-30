@@ -18,11 +18,18 @@ import java.util.Map;
 import org.eclipse.kapua.service.datastore.internal.setting.DatastoreSettingKey;
 import org.eclipse.kapua.service.datastore.internal.setting.DatastoreSettings;
 import org.elasticsearch.client.Client;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class EsClient {
-
+	
+	@SuppressWarnings("unused")
+	private static final Logger   s_logger = LoggerFactory.getLogger(EsClient.class);
+			
 	private static Client client;
+	
+	private static final int DEFAULT_PORT = 9300; 
 	
 	public static Client getcurrent() throws UnknownHostException, EsDatastoreException {
 		// TODO read hostname and port from configurations
@@ -39,14 +46,19 @@ public class EsClient {
 	        
 	        String[] nodeParts = getNodeParts(esNodes[0]);
 	        String esHost = null;
-	        String esPort = null;
+	        int esPort = DEFAULT_PORT;
 	        
 	        if (nodeParts.length > 0)
 	            esHost = nodeParts[0];
-	        if (nodeParts.length > 1)
-	            esPort = nodeParts[1];
+	        if (nodeParts.length > 1) {
+	        	try {
+	        		Integer.parseInt(nodeParts[1]);
+	        	} catch (NumberFormatException e) {
+	        		throw new EsDatastoreException("Could not parse port: " + nodeParts[1]);
+	        	}
+	        }
 	        
-			client = EsUtils.getEsClient(esHost, Integer.parseInt(esPort), config.getString(DatastoreSettingKey.ELASTICSEARCH_CLUSTER));
+			client = EsUtils.getEsClient(esHost, esPort, config.getString(DatastoreSettingKey.ELASTICSEARCH_CLUSTER));
 		}
 		return client;
 	}
