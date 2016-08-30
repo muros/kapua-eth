@@ -4,4 +4,4 @@ CREATE TABLE athz_user_role_roles (
   
   PRIMARY KEY (user_id, role_id)
   
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;

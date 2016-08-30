@@ -24,7 +24,138 @@
 
     <artifactId>org.eclipse.kapua.test</artifactId>
     <name>org.eclipse.kapua.test</name>
-
+    
+    <build>
+	    <plugins>
+    	<plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>sql-maven-plugin</artifactId>
+            <dependencies>
+            	<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+				<dependency>
+				    <groupId>com.h2database</groupId>
+				    <artifactId>h2</artifactId>
+				    <version>1.4.192</version>
+				</dependency>
+            </dependencies>
+            <configuration>
+                <encoding>UTF-8</encoding>
+                <driver>org.h2.Driver</driver>
+                <url>jdbc:h2:tcp://localhost:3306/~/kapuadb;shutdown=true</url>
+                <autocommit>true</autocommit>
+            </configuration>
+            <executions>
+                <!--  Create test data before running the tests -->
+                <execution>
+                    <id>create-test-compile-data</id>
+                    <phase>process-test-sources</phase>
+                    <inherited>true</inherited>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <configuration>
+                    	<!-- to be used with external H2 db
+                    	<url>jdbc:h2:tcp://localhost:3306/~/kapuadb;</url>
+                        -->
+                        <url>jdbc:h2:file:${basedir}/kapuadb</url>
+                        <driver>org.h2.Driver</driver>
+                        <detail>true</detail>
+                        <srcFiles>
+                        	<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/act_account_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/act_account_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/act_account_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/atht_credential_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/atht_credential_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/atht_credential_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_permission_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_permission_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_permission_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_permission_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_permission_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_role_permission_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_permission_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_permission_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_permission_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_roles_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_roles_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/athz_user_role_roles_seed.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_connection_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_connection_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_event_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.device.registry.internal/src/main/sql/dvc_device_event_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/usr_user_drop.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/usr_user_create.sql</srcFile>
+							<srcFile>../org.eclipse.kapua.service.user.internal/src/main/sql/usr_user_seed.sql</srcFile>                   
+			            </srcFiles>
+                        <autocommit>true</autocommit>
+                    </configuration>
+                </execution>
+                <!--  Drop test data after running the tests include hereafter -->
+			</executions>
+        </plugin>
+    
+<!-- 
+	    	<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-failsafe-plugin</artifactId>
+		        <version>2.13</version>
+		        <executions>
+		          <execution>
+		            <id>integration-test</id>
+		            <goals>
+		              <goal>integration-test</goal>
+		            </goals>
+		          </execution>
+		          <execution>
+		            <id>verify</id>
+		            <goals>
+		              <goal>verify</goal>
+		            </goals>
+		          </execution>
+		        </executions>
+		      </plugin> 
+		    <plugin>
+			  <groupId>net.ju-n.maven.plugins</groupId>
+			  <artifactId>vagrant-maven-plugin</artifactId>
+			  <version>1.0.2</version>
+			  <executions>
+			
+			    < Before tests: import box, start VM  > 
+			    <execution>
+			      <id>setup-and-start-vagrant-vm</id>
+			      <phase>pre-integration-test</phase>
+			      <goals>
+			        <goal>up</goal>
+			      </goals>
+			      <configuration>
+			        <vm>/Users/riccardomodanese/dev/git/kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/Vagrantfile</vm>
+			      </configuration>
+			    </execution>
+			
+			    < After tests: shut down, destroy VM  > 
+			    <execution>
+			      <id>destroy-vagrant-vm</id>
+			      <phase>post-integration-test</phase>
+			      <goals>
+			        <goal>destroy</goal>
+			      </goals>
+			    </execution>
+			
+			  </executions>
+			</plugin>
+			
+			 -->
+		</plugins>
+	</build>
+	
     <dependencies>
         <!-- -->
         <!-- Implemented service interfaces -->
@@ -54,6 +185,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>1.4.192</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

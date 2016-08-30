@@ -99,13 +99,13 @@
                                 <configuration>
                                     <autocommit>true</autocommit>
                                     <srcFiles>
-                                        <srcFile>src/main/sql/dvc_device_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/dvc_device_event_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/dvc_device_connection_drop.sql</srcFile>
+                                        <srcFile>src/main/sql/H2/dvc_device_drop.sql</srcFile>
+                                        <srcFile>src/main/sql/H2/dvc_device_event_drop.sql</srcFile>
+                                        <srcFile>src/main/sql/H2/dvc_device_connection_drop.sql</srcFile>
 
-                                        <srcFile>src/main/sql/dvc_device_create.sql</srcFile>
-                                        <srcFile>src/main/sql/dvc_device_event_create.sql</srcFile>
-                                        <srcFile>src/main/sql/dvc_device_connection_create.sql</srcFile>
+                                        <srcFile>src/main/sql/H2/dvc_device_create.sql</srcFile>
+                                        <srcFile>src/main/sql/H2/dvc_device_event_create.sql</srcFile>
+                                        <srcFile>src/main/sql/H2/dvc_device_connection_create.sql</srcFile>
                                     </srcFiles>
                                 </configuration>
                             </execution>

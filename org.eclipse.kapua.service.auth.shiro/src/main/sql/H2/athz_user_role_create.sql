@@ -1,16 +1,13 @@
-CREATE TABLE athz_user_permission (
+CREATE TABLE athz_user_role (
   scope_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
   id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
   created_on             	TIMESTAMP(3)  DEFAULT 0,
   created_by             	BIGINT(21)    UNSIGNED NOT NULL,
   
   user_id					BIGINT(21) 	  UNSIGNED NOT NULL,
-  domain					VARCHAR(64)   NOT NULL,
-  action					VARCHAR(64),
-  target_scope_id		    BIGINT(21),
   
-  PRIMARY KEY (id),
+  PRIMARY KEY (id)
   
-  UNIQUE INDEX idx_permissionScopeId (scope_id, user_id, domain, action, target_scope_id)
-  
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) DEFAULT CHARSET=utf8;
+
+CREATE INDEX idx_user_role_scope_id ON athz_user_role (scope_id, user_id);

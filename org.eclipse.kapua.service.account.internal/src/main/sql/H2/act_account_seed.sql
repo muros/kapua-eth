@@ -1,4 +1,4 @@
-INSERT INTO `kapuadb`.`act_account` ( 
+INSERT INTO `act_account` ( 
 	`scope_id`,
 	`id`,
 	`name`,
@@ -24,9 +24,9 @@ INSERT INTO `kapuadb`.`act_account` (
 VALUES (NULL,
 		1,
 		'kapua-sys',
-		UTC_TIMESTAMP(),
+		CURRENT_TIMESTAMP(),
 		1,
-		UTC_TIMESTAMP(),
+		CURRENT_TIMESTAMP(),
 		1,
 		'kapua-org',
 		'Kapua Sysadmin',
