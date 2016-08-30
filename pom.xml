@@ -307,7 +307,6 @@
         <!-- -->
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
-        <module>org.eclipse.kapua.locator.spi</module>
         <module>org.eclipse.kapua.locator.guice</module>
 
         <!-- -->

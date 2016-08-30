@@ -19,39 +19,16 @@
 	<name>${artifactId}</name>
 
 	<dependencies>
+	
 		<!-- Internal dependencies -->
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.commons</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.registry</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.authentication</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.authorization</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Internal testing dependencies -->
@@ -66,11 +43,14 @@
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 		</dependency>
+
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
