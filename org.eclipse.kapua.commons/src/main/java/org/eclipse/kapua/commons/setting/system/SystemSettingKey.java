@@ -39,6 +39,7 @@ public enum SystemSettingKey implements SettingKey
     DB_CONNECTION_TRUSTSTORE_URL("commons.db.connection.trust.store.url"),
     DB_CONNECTION_TRUSTSTORE_PWD("commons.db.connection.trust.store.pwd"),
 
+    DB_SCHEMA("commons.db.schema"),
     DB_USE_TIMEZIONE("commons.db.useTimezone"),
     DB_USE_LEGACY_DATETIME_CODE("commons.db.useLegacyDatetimeCode"),
     DB_SERVER_TIMEZONE("commons.db.serverTimezone"),
