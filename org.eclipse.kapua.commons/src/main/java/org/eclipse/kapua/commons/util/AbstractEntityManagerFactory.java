@@ -71,30 +71,10 @@ public abstract class AbstractEntityManagerFactory
             configOverrides.put("eclipselink.connection-pool.default.max", config.getString(SystemSettingKey.DB_POOL_SIZE_MAX));
             configOverrides.put("eclipselink.connection-pool.default.wait", config.getString(SystemSettingKey.DB_POOL_BORROW_TIMEOUT));
 
-            if (config.getBoolean(SystemSettingKey.OSGI_CONTEXT)) {
-                // OSGi JPA
-                // Could get this by wiring up OsgiTestBundleActivator as well.
-                org.osgi.framework.Bundle thisBundle = org.osgi.framework.FrameworkUtil.getBundle(AbstractEntityManagerFactory.class);
-                org.osgi.framework.BundleContext context = thisBundle.getBundleContext();
-                LOG.info(">>> Bundle context: {}", context);
 
-                @SuppressWarnings("rawtypes")
-                org.osgi.framework.ServiceReference serviceReference = context.getServiceReference(PersistenceProvider.class.getName());
-                LOG.info(">>> Service Reference: {}", serviceReference);
-
-                @SuppressWarnings("unchecked")
-                PersistenceProvider persistenceProvider = (PersistenceProvider) context.getService(serviceReference);
-                LOG.info(">>> Persistence Provider: {}", persistenceProvider);
-
-                entityManagerFactory = persistenceProvider.createEntityManagerFactory(persistenceUnitName,
-                                                                                      configOverrides);
-            }
-            else {
-
-                // Standalone JPA
-                entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName,
-                                                                              configOverrides);
-            }
+            // Standalone JPA
+            entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName,
+                                                                          configOverrides);
         }
         catch (Throwable ex) {
             LOG.error("Error creating EntityManagerFactory", ex);

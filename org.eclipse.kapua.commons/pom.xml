@@ -49,11 +49,6 @@
             <artifactId>eclipselink</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
  		<dependency>
  		    <groupId>com.h2database</groupId>

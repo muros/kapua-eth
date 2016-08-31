@@ -46,7 +46,9 @@ public class DefaultConfigurableJdbcConnectionUrlResolver implements JdbcConnect
         // This deletes the trailing '?' or '&'
         dbConnectionString.deleteCharAt(dbConnectionString.length() - 1);
 
+        }
         return dbConnectionString.toString();
-    }
 
+    }
+    
 }
