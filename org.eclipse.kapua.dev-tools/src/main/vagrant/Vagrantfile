@@ -135,11 +135,39 @@ Vagrant.configure("2") do |config|
      # enable debug
      sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
 
+     # install activemq
+     sudo mkdir -p /usr/local/activemq
+     sudo wget http://archive.apache.org/dist/activemq/5.11.0/apache-activemq-5.11.0-bin.tar.gz -P /usr/local/activemq
+     cd /usr/local/activemq
+     sudo tar zxvf apache-activemq-5.11.0-bin.tar.gz
+     sudo rm apache-activemq-5.11.0-bin.tar.gz
+
+     ### configure activemq
+     # Kapua jars and activemq.xml need to be added before starting the activemq instance...
+	   # config file
+	   cd apache-activemq-5.11.0
+	   rm conf/activemq.xml
+	   rm conf/log4j.properties
+	   ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/activemq.xml conf/activemq.xml
+	   ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/log4j.properties conf/log4j.properties
+     cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/*.sh .
+     chmod 555 update_kapua_jars.sh
+     chmod 555 start_broker.sh
+     echo 'remove old guava jars'
+     rm ./lib/optional/guava-*.*
+     # enable debug
+     sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
+
+     ### activemq post-install setup
+     # change the owner and the group of activemq to vagrant
+     sudo chown -R vagrant ../apache-activemq-5.11.0
+     sudo chgrp -R vagrant ../apache-activemq-5.11.0
+
      #database seeding (and create schema)
-     # echo 'seedind database'
-     # for name in $(find /kapua -name '*_drop.sql' | grep -Ev 'test|console|api'); do echo invoke drop sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
-     # for name in $(find /kapua -name '*_create.sql' | grep -Ev 'test|console|api'); do echo invoke create sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
-     # for name in $(find /kapua -name '*_seed.sql' | grep -Ev 'test|console|api'); do echo invoke seed sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+     echo 'seedind database'
+     for name in $(find /kapua -name '*_drop.sql' | grep -Ev 'test|console|api'); do echo invoke drop sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+     for name in $(find /kapua -name '*_create.sql' | grep -Ev 'test|console|api'); do echo invoke create sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+     for name in $(find /kapua -name '*_seed.sql' | grep -Ev 'test|console|api'); do echo invoke seed sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
 
 	 ###########################
      ### Elasticsearch setup ###
