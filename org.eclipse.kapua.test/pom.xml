@@ -27,37 +27,66 @@
     
     <build>
 	    <plugins>
-	    	<!-- VAGRANT MACHINE -->
-        	<plugin>
+	    	<!-- TEST RUN -->
+	    	<plugin>
+ 				<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+ 				<version>2.14.1</version>
+ 				<configuration>
+ 					<excludes>
+ 						<exclude>**/*IT.java</exclude>
+ 					</excludes>
+ 				</configuration>
+			</plugin>
+    		<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-failsafe-plugin</artifactId>
+		        <version>2.14.1</version>
+		        <executions>
+		        	<execution>
+		            	<goals>
+		              		<goal>integration-test</goal>
+		              		<goal>verify</goal>
+		            	</goals>
+		            	<configuration>
+		                    <includes>
+		                    	<include>**/*IT.java</include>
+                     		</includes>
+                    	</configuration>
+		          	</execution>
+		        </executions>
+			</plugin>
+	    	 <!-- VAGRANT MACHINE UP /DOWN -->
+	    	<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.1</version>
                 <executions>
                     <execution>
-                        <id>do-it-before</id>
+                        <id>vagrant-machine-up</id>
                         <phase>pre-integration-test</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
-		                <configuration>
-		                    <executable>./startup.sh</executable>
-		                    <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/testScript/</workingDirectory>
-		                </configuration>
+                        <configuration>
+                            <executable>./startup.sh</executable>
+                            <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/testScript/</workingDirectory>
+                        </configuration>
                     </execution>
-                	<execution>
-                        <id>do-it-after</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-		                <configuration>
-		                    <executable>./shutdown.sh</executable>
-		                    <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/testScript/</workingDirectory>
-		                </configuration>
-                    </execution>
+                    <execution>
+	              		<id>vagrant-machine-down</id>
+	                    <phase>post-integration-test</phase>
+	                    <goals>
+	                    	<goal>exec</goal>
+	                    </goals>
+	                    <configuration>
+	                    	<executable>./shutdown.sh</executable>
+	                        	<workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/testScript/</workingDirectory>
+	                    </configuration>
+                 	</execution>
                 </executions>
             </plugin>
-	    	<!-- DATABASE -->
+	    	<!-- DATABASE SEED BEFORE TEST -->
 	    	<plugin>
 	            <groupId>org.codehaus.mojo</groupId>
 	            <artifactId>sql-maven-plugin</artifactId>
@@ -72,23 +101,24 @@
 	            <configuration>
 	                <encoding>UTF-8</encoding>
 	                <driver>org.h2.Driver</driver>
-	                <url>jdbc:h2:tcp://localhost:3306/~/kapuadb;shutdown=true</url>
+	                <url>${db.conn.url}</url>
+	                <username>${db.username}</username>
+	                <password>${db.password}</password>
 	                <autocommit>true</autocommit>
 	            </configuration>
 	            <executions>
 	                <!-- Create test data before running the tests -->
 	                <execution>
-	                    <id>create-test-compile-data</id>
-	                    <phase>process-test-sources</phase>
+	                    <id>seed-db-pre-test</id>
+	                    <phase>pre-integration-test</phase>
 	                    <inherited>true</inherited>
 	                    <goals>
 	                        <goal>execute</goal>
 	                    </goals>
 	                    <configuration>
-	                    	<!-- to be used with external H2 db
-	                    	<url>jdbc:h2:tcp://localhost:3306/~/kapuadb;</url>
-	                        -->
-	                        <url>jdbc:h2:file:${basedir}/kapuadb</url>
+	                        <url>${db.conn.url}</url>
+	                        <username>${db.username}</username>
+	                		<password>${db.password}</password>
 	                        <driver>org.h2.Driver</driver>
 	                        <detail>true</detail>
 	                        <srcFiles>
@@ -129,47 +159,8 @@
 	                        <autocommit>true</autocommit>
 	                    </configuration>
 	                </execution>
-	                <execution>
-                        <id>drop-db-after-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-	                        <url>jdbc:h2:file:${basedir}/kapuadb</url>
-	                        <driver>org.h2.Driver</driver>
-	                        <detail>true</detail>
-	                        <srcFiles>
-	                        	<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_drop.sql</srcFile>
-								<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_create.sql</srcFile>
-								<srcFile>../org.eclipse.kapua.service.account.internal/src/main/sql/H2/act_account_seed.sql</srcFile>
-				            </srcFiles>
-	                        <autocommit>true</autocommit>
-	                    </configuration>
-                    </execution>
-	                <!--  Drop test data after running the tests include hereafter -->
 				</executions>
 	        </plugin>
-	        
-    		<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-failsafe-plugin</artifactId>
-		        <version>2.13</version>
-		        <executions>
-		        	<execution>
-		            	<id>integration-test</id>
-		            	<goals>
-		              		<goal>integration-test</goal>
-		            	</goals>
-		        	</execution>
-		          	<execution>
-		            	<id>verify</id>
-		            	<goals>
-		              		<goal>verify</goal>
-		            	</goals>
-		          	</execution>
-		        </executions>
-			</plugin>
 		</plugins>
 	</build>
 	

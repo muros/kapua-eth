@@ -116,10 +116,9 @@ Vagrant.configure("2") do |config|
      su --login -c "java -cp /usr/local/h2database/h2database-1.4.192/h2*.jar org.h2.tools.Server -baseDir /home/vagrant/H2/kapua -webAllowOthers -tcpAllowOthers -tcpPort 3306 &" vagrant
 	 
 	 # Create the initial database
-	 java -cp /usr/local/h2database/h2database-1.4.192/h2*.jar org.h2.tools.Shell -url jdbc:h2:tcp://localhost:3306/kapuadb -user "root" -password "password" -sql 
-	 	"CREATE SCHEMA IF NOT EXISTS kapuadb;
-	     CREATE USER kapua PASSWORD 'kapua';
-	 	 GRANT ALL ON SCHEMA kapuadb TO kapua;"
+	 java -cp /usr/local/h2database/h2database-1.4.192/h2*.jar org.h2.tools.Shell -url jdbc:h2:tcp://localhost:3306/kapuadb -user "root" -password "password" -sql "CREATE SCHEMA IF NOT EXISTS kapuadb; \
+	 	CREATE USER IF NOT EXISTS kapua PASSWORD 'kapua'; \
+	 	GRANT ALL ON SCHEMA kapuadb TO kapua;"
 
      ### install activemq ###
 	 sudo mkdir -p /usr/local/activemq
