@@ -26,4 +26,9 @@ public class DeviceEntityManagerFactory extends org.eclipse.kapua.commons.util.A
     {
         return instance.createEntityManager();
     }
+
+    public static DeviceEntityManagerFactory instance() {
+        return instance;
+    }
+
 }

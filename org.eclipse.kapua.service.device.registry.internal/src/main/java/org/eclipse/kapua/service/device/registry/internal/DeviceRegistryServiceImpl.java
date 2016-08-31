@@ -204,19 +204,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
 
         //
         // Do Query
-        DeviceListResult result = null;
-        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
-        try {
-            result = DeviceDAO.query(em, query);
-        }
-        catch (Exception e) {
-            throw KapuaExceptionUtils.convertPersistenceException(e);
-        }
-        finally {
-            em.close();
-        }
-
-        return result;
+        return DeviceEntityManagerFactory.instance().resultsFromEntityManager(entityManager -> DeviceDAO.query(entityManager, query));
     }
 
     @Override
@@ -234,19 +222,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
 
         //
         // Do count
-        long count = 0;
-        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
-        try {
-            count = DeviceDAO.count(em, query);
-        }
-        catch (Exception e) {
-            throw KapuaExceptionUtils.convertPersistenceException(e);
-        }
-        finally {
-            em.close();
-        }
-
-        return count;
+        return DeviceEntityManagerFactory.instance().resultsFromEntityManager(entityManager -> DeviceDAO.count(entityManager, query));
     }
 
     @Override

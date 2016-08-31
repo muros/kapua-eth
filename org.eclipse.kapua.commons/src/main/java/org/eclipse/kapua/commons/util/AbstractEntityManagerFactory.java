@@ -121,4 +121,23 @@ public abstract class AbstractEntityManagerFactory
     {
         return new EntityManager(entityManagerFactory.createEntityManager());
     }
+
+    public void onEntityManager(EntityManagerCallback entityManagerCallback) throws KapuaException {
+        resultsFromEntityManager(entityManagerCallback);
+    }
+
+    public <T> T resultsFromEntityManager(EntityManagerCallback<T> entityManagerCallback) throws KapuaException {
+        EntityManager manager = null;
+        try {
+            manager = createEntityManager();
+            return entityManagerCallback.onEntityManager(manager);
+        } catch (KapuaException e) {
+            throw KapuaExceptionUtils.convertPersistenceException(e);
+        } finally {
+            if(manager != null) {
+                manager.close();
+            }
+        }
+    }
+
 }
