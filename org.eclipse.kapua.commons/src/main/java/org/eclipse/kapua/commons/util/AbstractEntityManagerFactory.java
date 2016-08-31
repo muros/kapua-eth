@@ -47,6 +47,7 @@ public abstract class AbstractEntityManagerFactory
         SystemSetting config = SystemSetting.getInstance();
 
         String connectionUrlResolverType = config.getString(SystemSettingKey.DB_JDBC_CONNECTION_URL_RESOLVER, "DEFAULT");
+        LOG.debug("The following JDBC connection URL resolver type will be used: {}", connectionUrlResolverType);
         if(connectionUrlResolverType.equals("DEFAULT")) {
             jdbcConnectionUrlResolver = new DefaultConfigurableJdbcConnectionUrlResolver();
         } else if (connectionUrlResolverType.equals("H2")) {
@@ -107,6 +108,8 @@ public abstract class AbstractEntityManagerFactory
             s_uniqueConstraints.put(uc.getKey(), uc.getValue());
         }
     }
+
+    // Entity manager factory methods
 
     /**
      * Returns an EntityManager instance.
