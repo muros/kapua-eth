@@ -128,9 +128,6 @@
 								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/atht_credential_drop.sql</srcFile>
 								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/atht_credential_create.sql</srcFile>
 								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/atht_credential_seed.sql</srcFile>
-								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_permission_drop.sql</srcFile>
-								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_permission_create.sql</srcFile>
-								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_permission_seed.sql</srcFile>
 								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_create.sql</srcFile>
 								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_drop.sql</srcFile>
 								<srcFile>../org.eclipse.kapua.service.auth.shiro/src/main/sql/H2/athz_role_seed.sql</srcFile>

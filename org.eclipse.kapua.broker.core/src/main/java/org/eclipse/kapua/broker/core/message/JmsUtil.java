@@ -137,7 +137,7 @@ public class JmsUtil {
 		Translator<DeviceMessage, KapuaMessage> translatorToKapua = translatorToKapuaMap.get(connectorDescriptor.getDeviceProtocolName());
 		if (translatorToKapua==null) {
 			//lookup
-			translatorToKapua = Translator.getTranslatorFor(DeviceMessage.class, ReflectUtil.create(KapuaMessage.class, connectorDescriptor.getDeviceProtocolImplementationClass()));
+			translatorToKapua = Translator.getTranslatorFor(ReflectUtil.create(DeviceMessage.class, connectorDescriptor.getDeviceProtocolImplementationClass()), KapuaMessage.class);
 			translatorToKapuaMap.put(protocol, translatorToKapua);
 		}
 		return translatorToKapua.translate(middleMessage);
@@ -160,7 +160,7 @@ public class JmsUtil {
 		Translator<DeviceMessage, JmsMessage> translatorToJms = translatorToJmsMap.get(protocol);
 		if (translatorToJms==null) {
 			//lookup
-			translatorToJms = Translator.getTranslatorFor(DeviceMessage.class, ReflectUtil.create(JmsMessage.class, connectorDescriptor.getDeviceProtocolImplementationClass()));
+			translatorToJms = Translator.getTranslatorFor(ReflectUtil.create(DeviceMessage.class, connectorDescriptor.getDeviceProtocolImplementationClass()), JmsMessage.class);
 			translatorToJmsMap.put(protocol, translatorToJms);
 		}
 		return translatorToJms.translate(middleMessage);
