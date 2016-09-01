@@ -248,7 +248,7 @@
         transacted=false
         -->
 		<route errorHandlerRef="mainRouteMessageErrorHandler" >
-			<from uri="activemq:queue:Consumer.eurotech:mainRoutelisteners:EXACTLY_ONCE.VirtualTopic.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=30&amp;maxConcurrentConsumers=30" />
+			<from uri="activemq:queue:Consumer.eurotech:mainRoutelisteners:EXACTLY_ONCE.VirtualTopic.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=10&amp;maxConcurrentConsumers=10" />
 			<bean ref="kapuaConverter" method="convertTo"/>
 
 			<log message="BODY: ${header.JMSDestination}" loggingLevel="WARN" />
