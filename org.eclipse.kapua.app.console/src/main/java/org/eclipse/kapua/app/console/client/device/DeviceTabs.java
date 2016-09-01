@@ -47,7 +47,6 @@ public class DeviceTabs extends LayoutContainer
     private TabItem                      m_tabConfiguration;
 
     private TabItem                      m_tabCommand;
-    private TabItem                      m_tabRemoteAccess;
 
     private DeviceTabProfile             m_deviceProfileTab;
     private DeviceTabHistory             m_deviceHistoryTab;
@@ -86,7 +85,7 @@ public class DeviceTabs extends LayoutContainer
         }
 
         boolean hasConfigApp = selectedDevice != null && selectedDevice.hasApplication(GwtDeviceApplication.APP_CONFIGURATION);
-        if (hasConfigApp && m_currentSession.hasDeviceManagePermission()) {
+        if (hasConfigApp) {// && m_currentSession.hasDeviceManagePermission()) {
             m_tabConfiguration.enable();
         }
         else {
@@ -98,7 +97,7 @@ public class DeviceTabs extends LayoutContainer
         }
 
         boolean hasCmdApp = selectedDevice != null && selectedDevice.hasApplication(GwtDeviceApplication.APP_COMMAND);
-        if (hasCmdApp && m_currentSession.hasDeviceManagePermission()) {
+        if (hasCmdApp) {// && m_currentSession.hasDeviceManagePermission()) {
             m_tabCommand.enable();
         }
         else {
@@ -132,18 +131,6 @@ public class DeviceTabs extends LayoutContainer
             m_tabBundles.disable();
             m_tabBundles.getHeader().setTitle(MSGS.youDontHavePermissionTo("view", "tab", "device:manage"));
             if (m_tabsPanel.getSelectedItem() == m_tabBundles) {
-                m_tabsPanel.setSelection(m_tabProfile);
-            }
-        }
-
-        boolean hasRemoteAccessApp = selectedDevice != null && selectedDevice.hasApplication(GwtDeviceApplication.APP_VPN_CLIENT);
-        if (hasRemoteAccessApp && m_currentSession.hasDeviceManagePermission()) {
-            m_tabRemoteAccess.enable();
-        }
-        else {
-            m_tabRemoteAccess.disable();
-            m_tabRemoteAccess.getHeader().setTitle(MSGS.youDontHavePermissionTo("view", "tab", "device:manage"));
-            if (m_tabsPanel.getSelectedItem() == m_tabRemoteAccess) {
                 m_tabsPanel.setSelection(m_tabProfile);
             }
         }

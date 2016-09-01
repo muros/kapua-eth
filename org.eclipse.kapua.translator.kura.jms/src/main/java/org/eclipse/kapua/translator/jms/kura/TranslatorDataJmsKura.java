@@ -14,48 +14,47 @@ import org.eclipse.kapua.transport.message.jms.JmsTopic;
 public class TranslatorDataJmsKura implements Translator<JmsMessage, KuraMessage>
 {
     @Override
-    public KuraMessage translate(JmsMessage message)
+    @SuppressWarnings("unchecked")
+    public KuraMessage translate(JmsMessage jmsMessage)
         throws KapuaException
     {
         //
         // Kura topic
-        KuraChannel kuraChannel = translate(message.getTopic());
+        KuraChannel kuraChannel = translate(jmsMessage.getTopic());
 
         //
         // Kura payload
-        KuraPayload kuraPayload = translate(message.getPayload());
+        KuraPayload kuraPayload = translate(jmsMessage.getPayload());
 
         //
-        // Kura message
-        @SuppressWarnings("unchecked")
-        KuraMessage kuraMessage = new KuraMessage(kuraChannel,
-                                                  message.getReceivedOn(),
-                                                  kuraPayload);
+        // Return Kura message
+        return new KuraMessage(kuraChannel,
+                               jmsMessage.getReceivedOn(),
+                               kuraPayload);
+
+    }
+
+    private KuraChannel translate(JmsTopic jmsTopic)
+        throws KapuaException
+    {
+        String[] mqttTopicTokens = jmsTopic.getSplittedTopic();
 
         //
-        // Return result
-        return kuraMessage;
+        // Return Kura Channel
+        return new KuraResponseChannel(mqttTopicTokens[0],
+                                       mqttTopicTokens[1]);
     }
 
-    private KuraChannel translate(JmsTopic topic)
+    private KuraPayload translate(JmsPayload jmsPayload)
         throws KapuaException
     {
-        String[] mqttTopicTokens = topic.getSplittedTopic();
-
-        KuraChannel kuraResponseChannel = new KuraResponseChannel(mqttTopicTokens[0],
-                                                                  mqttTopicTokens[1]);
-
-        return kuraResponseChannel;
-    }
-
-    private KuraPayload translate(JmsPayload payload)
-        throws KapuaException
-    {
-        byte[] jmsBody = payload.getBody();
+        byte[] jmsBody = jmsPayload.getBody();
 
         KuraPayload kuraPayload = new KuraPayload();
         kuraPayload.readFromByteArray(jmsBody);
 
+        //
+        // Return Kura Payload
         return kuraPayload;
     }
 

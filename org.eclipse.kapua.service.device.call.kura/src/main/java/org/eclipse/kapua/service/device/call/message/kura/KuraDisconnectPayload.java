@@ -27,19 +27,19 @@ public class KuraDisconnectPayload extends KuraPayload implements DevicePayload
     {
         super();
 
-        metrics().put(UPTIME, uptime);
-        metrics().put(DISPLAY_NAME, displayName);
+        getMetrics().put(UPTIME, uptime);
+        getMetrics().put(DISPLAY_NAME, displayName);
     }
 
     public <P extends KuraPayload> KuraDisconnectPayload(P kuraPayload) throws MessageException, IOException
     {
-        Iterator<String> hdrIterator = metrics().keySet().iterator();
+        Iterator<String> hdrIterator = getMetrics().keySet().iterator();
 
         while (hdrIterator.hasNext()) {
             String hdrName = hdrIterator.next();
-            String hdrVal = (String) metrics().get(hdrName);
+            String hdrVal = (String) getMetrics().get(hdrName);
 
-            metrics().put(hdrName, hdrVal);
+            getMetrics().put(hdrName, hdrVal);
         }
 
         setBody(kuraPayload.getBody());
@@ -47,12 +47,12 @@ public class KuraDisconnectPayload extends KuraPayload implements DevicePayload
 
     public String getUptime()
     {
-        return (String) metrics().get(UPTIME);
+        return (String) getMetrics().get(UPTIME);
     }
 
     public String getDisplayName()
     {
-        return (String) metrics().get(DISPLAY_NAME);
+        return (String) getMetrics().get(DISPLAY_NAME);
     }
 
     public String toDisplayString()

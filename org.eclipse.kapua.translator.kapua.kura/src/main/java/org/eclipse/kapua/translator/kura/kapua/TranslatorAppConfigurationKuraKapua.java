@@ -1,0 +1,286 @@
+package org.eclipse.kapua.translator.kura.kapua;
+
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.xml.namespace.QName;
+
+import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.util.xml.XmlUtil;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.config.metatype.Tad;
+import org.eclipse.kapua.model.config.metatype.Ticon;
+import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.service.account.Account;
+import org.eclipse.kapua.service.account.AccountService;
+import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
+import org.eclipse.kapua.service.device.call.kura.app.ResponseMetrics;
+import org.eclipse.kapua.service.device.call.kura.model.KuraDeviceComponentConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.KuraDeviceConfiguration;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
+import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponsePayload;
+import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
+import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
+import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
+import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.internal.DeviceComponentConfigurationImpl;
+import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationImpl;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseChannel;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
+import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
+import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
+import org.eclipse.kapua.translator.Translator;
+import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
+import org.eclipse.kapua.translator.exception.TranslatorException;
+
+public class TranslatorAppConfigurationKuraKapua implements Translator<KuraResponseMessage, ConfigurationResponseMessage>
+{
+    private static final String                                          CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
+    private static Map<ConfigurationMetrics, ConfigurationAppProperties> metricsDictionary;
+
+    public TranslatorAppConfigurationKuraKapua()
+    {
+        metricsDictionary = new HashMap<>();
+
+        metricsDictionary.put(ConfigurationMetrics.APP_ID, ConfigurationAppProperties.APP_NAME);
+        metricsDictionary.put(ConfigurationMetrics.APP_VERSION, ConfigurationAppProperties.APP_VERSION);
+    }
+
+    @Override
+    public ConfigurationResponseMessage translate(KuraResponseMessage kuraMessage)
+        throws KapuaException
+    {
+        //
+        // Kura channel
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AccountService accountService = locator.getService(AccountService.class);
+        Account account = accountService.findByName(kuraMessage.getChannel().getScope());
+
+        ConfigurationResponseChannel commandResponseChannel = translate(kuraMessage.getChannel());
+
+        //
+        // Kura payload
+        ConfigurationResponsePayload responsePayload = translate(kuraMessage.getPayload());
+
+        //
+        // Kura Message
+        ConfigurationResponseMessage kapuaMessage = new ConfigurationResponseMessage();
+        kapuaMessage.setScopeId(account.getId());
+        kapuaMessage.setChannel(commandResponseChannel);
+        kapuaMessage.setPayload(responsePayload);
+        kapuaMessage.setCapturedOn(kuraMessage.getPayload().getTimestamp());
+        kapuaMessage.setSentOn(kuraMessage.getPayload().getTimestamp());
+        kapuaMessage.setReceivedOn(kuraMessage.getTimestamp());
+        kapuaMessage.setResponseCode(translate((Integer) kuraMessage.getPayload().getMetrics().get(ResponseMetrics.RESP_METRIC_EXIT_CODE.getValue())));
+
+        //
+        // Return Kapua Message
+        return kapuaMessage;
+    }
+
+    private ConfigurationResponseChannel translate(KuraResponseChannel kuraChannel)
+        throws KapuaException
+    {
+
+        if (!CONTROL_MESSAGE_CLASSIFIER.equals(kuraChannel.getMessageClassification())) {
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_CLASSIFIER,
+                                          null,
+                                          kuraChannel.getMessageClassification());
+        }
+
+        ConfigurationResponseChannel configurationResponseChannel = new ConfigurationResponseChannel();
+
+        String[] appIdTokens = kuraChannel.getAppId().split("-");
+
+        if (!ConfigurationMetrics.APP_ID.getValue().equals(appIdTokens[0])) {
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_APP_NAME,
+                                          null,
+                                          appIdTokens[0]);
+        }
+
+        if (!ConfigurationMetrics.APP_VERSION.getValue().equals(appIdTokens[1])) {
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_APP_VERSION,
+                                          null,
+                                          appIdTokens[1]);
+        }
+
+        configurationResponseChannel.setAppName(ConfigurationAppProperties.APP_NAME);
+        configurationResponseChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+
+        //
+        // Return Kapua Channel
+        return configurationResponseChannel;
+    }
+
+    private ConfigurationResponsePayload translate(KuraResponsePayload kuraPayload)
+        throws KapuaException
+    {
+        ConfigurationResponsePayload configurationResponsePayload = new ConfigurationResponsePayload();
+
+        configurationResponsePayload.setExceptionMessage((String) kuraPayload.getMetrics().get(ResponseMetrics.RESP_METRIC_EXCEPTION_MESSAGE.getValue()));
+        configurationResponsePayload.setExceptionStack((String) kuraPayload.getMetrics().get(ResponseMetrics.RESP_METRIC_EXCEPTION_STACK.getValue()));
+
+        DeviceManagementSetting config = DeviceManagementSetting.getInstance();
+        String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
+
+        if (kuraPayload.getBody() != null) {
+            String body = null;
+            try {
+                body = new String(kuraPayload.getBody(), charEncoding);
+            }
+            catch (Exception e) {
+                throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                              e,
+                                              configurationResponsePayload.getBody());
+            }
+
+            KuraDeviceConfiguration kuraDeviceConfiguration = null;
+            try {
+                kuraDeviceConfiguration = XmlUtil.unmarshal(body, KuraDeviceConfiguration.class);
+            }
+            catch (Exception e) {
+                throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                              e,
+                                              body);
+            }
+
+            translateBody(configurationResponsePayload,
+                          charEncoding,
+                          kuraDeviceConfiguration);
+        }
+
+        // Return Kapua Payload
+        return configurationResponsePayload;
+    }
+
+    private void translateBody(ConfigurationResponsePayload configurationResponsePayload, String charEncoding, KuraDeviceConfiguration kuraDeviceConfiguration)
+        throws TranslatorException
+    {
+        try {
+            DeviceConfigurationImpl deviceConfiguration = new DeviceConfigurationImpl();
+            for (KuraDeviceComponentConfiguration kuraDeviceCompConf : kuraDeviceConfiguration.getConfigurations()) {
+
+                String componentId = kuraDeviceCompConf.getComponentId();
+                DeviceComponentConfigurationImpl deviceComponentConfiguration = new DeviceComponentConfigurationImpl(componentId);
+                deviceComponentConfiguration.setName(kuraDeviceCompConf.getComponentName());
+                deviceComponentConfiguration.setProperties(translateProperties(kuraDeviceCompConf.getProperties()));
+
+                // Translate also definitions when they are available
+                if (kuraDeviceCompConf.getDefinition() != null) {
+                    deviceComponentConfiguration.setDefinition(translateDefinitions(kuraDeviceCompConf.getDefinition()));
+                }
+
+                // Add to kapua configuration
+                deviceConfiguration.getComponentConfigurations().add(deviceComponentConfiguration);
+            }
+
+            StringWriter sw = new StringWriter();
+
+            XmlUtil.marshal(deviceConfiguration, sw);
+            byte[] requestBody = sw.toString().getBytes(charEncoding);
+
+            configurationResponsePayload.setBody(requestBody);
+        }
+        catch (Exception e) {
+            throw new TranslatorException(TranslatorErrorCodes.INVALID_BODY,
+                                          e,
+                                          kuraDeviceConfiguration);
+        }
+    }
+
+    private Tocd translateDefinitions(Tocd kuraDefinition)
+    {
+        Tocd definition = new Tocd();
+
+        definition.setId(kuraDefinition.getId());
+        definition.setName(kuraDefinition.getName());
+        definition.setDescription(kuraDefinition.getDescription());
+
+        List<Tad> ads = definition.getAD();
+        for (Tad kuraAd : kuraDefinition.getAD()) {
+            Tad ad = new Tad();
+            ad.setCardinality(kuraAd.getCardinality());
+            ad.setDefault(ad.getDefault());
+            ad.setDescription(kuraAd.getDescription());
+            ad.setId(kuraAd.getId());
+            ad.setMax(kuraAd.getMax());
+            ad.setMin(kuraAd.getMin());
+            ad.setName(kuraAd.getName());
+            ad.setType(kuraAd.getType());
+
+            ads.add(ad);
+        }
+
+        List<Ticon> icons = definition.getIcon();
+        for (Ticon kuraIcon : kuraDefinition.getIcon()) {
+            Ticon icon = new Ticon();
+            icon.setResource(kuraIcon.getResource());
+            icon.setSize(kuraIcon.getSize());
+            icons.add(icon);
+        }
+
+        List<Object> anys = definition.getAny();
+        for (Object kuraAny : kuraDefinition.getAny()) {
+            anys.add(kuraAny);
+        }
+
+        Map<QName, String> otherAttributes = definition.getOtherAttributes();
+        for (Entry<QName, String> entry : kuraDefinition.getOtherAttributes().entrySet()) {
+            otherAttributes.put(entry.getKey(),
+                                entry.getValue());
+        }
+
+        return definition;
+    }
+
+    private Map<String, Object> translateProperties(Map<String, Object> kuraProperties)
+    {
+        Map<String, Object> properties = new HashMap<>();
+        for (Entry<String, Object> entry : kuraProperties.entrySet()) {
+            properties.put(entry.getKey(),
+                           entry.getValue());
+        }
+        return properties;
+    }
+
+    private KapuaResponseCode translate(Integer kuraResponseCode)
+    {
+        KapuaResponseCode responseCode;
+        switch (kuraResponseCode) {
+            case 200:
+                responseCode = KapuaResponseCode.ACCEPTED;
+                break;
+
+            case 400:
+                responseCode = KapuaResponseCode.BAD_REQUEST;
+                break;
+
+            case 404:
+                responseCode = KapuaResponseCode.NOT_FOUND;
+                break;
+            case 500:
+            default:
+                responseCode = KapuaResponseCode.INTERNAL_ERROR;
+                break;
+        }
+        return responseCode;
+    }
+
+    @Override
+    public Class<KuraResponseMessage> getClassFrom()
+    {
+        return KuraResponseMessage.class;
+    }
+
+    @Override
+    public Class<ConfigurationResponseMessage> getClassTo()
+    {
+        return ConfigurationResponseMessage.class;
+    }
+
+}

@@ -23,8 +23,8 @@ import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionCreator;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionService;
-import org.eclipse.kapua.service.device.call.kura.ResponseMetrics;
 import org.eclipse.kapua.service.device.call.kura.app.CommandMetrics;
+import org.eclipse.kapua.service.device.call.kura.app.ResponseMetrics;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
@@ -237,8 +237,8 @@ public class DeviceCommandManagementServiceTest extends Assert
             kuraResponseChannel.setRequestId(kuraRequestPayload.getRequestId());
 
             KuraResponsePayload kuraResponsePayload = new KuraResponsePayload();
-            kuraResponsePayload.metrics().put(ResponseMetrics.RESP_METRIC_EXIT_CODE.getValue(), 200);
-            kuraResponsePayload.metrics().put(CommandMetrics.APP_METRIC_STDOUT.getValue(), "ok");
+            kuraResponsePayload.getMetrics().put(ResponseMetrics.RESP_METRIC_EXIT_CODE.getValue(), 200);
+            kuraResponsePayload.getMetrics().put(CommandMetrics.APP_METRIC_STDOUT.getValue(), "ok");
 
             KuraResponseMessage kuraResponseMessage = new KuraResponseMessage(kuraResponseChannel,
                                                                               new Date(),

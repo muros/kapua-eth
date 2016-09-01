@@ -106,7 +106,9 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
                     public void run()
                     {
                         if (mqttMessage.getResponseTopic() != null) {
-                            mqttClientCallback.notifyAll();
+                            synchronized (mqttClientCallback) {
+                                mqttClientCallback.notifyAll();
+                            }
                         }
                     }
                 }, timeout);

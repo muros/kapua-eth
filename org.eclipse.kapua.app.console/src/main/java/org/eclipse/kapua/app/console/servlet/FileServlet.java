@@ -42,13 +42,11 @@ import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.model.KapuaFormFields;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
-import org.eclipse.kapua.commons.util.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
-import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
 import org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService;
 import org.slf4j.Logger;
@@ -119,16 +117,16 @@ public class FileServlet extends EdcHttpServlet
             }
 
             KapuaLocator locator = KapuaLocator.getInstance();
-            DeviceConfigurationManagementService deviceService = locator.getService(DeviceConfigurationManagementService.class);
+            DeviceConfigurationManagementService deviceConfigurationManagementService = locator.getService(DeviceConfigurationManagementService.class);
 
             FileItem fileItem = fileItems.get(0);
             byte[] data = fileItem.get();
-            String xmlString = new String(data, "UTF-8");
+            String xmlConfigurationString = new String(data, "UTF-8");
 
-            DeviceConfiguration config = XmlUtil.unmarshal(xmlString, DeviceConfiguration.class);
-            deviceService.put(KapuaEid.parseShortId(scopeIdString),
-                              KapuaEid.parseShortId(deviceIdString),
-                              config, null);
+            deviceConfigurationManagementService.put(KapuaEid.parseShortId(scopeIdString),
+                                                     KapuaEid.parseShortId(deviceIdString),
+                                                     xmlConfigurationString,
+                                                     null);
 
             // //
             // // Add an additional delay after the configuration update
@@ -264,7 +262,7 @@ public class FileServlet extends EdcHttpServlet
             }
 
             if (deviceIdString == null || deviceIdString.isEmpty()) {
-                throw new IllegalArgumentException("clientId");
+                throw new IllegalArgumentException("deviceId");
             }
 
             if (command == null || command.isEmpty()) {
@@ -305,7 +303,7 @@ public class FileServlet extends EdcHttpServlet
             }
 
             commandInput.setCommand(cmd);
-            commandInput.setPassword(password);
+            commandInput.setPassword((password == null || password.isEmpty()) ? null : password);
             commandInput.setArguments(args);
             commandInput.setTimeout(timeout);
             commandInput.setWorkingDir("/tmp/");
@@ -313,7 +311,8 @@ public class FileServlet extends EdcHttpServlet
 
             DeviceCommandOutput deviceCommandOutput = deviceService.exec(KapuaEid.parseShortId(scopeIdString),
                                                                          KapuaEid.parseShortId(deviceIdString),
-                                                                         commandInput, null);
+                                                                         commandInput,
+                                                                         null);
             resp.setContentType("text/plain");
             if (deviceCommandOutput.getStderr() != null &&
                 deviceCommandOutput.getStderr().length() > 0) {

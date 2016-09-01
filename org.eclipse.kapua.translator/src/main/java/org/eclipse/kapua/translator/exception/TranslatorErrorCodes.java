@@ -24,4 +24,6 @@ public enum TranslatorErrorCodes implements KapuaErrorCode
     INVALID_CHANNEL_APP_VERSION,
 
     INVALID_PAYLOAD,
+
+    INVALID_BODY,
 }

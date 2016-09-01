@@ -1,25 +1,18 @@
 INSERT INTO athz_user_permission (`scope_id`, `id`, `created_on`, `created_by`, `user_id`, `domain`) 
-		VALUES 	('1', '1', UTC_TIMESTAMP(), '1', '1', 'account'),
+		VALUES 	
+				-- kapua_sys permissions
+				('1', '1',  UTC_TIMESTAMP(), '1', '1', 'account'),
 			   	('1', '2', UTC_TIMESTAMP(), '1', '1', 'user'),
-				('1', '3', UTC_TIMESTAMP(), '1', '1', 'device_event'),
-				('1', '4', UTC_TIMESTAMP(), '1', '1', 'device_connection'),
+				('1', '3',  UTC_TIMESTAMP(), '1', '1', 'device_event'),
+				('1', '4',  UTC_TIMESTAMP(), '1', '1', 'device_connection'),
 				('1', '5', UTC_TIMESTAMP(), '1', '1', 'device'),
 				('1', '6', UTC_TIMESTAMP(), '1', '1', 'data'),
 				('1', '7', UTC_TIMESTAMP(), '1', '1', 'broker'),
 				('1', '8', UTC_TIMESTAMP(), '1', '1', 'credential'),
 				('1', '9', UTC_TIMESTAMP(), '1', '1', 'role'),
-				('1', '10', UTC_TIMESTAMP(), '1', '1', 'user_permission'),
+				('1', '10', UTC_TIMESTAMP(), '1', '1', 'user_permission'),				
 				('1', '11', UTC_TIMESTAMP(), '1', '1', 'device_lifecycle'),
-				('1', '12', UTC_TIMESTAMP(), '1', '1', 'device_management'),
-				('1', '101', UTC_TIMESTAMP(), '1', '2', 'account'),
-				('1', '102', UTC_TIMESTAMP(), '1', '2', 'user'),
-				('1', '103', UTC_TIMESTAMP(), '1', '2', 'device_event'),
-				('1', '104', UTC_TIMESTAMP(), '1', '2', 'device_connection'),
-				('1', '105', UTC_TIMESTAMP(), '1', '2', 'device'),
-				('1', '106', UTC_TIMESTAMP(), '1', '2', 'data'),
-				('1', '107', UTC_TIMESTAMP(), '1', '2', 'broker'),
-				('1', '108', UTC_TIMESTAMP(), '1', '2', 'credential'),
-				('1', '109', UTC_TIMESTAMP(), '1', '2', 'role'),
-				('1', '110', UTC_TIMESTAMP(), '1', '2', 'user_permission'),
-				('1', '111', UTC_TIMESTAMP(), '1', '2', 'device_lifecycle'),
-				('1', '112', UTC_TIMESTAMP(), '1', '2', 'device_management');
+			    ('1', '12', UTC_TIMESTAMP(), '1', '1', 'device_management'),
+			   
+			    -- kapua_broker permissions
+				('1', '101', UTC_TIMESTAMP(), '1', '2', 'broker');

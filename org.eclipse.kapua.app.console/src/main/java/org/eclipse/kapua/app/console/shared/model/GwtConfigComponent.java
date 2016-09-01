@@ -34,7 +34,7 @@ public class GwtConfigComponent extends EdcBaseModel implements Serializable {
         return getUnescaped("componentId");
     }
 
-    public void setComponentId(String componentId) {
+    public void setId(String componentId) {
         set("componentId", componentId);
     }
 
@@ -46,7 +46,7 @@ public class GwtConfigComponent extends EdcBaseModel implements Serializable {
         return getUnescaped("componentName");
     }
 
-    public void setComponentName(String componentName) {
+    public void setName(String componentName) {
         set("componentName", componentName);
     }
 
@@ -54,7 +54,7 @@ public class GwtConfigComponent extends EdcBaseModel implements Serializable {
         return get("componentDescription");
     }
 
-    public void setComponentDescription(String componentDescription) {
+    public void setDescription(String componentDescription) {
         set("componentDescription", componentDescription);
     }
 

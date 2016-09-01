@@ -36,7 +36,7 @@ public class KuraCallTest extends Assert
 
         KuraRequestPayload requestPayload = new KuraRequestPayload();
         // requestPayload.metrics().put(Kurame, value)
-        requestPayload.metrics().put(CommandMetrics.APP_METRIC_CMD.getValue(), "ifconfig");
+        requestPayload.getMetrics().put(CommandMetrics.APP_METRIC_CMD.getValue(), "ifconfig");
 
         KuraRequestMessage requestMessage = new KuraRequestMessage(requestChannel, new Date(), requestPayload);
 

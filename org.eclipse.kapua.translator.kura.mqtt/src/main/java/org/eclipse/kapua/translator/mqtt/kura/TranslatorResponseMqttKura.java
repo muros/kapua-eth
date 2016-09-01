@@ -31,13 +31,9 @@ public class TranslatorResponseMqttKura implements Translator<MqttMessage, KuraR
 
         //
         // Kura message
-        KuraResponseMessage kuraMessage = new KuraResponseMessage(kuraChannel,
-                                                                  mqttMessage.getTimestamp(),
-                                                                  kuraPayload);
-
-        //
-        // Return result
-        return kuraMessage;
+        return new KuraResponseMessage(kuraChannel,
+                                       mqttMessage.getTimestamp(),
+                                       kuraPayload);
     }
 
     private KuraResponseChannel translate(MqttTopic mqttTopic)
@@ -59,6 +55,8 @@ public class TranslatorResponseMqttKura implements Translator<MqttMessage, KuraR
         kuraResponseChannel.setReplyPart(mqttTopicTokens[4]);
         kuraResponseChannel.setRequestId(mqttTopicTokens[5]);
 
+        //
+        // Return Kura Channel
         return kuraResponseChannel;
     }
 
@@ -70,6 +68,8 @@ public class TranslatorResponseMqttKura implements Translator<MqttMessage, KuraR
         KuraResponsePayload kuraResponsePayload = new KuraResponsePayload();
         kuraResponsePayload.readFromByteArray(mqttBody);
 
+        //
+        // Return Kura Payload
         return kuraResponsePayload;
     }
 

@@ -65,35 +65,38 @@ public class KapuaPayloadImpl implements KapuaPayload
         while (hdrIterator.hasNext()) {
             String hdrName = hdrIterator.next();
             Object hdrValue = getProperties().get(hdrName);
-            String hdrValueString = "";
-            Class<?> type = hdrValue.getClass();
-            if (type == Float.class) {
-                hdrValueString = Float.toString((Float) hdrValue);
-            }
-            else if (type == Double.class) {
-                hdrValueString = Double.toString((Double) hdrValue);
-            }
-            else if (type == Integer.class) {
-                hdrValueString = Integer.toString((Integer) hdrValue);
-            }
-            else if (type == Long.class) {
-                hdrValueString = Long.toString((Long) hdrValue);
-            }
-            else if (type == Boolean.class) {
-                hdrValueString = Boolean.toString((Boolean) hdrValue);
-            }
-            else if (type == String.class) {
-                hdrValueString = (String) hdrValue;
-            }
-            else if (type == byte[].class) {
-                hdrValueString = byteArrayToHexString((byte[]) hdrValue);
-            }
-            sb.append(hdrName);
-            sb.append("=");
-            sb.append(hdrValueString);
+            if (hdrValue != null) {
 
-            if (hdrIterator.hasNext()) {
-                sb.append("~~");
+                String hdrValueString = "";
+                Class<?> type = hdrValue.getClass();
+                if (type == Float.class) {
+                    hdrValueString = Float.toString((Float) hdrValue);
+                }
+                else if (type == Double.class) {
+                    hdrValueString = Double.toString((Double) hdrValue);
+                }
+                else if (type == Integer.class) {
+                    hdrValueString = Integer.toString((Integer) hdrValue);
+                }
+                else if (type == Long.class) {
+                    hdrValueString = Long.toString((Long) hdrValue);
+                }
+                else if (type == Boolean.class) {
+                    hdrValueString = Boolean.toString((Boolean) hdrValue);
+                }
+                else if (type == String.class) {
+                    hdrValueString = (String) hdrValue;
+                }
+                else if (type == byte[].class) {
+                    hdrValueString = byteArrayToHexString((byte[]) hdrValue);
+                }
+                sb.append(hdrName);
+                sb.append("=");
+                sb.append(hdrValueString);
+
+                if (hdrIterator.hasNext()) {
+                    sb.append("~~");
+                }
             }
         }
 

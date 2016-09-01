@@ -40,7 +40,7 @@ public class DeviceCallExecutor<C extends KapuaRequestChannel, P extends KapuaRe
         //
         // Get the correct device call
         KapuaLocator locator = KapuaLocator.getInstance();
-        DeviceCallFactory kapuaDeviceCallFactory = locator.getFactory(DeviceCallFactory.class/* , device.getType() */);
+        DeviceCallFactory kapuaDeviceCallFactory = locator.getFactory(DeviceCallFactory.class);
         DeviceCall<DeviceRequestMessage, DeviceResponseMessage> deviceCall = kapuaDeviceCallFactory.newDeviceCall();
         Translator tKapuaToClient = Translator.getTranslatorFor(requestMessage.getRequestClass(),
                                                                 deviceCall.getBaseMessageClass());
@@ -49,7 +49,7 @@ public class DeviceCallExecutor<C extends KapuaRequestChannel, P extends KapuaRe
         timeout = timeout == null ? DeviceManagementSetting.getInstance().getLong(DeviceManagementSettingKey.REQUEST_TIMEOUT) : timeout;
 
         DeviceRequestMessage deviceRequestMessage = (DeviceRequestMessage) tKapuaToClient.translate(requestMessage);
-        switch (requestMessage.getSemanticChannel().getMethod()) {
+        switch (requestMessage.getChannel().getMethod()) {
             case CREATE:
             {
                 responseMessage = deviceCall.create(deviceRequestMessage, timeout);
@@ -83,7 +83,7 @@ public class DeviceCallExecutor<C extends KapuaRequestChannel, P extends KapuaRe
             default:
                 throw new DeviceManagementException(DeviceManagementErrorCodes.REQUEST_BAD_METHOD,
                                                     null,
-                                                    requestMessage.getSemanticChannel().getMethod());
+                                                    requestMessage.getChannel().getMethod());
         }
 
         Translator tClientToKapua = Translator.getTranslatorFor(deviceCall.getBaseMessageClass(),

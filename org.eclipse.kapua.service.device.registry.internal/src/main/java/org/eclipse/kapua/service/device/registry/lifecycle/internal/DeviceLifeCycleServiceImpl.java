@@ -40,7 +40,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         throws KapuaException
     {
         KapuaBirthPayload payload = message.getPayload();
-        KapuaBirthChannel channel = message.getSemanticChannel();
+        KapuaBirthChannel channel = message.getChannel();
         KapuaId scopeId = message.getScopeId();
         KapuaId deviceId = message.getDeviceId();
         String clientId = channel.getClientId();

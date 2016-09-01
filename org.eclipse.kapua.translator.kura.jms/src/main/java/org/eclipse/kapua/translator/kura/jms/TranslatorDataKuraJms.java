@@ -18,48 +18,48 @@ public class TranslatorDataKuraJms implements Translator<KuraMessage, JmsMessage
 {
 
     @Override
-    public JmsMessage translate(KuraMessage message)
+    public JmsMessage translate(KuraMessage kuraMessage)
         throws KapuaException
     {
         //
         // Jms request topic
-        JmsTopic jmsRequestTopic = translate(message.getChannel());
+        JmsTopic jmsRequestTopic = translate(kuraMessage.getChannel());
 
         //
         // Jms payload
-        JmsPayload jmsPayload = translate(message.getPayload());
+        JmsPayload jmsPayload = translate(kuraMessage.getPayload());
 
         //
-        // Jms message
-        JmsMessage jmsMessage = new JmsMessage(jmsRequestTopic,
-                                               new Date(),
-                                               jmsPayload);
-
-        //
-        // Return result
-        return jmsMessage;
+        // Return Jms message
+        return new JmsMessage(jmsRequestTopic,
+                              new Date(),
+                              jmsPayload);
     }
 
-    private JmsTopic translate(KuraChannel channel)
+    private JmsTopic translate(KuraChannel kuraChannel)
         throws KapuaException
     {
-        List<String> topicTokens = new ArrayList<String>();
+        List<String> topicTokens = new ArrayList<>();
 
-        topicTokens.add(channel.getScope());
-        topicTokens.add(channel.getClientId());
+        topicTokens.add(kuraChannel.getScope());
+        topicTokens.add(kuraChannel.getClientId());
 
-        if (channel.getSemanticChannelParts() != null &&
-            !channel.getSemanticChannelParts().isEmpty()) {
-            topicTokens.addAll(channel.getSemanticChannelParts());
+        if (kuraChannel.getSemanticChannelParts() != null &&
+            !kuraChannel.getSemanticChannelParts().isEmpty()) {
+            topicTokens.addAll(kuraChannel.getSemanticChannelParts());
         }
 
+        //
+        // Return Jms Topic
         return new JmsTopic(topicTokens.toArray(new String[0]));
     }
 
-    private JmsPayload translate(KuraPayload payload)
+    private JmsPayload translate(KuraPayload kuraPayload)
         throws KapuaException
     {
-        return new JmsPayload(payload.toByteArray());
+        //
+        // Return Jms Payload
+        return new JmsPayload(kuraPayload.toByteArray());
     }
 
     @Override

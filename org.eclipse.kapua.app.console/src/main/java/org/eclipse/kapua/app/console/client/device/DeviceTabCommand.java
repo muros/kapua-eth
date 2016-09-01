@@ -75,7 +75,7 @@ public class DeviceTabCommand extends LayoutContainer
     private LayoutContainer                    m_commandInput;
     private FormPanel                          m_formPanel;
     private HiddenField<String>                m_accountField;
-    private HiddenField<String>                m_clientIdField;
+    private HiddenField<String>                m_deviceIdField;
     private HiddenField<Integer>               m_timeoutField;
 
     private FileUploadField                    m_fileUploadField;
@@ -216,12 +216,12 @@ public class DeviceTabCommand extends LayoutContainer
         });
 
         m_accountField = new HiddenField<String>();
-        m_accountField.setName("account");
+        m_accountField.setName("scopeIdString");
         fieldSet.add(m_accountField);
 
-        m_clientIdField = new HiddenField<String>();
-        m_clientIdField.setName("clientId");
-        fieldSet.add(m_clientIdField);
+        m_deviceIdField = new HiddenField<String>();
+        m_deviceIdField.setName("deviceIdString");
+        fieldSet.add(m_deviceIdField);
 
         m_timeoutField = new HiddenField<Integer>();
         m_timeoutField.setName("timeout");
@@ -274,7 +274,7 @@ public class DeviceTabCommand extends LayoutContainer
                     m_result.clear();
                     m_commandInput.mask(MSGS.deviceCommandExecuting());
                     m_accountField.setValue(m_selectedDevice.getScopeId());
-                    m_clientIdField.setValue(m_selectedDevice.getUnescapedClientId());
+                    m_deviceIdField.setValue(m_selectedDevice.getId());
                     m_timeoutField.setValue(COMMAND_TIMEOUT_SECS);
                     GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_COMMAND_EXECUTE);
 

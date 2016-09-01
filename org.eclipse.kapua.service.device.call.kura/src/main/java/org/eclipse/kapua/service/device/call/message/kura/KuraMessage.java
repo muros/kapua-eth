@@ -36,8 +36,13 @@ public class KuraMessage<C extends KuraChannel, P extends KuraPayload> implement
     }
 
     @Override
-    public Date timestamp()
+    public Date getTimestamp()
     {
         return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp)
+    {
+        this.timestamp = timestamp;
     }
 }

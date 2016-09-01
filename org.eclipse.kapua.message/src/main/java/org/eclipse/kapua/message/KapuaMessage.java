@@ -35,9 +35,9 @@ public interface KapuaMessage<C extends KapuaChannel, P extends KapuaPayload> ex
 
     public void setPosition(KapuaPosition position);
 
-    public C getSemanticChannel();
+    public C getChannel();
 
-    public void setSemanticChannel(C semanticChannel);
+    public void setChannel(C semanticChannel);
 
     public P getPayload();
 

@@ -73,9 +73,9 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     @Column(name = "action", updatable = false, nullable = false)
     private KapuaMethod       action;
 
-    @XmlElement(name = "responseCode")
+    @XmlElement(name = "response_code")
     @Enumerated(EnumType.STRING)
-    @Column(name = "responseCode", updatable = false, nullable = false)
+    @Column(name = "response_code", updatable = false, nullable = false)
     private KapuaResponseCode responseCode;
 
     @XmlElement(name = "eventMessage")
@@ -138,16 +138,18 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     @Override
     public void setPosition(KapuaPosition position)
     {
-        this.position = new KapuaPositionImpl();
-        this.position.setAltitude(position.getAltitude());
-        this.position.setHeading(position.getHeading());
-        this.position.setLatitude(position.getLatitude());
-        this.position.setLongitude(position.getLongitude());
-        this.position.setPrecision(position.getPrecision());
-        this.position.setSatellites(position.getSatellites());
-        this.position.setSpeed(position.getSpeed());
-        this.position.setStatus(position.getStatus());
-        this.position.setTimestamp(position.getTimestamp());
+        if (position != null) {
+            this.position = new KapuaPositionImpl();
+            this.position.setAltitude(position.getAltitude());
+            this.position.setHeading(position.getHeading());
+            this.position.setLatitude(position.getLatitude());
+            this.position.setLongitude(position.getLongitude());
+            this.position.setPrecision(position.getPrecision());
+            this.position.setSatellites(position.getSatellites());
+            this.position.setSpeed(position.getSpeed());
+            this.position.setStatus(position.getStatus());
+            this.position.setTimestamp(position.getTimestamp());
+        }
     }
 
     @Override

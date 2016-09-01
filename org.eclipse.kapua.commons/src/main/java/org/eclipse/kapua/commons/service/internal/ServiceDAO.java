@@ -182,7 +182,6 @@ public class ServiceDAO
 
         // Set limit
         if (kapuaQuery.getLimit() != null) {
-
             query.setMaxResults(kapuaQuery.getLimit().intValue() + 1);
         }
 
@@ -191,7 +190,7 @@ public class ServiceDAO
 
         // Check limit exceeded
         if (kapuaQuery.getLimit() != null &&
-            result.size() >= kapuaQuery.getLimit().intValue()) {
+            result.size() > kapuaQuery.getLimit().intValue()) {
             result.remove(kapuaQuery.getLimit().intValue());
             resultContainer.setLimitExceeded(true);
         }
