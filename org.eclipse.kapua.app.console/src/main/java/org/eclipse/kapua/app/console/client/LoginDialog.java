@@ -127,6 +127,11 @@ public class LoginDialog extends Dialog
         add(password);
 
         setFocusWidget(username);
+
+        //
+        username.setValue("kapua-sys");
+        password.setValue("We!come12345");
+
     }
 
     public GwtSession getCurrentSession()

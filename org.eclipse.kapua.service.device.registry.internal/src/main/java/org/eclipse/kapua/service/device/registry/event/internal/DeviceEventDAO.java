@@ -26,15 +26,17 @@ public class DeviceEventDAO extends ServiceDAO
 
     public static DeviceEvent create(EntityManager em, DeviceEventCreator deviceEventCreator)
     {
-        DeviceEvent deviceConnection = new DeviceEventImpl(deviceEventCreator.getScopeId());
-        deviceConnection.setDeviceId(deviceEventCreator.getDeviceId());
-        deviceConnection.setReceivedOn(deviceEventCreator.getReceivedOn());
-        deviceConnection.setSentOn(deviceEventCreator.getSentOn());
-        deviceConnection.setResource(deviceEventCreator.getResource());
-        deviceConnection.setEventMessage(deviceEventCreator.getEventMessage());
-        deviceConnection.setPosition(deviceEventCreator.getPosition());
+        DeviceEvent deviceEvent = new DeviceEventImpl(deviceEventCreator.getScopeId());
+        deviceEvent.setDeviceId(deviceEventCreator.getDeviceId());
+        deviceEvent.setReceivedOn(deviceEventCreator.getReceivedOn());
+        deviceEvent.setSentOn(deviceEventCreator.getSentOn());
+        deviceEvent.setResource(deviceEventCreator.getResource());
+        deviceEvent.setAction(deviceEventCreator.getAction());
+        deviceEvent.setResponseCode(deviceEventCreator.getResponseCode());
+        deviceEvent.setEventMessage(deviceEventCreator.getEventMessage());
+        deviceEvent.setPosition(deviceEventCreator.getPosition());
 
-        return ServiceDAO.create(em, deviceConnection);
+        return ServiceDAO.create(em, deviceEvent);
     }
 
     public static DeviceEvent update(EntityManager em, DeviceEvent deviceConnection)

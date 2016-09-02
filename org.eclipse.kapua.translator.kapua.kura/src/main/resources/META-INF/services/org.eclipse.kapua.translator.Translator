@@ -5,6 +5,7 @@ org.eclipse.kapua.translator.kapua.kura.TranslatorAppConfigurationKapuaKura
 org.eclipse.kapua.translator.kapua.kura.TranslatorAppDeployKapuaKura
 org.eclipse.kapua.translator.kapua.kura.TranslatorAppSnapshotKapuaKura
 org.eclipse.kapua.translator.kapua.kura.TranslatorDataKapuaKura
+
 #from kura to kapua
 org.eclipse.kapua.translator.kura.kapua.TranslatorAppBundleKuraKapua
 org.eclipse.kapua.translator.kura.kapua.TranslatorAppCommandKuraKapua

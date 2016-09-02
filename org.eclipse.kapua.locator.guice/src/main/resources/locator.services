@@ -27,7 +27,13 @@ org.eclipse.kapua.service.authorization.user.role.UserRolesService
 org.eclipse.kapua.service.config.KapuaServiceConfigurationProvider
 org.eclipse.kapua.service.datastore.DatastoreObjectFactory
 org.eclipse.kapua.service.datastore.MessageStoreService
+org.eclipse.kapua.service.device.call.DeviceCallFactory
+org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory
 org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService
+org.eclipse.kapua.service.device.management.command.DeviceCommandFactory
+org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService
+org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService
+org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory
 org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory
 org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService
 org.eclipse.kapua.service.device.registry.DeviceFactory
@@ -39,6 +45,9 @@ org.eclipse.kapua.service.generator.id.IdGeneratorService
 org.eclipse.kapua.service.metric.MetricsService
 org.eclipse.kapua.service.user.UserFactory
 org.eclipse.kapua.service.user.UserService
+org.eclipse.kapua.transport.TransportClientFactory
+org.eclipse.kapua.transport.TransportFacade
+
 
 #DEMO CODE
 #org.eclipse.kapua.service.user.UserService,ServiceLoaderProvider

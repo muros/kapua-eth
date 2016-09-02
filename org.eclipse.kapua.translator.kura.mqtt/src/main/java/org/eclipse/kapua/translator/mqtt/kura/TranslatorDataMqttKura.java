@@ -14,48 +14,46 @@ import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 public class TranslatorDataMqttKura implements Translator<MqttMessage, KuraMessage>
 {
     @Override
-    public KuraMessage translate(MqttMessage message)
+    @SuppressWarnings("unchecked")
+    public KuraMessage translate(MqttMessage mqttMessage)
         throws KapuaException
     {
         //
         // Kura topic
-        KuraChannel kuraChannel = translate(message.getRequestTopic());
+        KuraChannel kuraChannel = translate(mqttMessage.getRequestTopic());
 
         //
         // Kura payload
-        KuraPayload kuraPayload = translate(message.getPayload());
+        KuraPayload kuraPayload = translate(mqttMessage.getPayload());
 
         //
-        // Kura message
-        @SuppressWarnings("unchecked")
-        KuraMessage kuraMessage = new KuraMessage(kuraChannel,
-                                                  message.getTimestamp(),
-                                                  kuraPayload);
+        // Return Kura message
+        return new KuraMessage(kuraChannel,
+                               mqttMessage.getTimestamp(),
+                               kuraPayload);
+    }
+
+    private KuraChannel translate(MqttTopic mqttTopic)
+        throws KapuaException
+    {
+        String[] mqttTopicTokens = mqttTopic.getSplittedTopic();
 
         //
-        // Return result
-        return kuraMessage;
+        // Return Kura Channel
+        return new KuraResponseChannel(mqttTopicTokens[0],
+                                       mqttTopicTokens[1]);
     }
 
-    private KuraChannel translate(MqttTopic topic)
+    private KuraPayload translate(MqttPayload mqttPayload)
         throws KapuaException
     {
-        String[] mqttTopicTokens = topic.getSplittedTopic();
-
-        KuraChannel kuraResponseChannel = new KuraResponseChannel(mqttTopicTokens[0],
-                                                                  mqttTopicTokens[1]);
-
-        return kuraResponseChannel;
-    }
-
-    private KuraPayload translate(MqttPayload payload)
-        throws KapuaException
-    {
-        byte[] jmsBody = payload.getBody();
+        byte[] jmsBody = mqttPayload.getBody();
 
         KuraPayload kuraPayload = new KuraPayload();
         kuraPayload.readFromByteArray(jmsBody);
 
+        //
+        // Return Kura Payload
         return kuraPayload;
     }
 

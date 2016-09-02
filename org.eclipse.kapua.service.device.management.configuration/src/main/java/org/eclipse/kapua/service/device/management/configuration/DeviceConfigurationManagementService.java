@@ -18,7 +18,14 @@ import org.eclipse.kapua.service.KapuaService;
 
 public interface DeviceConfigurationManagementService extends KapuaService
 {
-    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String configurationComponentPid, Long timeout)
+    public DeviceConfiguration get(KapuaId scopeId,
+                                   KapuaId deviceId,
+                                   String configurationId,
+                                   String configurationComponentPid,
+                                   Long timeout)
+        throws KapuaException;
+
+    public void put(KapuaId scopeId, KapuaId deviceId, String deviceConfig, Long timeout)
         throws KapuaException;
 
     public void put(KapuaId scopeId, KapuaId deviceId, DeviceConfiguration deviceConfig, Long timeout)

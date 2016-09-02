@@ -252,9 +252,9 @@ public class DeviceConfigComponents extends LayoutContainer
                     else {
                         List<GwtConfigComponent> comps = new ArrayList<GwtConfigComponent>();
                         GwtConfigComponent comp = new GwtConfigComponent();
-                        comp.setComponentId(MSGS.deviceNoDeviceSelected());
-                        comp.setComponentName(MSGS.deviceNoComponents());
-                        comp.setComponentDescription(MSGS.deviceNoConfigSupported());
+                        comp.setId(MSGS.deviceNoDeviceSelected());
+                        comp.setName(MSGS.deviceNoComponents());
+                        comp.setDescription(MSGS.deviceNoConfigSupported());
                         comps.add(comp);
                         callback.onSuccess(comps);
                     }
@@ -262,9 +262,9 @@ public class DeviceConfigComponents extends LayoutContainer
                 else {
                     List<GwtConfigComponent> comps = new ArrayList<GwtConfigComponent>();
                     GwtConfigComponent comp = new GwtConfigComponent();
-                    comp.setComponentId(MSGS.deviceNoDeviceSelected());
-                    comp.setComponentName(MSGS.deviceNoDeviceSelected());
-                    comp.setComponentDescription(MSGS.deviceNoDeviceSelected());
+                    comp.setId(MSGS.deviceNoDeviceSelected());
+                    comp.setName(MSGS.deviceNoDeviceSelected());
+                    comp.setDescription(MSGS.deviceNoDeviceSelected());
                     comps.add(comp);
                     callback.onSuccess(comps);
                 }
@@ -638,9 +638,9 @@ public class DeviceConfigComponents extends LayoutContainer
 
             List<ModelData> comps = new ArrayList<ModelData>();
             GwtConfigComponent comp = new GwtConfigComponent();
-            comp.setComponentId(MSGS.deviceNoDeviceSelected());
-            comp.setComponentName(MSGS.deviceNoComponents());
-            comp.setComponentDescription(MSGS.deviceNoConfigSupported());
+            comp.setId(MSGS.deviceNoDeviceSelected());
+            comp.setName(MSGS.deviceNoComponents());
+            comp.setDescription(MSGS.deviceNoConfigSupported());
             comps.add(comp);
             m_treeStore.removeAll();
             m_treeStore.add(comps, false);

@@ -17,48 +17,44 @@ import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 public class TranslatorDataKuraMqtt implements Translator<KuraMessage, MqttMessage>
 {
     @Override
-    public MqttMessage translate(KuraMessage message)
+    public MqttMessage translate(KuraMessage kuraMessage)
         throws KapuaException
     {
         //
-        // Jms request topic
-        MqttTopic jmsRequestTopic = translate(message.getChannel());
+        // Mqtt request topic
+        MqttTopic mqttRequestTopic = translate(kuraMessage.getChannel());
 
         //
-        // Jms payload
-        MqttPayload jmsPayload = translate(message.getPayload());
+        // Mqtt payload
+        MqttPayload mqttPayload = translate(kuraMessage.getPayload());
 
         //
-        // Jms message
-        MqttMessage jmsMessage = new MqttMessage(jmsRequestTopic,
-                                                 new Date(),
-                                                 jmsPayload);
-
-        //
-        // Return result
-        return jmsMessage;
+        // Return Mqtt message
+        return new MqttMessage(mqttRequestTopic,
+                               new Date(),
+                               mqttPayload);
     }
 
-    private MqttTopic translate(KuraChannel channel)
+    private MqttTopic translate(KuraChannel kuraChannel)
         throws KapuaException
     {
         List<String> topicTokens = new ArrayList<>();
 
-        topicTokens.add(channel.getScope());
-        topicTokens.add(channel.getClientId());
+        topicTokens.add(kuraChannel.getScope());
+        topicTokens.add(kuraChannel.getClientId());
 
-        if (channel.getSemanticChannelParts() != null &&
-            !channel.getSemanticChannelParts().isEmpty()) {
-            topicTokens.addAll(channel.getSemanticChannelParts());
+        if (kuraChannel.getSemanticChannelParts() != null &&
+            !kuraChannel.getSemanticChannelParts().isEmpty()) {
+            topicTokens.addAll(kuraChannel.getSemanticChannelParts());
         }
 
         return new MqttTopic(topicTokens.toArray(new String[0]));
     }
 
-    private MqttPayload translate(KuraPayload payload)
+    private MqttPayload translate(KuraPayload kuraPayload)
         throws KapuaException
     {
-        return new MqttPayload(payload.toByteArray());
+        return new MqttPayload(kuraPayload.toByteArray());
     }
 
     @Override

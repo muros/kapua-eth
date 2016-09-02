@@ -23,6 +23,7 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
+import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.transport.TransportClientFactory;
 import org.eclipse.kapua.transport.TransportFacade;
@@ -110,10 +111,13 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
             //
             // Do send
             try {
-                KuraRequestMessage kuraMessage = new KuraRequestMessage(requestChannel,
-                                                                        new Date(),
-                                                                        requestPayload);
-                TransportMessage transportResponseMessage = transportFacade.sendSync((TransportMessage) translatorKuraTransport.translate(kuraMessage), timeout);
+                // Set current timestamp
+                requestMessage.setTimestamp(new Date());
+
+                // Send
+                TransportMessage transportResponseMessage = transportFacade.sendSync((TransportMessage) translatorKuraTransport.translate(requestMessage), timeout);
+
+                // Translate response
                 response = (KuraResponseMessage) translatorTransportKura.translate(transportResponseMessage);
             }
             catch (KapuaException e) {
@@ -137,9 +141,10 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     }
 
     @Override
-    public Class<KuraResponseMessage> getBaseMessageClass()
+    @SuppressWarnings("unchecked")
+    public Class<KuraMessage> getBaseMessageClass()
     {
-        return KuraResponseMessage.class;
+        return KuraMessage.class;
     }
 
     //

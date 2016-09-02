@@ -7,6 +7,7 @@ import org.eclipse.kapua.service.device.management.request.KapuaRequestChannel;
 public class ConfigurationRequestChannel extends KapuaAppChannelImpl implements KapuaRequestChannel
 {
     private KapuaMethod method;
+    private String      configurationId;
     private String      componentId;
 
     @Override
@@ -19,6 +20,16 @@ public class ConfigurationRequestChannel extends KapuaAppChannelImpl implements 
     public void setMethod(KapuaMethod method)
     {
         this.method = method;
+    }
+
+    public String getConfigurationId()
+    {
+        return configurationId;
+    }
+
+    public void setConfigurationId(String configurationId)
+    {
+        this.configurationId = configurationId;
     }
 
     public String getComponentId()

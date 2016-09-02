@@ -54,7 +54,7 @@ public class KapuaMessageImpl<C extends KapuaChannel, P extends KapuaPayload> im
 
     private KapuaPosition position;
 
-    private C             semanticChannel;
+    private C             channel;
 
     private P             payload;
 
@@ -66,7 +66,7 @@ public class KapuaMessageImpl<C extends KapuaChannel, P extends KapuaPayload> im
     public KapuaMessageImpl(C channel, P metrics)
     {
         this();
-        this.semanticChannel = channel;
+        this.channel = channel;
         this.payload = metrics;
     }
 
@@ -155,15 +155,15 @@ public class KapuaMessageImpl<C extends KapuaChannel, P extends KapuaPayload> im
     }
 
     @Override
-    public C getSemanticChannel()
+    public C getChannel()
     {
-        return semanticChannel;
+        return channel;
     }
 
     @Override
-    public void setSemanticChannel(C semanticChannel)
+    public void setChannel(C channel)
     {
-        this.semanticChannel = semanticChannel;
+        this.channel = channel;
     }
 
     @Override

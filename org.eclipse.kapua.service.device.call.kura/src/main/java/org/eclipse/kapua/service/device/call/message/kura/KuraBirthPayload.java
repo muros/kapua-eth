@@ -78,101 +78,101 @@ public class KuraBirthPayload extends KuraPayload implements DevicePayload
         super();
 
         if (uptime != null) {
-            metrics().put(UPTIME, uptime);
+            getMetrics().put(UPTIME, uptime);
         }
         if (displayName != null) {
-            metrics().put(DISPLAY_NAME, displayName);
+            getMetrics().put(DISPLAY_NAME, displayName);
         }
         if (modelName != null) {
-            metrics().put(MODEL_NAME, modelName);
+            getMetrics().put(MODEL_NAME, modelName);
         }
         if (modelId != null) {
-            metrics().put(MODEL_ID, modelId);
+            getMetrics().put(MODEL_ID, modelId);
         }
         if (partNumber != null) {
-            metrics().put(PART_NUMBER, partNumber);
+            getMetrics().put(PART_NUMBER, partNumber);
         }
         if (serialNumber != null) {
-            metrics().put(SERIAL_NUMBER, serialNumber);
+            getMetrics().put(SERIAL_NUMBER, serialNumber);
         }
         if (firmwareVersion != null) {
-            metrics().put(FIRMWARE_VERSION, firmwareVersion);
+            getMetrics().put(FIRMWARE_VERSION, firmwareVersion);
         }
         if (biosVersion != null) {
-            metrics().put(BIOS_VERSION, biosVersion);
+            getMetrics().put(BIOS_VERSION, biosVersion);
         }
         if (os != null) {
-            metrics().put(OS, os);
+            getMetrics().put(OS, os);
         }
         if (osVersion != null) {
-            metrics().put(OS_VERSION, osVersion);
+            getMetrics().put(OS_VERSION, osVersion);
         }
         if (jvmName != null) {
-            metrics().put(JVM_NAME, jvmName);
+            getMetrics().put(JVM_NAME, jvmName);
         }
         if (jvmVersion != null) {
-            metrics().put(JVM_VERSION, jvmVersion);
+            getMetrics().put(JVM_VERSION, jvmVersion);
         }
         if (jvmProfile != null) {
-            metrics().put(JVM_PROFILE, jvmProfile);
+            getMetrics().put(JVM_PROFILE, jvmProfile);
         }
         if (esfkuraVersion != null) {
-            metrics().put(ESFKURA_VERSION, esfkuraVersion);
+            getMetrics().put(ESFKURA_VERSION, esfkuraVersion);
         }
         if (connectionInterface != null) {
-            metrics().put(CONNECTION_INTERFACE, connectionInterface);
+            getMetrics().put(CONNECTION_INTERFACE, connectionInterface);
         }
         if (connectionIp != null) {
-            metrics().put(CONNECTION_IP, connectionIp);
+            getMetrics().put(CONNECTION_IP, connectionIp);
         }
         if (acceptEncoding != null) {
-            metrics().put(ACCEPT_ENCODING, acceptEncoding);
+            getMetrics().put(ACCEPT_ENCODING, acceptEncoding);
         }
         if (applicationIdentifiers != null) {
-            metrics().put(APPLICATION_IDS, applicationIdentifiers);
+            getMetrics().put(APPLICATION_IDS, applicationIdentifiers);
         }
         if (availableProcessors != null) {
-            metrics().put(AVAILABLE_PROCESSORS, availableProcessors);
+            getMetrics().put(AVAILABLE_PROCESSORS, availableProcessors);
         }
         if (totalMemory != null) {
-            metrics().put(TOTAL_MEMORY, totalMemory);
+            getMetrics().put(TOTAL_MEMORY, totalMemory);
         }
         if (osArch != null) {
-            metrics().put(OS_ARCH, osArch);
+            getMetrics().put(OS_ARCH, osArch);
         }
         if (osgiFramework != null) {
-            metrics().put(OSGI_FRAMEWORK, osgiFramework);
+            getMetrics().put(OSGI_FRAMEWORK, osgiFramework);
         }
         if (osgiFrameworkVersion != null) {
-            metrics().put(OSGI_FRAMEWORK_VERSION, osgiFrameworkVersion);
+            getMetrics().put(OSGI_FRAMEWORK_VERSION, osgiFrameworkVersion);
         }
         if (modemImei != null) {
-            metrics().put(MODEM_IMEI, modemImei);
+            getMetrics().put(MODEM_IMEI, modemImei);
         }
         if (modemImsi != null) {
-            metrics().put(MODEM_IMSI, modemImsi);
+            getMetrics().put(MODEM_IMSI, modemImsi);
         }
         if (modemIccid != null) {
-            metrics().put(MODEM_ICCID, modemIccid);
+            getMetrics().put(MODEM_ICCID, modemIccid);
         }
     }
 
     public <P extends KuraPayload> KuraBirthPayload(P kuraPayload)
     {
-        Iterator<String> hdrIterator = kuraPayload.metrics().keySet().iterator();
+        Iterator<String> hdrIterator = kuraPayload.getMetrics().keySet().iterator();
         while (hdrIterator.hasNext()) {
             String hdrName = hdrIterator.next();
-            String hdrVal = (String) kuraPayload.metrics().get(hdrName);
+            String hdrVal = (String) kuraPayload.getMetrics().get(hdrName);
 
             // FIXME: Is this fine??
             if (hdrName.compareTo(ESF_VERSION) == 0) {
-                metrics().put(ESFKURA_VERSION, ESF_PREFIX + hdrVal);
+                getMetrics().put(ESFKURA_VERSION, ESF_PREFIX + hdrVal);
             }
             else if (hdrName.compareTo(KURA_VERSION) == 0) {
-                metrics().put(ESFKURA_VERSION, hdrVal);
+                getMetrics().put(ESFKURA_VERSION, hdrVal);
             }
             else {
-                metrics().put(hdrName, hdrVal);
+                getMetrics().put(hdrName, hdrVal);
             }
         }
         setTimestamp(kuraPayload.getTimestamp());
@@ -182,147 +182,147 @@ public class KuraBirthPayload extends KuraPayload implements DevicePayload
 
     public String getUptime()
     {
-        return (String) metrics().get(UPTIME);
+        return (String) getMetrics().get(UPTIME);
     }
 
     public String getDisplayName()
     {
-        return (String) metrics().get(DISPLAY_NAME);
+        return (String) getMetrics().get(DISPLAY_NAME);
     }
 
     public String getModelName()
     {
-        return (String) metrics().get(MODEL_NAME);
+        return (String) getMetrics().get(MODEL_NAME);
     }
 
     public String getModelId()
     {
-        return (String) metrics().get(MODEL_ID);
+        return (String) getMetrics().get(MODEL_ID);
     }
 
     public String getPartNumber()
     {
-        return (String) metrics().get(PART_NUMBER);
+        return (String) getMetrics().get(PART_NUMBER);
     }
 
     public String getSerialNumber()
     {
-        return (String) metrics().get(SERIAL_NUMBER);
+        return (String) getMetrics().get(SERIAL_NUMBER);
     }
 
     public String getFirmware()
     {
-        return (String) metrics().get(FIRMWARE_VERSION);
+        return (String) getMetrics().get(FIRMWARE_VERSION);
     }
 
     public String getFirmwareVersion()
     {
-        return (String) metrics().get(FIRMWARE_VERSION);
+        return (String) getMetrics().get(FIRMWARE_VERSION);
     }
 
     public String getBios()
     {
-        return (String) metrics().get(BIOS_VERSION);
+        return (String) getMetrics().get(BIOS_VERSION);
     }
 
     public String getBiosVersion()
     {
-        return (String) metrics().get(BIOS_VERSION);
+        return (String) getMetrics().get(BIOS_VERSION);
     }
 
     public String getOs()
     {
-        return (String) metrics().get(OS);
+        return (String) getMetrics().get(OS);
     }
 
     public String getOsVersion()
     {
-        return (String) metrics().get(OS_VERSION);
+        return (String) getMetrics().get(OS_VERSION);
     }
 
     public String getJvm()
     {
-        return (String) metrics().get(JVM_NAME);
+        return (String) getMetrics().get(JVM_NAME);
     }
 
     public String getJvmVersion()
     {
-        return (String) metrics().get(JVM_VERSION);
+        return (String) getMetrics().get(JVM_VERSION);
     }
 
     public String getJvmProfile()
     {
-        return (String) metrics().get(JVM_PROFILE);
+        return (String) getMetrics().get(JVM_PROFILE);
     }
 
     public String getContainerFramework()
     {
-        return (String) metrics().get(OSGI_FRAMEWORK);
+        return (String) getMetrics().get(OSGI_FRAMEWORK);
     }
 
     public String getContainerFrameworkVersion()
     {
-        return (String) metrics().get(OSGI_FRAMEWORK_VERSION);
+        return (String) getMetrics().get(OSGI_FRAMEWORK_VERSION);
     }
 
     public String getApplicationFramework()
     {
-        return (String) metrics().get(ESFKURA_VERSION);
+        return (String) getMetrics().get(ESFKURA_VERSION);
     }
 
     public String getApplicationFrameworkVersion()
     {
-        return (String) metrics().get(ESFKURA_VERSION);
+        return (String) getMetrics().get(ESFKURA_VERSION);
     }
 
     public String getConnectionInterface()
     {
-        return (String) metrics().get(CONNECTION_INTERFACE);
+        return (String) getMetrics().get(CONNECTION_INTERFACE);
     }
 
     public String getConnectionIp()
     {
-        return (String) metrics().get(CONNECTION_IP);
+        return (String) getMetrics().get(CONNECTION_IP);
     }
 
     public String getAcceptEncoding()
     {
-        return (String) metrics().get(ACCEPT_ENCODING);
+        return (String) getMetrics().get(ACCEPT_ENCODING);
     }
 
     public String getApplicationIdentifiers()
     {
-        return (String) metrics().get(APPLICATION_IDS);
+        return (String) getMetrics().get(APPLICATION_IDS);
     }
 
     public String getAvailableProcessors()
     {
-        return (String) metrics().get(AVAILABLE_PROCESSORS);
+        return (String) getMetrics().get(AVAILABLE_PROCESSORS);
     }
 
     public String getTotalMemory()
     {
-        return (String) metrics().get(TOTAL_MEMORY);
+        return (String) getMetrics().get(TOTAL_MEMORY);
     }
 
     public String getOsArch()
     {
-        return (String) metrics().get(OS_ARCH);
+        return (String) getMetrics().get(OS_ARCH);
     }
 
     public String getModemImei()
     {
-        return (String) metrics().get(MODEM_IMEI);
+        return (String) getMetrics().get(MODEM_IMEI);
     }
 
     public String getModemImsi()
     {
-        return (String) metrics().get(MODEM_IMSI);
+        return (String) getMetrics().get(MODEM_IMSI);
     }
 
     public String getModemIccid()
     {
-        return (String) metrics().get(MODEM_ICCID);
+        return (String) getMetrics().get(MODEM_ICCID);
     }
 
     public String toDisplayString()

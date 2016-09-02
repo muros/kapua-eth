@@ -1,6 +1,7 @@
 package org.eclipse.kapua.service.device.call;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.service.device.call.message.DeviceMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.DeviceRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.response.DeviceResponseMessage;
 
@@ -25,5 +26,5 @@ public interface DeviceCall<RQ extends DeviceRequestMessage, RS extends DeviceRe
     public RS options(RQ requestMessage, Long timeout)
         throws KapuaException;
 
-    public Class<RS> getBaseMessageClass();
+    public <M extends DeviceMessage> Class<M> getBaseMessageClass();
 }

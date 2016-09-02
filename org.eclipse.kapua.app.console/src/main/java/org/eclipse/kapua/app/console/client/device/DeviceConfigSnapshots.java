@@ -420,10 +420,10 @@ public class DeviceConfigSnapshots extends LayoutContainer
                 sbUrl.append("device_snapshots?");
             }
 
-            sbUrl.append("&account=")
-                 .append(URL.encodeQueryString(m_currentSession.getSelectedAccount().getName()))
-                 .append("&clientId=")
-                 .append(URL.encodeQueryString(m_selectedDevice.getClientId()))
+            sbUrl.append("&scopeId=")
+                 .append(URL.encodeQueryString(m_currentSession.getSelectedAccount().getId()))
+                 .append("&deviceId=")
+                 .append(URL.encodeQueryString(m_selectedDevice.getId()))
                  .append("&snapshotId=")
                  .append(snapshot.getSnapshotId());
             Window.open(sbUrl.toString(), "_blank", "location=no");
@@ -434,12 +434,12 @@ public class DeviceConfigSnapshots extends LayoutContainer
     {
         if (m_selectedDevice != null) {
             HiddenField<String> accountField = new HiddenField<String>();
-            accountField.setName("account");
+            accountField.setName("scopeIdString");
             accountField.setValue(m_selectedDevice.getScopeId());
 
             HiddenField<String> clientIdField = new HiddenField<String>();
-            clientIdField.setName("clientId");
-            clientIdField.setValue(m_selectedDevice.getClientId());
+            clientIdField.setName("deviceIdString");
+            clientIdField.setValue(m_selectedDevice.getId());
 
             List<HiddenField<?>> hiddenFields = new ArrayList<HiddenField<?>>();
             hiddenFields.add(accountField);

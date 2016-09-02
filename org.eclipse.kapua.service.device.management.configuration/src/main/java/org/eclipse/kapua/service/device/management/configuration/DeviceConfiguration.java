@@ -21,5 +21,5 @@ import javax.xml.bind.annotation.XmlRootElement;
 public interface DeviceConfiguration
 {
     @XmlElement(name = "configuration")
-    public List<DeviceComponentConfiguration> getComponentConfigurations();
+    public <C extends DeviceComponentConfiguration> List<C> getComponentConfigurations();
 }

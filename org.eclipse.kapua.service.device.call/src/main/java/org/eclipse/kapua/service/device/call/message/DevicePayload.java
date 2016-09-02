@@ -12,7 +12,7 @@ public interface DevicePayload extends Payload
 
     public DevicePosition getPosition();
 
-    public Map<String, Object> metrics();
+    public Map<String, Object> getMetrics();
 
     public byte[] getBody();
 

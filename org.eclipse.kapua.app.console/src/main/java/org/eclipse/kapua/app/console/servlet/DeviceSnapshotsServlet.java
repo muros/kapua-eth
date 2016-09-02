@@ -22,10 +22,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.kapua.commons.model.id.KapuaEid;
-import org.eclipse.kapua.commons.util.XmlUtil;
+import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,13 +50,14 @@ public class DeviceSnapshotsServlet extends HttpServlet
             //
             // get the devices and append them to the exporter
             KapuaLocator locator = KapuaLocator.getInstance();
-            DeviceSnapshotManagementService deviceSnapshotManagementService = locator.getService(DeviceSnapshotManagementService.class);
-            DeviceConfiguration conf = deviceSnapshotManagementService.get(KapuaEid.parseShortId(account),
-                                                                           KapuaEid.parseShortId(clientId),
-                                                                           snapshotId,
-                                                                           null);
+            DeviceConfigurationManagementService deviceConfigurationManagementService = locator.getService(DeviceConfigurationManagementService.class);
+            DeviceConfiguration conf = deviceConfigurationManagementService.get(KapuaEid.parseShortId(account),
+                                                                                KapuaEid.parseShortId(clientId),
+                                                                                snapshotId,
+                                                                                null,
+                                                                                null);
 
-            String contentDispositionFormat = "attachment; filename*=UTF-8''%s_%s_%s.xml; ";
+            String contentDispositionFormat = "attachment; filename*=UTF-8''snapshot_%s_%s_%s.xml; ";
 
             response.setContentType("application/xml; charset=UTF-8");
             response.setHeader("Cache-Control", "no-transform, max-age=0");

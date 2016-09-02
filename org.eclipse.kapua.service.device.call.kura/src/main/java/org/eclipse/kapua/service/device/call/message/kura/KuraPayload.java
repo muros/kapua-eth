@@ -54,7 +54,7 @@ public class KuraPayload implements DevicePayload
     }
 
     @Override
-    public Map<String, Object> metrics()
+    public Map<String, Object> getMetrics()
     {
         return metrics;
     }
@@ -86,10 +86,15 @@ public class KuraPayload implements DevicePayload
         }
 
         // set the metrics
-        for (String name : metrics().keySet()) {
+        for (String name : getMetrics().keySet()) {
 
             // build a metric
-            Object value = metrics().get(name);
+            Object value = getMetrics().get(name);
+
+            if (value == null) {
+                continue;
+            }
+
             try {
                 KuraPayloadProto.KuraPayload.KuraMetric.Builder metricB = KuraPayloadProto.KuraPayload.KuraMetric.newBuilder();
                 metricB.setName(name);

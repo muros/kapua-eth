@@ -5,29 +5,27 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.eclipse.kapua.model.config.metatype.Tocd;
 
-@XmlRootElement(name="configuration")
+@XmlRootElement(name = "configuration")
 public interface DeviceComponentConfiguration
 {
-    public String getComponentId();
+    @XmlAttribute(name = "pid")
+    public void setId(String Id);
 
-    @XmlAttribute(name="pid")
-    public void setComponentId(String componentId);
+    public String getId();
 
-    public String getComponentName();
+    @XmlAttribute(name = "name")
+    public void setName(String unescapedComponentName);
 
-    @XmlTransient
-    public void setComponentName(String unescapedComponentName);
+    public String getName();
 
-    public void setDefinition(Tocd definition);
+    @XmlAttribute(name = "definition")
     public Tocd getDefinition();
 
-    public Map<String, Object> getProperties();
-
-    @XmlElement(name="properties")
+    @XmlElement(name = "properties")
     public void setProperties(Map<String, Object> properties);
 
+    public Map<String, Object> getProperties();
 }

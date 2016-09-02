@@ -112,7 +112,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage<?>
                 return;
             }
             catch (Throwable t) {
-                logger.warn("Cannot send birth life cycle message {}! {}", new Object[]{birthMessage.getMessage().getSemanticChannel().toString(), t.getMessage()}, t);
+                logger.warn("Cannot send birth life cycle message {}! {}", new Object[]{birthMessage.getMessage().getChannel().toString(), t.getMessage()}, t);
                 return;
             }
 		}
@@ -150,7 +150,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage<?>
                 return;
             }
             catch (Throwable t) {
-                logger.warn("Cannot send disconnect life cycle message {}! {}", new Object[]{disconnectMessage.getMessage().getSemanticChannel().toString(), t.getMessage()}, t);
+                logger.warn("Cannot send disconnect life cycle message {}! {}", new Object[]{disconnectMessage.getMessage().getChannel().toString(), t.getMessage()}, t);
                 return;
             }
 		}
@@ -188,7 +188,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage<?>
                 return;
             }
             catch (Throwable t) {
-                logger.warn("Cannot send apps life cycle message {}! {}", new Object[]{appsMessage.getMessage().getSemanticChannel().toString(), t.getMessage()}, t);
+                logger.warn("Cannot send apps life cycle message {}! {}", new Object[]{appsMessage.getMessage().getChannel().toString(), t.getMessage()}, t);
                 return;
             }
 		}
@@ -226,7 +226,7 @@ public class DeviceMessageListener extends AbstractListener<CamelKapuaMessage<?>
                 return;
             }
             catch (Throwable t) {
-                logger.warn("Cannot send missing life cycle message {}! {}", new Object[]{missingMessage.getMessage().getSemanticChannel().toString(), t.getMessage()}, t);
+                logger.warn("Cannot send missing life cycle message {}! {}", new Object[]{missingMessage.getMessage().getChannel().toString(), t.getMessage()}, t);
                 return;
             }
 		}

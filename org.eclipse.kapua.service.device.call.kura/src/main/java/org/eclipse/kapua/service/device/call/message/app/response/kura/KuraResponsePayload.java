@@ -10,19 +10,19 @@ public class KuraResponsePayload extends KuraPayload implements DeviceResponsePa
     @Override
     public KuraResponseCode getResponseCode()
     {
-        return KuraResponseCode.valueOf((String) metrics().get("response.code"));
+        return KuraResponseCode.valueOf((String) getMetrics().get("response.code"));
     }
 
     @Override
     public String getExceptionMessage()
     {
-        return (String) metrics().get("response.exception.message");
+        return (String) getMetrics().get("response.exception.message");
     }
 
     @Override
     public String getExceptionStack()
     {
-        return (String) metrics().get("response.exception.stack");
+        return (String) getMetrics().get("response.exception.stack");
     }
 
     @Override

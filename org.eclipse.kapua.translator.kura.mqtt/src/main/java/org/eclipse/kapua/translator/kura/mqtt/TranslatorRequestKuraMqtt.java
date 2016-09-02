@@ -17,69 +17,67 @@ import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 public class TranslatorRequestKuraMqtt implements Translator<KuraRequestMessage, MqttMessage>
 {
     @Override
-    public MqttMessage translate(KuraRequestMessage message)
+    public MqttMessage translate(KuraRequestMessage kuraMessage)
         throws KapuaException
     {
         //
         // Mqtt request topic
-        MqttTopic mqttRequestTopic = translate(message.getChannel());
+        MqttTopic mqttRequestTopic = translate(kuraMessage.getChannel());
 
         //
         // Mqtt response topic
 
-        MqttTopic mqttResponseTopic = generateResponseTopic(message.getChannel());
+        MqttTopic mqttResponseTopic = generateResponseTopic(kuraMessage.getChannel());
 
         //
         // Mqtt payload
-        MqttPayload mqttPayload = translate(message.getPayload());
+        MqttPayload mqttPayload = translate(kuraMessage.getPayload());
 
         //
-        // Mqtt message
-        MqttMessage mqttMessage = new MqttMessage(mqttRequestTopic,
-                                                  mqttResponseTopic,
-                                                  mqttPayload);
-
-        //
-        // Return result
-        return mqttMessage;
+        // Return Mqtt message
+        return new MqttMessage(mqttRequestTopic,
+                               mqttResponseTopic,
+                               mqttPayload);
     }
 
-    public MqttTopic translate(KuraRequestChannel channel)
+    public MqttTopic translate(KuraRequestChannel kuraChannel)
         throws KapuaException
     {
         List<String> topicTokens = new ArrayList<>();
 
-        if (channel.getMessageClassification() != null) {
-            topicTokens.add(channel.getMessageClassification());
+        if (kuraChannel.getMessageClassification() != null) {
+            topicTokens.add(kuraChannel.getMessageClassification());
         }
 
-        topicTokens.add(channel.getScope());
-        topicTokens.add(channel.getClientId());
-        topicTokens.add(channel.getAppId());
-        topicTokens.add(channel.getMethod().name());
+        topicTokens.add(kuraChannel.getScope());
+        topicTokens.add(kuraChannel.getClientId());
+        topicTokens.add(kuraChannel.getAppId());
+        topicTokens.add(kuraChannel.getMethod().name());
 
-        for (String s : channel.getResources()) {
+        for (String s : kuraChannel.getResources()) {
             topicTokens.add(s);
         }
 
+        //
+        // Return Mqtt Topic
         return new MqttTopic(topicTokens.toArray(new String[0]));
     }
 
-    private MqttTopic generateResponseTopic(KuraRequestChannel channel)
+    private MqttTopic generateResponseTopic(KuraRequestChannel kuraChannel)
     {
         String replyPart = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_REPLY_PART);
 
         List<String> topicTokens = new ArrayList<>();
 
-        if (channel.getMessageClassification() != null) {
-            topicTokens.add(channel.getMessageClassification());
+        if (kuraChannel.getMessageClassification() != null) {
+            topicTokens.add(kuraChannel.getMessageClassification());
         }
 
-        topicTokens.add(channel.getScope());
-        topicTokens.add(channel.getRequesterClientId());
-        topicTokens.add(channel.getAppId());
+        topicTokens.add(kuraChannel.getScope());
+        topicTokens.add(kuraChannel.getRequesterClientId());
+        topicTokens.add(kuraChannel.getAppId());
         topicTokens.add(replyPart);
-        topicTokens.add(channel.getRequestId());
+        topicTokens.add(kuraChannel.getRequestId());
 
         return new MqttTopic(topicTokens.toArray(new String[0]));
     }

@@ -18,14 +18,15 @@ public interface Translator<FROM_M extends Message, TO_M extends Message>
                                                                                                                         Class<TO_M> toMessageClass)
         throws KapuaException
     {
-
         T translator = null;
 
         Iterator<T> translatorIterator = (Iterator<T>) translators.iterator();
         while (translatorIterator.hasNext()) {
-            translator = translatorIterator.next();
-            if (translator.getClassFrom().equals(fromMessageClass) &&
-                translator.getClassTo().equals(toMessageClass)) {
+            T t = translatorIterator.next();
+
+            if ((fromMessageClass.isAssignableFrom(t.getClassFrom())) &&
+                toMessageClass.isAssignableFrom(t.getClassTo())) {
+                translator = t;
                 break;
             }
         }

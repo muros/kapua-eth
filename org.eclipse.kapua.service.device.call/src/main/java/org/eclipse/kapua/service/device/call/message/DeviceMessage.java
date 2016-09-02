@@ -10,5 +10,5 @@ public interface DeviceMessage<C extends DeviceChannel, P extends DevicePayload>
 
     public P getPayload();
 
-    public Date timestamp();
+    public Date getTimestamp();
 }

@@ -1,6 +1,7 @@
 package org.eclipse.kapua.service.device.call.message.app.request.kura;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.service.device.call.kura.app.RequestMetrics;
 import org.eclipse.kapua.service.device.call.message.app.request.DeviceRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 
@@ -9,25 +10,25 @@ public class KuraRequestPayload extends KuraPayload implements DeviceRequestPayl
     @Override
     public void setRequestId(String requestId)
     {
-        metrics().put("resquest.id", requestId);
+        getMetrics().put(RequestMetrics.REQ_METRIC_REQUEST_ID.getValue(), requestId);
     }
 
     @Override
     public String getRequestId()
     {
-        return (String) metrics().get("resquest.id");
+        return (String) getMetrics().get(RequestMetrics.REQ_METRIC_REQUEST_ID.getValue());
     }
 
     @Override
     public void setRequesterClientId(String requesterClientId)
     {
-        metrics().put("requester.client.id", requesterClientId);
+        getMetrics().put(RequestMetrics.REQ_METRIC_REQUESTER_CLIENT_ID.getValue(), requesterClientId);
     }
 
     @Override
     public String getRequesterClientId()
     {
-        return (String) metrics().get("requester.client.id");
+        return (String) getMetrics().get(RequestMetrics.REQ_METRIC_REQUESTER_CLIENT_ID.getValue());
     }
 
     @Override

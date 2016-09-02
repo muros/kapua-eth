@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.XmlUtil;
+import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
@@ -17,15 +17,14 @@ import org.eclipse.kapua.service.device.management.commons.exception.DeviceManag
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
-import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
-import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotListResult;
-import org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
@@ -35,7 +34,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public DeviceSnapshotListResult get(KapuaId scopeId, KapuaId deviceId, Long timeout)
+    public DeviceSnapshotIds get(KapuaId scopeId, KapuaId deviceId, Long timeout)
         throws KapuaException
     {
         //
@@ -64,7 +63,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         snapshotRequestMessage.setDeviceId(deviceId);
         snapshotRequestMessage.setCapturedOn(new Date());
         snapshotRequestMessage.setPayload(snapshotRequestPayload);
-        snapshotRequestMessage.setSemanticChannel(snapshotRequestChannel);
+        snapshotRequestMessage.setChannel(snapshotRequestChannel);
 
         //
         // Do get
@@ -86,9 +85,9 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
                                                 responsePayload.getBody());
         }
 
-        DeviceSnapshotListResult deviceSnapshots = null;
+        DeviceSnapshotIds deviceSnapshots = null;
         try {
-            deviceSnapshots = XmlUtil.unmarshal(body, DeviceSnapshotListResult.class);
+            deviceSnapshots = XmlUtil.unmarshal(body, DeviceSnapshotIdsImpl.class);
         }
         catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION,
@@ -114,91 +113,6 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         deviceEventService.create(deviceEventCreator);
 
         return deviceSnapshots;
-    }
-
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    @Override
-    public DeviceConfiguration get(KapuaId scopeId, KapuaId deviceId, String snapshotId, Long timeout)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(scopeId, "scopeId");
-        ArgumentValidator.notNull(deviceId, "deviceId");
-        ArgumentValidator.notEmptyOrNull(snapshotId, "snapshotId");
-
-        //
-        // Check Access
-        KapuaLocator locator = KapuaLocator.getInstance();
-        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
-        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.read, scopeId));
-
-        //
-        // Prepare the request
-        SnapshotRequestChannel snapshotRequestChannel = new SnapshotRequestChannel();
-        snapshotRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
-        snapshotRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
-        snapshotRequestChannel.setMethod(KapuaMethod.READ);
-        snapshotRequestChannel.setSnapshotId(snapshotId);
-
-        SnapshotRequestPayload snapshotRequestPayload = new SnapshotRequestPayload();
-
-        SnapshotRequestMessage snapshotRequestMessage = new SnapshotRequestMessage();
-        snapshotRequestMessage.setScopeId(scopeId);
-        snapshotRequestMessage.setDeviceId(deviceId);
-        snapshotRequestMessage.setCapturedOn(new Date());
-        snapshotRequestMessage.setPayload(snapshotRequestPayload);
-        snapshotRequestMessage.setSemanticChannel(snapshotRequestChannel);
-
-        //
-        // Do get
-        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(snapshotRequestMessage, timeout);
-        SnapshotResponseMessage responseMessage = (SnapshotResponseMessage) deviceApplicationCall.send();
-
-        //
-        // Parse the response
-        SnapshotResponsePayload responsePayload = responseMessage.getPayload();
-
-        DeviceManagementSetting config = DeviceManagementSetting.getInstance();
-        String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
-
-        String body = null;
-        try {
-            body = new String(responsePayload.getBody(), charEncoding);
-        }
-        catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, responsePayload.getBody());
-
-        }
-
-        DeviceConfiguration deviceConfiguration = null;
-        try {
-            deviceConfiguration = XmlUtil.unmarshal(body, DeviceConfiguration.class);
-        }
-        catch (Exception e) {
-            throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, body);
-
-        }
-
-        //
-        // Create event
-        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
-        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
-        deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
-        deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(SnapshotAppProperties.APP_NAME.getValue());
-        deviceEventCreator.setAction(KapuaMethod.READ);
-        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
-        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
-
-        deviceEventService.create(deviceEventCreator);
-
-        return deviceConfiguration;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -234,7 +148,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         snapshotRequestMessage.setDeviceId(deviceId);
         snapshotRequestMessage.setCapturedOn(new Date());
         snapshotRequestMessage.setPayload(snapshotRequestPayload);
-        snapshotRequestMessage.setSemanticChannel(snapshotRequestChannel);
+        snapshotRequestMessage.setChannel(snapshotRequestChannel);
 
         //
         // Do exec

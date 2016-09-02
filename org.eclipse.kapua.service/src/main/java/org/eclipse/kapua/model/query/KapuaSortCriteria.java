@@ -15,6 +15,7 @@ package org.eclipse.kapua.model.query;
 /**
  * Marker interface for all dynamic sort criteria for the order by clause.
  */
-public interface KapuaSortCriteria {
+public interface KapuaSortCriteria
+{
 
 }

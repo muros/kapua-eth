@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.XmlUtil;
+import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
@@ -48,7 +48,6 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.read, scopeId));
 
-        
         //
         // Prepare the request
         BundleRequestChannel bundleRequestChannel = new BundleRequestChannel();
@@ -63,7 +62,7 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         bundleRequestMessage.setDeviceId(deviceId);
         bundleRequestMessage.setCapturedOn(new Date());
         bundleRequestMessage.setPayload(bundleRequestPayload);
-        bundleRequestMessage.setSemanticChannel(bundleRequestChannel);
+        bundleRequestMessage.setChannel(bundleRequestChannel);
 
         //
         // Do get
@@ -96,7 +95,6 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
                                                 body);
         }
 
-        
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
@@ -134,7 +132,7 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.execute, scopeId));
-        
+
         //
         // Prepare the request
         BundleRequestChannel bundleRequestChannel = new BundleRequestChannel();
@@ -151,13 +149,13 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         bundleRequestMessage.setDeviceId(deviceId);
         bundleRequestMessage.setCapturedOn(new Date());
         bundleRequestMessage.setPayload(bundleRequestPayload);
-        bundleRequestMessage.setSemanticChannel(bundleRequestChannel);
+        bundleRequestMessage.setChannel(bundleRequestChannel);
 
         //
         // Do get
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(bundleRequestMessage, timeout);
         BundleResponseMessage responseMessage = (BundleResponseMessage) deviceApplicationCall.send();
-        
+
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
@@ -210,13 +208,13 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         bundleRequestMessage.setDeviceId(deviceId);
         bundleRequestMessage.setCapturedOn(new Date());
         bundleRequestMessage.setPayload(bundleRequestPayload);
-        bundleRequestMessage.setSemanticChannel(bundleRequestChannel);
+        bundleRequestMessage.setChannel(bundleRequestChannel);
 
         //
         // Do get
         DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(bundleRequestMessage, timeout);
         BundleResponseMessage responseMessage = (BundleResponseMessage) deviceApplicationCall.send();
-        
+
         //
         // Create event
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);

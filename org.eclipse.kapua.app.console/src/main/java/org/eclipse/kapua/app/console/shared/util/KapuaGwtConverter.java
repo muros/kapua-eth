@@ -114,7 +114,7 @@ public class KapuaGwtConverter
         throws KapuaException
     {
         GwtDevice gwtDevice = new GwtDevice();
-        gwtDevice.setId(device.getId().toString());
+        gwtDevice.setId(device.getId().getShortId());
         gwtDevice.setScopeId(device.getScopeId().getShortId());
         gwtDevice.setGwtDeviceStatus(device.getStatus().toString());
         gwtDevice.setClientId(device.getClientId());

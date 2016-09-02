@@ -33,7 +33,7 @@ import org.eclipse.kapua.model.config.metatype.Tocd;
  * the min and max values. Instead it returns the raw ObjectClassDefintion as parsed
  * from the MetaType Information XML resource associated to this Component.
  */
-@XmlRootElement(name="configuration")
+@XmlRootElement(name = "configuration")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class KuraDeviceComponentConfiguration
 {
@@ -44,60 +44,69 @@ public class KuraDeviceComponentConfiguration
      * Component Descriptor XML file; at runtime, the same value is also available
      * in the component.name and in the service.pid attributes of the Component Configuration.
      */
-    @XmlAttribute(name="pid")
-    private String             componentId;
+    @XmlAttribute(name = "pid")
+    private String              componentId;
 
     @XmlTransient
-    private String             componentName;
+    private String              componentName;
 
     /**
      * The raw ObjectClassDefinition as parsed from the MetaType
      * Information XML resource associated to this Component.
      */
     @XmlElementRef
-    private Tocd               definition;
+    private Tocd                definition;
 
     /**
      * The Dictionary of properties currently used by this component.
      */
-    @XmlElement(name="properties")
+    @XmlElement(name = "properties")
     @XmlJavaTypeAdapter(KuraXmlConfigPropertiesAdapter.class)
-    private Map<String,Object> properties;
+    private Map<String, Object> properties;
 
     // Required by JAXB
-    public KuraDeviceComponentConfiguration() {
+    public KuraDeviceComponentConfiguration()
+    {
 
     }
 
-    public String getComponentId() {
+    public String getComponentId()
+    {
         return componentId;
     }
 
-    public void setComponentId(String componentId) {
+    public void setComponentId(String componentId)
+    {
         this.componentId = componentId;
     }
 
-    public String getComponentName() {
+    public String getComponentName()
+    {
         return componentName;
     }
 
-    public void setComponentName(String componentName) {
+    public void setComponentName(String componentName)
+    {
         this.componentName = componentName;
     }
 
-    public Tocd getDefinition() {
+    public Tocd getDefinition()
+    {
         return definition;
     }
 
-    public void setDefinition(Tocd definition) {
+    public void setDefinition(Tocd definition)
+    {
         this.definition = definition;
     }
 
-    public Map<String, Object> getProperties() {
+    public Map<String, Object> getProperties()
+    {
         return properties;
     }
 
-    public void setProperties(Map<String, Object> properties) {
+    public void setProperties(Map<String, Object> properties)
+    {
         this.properties = properties;
     }
 }
