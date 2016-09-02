@@ -29,4 +29,4 @@ CREATE TABLE dvc_device_event (
   PRIMARY KEY (scope_id, id)   -- primary key needs to include the partitioning key
 ) CHARSET=utf8;
 
-CREATE INDEX idx_device_event_id ON dvc_device_event (scope_id, device_id, event_type);
+CREATE INDEX idx_device_event_id ON dvc_device_event (scope_id, device_id, resource, action);

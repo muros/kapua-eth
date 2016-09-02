@@ -104,26 +104,12 @@
                                     <autocommit>true</autocommit>
                                     <srcFiles>
                                         <srcFile>src/main/sql/H2/atht_credential_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_permission_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_permission_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_role_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_role_permission_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_role_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_role_roles_drop.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/atht_credential_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_user_permission_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_role_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_role_permission_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_user_role_drop.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_user_role_roles_drop.sql</srcFile>
 
-                                        <srcFile>src/main/sql/H2/atht_credential_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_permission_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_permission_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_role_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_role_permission_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_role_create.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_role_roles_create.sql</srcFile>
                                         <srcFile>src/main/sql/H2/atht_credential_create.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_user_permission_create.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_role_create.sql</srcFile>
@@ -132,19 +118,11 @@
                                         <srcFile>src/main/sql/H2/athz_user_role_roles_create.sql</srcFile>
 
                                         <srcFile>src/main/sql/H2/atht_credential_seed.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_permission_seed.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_user_permission_seed.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_role_seed.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_role_permission_seed.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_user_role_seed.sql</srcFile>
                                         <srcFile>src/main/sql/H2/athz_user_role_roles_seed.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/atht_credential_seed.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_permission_seed.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_role_seed.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_role_permission_seed.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_role_seed.sql</srcFile>
-                                        <srcFile>src/main/sql/H2/athz_user_role_roles_seed.sql</srcFile>
-
                                     </srcFiles>
                                 </configuration>
                             </execution>
