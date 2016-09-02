@@ -7,8 +7,10 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.generator.id.IdGeneratorService;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class IdGeneratorServiceImplTest extends Assert
 {
     @Test
