@@ -1,17 +1,8 @@
 package org.eclipse.kapua.model.config.metatype;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyAttribute;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 /**
@@ -38,24 +29,8 @@ import javax.xml.namespace.QName;
  *
  *
  */
-@XmlRootElement(name = "Option", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Toption", propOrder = {
-                                         "any"
-})
-public class Toption
+public interface KapuaToption
 {
-    @XmlAnyElement(lax = true)
-    protected List<Object>     any;
-
-    @XmlAttribute(name = "label", required = true)
-    protected String           label;
-
-    @XmlAttribute(name = "value", required = true)
-    protected String           value;
-
-    @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
      * Gets the value of the any property.
@@ -81,13 +56,7 @@ public class Toption
      *
      *
      */
-    public List<Object> getAny()
-    {
-        if (any == null) {
-            any = new ArrayList<Object>();
-        }
-        return this.any;
-    }
+    public List<Object> getAny();
 
     /**
      * Gets the value of the label property.
@@ -97,10 +66,7 @@ public class Toption
      *         {@link String }
      *
      */
-    public String getLabel()
-    {
-        return label;
-    }
+    public String getLabel();
 
     /**
      * Sets the value of the label property.
@@ -110,10 +76,7 @@ public class Toption
      *            {@link String }
      *
      */
-    public void setLabel(String value)
-    {
-        this.label = value;
-    }
+    public void setLabel(String value);
 
     /**
      * Gets the value of the value property.
@@ -123,10 +86,7 @@ public class Toption
      *         {@link String }
      *
      */
-    public String getValue()
-    {
-        return value;
-    }
+    public String getValue();
 
     /**
      * Sets the value of the value property.
@@ -136,10 +96,7 @@ public class Toption
      *            {@link String }
      *
      */
-    public void setValue(String value)
-    {
-        this.value = value;
-    }
+    public void setValue(String value);
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.
@@ -155,9 +112,6 @@ public class Toption
      * @return
      *         always non-null
      */
-    public Map<QName, String> getOtherAttributes()
-    {
-        return otherAttributes;
-    }
+    public Map<QName, String> getOtherAttributes();
 
 }

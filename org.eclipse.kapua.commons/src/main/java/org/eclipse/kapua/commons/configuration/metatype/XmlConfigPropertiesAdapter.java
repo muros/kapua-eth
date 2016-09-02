@@ -9,7 +9,7 @@
  * Contributors:
  *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.model.config.metatype;
+package org.eclipse.kapua.commons.configuration.metatype;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,8 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import org.eclipse.kapua.model.config.metatype.XmlConfigPropertyAdapted.ConfigPropertyType;
+import org.eclipse.kapua.commons.configuration.metatype.XmlConfigPropertyAdapted.ConfigPropertyType;
+import org.eclipse.kapua.commons.util.CryptoUtil;
 
 public class XmlConfigPropertiesAdapter extends XmlAdapter<XmlConfigPropertiesAdapted, Map<String, Object>>
 {

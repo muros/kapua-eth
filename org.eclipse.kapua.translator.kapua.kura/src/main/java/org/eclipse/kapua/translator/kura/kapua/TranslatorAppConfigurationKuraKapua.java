@@ -9,11 +9,14 @@ import java.util.Map.Entry;
 import javax.xml.namespace.QName;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.configuration.metatype.TadImpl;
+import org.eclipse.kapua.commons.configuration.metatype.TiconImpl;
+import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
 import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.config.metatype.Tad;
-import org.eclipse.kapua.model.config.metatype.Ticon;
-import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.model.config.metatype.KapuaTad;
+import org.eclipse.kapua.model.config.metatype.KapuaTicon;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
@@ -193,17 +196,17 @@ public class TranslatorAppConfigurationKuraKapua implements Translator<KuraRespo
         }
     }
 
-    private Tocd translateDefinitions(Tocd kuraDefinition)
+    private KapuaTocd translateDefinitions(KapuaTocd kuraDefinition)
     {
-        Tocd definition = new Tocd();
+        KapuaTocd definition = new TocdImpl();
 
         definition.setId(kuraDefinition.getId());
         definition.setName(kuraDefinition.getName());
         definition.setDescription(kuraDefinition.getDescription());
 
-        List<Tad> ads = definition.getAD();
-        for (Tad kuraAd : kuraDefinition.getAD()) {
-            Tad ad = new Tad();
+        List<KapuaTad> ads = definition.getAD();
+        for (KapuaTad kuraAd : kuraDefinition.getAD()) {
+            KapuaTad ad = new TadImpl();
             ad.setCardinality(kuraAd.getCardinality());
             ad.setDefault(ad.getDefault());
             ad.setDescription(kuraAd.getDescription());
@@ -216,9 +219,9 @@ public class TranslatorAppConfigurationKuraKapua implements Translator<KuraRespo
             ads.add(ad);
         }
 
-        List<Ticon> icons = definition.getIcon();
-        for (Ticon kuraIcon : kuraDefinition.getIcon()) {
-            Ticon icon = new Ticon();
+        List<KapuaTicon> icons = definition.getIcon();
+        for (KapuaTicon kuraIcon : kuraDefinition.getIcon()) {
+            KapuaTicon icon = new TiconImpl();
             icon.setResource(kuraIcon.getResource());
             icon.setSize(kuraIcon.getSize());
             icons.add(icon);

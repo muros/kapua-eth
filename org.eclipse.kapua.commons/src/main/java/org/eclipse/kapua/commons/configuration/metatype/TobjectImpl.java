@@ -35,8 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.kapua.model.config.metatype.Tattribute;
-import org.eclipse.kapua.model.config.metatype.Tobject;
+import org.eclipse.kapua.model.config.metatype.KapuaTattribute;
+import org.eclipse.kapua.model.config.metatype.KapuaTobject;
 import org.w3c.dom.Element;
 
 
@@ -68,7 +68,7 @@ import org.w3c.dom.Element;
     "attribute",
     "any"
 })
-public class TobjectImpl implements Tobject {
+public class TobjectImpl implements KapuaTobject {
     @XmlElement(name = "Attribute", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
     protected List<TattributeImpl> attribute;
     @XmlAnyElement(lax = true)
@@ -100,11 +100,11 @@ public class TobjectImpl implements Tobject {
      *
      *
      */
-    public List<Tattribute> getAttribute() {
+    public List<KapuaTattribute> getAttribute() {
         if (attribute == null) {
             attribute = new ArrayList<TattributeImpl>();
         }
-        return new ArrayList<Tattribute>(this.attribute);
+        return new ArrayList<KapuaTattribute>(this.attribute);
     }
 
     /**

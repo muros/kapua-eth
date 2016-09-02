@@ -11,5 +11,6 @@ CREATE TABLE sys_configuration (
   attributes				 TEXT,
   properties                 TEXT,
   PRIMARY KEY  (id),
-  INDEX idx_configurationScopeId (scope_id)  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE INDEX idx_configurationScopeId ON sys_configuration (scope_id);

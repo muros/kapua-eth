@@ -14,7 +14,7 @@ import java.text.MessageFormat;
 import java.util.*;
 
 import org.eclipse.kapua.commons.configuration.metatype.TscalarImpl;
-import org.eclipse.kapua.model.config.metatype.Tad;
+import org.eclipse.kapua.model.config.metatype.KapuaTad;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,7 +159,7 @@ public class ValueTokenizer {
         return buffer.toString();
     }
 
-    public String validate(Tad ad) {
+    public String validate(KapuaTad ad) {
         // An empty list means the original value was null. Null is never valid.
         if (values.isEmpty()) {            
             return NULL_VALUE_INVALID;

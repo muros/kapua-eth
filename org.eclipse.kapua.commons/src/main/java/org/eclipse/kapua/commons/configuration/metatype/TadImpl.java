@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.kapua.model.config.metatype.Tad;
-import org.eclipse.kapua.model.config.metatype.Toption;
-import org.eclipse.kapua.model.config.metatype.Tscalar;
+import org.eclipse.kapua.model.config.metatype.KapuaTad;
+import org.eclipse.kapua.model.config.metatype.KapuaToption;
+import org.eclipse.kapua.model.config.metatype.KapuaTscalar;
 import org.w3c.dom.Element;
 
 
@@ -77,7 +77,7 @@ import org.w3c.dom.Element;
     "option",
     "any"
 })
-public class TadImpl implements Tad {
+public class TadImpl implements KapuaTad {
     @XmlElement(name = "Option", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
     protected List<ToptionImpl> option;
     @XmlAnyElement(lax = true)
@@ -125,11 +125,11 @@ public class TadImpl implements Tad {
      *
      *
      */
-    public List<Toption> getOption() {
+    public List<KapuaToption> getOption() {
         if (option == null) {
             option = new ArrayList<ToptionImpl>();
         }
-        return new ArrayList<Toption>(this.option);
+        return new ArrayList<KapuaToption>(this.option);
     }
 
     /**
@@ -254,7 +254,7 @@ public class TadImpl implements Tad {
      *     {@link TscalarImpl }
      *
      */
-    public void setType(Tscalar value) {
+    public void setType(KapuaTscalar value) {
         this.type = (TscalarImpl)value;
     }
 

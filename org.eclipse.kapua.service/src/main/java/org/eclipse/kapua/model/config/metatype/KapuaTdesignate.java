@@ -54,27 +54,27 @@ import org.w3c.dom.Element;
  *
  *
  */
-public interface Tdesignate 
+public interface KapuaTdesignate 
 {
     /**
      * Gets the value of the object property.
      *
      * @return
      *     possible object is
-     *     {@link Tobject }
+     *     {@link KapuaTobject }
      *
      */
-    public Tobject getObject();
+    public KapuaTobject getObject();
 
     /**
      * Sets the value of the object property.
      *
      * @param value
      *     allowed object is
-     *     {@link Tobject }
+     *     {@link KapuaTobject }
      *
      */
-    public void setObject(Tobject value);
+    public void setObject(KapuaTobject value);
 
     /**
      * Gets the value of the any property.

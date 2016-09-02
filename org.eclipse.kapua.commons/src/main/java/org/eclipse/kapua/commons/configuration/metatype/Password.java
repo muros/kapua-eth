@@ -7,28 +7,24 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *      Eurotech - initial API and implementation
+ *     Eurotech - initial API and implementation
+ *
  *******************************************************************************/
-package org.eclipse.kapua.model.config.metatype;
+package org.eclipse.kapua.commons.configuration.metatype;
 
-public class Password
-{
+public class Password {
     private String password;
 
-    public Password(String password)
-    {
+    public Password(String password) {
         super();
         this.password = password;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    @Override
-    public String toString()
-    {
+    public String toString() {
         return password;
     }
 }

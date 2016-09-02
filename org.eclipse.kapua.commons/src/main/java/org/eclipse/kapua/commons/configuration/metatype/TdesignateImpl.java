@@ -35,8 +35,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.kapua.model.config.metatype.Tdesignate;
-import org.eclipse.kapua.model.config.metatype.Tobject;
+import org.eclipse.kapua.model.config.metatype.KapuaTdesignate;
+import org.eclipse.kapua.model.config.metatype.KapuaTobject;
 import org.w3c.dom.Element;
 
 
@@ -72,7 +72,7 @@ import org.w3c.dom.Element;
     "object",
     "any"
 })
-public class TdesignateImpl implements Tdesignate {
+public class TdesignateImpl implements KapuaTdesignate {
     @XmlElement(name = "Object", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
     protected TobjectImpl object;
     @XmlAnyElement(lax = true)
@@ -98,7 +98,7 @@ public class TdesignateImpl implements Tdesignate {
      *     {@link TobjectImpl }
      *
      */
-    public Tobject getObject() {
+    public KapuaTobject getObject() {
         return object;
     }
 
@@ -110,7 +110,7 @@ public class TdesignateImpl implements Tdesignate {
      *     {@link TobjectImpl }
      *
      */
-    public void setObject(Tobject value) {
+    public void setObject(KapuaTobject value) {
         this.object = (TobjectImpl)value;
     }
 

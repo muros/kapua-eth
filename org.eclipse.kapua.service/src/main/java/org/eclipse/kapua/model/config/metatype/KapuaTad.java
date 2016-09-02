@@ -1,26 +1,14 @@
 package org.eclipse.kapua.model.config.metatype;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyAttribute;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 /**
- * <p>
- * Java class for Tad complex type.
+ * <p>Java class for Tad complex type.
  *
- * <p>
- * The following schema fragment specifies the expected content contained within this class.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
  * &lt;complexType name="Tad">
@@ -47,49 +35,8 @@ import javax.xml.namespace.QName;
  *
  *
  */
-@XmlRootElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tad", propOrder = {
-                                     "option",
-                                     "any"
-})
-public class Tad
+public interface KapuaTad
 {
-    @XmlElement(name = "Option", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<Toption>    option;
-
-    @XmlAnyElement(lax = true)
-    protected List<Object>     any;
-
-    @XmlAttribute(name = "name")
-    protected String           name;
-
-    @XmlAttribute(name = "description")
-    protected String           description;
-
-    @XmlAttribute(name = "id", required = true)
-    protected String           id;
-
-    @XmlAttribute(name = "type", required = true)
-    protected Tscalar          type;
-
-    @XmlAttribute(name = "cardinality")
-    protected Integer          cardinality;
-
-    @XmlAttribute(name = "min")
-    protected String           min;
-
-    @XmlAttribute(name = "max")
-    protected String           max;
-
-    @XmlAttribute(name = "default")
-    protected String           _default;
-
-    @XmlAttribute(name = "required")
-    protected Boolean          required;
-
-    @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
      * Gets the value of the option property.
@@ -110,17 +57,11 @@ public class Tad
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Toption }
+     * {@link KapuaToption }
      *
      *
      */
-    public List<Toption> getOption()
-    {
-        if (option == null) {
-            option = new ArrayList<Toption>();
-        }
-        return option;
-    }
+    public List<KapuaToption> getOption();
 
     /**
      * Gets the value of the any property.
@@ -146,13 +87,7 @@ public class Tad
      *
      *
      */
-    public List<Object> getAny()
-    {
-        if (any == null) {
-            any = new ArrayList<Object>();
-        }
-        return any;
-    }
+    public List<Object> getAny();
 
     /**
      * Gets the value of the name property.
@@ -162,10 +97,7 @@ public class Tad
      *         {@link String }
      *
      */
-    public String getName()
-    {
-        return name;
-    }
+    public String getName();
 
     /**
      * Sets the value of the name property.
@@ -175,10 +107,7 @@ public class Tad
      *            {@link String }
      *
      */
-    public void setName(String value)
-    {
-        this.name = value;
-    }
+    public void setName(String value);
 
     /**
      * Gets the value of the description property.
@@ -188,10 +117,7 @@ public class Tad
      *         {@link String }
      *
      */
-    public String getDescription()
-    {
-        return description;
-    }
+    public String getDescription();
 
     /**
      * Sets the value of the description property.
@@ -201,10 +127,7 @@ public class Tad
      *            {@link String }
      *
      */
-    public void setDescription(String value)
-    {
-        this.description = value;
-    }
+    public void setDescription(String value);
 
     /**
      * Gets the value of the id property.
@@ -214,10 +137,7 @@ public class Tad
      *         {@link String }
      *
      */
-    public String getId()
-    {
-        return id;
-    }
+    public String getId();
 
     /**
      * Sets the value of the id property.
@@ -227,36 +147,27 @@ public class Tad
      *            {@link String }
      *
      */
-    public void setId(String value)
-    {
-        this.id = value;
-    }
+    public void setId(String value);
 
     /**
      * Gets the value of the type property.
      *
      * @return
      *         possible object is
-     *         {@link Tscalar }
+     *         {@link KapuaTscalar }
      *
      */
-    public Tscalar getType()
-    {
-        return type;
-    }
+    public KapuaTscalar getType();
 
     /**
      * Sets the value of the type property.
      *
      * @param value
      *            allowed object is
-     *            {@link Tscalar }
+     *            {@link KapuaTscalar }
      *
      */
-    public void setType(Tscalar value)
-    {
-        this.type = value;
-    }
+    public void setType(KapuaTscalar value);
 
     /**
      * Gets the value of the cardinality property.
@@ -266,15 +177,7 @@ public class Tad
      *         {@link Integer }
      *
      */
-    public int getCardinality()
-    {
-        if (cardinality == null) {
-            return 0;
-        }
-        else {
-            return cardinality;
-        }
-    }
+    public int getCardinality();
 
     /**
      * Sets the value of the cardinality property.
@@ -284,10 +187,7 @@ public class Tad
      *            {@link Integer }
      *
      */
-    public void setCardinality(Integer value)
-    {
-        this.cardinality = value;
-    }
+    public void setCardinality(Integer value);
 
     /**
      * Gets the value of the min property.
@@ -297,10 +197,7 @@ public class Tad
      *         {@link String }
      *
      */
-    public String getMin()
-    {
-        return min;
-    }
+    public String getMin();
 
     /**
      * Sets the value of the min property.
@@ -310,10 +207,7 @@ public class Tad
      *            {@link String }
      *
      */
-    public void setMin(String value)
-    {
-        this.min = value;
-    }
+    public void setMin(String value);
 
     /**
      * Gets the value of the max property.
@@ -323,10 +217,7 @@ public class Tad
      *         {@link String }
      *
      */
-    public String getMax()
-    {
-        return max;
-    }
+    public String getMax();
 
     /**
      * Sets the value of the max property.
@@ -336,10 +227,7 @@ public class Tad
      *            {@link String }
      *
      */
-    public void setMax(String value)
-    {
-        this.max = value;
-    }
+    public void setMax(String value);
 
     /**
      * Gets the value of the default property.
@@ -349,10 +237,7 @@ public class Tad
      *         {@link String }
      *
      */
-    public String getDefault()
-    {
-        return _default;
-    }
+    public String getDefault();
 
     /**
      * Sets the value of the default property.
@@ -362,10 +247,7 @@ public class Tad
      *            {@link String }
      *
      */
-    public void setDefault(String value)
-    {
-        this._default = value;
-    }
+    public void setDefault(String value);
 
     /**
      * Gets the value of the required property.
@@ -375,15 +257,7 @@ public class Tad
      *         {@link Boolean }
      *
      */
-    public boolean isRequired()
-    {
-        if (required == null) {
-            return true;
-        }
-        else {
-            return required;
-        }
-    }
+    public boolean isRequired();
 
     /**
      * Sets the value of the required property.
@@ -393,10 +267,7 @@ public class Tad
      *            {@link Boolean }
      *
      */
-    public void setRequired(Boolean value)
-    {
-        this.required = value;
-    }
+    public void setRequired(Boolean value);
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.
@@ -412,9 +283,6 @@ public class Tad
      * @return
      *         always non-null
      */
-    public Map<QName, String> getOtherAttributes()
-    {
-        return otherAttributes;
-    }
+    public Map<QName, String> getOtherAttributes();
 
 }

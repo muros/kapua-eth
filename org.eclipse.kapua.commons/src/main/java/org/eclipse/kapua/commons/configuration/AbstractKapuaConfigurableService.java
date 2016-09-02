@@ -34,10 +34,10 @@ import org.eclipse.kapua.commons.util.EntityManager;
 import org.eclipse.kapua.commons.util.EntityManagerFactory;
 import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.commons.util.ResourceUtils;
-import org.eclipse.kapua.commons.util.XmlUtil;
+import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.config.metatype.Tad;
-import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.model.config.metatype.KapuaTad;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.predicate.KapuaAttributePredicate.Operator;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
@@ -68,15 +68,15 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         return metaData;
     }
 
-    private static void validateConfigurations(String pid, Tocd ocd, Map<String, Object> updatedProps)
+    private static void validateConfigurations(String pid, KapuaTocd ocd, Map<String, Object> updatedProps)
         throws KapuaException
     {
         if (ocd != null) {
 
             // build a map of all the attribute definitions
-            Map<String, Tad> attrDefs = new HashMap<String, Tad>();
-            List<Tad> defs = ocd.getAD();
-            for (Tad def : defs) {
+            Map<String, KapuaTad> attrDefs = new HashMap<String, KapuaTad>();
+            List<KapuaTad> defs = ocd.getAD();
+            for (KapuaTad def : defs) {
                 attrDefs.put(def.getId(), def);
             }
 
@@ -85,7 +85,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
             for (Entry<String, Object> property : updatedProps.entrySet()) {
 
                 String key = property.getKey();
-                Tad attrDef = attrDefs.get(key);
+                KapuaTad attrDef = attrDefs.get(key);
 
                 // is attribute undefined?
                 if (attrDef == null) {
@@ -113,7 +113,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
 
             // make sure all required properties are set
             if (ocd != null) {
-                for (Tad attrDef : ocd.getAD()) {
+                for (KapuaTad attrDef : ocd.getAD()) {
                     // to the required attributes make sure a value is defined.
                     if (attrDef.isRequired()) {
                         if (updatedProps.get(attrDef.getId()) == null) {
@@ -136,11 +136,11 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         return props;
     }
     
-    private static Map<String, Object> toValues(Tocd ocd, Properties props) throws KapuaException
+    private static Map<String, Object> toValues(KapuaTocd ocd, Properties props) throws KapuaException
     {
-        List<Tad> ads = ocd.getAD();
+        List<KapuaTad> ads = ocd.getAD();
         Map<String, Object> values = new HashMap<String, Object>();
-        for (Tad ad : ads)
+        for (KapuaTad ad : ads)
         {
             String valueStr = props == null ? ad.getDefault() : props.getProperty(ad.getId(), ad.getDefault());
             Object value = StringUtil.stringToValue(ad.getType().value(), valueStr);
@@ -206,7 +206,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
     }
 
     @Override
-    public Tocd getConfigMetadata()
+    public KapuaTocd getConfigMetadata()
         throws KapuaException
     {
         KapuaLocator locator = KapuaLocator.getInstance();
@@ -219,7 +219,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         try {
             TmetadataImpl metadata = readMetadata(this.pid);
             if (metadata.getOCD() != null && metadata.getOCD().size() > 0) {
-                for (Tocd ocd : metadata.getOCD()) {
+                for (KapuaTocd ocd : metadata.getOCD()) {
                     if (ocd.getId() != null && ocd.getId().equals(pid)) {
                         return ocd;
                     }
@@ -254,7 +254,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         if (result != null && result.size() > 0)
             properties = result.get(0).getConfigurations();
 
-        Tocd ocd = this.getConfigMetadata();
+        KapuaTocd ocd = this.getConfigMetadata();
         return toValues(ocd, properties);
     }
 
@@ -267,7 +267,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(domain, Actions.write, scopeId));
 
-        Tocd ocd = this.getConfigMetadata();
+        KapuaTocd ocd = this.getConfigMetadata();
         validateConfigurations(this.pid, ocd, values);
         
         Properties props = toProperties(values);

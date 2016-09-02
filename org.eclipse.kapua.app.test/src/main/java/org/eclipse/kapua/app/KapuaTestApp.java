@@ -20,7 +20,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.service.account.Account;
@@ -104,7 +104,7 @@ public class KapuaTestApp
             System.err.println("");
 
             // Test user service configurations
-            Tocd ocd = userService.getConfigMetadata();
+            KapuaTocd ocd = userService.getConfigMetadata();
             Map<String, Object> values = userService.getConfigValues(adminUser.getScopeId());
             userService.setConfigValues(adminUser.getScopeId(), values);
             

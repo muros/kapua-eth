@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.kapua.model.config.metatype.Toption;
+import org.eclipse.kapua.model.config.metatype.KapuaToption;
 import org.w3c.dom.Element;
 
 
@@ -65,7 +65,7 @@ import org.w3c.dom.Element;
 @XmlType(name = "Toption", propOrder = {
     "any"
 })
-public class ToptionImpl implements Toption {
+public class ToptionImpl implements KapuaToption {
     @XmlAnyElement(lax = true)
     protected List<Object> any;
     @XmlAttribute(name = "label", required = true)

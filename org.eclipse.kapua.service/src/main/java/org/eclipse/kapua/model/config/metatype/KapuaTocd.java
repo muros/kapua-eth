@@ -1,18 +1,8 @@
 package org.eclipse.kapua.model.config.metatype;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyAttribute;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 /**
@@ -42,35 +32,8 @@ import javax.xml.namespace.QName;
  *
  *
  */
-@XmlRootElement(name = "OCD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tocd", propOrder = {
-                                      "ad",
-                                      "icon",
-                                      "any"
-})
-public class Tocd
+public interface KapuaTocd
 {
-    @XmlElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
-    protected List<Tad>        ad;
-
-    @XmlElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<Ticon>      icon;
-
-    @XmlAnyElement(lax = true)
-    protected List<Object>     any;
-
-    @XmlAttribute(name = "name", required = true)
-    protected String           name;
-
-    @XmlAttribute(name = "description")
-    protected String           description;
-
-    @XmlAttribute(name = "id", required = true)
-    protected String           id;
-
-    @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
      * Gets the value of the ad property.
@@ -91,17 +54,11 @@ public class Tocd
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Tad }
+     * {@link KapuaTad }
      *
      *
      */
-    public List<Tad> getAD()
-    {
-        if (ad == null) {
-            ad = new ArrayList<Tad>();
-        }
-        return ad;
-    }
+    public List<KapuaTad> getAD();
 
     /**
      * Gets the value of the icon property.
@@ -122,17 +79,11 @@ public class Tocd
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Ticon }
+     * {@link KapuaTicon }
      *
      *
      */
-    public List<Ticon> getIcon()
-    {
-        if (icon == null) {
-            icon = new ArrayList<>();
-        }
-        return icon;
-    }
+    public List<KapuaTicon> getIcon();
 
     /**
      * Gets the value of the any property.
@@ -158,13 +109,7 @@ public class Tocd
      *
      *
      */
-    public List<Object> getAny()
-    {
-        if (any == null) {
-            any = new ArrayList<Object>();
-        }
-        return any;
-    }
+    public List<Object> getAny();
 
     /**
      * Gets the value of the name property.
@@ -174,10 +119,7 @@ public class Tocd
      *         {@link String }
      *
      */
-    public String getName()
-    {
-        return name;
-    }
+    public String getName();
 
     /**
      * Sets the value of the name property.
@@ -187,10 +129,7 @@ public class Tocd
      *            {@link String }
      *
      */
-    public void setName(String value)
-    {
-        this.name = value;
-    }
+    public void setName(String value);
 
     /**
      * Gets the value of the description property.
@@ -200,10 +139,7 @@ public class Tocd
      *         {@link String }
      *
      */
-    public String getDescription()
-    {
-        return description;
-    }
+    public String getDescription();
 
     /**
      * Sets the value of the description property.
@@ -213,10 +149,7 @@ public class Tocd
      *            {@link String }
      *
      */
-    public void setDescription(String value)
-    {
-        this.description = value;
-    }
+    public void setDescription(String value);
 
     /**
      * Gets the value of the id property.
@@ -226,10 +159,7 @@ public class Tocd
      *         {@link String }
      *
      */
-    public String getId()
-    {
-        return id;
-    }
+    public String getId();
 
     /**
      * Sets the value of the id property.
@@ -239,10 +169,7 @@ public class Tocd
      *            {@link String }
      *
      */
-    public void setId(String value)
-    {
-        this.id = value;
-    }
+    public void setId(String value);
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.
@@ -258,9 +185,6 @@ public class Tocd
      * @return
      *         always non-null
      */
-    public Map<QName, String> getOtherAttributes()
-    {
-        return otherAttributes;
-    }
+    public Map<QName, String> getOtherAttributes();
 
 }

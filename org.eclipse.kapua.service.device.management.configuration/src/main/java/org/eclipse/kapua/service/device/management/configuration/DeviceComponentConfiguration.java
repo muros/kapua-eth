@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 
 @XmlRootElement(name = "configuration")
 public interface DeviceComponentConfiguration
@@ -22,7 +22,7 @@ public interface DeviceComponentConfiguration
     public String getName();
 
     @XmlAttribute(name = "definition")
-    public Tocd getDefinition();
+    public KapuaTocd getDefinition();
 
     @XmlElement(name = "properties")
     public void setProperties(Map<String, Object> properties);

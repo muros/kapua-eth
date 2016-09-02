@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.kapua.model.config.metatype.Tdesignate;
-import org.eclipse.kapua.model.config.metatype.Tmetadata;
-import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.model.config.metatype.KapuaTdesignate;
+import org.eclipse.kapua.model.config.metatype.KapuaTmetadata;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.w3c.dom.Element;
 
 
@@ -71,7 +71,7 @@ import org.w3c.dom.Element;
     "designate",
     "any"
 })
-public class TmetadataImpl implements Tmetadata {
+public class TmetadataImpl implements KapuaTmetadata {
     @XmlElement(name = "OCD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
     protected List<TocdImpl> ocd;
     @XmlElement(name = "Designate", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
@@ -105,11 +105,11 @@ public class TmetadataImpl implements Tmetadata {
      *
      *
      */
-    public List<Tocd> getOCD() {
+    public List<KapuaTocd> getOCD() {
         if (ocd == null) {
             ocd = new ArrayList<TocdImpl>();
         }
-        return new ArrayList<Tocd>(this.ocd);
+        return new ArrayList<KapuaTocd>(this.ocd);
     }
 
     /**
@@ -134,11 +134,11 @@ public class TmetadataImpl implements Tmetadata {
      *
      *
      */
-    public List<Tdesignate> getDesignate() {
+    public List<KapuaTdesignate> getDesignate() {
         if (designate == null) {
             designate = new ArrayList<TdesignateImpl>();
         }
-        return new ArrayList<Tdesignate>(this.designate);
+        return new ArrayList<KapuaTdesignate>(this.designate);
     }
 
     /**

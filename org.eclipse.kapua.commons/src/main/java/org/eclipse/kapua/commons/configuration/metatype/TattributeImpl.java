@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.kapua.model.config.metatype.Tattribute;
+import org.eclipse.kapua.model.config.metatype.KapuaTattribute;
 import org.w3c.dom.Element;
 
 
@@ -68,7 +68,7 @@ import org.w3c.dom.Element;
     "value",
     "any"
 })
-public class TattributeImpl implements Tattribute {
+public class TattributeImpl implements KapuaTattribute {
     @XmlElement(name = "Value", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
     protected List<String> value;
     @XmlAnyElement(lax = true)

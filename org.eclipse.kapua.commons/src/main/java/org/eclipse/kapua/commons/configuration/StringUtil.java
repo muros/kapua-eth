@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.configuration.metatype.Password;
 import org.eclipse.kapua.commons.configuration.metatype.TscalarImpl;
 
 public class StringUtil 

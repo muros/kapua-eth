@@ -9,7 +9,7 @@
  * Contributors:
  *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.model.config.metatype;
+package org.eclipse.kapua.commons.configuration.metatype;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

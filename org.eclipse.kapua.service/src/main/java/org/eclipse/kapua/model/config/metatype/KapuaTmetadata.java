@@ -29,20 +29,20 @@ import org.w3c.dom.Element;
 
 
 /**
- * <p>Java class for Tattribute complex type.
+ * <p>Java class for Tmetadata complex type.
  *
  * <p>The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
- * &lt;complexType name="Tattribute">
+ * &lt;complexType name="Tmetadata">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="Value" type="{http://www.w3.org/2001/XMLSchema}string" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="OCD" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tocd" maxOccurs="unbounded" minOccurs="0"/>
+ *         &lt;element name="Designate" type="{http://www.osgi.org/xmlns/metatype/v1.2.0}Tdesignate" maxOccurs="unbounded" minOccurs="0"/>
  *         &lt;any processContents='lax' namespace='##other' maxOccurs="unbounded" minOccurs="0"/>
  *       &lt;/sequence>
- *       &lt;attribute name="adref" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="content" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="localization" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;anyAttribute/>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -51,31 +51,55 @@ import org.w3c.dom.Element;
  *
  *
  */
-public interface Tattribute 
-{
+public interface KapuaTmetadata {
+
     /**
-     * Gets the value of the value property.
+     * Gets the value of the ocd property.
      *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the value property.
+     * This is why there is not a <CODE>set</CODE> method for the ocd property.
      *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
-     *    getValue().add(newItem);
+     *    getOCD().add(newItem);
      * </pre>
      *
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link String }
+     * {@link KapuaTocd }
      *
      *
      */
-    public List<String> getValue();
+    public List<KapuaTocd> getOCD();
+
+    /**
+     * Gets the value of the designate property.
+     *
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the designate property.
+     *
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getDesignate().add(newItem);
+     * </pre>
+     *
+     *
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link KapuaTdesignate }
+     *
+     *
+     */
+    public List<KapuaTdesignate> getDesignate();
 
     /**
      * Gets the value of the any property.
@@ -103,44 +127,24 @@ public interface Tattribute
     public List<Object> getAny();
 
     /**
-     * Gets the value of the adref property.
+     * Gets the value of the localization property.
      *
      * @return
      *     possible object is
      *     {@link String }
      *
      */
-    public String getAdref();
+    public String getLocalization();
 
     /**
-     * Sets the value of the adref property.
+     * Sets the value of the localization property.
      *
      * @param value
      *     allowed object is
      *     {@link String }
      *
      */
-    public void setAdref(String value);
-
-    /**
-     * Gets the value of the content property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getContent();
-
-    /**
-     * Sets the value of the content property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setContent(String value);
+    public void setLocalization(String value);
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.
@@ -157,4 +161,5 @@ public interface Tattribute
      *     always non-null
      */
     public Map<QName, String> getOtherAttributes();
+
 }

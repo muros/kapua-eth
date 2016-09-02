@@ -35,9 +35,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.kapua.model.config.metatype.Tad;
-import org.eclipse.kapua.model.config.metatype.Ticon;
-import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.model.config.metatype.KapuaTad;
+import org.eclipse.kapua.model.config.metatype.KapuaTicon;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.w3c.dom.Element;
 
 
@@ -73,7 +73,7 @@ import org.w3c.dom.Element;
     "icon",
     "any"
 })
-public class TocdImpl implements Tocd {
+public class TocdImpl implements KapuaTocd {
     @XmlElement(name = "AD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0", required=true)
     protected List<TadImpl> ad;
     @XmlElement(name = "Icon", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
@@ -111,11 +111,11 @@ public class TocdImpl implements Tocd {
      *
      *
      */
-    public List<Tad> getAD() {
+    public List<KapuaTad> getAD() {
         if (ad == null) {
             ad = new ArrayList<TadImpl>();
         }
-        return new ArrayList<Tad>(this.ad);
+        return new ArrayList<KapuaTad>(this.ad);
     }
 
     /**
@@ -140,11 +140,11 @@ public class TocdImpl implements Tocd {
      *
      *
      */
-    public List<Ticon> getIcon() {
+    public List<KapuaTicon> getIcon() {
         if (icon == null) {
             icon = new ArrayList<TiconImpl>();
         }
-        return new ArrayList<Ticon>(this.icon);
+        return new ArrayList<KapuaTicon>(this.icon);
     }
 
     /**

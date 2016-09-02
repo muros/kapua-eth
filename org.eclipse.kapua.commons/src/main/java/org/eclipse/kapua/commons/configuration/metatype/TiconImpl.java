@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.eclipse.kapua.model.config.metatype.Ticon;
+import org.eclipse.kapua.model.config.metatype.KapuaTicon;
 import org.w3c.dom.Element;
 
 
@@ -67,7 +67,7 @@ import org.w3c.dom.Element;
 @XmlType(name = "Ticon", propOrder = {
     "any"
 })
-public class TiconImpl implements Ticon {
+public class TiconImpl implements KapuaTicon {
     @XmlAnyElement(lax = true)
     protected List<Object> any;
     @XmlAttribute(name = "resource", required = true)

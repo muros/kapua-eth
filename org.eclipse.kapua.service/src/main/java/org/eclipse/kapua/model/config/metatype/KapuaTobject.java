@@ -50,7 +50,7 @@ import org.w3c.dom.Element;
  *
  *
  */
-public interface Tobject 
+public interface KapuaTobject 
 {
 
     /**
@@ -71,11 +71,11 @@ public interface Tobject
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Tattribute }
+     * {@link KapuaTattribute }
      *
      *
      */
-    public List<Tattribute> getAttribute();
+    public List<KapuaTattribute> getAttribute();
 
     /**
      * Gets the value of the any property.

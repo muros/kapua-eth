@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.kapua.model.config.metatype.Tscalar;
+import org.eclipse.kapua.model.config.metatype.KapuaTscalar;
 
 
 /**
@@ -52,7 +52,7 @@ import org.eclipse.kapua.model.config.metatype.Tscalar;
  */
 @XmlEnum
 @XmlType(name = "Tscalar")
-public enum TscalarImpl implements Tscalar {
+public enum TscalarImpl implements KapuaTscalar {
     @XmlEnumValue("String")
     STRING("String"),
     @XmlEnumValue("Long")

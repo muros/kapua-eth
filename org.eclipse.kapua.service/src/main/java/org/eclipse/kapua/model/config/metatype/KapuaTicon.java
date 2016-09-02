@@ -1,19 +1,9 @@
 package org.eclipse.kapua.model.config.metatype;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyAttribute;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSchemaType;
-import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 /**
@@ -40,25 +30,8 @@ import javax.xml.namespace.QName;
  *
  *
  */
-@XmlRootElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Ticon", propOrder = {
-                                       "any"
-})
-public class Ticon
+public interface KapuaTicon
 {
-    @XmlAnyElement(lax = true)
-    protected List<Object>     any;
-
-    @XmlAttribute(name = "resource", required = true)
-    protected String           resource;
-
-    @XmlAttribute(name = "size", required = true)
-    @XmlSchemaType(name = "positiveInteger")
-    protected BigInteger       size;
-
-    @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**
      * Gets the value of the any property.
@@ -84,13 +57,7 @@ public class Ticon
      *
      *
      */
-    public List<Object> getAny()
-    {
-        if (any == null) {
-            any = new ArrayList<Object>();
-        }
-        return this.any;
-    }
+    public List<Object> getAny();
 
     /**
      * Gets the value of the resource property.
@@ -100,10 +67,7 @@ public class Ticon
      *         {@link String }
      *
      */
-    public String getResource()
-    {
-        return resource;
-    }
+    public String getResource();
 
     /**
      * Sets the value of the resource property.
@@ -113,10 +77,7 @@ public class Ticon
      *            {@link String }
      *
      */
-    public void setResource(String value)
-    {
-        this.resource = value;
-    }
+    public void setResource(String value);
 
     /**
      * Gets the value of the size property.
@@ -126,10 +87,7 @@ public class Ticon
      *         {@link BigInteger }
      *
      */
-    public BigInteger getSize()
-    {
-        return size;
-    }
+    public BigInteger getSize();
 
     /**
      * Sets the value of the size property.
@@ -139,10 +97,7 @@ public class Ticon
      *            {@link BigInteger }
      *
      */
-    public void setSize(BigInteger value)
-    {
-        this.size = value;
-    }
+    public void setSize(BigInteger value);
 
     /**
      * Gets a map that contains attributes that aren't bound to any typed property on this class.
@@ -158,9 +113,6 @@ public class Ticon
      * @return
      *         always non-null
      */
-    public Map<QName, String> getOtherAttributes()
-    {
-        return otherAttributes;
-    }
+    public Map<QName, String> getOtherAttributes();
 
 }
