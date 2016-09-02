@@ -17,6 +17,7 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.util.EntityManagerCallback;
 import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -64,27 +65,14 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         // Check Access
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, deviceCreator.getScopeId()));
 
-        //
         // Create the connection
-        Device device = null;
-        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
-        try {
-            em.beginTransaction();
+        return DeviceEntityManagerFactory.instance().resultsFromEntityManager(entityManager -> {
+            entityManager.beginTransaction();
+            Device device = DeviceDAO.create(entityManager, deviceCreator);
+            entityManager.commit();
 
-            device = DeviceDAO.create(em, deviceCreator);
-            em.commit();
-
-            device = DeviceDAO.find(em, device.getId());
-        }
-        catch (Exception e) {
-            em.rollback();
-            throw KapuaExceptionUtils.convertPersistenceException(e);
-        }
-        finally {
-            em.close();
-        }
-
-        return device;
+            return DeviceDAO.find(entityManager, device.getId());
+        });
     }
 
     @Override
@@ -101,62 +89,50 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         // Check Access
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, device.getScopeId()));
 
-        //
         // Do update
-        Device deviceUpdated = null;
-        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
-        try {
-            Device currentDevice = DeviceDAO.find(em, device.getId());
-            if (currentDevice == null) {
-                throw new KapuaEntityNotFoundException(Device.TYPE, device.getId());
+        return DeviceEntityManagerFactory.instance().resultsFromEntityManager(new EntityManagerCallback<Device>() {
+            @Override
+            public Device onEntityManager(EntityManager entityManager) throws KapuaException {
+                Device currentDevice = DeviceDAO.find(entityManager, device.getId());
+                if (currentDevice == null) {
+                    throw new KapuaEntityNotFoundException(Device.TYPE, device.getId());
+                }
+
+                currentDevice.setStatus(device.getStatus());
+                currentDevice.setDisplayName(device.getDisplayName());
+                currentDevice.setLastEventOn(device.getLastEventOn());
+                currentDevice.setLastEventType(device.getLastEventType());
+                currentDevice.setSerialNumber(device.getSerialNumber());
+                currentDevice.setModelId(device.getModelId());
+                currentDevice.setImei(device.getImei());
+                currentDevice.setImsi(device.getImsi());
+                currentDevice.setIccid(device.getIccid());
+                currentDevice.setBiosVersion(device.getBiosVersion());
+                currentDevice.setFirmwareVersion(device.getFirmwareVersion());
+                currentDevice.setOsVersion(device.getOsVersion());
+                currentDevice.setJvmVersion(device.getJvmVersion());
+                currentDevice.setOsgiFrameworkVersion(device.getOsgiFrameworkVersion());
+                currentDevice.setApplicationFrameworkVersion(device.getApplicationFrameworkVersion());
+                currentDevice.setApplicationIdentifiers(device.getApplicationIdentifiers());
+                currentDevice.setAcceptEncoding(device.getAcceptEncoding());
+                currentDevice.setGpsLongitude(device.getGpsLongitude());
+                currentDevice.setGpsLatitude(device.getGpsLatitude());
+                currentDevice.setCustomAttribute1(device.getCustomAttribute1());
+                currentDevice.setCustomAttribute2(device.getCustomAttribute2());
+                currentDevice.setCustomAttribute3(device.getCustomAttribute3());
+                currentDevice.setCustomAttribute4(device.getCustomAttribute4());
+                currentDevice.setCustomAttribute5(device.getCustomAttribute5());
+                currentDevice.setCredentialsMode(device.getCredentialsMode());
+                currentDevice.setPreferredUserId(device.getPreferredUserId());
+
+                // Update
+                entityManager.beginTransaction();
+                DeviceDAO.update(entityManager, currentDevice);
+                entityManager.commit();
+
+                return DeviceDAO.find(entityManager, device.getId());
             }
-
-            // FIXME: check preferred userid consistency
-
-            // Passing attributes
-            currentDevice.setStatus(device.getStatus());
-            currentDevice.setDisplayName(device.getDisplayName());
-            currentDevice.setLastEventOn(device.getLastEventOn());
-            currentDevice.setLastEventType(device.getLastEventType());
-            currentDevice.setSerialNumber(device.getSerialNumber());
-            currentDevice.setModelId(device.getModelId());
-            currentDevice.setImei(device.getImei());
-            currentDevice.setImsi(device.getImsi());
-            currentDevice.setIccid(device.getIccid());
-            currentDevice.setBiosVersion(device.getBiosVersion());
-            currentDevice.setFirmwareVersion(device.getFirmwareVersion());
-            currentDevice.setOsVersion(device.getOsVersion());
-            currentDevice.setJvmVersion(device.getJvmVersion());
-            currentDevice.setOsgiFrameworkVersion(device.getOsgiFrameworkVersion());
-            currentDevice.setApplicationFrameworkVersion(device.getApplicationFrameworkVersion());
-            currentDevice.setApplicationIdentifiers(device.getApplicationIdentifiers());
-            currentDevice.setAcceptEncoding(device.getAcceptEncoding());
-            currentDevice.setGpsLongitude(device.getGpsLongitude());
-            currentDevice.setGpsLatitude(device.getGpsLatitude());
-            currentDevice.setCustomAttribute1(device.getCustomAttribute1());
-            currentDevice.setCustomAttribute2(device.getCustomAttribute2());
-            currentDevice.setCustomAttribute3(device.getCustomAttribute3());
-            currentDevice.setCustomAttribute4(device.getCustomAttribute4());
-            currentDevice.setCustomAttribute5(device.getCustomAttribute5());
-            currentDevice.setCredentialsMode(device.getCredentialsMode());
-            currentDevice.setPreferredUserId(device.getPreferredUserId());
-
-            // Update
-            em.beginTransaction();
-            DeviceDAO.update(em, currentDevice);
-            em.commit();
-
-            deviceUpdated = DeviceDAO.find(em, device.getId());
-        }
-        catch (Exception e) {
-            em.rollback();
-            throw KapuaExceptionUtils.convertPersistenceException(e);
-        }
-        finally {
-            em.close();
-        }
-
-        return deviceUpdated;
+        });
     }
 
     @Override
