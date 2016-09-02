@@ -26,11 +26,11 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class GuiceLocatorImplTest {
 
 	KapuaLocator locator = GuiceLocatorImpl.getInstance();
 
-	@Ignore
 	@Test
 	public void shouldLoadUserService()
 	{
