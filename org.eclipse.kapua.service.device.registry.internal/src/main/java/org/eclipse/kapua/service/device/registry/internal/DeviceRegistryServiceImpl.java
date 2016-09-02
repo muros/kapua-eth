@@ -17,7 +17,6 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.util.EntityManager;
-import org.eclipse.kapua.commons.util.EntityManagerCallback;
 import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -39,15 +38,19 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
 
     private final PermissionFactory permissionFactory;
 
-    public DeviceRegistryServiceImpl(AuthorizationService authorizationService, PermissionFactory permissionFactory) {
+    private final DeviceEntityManagerFactory deviceEntityManagerFactory;
+
+    public DeviceRegistryServiceImpl(AuthorizationService authorizationService, PermissionFactory permissionFactory, DeviceEntityManagerFactory deviceEntityManagerFactory) {
         this.authorizationService = authorizationService;
         this.permissionFactory = permissionFactory;
+        this.deviceEntityManagerFactory = deviceEntityManagerFactory;
     }
 
     public DeviceRegistryServiceImpl() {
         KapuaLocator locator = KapuaLocator.getInstance();
         authorizationService = locator.getService(AuthorizationService.class);
         permissionFactory = locator.getFactory(PermissionFactory.class);
+        deviceEntityManagerFactory = DeviceEntityManagerFactory.instance();
     }
 
     @Override
@@ -66,7 +69,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, deviceCreator.getScopeId()));
 
         // Create the connection
-        return DeviceEntityManagerFactory.instance().resultsFromEntityManager(entityManager -> {
+        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> {
             entityManager.beginTransaction();
             Device device = DeviceDAO.create(entityManager, deviceCreator);
             entityManager.commit();
@@ -90,48 +93,45 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, device.getScopeId()));
 
         // Do update
-        return DeviceEntityManagerFactory.instance().resultsFromEntityManager(new EntityManagerCallback<Device>() {
-            @Override
-            public Device onEntityManager(EntityManager entityManager) throws KapuaException {
-                Device currentDevice = DeviceDAO.find(entityManager, device.getId());
-                if (currentDevice == null) {
-                    throw new KapuaEntityNotFoundException(Device.TYPE, device.getId());
-                }
-
-                currentDevice.setStatus(device.getStatus());
-                currentDevice.setDisplayName(device.getDisplayName());
-                currentDevice.setLastEventOn(device.getLastEventOn());
-                currentDevice.setLastEventType(device.getLastEventType());
-                currentDevice.setSerialNumber(device.getSerialNumber());
-                currentDevice.setModelId(device.getModelId());
-                currentDevice.setImei(device.getImei());
-                currentDevice.setImsi(device.getImsi());
-                currentDevice.setIccid(device.getIccid());
-                currentDevice.setBiosVersion(device.getBiosVersion());
-                currentDevice.setFirmwareVersion(device.getFirmwareVersion());
-                currentDevice.setOsVersion(device.getOsVersion());
-                currentDevice.setJvmVersion(device.getJvmVersion());
-                currentDevice.setOsgiFrameworkVersion(device.getOsgiFrameworkVersion());
-                currentDevice.setApplicationFrameworkVersion(device.getApplicationFrameworkVersion());
-                currentDevice.setApplicationIdentifiers(device.getApplicationIdentifiers());
-                currentDevice.setAcceptEncoding(device.getAcceptEncoding());
-                currentDevice.setGpsLongitude(device.getGpsLongitude());
-                currentDevice.setGpsLatitude(device.getGpsLatitude());
-                currentDevice.setCustomAttribute1(device.getCustomAttribute1());
-                currentDevice.setCustomAttribute2(device.getCustomAttribute2());
-                currentDevice.setCustomAttribute3(device.getCustomAttribute3());
-                currentDevice.setCustomAttribute4(device.getCustomAttribute4());
-                currentDevice.setCustomAttribute5(device.getCustomAttribute5());
-                currentDevice.setCredentialsMode(device.getCredentialsMode());
-                currentDevice.setPreferredUserId(device.getPreferredUserId());
-
-                // Update
-                entityManager.beginTransaction();
-                DeviceDAO.update(entityManager, currentDevice);
-                entityManager.commit();
-
-                return DeviceDAO.find(entityManager, device.getId());
+        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> {
+            Device currentDevice = DeviceDAO.find(entityManager, device.getId());
+            if (currentDevice == null) {
+                throw new KapuaEntityNotFoundException(Device.TYPE, device.getId());
             }
+
+            currentDevice.setStatus(device.getStatus());
+            currentDevice.setDisplayName(device.getDisplayName());
+            currentDevice.setLastEventOn(device.getLastEventOn());
+            currentDevice.setLastEventType(device.getLastEventType());
+            currentDevice.setSerialNumber(device.getSerialNumber());
+            currentDevice.setModelId(device.getModelId());
+            currentDevice.setImei(device.getImei());
+            currentDevice.setImsi(device.getImsi());
+            currentDevice.setIccid(device.getIccid());
+            currentDevice.setBiosVersion(device.getBiosVersion());
+            currentDevice.setFirmwareVersion(device.getFirmwareVersion());
+            currentDevice.setOsVersion(device.getOsVersion());
+            currentDevice.setJvmVersion(device.getJvmVersion());
+            currentDevice.setOsgiFrameworkVersion(device.getOsgiFrameworkVersion());
+            currentDevice.setApplicationFrameworkVersion(device.getApplicationFrameworkVersion());
+            currentDevice.setApplicationIdentifiers(device.getApplicationIdentifiers());
+            currentDevice.setAcceptEncoding(device.getAcceptEncoding());
+            currentDevice.setGpsLongitude(device.getGpsLongitude());
+            currentDevice.setGpsLatitude(device.getGpsLatitude());
+            currentDevice.setCustomAttribute1(device.getCustomAttribute1());
+            currentDevice.setCustomAttribute2(device.getCustomAttribute2());
+            currentDevice.setCustomAttribute3(device.getCustomAttribute3());
+            currentDevice.setCustomAttribute4(device.getCustomAttribute4());
+            currentDevice.setCustomAttribute5(device.getCustomAttribute5());
+            currentDevice.setCredentialsMode(device.getCredentialsMode());
+            currentDevice.setPreferredUserId(device.getPreferredUserId());
+
+            // Update
+            entityManager.beginTransaction();
+            DeviceDAO.update(entityManager, currentDevice);
+            entityManager.commit();
+
+            return DeviceDAO.find(entityManager, device.getId());
         });
     }
 
@@ -180,7 +180,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
 
         //
         // Do Query
-        return DeviceEntityManagerFactory.instance().resultsFromEntityManager(entityManager -> DeviceDAO.query(entityManager, query));
+        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> DeviceDAO.query(entityManager, query));
     }
 
     @Override
@@ -198,7 +198,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
 
         //
         // Do count
-        return DeviceEntityManagerFactory.instance().resultsFromEntityManager(entityManager -> DeviceDAO.count(entityManager, query));
+        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> DeviceDAO.count(entityManager, query));
     }
 
     @Override
