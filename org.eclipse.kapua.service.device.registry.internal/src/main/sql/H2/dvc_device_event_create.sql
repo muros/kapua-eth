@@ -1,11 +1,11 @@
 CREATE TABLE dvc_device_event (
   scope_id             	    BIGINT(21) 	  UNSIGNED NOT NULL,
   id                     	BIGINT(21) 	  UNSIGNED NOT NULL,
-  created_on             	TIMESTAMP(3)  NULL NOT NULL DEFAULT 0,
+  created_on             	TIMESTAMP(3)  NOT NULL DEFAULT 0,
   created_by             	BIGINT(21)    UNSIGNED NOT NULL,
   
   device_id					BIGINT(21) 	  UNSIGNED NOT NULL,
-  received_on				TIMESTAMP(3)  NULL NOT NULL DEFAULT 0,
+  received_on				TIMESTAMP(3)  NOT NULL DEFAULT 0,
   sent_on					TIMESTAMP(3)  NULL DEFAULT NULL,
   
   pos_longitude				DECIMAL(11,8),
@@ -26,7 +26,7 @@ CREATE TABLE dvc_device_event (
   attributes				 TEXT,
   properties                 TEXT,
 
-  PRIMARY KEY (scope_id, id),   -- primary key needs to include the partitioning key
-  INDEX idx_connection_status_id (scope_id, device_id, resource, action)
- 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 PARTITION BY HASH(scope_id) PARTITIONS 64;
+  PRIMARY KEY (scope_id, id)   -- primary key needs to include the partitioning key
+) CHARSET=utf8;
+
+CREATE INDEX idx_device_event_id ON dvc_device_event (scope_id, device_id, resource, action);

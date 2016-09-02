@@ -7,7 +7,7 @@ CREATE TABLE act_account (
   modified_on                TIMESTAMP(3)     NOT NULL,
   modified_by                BIGINT(21) 	  UNSIGNED NOT NULL,
   org_name                   VARCHAR(255) 	  NOT NULL,
-  org_person_name            VARCHAR(255) 	  DEFAULT "",
+  org_person_name            VARCHAR(255) 	  DEFAULT '',
   org_email                  VARCHAR(255) 	  NOT NULL,
   org_phone_number           VARCHAR(64),
   org_address_line_1         VARCHAR(255),
@@ -21,8 +21,10 @@ CREATE TABLE act_account (
   optlock                    INT UNSIGNED,
   attributes				 TEXT,
   properties                 TEXT,
-  PRIMARY KEY  (id),
+  
+  PRIMARY KEY (id),
   FOREIGN KEY (scope_id) REFERENCES act_account(id) ON DELETE RESTRICT,
-  CONSTRAINT act_accountName UNIQUE (name),
-  INDEX idx_accountScopeId (scope_id)  
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  CONSTRAINT act_accountName UNIQUE (name)
+) DEFAULT CHARSET=utf8;
+
+CREATE INDEX idx_account_scope_id ON act_account (scope_id);

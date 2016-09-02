@@ -15,7 +15,7 @@ package org.eclipse.kapua.commons.jpa;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 
-public class DefaultConfigurableJdbcConnectionUrlResolver implements JdbcConnectionUrlResolver {
+public class MariaDBJdbcConnectionUrlResolver implements JdbcConnectionUrlResolver {
 
     @Override
     public String connectionUrl() {
@@ -34,21 +34,41 @@ public class DefaultConfigurableJdbcConnectionUrlResolver implements JdbcConnect
                 .append(dbConnectionPort)
                 .append("/")
                 .append(dbName)
-                .append(";");
+                .append("?");
 
         // Optional connection parameters
-        String schema = config.getString(SystemSettingKey.DB_SCHEMA);
-        if (schema != null) {
-        	dbConnectionString.append("schema=")
-        		.append(schema)
-        		.append(";");
+        String useTimezone = config.getString(SystemSettingKey.DB_USE_TIMEZIONE);
+        if (useTimezone != null) {
+            dbConnectionString.append("useTimezone=")
+                    .append(useTimezone)
+                    .append("&");
+        }
+
+        String useLegacyDatetimeCode = config.getString(SystemSettingKey.DB_USE_LEGACY_DATETIME_CODE);
+        if (useLegacyDatetimeCode != null) {
+            dbConnectionString.append("useLegacyDatetimeCode=")
+                    .append(useLegacyDatetimeCode)
+                    .append("&");
+        }
+
+        String serverTimezone = config.getString(SystemSettingKey.DB_SERVER_TIMEZONE);
+        if (serverTimezone != null) {
+            dbConnectionString.append("serverTimezone=")
+                    .append(serverTimezone)
+                    .append("&");
+        }
+
+        String characterEncoding = config.getString(SystemSettingKey.DB_CHAR_ENCODING);
+        if (characterEncoding != null) {
+            dbConnectionString.append("characterEncoding=")
+                    .append(characterEncoding)
+                    .append("&");
+        }
 
         // This deletes the trailing '?' or '&'
         dbConnectionString.deleteCharAt(dbConnectionString.length() - 1);
 
-        }
         return dbConnectionString.toString();
-
     }
-    
+
 }

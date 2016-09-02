@@ -26,19 +26,15 @@
         <!-- Database host address is the one exported by the dev-tools/src/vagrant/Vagrantfile  -->        
 		<db.host>192.168.33.10</db.host>
 		<db.name>kapuadb</db.name>        
-		<db.url>jdbc:mariadb://${db.host}:3306/${db.name}</db.url>
+		<db.schema>kapuadb</db.schema>        
+		<db.conn.properties>schema=${db.schema}</db.conn.properties>
+		<db.conn.url>jdbc:h2:tcp://${db.host}:3306/${db.name};${db.conn.properties}</db.conn.url>
         <db.username>kapua</db.username>
         <db.password>kapua</db.password>
         
     </properties>
 
     <build>
-    	<resources>
-      		<resource>
-        		<directory>src/main/resources</directory>
-        		<filtering>false</filtering>
-      		</resource>
-      	</resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -79,14 +75,14 @@
         			<version>1.5</version>
         			<dependencies>
 				        <dependency>
-				            <groupId>org.mariadb.jdbc</groupId>
-				            <artifactId>mariadb-java-client</artifactId>
-				            <version>${mariadb.version}</version>
-				        </dependency>
+						    <groupId>com.h2database</groupId>
+						    <artifactId>h2</artifactId>
+						    <version>${h2.version}</version>
+						</dependency>
 				    </dependencies>
 				    <configuration>
-                    	<driver>org.mariadb.jdbc.Driver</driver>
-						<url>${db.url}</url>
+                    	<driver>org.h2.Driver</driver>
+						<url>${db.conn.url}</url>
                         <username>${db.username}</username>
                         <password>${db.password}</password>
                     </configuration>                    
@@ -285,11 +281,6 @@
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mariadb.jdbc</groupId>
-                <artifactId>mariadb-java-client</artifactId>
-                <version>${mariadb.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>

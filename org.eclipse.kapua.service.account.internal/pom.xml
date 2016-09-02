@@ -111,9 +111,9 @@
 								<configuration>
 									<autocommit>true</autocommit>
 									<srcFiles>
-										<srcFile>src/main/sql/act_account_drop.sql</srcFile>
-										<srcFile>src/main/sql/act_account_create.sql</srcFile>
-										<srcFile>src/main/sql/act_account_seed.sql</srcFile>
+										<srcFile>src/main/sql/H2/act_account_drop.sql</srcFile>
+										<srcFile>src/main/sql/H2/act_account_create.sql</srcFile>
+										<srcFile>src/main/sql/H2/act_account_seed.sql</srcFile>
 									</srcFiles>
 								</configuration>
 							</execution>

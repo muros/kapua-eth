@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
 
-  # mariadb
+  # dbms
   config.vm.network "forwarded_port", guest: 3306, host: 3306
   #activemq
   config.vm.network "forwarded_port", guest: 1883, host: 1883
@@ -97,43 +97,37 @@ Vagrant.configure("2") do |config|
      # update
      sudo apt-get update -y
 
-     #uncomment this section to have mariadb instead of m
-     # install mariadb no password prompt
-     sudo debconf-set-selections <<< 'mariadb-server-10.0 mysql-server/root_password password password'
-     sudo debconf-set-selections <<< 'mariadb-server-10.0 mysql-server/root_password_again password password'
-     sudo apt-get install -y mariadb-server
-
-     ### mariadb post-install setup
-
-     # allow remote access (required to access from our private network host. Note that this is completely insecure if used in any other way)
-     mysql -u root -ppassword -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION; FLUSH PRIVILEGES;"
-
-     mysql -u root -ppassword -e "CREATE DATABASE kapuadb DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
-          CREATE USER 'kapua'@'localhost' IDENTIFIED BY 'kapua';
-          GRANT ALL PRIVILEGES ON *.* TO 'kapua'@'localhost' WITH GRANT OPTION;
-          CREATE USER 'kapua'@'%' IDENTIFIED BY 'kapua';
-          GRANT ALL PRIVILEGES ON *.* TO 'kapua'@'%' WITH GRANT OPTION;
-          FLUSH PRIVILEGES;"
-
-     # Maridb access to the external world
-     sudo sed -i 's/127\.0\.0\.1/0\.0\.0\.0/' /etc/mysql//my.cnf
-     sudo /etc/init.d/mysql restart
-
-     # install oracle jdk 8
+	 ### install oracle jdk 8 ###
      sudo add-apt-repository -y ppa:webupd8team/java
      sudo apt-get update
      echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
      echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
      sudo apt-get -y install -qq oracle-java8-installer
 
-     # install activemq
-     sudo mkdir -p /usr/local/activemq
+     ### Install H2 database ###
+     sudo mkdir -p /usr/local/h2database/h2database-1.4.192
+     sudo mkdir -p /home/vagrant/H2/kapua
+	 sudo wget http://repo2.maven.org/maven2/com/h2database/h2/1.4.192/h2-1.4.192.jar -P /usr/local/h2database/h2database-1.4.192
+     sudo chown -R vagrant /usr/local/h2database/h2database-1.4.192
+     sudo chown -R vagrant /home/vagrant/H2/kapua
+	 
+     # H2 database post-install setup
+     # Run the database engine
+     su --login -c "java -cp /usr/local/h2database/h2database-1.4.192/h2*.jar org.h2.tools.Server -baseDir /home/vagrant/H2/kapua -webAllowOthers -tcpAllowOthers -tcpPort 3306 &" vagrant
+	 
+	 # Create the initial database
+	 java -cp /usr/local/h2database/h2database-1.4.192/h2*.jar org.h2.tools.Shell -url jdbc:h2:tcp://localhost:3306/kapuadb -user "root" -password "password" -sql "CREATE SCHEMA IF NOT EXISTS kapuadb; \
+	 	CREATE USER IF NOT EXISTS kapua PASSWORD 'kapua'; \
+	 	GRANT ALL ON SCHEMA kapuadb TO kapua;"
+
+     ### install activemq ###
+	 sudo mkdir -p /usr/local/activemq
      sudo wget http://archive.apache.org/dist/activemq/5.11.0/apache-activemq-5.11.0-bin.tar.gz -P /usr/local/activemq
      cd /usr/local/activemq
      sudo tar zxvf apache-activemq-5.11.0-bin.tar.gz
      sudo rm apache-activemq-5.11.0-bin.tar.gz
 
-     ### configure activemq
+     # configure activemq
      # Kapua jars and activemq.xml need to be added before starting the activemq instance...
 	   # config file
 	   cd apache-activemq-5.11.0
@@ -149,7 +143,7 @@ Vagrant.configure("2") do |config|
      # enable debug
      sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
      
-     ### activemq post-install setup
+     # activemq post-install setup
      # change the owner and the group of activemq to vagrant
      sudo chown -R vagrant ../apache-activemq-5.11.0
      sudo chgrp -R vagrant ../apache-activemq-5.11.0
@@ -160,7 +154,7 @@ Vagrant.configure("2") do |config|
      # for name in $(find /kapua -name '*_create.sql' | grep -Ev 'test|console|api'); do echo invoke create sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
      # for name in $(find /kapua -name '*_seed.sql' | grep -Ev 'test|console|api'); do echo invoke seed sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
 
-     # install Elasticsearch
+     ### install Elasticsearch ###
      sudo mkdir -p /usr/local/elasticsearch
      sudo wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.4/elasticsearch-2.3.4.tar.gz -P /usr/local/elasticsearch
      cd /usr/local/elasticsearch
@@ -180,7 +174,7 @@ Vagrant.configure("2") do |config|
      # Elasticsearch 2.3.4 post install
      su --login -c "/usr/local/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch -d --cluster.name kapua-datastore" vagrant
 
-     #install tomcat8
+     ### install tomcat8 ###
      sudo mkdir -p /usr/local/tomcat
      sudo wget http://it.apache.contactlab.it/tomcat/tomcat-8/v8.5.4/bin/apache-tomcat-8.5.4.tar.gz -P /usr/local/tomcat
      cd /usr/local/tomcat

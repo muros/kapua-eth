@@ -6,7 +6,7 @@ import org.eclipse.kapua.transport.message.TransportChannel;
 
 public class JmsTopic implements TransportChannel
 {
-    private static String topicSeparator = JmsClientSetting.getInstance().getString(JmsClientSettingKeys.TRANSPORT_TOPIC_SEPARATOR);
+    private final static String topicSeparator = "\\" + JmsClientSetting.getInstance().getString(JmsClientSettingKeys.TRANSPORT_TOPIC_SEPARATOR);
 
     private String        topic;
 
