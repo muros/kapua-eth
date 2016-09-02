@@ -23,12 +23,14 @@ import org.eclipse.kapua.locator.guice.TestService;
 import org.eclipse.kapua.service.KapuaService;
 import org.eclipse.kapua.service.user.UserService;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class GuiceLocatorImplTest {
 
 	KapuaLocator locator = GuiceLocatorImpl.getInstance();
 
+	@Ignore
 	@Test
 	public void shouldLoadUserService()
 	{
