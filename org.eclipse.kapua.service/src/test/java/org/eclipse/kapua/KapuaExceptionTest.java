@@ -18,7 +18,6 @@ import org.junit.Test;
 
 public class KapuaExceptionTest 
 {
-
 	@Test
 	public void test() {
 		KapuaException ke = new KapuaException(KapuaErrorCodes.ENTITY_NOT_FOUND, "user", 1);
@@ -38,5 +37,4 @@ public class KapuaExceptionTest
 		}, "abc", 1);
 		assertEquals("Error: abc,1", ke.getMessage());
 	}
-
 }

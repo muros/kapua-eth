@@ -10,9 +10,4 @@
 #     Eurotech - initial API and implementation
 #
 #
-#DEMO CODE
-#org.eclipse.kapua.service.user.UserService,ServiceLoaderProvider
-#org.eclipse.kapua.service.user.UserFactory,OsgiServiceLoaderProvider
-
-# We need to comment out this line, as Guice injector doesn't support multiple provider at this point
-# org.eclipse.kapua.service.user.UserFactory,ProxyOsgiServiceLoaderProvider
+org.eclipse.kapua.service.generator.id.IdGeneratorService
