@@ -15,8 +15,8 @@ package org.eclipse.kapua.service.datastore.internal;
 import java.util.ArrayList;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.service.internal.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.configuration.spi.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;

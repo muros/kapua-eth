@@ -1,6 +1,6 @@
 package org.eclipse.kapua.test;
 
-import org.eclipse.kapua.locator.spi.TestService;
+import org.eclipse.kapua.locator.guice.TestService;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
@@ -13,8 +13,10 @@ public class AccountFactoryMock implements AccountFactory
     @Override
     public AccountCreator newAccountCreator(KapuaId scopeId, String name)
     {
-        // TODO Auto-generated method stub
-        return null;
+        AccountCreatorMock accountCreatorMock = new AccountCreatorMock();
+        accountCreatorMock.setScopeId(scopeId);
+        accountCreatorMock.setName(name);
+        return accountCreatorMock;
     }
 
     @Override

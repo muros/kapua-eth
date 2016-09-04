@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.configuration.spi;
+package org.eclipse.kapua.commons.service.internal;
 
 import java.io.Serializable;
 import java.util.HashMap;
