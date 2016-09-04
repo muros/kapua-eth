@@ -69,21 +69,20 @@ public abstract class KapuaLocator
         return instance;
     }
 
-    static String locatorClassName()
-    {
-        String locatorClass = System.getProperty("locator.class.impl");
-        if (locatorClass != null) {
-            return locatorClass;
-        }
+	static String locatorClassName() {
+		String locatorClass = System.getProperty("locator.class.impl");
+		if(locatorClass != null) {
+			return locatorClass;
+		}
 
         locatorClass = System.getenv("LOCATOR_CLASS_IMPL");
         if (locatorClass != null) {
             return locatorClass;
         }
 
-        logger.debug("No service locator class resolved. Falling back to default.");
-        return null;
-    }
+		logger.debug("No service locator class resolved. Falling back to default.");
+		return null;
+	}
 
     /**
      * Returns an instance of a KapuaService implementing the provided KapuaService class.
@@ -101,5 +100,5 @@ public abstract class KapuaLocator
      * @return
      */
     public abstract <F extends KapuaObjectFactory> F getFactory(Class<F> factoryClass);
-
+    
 }

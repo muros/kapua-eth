@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<!-- Copyright (c) 2011, 2016 Eurotech and/or its affiliates All rights reserved. 
-	This program and the accompanying materials are made available under the 
-	terms of the Eclipse Public License v1.0 which accompanies this distribution, 
-	and is available at http://www.eclipse.org/legal/epl-v10.html Contributors: 
+<!-- Copyright (c) 2011, 2016 Eurotech and/or its affiliates All rights reserved.
+	This program and the accompanying materials are made available under the
+	terms of the Eclipse Public License v1.0 which accompanies this distribution,
+	and is available at http://www.eclipse.org/legal/epl-v10.html Contributors:
 	Eurotech - initial API and implementation -->
 
 <project
@@ -44,8 +44,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.configuration.spi</artifactId>
+			<artifactId>org.eclipse.kapua.locator.guice</artifactId>
 			<version>0.1-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- -->
@@ -56,42 +57,28 @@
 			<version>0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.locator.guice</artifactId>
+			<artifactId>org.eclipse.kapua.configuration.spi</artifactId>
 			<version>0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.authentication</artifactId>
-			<version>0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
-			<version>0.1-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user</artifactId>
-			<version>0.1-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
+			<artifactId>org.eclipse.kapua.service.generator.id.sequence</artifactId>
 			<version>0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+	</build>
 
 	<profiles>
 		<profile>

@@ -15,6 +15,8 @@ package org.eclipse.kapua.service.user.internal;
 import java.text.MessageFormat;
 import java.util.Date;
 
+import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.generator.id.IdGeneratorService;
@@ -23,13 +25,12 @@ import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
 import org.eclipse.kapua.service.user.UserService;
 import org.eclipse.kapua.service.user.UserStatus;
-import org.junit.Assert;
-import org.junit.Ignore;
+import org.eclipse.kapua.test.KapuaTest;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserServiceTest extends Assert
+public class UserServiceTest extends KapuaTest
 {
     @SuppressWarnings("unused")
     private static final Logger s_logger = LoggerFactory.getLogger(UserServiceTest.class);
@@ -37,7 +38,6 @@ public class UserServiceTest extends Assert
     /**
      * We should ignore this test until we have build fixed.
      */
-    @Ignore
     @Test
     public void testCreate()
         throws Exception

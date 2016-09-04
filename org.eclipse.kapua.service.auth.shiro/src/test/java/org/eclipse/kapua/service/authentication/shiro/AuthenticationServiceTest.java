@@ -23,7 +23,6 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.authentication.AuthenticationService;
 import org.eclipse.kapua.service.authentication.UsernamePasswordToken;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,12 +35,11 @@ public class AuthenticationServiceTest
     /**
      * We should ignore this test until build process is fixed.
      */
-    @Ignore
     @Test
     public void testLoginAndLogout()
         throws Exception
     {
-        String username = "admin";
+        String username = "kapua-sys";
         char[] password = "We!come12345".toCharArray();
 
         KapuaLocator locator = KapuaLocator.getInstance();
