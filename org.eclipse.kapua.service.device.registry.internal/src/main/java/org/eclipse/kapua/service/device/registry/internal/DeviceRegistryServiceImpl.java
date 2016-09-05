@@ -28,6 +28,7 @@ import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.DeviceListResult;
 import org.eclipse.kapua.service.device.registry.DevicePredicates;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
+import org.eclipse.kapua.service.device.registry.common.DeviceValidation;
 
 public class DeviceRegistryServiceImpl implements DeviceRegistryService
 {
@@ -36,11 +37,14 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
 
     private final PermissionFactory permissionFactory;
 
+    private final DeviceValidation deviceValidation;
+
     private final DeviceEntityManagerFactory deviceEntityManagerFactory;
 
     public DeviceRegistryServiceImpl(AuthorizationService authorizationService, PermissionFactory permissionFactory, DeviceEntityManagerFactory deviceEntityManagerFactory) {
         this.authorizationService = authorizationService;
         this.permissionFactory = permissionFactory;
+        this.deviceValidation = new DeviceValidation(permissionFactory, authorizationService);
         this.deviceEntityManagerFactory = deviceEntityManagerFactory;
     }
 
@@ -48,25 +52,16 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
         KapuaLocator locator = KapuaLocator.getInstance();
         authorizationService = locator.getService(AuthorizationService.class);
         permissionFactory = locator.getFactory(PermissionFactory.class);
+        this.deviceValidation = new DeviceValidation(permissionFactory, authorizationService);
         deviceEntityManagerFactory = DeviceEntityManagerFactory.instance();
     }
 
+    // Operations implementation
+
     @Override
-    public Device create(DeviceCreator deviceCreator)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(deviceCreator, "deviceCreator");
-        ArgumentValidator.notNull(deviceCreator.getScopeId(), "deviceCreator.scopeId");
-        ArgumentValidator.notEmptyOrNull(deviceCreator.getClientId(), "deviceCreator.clientId");
-        ArgumentValidator.notEmptyOrNull(deviceCreator.getClientId(), "deviceCreator.clientId");
+    public Device create(DeviceCreator deviceCreator) throws KapuaException {
+        deviceValidation.validateCreatePreconditions(deviceCreator);
 
-        //
-        // Check Access
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, deviceCreator.getScopeId()));
-
-        // Create the connection
         return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> {
             entityManager.beginTransaction();
             Device device = DeviceDAO.create(entityManager, deviceCreator);
@@ -77,20 +72,8 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
     }
 
     @Override
-    public Device update(Device device)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(device, "device");
-        ArgumentValidator.notNull(device.getId(), "device.id");
-        ArgumentValidator.notNull(device.getScopeId(), "v.scopeId");
-
-        //
-        // Check Access
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, device.getScopeId()));
-
-        // Do update
+    public Device update(Device device) throws KapuaException {
+        deviceValidation.validateUpdatePreconditions(device);
         return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> {
             Device currentDevice = DeviceDAO.find(entityManager, device.getId());
             if (currentDevice == null) {
@@ -134,18 +117,8 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
     }
 
     @Override
-    public Device find(KapuaId scopeId, KapuaId entityId)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(scopeId, "scopeId");
-        ArgumentValidator.notNull(entityId, "entityId");
-
-        //
-        // Check Access
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.read, scopeId));
-
+    public Device find(KapuaId scopeId, KapuaId entityId) throws KapuaException {
+        deviceValidation.validateFindPreconditions(scopeId, entityId);
         return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> DeviceDAO.find(entityManager, entityId));
     }
 
