@@ -7,21 +7,18 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Eurotech - initial API and implementation
- *
+ * Eurotech - initial API and implementation
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.internal;
 
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
-import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.model.query.predicate.KapuaPredicate;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
-import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
@@ -30,8 +27,7 @@ import org.eclipse.kapua.service.device.registry.DevicePredicates;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.service.device.registry.common.DeviceValidation;
 
-public class DeviceRegistryServiceImpl implements DeviceRegistryService
-{
+public class DeviceRegistryServiceImpl implements DeviceRegistryService {
 
     private final AuthorizationService authorizationService;
 
@@ -123,55 +119,20 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
     }
 
     @Override
-    public DeviceListResult query(KapuaQuery<Device> query)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(query, "query");
-        ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
-
-        //
-        // Check Access
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.read, query.getScopeId()));
-
-        //
-        // Do Query
+    public DeviceListResult query(KapuaQuery<Device> query) throws KapuaException {
+        deviceValidation.validateQueryPreconditions(query);
         return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> DeviceDAO.query(entityManager, query));
     }
 
     @Override
-    public long count(KapuaQuery<Device> query)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(query, "query");
-        ArgumentValidator.notNull(query.getScopeId(), "query.scopeId");
-
-        //
-        // Check Access
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.read, query.getScopeId()));
-
-        //
-        // Do count
+    public long count(KapuaQuery<Device> query) throws KapuaException {
+        deviceValidation.validateCountPreconditions(query);
         return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> DeviceDAO.count(entityManager, query));
     }
 
     @Override
-    public void delete(Device device)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(device, "device");
-        ArgumentValidator.notNull(device.getId(), "device.id");
-        ArgumentValidator.notNull(device.getScopeId(), "device.scopeId");
-
-        //
-        // Check Access
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.delete, device.getScopeId()));
-
+    public void delete(Device device) throws KapuaException {
+        deviceValidation.validateDeletePreconditions(device);
         deviceEntityManagerFactory.onEntityManager(entityManager -> {
             KapuaId deviceId = device.getId();
 
@@ -187,20 +148,9 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService
     }
 
     @Override
-    public Device findByClientId(KapuaId scopeId, String clientId)
-        throws KapuaException
-    {
-        //
-        // Argument Validation
-        ArgumentValidator.notNull(scopeId, "scopeId");
-        ArgumentValidator.notEmptyOrNull(clientId, "clientId");
+    public Device findByClientId(KapuaId scopeId, String clientId) throws KapuaException {
+        deviceValidation.validateFindByClientIdPreconditions(scopeId, clientId);
 
-        //
-        // Check Access
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.read, scopeId));
-
-        //
-        // Build query
         DeviceQueryImpl query = new DeviceQueryImpl(scopeId);
         KapuaPredicate predicate = new AttributePredicate<String>(DevicePredicates.CLIENT_ID, clientId);
         query.setPredicate(predicate);
