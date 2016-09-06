@@ -13,3 +13,7 @@ org.eclipse.kapua.translator.kura.kapua.TranslatorAppConfigurationKuraKapua
 org.eclipse.kapua.translator.kura.kapua.TranslatorAppDeployKuraKapua
 org.eclipse.kapua.translator.kura.kapua.TranslatorAppSnapshotKuraKapua
 org.eclipse.kapua.translator.kura.kapua.TranslatorDataKuraKapua
+org.eclipse.kapua.translator.kura.kapua.TranslatorLifeAppsKuraKapua
+org.eclipse.kapua.translator.kura.kapua.TranslatorLifeBirthKuraKapua
+org.eclipse.kapua.translator.kura.kapua.TranslatorLifeDisconnectKuraKapua
+org.eclipse.kapua.translator.kura.kapua.TranslatorLifeMissingKuraKapua

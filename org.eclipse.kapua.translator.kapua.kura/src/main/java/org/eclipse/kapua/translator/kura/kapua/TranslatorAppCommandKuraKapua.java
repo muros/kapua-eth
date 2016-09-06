@@ -23,7 +23,7 @@ import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
 
-public class TranslatorAppCommandKuraKapua implements Translator<KuraResponseMessage, CommandResponseMessage>
+public class TranslatorAppCommandKuraKapua extends Translator<KuraResponseMessage, CommandResponseMessage>
 {
     private static final String                              CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<CommandMetrics, CommandAppProperties> metricsDictionary;

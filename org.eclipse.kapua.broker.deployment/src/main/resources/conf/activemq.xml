@@ -235,9 +235,9 @@
         <!--
         For the transaction/acknowledge mode please follow http://stackoverflow.com/questions/13498652/camel-jms-client-acknowledge-mode
 
-        OK. After some some debugging and scanning throug source code I've found out that Camel uses spring MessageListenerContainers.
+        OK. After some some debugging and scanning through source code I've found out that Camel uses spring MessageListenerContainers.
         The AbstractMessageListenerContainer, in case of CLIENT_AKNOWLEDGE mode, invokes comitIfNecessary method acknowledging message.
-        This happens only AFTER registered MessageListener processes message succesfully (no exceptions)
+        This happens only AFTER registered MessageListener processes message successfully (no exceptions)
 
         Camel uses EndpointMessageListener which, eventually, invokes process method of next processor (or Producer) down the route.
         As this is classic chain of responsibilities, if any processor down the route throws exception or sets exception on the Exchange,
@@ -249,31 +249,41 @@
         -->
 		<route errorHandlerRef="mainRouteMessageErrorHandler" >
 			<from uri="activemq:queue:Consumer.eurotech:mainRoutelisteners:EXACTLY_ONCE.VirtualTopic.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=10&amp;maxConcurrentConsumers=10" />
-			<bean ref="kapuaConverter" method="convertTo"/>
-
-			<log message="BODY: ${header.JMSDestination}" loggingLevel="WARN" />
             <choice id="choice">
             	<when id="systemMessageFilter">
 	            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\..*'</simple>
-	            	<log message="BODY: ${header.JMSDestination}" loggingLevel="WARN" />
             		<choice id="choice">
 		            	<when id="birthMessageFilter">
-			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.BIRTH\..*'</simple>
+			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.BIRTH'</simple>
 				            <bean ref="kapuaConverter" method="convertToBirth"/>
-				            <log message="BODY: ${header.JMSDestination}" loggingLevel="WARN" />
 			                <multicast>
 				                <to uri="bean:deviceMessageListener?method=processBirthMessage" />
 			                </multicast>
 			            </when>
+		            	<when id="disconnectMessageFilter">
+			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.DC'</simple>
+				            <bean ref="kapuaConverter" method="convertToDisconnect"/>
+			                <to uri="bean:deviceMessageListener?method=processDisconnectMessage" />
+			            </when>
+			            <when id="appsMessageFilter">
+			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.APPS'</simple>
+				            <bean ref="kapuaConverter" method="convertToApps"/>
+			                <to uri="bean:deviceMessageListener?method=processAppsMessage" />
+			            </when>
+			            <when id="missingMessageFilter">
+			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.MISSING'</simple>
+				            <bean ref="kapuaConverter" method="convertToMissing"/>
+			                <to uri="bean:deviceMessageListener?method=processMissingMessage" />
+			            </when>
 		            	<otherwise>
-		            		<bean ref="kapuaConverter" method="convertTo"/>
+		            		<bean ref="kapuaConverter" method="convertToData"/>
 			  				<to uri="bean:errorMessageListener?method=processUnmatchedMessage" />
 				  		</otherwise>
 		            </choice>
 	            </when>
 	            <!-- otherwise data messages -->
             	<otherwise>
-            		<bean ref="kapuaConverter" method="convertTo"/>
+            		<bean ref="kapuaConverter" method="convertToData"/>
 	  				<to uri="bean:errorMessageListener?method=processUnmatchedMessage" />
 		  		</otherwise>
             </choice>

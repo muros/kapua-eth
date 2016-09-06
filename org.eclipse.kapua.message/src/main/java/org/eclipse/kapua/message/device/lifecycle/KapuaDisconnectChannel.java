@@ -4,5 +4,9 @@ import org.eclipse.kapua.message.KapuaChannel;
 
 public interface KapuaDisconnectChannel extends KapuaChannel
 {
+	
+	public String getClientId();
+
+    public void setClientId(String clientId);
 
 }

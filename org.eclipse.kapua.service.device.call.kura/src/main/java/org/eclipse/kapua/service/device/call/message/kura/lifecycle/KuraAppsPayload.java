@@ -10,13 +10,12 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.message.kura;
-
-import java.util.Iterator;
+package org.eclipse.kapua.service.device.call.message.kura.lifecycle;
 
 import org.eclipse.kapua.service.device.call.message.DevicePayload;
+import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 
-public class KuraBirthPayload extends KuraPayload implements DevicePayload
+public class KuraAppsPayload extends KuraPayload implements DevicePayload
 {
     private final static String UPTIME                 = "uptime";
     private final static String DISPLAY_NAME           = "display_name";
@@ -48,7 +47,12 @@ public class KuraBirthPayload extends KuraPayload implements DevicePayload
     private final static String MODEM_IMSI             = "modem_imsi";
     private final static String MODEM_ICCID            = "modem_iccid";
 
-    public KuraBirthPayload(String uptime,
+    public KuraAppsPayload()
+    {
+    	super();
+    }
+    
+    public KuraAppsPayload(String uptime,
                             String displayName,
                             String modelName,
                             String modelId,
@@ -155,29 +159,6 @@ public class KuraBirthPayload extends KuraPayload implements DevicePayload
         if (modemIccid != null) {
             getMetrics().put(MODEM_ICCID, modemIccid);
         }
-    }
-
-    public <P extends KuraPayload> KuraBirthPayload(P kuraPayload)
-    {
-        Iterator<String> hdrIterator = kuraPayload.getMetrics().keySet().iterator();
-        while (hdrIterator.hasNext()) {
-            String hdrName = hdrIterator.next();
-            String hdrVal = (String) kuraPayload.getMetrics().get(hdrName);
-
-            // FIXME: Is this fine??
-            if (hdrName.compareTo(ESF_VERSION) == 0) {
-                getMetrics().put(ESFKURA_VERSION, ESF_PREFIX + hdrVal);
-            }
-            else if (hdrName.compareTo(KURA_VERSION) == 0) {
-                getMetrics().put(ESFKURA_VERSION, hdrVal);
-            }
-            else {
-                getMetrics().put(hdrName, hdrVal);
-            }
-        }
-        setTimestamp(kuraPayload.getTimestamp());
-        setBody(kuraPayload.getBody());
-        setPosition(kuraPayload.getPosition());
     }
 
     public String getUptime()

@@ -7,14 +7,19 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaRuntimeErrorCodes;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.message.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("rawtypes")
-public interface Translator<FROM_M extends Message, TO_M extends Message>
+public abstract class Translator<FROM_M extends Message, TO_M extends Message>
 {
+	
+	public static final Logger logger = LoggerFactory.getLogger(Translator.class);
+	
     static ServiceLoader<?> translators = ServiceLoader.load(Translator.class);
 
     @SuppressWarnings("unchecked")
-    public static <FROM_M extends Message, TO_M extends Message, T extends Translator<FROM_M, TO_M>> T getTranslatorFor(Class<FROM_M> fromMessageClass,
+    public static synchronized <FROM_M extends Message, TO_M extends Message, T extends Translator<FROM_M, TO_M>> T getTranslatorFor(Class<FROM_M> fromMessageClass,
                                                                                                                         Class<TO_M> toMessageClass)
         throws KapuaException
     {
@@ -32,6 +37,7 @@ public interface Translator<FROM_M extends Message, TO_M extends Message>
         }
 
         if (translator == null) {
+        	logger.error("Cannot find translator from - to: {} - {}", new Object[]{fromMessageClass.getName(), toMessageClass.getName()});
             throw new KapuaRuntimeException(KapuaRuntimeErrorCodes.TRANSLATOR_NOT_FOUND,
                                             null,
                                             new Object[] {
@@ -44,10 +50,10 @@ public interface Translator<FROM_M extends Message, TO_M extends Message>
         return translator;
     }
 
-    public TO_M translate(FROM_M message)
+    public abstract TO_M translate(FROM_M message)
         throws KapuaException;
 
-    public Class<FROM_M> getClassFrom();
+    public abstract Class<FROM_M> getClassFrom();
 
-    public Class<TO_M> getClassTo();
+    public abstract Class<TO_M> getClassTo();
 }

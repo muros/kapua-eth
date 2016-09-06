@@ -1,7 +1,7 @@
 CREATE TABLE dvc_device (
   scope_id             	    BIGINT(21) 	    UNSIGNED NOT NULL,
   id                     	BIGINT(21) 	    UNSIGNED NOT NULL,
-  client_id                 VARCHAR(255)  NOT NULL,
+  client_id                 VARCHAR(255)    NOT NULL,
   created_on             	TIMESTAMP(3)    NULL,
   created_by             	BIGINT(21)      UNSIGNED NOT NULL,
   modified_on            	TIMESTAMP       NULL,

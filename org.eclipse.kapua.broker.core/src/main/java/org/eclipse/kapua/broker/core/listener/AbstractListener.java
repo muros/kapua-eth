@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.broker.core.listener;
 
-import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.metric.MetricsService;
 
@@ -20,14 +19,13 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Timer;
 
 /**
- * Default camel pojo endpoint
+ * Default camel pojo endpoint listener
  *
- * @param <M> Message to process
  */
-public abstract class AbstractListener<M extends Object> {
+public abstract class AbstractListener {
 	
 	//metrics
-	private final static String METRIC_COMPONENT_NAME = "listener";
+	private String metricComponentName = "listener";
   	private final static MetricsService metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
   	
   	protected String name;
@@ -36,14 +34,17 @@ public abstract class AbstractListener<M extends Object> {
 		this.name = name;
 	}
 	
-	public abstract void processMessage(M message) throws KapuaException;
+	protected AbstractListener(String metricComponentName, String name) {
+		this(name);
+		this.metricComponentName = metricComponentName;
+	}
 	
 	protected Counter registerCounter(String... names) {
-		return metricsService.getCounter(METRIC_COMPONENT_NAME, name, names);
+		return metricsService.getCounter(metricComponentName, name, names);
 	}
 	
 	protected Timer registerTimer(String... names) {
-		return metricsService.getTimer(METRIC_COMPONENT_NAME, name, names);
+		return metricsService.getTimer(metricComponentName, name, names);
 	}
 
 }

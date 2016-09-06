@@ -11,16 +11,16 @@ import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
-import org.eclipse.kapua.service.device.call.message.kura.KuraDataChannel;
 import org.eclipse.kapua.service.device.call.message.kura.KuraMessage;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 import org.eclipse.kapua.service.device.call.message.kura.KuraPosition;
+import org.eclipse.kapua.service.device.call.message.kura.data.KuraDataChannel;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorDataKapuaKura implements Translator<KapuaMessage, KuraMessage>
+public class TranslatorDataKapuaKura extends Translator<KapuaMessage, KuraMessage>
 {
 
     @Override

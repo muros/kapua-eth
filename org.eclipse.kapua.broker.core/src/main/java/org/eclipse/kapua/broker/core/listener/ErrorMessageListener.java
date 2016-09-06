@@ -12,19 +12,17 @@ import com.codahale.metrics.Counter;
 		title="error message processor", 
 		syntax="bean:errorMessageListener",
 		scheme="bean") 
-public class ErrorMessageListener extends AbstractErrorListener<Object> {
+public class ErrorMessageListener extends AbstractListener {
 	
 	private static final Logger s_logger = LoggerFactory.getLogger(ErrorMessageListener.class);
 	
 	private Counter metricErrorLifeCycleMessage;
 	
-
 	public ErrorMessageListener() {
 		super("error");
 		metricErrorLifeCycleMessage   = registerCounter("messages", "life_cycle", "count");
 	}
 	
-	@Override
 	public void processMessage(Exchange exchange, Object message) throws KapuaException {
 		metricErrorLifeCycleMessage.inc();
 		logError(exchange, message, "LifeCycle");

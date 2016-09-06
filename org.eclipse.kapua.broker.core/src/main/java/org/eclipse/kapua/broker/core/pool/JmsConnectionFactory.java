@@ -17,8 +17,8 @@ public class JmsConnectionFactory {
 
     public static ActiveMQConnectionFactory vmConnFactory;
 
-    //FIXME check if asynch=true is correct also for workers!!!
     //the workers used the same string connection without asynch=true
+    //TODO modify class to allow connection to an external broker
     static {
         try {
             s_logger.info("Instantiate amq embedded connection factory...");
@@ -28,8 +28,8 @@ public class JmsConnectionFactory {
             // https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/GenTuning-Colocate.html
             //TODO parameter to be added to configuration
 //            connectionFactoryUri = "vm://" + KapuaEnvironmentConfig.getInstance().getString(KapuaEnvironmentConfigKeys.BROKER_NAME) + "?create=false&waitForStart=3600000&async=true";
-            connectionFactoryUri = "vm://amq?create=false&waitForStart=3600000&async=true";
-            s_logger.info("Osgi context TRUE. Using connection factory url: " + connectionFactoryUri);
+            connectionFactoryUri = "vm://kapua?create=false&waitForStart=3600000&async=true";
+            s_logger.info("Using connection factory url: " + connectionFactoryUri);
 
             //connection factory
             vmConnFactory = new ActiveMQConnectionFactory(connectionFactoryUri);
@@ -62,7 +62,7 @@ public class JmsConnectionFactory {
             // http://activemq.apache.org/connection-configuration-uri.html
             vmConnFactory.setUseAsyncSend(true);
 
-            s_logger.info("Instantiate amq embedded connection factory... done");
+            s_logger.info("Instantiate activemq embedded connection factory... done");
         } catch (Throwable t) {
             s_logger.error("Initialization vm connection factory exception {} ", t.getMessage(), t);
         }

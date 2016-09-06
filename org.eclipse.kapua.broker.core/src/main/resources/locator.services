@@ -10,6 +10,7 @@
 #     Eurotech - initial API and implementation
 #
 #
+org.eclipse.kapua.message.KapuaMessageFactory
 org.eclipse.kapua.service.account.AccountFactory
 org.eclipse.kapua.service.account.AccountService
 org.eclipse.kapua.service.user.UserFactory
