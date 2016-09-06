@@ -28,7 +28,7 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;

@@ -1,11 +1,11 @@
-package org.eclipse.kapua.commons.util;
+package org.eclipse.kapua.commons.jpa;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
 
-public class CommonsEntityManagerFactory extends org.eclipse.kapua.commons.util.AbstractEntityManagerFactory
+public class CommonsEntityManagerFactory extends AbstractEntityManagerFactory
 {
     private static final String                PERSISTENCE_UNIT_NAME = "kapua-commons";
     private static final String                DATASOURCE_NAME       = "kapua-dbpool";

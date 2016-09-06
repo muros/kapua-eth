@@ -1,4 +1,4 @@
-package org.eclipse.kapua.commons.util;
+package org.eclipse.kapua.commons.jpa;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;

@@ -25,7 +25,7 @@ import org.eclipse.kapua.commons.service.internal.AbstractKapuaConfigurableServi
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
-import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;

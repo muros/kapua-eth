@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
+import org.eclipse.kapua.commons.jpa.EntityManager;
 
-public class AuthenticationEntityManagerFactory extends org.eclipse.kapua.commons.util.AbstractEntityManagerFactory
+public class AuthenticationEntityManagerFactory extends AbstractEntityManagerFactory
 {
     private static final String                       PERSISTENCE_UNIT_NAME = "kapua-authentication";
     private static final String                       DATASOURCE_NAME       = "kapua-dbpool";

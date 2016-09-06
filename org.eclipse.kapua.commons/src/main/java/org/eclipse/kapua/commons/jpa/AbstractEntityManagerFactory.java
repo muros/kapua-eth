@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.commons.util;
+package org.eclipse.kapua.commons.jpa;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,14 +18,11 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.spi.PersistenceProvider;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.jpa.DefaultConfigurableJdbcConnectionUrlResolver;
-import org.eclipse.kapua.commons.jpa.H2JdbcConnectionUrlResolver;
-import org.eclipse.kapua.commons.jpa.JdbcConnectionUrlResolver;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
+import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
