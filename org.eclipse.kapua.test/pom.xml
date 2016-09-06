@@ -24,6 +24,10 @@
 
     <artifactId>org.eclipse.kapua.test</artifactId>
     <name>org.eclipse.kapua.test</name>
+
+	<properties>
+		<maven.test.skip>true</maven.test.skip>
+	</properties>
     
     <build>
 	    <plugins>
