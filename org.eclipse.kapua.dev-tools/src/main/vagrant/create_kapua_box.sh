@@ -1,24 +1,30 @@
 #!/bin/bash
 
-KAPUA_BOX_TMP_DIR=./kapua-box-tmp
+CURRDIR=$(pwd)
+BASEDIR=$(dirname "$0")
+KAPUA_BOX_TMP_DIR=$BASEDIR/kapua-box-tmp
 KAPUA_BOX_NAME=trusty64/kapua-dev-box-0.1
 
-vagrant box remove "$KAPUA_BOX_NAME"
+echo 'Creating base kapua box named $KAPUA_BOX_NAME....'
 
-mkdir -p "$KAPUA_BOX_TMP_DIR"
+vagrant box remove $KAPUA_BOX_NAME
 
-cp Kapua-Box-Vagrantfile "$KAPUA_BOX_TMP_DIR"/Vagrantfile
+mkdir -p $KAPUA_BOX_TMP_DIR
 
-cd "$KAPUA_BOX_TMP_DIR"
+cp $BASEDIR/Kapua-Box-Vagrantfile $KAPUA_BOX_TMP_DIR/Vagrantfile
+
+cd $KAPUA_BOX_TMP_DIR
 
 vagrant up
 
 vagrant package --output trusty64-kapua-dev-0.1.box
 
-vagrant box add "$KAPUA_BOX_NAME" trusty64-kapua-dev-0.1.box
+vagrant box add $KAPUA_BOX_NAME trusty64-kapua-dev-0.1.box
 
-vagrant destroy
+vagrant destroy --force 
 
-cd ..
+rm -rf $KAPUA_BOX_TMP_DIR
 
-rm -rf "$KAPUA_BOX_TMP_DIR"
+cd $CURRDIR
+
+echo '....done.'
