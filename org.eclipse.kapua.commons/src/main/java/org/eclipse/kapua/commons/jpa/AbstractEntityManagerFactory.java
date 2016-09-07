@@ -37,7 +37,7 @@ public abstract class AbstractEntityManagerFactory
     private EntityManagerFactory             entityManagerFactory;
 
     private final JdbcConnectionUrlResolver jdbcConnectionUrlResolver;
-
+    
     protected AbstractEntityManagerFactory(String persistenceUnitName,
                                            String datasourceName,
                                            Map<String, String> uniqueConstraints) {
@@ -119,5 +119,4 @@ public abstract class AbstractEntityManagerFactory
             }
         }
     }
-
 }

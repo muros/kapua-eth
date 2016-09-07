@@ -14,19 +14,19 @@ package org.eclipse.kapua.service.account.internal.setting;
 
 import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 
-public class AccountSettings extends AbstractKapuaSetting<AccountSettingKey>
+public class KapuaAccountSetting extends AbstractKapuaSetting<KapuaAccountSettingKeys>
 {
 
-    private static final String          ACCOUNT_CONFIG_RESOURCE = "kapua-account-config.properties";
+    private static final String          ACCOUNT_CONFIG_RESOURCE = "kapua-account-setting.properties";
 
-    private static final AccountSettings instance                = new AccountSettings();
+    private static final KapuaAccountSetting instance                = new KapuaAccountSetting();
 
-    private AccountSettings()
+    private KapuaAccountSetting()
     {
         super(ACCOUNT_CONFIG_RESOURCE);
     }
 
-    public static AccountSettings getInstance()
+    public static KapuaAccountSetting getInstance()
     {
         return instance;
     }

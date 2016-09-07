@@ -16,6 +16,7 @@ import org.eclipse.kapua.commons.setting.SettingKey;
 
 public enum KapuaAuthenticationSettingKeys implements SettingKey
 {
+    UNUSED("PPP"), //FIXME
 	AUTHENTICATION_KEY("authentication.key");
 	
 	private String key;

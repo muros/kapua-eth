@@ -44,6 +44,8 @@ public class KapuaTest extends Assert {
 
     @Before
     public void setUp() {
+        
+        
         LOG.debug("Setting up test...");
         if(!isInitialized) {
             LOG.debug("Kapua test context is not initialized. Initializing...");

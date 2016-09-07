@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PermissionServiceTest
+public class PermissionServiceTest extends AbstractAuthorizationServiceTest
 {
     @SuppressWarnings("unused")
     private static final Logger s_logger = LoggerFactory.getLogger(PermissionServiceTest.class);
