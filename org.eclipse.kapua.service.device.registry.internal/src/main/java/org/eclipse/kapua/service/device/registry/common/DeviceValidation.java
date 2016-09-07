@@ -38,7 +38,6 @@ public final class DeviceValidation {
         ArgumentValidator.notNull(deviceCreator, "deviceCreator");
         ArgumentValidator.notNull(deviceCreator.getScopeId(), "deviceCreator.scopeId");
         ArgumentValidator.notEmptyOrNull(deviceCreator.getClientId(), "deviceCreator.clientId");
-        ArgumentValidator.notEmptyOrNull(deviceCreator.getClientId(), "deviceCreator.clientId");
 
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.write, deviceCreator.getScopeId()));
 
