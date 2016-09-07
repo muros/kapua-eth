@@ -26,6 +26,7 @@ import org.eclipse.kapua.service.user.UserFactory;
 import org.eclipse.kapua.service.user.UserService;
 import org.eclipse.kapua.service.user.UserStatus;
 import org.eclipse.kapua.test.KapuaTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +37,9 @@ public class UserServiceTest extends KapuaTest
     private static final Logger s_logger = LoggerFactory.getLogger(UserServiceTest.class);
 
     /**
-     * We should ignore this test until we have build fixed.
+     * We should ignore this test until schema loading feature is provided.
      */
+    @Ignore
     @Test
     public void testCreate()
         throws Exception
