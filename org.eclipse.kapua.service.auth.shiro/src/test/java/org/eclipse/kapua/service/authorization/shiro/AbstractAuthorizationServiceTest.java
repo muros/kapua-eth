@@ -18,7 +18,7 @@ import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.service.authentication.shiro.AuthenticationEntityManagerFactory;
 import org.eclipse.kapua.service.authorization.shiro.setting.KapuaAuthorizationSetting;
 import org.eclipse.kapua.service.authorization.shiro.setting.KapuaAuthorizationSettingKeys;
-import org.eclipse.kapua.test.SimpleNativeQueryExecutor;
+import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -31,27 +31,11 @@ public abstract class AbstractAuthorizationServiceTest extends Assert
     private static final Logger logger = LoggerFactory.getLogger(AbstractAuthorizationServiceTest.class);
     
     
-    private static String DEFAULT_PATH = "src/main/sql/H2";
-    private static String PATH = KapuaAuthorizationSetting.getInstance().getString(KapuaAuthorizationSettingKeys.UNUSED, DEFAULT_PATH);
-    private static String ATHZ_ROLE_DROP_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_role_drop.sql'", PATH);
-    private static String ATHZ_ROLE_CREATE_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_role_create.sql'", PATH);
-    private static String ATHZ_ROLE_SEED_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_role_seed.sql'", PATH);
-    
-    private static String ATHZ_ROLE_PERMISSION_DROP_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_role_permission_drop.sql'", PATH);
-    private static String ATHZ_ROLE_PERMISSION_CREATE_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_role_permission_create.sql'", PATH);
-    private static String ATHZ_ROLE_PERMISSION_SEED_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_role_permission_seed.sql'", PATH);
-    
-    private static String ATHZ_USER_PERMISSION_DROP_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_user_permission_drop.sql'", PATH);
-    private static String ATHZ_USER_PERMISSION_CREATE_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_user_permission_create.sql'", PATH);
-    private static String ATHZ_USER_PERMISSION_SEED_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_user_permission_seed.sql'", PATH);
-    
-    private static String ATHZ_USER_ROLE_DROP_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_user_role_drop.sql'", PATH);
-    private static String ATHZ_USER_ROLE_CREATE_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_user_role_create.sql'", PATH);
-    private static String ATHZ_USER_ROLE_SEED_SCRIPT = String.format("RUNSCRIPT FROM '%s/athz_user_role_seed.sql'", PATH);
+    public static String DEFAULT_PATH = "src/main/sql/H2";
+    public static String DEFAULT_FILTER = "athz_*.sql";
+    public static String DROP_FILTER = "athz_*_drop.sql";
 
-    @BeforeClass
-    public static void tearUp()
-        throws KapuaException
+    public static void scriptSession(String fileFilter)
     {
         EntityManager em = null;
         try {
@@ -61,30 +45,18 @@ public abstract class AbstractAuthorizationServiceTest extends Assert
             em = AuthenticationEntityManagerFactory.getEntityManager();
             em.beginTransaction();
             
-            SimpleNativeQueryExecutor nativeQueryExecutor = new SimpleNativeQueryExecutor();
-            nativeQueryExecutor.addQuery(em, ATHZ_ROLE_DROP_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_ROLE_PERMISSION_DROP_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_USER_PERMISSION_DROP_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_USER_ROLE_DROP_SCRIPT);
-            
-            nativeQueryExecutor.addQuery(em, ATHZ_ROLE_CREATE_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_ROLE_PERMISSION_CREATE_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_USER_PERMISSION_CREATE_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_USER_ROLE_CREATE_SCRIPT);
-            
-            nativeQueryExecutor.addQuery(em, ATHZ_ROLE_SEED_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_ROLE_PERMISSION_SEED_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_USER_PERMISSION_SEED_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHZ_USER_ROLE_SEED_SCRIPT);
-
-            nativeQueryExecutor.executeUpdate();
+            String path = KapuaAuthorizationSetting.getInstance().getString(KapuaAuthorizationSettingKeys.UNUSED, DEFAULT_PATH);
+            String filter = KapuaAuthorizationSetting.getInstance().getString(KapuaAuthorizationSettingKeys.UNUSED, fileFilter);
+            SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();
+            sqlScriptExecutor.scanScripts(path, filter);
+            sqlScriptExecutor.executeUpdate(em);
             
             em.commit();
             
             logger.info("...database scripts done!");
         }
         catch (KapuaException e) {
-            logger.error("Database scripts failed!", e);
+            logger.error("Database scripts failed: {}", e.getMessage());
             if (em != null)
                 em.rollback();
         }
@@ -94,9 +66,17 @@ public abstract class AbstractAuthorizationServiceTest extends Assert
         }
 
     }
+
+    @BeforeClass
+    public static void tearUp()
+        throws KapuaException
+    {
+        scriptSession(DEFAULT_FILTER);
+    }
     
     @AfterClass
     public static void tearDown()
     {
+        scriptSession(DROP_FILTER);
     }
 }

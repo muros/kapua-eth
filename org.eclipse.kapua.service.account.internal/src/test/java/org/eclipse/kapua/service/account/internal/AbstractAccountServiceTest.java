@@ -13,14 +13,12 @@
 package org.eclipse.kapua.service.account.internal;
 
 
-import javax.persistence.Query;
-
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.service.account.internal.setting.KapuaAccountSetting;
 import org.eclipse.kapua.service.account.internal.setting.KapuaAccountSettingKeys;
 import org.eclipse.kapua.test.KapuaTest;
-import org.eclipse.kapua.test.SimpleNativeQueryExecutor;
+import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
@@ -31,14 +29,12 @@ public abstract class AbstractAccountServiceTest extends KapuaTest
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(AbstractAccountServiceTest.class);
     
-    private static String ACT_ACCOUNT_DROP_SCRIPT = "RUNSCRIPT FROM '%s/act_account_drop.sql'";
-    private static String ACT_ACCOUNT_CREATE_SCRIPT = "RUNSCRIPT FROM '%s/act_account_create.sql'";
-    private static String ACT_ACCOUNT_SEED_SCRIPT = "RUNSCRIPT FROM '%s/act_account_seed.sql'";
-    private static String DEFAULT_PATH = "src/main/sql/H2";
+    public static String DEFAULT_PATH = "src/main/sql/H2";
+    public static String DEFAULT_FILTER = "act_*.sql";
+    public static String DROP_FILTER = "act_*_drop.sql";
 
-    @BeforeClass
-    public static void tearUp()
-        throws KapuaException
+
+    public static void scriptSession(String fileFilter)
     {
         EntityManager em = null;
         try {
@@ -49,24 +45,17 @@ public abstract class AbstractAccountServiceTest extends KapuaTest
             em.beginTransaction();
             
             String path = KapuaAccountSetting.getInstance().getString(KapuaAccountSettingKeys.UNUSED, DEFAULT_PATH);
-            SimpleNativeQueryExecutor nativeQueryExecutor = new SimpleNativeQueryExecutor();
-            String scriptCmd = String.format(ACT_ACCOUNT_DROP_SCRIPT, path);
-            nativeQueryExecutor.addQuery(em, scriptCmd);
-            
-            scriptCmd = String.format(ACT_ACCOUNT_CREATE_SCRIPT, path);
-            nativeQueryExecutor.addQuery(em, scriptCmd);
-            
-            scriptCmd = String.format(ACT_ACCOUNT_SEED_SCRIPT, path);
-            nativeQueryExecutor.addQuery(em, scriptCmd);
-
-            nativeQueryExecutor.executeUpdate();
+            String filter = KapuaAccountSetting.getInstance().getString(KapuaAccountSettingKeys.UNUSED, fileFilter);
+            SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();
+            sqlScriptExecutor.scanScripts(path, filter);
+            sqlScriptExecutor.executeUpdate(em);
             
             em.commit();
             
             logger.info("...database scripts done!");
         }
         catch (KapuaException e) {
-            logger.error("Database scripts failed!", e);
+            logger.error("Database scripts failed: {}", e.getMessage());
             if (em != null)
                 em.rollback();
         }
@@ -76,9 +65,17 @@ public abstract class AbstractAccountServiceTest extends KapuaTest
         }
 
     }
+
+    @BeforeClass
+    public static void tearUp()
+        throws KapuaException
+    {
+        scriptSession(DEFAULT_FILTER);
+    }
     
     @AfterClass
     public static void tearDown()
     {
+        scriptSession(DROP_FILTER);
     }
 }

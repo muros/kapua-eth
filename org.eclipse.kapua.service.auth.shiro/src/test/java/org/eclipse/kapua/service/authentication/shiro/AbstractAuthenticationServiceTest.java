@@ -17,7 +17,7 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.service.authentication.shiro.setting.KapuaAuthenticationSetting;
 import org.eclipse.kapua.service.authentication.shiro.setting.KapuaAuthenticationSettingKeys;
-import org.eclipse.kapua.test.SimpleNativeQueryExecutor;
+import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -29,15 +29,11 @@ public abstract class AbstractAuthenticationServiceTest extends Assert
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(AbstractAuthenticationServiceTest.class);
     
-    private static String DEFAULT_PATH = "src/main/sql/H2";
-    private static String PATH = KapuaAuthenticationSetting.getInstance().getString(KapuaAuthenticationSettingKeys.UNUSED, DEFAULT_PATH);
-    private static String ATHT_CREDENTIAL_DROP_SCRIPT = String.format("RUNSCRIPT FROM '%s/atht_credential_drop.sql'", PATH);
-    private static String ATHT_CREDENTIAL_CREATE_SCRIPT = String.format("RUNSCRIPT FROM '%s/atht_credential_create.sql'", PATH);
-    private static String ATHT_CREDENTIAL_SEED_SCRIPT = String.format("RUNSCRIPT FROM '%s/atht_credential_seed.sql'", PATH);
+    public static String DEFAULT_PATH = "src/main/sql/H2";
+    public static String DEFAULT_FILTER = "atht_*.sql";
+    public static String DROP_FILTER = "atht_*_drop.sql";
 
-    @BeforeClass
-    public static void tearUp()
-        throws KapuaException
+    public static void scriptSession(String fileFilter)
     {
         EntityManager em = null;
         try {
@@ -47,19 +43,18 @@ public abstract class AbstractAuthenticationServiceTest extends Assert
             em = AuthenticationEntityManagerFactory.getEntityManager();
             em.beginTransaction();
             
-            SimpleNativeQueryExecutor nativeQueryExecutor = new SimpleNativeQueryExecutor();
-            nativeQueryExecutor.addQuery(em, ATHT_CREDENTIAL_DROP_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHT_CREDENTIAL_CREATE_SCRIPT);
-            nativeQueryExecutor.addQuery(em, ATHT_CREDENTIAL_SEED_SCRIPT);
-
-            nativeQueryExecutor.executeUpdate();
+            String path = KapuaAuthenticationSetting.getInstance().getString(KapuaAuthenticationSettingKeys.UNUSED, DEFAULT_PATH);
+            String filter = KapuaAuthenticationSetting.getInstance().getString(KapuaAuthenticationSettingKeys.UNUSED, fileFilter);
+            SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();
+            sqlScriptExecutor.scanScripts(path, filter);
+            sqlScriptExecutor.executeUpdate(em);
             
             em.commit();
             
             logger.info("...database scripts done!");
         }
         catch (KapuaException e) {
-            logger.error("Database scripts failed!", e);
+            logger.error("Database scripts failed: {}", e.getMessage());
             if (em != null)
                 em.rollback();
         }
@@ -69,9 +64,17 @@ public abstract class AbstractAuthenticationServiceTest extends Assert
         }
 
     }
+
+    @BeforeClass
+    public static void tearUp()
+        throws KapuaException
+    {
+        scriptSession(DEFAULT_FILTER);
+    }
     
     @AfterClass
     public static void tearDown()
     {
+        scriptSession(DROP_FILTER);
     }
 }

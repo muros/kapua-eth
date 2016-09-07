@@ -18,7 +18,7 @@ import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.service.user.internal.setting.KapuaUserSetting;
 import org.eclipse.kapua.service.user.internal.setting.KapuaUserSettingKeys;
 import org.eclipse.kapua.test.KapuaTest;
-import org.eclipse.kapua.test.SimpleNativeQueryExecutor;
+import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
@@ -29,14 +29,11 @@ public abstract class AbstractUserServiceTest extends KapuaTest
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(AbstractUserServiceTest.class);
     
-    private static String USR_USER_DROP_SCRIPT = "RUNSCRIPT FROM '%s/usr_user_drop.sql'";
-    private static String USR_USER_CREATE_SCRIPT = "RUNSCRIPT FROM '%s/usr_user_create.sql'";
-    private static String USR_USER_SEED_SCRIPT = "RUNSCRIPT FROM '%s/usr_user_seed.sql'";
-    private static String DEFAULT_PATH = "src/main/sql/H2";
+    public static String DEFAULT_PATH = "./src/main/sql/H2/";
+    public static String DEFAULT_FILTER = "usr_*.sql";
+    public static String DROP_FILTER = "usr_*_drop.sql";
 
-    @BeforeClass
-    public static void tearUp()
-        throws KapuaException
+    public static void scriptSession(String fileFilter)
     {
         EntityManager em = null;
         try {
@@ -45,26 +42,19 @@ public abstract class AbstractUserServiceTest extends KapuaTest
             
             em = UserEntityManagerFactory.getEntityManager();
             em.beginTransaction();
-            
+                        
             String path = KapuaUserSetting.getInstance().getString(KapuaUserSettingKeys.USER_KEY, DEFAULT_PATH);
-            SimpleNativeQueryExecutor nativeQueryExecutor = new SimpleNativeQueryExecutor();
-            String scriptCmd = String.format(USR_USER_DROP_SCRIPT, path);
-            nativeQueryExecutor.addQuery(em, scriptCmd);
-            
-            scriptCmd = String.format(USR_USER_CREATE_SCRIPT, path);
-            nativeQueryExecutor.addQuery(em, scriptCmd);
-            
-            scriptCmd = String.format(USR_USER_SEED_SCRIPT, path);
-            nativeQueryExecutor.addQuery(em, scriptCmd);
-
-            nativeQueryExecutor.executeUpdate();
+            String filter = KapuaUserSetting.getInstance().getString(KapuaUserSettingKeys.USER_KEY, fileFilter);
+            SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();
+            sqlScriptExecutor.scanScripts(path, filter);
+            sqlScriptExecutor.executeUpdate(em);
             
             em.commit();
             
             logger.info("...database scripts done!");
         }
         catch (KapuaException e) {
-            logger.error("Database scripts failed!", e);
+            logger.error("Database scripts failed: {}", e.getMessage());
             if (em != null)
                 em.rollback();
         }
@@ -75,8 +65,16 @@ public abstract class AbstractUserServiceTest extends KapuaTest
 
     }
     
+    @BeforeClass
+    public static void tearUp()
+        throws KapuaException
+    {
+        scriptSession(DEFAULT_FILTER);
+    }
+    
     @AfterClass
     public static void tearDown()
     {
+        scriptSession(DROP_FILTER);
     }
 }
