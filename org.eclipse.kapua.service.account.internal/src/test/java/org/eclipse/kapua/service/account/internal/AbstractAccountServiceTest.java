@@ -15,6 +15,8 @@ package org.eclipse.kapua.service.account.internal;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
+import org.eclipse.kapua.commons.setting.system.SystemSetting;
+import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.service.account.internal.setting.KapuaAccountSetting;
 import org.eclipse.kapua.service.account.internal.setting.KapuaAccountSettingKeys;
 import org.eclipse.kapua.test.KapuaTest;
@@ -34,7 +36,7 @@ public abstract class AbstractAccountServiceTest extends KapuaTest
     public static String DROP_FILTER = "act_*_drop.sql";
 
 
-    public static void scriptSession(String fileFilter)
+    public static void scriptSession(String path, String fileFilter)
     {
         EntityManager em = null;
         try {
@@ -44,10 +46,8 @@ public abstract class AbstractAccountServiceTest extends KapuaTest
             em = AccountEntityManagerFactory.getEntityManager();
             em.beginTransaction();
             
-            String path = KapuaAccountSetting.getInstance().getString(KapuaAccountSettingKeys.UNUSED, DEFAULT_PATH);
-            String filter = KapuaAccountSetting.getInstance().getString(KapuaAccountSettingKeys.UNUSED, fileFilter);
             SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();
-            sqlScriptExecutor.scanScripts(path, filter);
+            sqlScriptExecutor.scanScripts(path, fileFilter);
             sqlScriptExecutor.executeUpdate(em);
             
             em.commit();
@@ -70,12 +70,12 @@ public abstract class AbstractAccountServiceTest extends KapuaTest
     public static void tearUp()
         throws KapuaException
     {
-        scriptSession(DEFAULT_FILTER);
+        scriptSession(DEFAULT_PATH, DEFAULT_FILTER);
     }
     
     @AfterClass
     public static void tearDown()
     {
-        scriptSession(DROP_FILTER);
+        scriptSession(DEFAULT_PATH, DROP_FILTER);
     }
 }

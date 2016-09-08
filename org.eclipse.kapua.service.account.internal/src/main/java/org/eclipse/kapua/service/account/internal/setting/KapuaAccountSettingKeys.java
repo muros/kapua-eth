@@ -16,7 +16,7 @@ import org.eclipse.kapua.commons.setting.SettingKey;
 
 public enum KapuaAccountSettingKeys implements SettingKey
 {
-	UNUSED(""); //FIXME
+	;
 	
 	private String key;
 	

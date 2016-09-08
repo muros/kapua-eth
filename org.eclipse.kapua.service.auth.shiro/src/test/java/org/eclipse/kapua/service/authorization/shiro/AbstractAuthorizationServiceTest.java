@@ -16,8 +16,6 @@ package org.eclipse.kapua.service.authorization.shiro;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.service.authentication.shiro.AuthenticationEntityManagerFactory;
-import org.eclipse.kapua.service.authorization.shiro.setting.KapuaAuthorizationSetting;
-import org.eclipse.kapua.service.authorization.shiro.setting.KapuaAuthorizationSettingKeys;
 import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -35,7 +33,7 @@ public abstract class AbstractAuthorizationServiceTest extends Assert
     public static String DEFAULT_FILTER = "athz_*.sql";
     public static String DROP_FILTER = "athz_*_drop.sql";
 
-    public static void scriptSession(String fileFilter)
+    public static void scriptSession(String path, String fileFilter)
     {
         EntityManager em = null;
         try {
@@ -45,10 +43,8 @@ public abstract class AbstractAuthorizationServiceTest extends Assert
             em = AuthenticationEntityManagerFactory.getEntityManager();
             em.beginTransaction();
             
-            String path = KapuaAuthorizationSetting.getInstance().getString(KapuaAuthorizationSettingKeys.UNUSED, DEFAULT_PATH);
-            String filter = KapuaAuthorizationSetting.getInstance().getString(KapuaAuthorizationSettingKeys.UNUSED, fileFilter);
             SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();
-            sqlScriptExecutor.scanScripts(path, filter);
+            sqlScriptExecutor.scanScripts(path, fileFilter);
             sqlScriptExecutor.executeUpdate(em);
             
             em.commit();
@@ -71,12 +67,12 @@ public abstract class AbstractAuthorizationServiceTest extends Assert
     public static void tearUp()
         throws KapuaException
     {
-        scriptSession(DEFAULT_FILTER);
+        scriptSession(DEFAULT_PATH, DEFAULT_FILTER);
     }
     
     @AfterClass
     public static void tearDown()
     {
-        scriptSession(DROP_FILTER);
+        scriptSession(DEFAULT_PATH, DROP_FILTER);
     }
 }
