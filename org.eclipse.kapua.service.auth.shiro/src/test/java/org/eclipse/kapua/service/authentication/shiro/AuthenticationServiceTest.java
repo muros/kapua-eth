@@ -12,11 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.shiro;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -28,7 +23,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AuthenticationServiceTest
+public class AuthenticationServiceTest extends AbstractAuthenticationServiceTest
 {
     @SuppressWarnings("unused")
     private static final Logger s_logger = LoggerFactory.getLogger(AuthenticationServiceTest.class);

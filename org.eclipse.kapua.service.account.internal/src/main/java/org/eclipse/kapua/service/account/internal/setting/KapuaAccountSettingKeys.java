@@ -14,13 +14,13 @@ package org.eclipse.kapua.service.account.internal.setting;
 
 import org.eclipse.kapua.commons.setting.SettingKey;
 
-public enum AccountSettingKey implements SettingKey
+public enum KapuaAccountSettingKeys implements SettingKey
 {
 	;
 	
 	private String key;
 	
-	private AccountSettingKey(String key) {
+	private KapuaAccountSettingKeys(String key) {
 		this.key = key;
 	}
 	

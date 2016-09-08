@@ -25,15 +25,13 @@ import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.account.Organization;
 import org.eclipse.kapua.test.KapuaTest;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * We should ignore this test until schema loading feature is provided.
+ * Ignoring those tests until we have build fixed. Then we should enabled embedded MariaDB and turn tests on again.
  */
-@Ignore
 public class AccountServiceTest extends KapuaTest
 {
     @SuppressWarnings("unused")
