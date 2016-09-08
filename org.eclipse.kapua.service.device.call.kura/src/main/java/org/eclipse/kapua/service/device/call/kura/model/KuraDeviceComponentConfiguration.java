@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
 import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 
 /**
@@ -55,7 +56,7 @@ public class KuraDeviceComponentConfiguration
      * Information XML resource associated to this Component.
      */
     @XmlElementRef
-    private KapuaTocd           definition;
+    private TocdImpl            definition;
 
     /**
      * The Dictionary of properties currently used by this component.
@@ -97,7 +98,7 @@ public class KuraDeviceComponentConfiguration
 
     public void setDefinition(KapuaTocd definition)
     {
-        this.definition = definition;
+        this.definition = (TocdImpl) definition;
     }
 
     public Map<String, Object> getProperties()

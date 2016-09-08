@@ -17,7 +17,6 @@
 // Generated on: 2012.11.25 at 06:05:15 PM CET
 //
 
-
 package org.eclipse.kapua.commons.configuration.metatype;
 
 import java.util.ArrayList;
@@ -37,11 +36,12 @@ import javax.xml.namespace.QName;
 import org.eclipse.kapua.model.config.metatype.KapuaToption;
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for Toption complex type.
+ * <p>
+ * Java class for Toption complex type.
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
  * &lt;complexType name="Toption">
@@ -60,18 +60,19 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="Option", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name = "Option", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Toption", propOrder = {
-    "any"
+                                         "any"
 })
-public class ToptionImpl implements KapuaToption {
+public class ToptionImpl implements KapuaToption
+{
     @XmlAnyElement(lax = true)
-    protected List<Object> any;
+    protected List<Object>     any;
     @XmlAttribute(name = "label", required = true)
-    protected String label;
+    protected String           label;
     @XmlAttribute(name = "value", required = true)
-    protected String value;
+    protected String           value;
     @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
@@ -86,8 +87,9 @@ public class ToptionImpl implements KapuaToption {
      *
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAny().add(newItem);
+     * getAny().add(newItem);
      * </pre>
      *
      *
@@ -98,7 +100,8 @@ public class ToptionImpl implements KapuaToption {
      *
      *
      */
-    public List<Object> getAny() {
+    public List<Object> getAny()
+    {
         if (any == null) {
             any = new ArrayList<Object>();
         }
@@ -109,11 +112,12 @@ public class ToptionImpl implements KapuaToption {
      * Gets the value of the label property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getLabel() {
+    public String getLabel()
+    {
         return label;
     }
 
@@ -121,11 +125,12 @@ public class ToptionImpl implements KapuaToption {
      * Sets the value of the label property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setLabel(String value) {
+    public void setLabel(String value)
+    {
         this.label = value;
     }
 
@@ -133,11 +138,12 @@ public class ToptionImpl implements KapuaToption {
      * Gets the value of the value property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getValue() {
+    public String getValue()
+    {
         return value;
     }
 
@@ -145,11 +151,12 @@ public class ToptionImpl implements KapuaToption {
      * Sets the value of the value property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setValue(String value) {
+    public void setValue(String value)
+    {
         this.value = value;
     }
 
@@ -165,10 +172,10 @@ public class ToptionImpl implements KapuaToption {
      *
      *
      * @return
-     *     always non-null
+     *         always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    public Map<QName, String> getOtherAttributes()
+    {
         return otherAttributes;
     }
-
 }

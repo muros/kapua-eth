@@ -17,7 +17,6 @@
 // Generated on: 2012.11.25 at 06:05:15 PM CET
 //
 
-
 package org.eclipse.kapua.commons.configuration.metatype;
 
 import java.math.BigInteger;
@@ -39,11 +38,12 @@ import javax.xml.namespace.QName;
 import org.eclipse.kapua.model.config.metatype.KapuaTicon;
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for Ticon complex type.
+ * <p>
+ * Java class for Ticon complex type.
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
  * &lt;complexType name="Ticon">
@@ -62,21 +62,25 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="Icon", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Ticon", propOrder = {
-    "any"
+                                       "any"
 })
-public class TiconImpl implements KapuaTicon {
+public class TiconImpl implements KapuaTicon
+{
     @XmlAnyElement(lax = true)
-    protected List<Object> any;
+    protected List<Object>     any;
+
     @XmlAttribute(name = "resource", required = true)
-    protected String resource;
+    protected String           resource;
+
     @XmlAttribute(name = "size", required = true)
     @XmlSchemaType(name = "positiveInteger")
-    protected BigInteger size;
+    protected BigInteger       size;
+
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the any property.
@@ -89,8 +93,9 @@ public class TiconImpl implements KapuaTicon {
      *
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAny().add(newItem);
+     * getAny().add(newItem);
      * </pre>
      *
      *
@@ -101,9 +106,10 @@ public class TiconImpl implements KapuaTicon {
      *
      *
      */
-    public List<Object> getAny() {
+    public List<Object> getAny()
+    {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
     }
@@ -112,11 +118,12 @@ public class TiconImpl implements KapuaTicon {
      * Gets the value of the resource property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getResource() {
+    public String getResource()
+    {
         return resource;
     }
 
@@ -124,11 +131,12 @@ public class TiconImpl implements KapuaTicon {
      * Sets the value of the resource property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setResource(String value) {
+    public void setResource(String value)
+    {
         this.resource = value;
     }
 
@@ -136,11 +144,12 @@ public class TiconImpl implements KapuaTicon {
      * Gets the value of the size property.
      *
      * @return
-     *     possible object is
-     *     {@link BigInteger }
+     *         possible object is
+     *         {@link BigInteger }
      *
      */
-    public BigInteger getSize() {
+    public BigInteger getSize()
+    {
         return size;
     }
 
@@ -148,11 +157,12 @@ public class TiconImpl implements KapuaTicon {
      * Sets the value of the size property.
      *
      * @param value
-     *     allowed object is
-     *     {@link BigInteger }
+     *            allowed object is
+     *            {@link BigInteger }
      *
      */
-    public void setSize(BigInteger value) {
+    public void setSize(BigInteger value)
+    {
         this.size = value;
     }
 
@@ -168,9 +178,10 @@ public class TiconImpl implements KapuaTicon {
      *
      *
      * @return
-     *     always non-null
+     *         always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    public Map<QName, String> getOtherAttributes()
+    {
         return otherAttributes;
     }
 

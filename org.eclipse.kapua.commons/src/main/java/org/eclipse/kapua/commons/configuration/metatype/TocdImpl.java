@@ -17,7 +17,6 @@
 // Generated on: 2012.11.25 at 06:05:15 PM CET
 //
 
-
 package org.eclipse.kapua.commons.configuration.metatype;
 
 import java.util.ArrayList;
@@ -40,11 +39,12 @@ import org.eclipse.kapua.model.config.metatype.KapuaTicon;
 import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for Tocd complex type.
+ * <p>
+ * Java class for Tocd complex type.
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
  * &lt;complexType name="Tocd">
@@ -66,28 +66,35 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="OCD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name = "OCD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Tocd", propOrder = {
-    "ad",
-    "icon",
-    "any"
+                                      "ad",
+                                      "icon",
+                                      "any"
 })
-public class TocdImpl implements KapuaTocd {
-    @XmlElement(name = "AD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0", required=true)
-    protected List<TadImpl> ad;
-    @XmlElement(name = "Icon", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
-    protected List<TiconImpl> icon;
+public class TocdImpl implements KapuaTocd
+{
+    @XmlElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
+    protected List<TadImpl>    ad;
+
+    @XmlElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
+    protected List<TiconImpl>  icon;
+
     @XmlAnyElement(lax = true)
-    protected List<Object> any;
+    protected List<Object>     any;
+
     @XmlAttribute(name = "name", required = true)
-    protected String name;
+    protected String           name;
+
     @XmlAttribute(name = "description")
-    protected String description;
+    protected String           description;
+
     @XmlAttribute(name = "id", required = true)
-    protected String id;
+    protected String           id;
+
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the ad property.
@@ -100,8 +107,9 @@ public class TocdImpl implements KapuaTocd {
      *
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAD().add(newItem);
+     * getAD().add(newItem);
      * </pre>
      *
      *
@@ -111,11 +119,21 @@ public class TocdImpl implements KapuaTocd {
      *
      *
      */
-    public List<KapuaTad> getAD() {
+    public List<KapuaTad> getAD()
+    {
         if (ad == null) {
-            ad = new ArrayList<TadImpl>();
+            ad = new ArrayList<>();
         }
-        return new ArrayList<KapuaTad>(this.ad);
+        return new ArrayList<>(this.ad);
+    }
+
+    public void addAD(KapuaTad ad)
+    {
+        if (this.ad == null) {
+            this.ad = new ArrayList<>();
+        }
+
+        this.ad.add((TadImpl) ad);
     }
 
     /**
@@ -129,8 +147,9 @@ public class TocdImpl implements KapuaTocd {
      *
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getIcon().add(newItem);
+     * getIcon().add(newItem);
      * </pre>
      *
      *
@@ -140,11 +159,20 @@ public class TocdImpl implements KapuaTocd {
      *
      *
      */
-    public List<KapuaTicon> getIcon() {
+    public List<KapuaTicon> getIcon()
+    {
         if (icon == null) {
-            icon = new ArrayList<TiconImpl>();
+            icon = new ArrayList<>();
         }
-        return new ArrayList<KapuaTicon>(this.icon);
+        return new ArrayList<>(this.icon);
+    }
+
+    public void addIcon(KapuaTicon icon)
+    {
+        if (this.icon == null) {
+            this.icon = new ArrayList<>();
+        }
+        this.icon.add((TiconImpl) icon);
     }
 
     /**
@@ -158,8 +186,9 @@ public class TocdImpl implements KapuaTocd {
      *
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAny().add(newItem);
+     * getAny().add(newItem);
      * </pre>
      *
      *
@@ -170,22 +199,29 @@ public class TocdImpl implements KapuaTocd {
      *
      *
      */
-    public List<Object> getAny() {
+    public List<Object> getAny()
+    {
         if (any == null) {
-            any = new ArrayList<Object>();
+            any = new ArrayList<>();
         }
         return this.any;
+    }
+
+    public void addAny(Object object)
+    {
+        getAny().add(object);
     }
 
     /**
      * Gets the value of the name property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
@@ -193,11 +229,12 @@ public class TocdImpl implements KapuaTocd {
      * Sets the value of the name property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setName(String value) {
+    public void setName(String value)
+    {
         this.name = value;
     }
 
@@ -205,11 +242,12 @@ public class TocdImpl implements KapuaTocd {
      * Gets the value of the description property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getDescription() {
+    public String getDescription()
+    {
         return description;
     }
 
@@ -217,11 +255,12 @@ public class TocdImpl implements KapuaTocd {
      * Sets the value of the description property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setDescription(String value) {
+    public void setDescription(String value)
+    {
         this.description = value;
     }
 
@@ -229,11 +268,12 @@ public class TocdImpl implements KapuaTocd {
      * Gets the value of the id property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
@@ -241,11 +281,12 @@ public class TocdImpl implements KapuaTocd {
      * Sets the value of the id property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setId(String value) {
+    public void setId(String value)
+    {
         this.id = value;
     }
 
@@ -261,10 +302,17 @@ public class TocdImpl implements KapuaTocd {
      *
      *
      * @return
-     *     always non-null
+     *         always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    public Map<QName, String> getOtherAttributes()
+    {
         return otherAttributes;
+    }
+
+    public void putOtherAttribute(QName key, String value)
+    {
+        getOtherAttributes().put(key,
+                                 value);
     }
 
 }

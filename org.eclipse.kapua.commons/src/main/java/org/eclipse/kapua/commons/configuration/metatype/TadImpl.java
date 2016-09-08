@@ -17,7 +17,6 @@
 // Generated on: 2012.11.25 at 06:05:15 PM CET
 //
 
-
 package org.eclipse.kapua.commons.configuration.metatype;
 
 import java.util.ArrayList;
@@ -40,11 +39,12 @@ import org.eclipse.kapua.model.config.metatype.KapuaToption;
 import org.eclipse.kapua.model.config.metatype.KapuaTscalar;
 import org.w3c.dom.Element;
 
-
 /**
- * <p>Java class for Tad complex type.
+ * <p>
+ * Java class for Tad complex type.
  *
- * <p>The following schema fragment specifies the expected content contained within this class.
+ * <p>
+ * The following schema fragment specifies the expected content contained within this class.
  *
  * <pre>
  * &lt;complexType name="Tad">
@@ -71,37 +71,49 @@ import org.w3c.dom.Element;
  *
  *
  */
-@XmlRootElement(name="AD", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlRootElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Tad", propOrder = {
-    "option",
-    "any"
+                                     "option",
+                                     "any"
 })
-public class TadImpl implements KapuaTad {
-    @XmlElement(name = "Option", namespace="http://www.osgi.org/xmlns/metatype/v1.2.0")
+public class TadImpl implements KapuaTad
+{
+    @XmlElement(name = "Option", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
     protected List<ToptionImpl> option;
+
     @XmlAnyElement(lax = true)
-    protected List<Object> any;
+    protected List<Object>      any;
+
     @XmlAttribute(name = "name")
-    protected String name;
+    protected String            name;
+
     @XmlAttribute(name = "description")
-    protected String description;
+    protected String            description;
+
     @XmlAttribute(name = "id", required = true)
-    protected String id;
+    protected String            id;
+
     @XmlAttribute(name = "type", required = true)
-    protected TscalarImpl type;
+    protected TscalarImpl       type;
+
     @XmlAttribute(name = "cardinality")
-    protected Integer cardinality;
+    protected Integer           cardinality;
+
     @XmlAttribute(name = "min")
-    protected String min;
+    protected String            min;
+
     @XmlAttribute(name = "max")
-    protected String max;
+    protected String            max;
+
     @XmlAttribute(name = "default")
-    protected String _default;
+    protected String            _default;
+
     @XmlAttribute(name = "required")
-    protected Boolean required;
+    protected Boolean           required;
+
     @XmlAnyAttribute
-    private Map<QName, String> otherAttributes = new HashMap<QName, String>();
+    private Map<QName, String>  otherAttributes = new HashMap<>();
 
     /**
      * Gets the value of the option property.
@@ -114,8 +126,9 @@ public class TadImpl implements KapuaTad {
      *
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getOption().add(newItem);
+     * getOption().add(newItem);
      * </pre>
      *
      *
@@ -125,11 +138,21 @@ public class TadImpl implements KapuaTad {
      *
      *
      */
-    public List<KapuaToption> getOption() {
+    public List<KapuaToption> getOption()
+    {
         if (option == null) {
-            option = new ArrayList<ToptionImpl>();
+            option = new ArrayList<>();
         }
-        return new ArrayList<KapuaToption>(this.option);
+        return new ArrayList<>(this.option);
+    }
+
+    public void addOption(KapuaToption option)
+    {
+        if (this.option == null) {
+            this.option = new ArrayList<>();
+        }
+
+        this.option.add((ToptionImpl) option);
     }
 
     /**
@@ -143,8 +166,9 @@ public class TadImpl implements KapuaTad {
      *
      * <p>
      * For example, to add a new item, do as follows:
+     * 
      * <pre>
-     *    getAny().add(newItem);
+     * getAny().add(newItem);
      * </pre>
      *
      *
@@ -155,7 +179,8 @@ public class TadImpl implements KapuaTad {
      *
      *
      */
-    public List<Object> getAny() {
+    public List<Object> getAny()
+    {
         if (any == null) {
             any = new ArrayList<Object>();
         }
@@ -166,11 +191,12 @@ public class TadImpl implements KapuaTad {
      * Gets the value of the name property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
@@ -178,11 +204,12 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the name property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setName(String value) {
+    public void setName(String value)
+    {
         this.name = value;
     }
 
@@ -190,11 +217,12 @@ public class TadImpl implements KapuaTad {
      * Gets the value of the description property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getDescription() {
+    public String getDescription()
+    {
         return description;
     }
 
@@ -202,11 +230,12 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the description property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setDescription(String value) {
+    public void setDescription(String value)
+    {
         this.description = value;
     }
 
@@ -214,11 +243,12 @@ public class TadImpl implements KapuaTad {
      * Gets the value of the id property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getId() {
+    public String getId()
+    {
         return id;
     }
 
@@ -226,11 +256,12 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the id property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setId(String value) {
+    public void setId(String value)
+    {
         this.id = value;
     }
 
@@ -238,11 +269,12 @@ public class TadImpl implements KapuaTad {
      * Gets the value of the type property.
      *
      * @return
-     *     possible object is
-     *     {@link TscalarImpl }
+     *         possible object is
+     *         {@link TscalarImpl }
      *
      */
-    public TscalarImpl getType() {
+    public TscalarImpl getType()
+    {
         return type;
     }
 
@@ -250,26 +282,29 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the type property.
      *
      * @param value
-     *     allowed object is
-     *     {@link TscalarImpl }
+     *            allowed object is
+     *            {@link TscalarImpl }
      *
      */
-    public void setType(KapuaTscalar value) {
-        this.type = (TscalarImpl)value;
+    public void setType(KapuaTscalar value)
+    {
+        this.type = (TscalarImpl) value;
     }
 
     /**
      * Gets the value of the cardinality property.
      *
      * @return
-     *     possible object is
-     *     {@link Integer }
+     *         possible object is
+     *         {@link Integer }
      *
      */
-    public int getCardinality() {
+    public int getCardinality()
+    {
         if (cardinality == null) {
-            return  0;
-        } else {
+            return 0;
+        }
+        else {
             return cardinality;
         }
     }
@@ -278,11 +313,12 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the cardinality property.
      *
      * @param value
-     *     allowed object is
-     *     {@link Integer }
+     *            allowed object is
+     *            {@link Integer }
      *
      */
-    public void setCardinality(Integer value) {
+    public void setCardinality(Integer value)
+    {
         this.cardinality = value;
     }
 
@@ -290,11 +326,12 @@ public class TadImpl implements KapuaTad {
      * Gets the value of the min property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getMin() {
+    public String getMin()
+    {
         return min;
     }
 
@@ -302,11 +339,12 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the min property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setMin(String value) {
+    public void setMin(String value)
+    {
         this.min = value;
     }
 
@@ -314,11 +352,12 @@ public class TadImpl implements KapuaTad {
      * Gets the value of the max property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getMax() {
+    public String getMax()
+    {
         return max;
     }
 
@@ -326,11 +365,12 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the max property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setMax(String value) {
+    public void setMax(String value)
+    {
         this.max = value;
     }
 
@@ -338,11 +378,12 @@ public class TadImpl implements KapuaTad {
      * Gets the value of the default property.
      *
      * @return
-     *     possible object is
-     *     {@link String }
+     *         possible object is
+     *         {@link String }
      *
      */
-    public String getDefault() {
+    public String getDefault()
+    {
         return _default;
     }
 
@@ -350,11 +391,12 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the default property.
      *
      * @param value
-     *     allowed object is
-     *     {@link String }
+     *            allowed object is
+     *            {@link String }
      *
      */
-    public void setDefault(String value) {
+    public void setDefault(String value)
+    {
         this._default = value;
     }
 
@@ -362,14 +404,16 @@ public class TadImpl implements KapuaTad {
      * Gets the value of the required property.
      *
      * @return
-     *     possible object is
-     *     {@link Boolean }
+     *         possible object is
+     *         {@link Boolean }
      *
      */
-    public boolean isRequired() {
+    public boolean isRequired()
+    {
         if (required == null) {
             return true;
-        } else {
+        }
+        else {
             return required;
         }
     }
@@ -378,11 +422,12 @@ public class TadImpl implements KapuaTad {
      * Sets the value of the required property.
      *
      * @param value
-     *     allowed object is
-     *     {@link Boolean }
+     *            allowed object is
+     *            {@link Boolean }
      *
      */
-    public void setRequired(Boolean value) {
+    public void setRequired(Boolean value)
+    {
         this.required = value;
     }
 
@@ -398,10 +443,16 @@ public class TadImpl implements KapuaTad {
      *
      *
      * @return
-     *     always non-null
+     *         always non-null
      */
-    public Map<QName, String> getOtherAttributes() {
+    public Map<QName, String> getOtherAttributes()
+    {
         return otherAttributes;
     }
 
+    public void putOtherAttribute(QName key, String value)
+    {
+        getOtherAttributes().put(key,
+                                 value);
+    }
 }

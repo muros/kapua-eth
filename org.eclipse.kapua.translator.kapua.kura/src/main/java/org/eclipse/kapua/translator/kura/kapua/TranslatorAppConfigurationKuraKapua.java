@@ -2,7 +2,6 @@ package org.eclipse.kapua.translator.kura.kapua;
 
 import java.io.StringWriter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,11 +11,13 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.configuration.metatype.TadImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TiconImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
+import org.eclipse.kapua.commons.configuration.metatype.ToptionImpl;
 import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.config.metatype.KapuaTad;
 import org.eclipse.kapua.model.config.metatype.KapuaTicon;
 import org.eclipse.kapua.model.config.metatype.KapuaTocd;
+import org.eclipse.kapua.model.config.metatype.KapuaToption;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
@@ -198,15 +199,14 @@ public class TranslatorAppConfigurationKuraKapua implements Translator<KuraRespo
 
     private KapuaTocd translateDefinitions(KapuaTocd kuraDefinition)
     {
-        KapuaTocd definition = new TocdImpl();
+        TocdImpl definition = new TocdImpl();
 
         definition.setId(kuraDefinition.getId());
         definition.setName(kuraDefinition.getName());
         definition.setDescription(kuraDefinition.getDescription());
 
-        List<KapuaTad> ads = definition.getAD();
         for (KapuaTad kuraAd : kuraDefinition.getAD()) {
-            KapuaTad ad = new TadImpl();
+            TadImpl ad = new TadImpl();
             ad.setCardinality(kuraAd.getCardinality());
             ad.setDefault(ad.getDefault());
             ad.setDescription(kuraAd.getDescription());
@@ -216,26 +216,38 @@ public class TranslatorAppConfigurationKuraKapua implements Translator<KuraRespo
             ad.setName(kuraAd.getName());
             ad.setType(kuraAd.getType());
 
-            ads.add(ad);
+            for (KapuaToption kuraToption : kuraAd.getOption()) {
+                ToptionImpl kapuaToption = new ToptionImpl();
+
+                kapuaToption.setLabel(kuraToption.getLabel());
+                kapuaToption.setValue(kuraToption.getValue());
+
+                ad.addOption(kapuaToption);
+            }
+
+            for (Entry<QName, String> entry : kuraAd.getOtherAttributes().entrySet()) {
+                ad.putOtherAttribute(entry.getKey(),
+                                     entry.getValue());
+            }
+
+            definition.addAD(ad);
         }
 
-        List<KapuaTicon> icons = definition.getIcon();
         for (KapuaTicon kuraIcon : kuraDefinition.getIcon()) {
             KapuaTicon icon = new TiconImpl();
             icon.setResource(kuraIcon.getResource());
             icon.setSize(kuraIcon.getSize());
-            icons.add(icon);
+
+            definition.addIcon(icon);
         }
 
-        List<Object> anys = definition.getAny();
         for (Object kuraAny : kuraDefinition.getAny()) {
-            anys.add(kuraAny);
+            definition.addAny(kuraAny);
         }
 
-        Map<QName, String> otherAttributes = definition.getOtherAttributes();
         for (Entry<QName, String> entry : kuraDefinition.getOtherAttributes().entrySet()) {
-            otherAttributes.put(entry.getKey(),
-                                entry.getValue());
+            definition.putOtherAttribute(entry.getKey(),
+                                         entry.getValue());
         }
 
         return definition;

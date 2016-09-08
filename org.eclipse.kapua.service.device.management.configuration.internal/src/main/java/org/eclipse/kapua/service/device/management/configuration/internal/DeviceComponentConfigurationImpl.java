@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
 import org.eclipse.kapua.commons.configuration.metatype.XmlConfigPropertiesAdapter;
 import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
@@ -24,7 +25,7 @@ public class DeviceComponentConfigurationImpl implements DeviceComponentConfigur
     private String              name;
 
     @XmlElementRef
-    private KapuaTocd           definition;
+    private TocdImpl            definition;
 
     @XmlElement(name = "properties")
     @XmlJavaTypeAdapter(XmlConfigPropertiesAdapter.class)
@@ -63,13 +64,11 @@ public class DeviceComponentConfigurationImpl implements DeviceComponentConfigur
         this.name = name;
     }
 
-    // @Override
     public void setDefinition(KapuaTocd definition)
     {
-        this.definition = definition;
+        this.definition = (TocdImpl) definition;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public KapuaTocd getDefinition()
     {
