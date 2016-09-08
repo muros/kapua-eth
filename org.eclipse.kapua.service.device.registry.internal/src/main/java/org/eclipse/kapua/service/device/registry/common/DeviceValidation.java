@@ -23,11 +23,14 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.internal.DeviceDomain;
 
+/**
+ * Provides logic used to validate preconditions required to execute the device service operation.
+ */
 public final class DeviceValidation {
 
-    PermissionFactory permissionFactory;
+    private final PermissionFactory permissionFactory;
 
-    AuthorizationService authorizationService;
+    private final AuthorizationService authorizationService;
 
     public DeviceValidation(PermissionFactory permissionFactory, AuthorizationService authorizationService) {
         this.permissionFactory = permissionFactory;
