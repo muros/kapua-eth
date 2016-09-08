@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "trusty64/kapua-dev-box-0.1"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -93,25 +93,18 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
   export DEBIAN_FRONTEND=noninteractive
-
-     # update
-     sudo apt-get update -y
-
-	 ### install oracle jdk 8 ###
-     sudo add-apt-repository -y ppa:webupd8team/java
-     sudo apt-get update
-     echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
-     echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
-     sudo apt-get -y install -qq oracle-java8-installer
-
-     ### Install H2 database ###
-     sudo mkdir -p /usr/local/h2database/h2database-1.4.192
-     sudo mkdir -p /home/vagrant/H2/kapua
-	 sudo wget http://repo2.maven.org/maven2/com/h2database/h2/1.4.192/h2-1.4.192.jar -P /usr/local/h2database/h2database-1.4.192
-     sudo chown -R vagrant /usr/local/h2database/h2database-1.4.192
-     sudo chown -R vagrant /home/vagrant/H2/kapua
 	 
-     # H2 database post-install setup
+	 #########################
+     ### H2 database setup ###
+	 #########################
+
+     # change the owner and the group to vagrant
+     sudo chown -R vagrant /usr/local/h2database/h2database-1.4.192
+
+	 # Create the db dir
+     sudo mkdir -p /home/vagrant/H2/kapua
+     sudo chown -R vagrant /home/vagrant/H2/kapua
+
      # Run the database engine
      su --login -c "java -cp /usr/local/h2database/h2database-1.4.192/h2*.jar org.h2.tools.Server -baseDir /home/vagrant/H2/kapua -webAllowOthers -tcpAllowOthers -tcpPort 3306 &" vagrant
 	 
@@ -120,17 +113,17 @@ Vagrant.configure("2") do |config|
 	 	CREATE USER IF NOT EXISTS kapua PASSWORD 'kapua'; \
 	 	GRANT ALL ON SCHEMA kapuadb TO kapua;"
 
-     ### install activemq ###
-	 sudo mkdir -p /usr/local/activemq
-     sudo wget http://archive.apache.org/dist/activemq/5.11.0/apache-activemq-5.11.0-bin.tar.gz -P /usr/local/activemq
-     cd /usr/local/activemq
-     sudo tar zxvf apache-activemq-5.11.0-bin.tar.gz
-     sudo rm apache-activemq-5.11.0-bin.tar.gz
+	 ######################
+     ### ActiveMQ setup ###
+     ######################
+     
+     # change the owner and the group of activemq to vagrant
+     sudo chown -R vagrant /usr/local/activemq/apache-activemq-5.11.0
+     sudo chgrp -R vagrant /usr/local/activemq/apache-activemq-5.11.0
 
-     # configure activemq
      # Kapua jars and activemq.xml need to be added before starting the activemq instance...
 	   # config file
-	   cd apache-activemq-5.11.0
+	   cd /usr/local/activemq/apache-activemq-5.11.0
 	   rm conf/activemq.xml
 	   rm conf/log4j.properties
 	   ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/activemq.xml conf/activemq.xml
@@ -140,13 +133,9 @@ Vagrant.configure("2") do |config|
      chmod 555 start_broker.sh
      echo 'remove old guava jars'
      rm ./lib/optional/guava-*.*
+
      # enable debug
      sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
-     
-     # activemq post-install setup
-     # change the owner and the group of activemq to vagrant
-     sudo chown -R vagrant ../apache-activemq-5.11.0
-     sudo chgrp -R vagrant ../apache-activemq-5.11.0
 
      #database seeding (and create schema)
      # echo 'seedind database'
@@ -154,15 +143,11 @@ Vagrant.configure("2") do |config|
      # for name in $(find /kapua -name '*_create.sql' | grep -Ev 'test|console|api'); do echo invoke create sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
      # for name in $(find /kapua -name '*_seed.sql' | grep -Ev 'test|console|api'); do echo invoke seed sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
 
-     ### install Elasticsearch ###
-     sudo mkdir -p /usr/local/elasticsearch
-     sudo wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.4/elasticsearch-2.3.4.tar.gz -P /usr/local/elasticsearch
-     cd /usr/local/elasticsearch
-     sudo tar -xvf elasticsearch-2.3.4.tar.gz
-     sudo chown -R vagrant elasticsearch-2.3.4
-     sudo rm elasticsearch-2.3.4.tar.gz
-
-     # elasticsearch post-install setup
+	 ###########################
+     ### Elasticsearch setup ###
+     ###########################
+     
+     sudo chown -R vagrant /usr/local/elasticsearch/elasticsearch-2.3.4
      
      cd /usr/local/elasticsearch/elasticsearch-2.3.4/config
      echo "" >> elasticsearch.yml
@@ -171,18 +156,13 @@ Vagrant.configure("2") do |config|
      echo "#---------------------------" >> elasticsearch.yml
      echo "" >> elasticsearch.yml
      
-     # Elasticsearch 2.3.4 post install
      su --login -c "/usr/local/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch -d --cluster.name kapua-datastore" vagrant
 
-     ### install tomcat8 ###
-     sudo mkdir -p /usr/local/tomcat
-     sudo wget http://it.apache.contactlab.it/tomcat/tomcat-8/v8.5.4/bin/apache-tomcat-8.5.4.tar.gz -P /usr/local/tomcat
-     cd /usr/local/tomcat
-     sudo tar zxvf apache-tomcat-8.5.4.tar.gz
-     sudo chown -R vagrant apache-tomcat-8.5.4
-     sudo rm apache-tomcat-8.5.4.tar.gz
-
-     # tomcat 8.5.4 post install
+     ### tomcat 8.5.4 post install ###
+     
+     # change the owner and the group to vagrant
+     sudo chown -R vagrant /usr/local/tomcat/apache-tomcat-8.5.4
+     
      su --login -c "/usr/local/tomcat/apache-tomcat-8.5.4/bin/startup.sh" vagrant
      
 
