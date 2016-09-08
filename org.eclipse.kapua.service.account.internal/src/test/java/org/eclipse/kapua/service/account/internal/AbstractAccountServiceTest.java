@@ -15,10 +15,6 @@ package org.eclipse.kapua.service.account.internal;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
-import org.eclipse.kapua.commons.setting.system.SystemSetting;
-import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
-import org.eclipse.kapua.service.account.internal.setting.KapuaAccountSetting;
-import org.eclipse.kapua.service.account.internal.setting.KapuaAccountSettingKeys;
 import org.eclipse.kapua.test.KapuaTest;
 import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
