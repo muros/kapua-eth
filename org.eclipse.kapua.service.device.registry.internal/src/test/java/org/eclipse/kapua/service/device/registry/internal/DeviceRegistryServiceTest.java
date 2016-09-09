@@ -10,17 +10,18 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.registry.connection;
+package org.eclipse.kapua.service.device.registry.internal;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.shiro.AuthenticationEntityManagerFactory;
+import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
-import org.eclipse.kapua.service.device.registry.internal.DeviceCreatorImpl;
 import org.eclipse.kapua.test.KapuaTest;
 import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
@@ -77,9 +78,12 @@ public class DeviceRegistryServiceTest extends KapuaTest {
 
     @Test
     public void testCreate() throws Exception {
-        DeviceCreator deviceCreator = new TestDeviceCreator(new KapuaEid(BigInteger.ONE));
-        deviceCreator.setClientId("foo");
-//        deviceRegistryService.create(deviceCreator);
+        Device device = KapuaSecurityUtils.doPriviledge(() -> {
+            DeviceCreator deviceCreator = new TestDeviceCreator(new KapuaEid(BigInteger.ONE));
+            deviceCreator.setClientId("foo");
+//            return deviceRegistryService.create(deviceCreator);
+            return null;
+        });
     }
 
     class TestDeviceCreator extends DeviceCreatorImpl {
