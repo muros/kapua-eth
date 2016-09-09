@@ -48,7 +48,6 @@ import org.eclipse.kapua.service.authorization.user.role.UserRoles;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesFactory;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesService;
-import org.eclipse.kapua.service.datastore.MessageStoreService;
 import org.eclipse.kapua.service.device.registry.connection.internal.DeviceConnectionDomain;
 import org.eclipse.kapua.service.device.registry.internal.DeviceDomain;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain;

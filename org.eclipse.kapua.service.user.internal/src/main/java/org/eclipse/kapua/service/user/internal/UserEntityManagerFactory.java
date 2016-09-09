@@ -3,7 +3,6 @@ package org.eclipse.kapua.service.user.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
 import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 import org.slf4j.Logger;

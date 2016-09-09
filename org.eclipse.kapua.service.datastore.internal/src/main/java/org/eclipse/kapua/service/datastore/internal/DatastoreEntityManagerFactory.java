@@ -3,8 +3,8 @@ package org.eclipse.kapua.service.datastore.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.kapua.commons.util.AbstractEntityManagerFactory;
-import org.eclipse.kapua.commons.util.EntityManagerFactory;
+import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
+import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
 
 public class DatastoreEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory
 {

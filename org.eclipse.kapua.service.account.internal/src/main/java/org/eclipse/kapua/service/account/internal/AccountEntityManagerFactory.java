@@ -3,8 +3,8 @@ package org.eclipse.kapua.service.account.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
+import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 
 public class AccountEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory
 {

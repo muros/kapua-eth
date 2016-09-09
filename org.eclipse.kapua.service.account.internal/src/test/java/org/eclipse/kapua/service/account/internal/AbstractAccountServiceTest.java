@@ -39,7 +39,7 @@ public abstract class AbstractAccountServiceTest extends KapuaTest
             
             logger.info("Running database scripts...");
             
-            em = AccountEntityManagerFactory.getEntityManager();
+            em = AccountEntityManagerFactory.getInstance().createEntityManager();
             em.beginTransaction();
             
             SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();

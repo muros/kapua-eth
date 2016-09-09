@@ -46,7 +46,11 @@
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.locator.guice</artifactId>
 			<version>0.1-SNAPSHOT</version>
-			<scope>test</scope>
+		</dependency> 
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.generator.id.sequence</artifactId>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- -->
@@ -54,13 +58,6 @@
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.test</artifactId>
-			<version>0.1-SNAPSHOT</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.generator.id.sequence</artifactId>
 			<version>0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>

@@ -9,7 +9,7 @@
  * Contributors:
  *     Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.commons.util;
+package org.eclipse.kapua.commons.jpa;
 
 import org.eclipse.kapua.KapuaException;
 

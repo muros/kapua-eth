@@ -24,6 +24,7 @@ import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.account.Organization;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,6 +164,7 @@ public class AccountServiceTest extends AbstractAccountServiceTest
         assertTrue(account.getOrganization().getEmail().equals(accountCreator.getOrganizationEmail()));
     }
 
+    @Ignore
     @Test
     public void testConfiguration()
         throws Exception

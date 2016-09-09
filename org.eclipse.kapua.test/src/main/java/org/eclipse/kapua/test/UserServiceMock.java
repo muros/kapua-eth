@@ -8,6 +8,7 @@ import java.util.Map;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.locator.guice.TestService;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.user.User;
@@ -101,6 +102,30 @@ public class UserServiceMock implements UserService
         throws KapuaException
     {
         throw KapuaException.internalError("Not implemented");
+    }
+
+    @Override
+    public KapuaTocd getConfigMetadata()
+        throws KapuaException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getConfigValues(KapuaId scopeId)
+        throws KapuaException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setConfigValues(KapuaId scopeId, Map<String, Object> values)
+        throws KapuaException
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }

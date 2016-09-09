@@ -13,7 +13,7 @@ package org.eclipse.kapua.commons.configuration;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.service.internal.ServiceDAO;
-import org.eclipse.kapua.commons.util.EntityManager;
+import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 

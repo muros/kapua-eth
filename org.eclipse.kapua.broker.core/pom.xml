@@ -32,12 +32,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.configuration.spi</artifactId>
-			<version>0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.message</artifactId>
 			<version>0.1-SNAPSHOT</version>
 			<scope>provided</scope>
