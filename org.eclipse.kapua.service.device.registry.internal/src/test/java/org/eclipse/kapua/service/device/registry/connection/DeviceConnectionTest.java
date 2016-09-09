@@ -14,12 +14,20 @@ package org.eclipse.kapua.service.device.registry.connection;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.shiro.AuthenticationEntityManagerFactory;
+import org.eclipse.kapua.service.device.registry.DeviceCreator;
+import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
+import org.eclipse.kapua.service.device.registry.internal.DeviceCreatorImpl;
 import org.eclipse.kapua.test.KapuaTest;
 import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.math.BigInteger;
 
 public class DeviceConnectionTest extends KapuaTest {
     //
@@ -71,124 +79,12 @@ public class DeviceConnectionTest extends KapuaTest {
     }
 
     @Test
-    public void testCreate()
-        throws Exception
-    {
-        // {
-        // // Creator setup
-        // DeviceConnectionCreator deviceConnectionCreator = deviceConnectionFactory.newCreator(KapuaEidGenerator.generate());
-        // deviceConnectionCreator.setClientId("testClientId-" + generateRandomString());
-        // deviceConnectionCreator.setClientIp("111.222.111.111");
-        // deviceConnectionCreator.setProtocol("mqtt");
-        // deviceConnectionCreator.setServerIp("222.111.222.111");
-        // deviceConnectionCreator.setUserId(adminUserId);
-        //
-        // // Create
-        // DeviceConnection deviceConnection = deviceConnectionService.create(deviceConnectionCreator);
-        //
-        // // Verify
-        // assertNotNull(deviceConnection);
-        // assertNotNull(deviceConnection.getId());
-        // assertEquals(deviceConnectionCreator.getScopeId(), deviceConnection.getScopeId());
-        // assertNotNull(deviceConnection.getCreatedOn());
-        // assertEquals(adminUserId, deviceConnection.getCreatedBy());
-        // assertNotNull(deviceConnection.getModifiedOn());
-        // assertEquals(adminUserId, deviceConnection.getModifiedBy());
-        // assertEquals(deviceConnectionCreator.getClientId(), deviceConnection.getClientId());
-        // assertEquals(adminUserId, deviceConnection.getUserId());
-        // assertEquals(deviceConnectionCreator.getProtocol(), deviceConnection.getProtocol());
-        // assertEquals(deviceConnectionCreator.getClientIp(), deviceConnection.getClientIp());
-        // assertEquals(deviceConnectionCreator.getServerIp(), deviceConnection.getServerIp());
-        //
-        // assertEquals(new Properties(), deviceConnection.getEntityAttributes());
-        // assertEquals(new Properties(), deviceConnection.getEntityProperties());
-        // assertEquals(DeviceConnectionStatus.CONNECTED, deviceConnection.getStatus());
-        // }
-        //
-        // @Test
-        // public void testUpdate()
-        // throws Exception
-        // {
-        // // Creator setup
-        // DeviceConnectionCreator deviceConnectionCreator = deviceConnectionFactory.newCreator(KapuaEidGenerator.generate());
-        // deviceConnectionCreator.setClientId("testClientId-" + generateRandomString());
-        // deviceConnectionCreator.setClientIp("111.222.111.111");
-        // deviceConnectionCreator.setServerIp("222.111.222.111");
-        // deviceConnectionCreator.setProtocol("mqtt");
-        // deviceConnectionCreator.setUserId(adminUserId);
-        //
-        // // Create
-        // DeviceConnection deviceConnection = deviceConnectionService.create(deviceConnectionCreator);
-        //
-        // // Verify
-        // assertNotNull(deviceConnection);
-        // assertNotNull(deviceConnection.getId());
-        // assertEquals(deviceConnectionCreator.getScopeId(), deviceConnection.getScopeId());
-        // assertNotNull(deviceConnection.getCreatedOn());
-        // assertEquals(adminUserId, deviceConnection.getCreatedBy());
-        // assertNotNull(deviceConnection.getModifiedOn());
-        // assertEquals(adminUserId, deviceConnection.getModifiedBy());
-        // assertEquals(deviceConnectionCreator.getClientId(), deviceConnection.getClientId());
-        // assertEquals(adminUserId, deviceConnection.getUserId());
-        // assertEquals(deviceConnectionCreator.getProtocol(), deviceConnection.getProtocol());
-        // assertEquals(deviceConnectionCreator.getClientIp(), deviceConnection.getClientIp());
-        // assertEquals(deviceConnectionCreator.getServerIp(), deviceConnection.getServerIp());
-        //
-        // assertEquals(new Properties(), deviceConnection.getEntityAttributes());
-        // assertEquals(new Properties(), deviceConnection.getEntityProperties());
-        // assertEquals(DeviceConnectionStatus.CONNECTED, deviceConnection.getStatus());
-        //
-        // // Change informations
-        // Properties deviceConnectionProperties = new Properties();
-        // deviceConnectionProperties.setProperty("deviceConnectionProperties", "properties");
-        //
-        // Properties deviceConnectionAttributes = new Properties();
-        // deviceConnectionAttributes.setProperty("deviceConnectionAttributes", "attributes");
-        //
-        // deviceConnection.setClientId("notUpdatableField");
-        // deviceConnection.setClientIp("222.111.222.111");
-        // deviceConnection.setServerIp("111.222.111.222");
-        // deviceConnection.setEntityProperties(deviceConnectionProperties);
-        // deviceConnection.setEntityAttributes(deviceConnectionAttributes);
-        // deviceConnection.setProtocol("mqtts");
-        // deviceConnection.setStatus(DeviceConnectionStatus.DISCONNECTED);
-        //
-        // // Update
-        // Thread.sleep(10);
-        // DeviceConnection deviceConnectionUpdated = deviceConnectionService.update(deviceConnection);
-        //
-        // // Verify
-        // assertNotNull(deviceConnectionUpdated);
-        // assertEquals(deviceConnection.getId(), deviceConnectionUpdated.getId());
-        // assertEquals(deviceConnection.getScopeId(), deviceConnectionUpdated.getScopeId());
-        // assertEquals(deviceConnection.getCreatedOn(), deviceConnectionUpdated.getCreatedOn());
-        // assertEquals(deviceConnection.getCreatedBy(), deviceConnectionUpdated.getCreatedBy());
-        //
-        // assertEquals(deviceConnection.getCreatedOn(), deviceConnection.getModifiedOn());
-        // assertTrue(deviceConnection.getModifiedOn().getTime() < deviceConnectionUpdated.getModifiedOn().getTime());
-        // assertTrue(deviceConnectionUpdated.getCreatedOn().getTime() < deviceConnectionUpdated.getModifiedOn().getTime());
-        // assertEquals(deviceConnection.getModifiedBy(), deviceConnectionUpdated.getModifiedBy());
-        // assertEquals(deviceConnection.getModifiedBy(), deviceConnectionUpdated.getModifiedBy());
-        //
-        // assertNotEquals(deviceConnection.getClientId(), deviceConnectionUpdated.getClientId());
-        // assertEquals(deviceConnectionCreator.getClientId(), deviceConnectionUpdated.getClientId());
-        //
-        // assertEquals(deviceConnection.getClientIp(), deviceConnectionUpdated.getClientIp());
-        // assertEquals(deviceConnection.getServerIp(), deviceConnectionUpdated.getServerIp());
-        // assertEquals(deviceConnectionProperties, deviceConnectionUpdated.getEntityProperties());
-        // assertEquals(deviceConnectionAttributes, deviceConnectionUpdated.getEntityAttributes());
-        // assertEquals(deviceConnection.getProtocol(), deviceConnectionUpdated.getProtocol());
-        // assertEquals(DeviceConnectionStatus.DISCONNECTED, deviceConnectionUpdated.getStatus());
-        //
-        // // Test optimistic lock
-        // try {
-        // deviceConnectionService.update(deviceConnection);
-        // }
-        // catch (KapuaOptimisticLockingException e) {
-        // assertEquals(KapuaOptimisticLockingException.class, e.getClass());
-        // }
-        // }
-        //
+    public void testCreate() throws Exception {
+        DeviceRegistryService deviceRegistryService = KapuaLocator.getInstance().getService(DeviceRegistryService.class);
+        DeviceCreator deviceCreator = new TestDeviceCreator(new KapuaEid(BigInteger.ONE));
+        deviceCreator.setClientId("foo");
+//        deviceRegistryService.create(deviceCreator);
+
         // @Test
         // public void testFind()
         // throws Exception
@@ -274,5 +170,14 @@ public class DeviceConnectionTest extends KapuaTest {
         // // Verify
         // assertNull(foundDeviceConnection);
     }
+
+    class TestDeviceCreator extends DeviceCreatorImpl {
+
+        protected TestDeviceCreator(KapuaId scopeId) {
+            super(scopeId);
+        }
+
+    }
+
 
 }
