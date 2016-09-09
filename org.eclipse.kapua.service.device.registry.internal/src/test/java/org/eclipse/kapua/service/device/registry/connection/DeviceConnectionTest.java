@@ -12,13 +12,63 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.connection;
 
+import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.jpa.EntityManager;
+import org.eclipse.kapua.service.authentication.shiro.AuthenticationEntityManagerFactory;
+import org.eclipse.kapua.test.KapuaTest;
+import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class DeviceConnectionTest// extends KapuaTest
-{
+public class DeviceConnectionTest extends KapuaTest {
     //
     // static DeviceConnectionService deviceConnectionService = locator.getService(DeviceConnectionService.class);
     // static DeviceConnectionFactory deviceConnectionFactory = locator.getFactory(DeviceConnectionFactory.class);
+
+    public static String DEFAULT_PATH = "src/main/sql/H2";
+    public static String DEFAULT_FILTER = "athz_*.sql";
+    public static String DROP_FILTER = "athz_*_drop.sql";
+
+    public static void scriptSession(String path, String fileFilter)
+    {
+        EntityManager em = null;
+        try {
+
+            em = AuthenticationEntityManagerFactory.getEntityManager();
+            em.beginTransaction();
+
+            SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();
+            sqlScriptExecutor.scanScripts(path, fileFilter);
+            sqlScriptExecutor.executeUpdate(em);
+
+            em.commit();
+
+        }
+        catch (KapuaException e) {
+            if (em != null)
+                em.rollback();
+        }
+        finally {
+            if (em != null)
+                em.close();
+        }
+
+    }
+
+    @BeforeClass
+    public static void tearUp()
+            throws KapuaException
+    {
+        enableH2Connection();
+        scriptSession(DEFAULT_PATH, DEFAULT_FILTER);
+    }
+
+    @AfterClass
+    public static void tearDown()
+    {
+        scriptSession(DEFAULT_PATH, DROP_FILTER);
+    }
 
     @Test
     public void testCreate()
