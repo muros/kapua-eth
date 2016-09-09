@@ -52,6 +52,11 @@
         <!-- Internal test dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.locator.guice</artifactId>
             <scope>test</scope>
         </dependency>

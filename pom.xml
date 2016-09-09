@@ -262,6 +262,11 @@
                 <artifactId>org.eclipse.kapua.service.user.internal</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>org.eclipse.kapua.test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- External dependencies -->
             <dependency>
