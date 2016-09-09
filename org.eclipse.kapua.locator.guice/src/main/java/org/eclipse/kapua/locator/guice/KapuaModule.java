@@ -17,10 +17,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.ImmutableList;
 import org.eclipse.kapua.KapuaErrorCodes;
 import org.eclipse.kapua.KapuaRuntimeException;
 import org.eclipse.kapua.commons.util.ResourceUtils;
@@ -48,7 +45,7 @@ public class KapuaModule extends AbstractModule
 	{
 		BufferedReader br = null;
 		try {
-			List<URL> servicesDefinitions = Arrays.asList(getClass().getClassLoader().getResource(SERVICE_RESOURCE), getClass().getClassLoader().getResource(SERVICE_TEST_RESOURCE));
+			List<URL> servicesDefinitions = Arrays.asList(ResourceUtils.getResource(SERVICE_RESOURCE), ResourceUtils.getResource(SERVICE_TEST_RESOURCE));
 
 			for (URL servicesUrl : servicesDefinitions) {
 				if (servicesUrl != null) {
@@ -75,6 +72,10 @@ public class KapuaModule extends AbstractModule
 						} catch (Exception e) {
 							s_logger.error("Cannot load Kapua service/factory " + trimmedServiceLine, e);
 						}
+						 catch (Throwable e) {
+								s_logger.error("Cannot load Kapua service/factory " + trimmedServiceLine, e);
+						throw e;	
+						 }
 					}
 				}
 			}
