@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2016 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package org.eclipse.kapua.commons.jpa;
 
 import java.util.HashMap;
@@ -5,7 +15,7 @@ import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
 
-public class CommonsEntityManagerFactory extends AbstractEntityManagerFactory
+public class CommonsEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory
 {
     private static final String                PERSISTENCE_UNIT_NAME = "kapua-commons";
     private static final String                DATASOURCE_NAME       = "kapua-dbpool";
@@ -24,5 +34,10 @@ public class CommonsEntityManagerFactory extends AbstractEntityManagerFactory
         throws KapuaException
     {
         return instance.createEntityManager();
+    }
+    
+    public static CommonsEntityManagerFactory getInstance()
+    {
+    	return instance;
     }
 }

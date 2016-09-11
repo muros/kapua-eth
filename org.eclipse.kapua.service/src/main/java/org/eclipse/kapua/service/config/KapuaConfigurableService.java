@@ -15,12 +15,12 @@ package org.eclipse.kapua.service.config;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.model.id.KapuaId;
 
 public interface KapuaConfigurableService
 {
-	public Tocd getConfigMetadata() throws KapuaException;
+	public KapuaTocd getConfigMetadata() throws KapuaException;
 	
 	public Map<String, Object> getConfigValues(KapuaId scopeId) throws KapuaException;
 	

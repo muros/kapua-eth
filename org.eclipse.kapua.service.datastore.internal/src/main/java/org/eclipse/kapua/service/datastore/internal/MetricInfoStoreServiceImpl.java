@@ -3,7 +3,7 @@ package org.eclipse.kapua.service.datastore.internal;
 import java.util.ArrayList;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.service.internal.AbstractKapuaConfigurableService;
+import org.eclipse.kapua.commons.configuration.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -47,8 +47,7 @@ public class MetricInfoStoreServiceImpl extends AbstractKapuaConfigurableService
 
     public MetricInfoStoreServiceImpl()
     {
-        // TODO pass a correct pid and a correct domain
-        super("PID", DatastoreDomain.DATASTORE);
+        super(MetricInfoStoreService.class.getName(), DatastoreDomain.DATASTORE, DatastoreEntityManagerFactory.getInstance());
 
         KapuaLocator locator = KapuaLocator.getInstance();
         accountService = locator.getService(AccountService.class);

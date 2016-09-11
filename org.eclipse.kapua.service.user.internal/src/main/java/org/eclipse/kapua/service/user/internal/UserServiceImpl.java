@@ -15,6 +15,7 @@ package org.eclipse.kapua.service.user.internal;
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalArgumentException;
+import org.eclipse.kapua.commons.configuration.AbstractKapuaConfigurableService;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
@@ -32,11 +33,17 @@ import org.eclipse.kapua.service.user.UserService;
 /**
  * UserServiceImpl implements the Kapua User Service.
  */
-public class UserServiceImpl implements UserService
+public class UserServiceImpl extends AbstractKapuaConfigurableService implements UserService
 {
+    private static final long serialVersionUID = 4319929212203916781L;
 
     private final KapuaLocator locator = KapuaLocator.getInstance();
 
+    public UserServiceImpl()
+    {
+        super(UserService.class.getName(), UserDomain.USER, UserEntityManagerFactory.getInstance());
+    }
+    
     @Override
     public User create(UserCreator userCreator)
         throws KapuaException
@@ -59,7 +66,7 @@ public class UserServiceImpl implements UserService
         //
         // Do create
         User user = null;
-        EntityManager em = UserEntityManagerFactory.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getInstance().createEntityManager();;
         try {
 
             em.beginTransaction();
@@ -103,7 +110,7 @@ public class UserServiceImpl implements UserService
         //
         // Do update
         User userUpdated = null;
-        EntityManager em = UserEntityManagerFactory.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getInstance().createEntityManager();
         try {
 
             User currentUser = UserDAO.find(em, user.getId());
@@ -144,7 +151,7 @@ public class UserServiceImpl implements UserService
         authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.write, user.getScopeId()));
 
         // Do the delete
-        EntityManager em = UserEntityManagerFactory.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getInstance().createEntityManager();
         try {
             KapuaId userId = user.getId();
 
@@ -188,7 +195,7 @@ public class UserServiceImpl implements UserService
 
         // Do the find
         User user = null;
-        EntityManager em = UserEntityManagerFactory.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getInstance().createEntityManager();;
         try {
             user = UserDAO.find(em, userId);
         }
@@ -211,7 +218,7 @@ public class UserServiceImpl implements UserService
 
         // Do the find
         User user = null;
-        EntityManager em = UserEntityManagerFactory.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getInstance().createEntityManager();;
         try {
             user = UserDAO.findByName(em, name);
         }
@@ -251,7 +258,7 @@ public class UserServiceImpl implements UserService
         //
         // Do count
         UserListResult result = null;
-        EntityManager em = UserEntityManagerFactory.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getInstance().createEntityManager();;
         try {
             result = UserDAO.query(em, query);
         }
@@ -281,7 +288,7 @@ public class UserServiceImpl implements UserService
         //
         // Do count
         long count = 0;
-        EntityManager em = UserEntityManagerFactory.getEntityManager();
+        EntityManager em = UserEntityManagerFactory.getInstance().createEntityManager();;
         try {
             count = UserDAO.count(em, query);
         }

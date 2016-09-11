@@ -31,13 +31,6 @@
 			<artifactId>org.eclipse.kapua.commons</artifactId>
 		</dependency>
 
-		<!-- Internal testing dependencies -->
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user</artifactId>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- External dependencies -->
 		<dependency>
 			<groupId>com.google.inject</groupId>

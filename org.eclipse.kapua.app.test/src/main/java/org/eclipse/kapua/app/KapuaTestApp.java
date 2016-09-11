@@ -13,12 +13,14 @@
 package org.eclipse.kapua.app;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.service.account.Account;
@@ -100,12 +102,21 @@ public class KapuaTestApp
             System.err.println("Found admin user: " + adminUser.getName() + " with userId: " + adminUser.getId());
             System.err.println("");
 
-            //
+            // Test user service configurations
+            KapuaTocd ocd = userService.getConfigMetadata();
+            Map<String, Object> values = userService.getConfigValues(adminUser.getScopeId());
+            userService.setConfigValues(adminUser.getScopeId(), values);
+            
             // Test find account
             AccountService accountService = locator.getService(AccountService.class);
             Account account = accountService.find(adminUser.getScopeId());
             System.err.println("Found admin account: " + account.getName() + " with userId: " + account.getId());
             System.err.println("");
+
+            // Test account service configurations
+            ocd = accountService.getConfigMetadata();
+            values = accountService.getConfigValues(adminUser.getScopeId());
+            accountService.setConfigValues(adminUser.getScopeId(), values);
 
             //
             // Test create user

@@ -62,10 +62,10 @@ import org.eclipse.kapua.commons.model.query.FieldSortCriteria.SortOrder;
 import org.eclipse.kapua.commons.model.query.predicate.AndPredicate;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.config.metatype.Tad;
-import org.eclipse.kapua.model.config.metatype.Ticon;
-import org.eclipse.kapua.model.config.metatype.Tocd;
-import org.eclipse.kapua.model.config.metatype.Toption;
+import org.eclipse.kapua.model.config.metatype.KapuaTad;
+import org.eclipse.kapua.model.config.metatype.KapuaTicon;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
+import org.eclipse.kapua.model.config.metatype.KapuaToption;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.model.query.predicate.KapuaAndPredicate;
@@ -664,14 +664,14 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                         continue;
                     }
 
-                    Tocd ocd = config.getDefinition();
+                    KapuaTocd ocd = config.getDefinition();
                     if (ocd != null) {
                         GwtConfigComponent gwtConfig = new GwtConfigComponent();
                         gwtConfig.setId(config.getId());
                         gwtConfig.setName(ocd.getName());
                         gwtConfig.setDescription(ocd.getDescription());
                         if (ocd.getIcon() != null && ocd.getIcon().size() > 0) {
-                            Ticon icon = ocd.getIcon().get(0);
+                            KapuaTicon icon = ocd.getIcon().get(0);
 
                             checkIconResource(icon);
 
@@ -680,18 +680,18 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
                         List<GwtConfigParameter> gwtParams = new ArrayList<>();
                         gwtConfig.setParameters(gwtParams);
-                        for (Tad ad : ocd.getAD()) {
+                        for (KapuaTad ad : ocd.getAD()) {
                             if (ad != null) {
                                 GwtConfigParameter gwtParam = new GwtConfigParameter();
                                 gwtParam.setId(ad.getId());
                                 gwtParam.setName(ad.getName());
                                 gwtParam.setDescription(ad.getDescription());
-                                gwtParam.setType(GwtConfigParameterType.valueOf(ad.getType().name()));
+                                gwtParam.setType(GwtConfigParameterType.fromString(ad.getType().value()));
                                 gwtParam.setRequired(ad.isRequired());
                                 gwtParam.setCardinality(ad.getCardinality());
                                 if (ad.getOption() != null && ad.getOption().size() > 0) {
                                     Map<String, String> options = new HashMap<>();
-                                    for (Toption option : ad.getOption()) {
+                                    for (KapuaToption option : ad.getOption()) {
                                         options.put(option.getLabel(), option.getValue());
                                     }
                                     gwtParam.setOptions(options);
@@ -1194,7 +1194,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
      * @throws NoSuchAlgorithmException
      * @throws ImageReadException
      */
-    private void checkIconResource(Ticon icon)
+    private void checkIconResource(KapuaTicon icon)
     {
         ConsoleSetting config = ConsoleSetting.getInstance();
 

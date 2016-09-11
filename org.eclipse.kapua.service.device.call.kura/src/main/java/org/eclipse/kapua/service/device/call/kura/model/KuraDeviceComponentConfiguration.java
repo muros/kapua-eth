@@ -22,7 +22,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.eclipse.kapua.model.config.metatype.Tocd;
+import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 
 /**
  * Describes the configuration of an OSGi Component.
@@ -55,7 +56,7 @@ public class KuraDeviceComponentConfiguration
      * Information XML resource associated to this Component.
      */
     @XmlElementRef
-    private Tocd                definition;
+    private TocdImpl            definition;
 
     /**
      * The Dictionary of properties currently used by this component.
@@ -90,14 +91,14 @@ public class KuraDeviceComponentConfiguration
         this.componentName = componentName;
     }
 
-    public Tocd getDefinition()
+    public KapuaTocd getDefinition()
     {
         return definition;
     }
 
-    public void setDefinition(Tocd definition)
+    public void setDefinition(KapuaTocd definition)
     {
-        this.definition = definition;
+        this.definition = (TocdImpl) definition;
     }
 
     public Map<String, Object> getProperties()

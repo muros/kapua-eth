@@ -133,7 +133,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -146,7 +146,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -159,7 +159,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore/>
+                                        <ignore />
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -346,17 +346,12 @@
         <!-- Commons libs -->
         <module>org.eclipse.kapua.commons</module>
 
-
         <!-- -->
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
         <module>org.eclipse.kapua.locator.guice</module>
 
         <!-- -->
-        <!-- Configurable service -->
-        <module>org.eclipse.kapua.configuration.spi</module>
-
-        <!--  -->
         <!-- Id generator service -->
         <module>org.eclipse.kapua.service.generator.id</module>
         <module>org.eclipse.kapua.service.generator.id.random.mysql</module>
@@ -454,7 +449,6 @@
         <!-- -->
         <!-- Test Framework -->
         <module>org.eclipse.kapua.test</module>
-        
     </modules>
 
     <licenses>

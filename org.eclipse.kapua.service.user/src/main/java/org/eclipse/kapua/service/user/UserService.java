@@ -18,6 +18,7 @@ import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.KapuaEntityService;
 import org.eclipse.kapua.service.KapuaNamedEntityService;
 import org.eclipse.kapua.service.KapuaUpdatableEntityService;
+import org.eclipse.kapua.service.config.KapuaConfigurableService;
 
 /**
  * UserService exposes APIs to manage User object under an Account.
@@ -26,7 +27,8 @@ import org.eclipse.kapua.service.KapuaUpdatableEntityService;
  */
 public interface UserService extends KapuaEntityService<User, UserCreator>,
                              KapuaUpdatableEntityService<User>,
-                             KapuaNamedEntityService<User>
+                             KapuaNamedEntityService<User>,
+                             KapuaConfigurableService
 {
     /**
      * Creates a new user under the account specified in the UserCreator.

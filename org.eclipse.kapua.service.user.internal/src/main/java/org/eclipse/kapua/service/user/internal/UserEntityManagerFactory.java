@@ -3,13 +3,12 @@ package org.eclipse.kapua.service.user.internal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
-import org.eclipse.kapua.commons.jpa.EntityManager;
+import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class UserEntityManagerFactory extends AbstractEntityManagerFactory
+public class UserEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory
 {
     @SuppressWarnings("unused")
     private static final Logger              LOG                 = LoggerFactory.getLogger(UserEntityManagerFactory.class);
@@ -24,10 +23,9 @@ public class UserEntityManagerFactory extends AbstractEntityManagerFactory
     {
         super(PERSISTENCE_UNIT_NAME, DATASOURCE_NAME, uniqueConstraints);
     }
-    
-    public static EntityManager getEntityManager()
-        throws KapuaException
+
+    public static EntityManagerFactory getInstance()
     {
-        return instance.createEntityManager();
+        return instance;
     }
 }
