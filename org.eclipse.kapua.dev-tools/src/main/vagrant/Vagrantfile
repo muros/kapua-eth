@@ -158,12 +158,12 @@ Vagrant.configure("2") do |config|
      
      su --login -c "/usr/local/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch -d --cluster.name kapua-datastore" vagrant
 
-     ### tomcat 8.5.4 post install ###
+     ### tomcat 8.5.5 post install ###
      
      # change the owner and the group to vagrant
-     sudo chown -R vagrant /usr/local/tomcat/apache-tomcat-8.5.4
+     sudo chown -R vagrant /usr/local/tomcat/apache-tomcat-8.5.5
      
-     su --login -c "/usr/local/tomcat/apache-tomcat-8.5.4/bin/startup.sh" vagrant
+     su --login -c "/usr/local/tomcat/apache-tomcat-8.5.5/bin/startup.sh" vagrant
      
 
   SHELL
