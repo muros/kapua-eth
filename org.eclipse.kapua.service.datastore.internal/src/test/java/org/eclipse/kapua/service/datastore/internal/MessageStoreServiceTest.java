@@ -27,12 +27,11 @@ import org.eclipse.kapua.service.datastore.MessageStoreService;
 import org.eclipse.kapua.service.datastore.model.MessageCreator;
 import org.eclipse.kapua.service.datastore.model.Payload;
 import org.eclipse.kapua.service.datastore.model.Position;
-import org.eclipse.kapua.test.KapuaTest;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MessageStoreServiceTest extends KapuaTest
+public class MessageStoreServiceTest extends AbstractMessageStoreServiceTest
 {
     @SuppressWarnings("unused")
     private static final Logger   s_logger = LoggerFactory.getLogger(MessageStoreServiceTest.class);

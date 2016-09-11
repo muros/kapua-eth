@@ -14,17 +14,18 @@ package org.eclipse.kapua.service.account.internal;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Map;
 
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.account.Organization;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,7 +165,6 @@ public class AccountServiceTest extends AbstractAccountServiceTest
         assertTrue(account.getOrganization().getEmail().equals(accountCreator.getOrganizationEmail()));
     }
 
-    @Ignore
     @Test
     public void testConfiguration()
         throws Exception
@@ -175,8 +175,9 @@ public class AccountServiceTest extends AbstractAccountServiceTest
         KapuaLocator locator = KapuaLocator.getInstance();
 
         AccountService accountService = locator.getService(AccountService.class);
-
-        accountService.setConfigValues(scopeId, null);
+        KapuaTocd ocd = accountService.getConfigMetadata();
+        Map<String, Object> values = accountService.getConfigValues(scopeId);
+        accountService.setConfigValues(scopeId, values);
 
         assertTrue(null == null);
     }

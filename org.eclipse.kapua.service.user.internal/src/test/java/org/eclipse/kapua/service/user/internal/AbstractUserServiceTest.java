@@ -14,9 +14,10 @@ package org.eclipse.kapua.service.user.internal;
 
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.configuration.KapuaConfigurableServiceSchemaUtils;
 import org.eclipse.kapua.commons.jpa.EntityManager;
+import org.eclipse.kapua.commons.jpa.SimpleSqlScriptExecutor;
 import org.eclipse.kapua.test.KapuaTest;
-import org.eclipse.kapua.test.SimpleSqlScriptExecutor;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ public abstract class AbstractUserServiceTest extends KapuaTest
     private static final Logger logger = LoggerFactory.getLogger(AbstractUserServiceTest.class);
     
     public static String DEFAULT_PATH = "./src/main/sql/H2/";
+
+    public static String DEFAULT_COMMONS_PATH = "../org.eclipse.kapua.commons";
     public static String DEFAULT_FILTER = "usr_*.sql";
     public static String DROP_FILTER = "usr_*_drop.sql";
 
@@ -65,6 +68,7 @@ public abstract class AbstractUserServiceTest extends KapuaTest
     public static void tearUp()
         throws KapuaException
     {
+    	KapuaConfigurableServiceSchemaUtils.createSchemaObjects(DEFAULT_COMMONS_PATH);
         scriptSession(DEFAULT_PATH, DEFAULT_FILTER);
     }
     
@@ -72,5 +76,6 @@ public abstract class AbstractUserServiceTest extends KapuaTest
     public static void tearDown()
     {
         scriptSession(DEFAULT_PATH, DROP_FILTER);
+    	KapuaConfigurableServiceSchemaUtils.dropSchemaObjects(DEFAULT_COMMONS_PATH);
     }
 }
