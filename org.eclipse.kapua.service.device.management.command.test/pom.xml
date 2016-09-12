@@ -97,5 +97,10 @@
             <version>0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

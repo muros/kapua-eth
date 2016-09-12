@@ -30,8 +30,12 @@
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
-        <!-- -->
-        <!-- Test dependencies -->
+        <!-- Testing dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.locator.guice</artifactId>
