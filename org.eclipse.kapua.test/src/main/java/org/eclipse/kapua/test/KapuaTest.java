@@ -8,8 +8,7 @@ package org.eclipse.kapua.test;
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Eurotech - initial API and implementation
- *
+ * Eurotech - initial API and implementation
  *******************************************************************************/
 
 
@@ -17,6 +16,7 @@ import java.util.Random;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.jpa.*;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -36,18 +36,18 @@ public class KapuaTest extends Assert {
 
     private static boolean isInitialized;
 
-    protected static Random       random  = new Random();
+    protected static Random random = new Random();
     protected static KapuaLocator locator = KapuaLocator.getInstance();
 
-    protected static KapuaId      adminUserId;
-    protected static KapuaId      adminScopeId;
+    protected static KapuaId adminUserId;
+    protected static KapuaId adminScopeId;
 
     @Before
     public void setUp() {
-        
-        
+
+
         LOG.debug("Setting up test...");
-        if(!isInitialized) {
+        if (!isInitialized) {
             LOG.debug("Kapua test context is not initialized. Initializing...");
             try {
                 //
@@ -71,8 +71,7 @@ public class KapuaTest extends Assert {
     }
 
     @AfterClass
-    public static void tearDown()
-    {
+    public static void tearDown() {
         LOG.debug("Stopping Kapua test context.");
         isInitialized = false;
         try {
@@ -80,8 +79,7 @@ public class KapuaTest extends Assert {
             AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
 
             authenticationService.logout();
-        }
-        catch (KapuaException exc) {
+        } catch (KapuaException exc) {
             exc.printStackTrace();
         }
     }
@@ -89,32 +87,41 @@ public class KapuaTest extends Assert {
     //
     // Test utility methods
     //
+
     /**
      * Generates a new random {@link String} of 10 chars with number and letters.
-     * 
+     *
      * @return the generated {@link String}
      */
-    protected static String generateRandomString()
-    {
+    protected static String generateRandomString() {
         return generateRandomString(10, true, true);
     }
 
     /**
      * Generates a random {@link String} from the given parameters
-     * 
+     *
      * @param chars length of the generated {@link String}
      * @param letters whether or not use chars
      * @param numbers whether or not use numbers
-     * 
+     *
      * @return the generated {@link String}
      */
-    protected static String generateRandomString(int chars, boolean letters, boolean numbers)
-    {
+    protected static String generateRandomString(int chars, boolean letters, boolean numbers) {
         return RandomStringUtils.random(chars, 0, 0, letters, numbers, null, random);
     }
 
     protected static void enableH2Connection() {
         System.setProperty(DB_JDBC_CONNECTION_URL_RESOLVER.key(), "H2");
     }
+
+    public static void scriptSession(AbstractEntityManagerFactory entityManagerFactory, String fileFilter) throws KapuaException {
+        entityManagerFactory.onEntityManager(entityManager -> {
+            entityManager.beginTransaction();
+            new SimpleSqlScriptExecutor().scanScripts(fileFilter).executeUpdate(entityManager);
+            entityManager.commit();
+            return null;
+        });
+    }
+
 
 }
