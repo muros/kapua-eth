@@ -27,9 +27,14 @@ public class SimpleSqlScriptExecutor
     private static final Logger logger = LoggerFactory.getLogger(SimpleSqlScriptExecutor.class);
 
     private static String WILDCAR_ANY = "*";
+
     private static String RUN_SCRIPT_CMD = "RUNSCRIPT FROM '%s'";
-    
+
+    private static String DEFAULT_SCRIPTS_PATH = "src/main/sql/H2";
+
     private List<String> queryStrings;
+
+    // Constructors
     
     public SimpleSqlScriptExecutor()
     {
@@ -105,8 +110,12 @@ public class SimpleSqlScriptExecutor
         this.addQueries(seedScripts);
         return this;
     }
-    
-    public SimpleSqlScriptExecutor addQuery(String sqlString)
+
+    public SimpleSqlScriptExecutor scanScripts(String filenameFilter) {
+        return scanScripts(DEFAULT_SCRIPTS_PATH, filenameFilter);
+    }
+
+        public SimpleSqlScriptExecutor addQuery(String sqlString)
     {
         this.queryStrings.add(sqlString);
         return this;
