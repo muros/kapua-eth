@@ -12,11 +12,11 @@ The development machine is a Vagrant machine that is based on a local vagrant bo
 
 You can check if there's already the vagrant box with the command:
 
-* $ sh ./vagrant box list
+* $ vagrant box list
 
 If the box is not present it can be created running the script:
 
-* create_kapua_box.sh
+* $ sh ./create_kapua_box.sh
 
 If the box needs to be created you have to remove the box from the local repo and then create it again:
 
