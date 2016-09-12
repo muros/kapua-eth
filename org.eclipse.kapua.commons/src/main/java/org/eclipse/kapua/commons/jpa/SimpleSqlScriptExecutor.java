@@ -32,15 +32,12 @@ public class SimpleSqlScriptExecutor
 
     private static String DEFAULT_SCRIPTS_PATH = "src/main/sql/H2";
 
-    private List<String> queryStrings;
+    // Members
 
-    // Constructors
-    
-    public SimpleSqlScriptExecutor()
-    {
-        queryStrings = new ArrayList<String>();
-    }
-    
+    private List<String> queryStrings = new ArrayList<>();
+
+    // Operations
+
     public void clearQueries()
     {
         queryStrings.clear();
@@ -64,23 +61,17 @@ public class SimpleSqlScriptExecutor
         final String finalPrefix = prefix;
         final String finalSuffix = suffix;
         
-        FilenameFilter sqlfilter = new FilenameFilter() {
+        FilenameFilter sqlfilter = (dir, name) -> {
+            if (finalPrefix.isEmpty() && finalSuffix.isEmpty())
+                return filenameFilter.equals(name);
 
-            @Override
-            public boolean accept(File dir, String name)
-            {
-                if (finalPrefix.isEmpty() && finalSuffix.isEmpty())
-                    return filenameFilter.equals(name);
-                    
-                if (!finalPrefix.isEmpty() && !name.startsWith(finalPrefix))
-                    return false;
-                    
-                if (!finalSuffix.isEmpty() && !name.endsWith(finalSuffix))
-                    return false;
-                
-                return true;
-            }
-            
+            if (!finalPrefix.isEmpty() && !name.startsWith(finalPrefix))
+                return false;
+
+            if (!finalSuffix.isEmpty() && !name.endsWith(finalSuffix))
+                return false;
+
+            return true;
         };
         
         String[] dirContents = new String[] {};
