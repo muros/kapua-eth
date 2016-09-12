@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.internal;
 
+import org.assertj.core.api.Assertions;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.SimpleSqlScriptExecutor;
@@ -34,11 +35,10 @@ public class DeviceRegistryServiceTest extends KapuaTest {
 
     DeviceRegistryService deviceRegistryService = KapuaLocator.getInstance().getService(DeviceRegistryService.class);
 
-    public static String DEFAULT_PATH = "src/main/sql/H2";
-    public static String DEFAULT_FILTER = "athz_*.sql";
-    public static String DROP_FILTER = "athz_*_drop.sql";
+    public static String DEFAULT_FILTER = "dvc_*.sql";
+    public static String DROP_FILTER = "dvc_*_drop.sql";
 
-    public static void scriptSession(String path, String fileFilter)
+    public static void scriptSession(String fileFilter)
     {
         EntityManager em = null;
         try {
@@ -47,7 +47,7 @@ public class DeviceRegistryServiceTest extends KapuaTest {
             em.beginTransaction();
 
             SimpleSqlScriptExecutor sqlScriptExecutor = new SimpleSqlScriptExecutor();
-            sqlScriptExecutor.scanScripts(path, fileFilter);
+            sqlScriptExecutor.scanScripts(fileFilter);
             sqlScriptExecutor.executeUpdate(em);
 
             em.commit();
@@ -67,24 +67,40 @@ public class DeviceRegistryServiceTest extends KapuaTest {
     @BeforeClass
     public static void beforeClass() throws KapuaException {
         enableH2Connection();
-        scriptSession(DEFAULT_PATH, DEFAULT_FILTER);
+        scriptSession(DEFAULT_FILTER);
     }
 
     @AfterClass
     public static void tearDown()
     {
-        scriptSession(DEFAULT_PATH, DROP_FILTER);
+        scriptSession(DROP_FILTER);
     }
 
+    // Tests
+
     @Test
-    public void testCreate() throws Exception {
+    public void shouldAssignIdAfterCreation() throws Exception {
         Device device = KapuaSecurityUtils.doPriviledge(() -> {
             DeviceCreator deviceCreator = new TestDeviceCreator(new KapuaEid(BigInteger.ONE));
             deviceCreator.setClientId("foo");
-//            return deviceRegistryService.create(deviceCreator);
+            return deviceRegistryService.create(deviceCreator);
+        });
+        Assertions.assertThat(device.getId()).isNotNull();
+    }
+
+    @Test
+    public void shouldFindDeviceByClientID() throws Exception {
+        KapuaSecurityUtils.doPriviledge(() -> {
+            DeviceCreator deviceCreator = new TestDeviceCreator(new KapuaEid(BigInteger.ONE));
+            deviceCreator.setClientId("bar");
+            deviceRegistryService.create(deviceCreator);
+            Device deviceFound = deviceRegistryService.findByClientId(new KapuaEid(BigInteger.ONE), "bar");
+            Assertions.assertThat(deviceFound).isNotNull();
             return null;
         });
     }
+
+    // Test classes
 
     class TestDeviceCreator extends DeviceCreatorImpl {
 
