@@ -15,11 +15,10 @@ package org.eclipse.kapua.service.device.registry.internal;
 import org.assertj.core.api.Assertions;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
+import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
-import org.eclipse.kapua.service.device.registry.Device;
-import org.eclipse.kapua.service.device.registry.DeviceCreator;
-import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
+import org.eclipse.kapua.service.device.registry.*;
 import org.eclipse.kapua.test.KapuaTest;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -153,6 +152,24 @@ public class DeviceRegistryServiceTest extends KapuaTest {
             // Then
             Device deviceFound = deviceRegistryService.find(scope, device.getId());
             Assertions.assertThat(deviceFound).isNull();
+            return null;
+        });
+    }
+
+    @Test
+    public void shouldFindByBiosVersion() throws Exception {
+        doPriviledge(() -> {
+            // Given
+            deviceCreator.setBiosVersion("foo");
+            deviceRegistryService.create(deviceCreator);
+            DeviceQuery query = new DeviceQueryImpl(scope);
+            query.setPredicate(new AttributePredicate<>("biosVersion", "foo"));
+
+            // When
+            DeviceListResult result = (DeviceListResult) deviceRegistryService.query(query);
+
+            // Then
+            Assertions.assertThat(result.get(0).getBiosVersion()).isEqualTo("foo");
             return null;
         });
     }
