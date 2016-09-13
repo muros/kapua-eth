@@ -34,9 +34,9 @@ import com.codahale.metrics.Timer.Context;
 		title="Data storage message processor", 
 		syntax="bean:dataStorageMessageListener",
 		scheme="bean") 
-public class DataStorageMessageListener extends AbstractListener<CamelKapuaMessage<?>> {
+public class DataStorageMessageProcessor extends AbstractProcessor<CamelKapuaMessage<?>> {
 	
-	private static final Logger logger = LoggerFactory.getLogger(DataStorageMessageListener.class);
+	private static final Logger logger = LoggerFactory.getLogger(DataStorageMessageProcessor.class);
 	
 	//metrics
 	private Counter metricStorageMessage;
@@ -48,8 +48,8 @@ public class DataStorageMessageListener extends AbstractListener<CamelKapuaMessa
 	private MessageStoreService messageStoreService = KapuaLocator.getInstance().getService(MessageStoreService.class);
 	private DatastoreObjectFactory datastoreObjectFactory = KapuaLocator.getInstance().getFactory(DatastoreObjectFactory.class);
 	
-	public DataStorageMessageListener() {
-		super("data");
+	public DataStorageMessageProcessor() {
+		super("DataStorage");
 		
 		//data message
 		metricStorageMessage                 = registerCounter("listener", "storage", "messages", "count");

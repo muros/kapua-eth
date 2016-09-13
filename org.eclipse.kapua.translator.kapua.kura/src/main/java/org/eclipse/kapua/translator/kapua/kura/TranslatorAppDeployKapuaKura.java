@@ -27,7 +27,7 @@ import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
 import org.org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
 
-public class TranslatorAppDeployKapuaKura implements Translator<DeployRequestMessage, KuraRequestMessage>
+public class TranslatorAppDeployKapuaKura extends Translator<DeployRequestMessage, KuraRequestMessage>
 {
     private static final String                            CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<DeployAppProperties, DeployMetrics> propertiesDictionary;

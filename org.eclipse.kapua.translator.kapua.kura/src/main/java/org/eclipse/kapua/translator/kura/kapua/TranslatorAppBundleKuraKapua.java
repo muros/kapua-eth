@@ -35,7 +35,7 @@ import org.org.eclipse.kapua.service.device.management.bundle.message.internal.B
 import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponseMessage;
 import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponsePayload;
 
-public class TranslatorAppBundleKuraKapua implements Translator<KuraResponseMessage, BundleResponseMessage>
+public class TranslatorAppBundleKuraKapua extends Translator<KuraResponseMessage, BundleResponseMessage>
 {
     private static final String                            CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<BundleMetrics, BundleAppProperties> metricsDictionary;

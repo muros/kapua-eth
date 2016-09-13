@@ -13,13 +13,13 @@
 package org.eclipse.kapua.service.device.registry.lifecycle;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.message.KapuaMessage;
+import org.eclipse.kapua.message.device.lifecycle.KapuaAppsMessage;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthMessage;
 import org.eclipse.kapua.message.device.lifecycle.KapuaDisconnectMessage;
+import org.eclipse.kapua.message.device.lifecycle.KapuaMissingMessage;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaService;
 
-@SuppressWarnings("rawtypes")
 public interface DeviceLifeCycleService extends KapuaService
 {
     /**
@@ -43,7 +43,7 @@ public interface DeviceLifeCycleService extends KapuaService
      * 
      * @throws KapuaException
      */
-    public <M extends KapuaMessage> void missing(KapuaId connectionId, M message)
+    public <M extends KapuaMissingMessage> void missing(KapuaId connectionId, M message)
         throws KapuaException;
 
     /**
@@ -51,6 +51,6 @@ public interface DeviceLifeCycleService extends KapuaService
      * 
      * @throws KapuaException
      */
-    public <M extends KapuaBirthMessage> void applications(KapuaId connectionId, M message)
+    public <M extends KapuaAppsMessage> void applications(KapuaId connectionId, M message)
         throws KapuaException;
 }

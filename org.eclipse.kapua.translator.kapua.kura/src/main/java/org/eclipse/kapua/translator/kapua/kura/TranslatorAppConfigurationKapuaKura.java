@@ -23,7 +23,7 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
-public class TranslatorAppConfigurationKapuaKura implements Translator<ConfigurationRequestMessage, KuraRequestMessage>
+public class TranslatorAppConfigurationKapuaKura extends Translator<ConfigurationRequestMessage, KuraRequestMessage>
 {
     private static final String                                          CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<ConfigurationAppProperties, ConfigurationMetrics> propertiesDictionary;

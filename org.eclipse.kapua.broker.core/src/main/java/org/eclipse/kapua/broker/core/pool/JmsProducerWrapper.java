@@ -12,20 +12,15 @@
  *******************************************************************************/
 package org.eclipse.kapua.broker.core.pool;
 
-import java.text.MessageFormat;
-
-import javax.jms.BytesMessage;
 import javax.jms.Connection;
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.eclipse.kapua.KapuaErrorCodes;
+import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
-import org.eclipse.kapua.broker.core.message.JmsUtil;
-import org.eclipse.kapua.broker.core.plugin.AclConstants;
-import org.eclipse.kapua.message.KapuaMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +52,7 @@ public abstract class JmsProducerWrapper {
 			connection.start();
 		}
 		session = connection.createSession(transacted, Session.AUTO_ACKNOWLEDGE);
-		//for virtual topic support we need to send connect/disconnect messages to the topics instead of queue then the destination will be dynamic ($EDC.{0}.{1}.MQTT.CONNECT) 
+		//for virtual topic support we need to send connect/disconnect messages to the topics instead of queue then the destination will be dynamic ($KAPUA.{0}.{1}.MQTT.CONNECT) 
 		if (destination!=null && destination.trim().length()>0) {
 			producer = session.createProducer(session.createQueue(destination));
 		}
@@ -85,24 +80,7 @@ public abstract class JmsProducerWrapper {
 		close();
 		super.finalize();
 	}
-	
-//	/**
-//	 * Send a message (raw payload)
-//	 * @param vmSession
-//	 * @param topic
-//	 * @param payload
-//	 * @return
-//	 * @throws JMSException
-//	 */
-//	public void sendRawMessage(String mqttTopic, byte[] payload) throws JMSException {
-//        String jmsTopic = MessageFormat.format(AclConstants.VT_TOPIC_PREFIX_TEMPLATE, JmsUtil.convertMqttWildCardToJms(mqttTopic));
-//		Destination destination = session.createTopic(jmsTopic);
-//        BytesMessage message = session.createBytesMessage();
-//        message.setJMSDestination(destination);
-//        message.writeBytes(payload);
-//        producer.send(destination, message);
-//	}
-	
+
 	/**
 	 * Send a message (raw payload)
 	 * @param vmSession
@@ -110,9 +88,11 @@ public abstract class JmsProducerWrapper {
 	 * @param payload
 	 * @return
 	 * @throws JMSException
+	 * @throws KapuaException 
 	 */
-	public void sendRawMessage(CamelKapuaMessage<?> message) throws JMSException {
-		//TODO
+	public void sendRawMessage(CamelKapuaMessage<?> message) throws JMSException, KapuaException {
+		s_logger.error("Feature not implemented yet!");
+		throw new KapuaException(KapuaErrorCodes.INTERNAL_ERROR);
 	}
 
 }

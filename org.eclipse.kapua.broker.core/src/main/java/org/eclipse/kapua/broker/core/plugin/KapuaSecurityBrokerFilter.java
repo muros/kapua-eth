@@ -2,7 +2,6 @@ package org.eclipse.kapua.broker.core.plugin;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.broker.core.message.MessageConstants;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
-import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -149,11 +147,8 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     {
         super(next);
 
-        connectorsDescriptorMap = new HashMap<String, ConnectorDescriptor>();
-        //TODO retrieve connector values from ??? (the key is the connector name)
-        connectorsDescriptorMap.put("mqtt", new ConnectorDescriptor("mqtt", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
-        connectorsDescriptorMap.put("mqtts", new ConnectorDescriptor("mqtts", "kura", "org.eclipse.kapua.service.device.call.message.kura.KuraMessage"));
-
+        connectorsDescriptorMap = ConnectorDescriptorLoader.loadConnectorDescriptors();
+        
         //login
         metricLoginSuccess              = metricsService.getCounter("security", "login", "success", "count");
         metricLoginRateLimited          = metricsService.getCounter("security", "login", "rate_limit", "count");
@@ -611,9 +606,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         		String username = kapuaSecurityContext.getUserName();
         		String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
 
-        		KapuaSession kapuaSession = KapuaSecurityUtils.getSession();
-        		KapuaId scopeId = kapuaSession.getScopeId();
-                KapuaId userId = kapuaSession.getUserId();
+        		KapuaId scopeId = ((KapuaPrincipal)kapuaSecurityContext.getMainPrincipal()).getAccountId();
         		
         		// multiple account stealing link fix
         		String fullClientId = MessageFormat.format(AclConstants.MULTI_ACCOUNT_CLIENT_ID, accountId, clientId);

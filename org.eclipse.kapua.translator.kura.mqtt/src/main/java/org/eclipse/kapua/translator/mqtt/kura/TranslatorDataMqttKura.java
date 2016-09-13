@@ -11,7 +11,7 @@ import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorDataMqttKura implements Translator<MqttMessage, KuraMessage>
+public class TranslatorDataMqttKura extends Translator<MqttMessage, KuraMessage>
 {
     @Override
     @SuppressWarnings("unchecked")

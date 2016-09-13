@@ -14,7 +14,7 @@ import org.eclipse.kapua.transport.message.jms.JmsPayload;
 import org.eclipse.kapua.transport.message.jms.JmsTopic;
 
 @SuppressWarnings("rawtypes")
-public class TranslatorDataKuraJms implements Translator<KuraMessage, JmsMessage>
+public class TranslatorDataKuraJms extends Translator<KuraMessage, JmsMessage>
 {
 
     @Override

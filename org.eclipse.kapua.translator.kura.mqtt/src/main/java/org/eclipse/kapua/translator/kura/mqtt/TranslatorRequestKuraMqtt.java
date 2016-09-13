@@ -14,7 +14,7 @@ import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
-public class TranslatorRequestKuraMqtt implements Translator<KuraRequestMessage, MqttMessage>
+public class TranslatorRequestKuraMqtt extends Translator<KuraRequestMessage, MqttMessage>
 {
     @Override
     public MqttMessage translate(KuraRequestMessage kuraMessage)

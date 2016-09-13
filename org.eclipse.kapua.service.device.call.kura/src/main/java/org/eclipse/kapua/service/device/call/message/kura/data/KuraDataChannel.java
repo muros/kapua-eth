@@ -1,8 +1,9 @@
-package org.eclipse.kapua.service.device.call.message.kura;
+package org.eclipse.kapua.service.device.call.message.kura.data;
 
 import java.util.List;
 
 import org.eclipse.kapua.service.device.call.message.data.DeviceDataChannel;
+import org.eclipse.kapua.service.device.call.message.kura.KuraChannel;
 
 public class KuraDataChannel extends KuraChannel implements DeviceDataChannel
 {

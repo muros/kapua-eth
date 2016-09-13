@@ -14,14 +14,16 @@ package org.eclipse.kapua.service.device.registry.lifecycle.internal;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.message.KapuaPayload;
 import org.eclipse.kapua.message.KapuaPosition;
+import org.eclipse.kapua.message.device.lifecycle.KapuaAppsMessage;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthChannel;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthMessage;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthPayload;
 import org.eclipse.kapua.message.device.lifecycle.KapuaDisconnectMessage;
+import org.eclipse.kapua.message.device.lifecycle.KapuaMissingMessage;
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
@@ -32,7 +34,6 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 import org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifeCycleService;
 
-@SuppressWarnings("rawtypes")
 public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
 {
     @Override
@@ -43,17 +44,16 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         KapuaBirthChannel channel = message.getChannel();
         KapuaId scopeId = message.getScopeId();
         KapuaId deviceId = message.getDeviceId();
-        String clientId = channel.getClientId();
 
         //
         // Device update
         KapuaLocator locator = KapuaLocator.getInstance();
         DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
-        Device device = deviceRegistryService.find(scopeId, deviceId);
+        Device device = null;
+        if (deviceId == null) {
+        	String clientId = channel.getClientId();
 
-        if (device == null) {
-            DeviceFactory deviceFactory = locator.getFactory(DeviceFactory.class);
-
+        	DeviceFactory deviceFactory = locator.getFactory(DeviceFactory.class);
             DeviceCreator deviceCreator = deviceFactory.newCreator(scopeId, clientId);
 
             deviceCreator.setDisplayName(payload.getDisplayName());
@@ -74,6 +74,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
             device = deviceRegistryService.create(deviceCreator);
         }
         else {
+        	device = deviceRegistryService.find(scopeId, deviceId);
             device.setDisplayName(payload.getDisplayName());
             device.setSerialNumber(payload.getSerialNumber());
             device.setModelId(payload.getModelId());
@@ -101,6 +102,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setResource("BIRTH");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
+        //TODO check this change
+        deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getSentOn());
 
         KapuaPosition position = message.getPosition();
@@ -135,6 +138,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setResource("DEATH");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
+        //TODO check this change
+        deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getSentOn());
 
         KapuaPosition position = message.getPosition();
@@ -146,7 +151,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
     }
 
     @Override
-    public void missing(KapuaId connectionId, KapuaMessage message)
+    public void missing(KapuaId connectionId, KapuaMissingMessage message)
         throws KapuaException
     {
         KapuaPayload payload = message.getPayload();
@@ -169,6 +174,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setResource("MISSING");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
+        //TODO check this change
+        deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getReceivedOn());
 
         KapuaPosition position = message.getPosition();
@@ -181,7 +188,7 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
     }
 
     @Override
-    public void applications(KapuaId connectionId, KapuaBirthMessage message)
+    public void applications(KapuaId connectionId, KapuaAppsMessage message)
         throws KapuaException
     {
         KapuaPayload payload = message.getPayload();
@@ -204,6 +211,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setResource("APPLICATION");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
+        //TODO check this change
+        deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getReceivedOn());
 
         KapuaPosition position = message.getPosition();

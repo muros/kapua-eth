@@ -47,7 +47,7 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
 	
 	static {
 		pools = new HashMap<JmsAssistantProducerPool.DESTINATIONS, JmsAssistantProducerPool>();
-		s_logger.info("Create pools for broker assistants (amq server instance)");
+		s_logger.info("Create pools for broker assistants (kapua server instance)");
 		s_logger.info("Create Service pool...");
 		//TODO parameter to be added to configuration
 //		pools.put(DESTINATIONS.KAPUA_SERVICE, 

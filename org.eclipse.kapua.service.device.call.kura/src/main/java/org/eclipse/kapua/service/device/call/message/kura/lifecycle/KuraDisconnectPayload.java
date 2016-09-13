@@ -10,18 +10,20 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.message.kura;
+package org.eclipse.kapua.service.device.call.message.kura.lifecycle;
 
-import java.io.IOException;
-import java.util.Iterator;
-
-import org.eclipse.kapua.message.internal.MessageException;
 import org.eclipse.kapua.service.device.call.message.DevicePayload;
+import org.eclipse.kapua.service.device.call.message.kura.KuraPayload;
 
 public class KuraDisconnectPayload extends KuraPayload implements DevicePayload
 {
     private final static String UPTIME       = "uptime";
     private final static String DISPLAY_NAME = "display_name";
+
+    public KuraDisconnectPayload() 
+    {
+    	super();
+    }
 
     public KuraDisconnectPayload(String uptime, String displayName)
     {
@@ -29,20 +31,6 @@ public class KuraDisconnectPayload extends KuraPayload implements DevicePayload
 
         getMetrics().put(UPTIME, uptime);
         getMetrics().put(DISPLAY_NAME, displayName);
-    }
-
-    public <P extends KuraPayload> KuraDisconnectPayload(P kuraPayload) throws MessageException, IOException
-    {
-        Iterator<String> hdrIterator = getMetrics().keySet().iterator();
-
-        while (hdrIterator.hasNext()) {
-            String hdrName = hdrIterator.next();
-            String hdrVal = (String) getMetrics().get(hdrName);
-
-            getMetrics().put(hdrName, hdrVal);
-        }
-
-        setBody(kuraPayload.getBody());
     }
 
     public String getUptime()
