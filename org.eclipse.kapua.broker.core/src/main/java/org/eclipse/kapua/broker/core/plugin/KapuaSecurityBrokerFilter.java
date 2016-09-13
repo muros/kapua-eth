@@ -35,6 +35,7 @@ import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.broker.core.message.MessageConstants;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
+import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -600,7 +601,15 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         		
         		KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
         		
-        		KapuaPrincipal kapuaPrincipal = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal());
+        		//TODO fix the kapua session when run as feature will be implemented
+        		KapuaPrincipal kapuaPrincipal = ((KapuaPrincipal)kapuaSecurityContext.getMainPrincipal());
+        		KapuaSession kapuaSession = new KapuaSession(null,
+        				kapuaPrincipal.getAccountId(),
+        				kapuaPrincipal.getAccountId(),
+        				kapuaPrincipal.getUserId(),
+        				kapuaPrincipal.getName());
+        		KapuaSecurityUtils.setSession(kapuaSession);
+        		
         		String clientId = kapuaPrincipal.getClientId();
         		KapuaId accountId = kapuaPrincipal.getAccountId();
         		String username = kapuaSecurityContext.getUserName();
