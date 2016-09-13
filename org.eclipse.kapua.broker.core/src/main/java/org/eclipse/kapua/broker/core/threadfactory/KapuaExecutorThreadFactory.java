@@ -78,7 +78,7 @@ public class KapuaExecutorThreadFactory implements ThreadFactory {
 				.append("_")
 				.append(COUNTER.incrementAndGet()).toString();
 		logger.info("Instantiate new thread {} from thread {} ...", new Object[]{threadName, Thread.currentThread().getName()});
-		Thread answer = new Thread(tdg, new KapuaRunnableWrapper(runnable, threadName, useLocalShiro, Thread.currentThread().getName().startsWith(name)), threadName);
+		Thread answer = new Thread(tdg, new KapuaRunnableWrapper(runnable, threadName), threadName);
 		answer.setDaemon(false);
 		logger.info("Instantiate new thread {} -> [{}] DONE", threadName, answer);
 		return answer;

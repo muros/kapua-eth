@@ -8,6 +8,8 @@ import org.eclipse.kapua.service.authentication.AccessToken;
 public class KapuaSession implements Serializable
 {
     private static final long serialVersionUID = -3831904230950408142L;
+    
+    public final static String KAPUA_SESSION_KEY = "KapuaSession";
 
     private AccessToken       accessToken;
     private KapuaId           runAsScopeId;
@@ -20,6 +22,19 @@ public class KapuaSession implements Serializable
     public KapuaSession()
     {
         super();
+    }
+    
+    /**
+     * creates a {@link KapuaSession} copy with trusted mode flag set to false 
+     * @param kapuaSession
+     * @return
+     */
+    public static KapuaSession createFrom(KapuaSession kapuaSession) {
+    	return new KapuaSession(kapuaSession.getAccessToken(),
+    			kapuaSession.getRunAsScopeId(),
+    			kapuaSession.getScopeId(),
+    			kapuaSession.getUserId(),
+    			kapuaSession.getUsername());
     }
 
     public KapuaSession(AccessToken accessToken,
@@ -65,7 +80,7 @@ public class KapuaSession implements Serializable
     {
         this.trustedMode = trustedMode;
     }
-
+    
     public final boolean isTrustedMode()
     {
         return trustedMode;
