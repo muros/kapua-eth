@@ -22,6 +22,7 @@
         <mariadb.version>1.4.6</mariadb.version>
         <mockito.version>1.10.19</mockito.version>
         <slf4j.version>1.7.2</slf4j.version>
+        <shiro.version>1.2.3</shiro.version>
         
         <!-- -->
         <!-- Database configuration for local installs and tests -->
@@ -133,7 +134,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -146,7 +147,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -159,7 +160,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore />
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -340,6 +341,7 @@
         <!-- Commons libs -->
         <module>org.eclipse.kapua.commons</module>
 
+
         <!-- -->
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
@@ -443,6 +445,7 @@
         <!-- -->
         <!-- Test Framework -->
         <module>org.eclipse.kapua.test</module>
+        
     </modules>
 
     <licenses>

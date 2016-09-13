@@ -341,8 +341,7 @@
                     <i18nConstantsWithLookupBundle>org.eclipse.kapua.app.console.client.messages.ValidationMessages</i18nConstantsWithLookupBundle>
                     <i18nMessagesBundle>org.eclipse.kapua.app.console.client.messages.ConsoleMessages</i18nMessagesBundle>
                     <webappDirectory>src/main/webapp</webappDirectory>
-                    <extraJvmArgs>-XX:MaxPermSize=512m -Xmx2048m \
-                        -XX:+UseParallelGC</extraJvmArgs>
+                    <extraJvmArgs>-Xmx2048m -XX:+UseParallelGC</extraJvmArgs>
                 </configuration>
             </plugin>
         </plugins>

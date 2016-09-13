@@ -31,12 +31,10 @@
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.authentication</artifactId>
-            <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-            <version>0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- -->
@@ -44,12 +42,10 @@
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.user</artifactId>
-            <version>0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.account</artifactId>
-            <version>0.1-SNAPSHOT</version>
         </dependency>
 
         <!-- -->
@@ -74,7 +70,7 @@
             <!-- Apache shiro security framework -->
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
-            <version>1.2.3</version>
+            <version>${shiro.version}</version>
         </dependency>
         <!-- BCrypt utilities for hashing and checking password -->
 	    <dependency>
