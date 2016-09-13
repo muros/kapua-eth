@@ -184,11 +184,11 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
                 String componentId = kuraDeviceCompConf.getComponentId();
                 DeviceComponentConfigurationImpl deviceComponentConfiguration = new DeviceComponentConfigurationImpl(componentId);
                 deviceComponentConfiguration.setName(kuraDeviceCompConf.getComponentName());
-                deviceComponentConfiguration.setProperties(translateProperties(kuraDeviceCompConf.getProperties()));
+                deviceComponentConfiguration.setProperties(translate(kuraDeviceCompConf.getProperties()));
 
                 // Translate also definitions when they are available
                 if (kuraDeviceCompConf.getDefinition() != null) {
-                    deviceComponentConfiguration.setDefinition(translateDefinitions(kuraDeviceCompConf.getDefinition()));
+                    deviceComponentConfiguration.setDefinition(translate(kuraDeviceCompConf.getDefinition()));
                 }
 
                 // Add to kapua configuration
@@ -209,7 +209,7 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
         }
     }
 
-    private KapuaTocd translateDefinitions(KapuaTocd kuraDefinition)
+    private KapuaTocd translate(KapuaTocd kuraDefinition)
     {
         TocdImpl definition = new TocdImpl();
 
@@ -265,7 +265,7 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
         return definition;
     }
 
-    private Map<String, Object> translateProperties(Map<String, Object> kuraProperties)
+    private Map<String, Object> translate(Map<String, Object> kuraProperties)
     {
         Map<String, Object> properties = new HashMap<>();
         for (Entry<String, Object> entry : kuraProperties.entrySet()) {

@@ -38,15 +38,14 @@ public class KuraDeviceConfiguration
 
     // Required by JAXB
     public KuraDeviceConfiguration()
-    {
-    }
+    {}
 
     public KuraDeviceConfiguration(String accountName, String clientId)
     {
-        super();
+        this();
         this.accountName = accountName;
         this.clientId = clientId;
-        configurations = new ArrayList<KuraDeviceComponentConfiguration>();
+        configurations = new ArrayList<>();
     }
 
     public String getAccountName()
@@ -71,6 +70,10 @@ public class KuraDeviceConfiguration
 
     public List<KuraDeviceComponentConfiguration> getConfigurations()
     {
+        if (configurations == null) {
+            configurations = new ArrayList<>();
+        }
+
         return configurations;
     }
 
