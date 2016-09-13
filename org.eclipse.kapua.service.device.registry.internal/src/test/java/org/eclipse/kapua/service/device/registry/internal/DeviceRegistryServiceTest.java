@@ -19,6 +19,7 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
+import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.test.KapuaTest;
 import org.junit.AfterClass;
@@ -29,6 +30,7 @@ import java.math.BigInteger;
 
 import static java.util.UUID.randomUUID;
 import static org.eclipse.kapua.commons.security.KapuaSecurityUtils.doPriviledge;
+import static org.eclipse.kapua.service.device.registry.DeviceCredentialsMode.LOOSE;
 
 public class DeviceRegistryServiceTest extends KapuaTest {
 
@@ -37,7 +39,13 @@ public class DeviceRegistryServiceTest extends KapuaTest {
     public static String DEFAULT_FILTER = "dvc_*.sql";
     public static String DROP_FILTER = "dvc_*_drop.sql";
 
+    // Data fixtures
+
+    KapuaEid scope = new KapuaEid(BigInteger.valueOf(random.nextLong()));
+
     String clientId = randomUUID().toString();
+
+    // Database fixtures
 
     @BeforeClass
     public static void beforeClass() throws KapuaException {
@@ -55,7 +63,7 @@ public class DeviceRegistryServiceTest extends KapuaTest {
     @Test
     public void shouldAssignIdAfterCreation() throws Exception {
         Device device = doPriviledge(() -> {
-            DeviceCreator deviceCreator = new TestDeviceCreator(new KapuaEid(BigInteger.ONE));
+            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
             deviceCreator.setClientId(clientId);
             return deviceRegistryService.create(deviceCreator);
         });
@@ -63,18 +71,73 @@ public class DeviceRegistryServiceTest extends KapuaTest {
     }
 
     @Test
+    public void shouldFindDeviceByID() throws Exception {
+        doPriviledge(() -> {
+            // Given
+            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
+            deviceCreator.setClientId(clientId);
+            Device device = deviceRegistryService.create(deviceCreator);
+
+            // When
+            Device deviceFound = deviceRegistryService.find(scope, device.getId());
+
+            // Then
+            Assertions.assertThat(deviceFound).isNotNull();
+            return null;
+        });
+    }
+
+    @Test
     public void shouldFindDeviceByClientID() throws Exception {
         doPriviledge(() -> {
             // Given
-            DeviceCreator deviceCreator = new TestDeviceCreator(new KapuaEid(BigInteger.ONE));
+            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
             deviceCreator.setClientId(clientId);
             deviceRegistryService.create(deviceCreator);
 
             // When
-            Device deviceFound = deviceRegistryService.findByClientId(new KapuaEid(BigInteger.ONE), clientId);
+            Device deviceFound = deviceRegistryService.findByClientId(scope, clientId);
 
             // Then
             Assertions.assertThat(deviceFound).isNotNull();
+            return null;
+        });
+    }
+
+    @Test
+    public void shouldUpdateDevice() throws Exception {
+        doPriviledge(() -> {
+            // Given
+            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
+            deviceCreator.setClientId(clientId);
+            Device device = deviceRegistryService.create(deviceCreator);
+            device.setBiosVersion("foo");
+
+            // When
+            deviceRegistryService.update(device);
+
+            // Then
+            Device deviceFound = deviceRegistryService.find(scope, device.getId());
+            Assertions.assertThat(deviceFound.getBiosVersion()).isEqualTo("foo");
+            return null;
+        });
+    }
+
+    @Test
+    public void shouldUpdateDeviceCredentialsMode() throws Exception {
+        doPriviledge(() -> {
+            // Given
+            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
+            deviceCreator.setClientId(clientId);
+            Device device = deviceRegistryService.create(deviceCreator);
+            device.setCredentialsMode(LOOSE);
+
+            // When
+            deviceRegistryService.update(device);
+
+            // Then
+            Device deviceFound = deviceRegistryService.find(scope, device.getId());
+            Assertions.assertThat(deviceFound.getCredentialsMode()).isEqualTo(LOOSE);
             return null;
         });
     }

@@ -220,9 +220,8 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
     private String                customAttribute5;
 
     @XmlElement(name = "devoceCredentialsMode")
-    @Enumerated(EnumType.STRING)
     @Column(name = "credentials_mode")
-    private DeviceCredentialsMode deviceCredentialsMode;
+    private String deviceCredentialsMode;
 
     @XmlElement(name = "preferredUserId")
     @Embedded
@@ -491,14 +490,14 @@ public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
         this.customAttribute5 = customAttribute5;
     }
 
-    public DeviceCredentialsMode getCredentialsMode()
-    {
-        return deviceCredentialsMode;
+    public DeviceCredentialsMode getCredentialsMode() {
+        return deviceCredentialsMode != null ? DeviceCredentialsMode.valueOf(deviceCredentialsMode) : null;
     }
 
-    public void setCredentialsMode(DeviceCredentialsMode deviceCredentialsMode)
-    {
-        this.deviceCredentialsMode = deviceCredentialsMode;
+    public void setCredentialsMode(DeviceCredentialsMode deviceCredentialsMode) {
+        if(deviceCredentialsMode != null) {
+            this.deviceCredentialsMode = deviceCredentialsMode.name();
+        }
     }
 
     public org.eclipse.kapua.model.id.KapuaId getPreferredUserId()
