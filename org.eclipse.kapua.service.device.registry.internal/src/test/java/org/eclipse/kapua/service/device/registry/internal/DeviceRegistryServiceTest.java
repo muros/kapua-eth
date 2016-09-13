@@ -19,10 +19,10 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
-import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.test.KapuaTest;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -45,6 +45,14 @@ public class DeviceRegistryServiceTest extends KapuaTest {
 
     String clientId = randomUUID().toString();
 
+    DeviceCreator deviceCreator;
+
+    @Before
+    public void before() {
+        deviceCreator = new TestDeviceCreator(scope);
+        deviceCreator.setClientId(clientId);
+    }
+
     // Database fixtures
 
     @BeforeClass
@@ -62,20 +70,17 @@ public class DeviceRegistryServiceTest extends KapuaTest {
 
     @Test
     public void shouldAssignIdAfterCreation() throws Exception {
-        Device device = doPriviledge(() -> {
-            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
-            deviceCreator.setClientId(clientId);
-            return deviceRegistryService.create(deviceCreator);
+        doPriviledge(() -> {
+            Device device = deviceRegistryService.create(deviceCreator);
+            Assertions.assertThat(device.getId()).isNotNull();
+            return null;
         });
-        Assertions.assertThat(device.getId()).isNotNull();
     }
 
     @Test
     public void shouldFindDeviceByID() throws Exception {
         doPriviledge(() -> {
             // Given
-            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
-            deviceCreator.setClientId(clientId);
             Device device = deviceRegistryService.create(deviceCreator);
 
             // When
@@ -91,8 +96,6 @@ public class DeviceRegistryServiceTest extends KapuaTest {
     public void shouldFindDeviceByClientID() throws Exception {
         doPriviledge(() -> {
             // Given
-            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
-            deviceCreator.setClientId(clientId);
             deviceRegistryService.create(deviceCreator);
 
             // When
@@ -108,8 +111,6 @@ public class DeviceRegistryServiceTest extends KapuaTest {
     public void shouldUpdateDevice() throws Exception {
         doPriviledge(() -> {
             // Given
-            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
-            deviceCreator.setClientId(clientId);
             Device device = deviceRegistryService.create(deviceCreator);
             device.setBiosVersion("foo");
 
@@ -127,8 +128,6 @@ public class DeviceRegistryServiceTest extends KapuaTest {
     public void shouldUpdateDeviceCredentialsMode() throws Exception {
         doPriviledge(() -> {
             // Given
-            DeviceCreator deviceCreator = new TestDeviceCreator(scope);
-            deviceCreator.setClientId(clientId);
             Device device = deviceRegistryService.create(deviceCreator);
             device.setCredentialsMode(LOOSE);
 
@@ -138,6 +137,22 @@ public class DeviceRegistryServiceTest extends KapuaTest {
             // Then
             Device deviceFound = deviceRegistryService.find(scope, device.getId());
             Assertions.assertThat(deviceFound.getCredentialsMode()).isEqualTo(LOOSE);
+            return null;
+        });
+    }
+
+    @Test
+    public void shouldFindDeleteDevice() throws Exception {
+        doPriviledge(() -> {
+            // Given
+            Device device = deviceRegistryService.create(deviceCreator);
+
+            // When
+            deviceRegistryService.delete(device);
+
+            // Then
+            Device deviceFound = deviceRegistryService.find(scope, device.getId());
+            Assertions.assertThat(deviceFound).isNull();
             return null;
         });
     }
