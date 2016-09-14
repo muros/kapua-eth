@@ -18,6 +18,7 @@ org.eclipse.kapua.service.authentication.AuthenticationService
 org.eclipse.kapua.service.authentication.credential.CredentialFactory
 org.eclipse.kapua.service.authentication.credential.CredentialService
 org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory
+
 org.eclipse.kapua.service.authorization.AuthorizationService
 org.eclipse.kapua.service.authorization.permission.PermissionFactory
 org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory
@@ -26,6 +27,7 @@ org.eclipse.kapua.service.authorization.role.RoleService
 org.eclipse.kapua.service.authorization.role.RoleFactory
 org.eclipse.kapua.service.authorization.user.role.UserRolesFactory
 org.eclipse.kapua.service.authorization.user.role.UserRolesService
+
 org.eclipse.kapua.service.device.registry.DeviceFactory
 org.eclipse.kapua.service.device.registry.DeviceRegistryService
 org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory
@@ -33,20 +35,20 @@ org.eclipse.kapua.service.device.registry.connection.DeviceConnectionService
 org.eclipse.kapua.service.device.registry.event.DeviceEventFactory
 org.eclipse.kapua.service.device.registry.event.DeviceEventService
 org.eclipse.kapua.service.device.registry.lifecycle.DeviceLifecycleDomain
+
 org.eclipse.kapua.service.device.call.DeviceCallFactory
 org.eclipse.kapua.service.device.call.DeviceMessageFactory
 
-org.eclipse.kapua.transport.TransportClientFactory
-
 org.eclipse.kapua.service.device.management.bundle.DeviceBundleManagementService
+org.eclipse.kapua.service.device.management.bundle.DeviceBundleFactory
 org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService
 org.eclipse.kapua.service.device.management.command.DeviceCommandFactory
 org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService
 org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory
 org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService
 org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentFactory
-org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory
 org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService
+org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory
 
 org.eclipse.kapua.service.generator.id.IdGeneratorService
 
@@ -55,3 +57,5 @@ org.eclipse.kapua.service.datastore.MessageStoreService
 org.eclipse.kapua.service.datastore.AssetInfoStoreService
 org.eclipse.kapua.service.datastore.TopicInfoStoreService
 org.eclipse.kapua.service.datastore.MetricInfoStoreService
+
+org.eclipse.kapua.transport.TransportClientFactory
