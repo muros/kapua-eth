@@ -108,15 +108,8 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventPredicates;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventQuery;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.extjs.gxt.ui.client.data.BaseListLoadResult;
-import com.extjs.gxt.ui.client.data.BasePagingLoadConfig;
-import com.extjs.gxt.ui.client.data.BasePagingLoadResult;
-import com.extjs.gxt.ui.client.data.ListLoadResult;
-import com.extjs.gxt.ui.client.data.PagingLoadConfig;
-import com.extjs.gxt.ui.client.data.PagingLoadResult;
+import src.main.java.org.eclipse.kapua.app.console.server.KapuaRemoteServiceServlet;
 
 /**
  * 
@@ -125,7 +118,7 @@ import com.extjs.gxt.ui.client.data.PagingLoadResult;
  */
 public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements GwtDeviceService {
 
-    private static Logger     logger           = LoggerFactory.getLogger(GwtDeviceServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(GwtDeviceServiceImpl.class);
 
     private static final long serialVersionUID = -1391026997499175151L;
 
@@ -531,8 +524,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId scopeId = KapuaEid.parseShortId(device.getScopeId());
             KapuaId id = KapuaEid.parseShortId(device.getId());
             DeviceBundles bundles = deviceBundleManagementService.get(scopeId,
-                                                        id,
-                                                        null);
+                                                                      id,
+                                                                      null);
 
             for (DeviceBundle bundle : bundles.getBundles()) {
                 GwtGroupedNVPair pair = new GwtGroupedNVPair();
@@ -747,8 +740,14 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                                                      compConfig,
                                                      null);
 
-        } catch (Throwable t) {
-            KapuaExceptionHandler.handle(t);
+            // //
+            // // Add an additional delay after the configuration update
+            // // to give the time to the device to apply the received
+            // // configuration
+            Thread.sleep(1000);
+        }
+        catch (Throwable t) {
+            EdcExceptionHandler.handle(t);
         }
     }
 
