@@ -28,6 +28,7 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
+import org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
 import org.eclipse.kapua.service.device.management.deploy.internal.DeployAppProperties;
 import org.eclipse.kapua.service.device.management.deploy.message.internal.DeployRequestChannel;
 import org.eclipse.kapua.service.device.management.deploy.message.internal.DeployRequestMessage;
@@ -37,7 +38,6 @@ import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
-import org.org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
 
 public class TranslatorAppDeployKapuaKura extends Translator<DeployRequestMessage, KuraRequestMessage>
 {

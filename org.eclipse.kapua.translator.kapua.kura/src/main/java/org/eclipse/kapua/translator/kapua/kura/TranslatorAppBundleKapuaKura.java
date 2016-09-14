@@ -27,13 +27,13 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
+import org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
+import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestChannel;
+import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestMessage;
+import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestPayload;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
-import org.org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
-import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestChannel;
-import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestMessage;
-import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestPayload;
 
 public class TranslatorAppBundleKapuaKura extends Translator<BundleRequestMessage, KuraRequestMessage>
 {
@@ -97,7 +97,7 @@ public class TranslatorAppBundleKapuaKura extends Translator<BundleRequestMessag
         List<String> resources = new ArrayList<>();
         switch (kapuaChannel.getMethod()) {
             case READ:
-                resources.add("bundle");
+                resources.add("bundles");
                 break;
             case EXECUTE:
             {

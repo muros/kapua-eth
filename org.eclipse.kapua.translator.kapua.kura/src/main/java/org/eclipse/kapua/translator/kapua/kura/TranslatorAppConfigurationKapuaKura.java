@@ -34,8 +34,8 @@ import org.eclipse.kapua.model.config.metatype.KapuaToption;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
-import org.eclipse.kapua.service.device.call.kura.model.KuraDeviceComponentConfiguration;
-import org.eclipse.kapua.service.device.call.kura.model.KuraDeviceConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceComponentConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceConfiguration;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
@@ -181,7 +181,6 @@ public class TranslatorAppConfigurationKapuaKura extends Translator<Configuratio
 
             KuraDeviceComponentConfiguration kuraComponentConfiguration = new KuraDeviceComponentConfiguration();
             kuraComponentConfiguration.setComponentId(kapuaDeviceCompConf.getId());
-            kuraComponentConfiguration.setComponentName(kapuaDeviceCompConf.getName());
             kuraComponentConfiguration.setProperties(translate(kapuaDeviceCompConf.getProperties()));
 
             // Translate also definitions when they are available
