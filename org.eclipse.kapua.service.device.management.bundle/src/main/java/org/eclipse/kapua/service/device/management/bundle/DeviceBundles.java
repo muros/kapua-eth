@@ -10,12 +10,11 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.org.eclipse.kapua.service.device.management.bundle.message.internal;
+package org.eclipse.kapua.service.device.management.bundle;
 
-import org.eclipse.kapua.message.KapuaPayload;
-import org.eclipse.kapua.service.device.management.commons.message.response.KapuaResponsePayloadImpl;
+import java.util.List;
 
-public class BundleResponsePayload extends KapuaResponsePayloadImpl implements KapuaPayload
+public interface DeviceBundles
 {
-
+    public <B extends DeviceBundle> List<B> getBundles();
 }

@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.KapuaService;
 
 public interface DeviceBundleManagementService extends KapuaService
 {
-    public DeviceBundleListResult get(KapuaId scopeId, KapuaId deviceId, Long timeout)
+    public DeviceBundles get(KapuaId scopeId, KapuaId deviceId, Long timeout)
         throws KapuaException;
 
     public void start(KapuaId scopeId, KapuaId deviceId, String bundleId, Long timeout)

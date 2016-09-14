@@ -10,27 +10,12 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.org.eclipse.kapua.service.device.management.bundle.internal;
+package org.eclipse.kapua.service.device.management.bundle.message.internal;
 
-import org.eclipse.kapua.service.device.management.KapuaAppProperties;
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.service.device.management.commons.message.response.KapuaResponsePayloadImpl;
 
-public enum BundleAppProperties implements KapuaAppProperties
+public class BundleResponsePayload extends KapuaResponsePayloadImpl implements KapuaPayload
 {
-	APP_NAME("BUNDLE"),
-    APP_VERSION("1.0.0"),
-    ;
 
-    private String value;
-
-    BundleAppProperties(String value)
-    {
-        this.value = value;
-    }
-
-    @Override
-    public String getValue()
-    {
-        return value;
-    }
-	
 }

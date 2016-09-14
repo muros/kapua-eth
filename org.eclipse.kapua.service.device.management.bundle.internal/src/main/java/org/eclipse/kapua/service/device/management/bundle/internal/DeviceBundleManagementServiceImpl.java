@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.org.eclipse.kapua.service.device.management.bundle.internal;
+package org.eclipse.kapua.service.device.management.bundle.internal;
 
 import java.util.Date;
 
@@ -23,8 +23,13 @@ import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 import org.eclipse.kapua.service.device.management.KapuaMethod;
-import org.eclipse.kapua.service.device.management.bundle.DeviceBundleListResult;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundleManagementService;
+import org.eclipse.kapua.service.device.management.bundle.DeviceBundles;
+import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestChannel;
+import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestMessage;
+import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestPayload;
+import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponseMessage;
+import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponsePayload;
 import org.eclipse.kapua.service.device.management.commons.DeviceManagementDomain;
 import org.eclipse.kapua.service.device.management.commons.call.DeviceCallExecutor;
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementErrorCodes;
@@ -34,18 +39,13 @@ import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagem
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
-import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestChannel;
-import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestMessage;
-import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestPayload;
-import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponseMessage;
-import org.org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponsePayload;
 
 public class DeviceBundleManagementServiceImpl implements DeviceBundleManagementService
 {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public DeviceBundleListResult get(KapuaId scopeId, KapuaId deviceId, Long timeout)
+    public DeviceBundles get(KapuaId scopeId, KapuaId deviceId, Long timeout)
         throws KapuaException
     {
         //
@@ -97,9 +97,9 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
 
         }
 
-        DeviceBundleListResult deviceBundleList = null;
+        DeviceBundles deviceBundleList = null;
         try {
-            deviceBundleList = XmlUtil.unmarshal(body, DeviceBundleListResult.class);
+            deviceBundleList = XmlUtil.unmarshal(body, DeviceBundlesImpl.class);
         }
         catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION,

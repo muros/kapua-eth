@@ -14,7 +14,6 @@ package org.eclipse.kapua.service.device.management.bundle;
 
 public interface DeviceBundle
 {
-
     public long getId();
 
     public void setId(long id);
