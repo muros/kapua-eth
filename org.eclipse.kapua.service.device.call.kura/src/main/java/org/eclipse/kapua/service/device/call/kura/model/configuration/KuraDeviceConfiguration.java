@@ -9,7 +9,7 @@
  * Contributors:
  *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.kura.model;
+package org.eclipse.kapua.service.device.call.kura.model.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * A container for a list of OSGi component configurations.
@@ -27,12 +26,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class KuraDeviceConfiguration
 {
-    @XmlTransient
-    private String accountName;
-
-    @XmlTransient
-    private String clientId;
-
     @XmlElement(name = "configuration")
     private List<KuraDeviceComponentConfiguration> configurations;
 
@@ -43,29 +36,7 @@ public class KuraDeviceConfiguration
     public KuraDeviceConfiguration(String accountName, String clientId)
     {
         this();
-        this.accountName = accountName;
-        this.clientId = clientId;
         configurations = new ArrayList<>();
-    }
-
-    public String getAccountName()
-    {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName)
-    {
-        this.accountName = accountName;
-    }
-
-    public String getClientId()
-    {
-        return clientId;
-    }
-
-    public void setClientId(String clientId)
-    {
-        this.clientId = clientId;
     }
 
     public List<KuraDeviceComponentConfiguration> getConfigurations()

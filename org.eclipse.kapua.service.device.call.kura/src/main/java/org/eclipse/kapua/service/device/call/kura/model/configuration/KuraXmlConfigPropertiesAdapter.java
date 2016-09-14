@@ -9,7 +9,7 @@
  * Contributors:
  *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.kura.model;
+package org.eclipse.kapua.service.device.call.kura.model.configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 import org.eclipse.kapua.commons.util.CryptoUtil;
-import org.eclipse.kapua.service.device.call.kura.model.XmlConfigPropertyAdapted.ConfigPropertyType;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.XmlConfigPropertyAdapted.ConfigPropertyType;
 
 public class KuraXmlConfigPropertiesAdapter extends XmlAdapter<KuraXmlConfigPropertiesAdapted, Map<String, Object>>
 {

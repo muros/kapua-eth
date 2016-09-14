@@ -7,41 +7,31 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Eurotech - initial API and implementation
- *
+ *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.kura.model;
+package org.eclipse.kapua.service.device.call.kura.model.configuration;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement(name="bundleInfo")
+/**
+ * A container for XmlConfigPropertyAdapted organized into an array.
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder= {"name","version"})
-public class XmlBundleInfo
+public class KuraXmlConfigPropertiesAdapted
 {
-    @XmlElement(name="name")
-    public String name;
+    @XmlElement(name="property")
+    private XmlConfigPropertyAdapted[] properties;
 
-    @XmlElement(name="version")
-    public String version;
-
-    public String getName() {
-        return name;
+    public KuraXmlConfigPropertiesAdapted() {
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public XmlConfigPropertyAdapted[] getProperties() {
+        return properties;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
+    public void setProperties(XmlConfigPropertyAdapted[] properties) {
+        this.properties = properties;
     }
 }

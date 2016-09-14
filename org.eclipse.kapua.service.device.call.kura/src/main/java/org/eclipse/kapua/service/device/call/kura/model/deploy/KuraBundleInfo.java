@@ -10,19 +10,18 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.kura.model;
+package org.eclipse.kapua.service.device.call.kura.model.deploy;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement(name="package")
+@XmlRootElement(name="bundleInfo")
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder= {"name","version","bundleInfos"})
-public class XmlDeploymentPackage
+@XmlType(propOrder= {"name","version"})
+public class KuraBundleInfo
 {
     @XmlElement(name="name")
     public String name;
@@ -30,31 +29,23 @@ public class XmlDeploymentPackage
     @XmlElement(name="version")
     public String version;
 
-    @XmlElementWrapper(name="bundles")
-    @XmlElement(name="bundle")
-    public XmlBundleInfo[] bundleInfos;
-
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getVersion() {
+    public String getVersion()
+    {
         return version;
     }
 
-    public void setVersion(String version) {
+    public void setVersion(String version)
+    {
         this.version = version;
-    }
-
-    public XmlBundleInfo[] getBundleInfos() {
-        return bundleInfos;
-    }
-
-    public void setBundleInfos(XmlBundleInfo[] bundleInfos) {
-        this.bundleInfos = bundleInfos;
     }
 }

@@ -9,7 +9,7 @@
  * Contributors:
  *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.kura.model;
+package org.eclipse.kapua.service.device.call.kura.model.configuration;
 
 import java.util.Map;
 
@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
@@ -46,17 +45,14 @@ public class KuraDeviceComponentConfiguration
      * in the component.name and in the service.pid attributes of the Component Configuration.
      */
     @XmlAttribute(name = "pid")
-    private String              componentId;
-
-    @XmlTransient
-    private String              componentName;
+    private String componentId;
 
     /**
      * The raw ObjectClassDefinition as parsed from the MetaType
      * Information XML resource associated to this Component.
      */
     @XmlElementRef
-    private TocdImpl            definition;
+    private TocdImpl definition;
 
     /**
      * The Dictionary of properties currently used by this component.
@@ -67,9 +63,7 @@ public class KuraDeviceComponentConfiguration
 
     // Required by JAXB
     public KuraDeviceComponentConfiguration()
-    {
-
-    }
+    {}
 
     public String getComponentId()
     {
@@ -79,16 +73,6 @@ public class KuraDeviceComponentConfiguration
     public void setComponentId(String componentId)
     {
         this.componentId = componentId;
-    }
-
-    public String getComponentName()
-    {
-        return componentName;
-    }
-
-    public void setComponentName(String componentName)
-    {
-        this.componentName = componentName;
     }
 
     public KapuaTocd getDefinition()

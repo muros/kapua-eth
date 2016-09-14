@@ -9,27 +9,26 @@
  * Contributors:
  *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.kura.model;
+package org.eclipse.kapua.service.device.call.kura.model.configuration;
 
-import java.util.List;
+public class Password
+{
+    private String password;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-/**
- * Utility class to serialize a set of snapshot ids.
- */
-@XmlRootElement(name="snapshot-ids")
-public class XmlSnapshotIdResult {
-    private List<Long> snapshotIds;
-
-    public XmlSnapshotIdResult() {
+    public Password(String password)
+    {
+        super();
+        this.password = password;
     }
 
-    public List<Long> getSnapshotIds() {
-        return snapshotIds;
+    public String getPassword()
+    {
+        return password;
     }
 
-    public void setSnapshotIds(List<Long> snapshotIds) {
-        this.snapshotIds = snapshotIds;
+    @Override
+    public String toString()
+    {
+        return password;
     }
 }

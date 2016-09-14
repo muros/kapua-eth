@@ -13,8 +13,8 @@ package org.eclipse.kapua.service.device.call.kura.app;
 
 public enum BundleMetrics
 {
-    APP_ID("DEPLOY"), 
-    APP_VERSION("V1"),
+    APP_ID("DEPLOY"),
+    APP_VERSION("V2"),
     ;
 
     private String value;
