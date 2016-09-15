@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 import javax.xml.namespace.QName;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.configuration.metatype.Password;
 import org.eclipse.kapua.commons.configuration.metatype.TadImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TiconImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
@@ -36,6 +37,7 @@ import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
 import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraPassword;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestChannel;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage;
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
@@ -251,12 +253,33 @@ public class TranslatorAppConfigurationKapuaKura extends Translator<Configuratio
         return definition;
     }
 
-    private Map<String, Object> translate(Map<String, Object> kuraProperties)
+    private Map<String, Object> translate(Map<String, Object> kapuaProperties)
     {
         Map<String, Object> properties = new HashMap<>();
-        for (Entry<String, Object> entry : kuraProperties.entrySet()) {
+        for (Entry<String, Object> entry : kapuaProperties.entrySet()) {
+            Object value = entry.getValue();
+
+            //
+            // Special management of Password type field
+            if (value instanceof Password) {
+                value = new KuraPassword(((Password) value).getPassword());
+            }
+            else if (value instanceof Password[]) {
+                Password[] passwords = (Password[]) value;
+                KuraPassword[] kuraPasswords = new KuraPassword[passwords.length];
+
+                int i = 0;
+                for (Password p : passwords) {
+                    kuraPasswords[i++] = new KuraPassword(p.getPassword());
+                }
+
+                value = kuraPasswords;
+            }
+
+            //
+            // Set property
             properties.put(entry.getKey(),
-                           entry.getValue());
+                           value);
         }
         return properties;
     }

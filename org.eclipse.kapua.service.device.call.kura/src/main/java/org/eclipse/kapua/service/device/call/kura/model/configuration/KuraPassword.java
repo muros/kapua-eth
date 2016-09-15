@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.call.kura.model.configuration;
 
-public class Password
+public class KuraPassword
 {
     private String password;
 
-    public Password(String password)
+    public KuraPassword(String password)
     {
         super();
         this.password = password;

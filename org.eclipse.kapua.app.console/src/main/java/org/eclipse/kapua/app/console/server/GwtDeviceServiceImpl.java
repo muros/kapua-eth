@@ -56,6 +56,7 @@ import org.eclipse.kapua.app.console.shared.model.GwtSnapshot;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
 import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
+import org.eclipse.kapua.commons.configuration.metatype.Password;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.model.query.FieldSortCriteria;
 import org.eclipse.kapua.commons.model.query.FieldSortCriteria.SortOrder;
@@ -77,7 +78,6 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
-import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfigParamPassword;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
@@ -108,8 +108,15 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventPredicates;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventQuery;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import src.main.java.org.eclipse.kapua.app.console.server.KapuaRemoteServiceServlet;
+import com.extjs.gxt.ui.client.data.BaseListLoadResult;
+import com.extjs.gxt.ui.client.data.BasePagingLoadConfig;
+import com.extjs.gxt.ui.client.data.BasePagingLoadResult;
+import com.extjs.gxt.ui.client.data.ListLoadResult;
+import com.extjs.gxt.ui.client.data.PagingLoadConfig;
+import com.extjs.gxt.ui.client.data.PagingLoadResult;
 
 /**
  * 
@@ -740,10 +747,10 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                                                      compConfig,
                                                      null);
 
-            // //
-            // // Add an additional delay after the configuration update
-            // // to give the time to the device to apply the received
-            // // configuration
+            //
+            // Add an additional delay after the configuration update
+            // to give the time to the device to apply the received
+            // configuration
             Thread.sleep(1000);
         }
         catch (Throwable t) {
@@ -1026,7 +1033,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                     objValue = Boolean.parseBoolean(strValue);
                     break;
                 case PASSWORD:
-                    objValue = new DeviceComponentConfigParamPassword(strValue);
+                    objValue = new Password(strValue);
                     break;
                 case CHAR:
                     objValue = Character.valueOf(strValue.charAt(0));
@@ -1093,9 +1100,9 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
             case PASSWORD:
                 for (String value : defaultValues) {
-                    values.add(new DeviceComponentConfigParamPassword(value));
+                    values.add(new Password(value));
                 }
-                return values.toArray(new DeviceComponentConfigParamPassword[] {});
+                return values.toArray(new Password[] {});
 
             case STRING:
             default:

@@ -86,7 +86,7 @@ public class KuraXmlConfigPropertiesAdapter extends XmlAdapter<KuraXmlConfigProp
                     adaptedValue.setType(ConfigPropertyType.shortType);
                     adaptedValue.setValues(new String[] { value.toString() });
                 }
-                else if (value instanceof Password) {
+                else if (value instanceof KuraPassword) {
                     adaptedValue.setArray(false);
                     adaptedValue.setEncrypted(true);
                     adaptedValue.setType(ConfigPropertyType.passwordType);
@@ -193,11 +193,11 @@ public class KuraXmlConfigPropertiesAdapter extends XmlAdapter<KuraXmlConfigProp
                     }
                     adaptedValue.setValues(stringValues);
                 }
-                else if (value instanceof Password[]) {
+                else if (value instanceof KuraPassword[]) {
                     adaptedValue.setArray(true);
                     adaptedValue.setEncrypted(true);
                     adaptedValue.setType(ConfigPropertyType.passwordType);
-                    Password[] nativeValues = (Password[]) value;
+                    KuraPassword[] nativeValues = (KuraPassword[]) value;
                     String[] stringValues = new String[nativeValues.length];
                     for (int i = 0; i < nativeValues.length; i++) {
                         if (nativeValues[i] != null) {
@@ -261,10 +261,10 @@ public class KuraXmlConfigPropertiesAdapter extends XmlAdapter<KuraXmlConfigProp
                         case passwordType:
                             propvalue = (String) adaptedProp.getValues()[0];
                             if (adaptedProp.isEncrypted()) {
-                                propvalue = new Password(CryptoUtil.decodeBase64((String) propvalue));
+                                propvalue = new KuraPassword(CryptoUtil.decodeBase64((String) propvalue));
                             }
                             else {
-                                propvalue = new Password((String) propvalue);
+                                propvalue = new KuraPassword((String) propvalue);
                             }
                             break;
                     }
@@ -348,14 +348,14 @@ public class KuraXmlConfigPropertiesAdapter extends XmlAdapter<KuraXmlConfigProp
                             propvalue = shortValues;
                             break;
                         case passwordType:
-                            Password[] pwdValues = new Password[adaptedProp.getValues().length];
+                            KuraPassword[] pwdValues = new KuraPassword[adaptedProp.getValues().length];
                             for (int i = 0; i < adaptedProp.getValues().length; i++) {
                                 if (adaptedProp.getValues()[i] != null) {
                                     if (adaptedProp.isEncrypted()) {
-                                        pwdValues[i] = new Password(CryptoUtil.decodeBase64(adaptedProp.getValues()[i]));
+                                        pwdValues[i] = new KuraPassword(CryptoUtil.decodeBase64(adaptedProp.getValues()[i]));
                                     }
                                     else {
-                                        pwdValues[i] = new Password(adaptedProp.getValues()[i]);
+                                        pwdValues[i] = new KuraPassword(adaptedProp.getValues()[i]);
                                     }
                                 }
                             }

@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import javax.xml.namespace.QName;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.configuration.metatype.Password;
 import org.eclipse.kapua.commons.configuration.metatype.TadImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TiconImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
@@ -36,6 +37,7 @@ import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
 import org.eclipse.kapua.service.device.call.kura.app.ResponseMetrics;
 import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraPassword;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponsePayload;
@@ -267,8 +269,30 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
     {
         Map<String, Object> properties = new HashMap<>();
         for (Entry<String, Object> entry : kuraProperties.entrySet()) {
+
+            Object value = entry.getValue();
+
+            //
+            // Special management of Password type field
+            if (value instanceof KuraPassword) {
+                value = new Password(((KuraPassword) value).getPassword());
+            }
+            else if (value instanceof KuraPassword[]) {
+                KuraPassword[] kuraPasswords = (KuraPassword[]) value;
+                Password[] passwords = new Password[kuraPasswords.length];
+
+                int i = 0;
+                for (KuraPassword p : kuraPasswords) {
+                    passwords[i++] = new Password(p.getPassword());
+                }
+
+                value = passwords;
+            }
+
+            //
+            // Set property
             properties.put(entry.getKey(),
-                           entry.getValue());
+                           value);
         }
         return properties;
     }
