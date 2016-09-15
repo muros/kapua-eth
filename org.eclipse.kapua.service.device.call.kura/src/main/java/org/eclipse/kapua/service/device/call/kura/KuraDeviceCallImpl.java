@@ -125,16 +125,16 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
                                                       e,
                                                       (Object[]) null);
             }
-
         }
         catch (KapuaException ke) {
-            if (transportFacade != null) {
-                transportFacade.clean();
-            }
-
             throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
                                                   ke,
                                                   (Object[]) null);
+        }
+        finally {
+            if (transportFacade != null) {
+                transportFacade.clean();
+            }
         }
 
         return response;
@@ -155,15 +155,9 @@ public class KuraDeviceCallImpl implements DeviceCall<KuraRequestMessage, KuraRe
     {
         TransportFacade transportFacade;
         try {
-            // FIXME:
-            // Device device = findByClientId(requestDest.getClientid();
-            // DeviceConnection deviceConnection = findById(scopeId, device.getConnectionId());
-            // kapuaClient = (KapuaClient) KapuaClientPool.getInstance(deviceConnection.getProtocol()).borrowObject();
-
-            // transportClient = (TransportClient) TransportClientPool.getInstance(/* MqttClient.class */).borrowObject();
             KapuaLocator locator = KapuaLocator.getInstance();
             TransportClientFactory transportClientFactory = locator.getFactory(TransportClientFactory.class);
-            transportFacade = transportClientFactory.getFacade(/* MqttClient.class */);
+            transportFacade = transportClientFactory.getFacade();
         }
         catch (Exception e) {
             throw new KuraMqttDeviceCallException(KuraMqttDeviceCallErrorCodes.CALL_ERROR,
