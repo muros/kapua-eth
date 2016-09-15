@@ -49,30 +49,50 @@
                 <include>commons-configuration:commons-configuration</include>
                 <include>org.springframework.security:spring-security-core</include>
                 <include>io.dropwizard.metrics:metrics-core</include>
-                <include>io.dropwizard.metrics:metrics-annotation</include>
-                <!-- TODO is there a better way to import jdbc driver at runtime -->
-                <include>org.mariadb.jdbc:mariadb-java-client</include>
+                <include>com.h2database:h2</include>
+                <include>com.google.protobuf:protobuf-java</include>
 
                 <include>${pom.groupId}:org.eclipse.kapua.commons</include>
-                <include>${pom.groupId}:org.eclipse.kapua.configuration.spi</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service</include>
                 <include>${pom.groupId}:org.eclipse.kapua.locator.guice</include>
                 <include>${pom.groupId}:org.eclipse.kapua.broker.core</include>
+                <include>${pom.groupId}:org.eclipse.kapua.message</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.auth.shiro</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.registry</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.registry.internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.user</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.user.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.authentication</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.authorization</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.auth.shiro</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.call</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.call.kura</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.bundle</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.bundle.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.command</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.command.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.commons</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.deploy</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.deploy.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.registry</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.device.registry.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.generator.id</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.generator.id.sequence</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.user</include>
+                <include>${pom.groupId}:org.eclipse.kapua.service.user.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.datastore</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.datastore.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration.internal</include>
+                <include>${pom.groupId}:org.eclipse.kapua.translator</include>
+                <include>${pom.groupId}:org.eclipse.kapua.translator.kapua.kura</include>
+                <include>${pom.groupId}:org.eclipse.kapua.translator.kura.jms</include>
+                <include>${pom.groupId}:org.eclipse.kapua.translator.kura.mqtt</include>
+                <include>${pom.groupId}:org.eclipse.kapua.transport</include>
+                <include>${pom.groupId}:org.eclipse.kapua.transport.jms</include>
+                <include>${pom.groupId}:org.eclipse.kapua.transport.mqtt</include>
             </includes>
         </dependencySet>
     </dependencySets>

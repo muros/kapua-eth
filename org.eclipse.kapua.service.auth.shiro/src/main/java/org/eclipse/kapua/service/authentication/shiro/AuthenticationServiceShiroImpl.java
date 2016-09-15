@@ -48,7 +48,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
 {
 
     private static Logger logger = LoggerFactory.getLogger(AuthenticationServiceShiroImpl.class);
-    
+
     static {
         // org.apache.shiro.config.Ini
         // org.apache.shiro.config.IniSecurityManagerFactory
@@ -70,16 +70,16 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
         DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
         defaultSecurityManager.setAuthenticator(new KapuaAuthenticator());
         logger.info("Set '{}' as shiro authenticator", KapuaAuthenticator.class);
-//        if (defaultSecurityManager.getAuthenticator() instanceof ModularRealmAuthenticator) {
-//        	KapuaAuthenticationStrategy authenticationStrategy = new KapuaAuthenticationStrategy();
-//        	((ModularRealmAuthenticator) defaultSecurityManager.getAuthenticator()).setAuthenticationStrategy(authenticationStrategy);
-//        	logger.info("Set '{}' as shiro authentication strategy ", KapuaAuthenticationStrategy.class);
-//        }
-//        else {
-//        	logger.warn("Cannot set '{}' as shiro authentication strategy! Authenticator class is '{}' and this option is only available for ModularRealmAuthenticator!", 
-//        			new Object[]{KapuaAuthenticationStrategy.class, defaultSecurityManager.getAuthenticator() != null ? defaultSecurityManager.getAuthenticator().getClass() : "null"});
-//        }
-        
+        // if (defaultSecurityManager.getAuthenticator() instanceof ModularRealmAuthenticator) {
+        // KapuaAuthenticationStrategy authenticationStrategy = new KapuaAuthenticationStrategy();
+        // ((ModularRealmAuthenticator) defaultSecurityManager.getAuthenticator()).setAuthenticationStrategy(authenticationStrategy);
+        // logger.info("Set '{}' as shiro authentication strategy ", KapuaAuthenticationStrategy.class);
+        // }
+        // else {
+        // logger.warn("Cannot set '{}' as shiro authentication strategy! Authenticator class is '{}' and this option is only available for ModularRealmAuthenticator!",
+        // new Object[]{KapuaAuthenticationStrategy.class, defaultSecurityManager.getAuthenticator() != null ? defaultSecurityManager.getAuthenticator().getClass() : "null"});
+        // }
+
         defaultSecurityManager.setRealms(realms);
         SecurityUtils.setSecurityManager(defaultSecurityManager);
 
@@ -113,7 +113,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
         // defaultSecurityManager.setCacheManager(new EdcCacheManager());
 
     }
-    
+
     @Override
     public AccessToken login(AuthenticationCredentials authenticationToken)
         throws KapuaException
@@ -121,7 +121,7 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
         Subject currentUser = SecurityUtils.getSubject();
 
         if (currentUser.isAuthenticated()) {
-        	logger.info("Thread already authenticated for thread {} - {}", new Object[]{Thread.currentThread().getId(), Thread.currentThread().getName()});
+            logger.info("Thread already authenticated for thread '{}' - '{}' - '{}'", new Object[] { Thread.currentThread().getId(), Thread.currentThread().getName(), currentUser.toString() });
             throw new KapuaAuthenticationException(KapuaAuthenticationErrorCodes.SUBJECT_ALREADY_LOGGED);
         }
 
@@ -139,25 +139,26 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
 
                 Subject shiroSubject = SecurityUtils.getSubject();
                 Session shiroSession = shiroSubject.getSession();
-                
+
                 KapuaEid scopeId = (KapuaEid) shiroSession.getAttribute("scopeId");
                 KapuaEid userScopeId = (KapuaEid) shiroSession.getAttribute("userScopeId");
                 KapuaEid userId = (KapuaEid) shiroSession.getAttribute("userId");
 
-                //create the access token
+                // create the access token
                 String generatedTokenKey = generateToken();
                 AccessToken accessToken = new AccessTokenImpl(userId, scopeId, userScopeId, generatedTokenKey);
-                
+
                 KapuaSession kapuaSession = new KapuaSession(accessToken,
                                                              scopeId,
                                                              userScopeId,
                                                              userId,
                                                              usernamePasswordToken.getUsername());
-                
+
                 KapuaSecurityUtils.setSession(kapuaSession);
 
                 shiroSubject.getSession().setAttribute(KapuaSession.KAPUA_SESSION_KEY, kapuaSession);
-                
+                logger.info("Login for thread '{}' - '{}' - '{}'", new Object[] { Thread.currentThread().getId(), Thread.currentThread().getName(), shiroSubject.toString() });
+
                 return kapuaSession.getAccessToken();
             }
             catch (ShiroException se) {
@@ -190,33 +191,36 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
         else {
             throw new KapuaAuthenticationException(KapuaAuthenticationErrorCodes.INVALID_CREDENTIALS_TOKEN_PROVIDED);
         }
+
     }
 
     @Override
     public void logout()
         throws KapuaException
     {
-		Subject currentUser = SecurityUtils.getSubject();
-		try {
-			currentUser.logout();
-		}
-		finally {
-			KapuaSecurityUtils.clearSession();
-		}
+        Subject currentUser = SecurityUtils.getSubject();
+        try {
+            currentUser.logout();
+        }
+        finally {
+            KapuaSecurityUtils.clearSession();
+        }
     }
-    
-    private String generateToken() {
-    	return UUID.randomUUID().toString();
+
+    private String generateToken()
+    {
+        return UUID.randomUUID().toString();
     }
-    
+
     @Override
-    public AccessToken getToken(String tokenId) throws KapuaException {
-//    	KapuaSession kapuaSession = sessionMap.get(tokenId);
-//    	if (kapuaSession!=null) {
-//    		return kapuaSession.getAccessToken();
-//    	}
-    	//TODO choose the appropriate exception
-    	throw new KapuaException(KapuaErrorCodes.ENTITY_NOT_FOUND);
+    public AccessToken getToken(String tokenId) throws KapuaException
+    {
+        // KapuaSession kapuaSession = sessionMap.get(tokenId);
+        // if (kapuaSession!=null) {
+        // return kapuaSession.getAccessToken();
+        // }
+        // TODO choose the appropriate exception
+        throw new KapuaException(KapuaErrorCodes.ENTITY_NOT_FOUND);
     }
 
 }
