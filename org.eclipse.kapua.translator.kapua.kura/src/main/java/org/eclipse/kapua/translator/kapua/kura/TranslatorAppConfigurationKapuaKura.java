@@ -215,6 +215,7 @@ public class TranslatorAppConfigurationKapuaKura extends Translator<Configuratio
             ad.setMin(kapuaAd.getMin());
             ad.setName(kapuaAd.getName());
             ad.setType(kapuaAd.getType());
+            ad.setRequired(kapuaAd.isRequired());
 
             for (KapuaToption kuraToption : kapuaAd.getOption()) {
                 ToptionImpl kapuaToption = new ToptionImpl();
