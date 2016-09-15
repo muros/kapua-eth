@@ -117,7 +117,6 @@ public class MqttClient
     //
     // Message management
     //
-
     public void publish(MqttMessage mqttMessage)
         throws KapuaException
     {
@@ -151,23 +150,20 @@ public class MqttClient
         }
     }
 
-    public void unsubscribe(MqttTopic mqttTopic)
+    private void unsubscribe(MqttTopic mqttTopic)
         throws KapuaException
     {
         try {
             getPahoClient().unsubscribe(mqttTopic.getTopic());
-            subscribedTopics.remove(mqttTopic);
         }
         catch (MqttException | KapuaException e) {
             throw new MqttClientException(MqttClientErrorCodes.CLIENT_UNSUBSCRIBE_ERROR,
                                           e,
                                           new Object[] { mqttTopic.toString() });
         }
-
-        subscribedTopics.remove(mqttTopic);
     }
 
-    public void unsubscribeAll()
+    public synchronized void unsubscribeAll()
         throws KapuaException
     {
         Iterator<MqttTopic> subscribptionIterator = subscribedTopics.iterator();
@@ -175,6 +171,7 @@ public class MqttClient
         while (subscribptionIterator.hasNext()) {
             MqttTopic mqttTopic = subscribptionIterator.next();
             unsubscribe(mqttTopic);
+
         }
 
         subscribedTopics.clear();
