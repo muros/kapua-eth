@@ -72,24 +72,23 @@ public class RoleServiceImpl implements RoleService
     }
 
     @Override
-    public void delete(Role role)
-        throws KapuaException
-    {
+    public void delete(Role role) throws KapuaException {
         ArgumentValidator.notNull(role, "role");
+        delete(role.getScopeId(), role.getId());
+    }
 
-        //
+    @Override
+    public void delete(KapuaId scopeId, KapuaId roleId) throws KapuaException {
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.delete, role.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.delete, scopeId));
 
         //
         // Do delete
         EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
-            KapuaId roleId = role.getId();
-
             if (RoleDAO.find(em, roleId) == null) {
                 throw new KapuaEntityNotFoundException(Role.TYPE, roleId);
             }

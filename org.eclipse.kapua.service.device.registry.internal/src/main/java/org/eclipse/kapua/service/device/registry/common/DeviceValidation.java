@@ -78,12 +78,11 @@ public final class DeviceValidation {
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.read, query.getScopeId()));
     }
 
-    public void validateDeletePreconditions(Device device) throws KapuaException {
-        ArgumentValidator.notNull(device, "device");
-        ArgumentValidator.notNull(device.getId(), "device.id");
-        ArgumentValidator.notNull(device.getScopeId(), "device.scopeId");
+    public void validateDeletePreconditions(KapuaId scopeId, KapuaId deviceId) throws KapuaException {
+        ArgumentValidator.notNull(deviceId, "device.id");
+        ArgumentValidator.notNull(scopeId, "device.scopeId");
 
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.delete, device.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceDomain.DEVICE, Actions.delete, scopeId));
     }
 
     public void validateFindByClientIdPreconditions(KapuaId scopeId, String clientId) throws KapuaException {

@@ -39,6 +39,6 @@ public interface KapuaEntityService<E extends KapuaEntity, C extends KapuaEntity
     public long count(KapuaQuery<E> query)
         throws KapuaException;
 
-    public void delete(E entity)
+    public void delete(KapuaId scopeId, KapuaId entityId)
         throws KapuaException;
 }

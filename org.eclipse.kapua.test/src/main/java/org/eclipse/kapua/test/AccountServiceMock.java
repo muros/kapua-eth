@@ -64,13 +64,13 @@ public class AccountServiceMock implements AccountService
     }
 
     @Override
-    public void delete(Account account)
+    public void delete(KapuaId scopeId, KapuaId accountId)
         throws KapuaException
     {
-        if (!accounts.containsKey(account.getId()))
+        if (!accounts.containsKey(accountId))
             throw KapuaException.internalError("User not found");
         
-        AccountMock accountMock = accounts.remove(account.getId());
+        AccountMock accountMock = accounts.remove(accountId);
     }
 
     @Override

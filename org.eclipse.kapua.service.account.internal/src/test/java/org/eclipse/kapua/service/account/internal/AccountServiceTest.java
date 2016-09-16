@@ -124,7 +124,7 @@ public class AccountServiceTest extends AbstractAccountServiceTest
         AccountService accountService = locator.getService(AccountService.class);
         Account account = accountService.create(accountCreator);
 
-        accountService.delete(account);
+        accountService.delete(scopeId, account.getId());
 
         try {
             account = accountService.find(account.getScopeId(), account.getId());

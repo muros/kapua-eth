@@ -147,7 +147,7 @@ public class DeviceRegistryServiceTest extends KapuaTest {
             Device device = deviceRegistryService.create(deviceCreator);
 
             // When
-            deviceRegistryService.delete(device);
+            deviceRegistryService.delete(device.getScopeId(), device.getId());
 
             // Then
             Device deviceFound = deviceRegistryService.find(scope, device.getId());

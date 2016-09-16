@@ -55,12 +55,20 @@ public class UserServiceMock implements UserService
     {
         if (!users.containsKey(user.getId()))
             throw KapuaException.internalError("User not found");
-        
+
         UserMock userMock = users.get(user.getId());
         user.setDisplayName(user.getDisplayName());
         user.setEmail(user.getEmail());
         user.setPhoneNumber(user.getPhoneNumber());
         return userMock;
+    }
+
+    @Override
+    public void delete(KapuaId scopeId, KapuaId userId) throws KapuaException {
+        if (!users.containsKey(userId))
+            throw KapuaException.internalError("User not found");
+
+        UserMock userMock = users.remove(userId);
     }
 
     @Override

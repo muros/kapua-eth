@@ -185,15 +185,14 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
      * 
      */
     @Override
-    public void delete(Account account)
+    public void delete(KapuaId scopeId, KapuaId accountId)
         throws KapuaException
     {
 
         //
         // Validation of the fields
-        ArgumentValidator.notNull(account, "account");
-        ArgumentValidator.notNull(account.getId(), "id");
-        ArgumentValidator.notNull(account.getScopeId(), "id.id");
+        ArgumentValidator.notNull(accountId, "id");
+        ArgumentValidator.notNull(scopeId, "id.id");
 
         //
         // Check Access
@@ -201,11 +200,11 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.ACCOUNT, action, account.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(AccountDomain.ACCOUNT, action, scopeId));
 
         //
         // Check if it has children
-        if (this.findChildAccountsTrusted(account.getId()).size() > 0) {
+        if (this.findChildAccountsTrusted(accountId).size() > 0) {
             throw new KapuaAccountException(KapuaAccountErrorCodes.OPERATION_NOT_ALLOWED, null, "This account cannot be deleted. Delete its child first.");
         }
 
@@ -213,12 +212,11 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         // Delete the Account
         EntityManager em = AccountEntityManagerFactory.getInstance().createEntityManager();
         try {
-            KapuaId accountId = account.getId();
 
             // Entity needs to be loaded in the context of the same EntityManger to be able to delete it afterwards
-            Account accountx = AccountDAO.find(em, account.getId());
+            Account accountx = AccountDAO.find(em, accountId);
             if (accountx == null) {
-                throw new KapuaEntityNotFoundException(Account.TYPE, account.getId());
+                throw new KapuaEntityNotFoundException(Account.TYPE, accountId);
             }
 
             // do not allow deletion of the edc admin account

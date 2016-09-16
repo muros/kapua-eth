@@ -131,11 +131,9 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
     }
 
     @Override
-    public void delete(Device device) throws KapuaException {
-        deviceValidation.validateDeletePreconditions(device);
+    public void delete(KapuaId scopeId, KapuaId deviceId) throws KapuaException {
+        deviceValidation.validateDeletePreconditions(scopeId, deviceId);
         deviceEntityManagerFactory.onEntityManager(entityManager -> {
-            KapuaId deviceId = device.getId();
-
             if (DeviceDAO.find(entityManager, deviceId) == null) {
                 throw new KapuaEntityNotFoundException(Device.TYPE, deviceId);
             }

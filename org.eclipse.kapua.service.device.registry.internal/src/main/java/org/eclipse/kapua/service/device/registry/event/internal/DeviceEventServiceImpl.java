@@ -162,28 +162,23 @@ public class DeviceEventServiceImpl implements DeviceEventService
     }
 
     @Override
-    public void delete(DeviceEvent deviceEvent)
-        throws KapuaException
-    {
+    public void delete(KapuaId scopeId, KapuaId deviceEventId) throws KapuaException {
         //
         // Argument Validation
-        ArgumentValidator.notNull(deviceEvent, "deviceEvent");
-        ArgumentValidator.notNull(deviceEvent.getId(), "deviceEvent.id");
-        ArgumentValidator.notNull(deviceEvent.getScopeId(), "deviceEvent.scopeId");
+        ArgumentValidator.notNull(deviceEventId, "deviceEvent.id");
+        ArgumentValidator.notNull(scopeId, "deviceEvent.scopeId");
 
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.DEVICE_EVENT, Actions.delete, deviceEvent.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.DEVICE_EVENT, Actions.delete, scopeId));
 
         //
         // Do delete
         EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
-            KapuaId deviceEventId = deviceEvent.getId();
-
             if (DeviceEventDAO.find(em, deviceEventId) == null) {
                 throw new KapuaEntityNotFoundException(DeviceEvent.TYPE, deviceEventId);
             }

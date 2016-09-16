@@ -240,7 +240,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             Account account = accountService.find(kapuaId);
 
             if (account != null) {
-                accountService.delete(account);
+                accountService.delete(account.getScopeId(), account.getId());
             }
         }
         catch (Throwable t) {

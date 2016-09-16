@@ -136,30 +136,26 @@ public class UserServiceImpl extends AbstractKapuaConfigurableService implements
     }
 
     @Override
-    public void delete(User user)
-        throws KapuaException
-    {
+    public void delete(KapuaId scopeId, KapuaId userId) throws KapuaException {
         // Validation of the fields
-        ArgumentValidator.notNull(user, "user");
-        ArgumentValidator.notNull(user.getId().getId(), "id");
-        ArgumentValidator.notNull(user.getScopeId().getId(), "accountId");
+        ArgumentValidator.notNull(userId.getId(), "id");
+        ArgumentValidator.notNull(scopeId.getId(), "accountId");
 
         //
         // Check Access
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.write, user.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(UserDomain.USER, Actions.write, scopeId));
 
         // Do the delete
         EntityManager em = UserEntityManagerFactory.getInstance().createEntityManager();
         try {
-            KapuaId userId = user.getId();
-
             // Entity needs to be loaded in the context of the same EntityManger to be able to delete it afterwards
             User userx = UserDAO.find(em, userId);
             if (userx == null) {
                 throw new KapuaEntityNotFoundException(User.TYPE, userId);
             }
+            User user = find(scopeId, userId);
             validateSystemUser(user.getName());
 
             // Ensure this is not the last admin for the account
@@ -177,6 +173,12 @@ public class UserServiceImpl extends AbstractKapuaConfigurableService implements
         finally {
             em.close();
         }
+    }
+
+    @Override
+    public void delete(User user) throws KapuaException {
+        ArgumentValidator.notNull(user, "user");
+        delete(user.getScopeId(), user.getId());
     }
 
     @Override

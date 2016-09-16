@@ -75,20 +75,20 @@ public class UserPermissionServiceImpl implements UserPermissionService
         throws KapuaException
     {
         ArgumentValidator.notNull(permission, "permission");
+        delete(permission.getScopeId(), permission.getId());
+    }
 
-        //
+    @Override
+    public void delete(KapuaId scopeId, KapuaId permissionId) throws KapuaException {
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.USER_PERMISSION, Actions.write, permission.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(UserPermissionDomain.USER_PERMISSION, Actions.write, scopeId));
 
-        //
         // Do delete
         EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
-            KapuaId permissionId = permission.getId();
-
             if (UserPermissionDAO.find(em, permissionId) == null) {
                 throw new KapuaEntityNotFoundException(UserPermission.TYPE, permissionId);
             }

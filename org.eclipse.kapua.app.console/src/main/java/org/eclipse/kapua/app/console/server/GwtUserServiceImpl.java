@@ -221,7 +221,7 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
                                 break;
                             }
                         }
-                        credentialService.delete(oldCredential);
+                        credentialService.delete(oldCredential.getScopeId(), oldCredential.getId());
 
                         //
                         // Create new PASSWORD credential

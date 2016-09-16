@@ -486,7 +486,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaLocator locator = KapuaLocator.getInstance();
             DeviceRegistryService drs = locator.getService(DeviceRegistryService.class);
             Device d = drs.findByClientId(scopeId, clientId);
-            drs.delete(d);
+            drs.delete(d.getScopeId(), d.getId());
         }
         catch (Throwable t) {
             EdcExceptionHandler.handle(t);

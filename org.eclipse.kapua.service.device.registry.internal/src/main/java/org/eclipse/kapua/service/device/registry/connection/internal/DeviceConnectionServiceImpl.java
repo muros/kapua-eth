@@ -247,28 +247,25 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
     }
 
     @Override
-    public void delete(DeviceConnection deviceConnection)
+    public void delete(KapuaId scopeId, KapuaId deviceConnectionId)
         throws KapuaException
     {
         //
         // Argument Validation
-        ArgumentValidator.notNull(deviceConnection, "deviceConnection");
-        ArgumentValidator.notNull(deviceConnection.getId(), "deviceConnection.id");
-        ArgumentValidator.notNull(deviceConnection.getScopeId(), "deviceConnection.scopeId");
+        ArgumentValidator.notNull(deviceConnectionId, "deviceConnection.id");
+        ArgumentValidator.notNull(scopeId, "deviceConnection.scopeId");
 
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(DeviceConnectionDomain.DEVICE_CONNECTION, Actions.write, deviceConnection.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceConnectionDomain.DEVICE_CONNECTION, Actions.write, scopeId));
 
         //
         // Do delete
         EntityManager em = DeviceEntityManagerFactory.getEntityManager();
         try {
-            KapuaId deviceConnectionId = deviceConnection.getId();
-
             if (DeviceConnectionDAO.find(em, deviceConnectionId) == null) {
                 throw new KapuaEntityNotFoundException(DeviceConnection.TYPE, deviceConnectionId);
             }

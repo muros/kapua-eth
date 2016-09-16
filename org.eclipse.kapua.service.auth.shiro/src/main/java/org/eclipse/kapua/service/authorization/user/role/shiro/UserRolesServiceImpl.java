@@ -33,8 +33,7 @@ import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesListResult;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesService;
 
-public class UserRolesServiceImpl implements UserRolesService
-{
+public class UserRolesServiceImpl implements UserRolesService {
 
     @Override
     public UserRoles create(UserRolesCreator userRoleCreator)
@@ -78,20 +77,22 @@ public class UserRolesServiceImpl implements UserRolesService
         throws KapuaException
     {
         ArgumentValidator.notNull(userRole, "userRole");
+        delete(userRole.getScopeId(), userRole.getId());
+    }
 
+    @Override
+    public void delete(KapuaId scopeId, KapuaId userRoleId) throws KapuaException {
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.delete, userRole.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(RoleDomain.ROLE, Actions.delete, scopeId));
 
         //
         // Do delete
         EntityManager em = AuthorizationEntityManagerFactory.getEntityManager();
         try {
-            KapuaId userRoleId = userRole.getId();
-
             if (UserRolesDAO.find(em, userRoleId) == null) {
                 throw new KapuaEntityNotFoundException(Role.TYPE, userRoleId);
             }

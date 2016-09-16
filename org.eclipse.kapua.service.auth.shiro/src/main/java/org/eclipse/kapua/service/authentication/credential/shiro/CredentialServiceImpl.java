@@ -215,28 +215,25 @@ public class CredentialServiceImpl implements CredentialService
     }
 
     @Override
-    public void delete(Credential credential)
+    public void delete(KapuaId scopeId, KapuaId credentialId)
         throws KapuaException
     {
         //
         // Argument Validation
-        ArgumentValidator.notNull(credential, "credential");
-        ArgumentValidator.notNull(credential.getId(), "credential.id");
-        ArgumentValidator.notNull(credential.getScopeId(), "credential.scopeId");
+        ArgumentValidator.notNull(credentialId, "credential.id");
+        ArgumentValidator.notNull(scopeId, "credential.scopeId");
 
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
         AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
-        authorizationService.checkPermission(permissionFactory.newPermission(CredentialDomain.CREDENTIAL, Actions.delete, credential.getScopeId()));
+        authorizationService.checkPermission(permissionFactory.newPermission(CredentialDomain.CREDENTIAL, Actions.delete, scopeId));
 
         //
         // Do delete
         EntityManager em = AuthenticationEntityManagerFactory.getEntityManager();
         try {
-            KapuaId credentialId = credential.getId();
-
             if (CredentialDAO.find(em, credentialId) == null) {
                 throw new KapuaEntityNotFoundException(Credential.TYPE, credentialId);
             }
