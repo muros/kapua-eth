@@ -27,6 +27,7 @@ import org.junit.Test;
 import java.math.BigInteger;
 
 import static java.util.UUID.randomUUID;
+import static org.eclipse.kapua.commons.model.query.predicate.AttributePredicate.attributeIsEqualTo;
 import static org.eclipse.kapua.commons.security.KapuaSecurityUtils.doPriviledge;
 import static org.eclipse.kapua.service.device.registry.DeviceCredentialsMode.LOOSE;
 
@@ -168,6 +169,24 @@ public class DeviceRegistryServiceTest extends KapuaTest {
 
             // Then
             Assertions.assertThat(result.get(0).getBiosVersion()).isEqualTo("foo");
+            return null;
+        });
+    }
+
+    @Test
+    public void shouldCountByBiosVersion() throws Exception {
+        doPriviledge(() -> {
+            // Given
+            deviceCreator.setBiosVersion(randomUUID().toString());
+            Device device = deviceRegistryService.create(deviceCreator);
+            DeviceQuery query = new DeviceQueryImpl(scope);
+            query.setPredicate(attributeIsEqualTo("biosVersion", device.getBiosVersion()));
+
+            // When
+            long count = deviceRegistryService.count(query);
+
+            // Then
+            Assertions.assertThat(count).isEqualTo(1L);
             return null;
         });
     }
