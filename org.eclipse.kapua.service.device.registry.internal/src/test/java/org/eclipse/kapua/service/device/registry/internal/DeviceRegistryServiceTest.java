@@ -17,7 +17,6 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.*;
 import org.eclipse.kapua.test.KapuaTest;
 import org.junit.AfterClass;
@@ -48,8 +47,7 @@ public class DeviceRegistryServiceTest extends KapuaTest {
 
     @Before
     public void before() {
-        deviceCreator = new TestDeviceCreator(scope);
-        deviceCreator.setClientId(clientId);
+        deviceCreator = new DeviceFactoryImpl().newCreator(scope, clientId);
     }
 
     // Database fixtures
@@ -172,16 +170,6 @@ public class DeviceRegistryServiceTest extends KapuaTest {
             Assertions.assertThat(result.get(0).getBiosVersion()).isEqualTo("foo");
             return null;
         });
-    }
-
-    // Test classes
-
-    class TestDeviceCreator extends DeviceCreatorImpl {
-
-        protected TestDeviceCreator(KapuaId scopeId) {
-            super(scopeId);
-        }
-
     }
 
 }
