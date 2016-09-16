@@ -33,6 +33,14 @@ public class AttributePredicate<T> implements KapuaAttributePredicate<T>
         this.operator = operator;
     }
 
+    public static <T> AttributePredicate<T> attributeIsEqualTo(String attributeName, T attributeValue) {
+        return new AttributePredicate<>(attributeName, attributeValue);
+    }
+
+    public static <T> AttributePredicate<T> attributeIsNotEqualTo(String attributeName, T attributeValue) {
+        return new AttributePredicate<>(attributeName, attributeValue, Operator.NOT_EQUAL);
+    }
+
     public String getAttributeName()
     {
         return attributeName;
