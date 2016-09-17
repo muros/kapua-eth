@@ -215,7 +215,7 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
                         //
                         // Delete old PASSWORD credential
                         Credential oldCredential = null;
-                        for (Credential c : credentials) {
+                        for (Credential c : credentials.getItems()) {
                             if (CredentialType.PASSWORD.equals(c.getCredentialType())) {
                                 oldCredential = c;
                                 break;
@@ -306,7 +306,7 @@ public class GwtUserServiceImpl extends KapuaRemoteServiceServlet implements Gwt
             UserQuery query = userFactory.newQuery(scopeId);
             UserListResult list = userService.query(query);
 
-            for (User user : list) {
+            for (User user : list.getItems()) {
                 gwtUserList.add(KapuaGwtConverter.convert(user));
             }
         }

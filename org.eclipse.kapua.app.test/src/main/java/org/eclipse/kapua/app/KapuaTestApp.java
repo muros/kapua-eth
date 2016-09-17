@@ -157,7 +157,7 @@ public class KapuaTestApp
             KapuaListResult<User> userList = userService.query(userQuery);
 
             System.err.println("I found those users");
-            for (User u : userList) {
+            for (User u : userList.getItems()) {
                 System.err.print("Id: " + u.getId());
                 System.err.print("\t - User: " + u.getName());
                 System.err.println("\t - Created On: " + u.getCreatedOn());

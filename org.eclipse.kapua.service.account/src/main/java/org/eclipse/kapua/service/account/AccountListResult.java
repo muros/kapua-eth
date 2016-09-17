@@ -12,8 +12,16 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import org.eclipse.kapua.model.query.KapuaListResult;
 
+@XmlRootElement(name = "accountListResult")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(factoryClass = AccountXmlRegistry.class,factoryMethod = "newAccountListResult")
 public interface AccountListResult extends KapuaListResult<Account> {
 
 }

@@ -78,7 +78,7 @@ public class DeviceExporterExcel extends DeviceExporter
     {
         Row row = null;
         Cell cell = null;
-        for (Device device : devices) {
+        for (Device device : devices.getItems()) {
 
             int iColCount = 0;
             row = m_sheet.createRow(m_rowCount++);

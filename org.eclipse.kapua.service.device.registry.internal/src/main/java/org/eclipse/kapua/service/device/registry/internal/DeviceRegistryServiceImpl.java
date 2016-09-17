@@ -157,8 +157,8 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
         // Query and parse result
         Device device = null;
         DeviceListResult result = query(query);
-        if (result.size() == 1) {
-            device = result.get(0);
+        if (result.getSize() == 1) {
+            device = result.getItem(0);
         }
 
         return device;

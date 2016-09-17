@@ -261,7 +261,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             AccountQuery query = accountFactory.newQuery(scopeId);
 
             KapuaListResult<Account> list = accountService.query(query);
-            for (Account account : list) {
+            for (Account account : list.getItems()) {
                 gwtAccountList.add(KapuaGwtConverter.convert(account));
             }
         }
@@ -286,7 +286,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             AccountQuery query = accountFactory.newQuery(scopeId);
 
             KapuaListResult<Account> list = accountService.query(query);
-            for (Account account : list) {
+            for (Account account : list.getItems()) {
                 gwtAccountList.add(KapuaGwtConverter.convert(account));
             }
         }
@@ -309,7 +309,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
         AccountListResult list;
         try {
             list = accountService.findChildsRecursively(scopeId);
-            for (Account account : list) {
+            for (Account account : list.getItems()) {
                 GwtAccountStringListItem item = new GwtAccountStringListItem();
                 item.setId(account.getId().getShortId());
                 item.setValue(account.getName());

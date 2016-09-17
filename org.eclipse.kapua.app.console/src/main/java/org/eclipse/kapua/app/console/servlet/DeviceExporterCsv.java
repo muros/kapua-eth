@@ -61,7 +61,7 @@ public class DeviceExporterCsv extends DeviceExporter
     public void append(KapuaListResult<Device> devices)
         throws ServletException, IOException
     {
-        for (Device device : devices) {
+        for (Device device : devices.getItems()) {
 
             List<String> cols = new ArrayList<String>();
             cols.add(m_account);

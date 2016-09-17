@@ -251,8 +251,8 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         Properties properties = null;
         EntityManager em = this.entityManagerFactory.createEntityManager();
         ServiceConfigListResult result = ServiceConfigDAO.query(em, ServiceConfig.class, ServiceConfigImpl.class, new ServiceConfigListResultImpl(), query);
-        if (result != null && result.size() > 0)
-            properties = result.get(0).getConfigurations();
+        if (result != null && result.getSize() > 0)
+            properties = result.getItem(0).getConfigurations();
 
         KapuaTocd ocd = this.getConfigMetadata();
         return toValues(ocd, properties);
@@ -284,7 +284,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         ServiceConfigListResultImpl result = ServiceConfigDAO.query(em, ServiceConfig.class, ServiceConfigImpl.class, new ServiceConfigListResultImpl(), query);
 
         // In not exists create then return
-        if (result == null || result.size() == 0) {
+        if (result == null || result.getSize() == 0) {
             ServiceConfigImpl serviceConfigNew = new ServiceConfigImpl(scopeId);
             serviceConfigNew.setPid(this.pid);
             serviceConfigNew.setConfigurations(props);
@@ -293,7 +293,7 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         }
 
         // If exists update it
-        serviceConfig = result.get(0);
+        serviceConfig = result.getItem(0);
         serviceConfig.setConfigurations(props);
         this.update(em, serviceConfig);
         return;
