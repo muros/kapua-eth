@@ -28,12 +28,6 @@
 			<artifactId>jersey-container-servlet-core</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-		
-		<dependency>
-		    <groupId>org.glassfish.jersey.core</groupId>
-		    <artifactId>jersey-server</artifactId>
-		    <version>2.23.2</version>
-		</dependency>
 
         <!-- -->
         <!-- Swagger for apidoc -->
