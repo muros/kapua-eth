@@ -12,12 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account.internal;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import org.eclipse.kapua.commons.model.AbstractKapuaNamedEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
@@ -27,60 +21,32 @@ import org.eclipse.kapua.service.account.AccountCreator;
  * AccountCreator encapsulates all the information needed to create a new Account in the system.
  * The data provided will be used to seed the new Account and its related information such as the associated organization and users.
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "accountName",
-                      "accountPassword",
-                      "organizationName",
-                      "organizationPersonName",
-                      "organizationEmail",
-                      "organizationPhoneNumber",
-                      "organizationAddressLine1",
-                      "organizationAddressLine2",
-                      "organizationCity",
-                      "organizationZipPostCode",
-                      "organizationStateProvinceCounty",
-                      "organizationCountry"
-					})
-
 public class AccountCreatorImpl extends AbstractKapuaNamedEntityCreator<Account> implements AccountCreator
 {
 	private static final long serialVersionUID = -2460883485294616032L;
 
-	@XmlElement(name = "accountName")
 	private String accountName;
 
-	@XmlElement(name = "accountPassword")
 	private String accountPassword;
 
-	@XmlElement(name = "organizationName")
 	private String organizationName;
 
-	@XmlElement(name = "organizationPersonName")
 	private String organizationPersonName;
 	
-	@XmlElement(name = "organizationEmail")
 	private String organizationEmail;
 
-	@XmlElement(name = "organizationPhoneNumber")
 	private String organizationPhoneNumber;
 
-	@XmlElement(name = "organizationAddressLine1")
 	private String organizationAddressLine1;
 
-	@XmlElement(name = "organizationAddressLine2")
 	private String organizationAddressLine2;
 
-	@XmlElement(name = "organizationCity")
 	private String organizationCity;
 
-	@XmlElement(name = "organizationZipPostCode")
 	private String organizationZipPostCode;
 
-	@XmlElement(name = "organizationStateProvinceCounty")
 	private String organizationStateProvinceCounty;
 
-	@XmlElement(name = "organizationCountry")
 	private String organizationCountry;
 
     public AccountCreatorImpl(KapuaId scopeId, String name)

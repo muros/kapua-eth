@@ -17,9 +17,6 @@ import javax.persistence.AccessType;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.model.KapuaNamedEntity;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -27,11 +24,9 @@ import org.eclipse.kapua.model.id.KapuaId;
 @SuppressWarnings("serial")
 @MappedSuperclass
 @Access(AccessType.FIELD)
-@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractKapuaNamedEntity extends AbstractKapuaUpdatableEntity implements KapuaNamedEntity
 {
 
-    @XmlElement(name = "name")
     @Basic
     @Column(name = "name")
     protected String name;

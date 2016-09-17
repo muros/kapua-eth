@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.model;
 
+
 public interface KapuaUpdatableEntityCreator<E extends KapuaEntity> extends KapuaEntityCreator<E>
 {
 

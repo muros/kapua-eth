@@ -14,17 +14,34 @@ package org.eclipse.kapua.model;
 
 import java.util.Date;
 
-import org.eclipse.kapua.model.id.KapuaId;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.model.id.KapuaIdAdapter;
+
+@XmlType(propOrder = {"id", "type", "scopeId", "createdOn", "createdBy" })
 public interface KapuaEntity
 {
+	@XmlElement(name="id")
+	@XmlJavaTypeAdapter(KapuaIdAdapter.class)
     public KapuaId getId();
 
+	public void setId(KapuaId id);
+	
+	@XmlElement(name="type")
     public String getType();
 
+	@XmlElement(name="scopeId")
+	@XmlJavaTypeAdapter(KapuaIdAdapter.class)
     public KapuaId getScopeId();
 
+	@XmlElement(name="createdOn")
     public Date getCreatedOn();
 
+	@XmlElement(name="createdBy")
+	@XmlJavaTypeAdapter(KapuaIdAdapter.class)
     public KapuaId getCreatedBy();
 }

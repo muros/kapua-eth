@@ -178,4 +178,10 @@ public class UserMock implements User
 
     }
 
+	@Override
+	public void setId(KapuaId id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -15,11 +15,9 @@ package org.eclipse.kapua.service.account.internal;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.eclipse.kapua.service.account.Organization;
 
-@XmlRootElement
 @Embeddable
 public class OrganizationImpl implements Organization, Serializable {
 

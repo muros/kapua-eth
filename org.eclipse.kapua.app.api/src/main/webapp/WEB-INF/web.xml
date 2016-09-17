@@ -9,13 +9,22 @@
 	<display-name>api</display-name>
 
 	<!-- -->
-	<!-- Filters -->
+	<!-- Filters -->   	
 	<filter>
-		<filter-name>ShiroFilter</filter-name>
-		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
-	</filter>
+	   <filter-name>ShiroFilter</filter-name>
+        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+   	</filter>
 	<filter-mapping>
 		<filter-name>ShiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+	   <filter-name>KapuaFilter</filter-name>
+        <filter-class>org.eclipse.kapua.app.api.auth.KapuaSessionAuthFilter</filter-class>
+   	</filter>
+	<filter-mapping>
+		<filter-name>KapuaFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
@@ -32,11 +41,8 @@
 		<servlet-name>Jersey Web Application</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
-			<param-name>jersey.config.server.provider.packages</param-name>
-			<param-value>
-            	io.swagger.jaxrs.listing,
-            	org.eclipse.kapua.app.api
-            </param-value>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>org.eclipse.kapua.app.api.RestApisApplication</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

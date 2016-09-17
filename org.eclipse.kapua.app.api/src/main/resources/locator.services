@@ -27,6 +27,7 @@ org.eclipse.kapua.service.authorization.role.RoleFactory
 org.eclipse.kapua.service.authorization.user.role.UserRolesFactory
 org.eclipse.kapua.service.authorization.user.role.UserRolesService
 
+## Uncomment as needed
 #org.eclipse.kapua.service.device.registry.DeviceFactory
 #org.eclipse.kapua.service.device.registry.DeviceRegistryService
 #org.eclipse.kapua.service.device.registry.connection.DeviceConnectionFactory
@@ -45,9 +46,11 @@ org.eclipse.kapua.service.authorization.user.role.UserRolesService
 #org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentFactory
 #org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotFactory
 #org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService
-#org.eclipse.kapua.service.generator.id.IdGeneratorService
 #org.eclipse.kapua.service.datastore.DatastoreObjectFactory
 #org.eclipse.kapua.service.datastore.MessageStoreService
 #org.eclipse.kapua.service.datastore.AssetInfoStoreService
 #org.eclipse.kapua.service.datastore.TopicInfoStoreService
 #org.eclipse.kapua.service.datastore.MetricInfoStoreService
+#
+org.eclipse.kapua.service.generator.id.IdGeneratorService
+org.eclipse.kapua.model.id.KapuaIdFactory

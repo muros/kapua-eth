@@ -18,17 +18,7 @@
 		<swagger.version>1.5.10</swagger.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.glassfish.jersey</groupId>
-				<artifactId>jersey-bom</artifactId>
-				<version>${jersey.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+
 	<dependencies>
 
         <!-- -->
@@ -36,6 +26,13 @@
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet-core</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-server</artifactId>
+		    <version>2.23.2</version>
 		</dependency>
 
         <!-- -->
@@ -45,6 +42,14 @@
 			<artifactId>swagger-jersey2-jaxrs</artifactId>
 			<version>${swagger.version}</version>
 		</dependency>		
+		
+		<!-- -->
+		<!-- Moxy for object marshalling unmarshalling -->
+		<dependency>
+		    <groupId>org.glassfish.jersey.media</groupId>
+		    <artifactId>jersey-media-moxy</artifactId>
+		    <version>2.23.2</version>
+		</dependency>
 
         <!-- -->
         <!-- Apache shiro security framework -->
@@ -53,6 +58,7 @@
             <artifactId>shiro-core</artifactId>
             <version>${shiro.version}</version>
         </dependency>
+
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-web</artifactId>
@@ -68,12 +74,15 @@
 		    <scope>provided</scope>
 		</dependency>
 		
-		
         <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.commons</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
