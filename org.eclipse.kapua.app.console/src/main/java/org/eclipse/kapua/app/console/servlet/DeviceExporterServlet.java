@@ -152,10 +152,10 @@ public class DeviceExporterServlet extends HttpServlet
 
                 deviceExporter.append(results);
 
-                offset += results.size();
-                resultsCount += results.size();
+                offset += results.getSize();
+                resultsCount += results.getSize();
             }
-            while (results.size() > 0);
+            while (results.getSize() > 0);
 
             // Close things up
             deviceExporter.close();

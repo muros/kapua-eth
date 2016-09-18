@@ -18,6 +18,12 @@ import org.eclipse.kapua.model.id.KapuaId;
 public interface AccountFactory extends KapuaObjectFactory
 {
     public AccountCreator newAccountCreator(KapuaId scopeId, String name);
+    
+    public Account newAccount();
+    
+    public Organization newOrganization();
 
     public AccountQuery newQuery(KapuaId scopeId);
+    
+    public AccountListResult newAccountListResult();
 }

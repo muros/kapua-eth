@@ -26,9 +26,6 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
@@ -41,29 +38,24 @@ import org.eclipse.kapua.service.generator.id.IdGeneratorService;
 @SuppressWarnings("serial")
 @MappedSuperclass
 @Access(AccessType.FIELD)
-@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
 {
-    @XmlElement(name = "id")
     @EmbeddedId
     @AttributeOverrides({
                           @AttributeOverride(name = "eid", column = @Column(name = "id", nullable = false, updatable = false))
     })
     protected KapuaEid id;
 
-    @XmlElement(name = "scopeId")
     @Embedded
     @AttributeOverrides({
                           @AttributeOverride(name = "eid", column = @Column(name = "scope_id", nullable = false, updatable = false))
     })
     protected KapuaEid scopeId;
 
-    @XmlElement(name = "createdOn")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_on", nullable = false)
     protected Date     createdOn;
 
-    @XmlElement(name = "createdBy")
     @Embedded
     @AttributeOverrides({
                           @AttributeOverride(name = "eid", column = @Column(name = "created_by", nullable = false, updatable = false))
@@ -90,6 +82,11 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
     public KapuaId getId()
     {
         return id;
+    }
+
+    public void setId(KapuaId id)
+    {
+    	this.id = (KapuaEid)id;
     }
 
     public Date getCreatedOn()

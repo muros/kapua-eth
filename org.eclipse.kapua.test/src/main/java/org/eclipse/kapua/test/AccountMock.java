@@ -150,4 +150,10 @@ public class AccountMock implements Account
 
     }
 
+	@Override
+	public void setId(KapuaId id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -164,7 +164,7 @@ public class KapuaGwtConverter
         KapuaListResult<DeviceConnection> deviceConnections = deviceConnectionService.query(query);
 
         if (!deviceConnections.isEmpty()) {
-            DeviceConnection connection = deviceConnections.get(0);
+            DeviceConnection connection = deviceConnections.getItem(0);
 
             gwtDevice.setGwtDeviceConnectionStatus(connection.getStatus().toString());
             gwtDevice.setConnectionIp(connection.getClientIp());

@@ -347,7 +347,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             eventQuery.setLimit(1);
             eventQuery.setSortCriteria(new FieldSortCriteria(DeviceEventPredicates.RECEIVED_ON, SortOrder.DESCENDING));
 
-            for (Device d : devices) {
+            for (Device d : devices.getItems()) {
                 DeviceConnection deviceConnection = deviceConnectionService.findByClientId(d.getScopeId(),
                                                                                            d.getClientId());
 
@@ -362,7 +362,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                 KapuaListResult<DeviceEvent> events = deviceEventService.query(eventQuery);
 
                 if (!events.isEmpty()) {
-                    DeviceEvent lastEvent = events.get(0);
+                    DeviceEvent lastEvent = events.getItem(0);
 
                     gwtDevice.setLastEventType(lastEvent.getResource());
                     gwtDevice.setLastEventOn(lastEvent.getReceivedOn());
@@ -527,7 +527,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaListResult<DeviceEvent> deviceEvents = des.query(query);
 
             // prepare results
-            for (DeviceEvent deviceEvent : deviceEvents) {
+            for (DeviceEvent deviceEvent : deviceEvents.getItems()) {
                 gwtDeviceEvents.add(KapuaGwtConverter.convert(deviceEvent));
             }
             gwtResults = new BasePagingLoadResult<GwtDeviceEvent>(gwtDeviceEvents);

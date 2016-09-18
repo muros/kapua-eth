@@ -196,7 +196,7 @@ public class ServiceDAO
         }
 
         // Set results
-        resultContainer.addAll(result);
+        resultContainer.addItems(result);
         return resultContainer;
     }
 

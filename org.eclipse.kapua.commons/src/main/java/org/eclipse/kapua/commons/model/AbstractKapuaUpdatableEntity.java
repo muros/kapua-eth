@@ -30,10 +30,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Version;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
@@ -44,22 +40,18 @@ import org.eclipse.kapua.model.id.KapuaId;
 @SuppressWarnings("serial")
 @MappedSuperclass
 @Access(AccessType.FIELD)
-@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class AbstractKapuaUpdatableEntity extends AbstractKapuaEntity implements KapuaUpdatableEntity
 {
-    @XmlElement(name = "modifiedOn")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_on")
     protected Date     modifiedOn;
 
-    @XmlElement(name = "modifiedBy")
     @Embedded
     @AttributeOverrides({
                           @AttributeOverride(name = "eid", column = @Column(name = "modified_by"))
     })
     protected KapuaEid modifiedBy;
 
-    @XmlElement(name = "optlock")
     @Version
     @Column(name = "optlock")
     protected int      optlock;
@@ -68,7 +60,6 @@ public abstract class AbstractKapuaUpdatableEntity extends AbstractKapuaEntity i
     @Column(name = "attributes")
     protected String   attributes;
 
-    @XmlTransient
     @Basic
     @Column(name = "properties")
     protected String   properties;

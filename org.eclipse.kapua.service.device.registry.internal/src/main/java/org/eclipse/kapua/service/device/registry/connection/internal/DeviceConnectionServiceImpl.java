@@ -173,8 +173,8 @@ public class DeviceConnectionServiceImpl implements DeviceConnectionService
         // Query and parse result
         DeviceConnection device = null;
         DeviceConnectionListResult result = query(query);
-        if (result.size() == 1) {
-            device = result.get(0);
+        if (result.getSize() == 1) {
+            device = result.getItem(0);
         }
 
         return device;

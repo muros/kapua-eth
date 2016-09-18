@@ -136,7 +136,7 @@ public class KapuaAuthorizingRealm extends AuthorizingRealm
         //
         // Create SimpleAuthorizationInfo with principals permissions
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        for (UserPermission userPermission : userPermissions) {
+        for (UserPermission userPermission : userPermissions.getItems()) {
 
             Permission p = permissionFactory.newPermission(userPermission.getPermission().getDomain(),
                                                            userPermission.getPermission().getAction(),

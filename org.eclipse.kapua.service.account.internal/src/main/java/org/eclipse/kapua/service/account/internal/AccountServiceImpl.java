@@ -363,7 +363,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
             q.setParameter("parentAccountPath", account.getParentAccountPath() + "/%");
 
             result = new AccountListResultImpl();
-            result.addAll(q.getResultList());
+            result.addItems(q.getResultList());
 
         }
         catch (Exception e) {

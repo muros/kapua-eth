@@ -168,7 +168,7 @@ public class DeviceRegistryServiceTest extends KapuaTest {
             DeviceListResult result = (DeviceListResult) deviceRegistryService.query(query);
 
             // Then
-            Assertions.assertThat(result.get(0).getBiosVersion()).isEqualTo("foo");
+            Assertions.assertThat(result.getItem(0).getBiosVersion()).isEqualTo("foo");
             return null;
         });
     }

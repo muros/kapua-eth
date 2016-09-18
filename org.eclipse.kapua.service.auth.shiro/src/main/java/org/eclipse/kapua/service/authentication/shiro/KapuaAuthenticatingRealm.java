@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.shiro;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.apache.shiro.SecurityUtils;
@@ -34,6 +33,7 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.authentication.credential.Credential;
+import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
 import org.eclipse.kapua.service.authentication.credential.CredentialService;
 import org.eclipse.kapua.service.authentication.shiro.credential.BCryptCredentialsMatcher;
 import org.eclipse.kapua.service.authentication.shiro.credential.KapuaSimpleAuthenticationInfo;
@@ -167,11 +167,11 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
                 public Credential call()
                     throws Exception
                 {
-                    List<Credential> credentialList = credentialService.findByUserId(user.getScopeId(),
+                    CredentialListResult credentialList = credentialService.findByUserId(user.getScopeId(),
                                                                                      user.getId());
                     // TODO may be better to filter by credential type?
                     if (credentialList != null && !credentialList.isEmpty()) {
-                        return credentialList.get(0);
+                        return credentialList.getItem(0);
                     }
                     else {
                         throw new UnknownAccountException();

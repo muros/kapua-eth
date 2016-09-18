@@ -12,8 +12,13 @@
  *******************************************************************************/
 package org.eclipse.kapua.model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(propOrder = {"name" })
 public interface KapuaNamedEntityCreator<E extends KapuaEntity> extends KapuaUpdatableEntityCreator<E>
 {
+	@XmlElement(name="name")
     public String getName();
 
     public void setName(String name);

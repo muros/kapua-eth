@@ -12,9 +12,19 @@
  *******************************************************************************/
 package org.eclipse.kapua.model;
 
-import org.eclipse.kapua.model.id.KapuaId;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.model.id.KapuaIdAdapter;
+
+@XmlType(propOrder = {"scopeId" })
 public interface KapuaEntityCreator<E extends KapuaEntity>
 {
+	@XmlElement(name="scopeId")
+	@XmlJavaTypeAdapter(KapuaIdAdapter.class)
     public KapuaId getScopeId();
+	
+	public void setScopeId(KapuaId scopeId);
 }

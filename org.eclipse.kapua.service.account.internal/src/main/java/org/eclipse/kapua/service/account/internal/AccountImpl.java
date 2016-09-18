@@ -21,20 +21,12 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaNamedEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.Organization;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "scopeId", "id", "name", "createdOn", "createdBy", "modifiedOn", "modifiedBy", "organization", "parentAccountPath", "optlock" })
 @Entity(name = "Account")
 @NamedQueries({
                 @NamedQuery(name = "Account.findChildAccounts", query = "SELECT a FROM Account a WHERE a.scopeId = :scopeId ORDER BY a.name"),
@@ -45,7 +37,6 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account
 {
     private static final long serialVersionUID = 8530992430658117928L;
 
-    @XmlElement(name = "organization")
     @Embedded
     @AttributeOverrides({
                           @AttributeOverride(name = "name", column = @Column(name = "org_name")),
@@ -63,7 +54,6 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account
     })
     private OrganizationImpl  organization;
 
-    @XmlElement(name = "parentAccountPath")
     @Basic
     @Column(name = "parent_account_path", nullable = false)
     private String            parentAccountPath;

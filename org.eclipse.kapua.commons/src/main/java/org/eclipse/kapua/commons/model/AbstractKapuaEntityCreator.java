@@ -14,8 +14,6 @@ package org.eclipse.kapua.commons.model;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.KapuaEntityCreator;
@@ -24,7 +22,6 @@ import org.eclipse.kapua.model.id.KapuaId;
 @SuppressWarnings("serial")
 public abstract class AbstractKapuaEntityCreator<E extends KapuaEntity> implements KapuaEntityCreator<E>, Serializable
 {
-    @XmlElement(name = "scopeId")
     protected KapuaId scopeId;
 
     protected AbstractKapuaEntityCreator(KapuaId scopeId)

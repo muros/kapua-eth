@@ -12,6 +12,12 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(factoryClass=AccountXmlRegistry.class, factoryMethod="newOrganization")
 public interface Organization
 {
 

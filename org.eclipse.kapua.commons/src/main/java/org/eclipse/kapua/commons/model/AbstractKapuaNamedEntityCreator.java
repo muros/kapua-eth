@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.model;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.KapuaNamedEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -21,7 +19,6 @@ import org.eclipse.kapua.model.id.KapuaId;
 @SuppressWarnings("serial")
 public abstract class AbstractKapuaNamedEntityCreator<E extends KapuaEntity> extends AbstractKapuaEntityCreator<E> implements KapuaNamedEntityCreator<E>
 {
-    @XmlElement(name = "name")
     protected String name;
 
     protected AbstractKapuaNamedEntityCreator(KapuaId scopeId,
