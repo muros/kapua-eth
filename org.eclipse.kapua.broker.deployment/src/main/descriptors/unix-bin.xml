@@ -46,7 +46,7 @@
                 <include>aopalliance:aopalliance</include>
                 <include>org.eclipse.persistence:javax.persistence</include>
                 <include>commons-configuration:commons-configuration</include>
-                <include>de.svenkubiak:jBCrypt</include>
+                <include>org.springframework.security:spring-security-core</include>
                 <include>io.dropwizard.metrics:metrics-core</include>
                 <include>io.dropwizard.metrics:metrics-annotation</include>
 
