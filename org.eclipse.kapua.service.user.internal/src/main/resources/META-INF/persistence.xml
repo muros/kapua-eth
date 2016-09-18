@@ -19,6 +19,12 @@
         
         <class>org.eclipse.kapua.service.user.internal.UserImpl</class>
         <class>org.eclipse.kapua.commons.configuration.ServiceConfigImpl</class>
+         
+        <!-- Base classes and External classes -->
+        <class>org.eclipse.kapua.commons.model.id.KapuaEid</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaEntity</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaNamedEntity</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity</class>
 
 	</persistence-unit>
 </persistence>

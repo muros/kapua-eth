@@ -19,6 +19,12 @@
         
         <!-- Authentication -->
         <class>org.eclipse.kapua.service.authentication.credential.shiro.CredentialImpl</class>
+         
+        <!-- Base classes and External classes -->
+        <class>org.eclipse.kapua.commons.model.id.KapuaEid</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaEntity</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaNamedEntity</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity</class>
         
 		<properties>
 			<!-- <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" /> -->
@@ -38,6 +44,12 @@
         <class>org.eclipse.kapua.service.authorization.role.shiro.RolePermissionImpl</class>
 
         <class>org.eclipse.kapua.service.authorization.user.role.shiro.UserRolesImpl</class>
+         
+        <!-- Base classes and External classes -->
+        <class>org.eclipse.kapua.commons.model.id.KapuaEid</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaEntity</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaNamedEntity</class>
+        <class>org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity</class>
         
         <properties>
             <!-- <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" /> -->

@@ -31,6 +31,7 @@ public enum SystemSettingKey implements SettingKey
     DB_USERNAME("commons.db.username"),
     DB_PASSWORD("commons.db.password"),
 
+    DB_JDBC_DRIVER("commons.db.jdbc.driver"),
     DB_CONNECTION_SCHEME("commons.db.connection.scheme"),
     DB_CONNECTION_HOST("commons.db.connection.host"),
     DB_CONNECTION_PORT("commons.db.connection.port"),
