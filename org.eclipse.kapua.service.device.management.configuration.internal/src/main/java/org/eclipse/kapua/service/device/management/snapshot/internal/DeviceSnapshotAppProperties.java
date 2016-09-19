@@ -14,7 +14,7 @@ package org.eclipse.kapua.service.device.management.snapshot.internal;
 
 import org.eclipse.kapua.service.device.management.KapuaAppProperties;
 
-public enum SnapshotAppProperties implements KapuaAppProperties
+public enum DeviceSnapshotAppProperties implements KapuaAppProperties
 {
 	APP_NAME("SNAPSHOT"),
     APP_VERSION("1.0.0"),
@@ -22,7 +22,7 @@ public enum SnapshotAppProperties implements KapuaAppProperties
 
     private String value;
 
-    SnapshotAppProperties(String value)
+    DeviceSnapshotAppProperties(String value)
     {
         this.value = value;
     }

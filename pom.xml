@@ -422,8 +422,8 @@
         <module>org.eclipse.kapua.service.device.management.configuration.internal</module>
 
         <!-- Deploy -->
-        <module>org.eclipse.kapua.service.device.management.deploy</module>
-        <module>org.eclipse.kapua.service.device.management.deploy.internal</module>
+        <module>org.eclipse.kapua.service.device.management.packages</module>
+        <module>org.eclipse.kapua.service.device.management.packages.internal</module>
 
         <!-- Bundles -->
         <module>org.eclipse.kapua.service.device.management.bundle</module>

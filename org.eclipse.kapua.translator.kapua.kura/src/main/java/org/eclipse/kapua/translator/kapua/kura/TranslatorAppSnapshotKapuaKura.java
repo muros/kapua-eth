@@ -30,7 +30,7 @@ import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSett
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
-import org.eclipse.kapua.service.device.management.snapshot.internal.SnapshotAppProperties;
+import org.eclipse.kapua.service.device.management.snapshot.internal.DeviceSnapshotAppProperties;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
@@ -38,14 +38,14 @@ import org.eclipse.kapua.translator.Translator;
 public class TranslatorAppSnapshotKapuaKura extends Translator<SnapshotRequestMessage, KuraRequestMessage>
 {
     private static final String                                CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<SnapshotAppProperties, SnapshotMetrics> propertiesDictionary;
+    private static Map<DeviceSnapshotAppProperties, SnapshotMetrics> propertiesDictionary;
 
     public TranslatorAppSnapshotKapuaKura()
     {
         propertiesDictionary = new HashMap<>();
 
-        propertiesDictionary.put(SnapshotAppProperties.APP_NAME, SnapshotMetrics.APP_ID);
-        propertiesDictionary.put(SnapshotAppProperties.APP_VERSION, SnapshotMetrics.APP_VERSION);
+        propertiesDictionary.put(DeviceSnapshotAppProperties.APP_NAME, SnapshotMetrics.APP_ID);
+        propertiesDictionary.put(DeviceSnapshotAppProperties.APP_VERSION, SnapshotMetrics.APP_VERSION);
     }
 
     @Override
@@ -83,9 +83,9 @@ public class TranslatorAppSnapshotKapuaKura extends Translator<SnapshotRequestMe
 
         // Build appId
         StringBuilder appIdSb = new StringBuilder();
-        appIdSb.append(propertiesDictionary.get(SnapshotAppProperties.APP_NAME).getValue())
+        appIdSb.append(propertiesDictionary.get(DeviceSnapshotAppProperties.APP_NAME).getValue())
                .append("-")
-               .append(propertiesDictionary.get(SnapshotAppProperties.APP_VERSION).getValue());
+               .append(propertiesDictionary.get(DeviceSnapshotAppProperties.APP_VERSION).getValue());
 
         kuraRequestChannel.setAppId(appIdSb.toString());
 

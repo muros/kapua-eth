@@ -63,8 +63,8 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         //
         // Prepare the request
         BundleRequestChannel bundleRequestChannel = new BundleRequestChannel();
-        bundleRequestChannel.setAppName(BundleAppProperties.APP_NAME);
-        bundleRequestChannel.setVersion(BundleAppProperties.APP_VERSION);
+        bundleRequestChannel.setAppName(DeviceBundleAppProperties.APP_NAME);
+        bundleRequestChannel.setVersion(DeviceBundleAppProperties.APP_VERSION);
         bundleRequestChannel.setMethod(KapuaMethod.READ);
 
         BundleRequestPayload bundleRequestPayload = new BundleRequestPayload();
@@ -112,7 +112,6 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), BundleAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.READ);
@@ -145,8 +144,8 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         //
         // Prepare the request
         BundleRequestChannel bundleRequestChannel = new BundleRequestChannel();
-        bundleRequestChannel.setAppName(BundleAppProperties.APP_NAME);
-        bundleRequestChannel.setVersion(BundleAppProperties.APP_VERSION);
+        bundleRequestChannel.setAppName(DeviceBundleAppProperties.APP_NAME);
+        bundleRequestChannel.setVersion(DeviceBundleAppProperties.APP_VERSION);
         bundleRequestChannel.setMethod(KapuaMethod.EXECUTE);
         bundleRequestChannel.setStart(true);
         bundleRequestChannel.setBundleId(bundleId);
@@ -170,7 +169,6 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), BundleAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.EXECUTE);
@@ -201,8 +199,8 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         //
         // Prepare the request
         BundleRequestChannel bundleRequestChannel = new BundleRequestChannel();
-        bundleRequestChannel.setAppName(BundleAppProperties.APP_NAME);
-        bundleRequestChannel.setVersion(BundleAppProperties.APP_VERSION);
+        bundleRequestChannel.setAppName(DeviceBundleAppProperties.APP_NAME);
+        bundleRequestChannel.setVersion(DeviceBundleAppProperties.APP_VERSION);
         bundleRequestChannel.setMethod(KapuaMethod.EXECUTE);
         bundleRequestChannel.setStart(false);
         bundleRequestChannel.setBundleId(bundleId);

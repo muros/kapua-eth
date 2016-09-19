@@ -34,7 +34,7 @@ import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSett
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundle;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundleFactory;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundles;
-import org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
+import org.eclipse.kapua.service.device.management.bundle.internal.DeviceBundleAppProperties;
 import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponseChannel;
 import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponseMessage;
 import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleResponsePayload;
@@ -47,14 +47,14 @@ import org.eclipse.kapua.translator.exception.TranslatorException;
 public class TranslatorAppBundleKuraKapua extends Translator<KuraResponseMessage, BundleResponseMessage>
 {
     private static final String                            CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<BundleMetrics, BundleAppProperties> metricsDictionary;
+    private static Map<BundleMetrics, DeviceBundleAppProperties> metricsDictionary;
 
     public TranslatorAppBundleKuraKapua()
     {
         metricsDictionary = new HashMap<>();
 
-        metricsDictionary.put(BundleMetrics.APP_ID, BundleAppProperties.APP_NAME);
-        metricsDictionary.put(BundleMetrics.APP_VERSION, BundleAppProperties.APP_VERSION);
+        metricsDictionary.put(BundleMetrics.APP_ID, DeviceBundleAppProperties.APP_NAME);
+        metricsDictionary.put(BundleMetrics.APP_VERSION, DeviceBundleAppProperties.APP_VERSION);
     }
 
     @Override
@@ -115,8 +115,8 @@ public class TranslatorAppBundleKuraKapua extends Translator<KuraResponseMessage
                                           appIdTokens[1]);
         }
 
-        bundleResponseChannel.setAppName(BundleAppProperties.APP_NAME);
-        bundleResponseChannel.setVersion(BundleAppProperties.APP_VERSION);
+        bundleResponseChannel.setAppName(DeviceBundleAppProperties.APP_NAME);
+        bundleResponseChannel.setVersion(DeviceBundleAppProperties.APP_VERSION);
 
         //
         // Return Kapua Channel

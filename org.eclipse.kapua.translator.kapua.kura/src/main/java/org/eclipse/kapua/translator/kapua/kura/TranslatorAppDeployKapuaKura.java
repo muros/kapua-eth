@@ -28,32 +28,30 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
-import org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
-import org.eclipse.kapua.service.device.management.deploy.internal.DeployAppProperties;
-import org.eclipse.kapua.service.device.management.deploy.message.internal.DeployRequestChannel;
-import org.eclipse.kapua.service.device.management.deploy.message.internal.DeployRequestMessage;
-import org.eclipse.kapua.service.device.management.deploy.message.internal.DeployRequestPayload;
+import org.eclipse.kapua.service.device.management.packages.internal.PackageAppProperties;
+import org.eclipse.kapua.service.device.management.packages.message.internal.PackageRequestChannel;
+import org.eclipse.kapua.service.device.management.packages.message.internal.PackageRequestMessage;
+import org.eclipse.kapua.service.device.management.packages.message.internal.PackageRequestPayload;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
 
-public class TranslatorAppDeployKapuaKura extends Translator<DeployRequestMessage, KuraRequestMessage>
+public class TranslatorAppDeployKapuaKura extends Translator<PackageRequestMessage, KuraRequestMessage>
 {
     private static final String                            CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<DeployAppProperties, DeployMetrics> propertiesDictionary;
+    private static Map<PackageAppProperties, DeployMetrics> propertiesDictionary;
 
     public TranslatorAppDeployKapuaKura()
     {
         propertiesDictionary = new HashMap<>();
-
-        propertiesDictionary.put(DeployAppProperties.APP_NAME, DeployMetrics.APP_ID);
-        propertiesDictionary.put(DeployAppProperties.APP_VERSION, DeployMetrics.APP_VERSION);
+        propertiesDictionary.put(PackageAppProperties.APP_NAME, DeployMetrics.APP_ID);
+        propertiesDictionary.put(PackageAppProperties.APP_VERSION, DeployMetrics.APP_VERSION);
     }
 
     @Override
-    public KuraRequestMessage translate(DeployRequestMessage kapuaMessage)
+    public KuraRequestMessage translate(PackageRequestMessage kapuaMessage)
         throws KapuaException
     {
         //
@@ -81,7 +79,7 @@ public class TranslatorAppDeployKapuaKura extends Translator<DeployRequestMessag
                                       kuraPayload);
     }
 
-    private KuraRequestChannel translate(DeployRequestChannel kapuaChannel)
+    private KuraRequestChannel translate(PackageRequestChannel kapuaChannel)
         throws KapuaException
     {
         KuraRequestChannel kuraRequestChannel = new KuraRequestChannel();
@@ -89,9 +87,9 @@ public class TranslatorAppDeployKapuaKura extends Translator<DeployRequestMessag
 
         // Build appId
         StringBuilder appIdSb = new StringBuilder();
-        appIdSb.append(propertiesDictionary.get(BundleAppProperties.APP_NAME).getValue())
+        appIdSb.append(propertiesDictionary.get(PackageAppProperties.APP_NAME).getValue())
                .append("-")
-               .append(propertiesDictionary.get(BundleAppProperties.APP_VERSION).getValue());
+               .append(propertiesDictionary.get(PackageAppProperties.APP_VERSION).getValue());
 
         kuraRequestChannel.setAppId(appIdSb.toString());
         kuraRequestChannel.setMethod(MethodDictionaryKapuaKura.get(kapuaChannel.getMethod()));
@@ -127,7 +125,7 @@ public class TranslatorAppDeployKapuaKura extends Translator<DeployRequestMessag
         return kuraRequestChannel;
     }
 
-    private KuraRequestPayload translate(DeployRequestPayload kapuaPayload)
+    private KuraRequestPayload translate(PackageRequestPayload kapuaPayload)
         throws KapuaException
     {
         KuraRequestPayload kuraRequestPayload = new KuraRequestPayload();
@@ -135,14 +133,14 @@ public class TranslatorAppDeployKapuaKura extends Translator<DeployRequestMessag
         String deployFileName = kapuaPayload.getDeployInstallFileName();
         if (deployFileName != null) {
             kuraRequestPayload.getMetrics()
-                              .put(propertiesDictionary.get(DeployAppProperties.APP_PROPERTY_DEPLOY_INSTALL_FILENAME).getValue(),
+                              .put(propertiesDictionary.get(PackageAppProperties.APP_PROPERTY_DEPLOY_INSTALL_FILENAME).getValue(),
                                    deployFileName);
         }
 
         String deployInstallUrl = kapuaPayload.getDeployInstallUrl();
         if (deployInstallUrl != null) {
             kuraRequestPayload.getMetrics()
-                              .put(propertiesDictionary.get(DeployAppProperties.APP_PROPERTY_DEPLOY_INSTALL_URL).getValue(),
+                              .put(propertiesDictionary.get(PackageAppProperties.APP_PROPERTY_DEPLOY_INSTALL_URL).getValue(),
                                    deployInstallUrl);
         }
 
@@ -169,9 +167,9 @@ public class TranslatorAppDeployKapuaKura extends Translator<DeployRequestMessag
     }
 
     @Override
-    public Class<DeployRequestMessage> getClassFrom()
+    public Class<PackageRequestMessage> getClassFrom()
     {
-        return DeployRequestMessage.class;
+        return PackageRequestMessage.class;
     }
 
     @Override

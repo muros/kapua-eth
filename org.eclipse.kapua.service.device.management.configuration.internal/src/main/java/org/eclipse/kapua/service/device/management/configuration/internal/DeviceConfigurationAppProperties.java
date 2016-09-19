@@ -10,19 +10,19 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.management.bundle.internal;
+package org.eclipse.kapua.service.device.management.configuration.internal;
 
 import org.eclipse.kapua.service.device.management.KapuaAppProperties;
 
-public enum BundleAppProperties implements KapuaAppProperties
+public enum DeviceConfigurationAppProperties implements KapuaAppProperties
 {
-	APP_NAME("BUNDLE"),
+    APP_NAME("CONFIGURATION"), 
     APP_VERSION("1.0.0"),
     ;
 
     private String value;
 
-    BundleAppProperties(String value)
+    DeviceConfigurationAppProperties(String value)
     {
         this.value = value;
     }
@@ -32,5 +32,5 @@ public enum BundleAppProperties implements KapuaAppProperties
     {
         return value;
     }
-	
+
 }

@@ -29,7 +29,7 @@ import org.eclipse.kapua.service.device.management.commons.exception.DeviceManag
 import org.eclipse.kapua.service.device.management.commons.exception.DeviceManagementException;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
-import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationAppProperties;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestChannel;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestMessage;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
@@ -64,8 +64,8 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         //
         // Prepare the request
         SnapshotRequestChannel snapshotRequestChannel = new SnapshotRequestChannel();
-        snapshotRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
-        snapshotRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        snapshotRequestChannel.setAppName(DeviceConfigurationAppProperties.APP_NAME);
+        snapshotRequestChannel.setVersion(DeviceConfigurationAppProperties.APP_VERSION);
         snapshotRequestChannel.setMethod(KapuaMethod.READ);
 
         SnapshotRequestPayload snapshotRequestPayload = new SnapshotRequestPayload();
@@ -145,8 +145,8 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         //
         // Prepare the request
         SnapshotRequestChannel snapshotRequestChannel = new SnapshotRequestChannel();
-        snapshotRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
-        snapshotRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        snapshotRequestChannel.setAppName(DeviceConfigurationAppProperties.APP_NAME);
+        snapshotRequestChannel.setVersion(DeviceConfigurationAppProperties.APP_VERSION);
         snapshotRequestChannel.setMethod(KapuaMethod.EXECUTE);
         snapshotRequestChannel.setSnapshotId(snapshotId);
 

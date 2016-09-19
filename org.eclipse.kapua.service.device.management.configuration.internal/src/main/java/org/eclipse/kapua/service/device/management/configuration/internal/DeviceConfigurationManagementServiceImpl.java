@@ -72,8 +72,8 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         //
         // Prepare the request
         ConfigurationRequestChannel configurationRequestChannel = new ConfigurationRequestChannel();
-        configurationRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
-        configurationRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        configurationRequestChannel.setAppName(DeviceConfigurationAppProperties.APP_NAME);
+        configurationRequestChannel.setVersion(DeviceConfigurationAppProperties.APP_VERSION);
         configurationRequestChannel.setMethod(KapuaMethod.READ);
         configurationRequestChannel.setConfigurationId(configurationId);
         configurationRequestChannel.setComponentId(configurationComponentPid);
@@ -124,7 +124,6 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), ConfigurationAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.READ);
@@ -158,8 +157,8 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         //
         // Prepare the request
         ConfigurationRequestChannel configurationRequestChannel = new ConfigurationRequestChannel();
-        configurationRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
-        configurationRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        configurationRequestChannel.setAppName(DeviceConfigurationAppProperties.APP_NAME);
+        configurationRequestChannel.setVersion(DeviceConfigurationAppProperties.APP_VERSION);
         configurationRequestChannel.setMethod(KapuaMethod.WRITE);
         configurationRequestChannel.setComponentId(deviceComponentConfiguration.getId());
 
@@ -202,7 +201,6 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), ConfigurationAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.WRITE);
@@ -250,8 +248,8 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         //
         // Prepare the request
         ConfigurationRequestChannel configurationRequestChannel = new ConfigurationRequestChannel();
-        configurationRequestChannel.setAppName(ConfigurationAppProperties.APP_NAME);
-        configurationRequestChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        configurationRequestChannel.setAppName(DeviceConfigurationAppProperties.APP_NAME);
+        configurationRequestChannel.setVersion(DeviceConfigurationAppProperties.APP_VERSION);
         configurationRequestChannel.setMethod(KapuaMethod.WRITE);
 
         ConfigurationRequestPayload configurationRequestPayload = new ConfigurationRequestPayload();

@@ -47,7 +47,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class XmlUtil
 {
     @SuppressWarnings("unused")
-    private static final Logger            s_logger = LoggerFactory.getLogger(XmlUtil.class);
+    private static final Logger s_logger = LoggerFactory.getLogger(XmlUtil.class);
 
     @SuppressWarnings("rawtypes")
     private static Map<Class, JAXBContext> contexts = new HashMap<>();
@@ -168,9 +168,10 @@ public class XmlUtil
             for (ValidationEvent valEvent : valEventHndlr.getEvents()) {
                 if (valEvent.getSeverity() != ValidationEvent.WARNING) {
                     // throw a new Unmarshall Exception if there is a parsing error
-                    String msg = MessageFormat.format("Line {0}, Col: {1}: {2}",
+                    String msg = MessageFormat.format("Line {0}, Col: {1}.\n\tError message: {2}\n\tLinked exception message:{3}",
                                                       valEvent.getLocator().getLineNumber(),
                                                       valEvent.getLocator().getColumnNumber(),
+                                                      valEvent.getMessage() != null ? valEvent.getMessage() : "",
                                                       valEvent.getLinkedException() != null ? valEvent.getLinkedException().getMessage() : "");
                     throw new UnmarshalException(msg, valEvent.getLinkedException());
                 }

@@ -45,7 +45,7 @@ import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSett
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationAppProperties;
 import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationImpl;
 import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestChannel;
 import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationRequestMessage;
@@ -59,14 +59,14 @@ import org.eclipse.kapua.translator.exception.TranslatorException;
 public class TranslatorAppConfigurationKapuaKura extends Translator<ConfigurationRequestMessage, KuraRequestMessage>
 {
     private static final String                                          CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<ConfigurationAppProperties, ConfigurationMetrics> propertiesDictionary;
+    private static Map<DeviceConfigurationAppProperties, ConfigurationMetrics> propertiesDictionary;
 
     public TranslatorAppConfigurationKapuaKura()
     {
         propertiesDictionary = new HashMap<>();
 
-        propertiesDictionary.put(ConfigurationAppProperties.APP_NAME, ConfigurationMetrics.APP_ID);
-        propertiesDictionary.put(ConfigurationAppProperties.APP_VERSION, ConfigurationMetrics.APP_VERSION);
+        propertiesDictionary.put(DeviceConfigurationAppProperties.APP_NAME, ConfigurationMetrics.APP_ID);
+        propertiesDictionary.put(DeviceConfigurationAppProperties.APP_VERSION, ConfigurationMetrics.APP_VERSION);
     }
 
     @Override
@@ -106,9 +106,9 @@ public class TranslatorAppConfigurationKapuaKura extends Translator<Configuratio
 
         // Build appId
         StringBuilder appIdSb = new StringBuilder();
-        appIdSb.append(propertiesDictionary.get(ConfigurationAppProperties.APP_NAME).getValue())
+        appIdSb.append(propertiesDictionary.get(DeviceConfigurationAppProperties.APP_NAME).getValue())
                .append("-")
-               .append(propertiesDictionary.get(ConfigurationAppProperties.APP_VERSION).getValue());
+               .append(propertiesDictionary.get(DeviceConfigurationAppProperties.APP_VERSION).getValue());
 
         kuraRequestChannel.setAppId(appIdSb.toString());
         kuraRequestChannel.setMethod(MethodDictionaryKapuaKura.get(kapuaChannel.getMethod()));

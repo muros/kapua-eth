@@ -13,13 +13,12 @@ package org.eclipse.kapua.service.device.call.kura.app;
 
 public enum DeployMetrics
 {
-    APP_ID("DEPLOY"), 
-    APP_VERSION("V1"),
-    
+    APP_ID("DEPLOY"),
+    APP_VERSION("V2"),
+
     // Request
     APP_METRIC_DEPLOY_URL("deploy.url"),
     APP_METRIC_DEPLOY_FILENAME("deploy.filename"),
-    
     ;
 
     private String value;

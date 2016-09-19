@@ -32,13 +32,13 @@ import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSett
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
-import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationAppProperties;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseChannel;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
-import org.eclipse.kapua.service.device.management.snapshot.internal.SnapshotAppProperties;
+import org.eclipse.kapua.service.device.management.snapshot.internal.DeviceSnapshotAppProperties;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
@@ -46,14 +46,14 @@ import org.eclipse.kapua.translator.exception.TranslatorException;
 public class TranslatorAppSnapshotKuraKapua extends Translator<KuraResponseMessage, SnapshotResponseMessage>
 {
     private static final String                                CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<SnapshotMetrics, SnapshotAppProperties> metricsDictionary;
+    private static Map<SnapshotMetrics, DeviceSnapshotAppProperties> metricsDictionary;
 
     public TranslatorAppSnapshotKuraKapua()
     {
         metricsDictionary = new HashMap<>();
 
-        metricsDictionary.put(SnapshotMetrics.APP_ID, SnapshotAppProperties.APP_NAME);
-        metricsDictionary.put(SnapshotMetrics.APP_VERSION, SnapshotAppProperties.APP_VERSION);
+        metricsDictionary.put(SnapshotMetrics.APP_ID, DeviceSnapshotAppProperties.APP_NAME);
+        metricsDictionary.put(SnapshotMetrics.APP_VERSION, DeviceSnapshotAppProperties.APP_VERSION);
     }
 
     @Override
@@ -114,8 +114,8 @@ public class TranslatorAppSnapshotKuraKapua extends Translator<KuraResponseMessa
                                           appIdTokens[1]);
         }
 
-        snapshotResponseChannel.setAppName(ConfigurationAppProperties.APP_NAME);
-        snapshotResponseChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        snapshotResponseChannel.setAppName(DeviceConfigurationAppProperties.APP_NAME);
+        snapshotResponseChannel.setVersion(DeviceConfigurationAppProperties.APP_VERSION);
 
         //
         // Return Kapua Channel
