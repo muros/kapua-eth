@@ -88,10 +88,10 @@ Vagrant.configure(2) do |config|
 
      ### install activemq ###
 	 sudo mkdir -p /usr/local/activemq
-     sudo wget http://archive.apache.org/dist/activemq/5.11.0/apache-activemq-5.11.0-bin.tar.gz -P /usr/local/activemq
+     sudo wget http://archive.apache.org/dist/activemq/5.14.0/apache-activemq-5.14.0-bin.tar.gz -P /usr/local/activemq
      cd /usr/local/activemq
-     sudo tar zxvf apache-activemq-5.11.0-bin.tar.gz
-     sudo rm apache-activemq-5.11.0-bin.tar.gz
+     sudo tar zxvf apache-activemq-5.14.0-bin.tar.gz
+     sudo rm apache-activemq-5.14.0-bin.tar.gz
 
      ### install Elasticsearch ###
      sudo mkdir -p /usr/local/elasticsearch
