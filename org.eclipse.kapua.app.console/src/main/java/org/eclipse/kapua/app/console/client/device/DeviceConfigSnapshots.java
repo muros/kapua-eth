@@ -25,6 +25,8 @@ import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtSnapshot;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementService;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
@@ -70,37 +72,38 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
 public class DeviceConfigSnapshots extends LayoutContainer {
 
-    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
+    private static final ConsoleMessages                MSGS             = GWT.create(ConsoleMessages.class);
 
-    private final GwtDeviceServiceAsync gwtDeviceService = GWT.create(GwtDeviceService.class);
-    private final GwtSecurityTokenServiceAsync gwtXSRFService = GWT.create(GwtSecurityTokenService.class);
+    private final GwtDeviceManagementServiceAsync gwtDeviceManagementService = GWT.create(GwtDeviceManagementService.class);
+    private final GwtDeviceServiceAsync                 gwtDeviceService = GWT.create(GwtDeviceService.class);
+    private final GwtSecurityTokenServiceAsync          gwtXSRFService   = GWT.create(GwtSecurityTokenService.class);
 
-    private final static String SERVLET_URL = "console/file/configuration/snapshot";
+    private final static String                         SERVLET_URL      = "console/file/configuration/snapshot";
 
-    private GwtSession m_currentSession;
+    private GwtSession                                  m_currentSession;
 
-    private boolean m_dirty;
-    private boolean m_initialized;
-    private GwtDevice m_selectedDevice;
-    private DeviceTabConfiguration m_tabConfig;
+    private boolean                                     m_dirty;
+    private boolean                                     m_initialized;
+    private GwtDevice                                   m_selectedDevice;
+    private DeviceTabConfiguration                      m_tabConfig;
 
-    private ToolBar m_toolBar;
+    private ToolBar                                     m_toolBar;
 
-    private Button m_refreshButton;
-    private boolean refreshProcess;
+    private Button                                      m_refreshButton;
+    private boolean                                     refreshProcess;
 
-    private Button m_downloadButton;
-    private Button m_rollbackButton;
-    private Button m_uploadButton;
+    private Button                                      m_downloadButton;
+    private Button                                      m_rollbackButton;
+    private Button                                      m_uploadButton;
 
-    private ListStore<GwtSnapshot> m_store;
-    private Grid<GwtSnapshot> m_grid;
+    private ListStore<GwtSnapshot>                      m_store;
+    private Grid<GwtSnapshot>                           m_grid;
     private BaseListLoader<ListLoadResult<GwtSnapshot>> m_loader;
-    private FileUploadDialog m_fileUpload;
+    private FileUploadDialog                            m_fileUpload;
 
-    protected boolean downloadProcess;
-    protected boolean uploadProcess;
-    protected boolean rollbackProcess;
+    protected boolean                                   downloadProcess;
+    protected boolean                                   uploadProcess;
+    protected boolean                                   rollbackProcess;
 
     public DeviceConfigSnapshots(GwtSession currentSession,
             DeviceTabConfiguration tabConfig) {
@@ -144,82 +147,82 @@ public class DeviceConfigSnapshots extends LayoutContainer {
         //
         // Refresh Button
         m_refreshButton = new Button(MSGS.refreshButton(),
-                AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
-                new SelectionListener<ButtonEvent>() {
+                                     AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
+                                     new SelectionListener<ButtonEvent>() {
 
-                    @Override
+                                         @Override
                     public void componentSelected(ButtonEvent ce) {
-                        if (!refreshProcess) {
-                            refreshProcess = true;
-                            m_refreshButton.setEnabled(false);
+                                             if (!refreshProcess) {
+                                                 refreshProcess = true;
+                                                 m_refreshButton.setEnabled(false);
 
-                            m_dirty = true;
-                            reload();
+                                                 m_dirty = true;
+                                                 reload();
 
-                            m_refreshButton.setEnabled(true);
-                            refreshProcess = false;
-                        }
-                    }
-                });
+                                                 m_refreshButton.setEnabled(true);
+                                                 refreshProcess = false;
+                                             }
+                                         }
+                                     });
         m_refreshButton.setEnabled(false);
         m_toolBar.add(m_refreshButton);
         m_toolBar.add(new SeparatorToolItem());
 
         m_downloadButton = new Button(MSGS.download(),
-                AbstractImagePrototype.create(Resources.INSTANCE.snapshotDownload()),
-                new SelectionListener<ButtonEvent>() {
+                                      AbstractImagePrototype.create(Resources.INSTANCE.snapshotDownload()),
+                                      new SelectionListener<ButtonEvent>() {
 
-                    @Override
+                                          @Override
                     public void componentSelected(ButtonEvent ce) {
-                        if (!downloadProcess) {
-                            downloadProcess = true;
-                            m_downloadButton.setEnabled(false);
+                                              if (!downloadProcess) {
+                                                  downloadProcess = true;
+                                                  m_downloadButton.setEnabled(false);
 
-                            downloadSnapshot();
+                                                  downloadSnapshot();
 
-                            m_downloadButton.setEnabled(true);
-                            downloadProcess = false;
-                        }
-                    }
-                });
+                                                  m_downloadButton.setEnabled(true);
+                                                  downloadProcess = false;
+                                              }
+                                          }
+                                      });
         m_downloadButton.setEnabled(false);
 
         m_uploadButton = new Button(MSGS.upload(),
-                AbstractImagePrototype.create(Resources.INSTANCE.snapshotUpload()),
-                new SelectionListener<ButtonEvent>() {
+                                    AbstractImagePrototype.create(Resources.INSTANCE.snapshotUpload()),
+                                    new SelectionListener<ButtonEvent>() {
 
-                    @Override
+                                        @Override
                     public void componentSelected(ButtonEvent ce) {
-                        if (!uploadProcess) {
-                            uploadProcess = true;
-                            m_uploadButton.setEnabled(false);
+                                            if (!uploadProcess) {
+                                                uploadProcess = true;
+                                                m_uploadButton.setEnabled(false);
 
-                            uploadSnapshot();
+                                                uploadSnapshot();
 
-                            m_uploadButton.setEnabled(true);
-                            uploadProcess = false;
-                        }
-                    }
-                });
+                                                m_uploadButton.setEnabled(true);
+                                                uploadProcess = false;
+                                            }
+                                        }
+                                    });
         m_uploadButton.setEnabled(true);
 
         m_rollbackButton = new Button(MSGS.rollback(),
-                AbstractImagePrototype.create(Resources.INSTANCE.snapshotRollback()),
-                new SelectionListener<ButtonEvent>() {
+                                      AbstractImagePrototype.create(Resources.INSTANCE.snapshotRollback()),
+                                      new SelectionListener<ButtonEvent>() {
 
-                    @Override
+                                          @Override
                     public void componentSelected(ButtonEvent ce) {
-                        if (!rollbackProcess) {
-                            rollbackProcess = true;
-                            m_rollbackButton.setEnabled(false);
+                                              if (!rollbackProcess) {
+                                                  rollbackProcess = true;
+                                                  m_rollbackButton.setEnabled(false);
 
-                            rollbackSnapshot();
+                                                  rollbackSnapshot();
 
-                            m_rollbackButton.setEnabled(true);
-                            rollbackProcess = false;
-                        }
-                    }
-                });
+                                                  m_rollbackButton.setEnabled(true);
+                                                  rollbackProcess = false;
+                                              }
+                                          }
+                                      });
         m_rollbackButton.setEnabled(false);
 
         m_toolBar.add(m_downloadButton);
@@ -249,8 +252,8 @@ public class DeviceConfigSnapshots extends LayoutContainer {
             public void load(Object loadConfig, AsyncCallback<ListLoadResult<GwtSnapshot>> callback) {
                 if (m_selectedDevice != null && m_dirty && m_initialized) {
                     if (m_selectedDevice.isOnline()) {
-                        gwtDeviceService.findDeviceSnapshots(m_selectedDevice,
-                                callback);
+                        gwtDeviceManagementService.findDeviceSnapshots(m_selectedDevice,
+                                                             callback);
                     } else {
                         ListLoadResult<GwtSnapshot> snapshotResults = new ListLoadResult<GwtSnapshot>() {
 
@@ -322,7 +325,7 @@ public class DeviceConfigSnapshots extends LayoutContainer {
 
         Timer timer = new Timer() {
 
-            private int TIMEOUT_MILLIS = 30000;
+            private int TIMEOUT_MILLIS  = 30000;
             private int countdownMillis = TIMEOUT_MILLIS;
 
             public void run() {
@@ -332,30 +335,30 @@ public class DeviceConfigSnapshots extends LayoutContainer {
                     //
                     // Poll the current status of the device until is online again or timeout.
                     gwtDeviceService.findDevice(m_selectedDevice.getScopeId(),
-                            m_selectedDevice.getClientId(),
-                            new AsyncCallback<GwtDevice>() {
+                                                m_selectedDevice.getClientId(),
+                                                new AsyncCallback<GwtDevice>() {
 
-                                @Override
+                                                    @Override
                                 public void onFailure(Throwable t) {
-                                    done();
-                                }
+                                                        done();
+                                                    }
 
-                                @Override
+                                                    @Override
                                 public void onSuccess(GwtDevice gwtDevice) {
-                                    if (countdownMillis <= 0 ||
-                                    // Allow the device to disconnect before checking if it's online again.
-                                            ((TIMEOUT_MILLIS - countdownMillis) > 5000 && gwtDevice.isOnline())) {
-                                        done();
-                                    }
-                                }
+                                                        if (countdownMillis <= 0 ||
+                                                        // Allow the device to disconnect before checking if it's online again.
+                                                            ((TIMEOUT_MILLIS - countdownMillis) > 5000 && gwtDevice.isOnline())) {
+                                                            done();
+                                                        }
+                                                    }
 
                                 private void done() {
-                                    cancel();
-                                    // force a dirty on both tabs
-                                    m_tabConfig.setDevice(m_selectedDevice);
-                                    refresh();
-                                }
-                            });
+                                                        cancel();
+                                                        // force a dirty on both tabs
+                                                        m_tabConfig.setDevice(m_selectedDevice);
+                                                        refresh();
+                                                    }
+                                                });
                 }
             }
         };
@@ -397,11 +400,11 @@ public class DeviceConfigSnapshots extends LayoutContainer {
             }
 
             sbUrl.append("&scopeId=")
-                    .append(URL.encodeQueryString(m_currentSession.getSelectedAccount().getId()))
-                    .append("&deviceId=")
-                    .append(URL.encodeQueryString(m_selectedDevice.getId()))
-                    .append("&snapshotId=")
-                    .append(snapshot.getSnapshotId());
+                 .append(URL.encodeQueryString(m_currentSession.getSelectedAccount().getId()))
+                 .append("&deviceId=")
+                 .append(URL.encodeQueryString(m_selectedDevice.getId()))
+                 .append("&snapshotId=")
+                 .append(snapshot.getSnapshotId());
             Window.open(sbUrl.toString(), "_blank", "location=no");
         }
     }
@@ -443,53 +446,53 @@ public class DeviceConfigSnapshots extends LayoutContainer {
         if (m_selectedDevice != null && snapshot != null) {
 
             MessageBox.confirm(MSGS.confirm(),
-                    MSGS.deviceSnapshotRollbackConfirm(),
-                    new Listener<MessageBoxEvent>() {
+                               MSGS.deviceSnapshotRollbackConfirm(),
+                               new Listener<MessageBoxEvent>() {
 
                         public void handleEvent(MessageBoxEvent ce) {
-                            // if confirmed, delete
-                            Dialog dialog = ce.getDialog();
-                            if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
+                                       // if confirmed, delete
+                                       Dialog dialog = ce.getDialog();
+                                       if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
 
-                                m_dirty = true;
-                                m_grid.mask(MSGS.rollingBack());
-                                m_toolBar.disable();
+                                           m_dirty = true;
+                                           m_grid.mask(MSGS.rollingBack());
+                                           m_toolBar.disable();
 
-                                // mark the whole config panel dirty and for reload
-                                m_tabConfig.setDevice(m_selectedDevice);
+                                           // mark the whole config panel dirty and for reload
+                                           m_tabConfig.setDevice(m_selectedDevice);
 
-                                //
-                                // Getting XSRF token
-                                gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
+                                           //
+                                           // Getting XSRF token
+                                           gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
 
-                                    @Override
+                                               @Override
                                     public void onFailure(Throwable ex) {
-                                        FailureHandler.handle(ex);
-                                    }
+                                                   FailureHandler.handle(ex);
+                                               }
 
-                                    @Override
+                                               @Override
                                     public void onSuccess(GwtXSRFToken token) {
-                                        // do the rollback
-                                        gwtDeviceService.rollbackDeviceSnapshot(token,
-                                                m_selectedDevice,
-                                                snapshot,
-                                                new AsyncCallback<Void>() {
+                                                   // do the rollback
+                                                   gwtDeviceManagementService.rollbackDeviceSnapshot(token,
+                                                                                           m_selectedDevice,
+                                                                                           snapshot,
+                                                                                           new AsyncCallback<Void>() {
 
                                                     public void onFailure(Throwable caught) {
-                                                        FailureHandler.handle(caught);
-                                                        m_dirty = true;
-                                                    }
+                                                                                                   FailureHandler.handle(caught);
+                                                                                                   m_dirty = true;
+                                                                                               }
 
                                                     public void onSuccess(Void arg0) {
-                                                        refreshWhenOnline();
-                                                    }
-                                                });
-                                    }
-                                });
+                                                                                                   refreshWhenOnline();
+                                                                                               }
+                                                                                           });
+                                               }
+                                           });
 
-                            }
-                        }
-                    });
+                                       }
+                                   }
+                               });
         }
     }
 

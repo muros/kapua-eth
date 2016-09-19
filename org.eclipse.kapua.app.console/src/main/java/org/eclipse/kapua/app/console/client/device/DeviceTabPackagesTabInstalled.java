@@ -21,8 +21,8 @@ import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.shared.model.GwtBundleInfo;
 import org.eclipse.kapua.app.console.shared.model.GwtDeploymentPackage;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
-import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
-import org.eclipse.kapua.app.console.shared.service.GwtDeviceServiceAsync;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementService;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementServiceAsync;
 
 import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
@@ -40,15 +40,15 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
 public class DeviceTabPackagesTabInstalled extends TabItem
 {
-    private static final ConsoleMessages MSGS             = GWT.create(ConsoleMessages.class);
-    private final GwtDeviceServiceAsync  gwtDeviceService = GWT.create(GwtDeviceService.class);
+    private static final ConsoleMessages          MSGS                       = GWT.create(ConsoleMessages.class);
+    private final GwtDeviceManagementServiceAsync gwtDeviceManagementService = GWT.create(GwtDeviceManagementService.class);
 
-    private boolean                      m_initialized    = false;
-    private boolean                      m_dirty          = true;
+    private boolean m_initialized = false;
+    private boolean m_dirty       = true;
 
-    private DeviceTabPackages            m_rootTabPanel;
-    private TreeGrid<ModelData>          m_treeGrid;
-    private TreeStore<ModelData>         m_treeStore      = new TreeStore<ModelData>();
+    private DeviceTabPackages    m_rootTabPanel;
+    private TreeGrid<ModelData>  m_treeGrid;
+    private TreeStore<ModelData> m_treeStore = new TreeStore<ModelData>();
 
     public DeviceTabPackagesTabInstalled(DeviceTabPackages rootTabPanel)
     {
@@ -137,7 +137,7 @@ public class DeviceTabPackagesTabInstalled extends TabItem
             else {
                 m_treeGrid.mask(MSGS.loading());
 
-                gwtDeviceService.findDeviceDeploymentPackages(selectedDevice, new AsyncCallback<List<GwtDeploymentPackage>>() {
+                gwtDeviceManagementService.findDeviceDeploymentPackages(selectedDevice, new AsyncCallback<List<GwtDeploymentPackage>>() {
                     @Override
                     public void onSuccess(List<GwtDeploymentPackage> packages)
                     {

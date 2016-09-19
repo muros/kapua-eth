@@ -23,8 +23,8 @@ import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
-import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
-import org.eclipse.kapua.app.console.shared.service.GwtDeviceServiceAsync;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementService;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementServiceAsync;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenService;
 import org.eclipse.kapua.app.console.shared.service.GwtSecurityTokenServiceAsync;
 
@@ -61,30 +61,30 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
 public class DeviceTabBundles extends LayoutContainer {
 
-    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
+    private static final ConsoleMessages                     MSGS             = GWT.create(ConsoleMessages.class);
 
-    private final GwtDeviceServiceAsync gwtDeviceService = GWT.create(GwtDeviceService.class);
-    private final GwtSecurityTokenServiceAsync gwtXSRFService = GWT.create(GwtSecurityTokenService.class);
+    private final GwtDeviceManagementServiceAsync gwtDeviceManagementService = GWT.create(GwtDeviceManagementService.class);
+    private final GwtSecurityTokenServiceAsync               gwtXSRFService   = GWT.create(GwtSecurityTokenService.class);
 
     @SuppressWarnings("unused")
-    private GwtSession m_currentSession;
-    private DeviceTabs m_deviceTabs;
+    private GwtSession                                       m_currentSession;
+    private DeviceTabs                                       m_deviceTabs;
 
-    private boolean m_dirty;
-    private boolean m_initialized;
-    private GwtDevice m_selectedDevice;
+    private boolean                                          m_dirty;
+    private boolean                                          m_initialized;
+    private GwtDevice                                        m_selectedDevice;
 
-    private ToolBar m_toolBar;
+    private ToolBar                                          m_toolBar;
 
-    private Button m_refreshButton;
-    private Button m_startButton;
-    private Button m_stopButton;
+    private Button                                           m_refreshButton;
+    private Button                                           m_startButton;
+    private Button                                           m_stopButton;
 
-    private Grid<GwtGroupedNVPair> m_grid;
-    private ListStore<GwtGroupedNVPair> m_store;
+    private Grid<GwtGroupedNVPair>                           m_grid;
+    private ListStore<GwtGroupedNVPair>                      m_store;
     private BaseListLoader<ListLoadResult<GwtGroupedNVPair>> m_loader;
 
-    protected boolean refreshProcess;
+    protected boolean                                        refreshProcess;
 
     public DeviceTabBundles(GwtSession currentSession,
             DeviceTabs deviceTabs) {
@@ -126,35 +126,35 @@ public class DeviceTabBundles extends LayoutContainer {
         //
         // Refresh Button
         m_refreshButton = new Button(MSGS.refreshButton(),
-                AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
-                new SelectionListener<ButtonEvent>() {
+                                     AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
+                                     new SelectionListener<ButtonEvent>() {
 
-                    @Override
+                                         @Override
                     public void componentSelected(ButtonEvent ce) {
-                        if (!refreshProcess) {
-                            refreshProcess = true;
+                                             if (!refreshProcess) {
+                                                 refreshProcess = true;
 
-                            if (m_selectedDevice.isOnline()) {
-                                m_toolBar.disable();
-                                m_dirty = true;
-                                refresh();
+                                                 if (m_selectedDevice.isOnline()) {
+                                                     m_toolBar.disable();
+                                                     m_dirty = true;
+                                                     refresh();
 
-                                refreshProcess = false;
+                                                     refreshProcess = false;
                             } else {
-                                MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
-                                        new Listener<MessageBoxEvent>() {
+                                                     MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
+                                                                      new Listener<MessageBoxEvent>() {
 
-                                            @Override
+                                                                          @Override
                                             public void handleEvent(MessageBoxEvent be) {
-                                                m_grid.unmask();
+                                                                              m_grid.unmask();
 
-                                                refreshProcess = false;
-                                            }
-                                        });
-                            }
-                        }
-                    }
-                });
+                                                                              refreshProcess = false;
+                                                                          }
+                                                                      });
+                                                 }
+                                             }
+                                         }
+                                     });
 
         m_refreshButton.setEnabled(true);
         m_toolBar.add(m_refreshButton);
@@ -178,44 +178,44 @@ public class DeviceTabBundles extends LayoutContainer {
         //
         // Start Button
         m_startButton = new Button(MSGS.deviceBndStart(),
-                AbstractImagePrototype.create(Resources.INSTANCE.bundleStart()),
-                new SelectionListener<ButtonEvent>() {
+                                   AbstractImagePrototype.create(Resources.INSTANCE.bundleStart()),
+                                   new SelectionListener<ButtonEvent>() {
 
-                    @Override
+                                       @Override
                     public void componentSelected(ButtonEvent ce) {
-                        if (m_selectedDevice.isOnline()) {
-                            m_toolBar.disable();
-                            m_grid.mask(MSGS.loading());
+                                           if (m_selectedDevice.isOnline()) {
+                                               m_toolBar.disable();
+                                               m_grid.mask(MSGS.loading());
 
-                            //
-                            // Getting XSRF token
-                            gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
+                                               //
+                                               // Getting XSRF token
+                                               gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
 
-                                @Override
+                                                   @Override
                                 public void onFailure(Throwable ex) {
-                                    FailureHandler.handle(ex);
-                                }
+                                                       FailureHandler.handle(ex);
+                                                   }
 
-                                @Override
+                                                   @Override
                                 public void onSuccess(GwtXSRFToken token) {
-                                    gwtDeviceService.startBundle(token,
-                                            m_selectedDevice,
-                                            m_grid.getSelectionModel().getSelectedItem(),
-                                            callback);
-                                }
-                            });
+                                                       gwtDeviceManagementService.startBundle(token,
+                                                                                    m_selectedDevice,
+                                                                                    m_grid.getSelectionModel().getSelectedItem(),
+                                                                                    callback);
+                                                   }
+                                               });
                         } else {
-                            MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
-                                    new Listener<MessageBoxEvent>() {
+                                               MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
+                                                                new Listener<MessageBoxEvent>() {
 
-                                        @Override
+                                                                    @Override
                                         public void handleEvent(MessageBoxEvent be) {
-                                            m_grid.unmask();
-                                        }
-                                    });
-                        }
-                    }
-                });
+                                                                        m_grid.unmask();
+                                                                    }
+                                                                });
+                                           }
+                                       }
+                                   });
         m_startButton.setEnabled(true);
         m_toolBar.add(m_startButton);
         m_toolBar.add(new SeparatorToolItem());
@@ -223,56 +223,56 @@ public class DeviceTabBundles extends LayoutContainer {
         //
         // Stop Button
         m_stopButton = new Button(MSGS.deviceBndStop(),
-                AbstractImagePrototype.create(Resources.INSTANCE.bundleStop()),
-                new SelectionListener<ButtonEvent>() {
+                                  AbstractImagePrototype.create(Resources.INSTANCE.bundleStop()),
+                                  new SelectionListener<ButtonEvent>() {
 
-                    @Override
+                                      @Override
                     public void componentSelected(ButtonEvent ce) {
-                        if (m_selectedDevice.isOnline()) {
-                            final GwtGroupedNVPair pair = m_grid.getSelectionModel().getSelectedItem();
-                            String bundleName = pair.getName();
-                            MessageBox.confirm(MSGS.confirm(),
-                                    MSGS.deviceStopBundle(bundleName),
-                                    new Listener<MessageBoxEvent>() {
+                                          if (m_selectedDevice.isOnline()) {
+                                              final GwtGroupedNVPair pair = m_grid.getSelectionModel().getSelectedItem();
+                                              String bundleName = pair.getName();
+                                              MessageBox.confirm(MSGS.confirm(),
+                                                                 MSGS.deviceStopBundle(bundleName),
+                                                                 new Listener<MessageBoxEvent>() {
 
                                         public void handleEvent(MessageBoxEvent ce) {
-                                            // if confirmed, stop
-                                            Dialog dialog = ce.getDialog();
-                                            if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
-                                                m_toolBar.disable();
-                                                m_grid.mask(MSGS.loading());
-                                                //
-                                                // Getting XSRF token
-                                                gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
+                                                                         // if confirmed, stop
+                                                                         Dialog dialog = ce.getDialog();
+                                                                         if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
+                                                                             m_toolBar.disable();
+                                                                             m_grid.mask(MSGS.loading());
+                                                                             //
+                                                                             // Getting XSRF token
+                                                                             gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
 
-                                                    @Override
+                                                                                 @Override
                                                     public void onFailure(Throwable ex) {
-                                                        FailureHandler.handle(ex);
-                                                    }
+                                                                                     FailureHandler.handle(ex);
+                                                                                 }
 
-                                                    @Override
+                                                                                 @Override
                                                     public void onSuccess(GwtXSRFToken token) {
-                                                        gwtDeviceService.stopBundle(token,
-                                                                m_selectedDevice,
-                                                                pair,
-                                                                callback);
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
+                                                                                     gwtDeviceManagementService.stopBundle(token,
+                                                                                                                 m_selectedDevice,
+                                                                                                                 pair,
+                                                                                                                 callback);
+                                                                                 }
+                                                                             });
+                                                                         }
+                                                                     }
+                                                                 });
                         } else {
-                            MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
-                                    new Listener<MessageBoxEvent>() {
+                                              MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(),
+                                                               new Listener<MessageBoxEvent>() {
 
-                                        @Override
+                                                                   @Override
                                         public void handleEvent(MessageBoxEvent be) {
-                                            m_grid.unmask();
-                                        }
-                                    });
-                        }
-                    }
-                });
+                                                                       m_grid.unmask();
+                                                                   }
+                                                               });
+                                          }
+                                      }
+                                  });
         m_stopButton.setEnabled(true);
         m_toolBar.add(m_stopButton);
         m_toolBar.add(new SeparatorToolItem());
@@ -287,7 +287,7 @@ public class DeviceTabBundles extends LayoutContainer {
             protected void load(Object loadConfig, final AsyncCallback<ListLoadResult<GwtGroupedNVPair>> callback) {
                 if (m_selectedDevice != null) {
                     if (m_selectedDevice.isOnline()) {
-                        gwtDeviceService.findBundles(m_selectedDevice, callback);
+                        gwtDeviceManagementService.findBundles(m_selectedDevice, callback);
                     } else {
                         m_grid.getStore().removeAll();
                         m_grid.unmask();

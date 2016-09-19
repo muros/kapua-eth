@@ -45,6 +45,7 @@
         <url-pattern>/console/auth/*</url-pattern>
         <url-pattern>/console/cluster/*</url-pattern>
         <url-pattern>/console/device/*</url-pattern>
+        <url-pattern>/console/deviceManagement/*</url-pattern>
         <url-pattern>/console/deviceJob/*</url-pattern>
         <url-pattern>/console/sim/*</url-pattern>
         <url-pattern>/console/simJob/*</url-pattern>
@@ -60,7 +61,6 @@
         <url-pattern>/console/user/*</url-pattern>
         <url-pattern>/console/task/*</url-pattern>
         <url-pattern>/console/data/*</url-pattern>
-        <url-pattern>/console/deviceJobManager/*</url-pattern>
         <url-pattern>/console/exporter/*</url-pattern>
         <url-pattern>/console/exporter_usage/*</url-pattern>
         <url-pattern>/console/exporter_device/*</url-pattern>
@@ -70,9 +70,6 @@
         <url-pattern>/console/image/*</url-pattern>
         <url-pattern>/console/provision/*</url-pattern>
         <url-pattern>/console/SSLfile/*</url-pattern>
-        <url-pattern>/console/gwtComet/*</url-pattern>
-        <url-pattern>/console/vpn_connection</url-pattern>
-        <url-pattern>/console/SimCardGroupMigrationTest</url-pattern>  
 	</filter-mapping>
 	
     <filter>
@@ -94,6 +91,7 @@
         <url-pattern>/console/auth/*</url-pattern>
         <url-pattern>/console/cluster/*</url-pattern>
         <url-pattern>/console/device/*</url-pattern>
+        <url-pattern>/console/deviceManagement/*</url-pattern>
         <url-pattern>/console/deviceJob/*</url-pattern>
         <url-pattern>/console/sim/*</url-pattern>
         <url-pattern>/console/simJob/*</url-pattern>
@@ -207,6 +205,15 @@
 		<servlet-name>deviceServlet</servlet-name>
 		<url-pattern>/console/device</url-pattern>
 	</servlet-mapping>
+
+    <servlet>
+        <servlet-name>deviceManagementServlet</servlet-name>
+        <servlet-class>org.eclipse.kapua.app.console.server.GwtDeviceManagementServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deviceManagementServlet</servlet-name>
+        <url-pattern>/console/deviceManagement</url-pattern>
+    </servlet-mapping>
 
 	<servlet>
 		<servlet-name>userServlet</servlet-name>
