@@ -118,12 +118,12 @@ Vagrant.configure("2") do |config|
      ######################
      
      # change the owner and the group of activemq to vagrant
-     sudo chown -R vagrant /usr/local/activemq/apache-activemq-5.11.0
-     sudo chgrp -R vagrant /usr/local/activemq/apache-activemq-5.11.0
+     sudo chown -R vagrant /usr/local/activemq/apache-activemq-5.14.0
+     sudo chgrp -R vagrant /usr/local/activemq/apache-activemq-5.14.0
 
      # Kapua jars and activemq.xml need to be added before starting the activemq instance...
 	   # config file
-	   cd /usr/local/activemq/apache-activemq-5.11.0
+	   cd /usr/local/activemq/apache-activemq-5.14.0
 	   rm conf/activemq.xml
 	   rm conf/log4j.properties
 	   ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/activemq.xml conf/activemq.xml
