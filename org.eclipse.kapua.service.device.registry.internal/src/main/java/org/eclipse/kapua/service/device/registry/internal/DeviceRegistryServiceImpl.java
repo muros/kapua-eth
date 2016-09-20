@@ -30,6 +30,8 @@ import org.eclipse.kapua.service.device.registry.common.DeviceValidation;
 
 public class DeviceRegistryServiceImpl implements DeviceRegistryService {
 
+    // Collaborator members
+
     private final AuthorizationService authorizationService;
 
     private final PermissionFactory permissionFactory;
@@ -39,6 +41,8 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
     private final DeviceEntityManagerFactory deviceEntityManagerFactory;
 
     private final EntityManagerSession entityManagerSession;
+
+    // Constructors
 
     public DeviceRegistryServiceImpl(AuthorizationService authorizationService, PermissionFactory permissionFactory, DeviceEntityManagerFactory deviceEntityManagerFactory) {
         this.authorizationService = authorizationService;
