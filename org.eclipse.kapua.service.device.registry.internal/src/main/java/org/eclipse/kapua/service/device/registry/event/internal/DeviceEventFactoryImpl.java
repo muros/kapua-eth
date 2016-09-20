@@ -20,9 +20,10 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventQuery;
 
 public class DeviceEventFactoryImpl implements DeviceEventFactory
 {
-    public DeviceEventCreator newCreator(KapuaId scopeId)
+    public DeviceEventCreator newCreator(KapuaId scopeId, KapuaId deviceId)
     {
     	DeviceEventCreatorImpl deviceEventCreatorImpl = new DeviceEventCreatorImpl(scopeId);
+        deviceEventCreatorImpl.setDeviceId(deviceId);
     	deviceEventCreatorImpl.setAction(KapuaMethod.CREATE);
         return deviceEventCreatorImpl;
     }

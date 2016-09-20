@@ -17,7 +17,7 @@ import org.eclipse.kapua.model.id.KapuaId;
 
 public interface DeviceEventFactory extends KapuaObjectFactory
 {
-    public DeviceEventCreator newCreator(KapuaId scopeId);
+    DeviceEventCreator newCreator(KapuaId scopeId, KapuaId deviceId);
 
-    public DeviceEventQuery newQuery(KapuaId scopeId);
+    DeviceEventQuery newQuery(KapuaId scopeId);
 }

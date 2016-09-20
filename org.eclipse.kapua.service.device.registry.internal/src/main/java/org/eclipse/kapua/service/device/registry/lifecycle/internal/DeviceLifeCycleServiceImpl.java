@@ -96,9 +96,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Event create
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId());
 
-        deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setResource("BIRTH");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
@@ -132,9 +131,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Event create
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId);
 
-        deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setResource("DEATH");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
@@ -168,9 +166,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Event create
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId());
 
-        deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setResource("MISSING");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
@@ -205,9 +202,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Event create
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId());
 
-        deviceEventCreator.setDeviceId(device.getId());
         deviceEventCreator.setEventMessage(payload.toDisplayString());
         deviceEventCreator.setResource("APPLICATION");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());

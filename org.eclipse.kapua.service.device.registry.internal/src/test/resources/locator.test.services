@@ -32,3 +32,4 @@ org.eclipse.kapua.service.generator.id.IdGeneratorService
 
 # Testing subject
 org.eclipse.kapua.service.device.registry.DeviceRegistryService
+org.eclipse.kapua.service.device.registry.event.DeviceEventService
