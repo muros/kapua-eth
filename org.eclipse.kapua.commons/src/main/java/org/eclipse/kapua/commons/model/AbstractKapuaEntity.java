@@ -88,6 +88,11 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
     {
     	this.id = (KapuaEid)id;
     }
+    
+    public void setScopeId(KapuaId scopeId)
+    {
+        this.scopeId = (KapuaEid)scopeId;
+    }
 
     public Date getCreatedOn()
     {
