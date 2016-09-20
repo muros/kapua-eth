@@ -124,8 +124,7 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId);
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
@@ -203,8 +202,7 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId);
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
@@ -291,8 +289,7 @@ public class DeviceConfigurationManagementServiceImpl implements DeviceConfigura
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId);
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
