@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 import org.eclipse.kapua.app.console.shared.model.GwtDevice.GwtDeviceCredentialsTight;
 
-public class GwtDeviceCreator extends EdcBaseModel implements Serializable
+public class GwtDeviceCreator extends KapuaBaseModel implements Serializable
 {
     private static final long         serialVersionUID = -6479267588650553114L;
 

@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
 import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
 import org.eclipse.kapua.app.console.shared.model.GwtDeploymentPackage;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
@@ -46,20 +46,20 @@ public interface GwtDeviceService extends RemoteService
      * 
      * @param accountId
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public long getNumOfDevices(String accountId)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Returns count of all devices by connection status.
      * 
      * @param accountId
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public Map<String, Integer> getNumOfDevicesConnected(String accountId)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Finds device given its clientId
@@ -69,7 +69,7 @@ public interface GwtDeviceService extends RemoteService
      * @return
      */
     public GwtDevice findDevice(String scopeIdString, String clientId)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Finds devices in an account with query
@@ -80,7 +80,7 @@ public interface GwtDeviceService extends RemoteService
      * @return
      */
     public PagingLoadResult<GwtDevice> findDevices(PagingLoadConfig loadConfig, String scopeIdString, GwtDeviceQueryPredicates predicates)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Creates a device entry for the account
@@ -88,20 +88,20 @@ public interface GwtDeviceService extends RemoteService
      * @param xsrfToken
      * @param gwtDeviceCreator
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public GwtDevice createDevice(GwtXSRFToken xsrfToken, GwtDeviceCreator gwtDeviceCreator)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Updates a device entity with the given gwtDevice new values for custom attributes, display name and associated tag
      * 
      * @param gwtDevice
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public GwtDevice updateAttributes(GwtXSRFToken xsfrToken, GwtDevice gwtDevice)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Deletes a device
@@ -110,7 +110,7 @@ public interface GwtDeviceService extends RemoteService
      * @param clientId
      */
     public void deleteDevice(GwtXSRFToken xsfrToken, String scopeIdString, String clientId)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     //
     // Device Management Methods
@@ -122,10 +122,10 @@ public interface GwtDeviceService extends RemoteService
      * @param startDateMillis the start of the date range in milliseconds since epoch (Date.getTime())
      * @param endDateMillis the end of the date range in milliseconds since epoch (Date.getTime())
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public PagingLoadResult<GwtDeviceEvent> findDeviceEvents(PagingLoadConfig loadConfig, GwtDevice gwtDevice, Date startDate, Date endDate)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Returns the configuration of a Device as the list of all the configurable components.
@@ -134,7 +134,7 @@ public interface GwtDeviceService extends RemoteService
      * @return
      */
     public List<GwtConfigComponent> findDeviceConfigurations(GwtDevice device)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Updates the configuration of the provided component.
@@ -143,7 +143,7 @@ public interface GwtDeviceService extends RemoteService
      * @param configComponent
      */
     public void updateComponentConfiguration(GwtXSRFToken xsrfToken, GwtDevice device, GwtConfigComponent configComponent)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Returns the deployment packages installed on a Device.
@@ -152,17 +152,17 @@ public interface GwtDeviceService extends RemoteService
      * @return
      */
     public List<GwtDeploymentPackage> findDeviceDeploymentPackages(GwtDevice device)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Uninstalls a deployment package from a device.
      * 
      * @param device
      * @param packageName
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public void uninstallDeploymentPackage(GwtXSRFToken xsfrToken, GwtDevice device, String packageName)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Executes a command on a remote Device.
@@ -172,36 +172,36 @@ public interface GwtDeviceService extends RemoteService
      * @return
      */
     public GwtDeviceCommandOutput executeCommand(GwtXSRFToken xsfrToken, GwtDevice device, GwtDeviceCommandInput commandInput)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * 
      * @param device
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public ListLoadResult<GwtSnapshot> findDeviceSnapshots(GwtDevice device)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * 
      * @param device
      * @param snapshot
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public void rollbackDeviceSnapshot(GwtXSRFToken xsfrToken, GwtDevice device, GwtSnapshot snapshot)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     public ListLoadResult<GwtGroupedNVPair> findDeviceProfile(String scopeIdString, String clientId)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     public ListLoadResult<GwtGroupedNVPair> findBundles(GwtDevice device)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     public void startBundle(GwtXSRFToken xsfrToken, GwtDevice device, GwtGroupedNVPair pair)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     public void stopBundle(GwtXSRFToken xsfrToken, GwtDevice device, GwtGroupedNVPair pair)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
 }

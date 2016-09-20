@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.eclipse.kapua.app.console.server.util.EdcExceptionHandler;
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.server.util.KapuaExceptionHandler;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtAccountCreator;
 import org.eclipse.kapua.app.console.shared.model.GwtAccountStringListItem;
@@ -53,7 +53,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
     private static final long   serialVersionUID = 3314502846487119577L;
 
     public GwtAccount create(GwtXSRFToken xsrfToken, GwtAccountCreator gwtAccountCreator)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -88,13 +88,13 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             gwtAccount = KapuaGwtConverter.convert(account);
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
         return gwtAccount;
     }
 
     public GwtAccount find(String accountIdString)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         KapuaId accountId = KapuaEid.parseShortId(accountIdString);
 
@@ -105,14 +105,14 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             gwtAccount = KapuaGwtConverter.convert(accountService.find(accountId));
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return gwtAccount;
     }
 
     public ListLoadResult<GwtGroupedNVPair> getAccountInfo(String accountIdString)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         KapuaId accountId = KapuaEid.parseShortId(accountIdString);
 
@@ -143,14 +143,14 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             accountPropertiesPairs.add(new GwtGroupedNVPair("organizationInfo", "organizationCountry", account.getOrganization().getCountry()));
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return new BaseListLoadResult<GwtGroupedNVPair>(accountPropertiesPairs);
     }
 
     public GwtAccount updateAccountProperties(GwtXSRFToken xsrfToken, GwtAccount gwtAccount)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -184,13 +184,13 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             gwtAccountUpdated = KapuaGwtConverter.convert(account);
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
         return gwtAccountUpdated;
     }
 
     public GwtAccount update(GwtXSRFToken xsrfToken, GwtAccount gwtAccount)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -221,13 +221,13 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             gwtAccountUpdated = KapuaGwtConverter.convert(account);
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
         return gwtAccountUpdated;
     }
 
     public void delete(GwtXSRFToken xsrfToken, GwtAccount gwtAccount)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -244,12 +244,12 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             }
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
     }
 
     public ListLoadResult<GwtAccount> findAll(String scopeIdString)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
 
         List<GwtAccount> gwtAccountList = new ArrayList<GwtAccount>();
@@ -266,14 +266,14 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             }
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return new BaseListLoadResult<GwtAccount>(gwtAccountList);
     }
 
     public ListLoadResult<GwtAccount> findChildren(String parentAccountId, boolean recoursive)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         KapuaId scopeId = KapuaEid.parseShortId(parentAccountId);
 
@@ -291,14 +291,14 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             }
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return new BaseListLoadResult<GwtAccount>(gwtAccountList);
     }
 
     public ListLoadResult<GwtAccountStringListItem> findChildrenAsStrings(String parentAccountId, boolean recoursive)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         KapuaId scopeId = KapuaEid.parseShortId(parentAccountId);
 
@@ -319,7 +319,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             }
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return new BaseListLoadResult<GwtAccountStringListItem>(gwtAccountStrings);
@@ -327,7 +327,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
 
     @Override
     public GwtAccount findByAccountName(String accountName)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         GwtAccount gwtAccount = null;
         try {
@@ -339,7 +339,7 @@ public class GwtAccountServiceImpl extends KapuaRemoteServiceServlet implements 
             }
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return gwtAccount;

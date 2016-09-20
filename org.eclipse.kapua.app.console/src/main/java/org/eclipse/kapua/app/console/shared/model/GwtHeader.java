@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 import org.eclipse.kapua.app.console.client.util.HeaderTypeUtils;
 
-public class GwtHeader extends EdcBaseModel implements Serializable {
+public class GwtHeader extends KapuaBaseModel implements Serializable {
     private static final long serialVersionUID = -6683882186670183772L;
 
     public enum GwtHeaderType {

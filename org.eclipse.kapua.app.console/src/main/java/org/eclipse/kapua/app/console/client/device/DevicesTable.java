@@ -17,12 +17,11 @@ import java.util.List;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
-import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
+import org.eclipse.kapua.app.console.client.util.KapuaLoadListener;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.client.util.ImageUtils;
 import org.eclipse.kapua.app.console.client.util.SwappableListStore;
 import org.eclipse.kapua.app.console.client.util.UserAgentUtils;
-import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceQueryPredicates;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
@@ -81,51 +80,49 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
-public class DevicesTable extends LayoutContainer
-{
-    private final ConsoleMessages                         MSGS             = GWT.create(ConsoleMessages.class);
+public class DevicesTable extends LayoutContainer {
 
-    private final GwtDeviceServiceAsync                   gwtDeviceService = GWT.create(GwtDeviceService.class);
+    private final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
-    private final GwtSecurityTokenServiceAsync            gwtXSRFService   = GWT.create(GwtSecurityTokenService.class);
+    private final GwtDeviceServiceAsync gwtDeviceService = GWT.create(GwtDeviceService.class);
 
-    private static final int                              DEVICE_PAGE_SIZE = 250;
+    private final GwtSecurityTokenServiceAsync gwtXSRFService = GWT.create(GwtSecurityTokenService.class);
 
-    private GwtSession                                    m_currentSession;
-    private GwtDevice                                     m_selectedDevice;
+    private static final int DEVICE_PAGE_SIZE = 250;
 
-    private DevicesView                                   m_devicesView;
-    private ContentPanel                                  m_tableContainer;
-    private ToolBar                                       m_devicesToolBar;
+    private GwtSession m_currentSession;
+    private GwtDevice m_selectedDevice;
 
-    private Button                                        m_addDeviceButton;
+    private DevicesView m_devicesView;
+    private ContentPanel m_tableContainer;
+    private ToolBar m_devicesToolBar;
 
-    private Button                                        m_refreshButton;
-    private boolean                                       refreshProcess;
-    private Button                                        m_deleteDeviceButton;
-    private Button                                        m_export;
+    private Button m_addDeviceButton;
 
-    private ToggleButton                                  m_toggleFilter;
+    private Button m_refreshButton;
+    private boolean refreshProcess;
+    private Button m_deleteDeviceButton;
+    private Button m_export;
 
-    private ContentPanel                                  m_filterPanel;
+    private ToggleButton m_toggleFilter;
 
-    private Grid<GwtDevice>                               m_devicesGrid;
-    private PagingToolBar                                 m_pagingToolBar;
+    private ContentPanel m_filterPanel;
+
+    private Grid<GwtDevice> m_devicesGrid;
+    private PagingToolBar m_pagingToolBar;
     private BasePagingLoader<PagingLoadResult<GwtDevice>> m_loader;
-    private GwtDeviceQueryPredicates                      m_filterPredicates;
+    private GwtDeviceQueryPredicates m_filterPredicates;
 
     public DevicesTable(DevicesView deviceView,
-                        GwtSession currentSession,
-                        ContentPanel filterPanel)
-    {
+            GwtSession currentSession,
+            ContentPanel filterPanel) {
         m_devicesView = deviceView;
         m_currentSession = currentSession;
         m_filterPredicates = new GwtDeviceQueryPredicates();
         m_filterPanel = filterPanel;
     }
 
-    protected void onRender(final Element parent, int index)
-    {
+    protected void onRender(final Element parent, int index) {
         super.onRender(parent, index);
 
         // FitLayout that expands to the whole screen
@@ -143,8 +140,7 @@ public class DevicesTable extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    private void initDevicesTable()
-    {
+    private void initDevicesTable() {
         // init components
         initDevicesToolBar();
         initDevicesGrid();
@@ -160,8 +156,7 @@ public class DevicesTable extends LayoutContainer
         m_tableContainer.setBottomComponent(m_pagingToolBar);
     }
 
-    private void initDevicesToolBar()
-    {
+    private void initDevicesToolBar() {
 
         m_devicesToolBar = new ToolBar();
 
@@ -170,12 +165,11 @@ public class DevicesTable extends LayoutContainer
             m_addDeviceButton = new Button(MSGS.addButton(), AbstractImagePrototype.create(Resources.INSTANCE.add()), new SelectionListener<ButtonEvent>() {
 
                 @Override
-                public void componentSelected(ButtonEvent ce)
-                {
+                public void componentSelected(ButtonEvent ce) {
                     DeviceForm deviceForm = new DeviceForm(m_currentSession);
                     deviceForm.addListener(Events.Hide, new Listener<ComponentEvent>() {
-                        public void handleEvent(ComponentEvent be)
-                        {
+
+                        public void handleEvent(ComponentEvent be) {
                             refresh(m_filterPredicates);
                         }
                     });
@@ -190,21 +184,20 @@ public class DevicesTable extends LayoutContainer
         //
         // Refresh Button
         m_refreshButton = new Button(MSGS.refreshButton(),
-                                     AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
-                                     new SelectionListener<ButtonEvent>() {
-                                         @Override
-                                         public void componentSelected(ButtonEvent ce)
-                                         {
-                                             if (!refreshProcess) {
-                                                 refreshProcess = true;
+                AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
+                new SelectionListener<ButtonEvent>() {
 
-                                                 GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_REFRESH);
-                                                 refresh(m_filterPredicates);
+                    @Override
+                    public void componentSelected(ButtonEvent ce) {
+                        if (!refreshProcess) {
+                            refreshProcess = true;
 
-                                                 refreshProcess = false;
-                                             }
-                                         }
-                                     });
+                            refresh(m_filterPredicates);
+
+                            refreshProcess = false;
+                        }
+                    }
+                });
         m_refreshButton.setEnabled(true);
         m_devicesToolBar.add(m_refreshButton);
         m_devicesToolBar.add(new SeparatorToolItem());
@@ -215,23 +208,21 @@ public class DevicesTable extends LayoutContainer
         m_export.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.download()));
         Menu menu = new Menu();
         menu.add(new MenuItem(MSGS.exportToExcel(), AbstractImagePrototype.create(Resources.INSTANCE.exportExcel()),
-                              new SelectionListener<MenuEvent>() {
-                                  @Override
-                                  public void componentSelected(MenuEvent ce)
-                                  {
-                                      GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_EXPORT_XLS);
-                                      export("xls");
-                                  }
-                              }));
+                new SelectionListener<MenuEvent>() {
+
+                    @Override
+                    public void componentSelected(MenuEvent ce) {
+                        export("xls");
+                    }
+                }));
         menu.add(new MenuItem(MSGS.exportToCSV(), AbstractImagePrototype.create(Resources.INSTANCE.exportCSV()),
-                              new SelectionListener<MenuEvent>() {
-                                  @Override
-                                  public void componentSelected(MenuEvent ce)
-                                  {
-                                      GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_EXPORT_CSV);
-                                      export("csv");
-                                  }
-                              }));
+                new SelectionListener<MenuEvent>() {
+
+                    @Override
+                    public void componentSelected(MenuEvent ce) {
+                        export("csv");
+                    }
+                }));
         m_export.setMenu(menu);
         m_devicesToolBar.add(m_export);
         m_devicesToolBar.add(new SeparatorToolItem());
@@ -239,33 +230,31 @@ public class DevicesTable extends LayoutContainer
         //
         // Delete Device Button
         m_deleteDeviceButton = new Button(MSGS.deleteButton(),
-                                          AbstractImagePrototype.create(Resources.INSTANCE.delete16()),
-                                          new SelectionListener<ButtonEvent>() {
+                AbstractImagePrototype.create(Resources.INSTANCE.delete16()),
+                new SelectionListener<ButtonEvent>() {
 
-                                              @Override
-                                              public void componentSelected(ButtonEvent ce)
-                                              {
-                                                  GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_DELETE);
-                                                  if (m_devicesGrid != null) {
-                                                      final GwtDevice gwtDevice = m_devicesGrid.getSelectionModel().getSelectedItem();
-                                                      if (gwtDevice != null) {
-                                                          // delete the selected device
-                                                          // ask for confirmation
-                                                          MessageBox.confirm(MSGS.confirm(), MSGS.deviceDeleteConfirmation(gwtDevice.getClientId()),
-                                                                             new Listener<MessageBoxEvent>() {
-                                                                                 public void handleEvent(MessageBoxEvent ce)
-                                                                                 {
-                                                                                     // if confirmed, delete
-                                                                                     Dialog dialog = ce.getDialog();
-                                                                                     if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
-                                                                                         deleteDevice(gwtDevice);
-                                                                                     }
-                                                                                 }
-                                                                             });
-                                                      }
-                                                  }
-                                              }
-                                          });
+                    @Override
+                    public void componentSelected(ButtonEvent ce) {
+                        if (m_devicesGrid != null) {
+                            final GwtDevice gwtDevice = m_devicesGrid.getSelectionModel().getSelectedItem();
+                            if (gwtDevice != null) {
+                                // delete the selected device
+                                // ask for confirmation
+                                MessageBox.confirm(MSGS.confirm(), MSGS.deviceDeleteConfirmation(gwtDevice.getClientId()),
+                                        new Listener<MessageBoxEvent>() {
+
+                                            public void handleEvent(MessageBoxEvent ce) {
+                                                // if confirmed, delete
+                                                Dialog dialog = ce.getDialog();
+                                                if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
+                                                    deleteDevice(gwtDevice);
+                                                }
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
         m_deleteDeviceButton.setEnabled(false);
         m_devicesToolBar.add(m_deleteDeviceButton);
         m_devicesToolBar.add(new FillToolItem());
@@ -273,14 +262,13 @@ public class DevicesTable extends LayoutContainer
         //
         // Live Button
         m_toggleFilter = new ToggleButton(MSGS.deviceTableToolbarCloseFilter(), new SelectionListener<ButtonEvent>() {
+
             @Override
-            public void componentSelected(ButtonEvent ce)
-            {
+            public void componentSelected(ButtonEvent ce) {
                 if (m_toggleFilter.isPressed()) {
                     m_filterPanel.show();
                     m_toggleFilter.setText(MSGS.deviceTableToolbarCloseFilter());
-                }
-                else {
+                } else {
                     m_filterPanel.hide();
                     m_toggleFilter.setText(MSGS.deviceTableToolbarOpenFilter());
                 }
@@ -290,8 +278,7 @@ public class DevicesTable extends LayoutContainer
         m_devicesToolBar.add(m_toggleFilter);
     }
 
-    private void initDevicesGrid()
-    {
+    private void initDevicesGrid() {
         //
         // Column Configuration
         List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
@@ -299,21 +286,18 @@ public class DevicesTable extends LayoutContainer
         ColumnConfig column = new ColumnConfig("status", MSGS.deviceTableStatus(), 50);
         column.setAlignment(HorizontalAlignment.CENTER);
         GridCellRenderer<GwtDevice> setStatusIcon = new GridCellRenderer<GwtDevice>() {
-            public String render(GwtDevice gwtDevice, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtDevice> deviceList, Grid<GwtDevice> grid)
-            {
+
+            public String render(GwtDevice gwtDevice, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtDevice> deviceList, Grid<GwtDevice> grid) {
                 if (gwtDevice.getGwtDeviceStatus().compareTo("ENABLED") == 0) {
                     if (gwtDevice.getGwtDeviceConnectionStatus().compareTo("CONNECTED") == 0) {
                         return ImageUtils.toHTML(Resources.INSTANCE.greenBullet14(), MSGS.connected(), "10");
-                    }
-                    else if (gwtDevice.getGwtDeviceConnectionStatus().compareTo("MISSING") == 0) {
+                    } else if (gwtDevice.getGwtDeviceConnectionStatus().compareTo("MISSING") == 0) {
                         return ImageUtils.toHTML(Resources.INSTANCE.redBullet14(), MSGS.missing(), "10");
-                    }
-                    else if (gwtDevice.getGwtDeviceConnectionStatus().compareTo("DISCONNECTED") == 0) {
+                    } else if (gwtDevice.getGwtDeviceConnectionStatus().compareTo("DISCONNECTED") == 0) {
                         return ImageUtils.toHTML(Resources.INSTANCE.yellowBullet14(), MSGS.disconnected(), "10");
                     }
                     return gwtDevice.getGwtDeviceConnectionStatus();
-                }
-                else {
+                } else {
                     if (gwtDevice.getGwtDeviceConnectionStatus().compareTo("CONNECTED") == 0) {
                         return ImageUtils.toHTML(Resources.INSTANCE.greenAndBlackBullet14(), MSGS.disabledButConnected(), "10");
                     }
@@ -354,13 +338,12 @@ public class DevicesTable extends LayoutContainer
         column = new ColumnConfig("Device Management Certificate Status", "DM", 50);
         column.setAlignment(HorizontalAlignment.CENTER);
         GridCellRenderer<GwtDevice> setDmStatusIcon = new GridCellRenderer<GwtDevice>() {
-            public String render(GwtDevice gwtDevice, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtDevice> deviceList, Grid<GwtDevice> grid)
-            {
+
+            public String render(GwtDevice gwtDevice, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtDevice> deviceList, Grid<GwtDevice> grid) {
                 if (gwtDevice.getSignedCertificateId() == null) {
                     // Device Management Communication is not signed
                     return ImageUtils.toHTML(Resources.INSTANCE.dmUnlock16(), MSGS.deviceTableCertificateDMTooltipStatusNotSigned(), "14");
-                }
-                else {
+                } else {
                     // Device Management Communication is signed
                     return ImageUtils.toHTML(Resources.INSTANCE.lockGreen16(), MSGS.deviceTableCertificateDMTooltipStatusSigned(), "14");
                 }
@@ -450,15 +433,15 @@ public class DevicesTable extends LayoutContainer
 
         // loader and store
         RpcProxy<PagingLoadResult<GwtDevice>> proxy = new RpcProxy<PagingLoadResult<GwtDevice>>() {
+
             @Override
-            public void load(Object loadConfig, AsyncCallback<PagingLoadResult<GwtDevice>> callback)
-            {
+            public void load(Object loadConfig, AsyncCallback<PagingLoadResult<GwtDevice>> callback) {
                 PagingLoadConfig pagingConfig = (BasePagingLoadConfig) loadConfig;
                 ((BasePagingLoadConfig) pagingConfig).setLimit(DEVICE_PAGE_SIZE);
                 gwtDeviceService.findDevices(pagingConfig,
-                                             m_currentSession.getSelectedAccount().getId(),
-                                             m_filterPredicates,
-                                             callback);
+                        m_currentSession.getSelectedAccount().getId(),
+                        m_filterPredicates,
+                        callback);
             }
         };
         m_loader = new BasePagingLoader<PagingLoadResult<GwtDevice>>(proxy);
@@ -468,8 +451,8 @@ public class DevicesTable extends LayoutContainer
 
         SwappableListStore<GwtDevice> store = new SwappableListStore<GwtDevice>(m_loader);
         store.setKeyProvider(new ModelKeyProvider<GwtDevice>() {
-            public String getKey(GwtDevice device)
-            {
+
+            public String getKey(GwtDevice device) {
                 return device.getScopeId() + ":" + device.getClientId();
             }
         });
@@ -484,9 +467,9 @@ public class DevicesTable extends LayoutContainer
         m_devicesGrid.getView().setEmptyText(MSGS.deviceTableNoDevices());
         m_devicesGrid.disableTextSelection(false);
         m_devicesGrid.addListener(Events.HeaderClick, new Listener<GridEvent<GwtDevice>>() {
+
             @Override
-            public void handleEvent(GridEvent<GwtDevice> be)
-            {
+            public void handleEvent(GridEvent<GwtDevice> be) {
 
                 if (be.getColIndex() == 1) {
 
@@ -494,48 +477,39 @@ public class DevicesTable extends LayoutContainer
                         if (m_filterPredicates.getSortOrderEnum().equals(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING)) {
                             m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.DESCENDING.name());
 
-                        }
-                        else {
+                        } else {
                             m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING.name());
                         }
-                    }
-                    else {
+                    } else {
                         m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING.name());
                     }
                     m_filterPredicates.setSortAttribute(GwtDeviceQueryPredicates.GwtSortAttribute.CLIENT_ID.name());
 
-                }
-                else if (be.getColIndex() == 2) {
+                } else if (be.getColIndex() == 2) {
                     if (m_filterPredicates.getSortAttribute().equals(GwtDeviceQueryPredicates.GwtSortAttribute.DISPLAY_NAME.name())) {
                         if (m_filterPredicates.getSortOrderEnum().equals(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING)) {
                             m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.DESCENDING.name());
-                        }
-                        else {
+                        } else {
                             m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING.name());
                         }
-                    }
-                    else {
+                    } else {
                         m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING.name());
                     }
                     m_filterPredicates.setSortAttribute(GwtDeviceQueryPredicates.GwtSortAttribute.DISPLAY_NAME.name());
 
-                }
-                else if (be.getColIndex() == 3) {
+                } else if (be.getColIndex() == 3) {
                     if (m_filterPredicates.getSortAttribute().equals(GwtDeviceQueryPredicates.GwtSortAttribute.LAST_EVENT_ON.name())) {
                         if (m_filterPredicates.getSortOrderEnum().equals(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING)) {
                             m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.DESCENDING.name());
-                        }
-                        else {
+                        } else {
                             m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING.name());
                         }
-                    }
-                    else {
+                    } else {
                         m_filterPredicates.setSortOrder(GwtDeviceQueryPredicates.GwtSortOrder.ASCENDING.name());
                     }
                     m_filterPredicates.setSortAttribute(GwtDeviceQueryPredicates.GwtSortAttribute.LAST_EVENT_ON.name());
 
-                }
-                else {
+                } else {
                     return;
                 }
 
@@ -553,15 +527,14 @@ public class DevicesTable extends LayoutContainer
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
         m_devicesGrid.setSelectionModel(selectionModel);
         m_devicesGrid.getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<GwtDevice>() {
+
             @Override
-            public void selectionChanged(SelectionChangedEvent<GwtDevice> se)
-            {
+            public void selectionChanged(SelectionChangedEvent<GwtDevice> se) {
                 m_selectedDevice = se.getSelectedItem();
                 if (m_selectedDevice != null) {
                     m_deleteDeviceButton.setEnabled(true);
                     m_devicesView.setDevice(m_selectedDevice);
-                }
-                else {
+                } else {
                     // m_editDeviceButton.setEnabled(false);
                     m_deleteDeviceButton.setEnabled(false);
                 }
@@ -575,173 +548,164 @@ public class DevicesTable extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    public void refreshAll(GwtDeviceQueryPredicates predicates)
-    {
+    public void refreshAll(GwtDeviceQueryPredicates predicates) {
         m_loader.setSortDir(SortDir.ASC);
         m_loader.setSortField("clientId");
         refresh(predicates);
     }
 
-    public void refresh(GwtDeviceQueryPredicates predicates)
-    {
+    public void refresh(GwtDeviceQueryPredicates predicates) {
         m_filterPredicates = predicates;
         m_loader.load();
         m_pagingToolBar.enable();
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         m_loader.load();
         m_pagingToolBar.enable();
     };
 
-    private void deleteDevice(GwtDevice device)
-    {
+    private void deleteDevice(GwtDevice device) {
         final GwtDevice toDeleteDevice = device;
 
         //
         // Getting XSRF token
         gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
+
             @Override
-            public void onFailure(Throwable ex)
-            {
+            public void onFailure(Throwable ex) {
                 FailureHandler.handle(ex);
             }
 
             @Override
-            public void onSuccess(GwtXSRFToken token)
-            {
+            public void onSuccess(GwtXSRFToken token) {
                 gwtDeviceService.deleteDevice(token,
-                                              m_currentSession.getSelectedAccount().getId(),
-                                              toDeleteDevice.getClientId(),
-                                              new AsyncCallback<Void>() {
+                        m_currentSession.getSelectedAccount().getId(),
+                        toDeleteDevice.getClientId(),
+                        new AsyncCallback<Void>() {
 
-                                                  public void onFailure(Throwable caught)
-                                                  {
-                                                      FailureHandler.handle(caught);
-                                                  }
+                            public void onFailure(Throwable caught) {
+                                FailureHandler.handle(caught);
+                            }
 
-                                                  public void onSuccess(Void arg0)
-                                                  {
-                                                      refresh(m_filterPredicates);
-                                                  }
-                                              });
+                            public void onSuccess(Void arg0) {
+                                refresh(m_filterPredicates);
+                            }
+                        });
             }
         });
 
     }
 
-    private void export(String format)
-    {
+    private void export(String format) {
         StringBuilder sbUrl = new StringBuilder();
         if (UserAgentUtils.isSafari() || UserAgentUtils.isChrome()) {
             sbUrl.append("console/exporter_device?");
-        }
-        else {
+        } else {
             sbUrl.append("exporter_device?");
         }
 
         sbUrl.append("format=")
-             .append(format)
-             .append("&account=")
-             .append(URL.encodeQueryString(m_currentSession.getSelectedAccount().getName()));
+                .append(format)
+                .append("&account=")
+                .append(URL.encodeQueryString(m_currentSession.getSelectedAccount().getName()));
 
         //
         // Adding filtering parameter if specified
         Long tag = m_filterPredicates.getTag();
         if (tag != null) {
             sbUrl.append("&tag=")
-                 .append(tag);
+                    .append(tag);
         }
 
         String clientId = m_filterPredicates.getClientId();
         if (clientId != null && !clientId.isEmpty()) {
             sbUrl.append("&clientId=")
-                 .append(clientId);
+                    .append(clientId);
         }
 
         String displayName = m_filterPredicates.getDisplayName();
         if (displayName != null && !displayName.isEmpty()) {
             sbUrl.append("&displayName=")
-                 .append(displayName);
+                    .append(displayName);
         }
 
         String serialNumber = m_filterPredicates.getSerialNumber();
         if (serialNumber != null && !serialNumber.isEmpty()) {
             sbUrl.append("&serialNumber=")
-                 .append(serialNumber);
+                    .append(serialNumber);
         }
 
         String deviceStatus = m_filterPredicates.getDeviceStatus();
         if (deviceStatus != null && !deviceStatus.isEmpty()) {
             sbUrl.append("&deviceStatus=")
-                 .append(deviceStatus);
+                    .append(deviceStatus);
         }
 
         String deviceConnectionStatus = m_filterPredicates.getDeviceConnectionStatus();
         if (deviceConnectionStatus != null && !deviceConnectionStatus.isEmpty()) {
             sbUrl.append("&deviceConnectionStatus=")
-                 .append(deviceConnectionStatus);
+                    .append(deviceConnectionStatus);
         }
 
         String esfVersion = m_filterPredicates.getEsfVersion();
         if (esfVersion != null && !esfVersion.isEmpty()) {
             sbUrl.append("&esfVersion=")
-                 .append(esfVersion);
+                    .append(esfVersion);
         }
 
         String applicationIdentifiers = m_filterPredicates.getApplicationIdentifiers();
         if (applicationIdentifiers != null && !applicationIdentifiers.isEmpty()) {
             sbUrl.append("&applicationIdentifiers=")
-                 .append(applicationIdentifiers);
+                    .append(applicationIdentifiers);
         }
 
         String imei = m_filterPredicates.getImei();
         if (imei != null && !imei.isEmpty()) {
             sbUrl.append("&imei=")
-                 .append(imei);
+                    .append(imei);
         }
 
         String imsi = m_filterPredicates.getImsi();
         if (imsi != null && !imsi.isEmpty()) {
             sbUrl.append("&imsi=")
-                 .append(imsi);
+                    .append(imsi);
         }
 
         String iccid = m_filterPredicates.getIccid();
         if (iccid != null && !iccid.isEmpty()) {
             sbUrl.append("&iccid=")
-                 .append(iccid);
+                    .append(iccid);
         }
 
         String customAttribute1 = m_filterPredicates.getCustomAttribute1();
         if (customAttribute1 != null && !customAttribute1.isEmpty()) {
             sbUrl.append("&customAttribute1=")
-                 .append(customAttribute1);
+                    .append(customAttribute1);
         }
 
         String customAttribute2 = m_filterPredicates.getCustomAttribute2();
         if (customAttribute2 != null && !customAttribute2.isEmpty()) {
             sbUrl.append("&customAttribute2=")
-                 .append(customAttribute2);
+                    .append(customAttribute2);
         }
 
         Long signedCertificateId = m_filterPredicates.getSignedCertificateId();
         if (signedCertificateId != null) {
             sbUrl.append("&signedCertificateId=")
-                 .append(signedCertificateId);
+                    .append(signedCertificateId);
         }
 
         String sortOrder = m_filterPredicates.getSortOrder();
         if (sortOrder != null && !sortOrder.isEmpty()) {
             sbUrl.append("&sortOrder=")
-                 .append(sortOrder);
+                    .append(sortOrder);
         }
 
         String sortAttribute = m_filterPredicates.getSortAttribute();
         if (sortAttribute != null && !sortAttribute.isEmpty()) {
             sbUrl.append("&sortAttribute=")
-                 .append(sortAttribute);
+                    .append(sortAttribute);
         }
 
         Window.open(sbUrl.toString(), "_blank", "location=no");
@@ -753,24 +717,21 @@ public class DevicesTable extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    private class DataLoadListener extends EdcLoadListener
-    {
-        private Grid<GwtDevice> m_devicesGrid;
-        private GwtDevice       m_selectedDevice;
+    private class DataLoadListener extends KapuaLoadListener {
 
-        public DataLoadListener(Grid<GwtDevice> devicesGrid)
-        {
+        private Grid<GwtDevice> m_devicesGrid;
+        private GwtDevice m_selectedDevice;
+
+        public DataLoadListener(Grid<GwtDevice> devicesGrid) {
             m_devicesGrid = devicesGrid;
             m_selectedDevice = null;
         }
 
-        public void loaderBeforeLoad(LoadEvent le)
-        {
+        public void loaderBeforeLoad(LoadEvent le) {
             m_selectedDevice = m_devicesGrid.getSelectionModel().getSelectedItem();
         }
 
-        public void loaderLoad(LoadEvent le)
-        {
+        public void loaderLoad(LoadEvent le) {
             if (le.exception != null) {
                 FailureHandler.handle(le.exception);
             }
@@ -781,8 +742,7 @@ public class DevicesTable extends LayoutContainer
                 if (modelDevice != null) {
                     m_devicesGrid.getSelectionModel().select(modelDevice, false);
                     m_devicesGrid.getView().focusRow(store.indexOf(modelDevice));
-                }
-                else {
+                } else {
                     m_devicesView.setDevice(null);
                 }
             }
@@ -795,8 +755,7 @@ public class DevicesTable extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    public void onUnload()
-    {
+    public void onUnload() {
         super.onUnload();
     }
 }

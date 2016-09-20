@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.util.Constants;
-import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
+import org.eclipse.kapua.app.console.client.util.KapuaSafeHtmlUtils;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.client.util.FormUtils;
 import org.eclipse.kapua.app.console.client.util.MessageUtils;
@@ -311,7 +311,7 @@ public class DeviceConfigPanel extends LayoutContainer
         m_actionFieldSet.setScrollMode(Scroll.AUTO);
         if (m_configComponent.getComponentDescription() != null &&
             m_configComponent.getComponentDescription().trim().length() > 0) {
-            m_actionFieldSet.addText(EdcSafeHtmlUtils.htmlEscape(m_configComponent.getComponentDescription()));
+            m_actionFieldSet.addText(KapuaSafeHtmlUtils.htmlEscape(m_configComponent.getComponentDescription()));
         }
 
         FormLayout layout = new FormLayout();

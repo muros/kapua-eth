@@ -55,26 +55,25 @@ import com.google.gwt.user.client.ui.SimplePanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  * 
  */
-public class KapuaCloudConsole implements EntryPoint
-{
-    private static final ConsoleMessages MSGS                    = GWT.create(ConsoleMessages.class);
+public class KapuaCloudConsole implements EntryPoint {
+
+    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
     private GwtAuthorizationServiceAsync gwtAuthorizationService = GWT.create(GwtAuthorizationService.class);
 
-    private GwtSession                   currentSession;
+    private GwtSession currentSession;
 
-    private Viewport                     viewport;
+    private Viewport viewport;
 
-    private NorthView                    northView;
-    private WestNavigationView           westView;
-    private LayoutContainer              centerView;
-    private HorizontalPanel              southView;
+    private NorthView northView;
+    private WestNavigationView westView;
+    private LayoutContainer centerView;
+    private HorizontalPanel southView;
 
     /**
      * Note, we defer all application initialization code to {@link #onModuleLoad2()} so that the
      * UncaughtExceptionHandler can catch any unexpected exceptions.
      */
-    public void onModuleLoad()
-    {
+    public void onModuleLoad() {
         /*
          * Install an UncaughtExceptionHandler which will produce <code>FATAL</code> log messages
          */
@@ -82,8 +81,8 @@ public class KapuaCloudConsole implements EntryPoint
 
         // Use deferred command to catch initialization exceptions in onModuleLoad2
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            public void execute()
-            {
+
+            public void execute() {
                 onModuleLoad2();
             }
         });
@@ -92,24 +91,21 @@ public class KapuaCloudConsole implements EntryPoint
     /**
      * This is the 'real' entry point method.
      */
-    public void onModuleLoad2()
-    {
+    public void onModuleLoad2() {
         //
         // Check if a session has already been established on the server-side
         gwtAuthorizationService.getCurrentSession(new AsyncCallback<GwtSession>() {
-            public void onFailure(Throwable t)
-            {
+
+            public void onFailure(Throwable t) {
                 // We do not have a valid session: display the login page
                 renderLoginDialog();
             }
 
-            public void onSuccess(GwtSession gwtSession)
-            {
+            public void onSuccess(GwtSession gwtSession) {
                 if (gwtSession == null) {
                     // We do not have a valid session: display the login page
                     renderLoginDialog();
-                }
-                else {
+                } else {
                     //
                     // We have a valid session
                     currentSession = gwtSession;
@@ -120,15 +116,14 @@ public class KapuaCloudConsole implements EntryPoint
         });
     }
 
-    private void render(GwtSession gwtSession)
-    {
+    private void render(GwtSession gwtSession) {
         final BorderLayout borderLayout = new BorderLayout();
 
         viewport = new Viewport();
         viewport.setLayout(borderLayout);
 
         // Set class name based on account. This allows for styling based on account
-        RootPanel.getBodyElement().addClassName(gwtSession.getSelectedAccount().getName());
+        // RootPanel.getBodyElement().addClassName(gwtSession.getSelectedAccount().getName());
 
         //
         // North View
@@ -202,16 +197,14 @@ public class KapuaCloudConsole implements EntryPoint
         RootPanel.get().add(viewport);
     }
 
-    private void renderLoginDialog()
-    {
+    private void renderLoginDialog() {
         final Viewport viewport = new Viewport();
 
         final BorderLayout borderLayout = new BorderLayout();
         viewport.setLayout(borderLayout);
         if (!UserAgentUtils.isIE() || UserAgentUtils.getIEDocumentMode() > 8) {
             viewport.setStyleName("login");
-        }
-        else {
+        } else {
             viewport.setStyleName("login-ie8");
         }
 
@@ -231,16 +224,14 @@ public class KapuaCloudConsole implements EntryPoint
         SimplePanel ethLogo = new SimplePanel();
         if (!UserAgentUtils.isIE() || UserAgentUtils.getIEDocumentMode() > 8) {
             ethLogo.setStyleName("ethLogo");
-        }
-        else {
+        } else {
             ethLogo.setStyleName("ethLogo-ie8");
         }
 
         SimplePanel cloudLogo = new SimplePanel();
         if (!UserAgentUtils.isIE() || UserAgentUtils.getIEDocumentMode() > 8) {
             cloudLogo.setStyleName("cloudLogo");
-        }
-        else {
+        } else {
             cloudLogo.setStyleName("cloudLogo-ie8");
         }
 
@@ -249,8 +240,7 @@ public class KapuaCloudConsole implements EntryPoint
         LayoutContainer lcFooter = new LayoutContainer(layout);
         if (!UserAgentUtils.isIE() || UserAgentUtils.getIEDocumentMode() > 8) {
             lcFooter.setStyleName("loginBanner");
-        }
-        else {
+        } else {
             lcFooter.setStyleName("loginBanner-ie8");
         }
 
@@ -270,8 +260,8 @@ public class KapuaCloudConsole implements EntryPoint
         // Dialog window
         final LoginDialog loginDialog = new LoginDialog();
         loginDialog.addListener(Events.Hide, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 if (loginDialog.isAllowMainScreen()) {
                     currentSession = loginDialog.getCurrentSession();
 
@@ -284,13 +274,11 @@ public class KapuaCloudConsole implements EntryPoint
                             RootPanel.get().remove(viewport);
                             render(currentSession);
 
-                        }
-                        else {
+                        } else {
                             ConsoleInfo.display(MSGS.error(), MSGS.loginError());
                             loginDialog.show();
                         }
-                    }
-                    else {
+                    } else {
                         ConsoleInfo.display(MSGS.error(), MSGS.loginError());
                         loginDialog.show();
                     }
@@ -300,8 +288,8 @@ public class KapuaCloudConsole implements EntryPoint
 
         if (!UserAgentUtils.isIE()) {
             Window.addResizeHandler(new ResizeHandler() {
-                public void onResize(ResizeEvent arg0)
-                {
+
+                public void onResize(ResizeEvent arg0) {
                     loginDialog.center();
                 }
             });
@@ -310,28 +298,23 @@ public class KapuaCloudConsole implements EntryPoint
         loginDialog.show();
     }
 
-    public Viewport getViewport()
-    {
+    public Viewport getViewport() {
         return viewport;
     }
 
-    public NorthView getNorthView()
-    {
+    public NorthView getNorthView() {
         return northView;
     }
 
-    public WestNavigationView getWestView()
-    {
+    public WestNavigationView getWestView() {
         return westView;
     }
 
-    public LayoutContainer getCenterView()
-    {
+    public LayoutContainer getCenterView() {
         return centerView;
     }
 
-    public HorizontalPanel getSouthView()
-    {
+    public HorizontalPanel getSouthView() {
         return southView;
     }
 }

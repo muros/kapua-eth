@@ -14,7 +14,7 @@ package org.eclipse.kapua.app.console.shared.model;
 
 import java.io.Serializable;
 
-public class GwtDeviceCommandInput extends EdcBaseModel implements Serializable {
+public class GwtDeviceCommandInput extends KapuaBaseModel implements Serializable {
 
     private static final long serialVersionUID = -6088132160238324922L;
 

@@ -55,30 +55,28 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class DevicesMap extends LayoutContainer
-{
-    private final ConsoleMessages       MSGS               = GWT.create(ConsoleMessages.class);
-    private final GwtDeviceServiceAsync gwtDeviceService   = GWT.create(GwtDeviceService.class);
+public class DevicesMap extends LayoutContainer {
 
-    private static final Projection     DEFAULT_PROJECTION = new Projection("EPSG:4326");
+    private final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
+    private final GwtDeviceServiceAsync gwtDeviceService = GWT.create(GwtDeviceService.class);
 
-    private DevicesView                 m_devicesView;
-    private GwtSession                  m_currentSession;
+    private static final Projection DEFAULT_PROJECTION = new Projection("EPSG:4326");
 
-    private Map                         m_map;
-    private MapWidget                   m_mapWidget;
-    private Vector                      m_markerLayer;
-    private AnchoredBubble              m_popup;
+    private DevicesView m_devicesView;
+    private GwtSession m_currentSession;
+
+    private Map m_map;
+    private MapWidget m_mapWidget;
+    private Vector m_markerLayer;
+    private AnchoredBubble m_popup;
 
     public DevicesMap(DevicesView devicesView,
-                      GwtSession currentSession)
-    {
+            GwtSession currentSession) {
         m_devicesView = devicesView;
         m_currentSession = currentSession;
     }
 
-    protected void onRender(final Element parent, int index)
-    {
+    protected void onRender(final Element parent, int index) {
         super.onRender(parent, index);
         setLayout(new FitLayout());
         setBorders(false);
@@ -93,7 +91,8 @@ public class DevicesMap extends LayoutContainer
 
         // create the mapquest base layer
         OSMOptions osmOptions = new OSMOptions();
-        osmOptions.setAttribution("<p>Tiles Courtesy of <a href=\"http://www.mapquest.com/\" target=\"_blank\">MapQuest</a> <img src=\"http://developer.mapquest.com/content/osm/mq_logo.png\"></p> - &copy; <a href=\"http://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a> contributors");
+        osmOptions.setAttribution(
+                "<p>Tiles Courtesy of <a href=\"http://www.mapquest.com/\" target=\"_blank\">MapQuest</a> <img src=\"http://developer.mapquest.com/content/osm/mq_logo.png\"></p> - &copy; <a href=\"http://www.openstreetmap.org/copyright\" target=\"_blank\">OpenStreetMap</a> contributors");
         OSM mapQuest = new OSM("Map", "http://otile1.mqcdn.com/tiles/1.0.0/map/${z}/${x}/${y}.png", osmOptions);
         mapQuest.setIsBaseLayer(true);
 
@@ -129,8 +128,7 @@ public class DevicesMap extends LayoutContainer
         m_mapWidget.getElement().getFirstChildElement().getStyle().setZIndex(0);
     }
 
-    public void refresh(GwtDeviceQueryPredicates predicates)
-    {
+    public void refresh(GwtDeviceQueryPredicates predicates) {
         // clean-up the Marker list
         m_markerLayer.destroyFeatures();
         if (m_popup != null) {
@@ -142,25 +140,23 @@ public class DevicesMap extends LayoutContainer
         theDeviceMap.mask(MSGS.loading());
         BasePagingLoadConfig loadConfig = new BasePagingLoadConfig(0, 500);
         gwtDeviceService.findDevices(loadConfig,
-                                     m_currentSession.getSelectedAccount().getId(),
-                                     predicates,
-                                     new AsyncCallback<PagingLoadResult<GwtDevice>>() {
-                                         public void onFailure(Throwable caught)
-                                         {
-                                             FailureHandler.handle(caught);
-                                             theDeviceMap.unmask();
-                                         }
+                m_currentSession.getSelectedAccount().getId(),
+                predicates,
+                new AsyncCallback<PagingLoadResult<GwtDevice>>() {
 
-                                         public void onSuccess(PagingLoadResult<GwtDevice> loadResult)
-                                         {
-                                             placeMarkers(loadResult.getData());
-                                             theDeviceMap.unmask();
-                                         }
-                                     });
+                    public void onFailure(Throwable caught) {
+                        FailureHandler.handle(caught);
+                        theDeviceMap.unmask();
+                    }
+
+                    public void onSuccess(PagingLoadResult<GwtDevice> loadResult) {
+                        placeMarkers(loadResult.getData());
+                        theDeviceMap.unmask();
+                    }
+                });
     }
 
-    private void placeMarkers(List<GwtDevice> devices)
-    {
+    private void placeMarkers(List<GwtDevice> devices) {
         LonLat lonLat = null;
         final List<GwtDevice> theDevices = devices;
         for (int i = 0; i < devices.size(); i++) {
@@ -171,11 +167,10 @@ public class DevicesMap extends LayoutContainer
                 StringBuilder sbDeviceTitle = new StringBuilder();
                 if (theDevice.getDisplayName() != null) {
                     sbDeviceTitle.append(theDevice.getDisplayName())
-                                 .append(" (")
-                                 .append(theDevice.getClientId())
-                                 .append(")");
-                }
-                else {
+                            .append(" (")
+                            .append(theDevice.getClientId())
+                            .append(")");
+                } else {
                     sbDeviceTitle.append(theDevice.getClientId());
                 }
 
@@ -185,7 +180,7 @@ public class DevicesMap extends LayoutContainer
                 // lets create a vector point on the location
                 Style pointStyle = new Style();
                 pointStyle.setFillOpacity(0.9);
-                pointStyle.setExternalGraphic("eurotech/com/eurotech/cloud/icon/device_map.png");
+                pointStyle.setExternalGraphic("eclipse/org/eclipse/kapua/app/console/icon/device_map.png");
                 pointStyle.setGraphicSize(37, 34);
                 pointStyle.setGraphicOffset(-10, -34);
                 pointStyle.setGraphicName(theDevice.getDisplayName());
@@ -205,9 +200,9 @@ public class DevicesMap extends LayoutContainer
         // Click SelectFeature and its Options
         SelectFeatureOptions clickFeatureOptions = new SelectFeatureOptions();
         clickFeatureOptions.onSelect(new SelectFeatureListener() {
+
             @Override
-            public void onFeatureSelected(VectorFeature theVectorFeature)
-            {
+            public void onFeatureSelected(VectorFeature theVectorFeature) {
                 int deviceIdx = theVectorFeature.getAttributes().getAttributeAsInt("deviceIdx");
                 GwtDevice device = theDevices.get(deviceIdx);
                 if (device != null) {
@@ -229,9 +224,9 @@ public class DevicesMap extends LayoutContainer
         hoverFeature.setClickOut(true);
         hoverFeature.setMultiple(false);
         hoverFeature.addFeatureHighlightedListener(new FeatureHighlightedListener() {
+
             @Override
-            public void onFeatureHighlighted(VectorFeature theVectorFeature)
-            {
+            public void onFeatureHighlighted(VectorFeature theVectorFeature) {
                 int deviceIdx = theVectorFeature.getAttributes().getAttributeAsInt("deviceIdx");
                 GwtDevice device = theDevices.get(deviceIdx);
                 if (device != null) {
@@ -240,19 +235,19 @@ public class DevicesMap extends LayoutContainer
                     }
                     LonLat lonLat = theVectorFeature.getCenterLonLat();
                     m_popup = new AnchoredBubble("marker-info",
-                                                 lonLat,
-                                                 new Size(185, 20),
-                                                 "<p>" + device.getDisplayName() + " (" + device.getClientId() + ")</p>",
-                                                 null,
-                                                 false);
+                            lonLat,
+                            new Size(185, 20),
+                            "<p>" + device.getDisplayName() + " (" + device.getClientId() + ")</p>",
+                            null,
+                            false);
                     m_map.addPopup(m_popup);
                 }
             }
         });
         hoverFeature.addFeatureUnhighlightedListener(new FeatureUnhighlightedListener() {
+
             @Override
-            public void onFeatureUnhighlighted(VectorFeature eventObject)
-            {
+            public void onFeatureUnhighlighted(VectorFeature eventObject) {
                 if (m_popup != null) {
                     m_map.removePopup(m_popup);
                     m_popup = null;
@@ -270,8 +265,7 @@ public class DevicesMap extends LayoutContainer
         // auto-adjust the zoom to show all points
         if (m_markerLayer.getDataExtent() != null) {
             m_map.zoomToExtent(m_markerLayer.getDataExtent());
-        }
-        else {
+        } else {
             m_map.zoomTo(1);
         }
     }
@@ -282,8 +276,7 @@ public class DevicesMap extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    public void onUnload()
-    {
+    public void onUnload() {
         // clean-up the Marker list
         // for (Marker marker : m_markers) {
         // Event.clearInstanceListeners(marker);
@@ -291,8 +284,7 @@ public class DevicesMap extends LayoutContainer
         super.onUnload();
     }
 
-    public void onResize(int width, int height)
-    {
+    public void onResize(int width, int height) {
         // m_mapWidget.setSize(String.valueOf(width), String.valueOf(height));
         super.onResize(width, height);
     }

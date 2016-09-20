@@ -21,8 +21,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.eclipse.kapua.app.console.shared.GwtEdcErrorCode;
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.shared.GwtKapuaErrorCode;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
 import org.slf4j.Logger;
@@ -30,23 +30,22 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-public class KapuaRemoteServiceServlet extends RemoteServiceServlet
-{
+public class KapuaRemoteServiceServlet extends RemoteServiceServlet {
+
     private static final long serialVersionUID = 1L;
 
-    private static Logger     s_logger         = LoggerFactory.getLogger(KapuaGwtConverter.class);
+    private static Logger s_logger = LoggerFactory.getLogger(KapuaGwtConverter.class);
 
     /**
      *
-     * If the given xsrfToken is not valid a GwtEdcException will throw.
+     * If the given xsrfToken is not valid a GwtKapuaException will throw.
      * Check if the given xsrfToken is valid, otherwise traces the user network info and invalidates the user session.
      *
      * @param xsrfToken
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public void checkXSRFToken(GwtXSRFToken xsrfToken)
-        throws GwtEdcException
-    {
+            throws GwtKapuaException {
         HttpServletRequest req = this.perThreadRequest.get();
         performXSRFTokenValidation(req, xsrfToken);
     }
@@ -60,8 +59,7 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet
      * @param userToken
      */
     static private void performXSRFTokenValidation(HttpServletRequest req, GwtXSRFToken userToken)
-        throws GwtEdcException
-    {
+            throws GwtKapuaException {
         HttpSession session = req.getSession();
 
         if (!isValidXSRFToken(session, userToken)) {
@@ -71,15 +69,15 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet
                 s_logger.debug("\tSender Host: {}", req.getRemoteHost());
                 s_logger.debug("\tSender Port: {}", req.getRemotePort());
                 s_logger.debug("\tFull Request URL\n {}?{}\n\n",
-                               req.getRequestURL().toString(),
-                               req.getQueryString());
+                        req.getRequestURL().toString(),
+                        req.getQueryString());
             }
 
             // forcing the console log out
             session.invalidate();
             s_logger.debug("Session invalidated.");
 
-            throw new GwtEdcException(GwtEdcErrorCode.XSRF_INVALID_TOKEN, null, "Invalid XSRF token");
+            throw new GwtKapuaException(GwtKapuaErrorCode.XSRF_INVALID_TOKEN, null, "Invalid XSRF token");
         }
     }
 
@@ -94,8 +92,7 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet
      * @param userToken
      * @return boolean
      */
-    static public boolean isValidXSRFToken(HttpSession session, GwtXSRFToken userToken)
-    {
+    static public boolean isValidXSRFToken(HttpSession session, GwtXSRFToken userToken) {
         s_logger.debug("Starting XSRF Token validation...'");
 
         if (userToken == null) {
@@ -119,8 +116,7 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet
                             // Reset used token
                             session.setAttribute(GwtSecurityTokenServiceImpl.XSRF_TOKEN_KEY, null);
                             return true;
-                        }
-                        else {
+                        } else {
                             session.setAttribute(GwtSecurityTokenServiceImpl.XSRF_TOKEN_KEY, null);
                             s_logger.error("XSRF Token is EXPIRED - {}", userToken.getToken());
                         }
@@ -140,8 +136,7 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet
      * @param token
      * @return boolean
      */
-    static private boolean isValidStringToken(String token)
-    {
+    static private boolean isValidStringToken(String token) {
         if (token != null) {
             if (!token.isEmpty())
                 return true;
@@ -161,8 +156,7 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet
      */
     @SuppressWarnings("unchecked")
     static public String getFieldFromMultiPartForm(HttpServletRequest req, String fieldName)
-        throws Exception
-    {
+            throws Exception {
         String fieldValue = null;
 
         ServletFileUpload upload = new ServletFileUpload();
@@ -186,8 +180,7 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet
     }
 
     static public void checkXSRFToken(HttpServletRequest req, GwtXSRFToken token)
-        throws Exception
-    {
+            throws Exception {
         performXSRFTokenValidation(req, token);
     }
 
@@ -200,8 +193,7 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet
      * @throws Exception
      */
     static public void checkXSRFTokenMultiPart(HttpServletRequest req, GwtXSRFToken token)
-        throws Exception
-    {
+            throws Exception {
         performXSRFTokenValidation(req, token);
     }
 

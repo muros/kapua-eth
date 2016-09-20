@@ -20,7 +20,7 @@ import org.eclipse.kapua.app.console.client.util.DateUtils;
 
 import com.google.gwt.core.client.GWT;
 
-public class GwtGroupedNVPair extends EdcBaseModel implements Serializable
+public class GwtGroupedNVPair extends KapuaBaseModel implements Serializable
 {
     private static final long serialVersionUID = 6017065568183482351L;
 

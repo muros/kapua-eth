@@ -16,7 +16,7 @@ import java.util.Date;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GwtUser extends EdcBaseModel implements IsSerializable
+public class GwtUser extends KapuaBaseModel implements IsSerializable
 {
     private static final long serialVersionUID = -3731370307878410611L;
 

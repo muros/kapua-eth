@@ -15,7 +15,7 @@ package org.eclipse.kapua.app.console.shared.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
+import org.eclipse.kapua.app.console.client.util.KapuaSafeHtmlUtils;
 
 public class GwtMqttTopic implements Serializable {
 
@@ -23,7 +23,8 @@ public class GwtMqttTopic implements Serializable {
 
     private String fullTopic;
 
-    public GwtMqttTopic() {}
+    public GwtMqttTopic() {
+    }
 
     public GwtMqttTopic(String topic) {
         this.setFullTopic(topic);
@@ -34,11 +35,10 @@ public class GwtMqttTopic implements Serializable {
     }
 
     public String getUnescapedFullTopic() {
-        return EdcSafeHtmlUtils.htmlUnescape(fullTopic);
+        return KapuaSafeHtmlUtils.htmlUnescape(fullTopic);
     }
 
     public void setFullTopic(String topic) {
-//  this.fullTopic = EdcSafeHtmlUtils.htmlEscape(topic);
         this.fullTopic = topic;
     }
 
@@ -49,7 +49,7 @@ public class GwtMqttTopic implements Serializable {
 
     @Override
     public int hashCode() {
-        //TODO - fixme
+        // TODO - fixme
         return 0;
     }
 
@@ -99,27 +99,27 @@ public class GwtMqttTopic implements Serializable {
             this.value = value;
         }
 
-        public static SubToken [] getTokens(String str) throws Exception {
-            if(str == null || str.length() == 0) {
+        public static SubToken[] getTokens(String str) throws Exception {
+            if (str == null || str.length() == 0) {
                 return null;
             }
             ArrayList<SubToken> tokens = new ArrayList<SubToken>();
             String remainingStr = str;
-            while(true) {
-                if(remainingStr.contains("+/")) {
+            while (true) {
+                if (remainingStr.contains("+/")) {
                     int plusIndex = remainingStr.indexOf("+/");
-                    if(plusIndex == 0 ) {
+                    if (plusIndex == 0) {
                         tokens.add(new SubToken(PLUS, "+"));
                         remainingStr = remainingStr.substring(2);
                     } else {
-                        tokens.add(new SubToken(TOPIC, remainingStr.substring(0, plusIndex-1)));
+                        tokens.add(new SubToken(TOPIC, remainingStr.substring(0, plusIndex - 1)));
                         remainingStr = remainingStr.substring(plusIndex);
                     }
-                } else if(remainingStr.contains("#")) {
-                    if(remainingStr.startsWith("#")) {
+                } else if (remainingStr.contains("#")) {
+                    if (remainingStr.startsWith("#")) {
                         tokens.add(new SubToken(HASH, "#"));
-                    } else if(remainingStr.endsWith("#")) {
-                        tokens.add(new SubToken(TOPIC, remainingStr.substring(0, remainingStr.length()-2)));
+                    } else if (remainingStr.endsWith("#")) {
+                        tokens.add(new SubToken(TOPIC, remainingStr.substring(0, remainingStr.length() - 2)));
                         tokens.add(new SubToken(HASH, "#"));
                     } else {
                         throw new Exception("Invalid '#' placement within subscribed topic " + str);
@@ -130,42 +130,42 @@ public class GwtMqttTopic implements Serializable {
                     break;
                 }
             }
-            SubToken [] result = new SubToken[tokens.size()];
-            for(int i=0; i<tokens.size(); i++) {
-                result[i] = (SubToken)tokens.get(i);
+            SubToken[] result = new SubToken[tokens.size()];
+            for (int i = 0; i < tokens.size(); i++) {
+                result[i] = (SubToken) tokens.get(i);
             }
             return result;
         }
 
-        public static boolean verifyTopic(SubToken [] toks, String pubTopic) throws Exception {
-            if(pubTopic==null) {
+        public static boolean verifyTopic(SubToken[] toks, String pubTopic) throws Exception {
+            if (pubTopic == null) {
                 throw new Exception("published topic is null");
             }
             SubToken tok = toks[0];
-            if(toks.length > 1) {
-                if(tok.isTopic()) {
-                    if(pubTopic.length() == 0) {
+            if (toks.length > 1) {
+                if (tok.isTopic()) {
+                    if (pubTopic.length() == 0) {
                         return false;
                     }
-                    if(pubTopic.startsWith(tok.getValue())) {
-                        if(pubTopic.length()>tok.getValue().length()) {
-                            return verifyTopic(trimToken(toks), pubTopic.substring(tok.getValue().length()+1));
+                    if (pubTopic.startsWith(tok.getValue())) {
+                        if (pubTopic.length() > tok.getValue().length()) {
+                            return verifyTopic(trimToken(toks), pubTopic.substring(tok.getValue().length() + 1));
                         } else {
                             return verifyTopic(trimToken(toks), "");
                         }
                     } else {
                         return false;
                     }
-                } else if(tok.isPlus()) {
+                } else if (tok.isPlus()) {
                     int nextTopicLevelIndex = pubTopic.indexOf("/");
-                    if(nextTopicLevelIndex == -1) {
-                        if(pubTopic.length() != 0) {
+                    if (nextTopicLevelIndex == -1) {
+                        if (pubTopic.length() != 0) {
                             return verifyTopic(trimToken(toks), "");
                         } else {
                             return false;
                         }
                     } else {
-                        if(pubTopic.length() >= nextTopicLevelIndex+2) {
+                        if (pubTopic.length() >= nextTopicLevelIndex + 2) {
                             return verifyTopic(trimToken(toks), pubTopic.substring(nextTopicLevelIndex + 1));
                         } else {
                             return false;
@@ -175,51 +175,49 @@ public class GwtMqttTopic implements Serializable {
                     throw new Exception("Invalid subscription topic: '#' can only be last topic level.");
                 }
             } else {
-                if(tok.isHash()) {
+                if (tok.isHash()) {
                     return true;
-                } else if(tok.isPlus()) {
-                    if(pubTopic.contains("/") || pubTopic.length()==0) {
+                } else if (tok.isPlus()) {
+                    if (pubTopic.contains("/") || pubTopic.length() == 0) {
                         return false;
                     } else {
                         return true;
                     }
                 } else {
-                    return (pubTopic.compareTo(tok.getValue())==0);
+                    return (pubTopic.compareTo(tok.getValue()) == 0);
                 }
             }
         }
 
-        public static SubToken [] trimToken(SubToken [] toks) {
-            int newLength = toks.length-1;
-            SubToken [] result = new SubToken[newLength];
-            for(int i=0; i<newLength; i++) {
-                result[i] = toks[i+1];
+        public static SubToken[] trimToken(SubToken[] toks) {
+            int newLength = toks.length - 1;
+            SubToken[] result = new SubToken[newLength];
+            for (int i = 0; i < newLength; i++) {
+                result[i] = toks[i + 1];
             }
             return result;
         }
-
 
         public String getValue() {
             return value;
         }
 
-
         public boolean isTopic() {
-            if(type == TOPIC) {
+            if (type == TOPIC) {
                 return true;
             }
             return false;
         }
 
         public boolean isPlus() {
-            if(type == PLUS) {
+            if (type == PLUS) {
                 return true;
             }
             return false;
         }
 
         public boolean isHash() {
-            if(type == HASH) {
+            if (type == HASH) {
                 return true;
             }
             return false;

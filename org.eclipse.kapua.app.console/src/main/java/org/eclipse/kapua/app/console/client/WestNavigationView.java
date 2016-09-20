@@ -21,7 +21,6 @@ import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.overview.DashboardView;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.client.user.UserView;
-import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 
@@ -54,30 +53,28 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Widget;
 
-public class WestNavigationView extends LayoutContainer
-{
+public class WestNavigationView extends LayoutContainer {
 
     private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
-    private LayoutContainer              m_centerPanel;
-    private ContentPanel                 m_accountPanel;
-    private ContentPanel                 m_accordionPanel;
-    private ContentPanel                 m_managePanel;
-    private AccordionLayout              m_accordionLayout;
+    private LayoutContainer m_centerPanel;
+    private ContentPanel m_accountPanel;
+    private ContentPanel m_accordionPanel;
+    private ContentPanel m_managePanel;
+    private AccordionLayout m_accordionLayout;
 
-    private TreeStore<ModelData>         m_accountStore;
-    private TreeGrid<ModelData>          m_accountTree;
-    private TreeStore<ModelData>         m_manageStore;
-    private TreeGrid<ModelData>          m_manageTree;
+    private TreeStore<ModelData> m_accountStore;
+    private TreeGrid<ModelData> m_accountTree;
+    private TreeStore<ModelData> m_manageStore;
+    private TreeGrid<ModelData> m_manageTree;
 
-    private boolean                      dashboardSelected;
-    private Label                        imgRefreshLabel;
-    private DashboardView                m_dashboardView;
+    private boolean dashboardSelected;
+    private Label imgRefreshLabel;
+    private DashboardView m_dashboardView;
 
-    private GwtSession                   m_currentSession;
+    private GwtSession m_currentSession;
 
-    public WestNavigationView(GwtSession currentSession, LayoutContainer center)
-    {
+    public WestNavigationView(GwtSession currentSession, LayoutContainer center) {
         m_centerPanel = center;
         m_currentSession = currentSession;
 
@@ -92,13 +89,8 @@ public class WestNavigationView extends LayoutContainer
         dashboardSelected = true;
     }
 
-    protected void onRender(final Element parent, int index)
-    {
+    protected void onRender(final Element parent, int index) {
         super.onRender(parent, index);
-
-        // Analytics
-        GoogleAnalytics.setAccount(m_currentSession.getGoogleAnalyticsTrackingId(), m_currentSession.getSelectedAccount().getName(), m_currentSession.getGwtUser().getUsername());
-        GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DASHBOARD); // Initial page
 
         setLayout(new FitLayout());
         setBorders(false);
@@ -142,9 +134,9 @@ public class WestNavigationView extends LayoutContainer
 
         ColumnConfig name = new ColumnConfig("name", "Name", 100);
         name.setRenderer(new WidgetTreeGridCellRenderer<ModelData>() {
+
             @Override
-            public Widget getWidget(ModelData model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<ModelData> store, Grid<ModelData> grid)
-            {
+            public Widget getWidget(ModelData model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<ModelData> store, Grid<ModelData> grid) {
                 Label label = new Label((String) model.get(property));
                 label.setStyleAttribute("padding-left", "5px");
 
@@ -163,17 +155,17 @@ public class WestNavigationView extends LayoutContainer
 
                     dashboardLabelPanel.add(label);
 
-                    imgRefreshLabel = new Label("<image src=\"eurotech/com/eurotech/cloud/icon/refresh.png\" "
-                                                + "width=\"15\" height=\"15\" "
-                                                + "style=\"vertical-align: middle\" title=\"" + MSGS.refreshButton() + "\"/>");
+                    imgRefreshLabel = new Label("<image src=\"eclipse/org/eclipse/kapua/app/console/icon/refresh.png\" "
+                            + "width=\"15\" height=\"15\" "
+                            + "style=\"vertical-align: middle\" title=\"" + MSGS.refreshButton() + "\"/>");
 
                     dashboardLabelPanel.add(imgRefreshLabel);
                     dashboardLabelPanel.setBodyStyle("background-color:transparent");
 
                     imgRefreshLabel.addListener(Events.OnClick, new Listener<BaseEvent>() {
+
                         @Override
-                        public void handleEvent(BaseEvent be)
-                        {
+                        public void handleEvent(BaseEvent be) {
                             if (dashboardSelected) {
                                 m_dashboardView.refresh();
                             }
@@ -195,13 +187,12 @@ public class WestNavigationView extends LayoutContainer
         m_accountTree.getTreeView().setRowHeight(36);
         m_accountTree.getTreeView().setForceFit(true);
         m_accountTree.setIconProvider(new ModelIconProvider<ModelData>() {
-            public AbstractImagePrototype getIcon(ModelData model)
-            {
+
+            public AbstractImagePrototype getIcon(ModelData model) {
                 if (model.get("icon") != null) {
                     ImageResource ir = (ImageResource) model.get("icon");
                     return AbstractImagePrototype.create(ir);
-                }
-                else {
+                } else {
                     return null;
                 }
             }
@@ -209,9 +200,9 @@ public class WestNavigationView extends LayoutContainer
 
         m_accountTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         m_accountTree.getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<ModelData>() {
+
             @Override
-            public void selectionChanged(SelectionChangedEvent<ModelData> se)
-            {
+            public void selectionChanged(SelectionChangedEvent<ModelData> se) {
                 ModelData selected = se.getSelectedItem();
                 if (selected == null)
                     return;
@@ -238,9 +229,7 @@ public class WestNavigationView extends LayoutContainer
                     m_centerPanel.layout();
                     dashboardSelected = true;
 
-                    GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DASHBOARD);
-                }
-                else if ("devices".equals(selectedId)) {
+                } else if ("devices".equals(selectedId)) {
 
                     panel.setHeaderVisible(false);
                     panel.add(new DevicesView(m_currentSession));
@@ -248,19 +237,7 @@ public class WestNavigationView extends LayoutContainer
                     m_centerPanel.layout();
                     dashboardSelected = false;
 
-                    GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES);
-                }
-                // else if ("data".equals(selectedId)) {
-                //
-                // panel.setHeaderVisible(false);
-                // panel.add(new DataView(m_currentSession));
-                // m_centerPanel.add(panel);
-                // m_centerPanel.layout();
-                // dashboardSelected = false;
-                //
-                // GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DATA);
-                // }
-                else if ("user".equals(selectedId)) {
+                } else if ("user".equals(selectedId)) {
 
                     panel.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.users16()));
                     panel.setHeading(MSGS.users());
@@ -272,9 +249,7 @@ public class WestNavigationView extends LayoutContainer
                     userView.refresh();
                     dashboardSelected = false;
 
-                    GoogleAnalytics.trackPageview(GoogleAnalytics.GA_USERS);
-                }
-                else if ("mysettings".equals(selectedId)) {
+                } else if ("mysettings".equals(selectedId)) {
 
                     panel.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.settings()));
                     panel.setHeading(MSGS.settings());
@@ -284,8 +259,6 @@ public class WestNavigationView extends LayoutContainer
                     m_centerPanel.add(panel);
                     m_centerPanel.layout();
                     settingView.refresh();
-
-                    GoogleAnalytics.trackPageview(GoogleAnalytics.GA_SETTINGS);
                 }
 
                 imgRefreshLabel.setVisible(dashboardSelected);
@@ -294,9 +267,9 @@ public class WestNavigationView extends LayoutContainer
 
         ColumnConfig name1 = new ColumnConfig("name", "Name", 100);
         name1.setRenderer(new WidgetTreeGridCellRenderer<ModelData>() {
+
             @Override
-            public Widget getWidget(ModelData model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<ModelData> store, Grid<ModelData> grid)
-            {
+            public Widget getWidget(ModelData model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<ModelData> store, Grid<ModelData> grid) {
                 Label label = new Label((String) model.get(property));
                 label.setStyleAttribute("padding-left", "5px");
                 return label;
@@ -311,13 +284,12 @@ public class WestNavigationView extends LayoutContainer
         m_manageTree.getTreeView().setRowHeight(36);
         m_manageTree.getTreeView().setForceFit(true);
         m_manageTree.setIconProvider(new ModelIconProvider<ModelData>() {
-            public AbstractImagePrototype getIcon(ModelData model)
-            {
+
+            public AbstractImagePrototype getIcon(ModelData model) {
                 if (model.get("icon") != null) {
                     ImageResource ir = (ImageResource) model.get("icon");
                     return AbstractImagePrototype.create(ir);
-                }
-                else {
+                } else {
                     return null;
                 }
             }
@@ -325,9 +297,9 @@ public class WestNavigationView extends LayoutContainer
 
         m_manageTree.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         m_manageTree.getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<ModelData>() {
+
             @Override
-            public void selectionChanged(SelectionChangedEvent<ModelData> se)
-            {
+            public void selectionChanged(SelectionChangedEvent<ModelData> se) {
 
                 ModelData selected = se.getSelectedItem();
                 if (selected == null)
@@ -347,7 +319,6 @@ public class WestNavigationView extends LayoutContainer
                     AccountView accountView = new AccountView(m_currentSession);
                     panel.add(accountView);
                     dashboardSelected = false;
-                    GoogleAnalytics.trackPageview(GoogleAnalytics.GA_CHILDACCOUNTS);
                 }
                 imgRefreshLabel.setVisible(dashboardSelected);
 
@@ -365,8 +336,7 @@ public class WestNavigationView extends LayoutContainer
         m_accordionPanel.add(m_accountPanel);
     }
 
-    public void addMenuItems()
-    {
+    public void addMenuItems() {
         ModelData selectedAccountItem = null;
         ModelData selectedManageItem = null;
 
@@ -420,8 +390,7 @@ public class WestNavigationView extends LayoutContainer
                     break;
                 }
             }
-        }
-        else if (selectedManageItem != null) {
+        } else if (selectedManageItem != null) {
             String searchFor = (String) selectedManageItem.get("id");
 
             for (int i = 0; i < m_manageStore.getAllItems().size(); i++) {
@@ -434,13 +403,11 @@ public class WestNavigationView extends LayoutContainer
         }
     }
 
-    public void setDashboardSelected(boolean isSelected)
-    {
+    public void setDashboardSelected(boolean isSelected) {
         this.dashboardSelected = isSelected;
     }
 
-    private ModelData newItem(String id, String text, Object iconStyle)
-    {
+    private ModelData newItem(String id, String text, Object iconStyle) {
         ModelData m = new BaseModelData();
         m.set("id", id);
         m.set("name", text);

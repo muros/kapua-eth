@@ -31,9 +31,7 @@
         <!-- 
             Favicon and title definition
          -->
-        <link rel="icon" href="eurotech/com/eurotech/cloud/icon/eurotech_favicon.ico" />
-        <link rel="shortcut icon" href="eurotech/com/eurotech/cloud/icon/eurotech_favicon.ico" />
-        <title>Everyware&trade; Cloud</title>
+        <title>Kapua&copy; Console</title>
         
         <!-- 
             CSS resources
@@ -45,11 +43,10 @@
             JS resources
          -->
         <script type="text/javascript" src="js/jquery/jquery-1.4.2.js"></script>
-        <script type="text/javascript" src="js/highcharts/highcharts.js"></script>
         <script type="text/javascript" src="console/console.nocache.js"></script>
         
         <!-- This script manage all JS/CSS deferred loading -->
-        <script type="text/javascript" src="js/everywarecloud/console.js" defer></script>
+        <script type="text/javascript" src="js/kapuaconsole/console.js" defer></script>
 
     </head>
     <body>

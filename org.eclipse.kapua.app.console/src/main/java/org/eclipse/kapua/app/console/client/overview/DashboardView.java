@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.overview;
 
-import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
@@ -24,26 +23,23 @@ import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.google.gwt.user.client.Element;
 
-public class DashboardView extends LayoutContainer
-{
+public class DashboardView extends LayoutContainer {
 
-    private GwtSession         m_currentSession;
-    private ContentPanel       centerPanel;
-    private ContentPanel       southPanel;
+    private GwtSession m_currentSession;
+    private ContentPanel centerPanel;
+    private ContentPanel southPanel;
 
     private CenterOverviewView m_centerOverviewView;
     private BottomOverviewView m_bottomOverviewView;
 
-    public DashboardView(GwtSession currentSession)
-    {
+    public DashboardView(GwtSession currentSession) {
         m_currentSession = currentSession;
     }
 
     /**
      * Add panel to different area of overview.
      */
-    public void AddOverviewsPanel()
-    {
+    public void AddOverviewsPanel() {
         // Last message summary and last data received chart
         m_centerOverviewView = new CenterOverviewView(m_currentSession);
         centerPanel.add(m_centerOverviewView);
@@ -53,8 +49,7 @@ public class DashboardView extends LayoutContainer
         southPanel.add(m_bottomOverviewView);
     }
 
-    protected void onRender(final Element parent, int index)
-    {
+    protected void onRender(final Element parent, int index) {
         super.onRender(parent, index);
 
         setBorders(false);
@@ -102,9 +97,7 @@ public class DashboardView extends LayoutContainer
         AddOverviewsPanel();
     }
 
-    public void refresh()
-    {
-        GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DASHBOARD_REFRESH);
+    public void refresh() {
         if (rendered) {
             m_centerOverviewView.refresh();
         }

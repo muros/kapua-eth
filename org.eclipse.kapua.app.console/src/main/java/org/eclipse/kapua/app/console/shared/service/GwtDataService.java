@@ -16,12 +16,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
-import org.eclipse.kapua.app.console.shared.model.EdcBasePagingCursor;
-import org.eclipse.kapua.app.console.shared.model.EdcPagingLoadConfig;
-import org.eclipse.kapua.app.console.shared.model.EdcPagingLoadResult;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
+import org.eclipse.kapua.app.console.shared.model.KapuaBasePagingCursor;
+import org.eclipse.kapua.app.console.shared.model.KapuaPagingLoadConfig;
+import org.eclipse.kapua.app.console.shared.model.KapuaPagingLoadResult;
 import org.eclipse.kapua.app.console.shared.model.GwtAsset;
-import org.eclipse.kapua.app.console.shared.model.GwtEdcChartResult;
+import org.eclipse.kapua.app.console.shared.model.GwtKapuaChartResult;
 import org.eclipse.kapua.app.console.shared.model.GwtHeader;
 import org.eclipse.kapua.app.console.shared.model.GwtMessage;
 import org.eclipse.kapua.app.console.shared.model.GwtTopic;
@@ -42,9 +42,9 @@ public interface GwtDataService extends RemoteService {
      * @param config
      * @param accountId
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
-    public GwtTopic findTopicsTree(String accountName) throws GwtEdcException;
+    public GwtTopic findTopicsTree(String accountName) throws GwtKapuaException;
 
     /**
      * Return the Topics for a given account; the returned structure is a list
@@ -53,9 +53,9 @@ public interface GwtDataService extends RemoteService {
      * @param config
      * @param accountId
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
-    public List<GwtTopic> findTopicsList(String accountName) throws GwtEdcException;
+    public List<GwtTopic> findTopicsList(String accountName) throws GwtKapuaException;
 
 
     /**
@@ -63,9 +63,9 @@ public interface GwtDataService extends RemoteService {
      * @param config
      * @param accountName
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
-    public ListLoadResult<GwtAsset> findAssets(LoadConfig config, String accountName) throws GwtEdcException;
+    public ListLoadResult<GwtAsset> findAssets(LoadConfig config, String accountName) throws GwtKapuaException;
 
 
     /**
@@ -76,9 +76,9 @@ public interface GwtDataService extends RemoteService {
      * @param accountId
      * @param topic
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
-    public ListLoadResult<GwtHeader> findHeaders(LoadConfig config, String accountName, GwtTopic topic) throws GwtEdcException;
+    public ListLoadResult<GwtHeader> findHeaders(LoadConfig config, String accountName, GwtTopic topic) throws GwtKapuaException;
 
     /**
     * Return the number Headers (int, long, float, double and so on. Not String, Boolean, Byte) for a given account/topic pair.
@@ -88,9 +88,9 @@ public interface GwtDataService extends RemoteService {
     * @param accountId
     * @param topic
     * @return
-    * @throws GwtEdcException
+    * @throws GwtKapuaException
     */
-    public ListLoadResult<GwtHeader> findNumberHeaders(LoadConfig config, String accountName, GwtTopic topic) throws GwtEdcException;
+    public ListLoadResult<GwtHeader> findNumberHeaders(LoadConfig config, String accountName, GwtTopic topic) throws GwtKapuaException;
 
 
     /**
@@ -101,9 +101,9 @@ public interface GwtDataService extends RemoteService {
      * @param accountId
      * @param topic
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
-    public ListLoadResult<GwtHeader> findHeaders(LoadConfig config, String accountName, GwtAsset asset) throws GwtEdcException;
+    public ListLoadResult<GwtHeader> findHeaders(LoadConfig config, String accountName, GwtAsset asset) throws GwtKapuaException;
 
 
     /**
@@ -114,22 +114,22 @@ public interface GwtDataService extends RemoteService {
      * @param topic
      * @param headers
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
-    public EdcPagingLoadResult<GwtMessage> findMessagesByTopic(EdcPagingLoadConfig loadConfig, String accountName,
-            GwtTopic topic, List<GwtHeader> headers, Date startDate, Date endDate) throws GwtEdcException;
+    public KapuaPagingLoadResult<GwtMessage> findMessagesByTopic(KapuaPagingLoadConfig loadConfig, String accountName,
+            GwtTopic topic, List<GwtHeader> headers, Date startDate, Date endDate) throws GwtKapuaException;
 
-    public List<GwtMessage> findLastMessageByTopic(String accountName, int limit) throws GwtEdcException;
+    public List<GwtMessage> findLastMessageByTopic(String accountName, int limit) throws GwtKapuaException;
 
-    public GwtEdcChartResult findMessagesByTopic(String accountName, GwtTopic topic, List<GwtHeader> metrics, Date startDate, Date endDate) throws GwtEdcException;
+    public GwtKapuaChartResult findMessagesByTopic(String accountName, GwtTopic topic, List<GwtHeader> metrics, Date startDate, Date endDate) throws GwtKapuaException;
 
-    public GwtEdcChartResult findMessagesByTopic(String accountName, GwtTopic topic,
-            List<GwtHeader> headers, Date startDate, Date endDate, Stack<EdcBasePagingCursor> cursors, int limit, int lastOffset, Integer indexOffset) throws GwtEdcException;
+    public GwtKapuaChartResult findMessagesByTopic(String accountName, GwtTopic topic,
+            List<GwtHeader> headers, Date startDate, Date endDate, Stack<KapuaBasePagingCursor> cursors, int limit, int lastOffset, Integer indexOffset) throws GwtKapuaException;
 
-    public EdcPagingLoadResult<GwtMessage> findMessagesByAsset(EdcPagingLoadConfig loadConfig, String accountName,
-            GwtAsset asset, List<GwtHeader> headers, Date startDate, Date endDate) throws GwtEdcException;
+    public KapuaPagingLoadResult<GwtMessage> findMessagesByAsset(KapuaPagingLoadConfig loadConfig, String accountName,
+            GwtAsset asset, List<GwtHeader> headers, Date startDate, Date endDate) throws GwtKapuaException;
 
-    public GwtEdcChartResult findMessagesByAsset(String accountName, GwtAsset asset,
-            List<GwtHeader> headers, Date startDate, Date endDate, Stack<EdcBasePagingCursor> cursors, int limit, int lastOffset, Integer indexOffset) throws GwtEdcException;
+    public GwtKapuaChartResult findMessagesByAsset(String accountName, GwtAsset asset,
+            List<GwtHeader> headers, Date startDate, Date endDate, Stack<KapuaBasePagingCursor> cursors, int limit, int lastOffset, Integer indexOffset) throws GwtKapuaException;
 
 }

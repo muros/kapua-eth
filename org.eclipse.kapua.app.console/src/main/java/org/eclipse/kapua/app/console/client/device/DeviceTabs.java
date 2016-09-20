@@ -14,7 +14,6 @@ package org.eclipse.kapua.app.console.client.device;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
-import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice.GwtDeviceApplication;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
@@ -30,33 +29,31 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
-public class DeviceTabs extends LayoutContainer
-{
+public class DeviceTabs extends LayoutContainer {
 
     private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
-    private GwtSession                   m_currentSession;
-    private DevicesTable                 m_devicesTable;
-    private DeviceFilterPanel            m_deviceFilterPanel;
+    private GwtSession m_currentSession;
+    private DevicesTable m_devicesTable;
+    private DeviceFilterPanel m_deviceFilterPanel;
 
-    private TabPanel                     m_tabsPanel;
-    private TabItem                      m_tabProfile;
-    private TabItem                      m_tabHistory;
-    private TabItem                      m_tabPackages;
-    private TabItem                      m_tabBundles;
-    private TabItem                      m_tabConfiguration;
+    private TabPanel m_tabsPanel;
+    private TabItem m_tabProfile;
+    private TabItem m_tabHistory;
+    private TabItem m_tabPackages;
+    private TabItem m_tabBundles;
+    private TabItem m_tabConfiguration;
 
-    private TabItem                      m_tabCommand;
+    private TabItem m_tabCommand;
 
-    private DeviceTabProfile             m_deviceProfileTab;
-    private DeviceTabHistory             m_deviceHistoryTab;
-    private DeviceTabPackages            m_devicePackagesTab;
-    private DeviceTabBundles             m_deviceBundlesTab;
-    private DeviceTabConfiguration       m_deviceConfigTab;
-    private DeviceTabCommand             m_deviceCommandTab;
+    private DeviceTabProfile m_deviceProfileTab;
+    private DeviceTabHistory m_deviceHistoryTab;
+    private DeviceTabPackages m_devicePackagesTab;
+    private DeviceTabBundles m_deviceBundlesTab;
+    private DeviceTabConfiguration m_deviceConfigTab;
+    private DeviceTabCommand m_deviceCommandTab;
 
-    public DeviceTabs(DevicesTable devicesTable, DeviceFilterPanel deviceFilterPanel, GwtSession currentSession)
-    {
+    public DeviceTabs(DevicesTable devicesTable, DeviceFilterPanel deviceFilterPanel, GwtSession currentSession) {
         m_devicesTable = devicesTable;
         m_deviceFilterPanel = deviceFilterPanel;
         m_currentSession = currentSession;
@@ -70,13 +67,11 @@ public class DeviceTabs extends LayoutContainer
         m_deviceCommandTab = new DeviceTabCommand(m_currentSession);
     }
 
-    public void setDevice(GwtDevice selectedDevice)
-    {
+    public void setDevice(GwtDevice selectedDevice) {
         // configure the tabs based on the available applications and user permissions
         if (m_currentSession.hasDeviceReadPermission()) {
             m_tabHistory.enable();
-        }
-        else {
+        } else {
             m_tabHistory.disable();
             m_tabHistory.getHeader().setTitle(MSGS.youDontHavePermissionTo("view", "tab", "device:manage"));
             if (m_tabsPanel.getSelectedItem() == m_tabHistory) {
@@ -87,8 +82,7 @@ public class DeviceTabs extends LayoutContainer
         boolean hasConfigApp = selectedDevice != null && selectedDevice.hasApplication(GwtDeviceApplication.APP_CONFIGURATION);
         if (hasConfigApp) {// && m_currentSession.hasDeviceManagePermission()) {
             m_tabConfiguration.enable();
-        }
-        else {
+        } else {
             m_tabConfiguration.disable();
             m_tabConfiguration.getHeader().setTitle(MSGS.youDontHavePermissionTo("view", "tab", "device:manage"));
             if (m_tabsPanel.getSelectedItem() == m_tabConfiguration) {
@@ -99,8 +93,7 @@ public class DeviceTabs extends LayoutContainer
         boolean hasCmdApp = selectedDevice != null && selectedDevice.hasApplication(GwtDeviceApplication.APP_COMMAND);
         if (hasCmdApp) {// && m_currentSession.hasDeviceManagePermission()) {
             m_tabCommand.enable();
-        }
-        else {
+        } else {
             m_tabCommand.disable();
             m_tabCommand.getHeader().setTitle(MSGS.youDontHavePermissionTo("view", "tab", "device:manage"));
             if (m_tabsPanel.getSelectedItem() == m_tabCommand) {
@@ -110,11 +103,10 @@ public class DeviceTabs extends LayoutContainer
         }
 
         boolean hasPkgApp = selectedDevice != null && (selectedDevice.hasApplication(GwtDeviceApplication.APP_DEPLOY_V1) ||
-                                                       selectedDevice.hasApplication(GwtDeviceApplication.APP_DEPLOY_V2));
+                selectedDevice.hasApplication(GwtDeviceApplication.APP_DEPLOY_V2));
         if (hasPkgApp && m_currentSession.hasDeviceManagePermission()) {
             m_tabPackages.enable();
-        }
-        else {
+        } else {
             m_tabPackages.disable();
             m_tabPackages.getHeader().setTitle(MSGS.youDontHavePermissionTo("view", "tab", "device:manage"));
             if (m_tabsPanel.getSelectedItem() == m_tabPackages) {
@@ -123,11 +115,10 @@ public class DeviceTabs extends LayoutContainer
         }
 
         boolean hasBundleApp = selectedDevice != null && (selectedDevice.hasApplication(GwtDeviceApplication.APP_DEPLOY_V1) ||
-                                                          selectedDevice.hasApplication(GwtDeviceApplication.APP_DEPLOY_V2));
+                selectedDevice.hasApplication(GwtDeviceApplication.APP_DEPLOY_V2));
         if (hasBundleApp && m_currentSession.hasDeviceManagePermission()) {
             m_tabBundles.enable();
-        }
-        else {
+        } else {
             m_tabBundles.disable();
             m_tabBundles.getHeader().setTitle(MSGS.youDontHavePermissionTo("view", "tab", "device:manage"));
             if (m_tabsPanel.getSelectedItem() == m_tabBundles) {
@@ -144,26 +135,20 @@ public class DeviceTabs extends LayoutContainer
 
         if (m_tabsPanel.getSelectedItem() == m_tabProfile) {
             m_deviceProfileTab.refresh();
-        }
-        else if (m_tabsPanel.getSelectedItem() == m_tabHistory) {
+        } else if (m_tabsPanel.getSelectedItem() == m_tabHistory) {
             m_deviceHistoryTab.refresh();
-        }
-        else if (m_tabsPanel.getSelectedItem() == m_tabConfiguration) {
+        } else if (m_tabsPanel.getSelectedItem() == m_tabConfiguration) {
             m_deviceConfigTab.refresh();
-        }
-        else if (m_tabsPanel.getSelectedItem() == m_tabCommand) {
+        } else if (m_tabsPanel.getSelectedItem() == m_tabCommand) {
             m_deviceCommandTab.refresh();
-        }
-        else if (m_tabsPanel.getSelectedItem() == m_tabPackages) {
+        } else if (m_tabsPanel.getSelectedItem() == m_tabPackages) {
             m_devicePackagesTab.refresh();
-        }
-        else if (m_tabsPanel.getSelectedItem() == m_tabBundles) {
+        } else if (m_tabsPanel.getSelectedItem() == m_tabBundles) {
             m_deviceBundlesTab.refresh();
         }
     }
 
-    protected void onRender(Element parent, int index)
-    {
+    protected void onRender(Element parent, int index) {
 
         super.onRender(parent, index);
 
@@ -182,10 +167,9 @@ public class DeviceTabs extends LayoutContainer
         m_tabProfile.setLayout(new FitLayout());
         m_tabProfile.add(m_deviceProfileTab);
         m_tabProfile.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 m_deviceProfileTab.refresh();
-                GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_DESCRIPTION);
             }
         });
         m_tabsPanel.add(m_tabProfile);
@@ -196,10 +180,9 @@ public class DeviceTabs extends LayoutContainer
         m_tabHistory.setLayout(new FitLayout());
         m_tabHistory.add(m_deviceHistoryTab);
         m_tabHistory.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 m_deviceHistoryTab.refresh();
-                GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_EVENTS);
             }
         });
         m_tabsPanel.add(m_tabHistory);
@@ -210,10 +193,9 @@ public class DeviceTabs extends LayoutContainer
         m_tabPackages.setLayout(new FitLayout());
         m_tabPackages.add(m_devicePackagesTab);
         m_tabPackages.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 m_devicePackagesTab.refresh();
-                GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_PACKAGES);
             }
         });
         m_tabsPanel.add(m_tabPackages);
@@ -224,10 +206,9 @@ public class DeviceTabs extends LayoutContainer
         m_tabBundles.setLayout(new FitLayout());
         m_tabBundles.add(m_deviceBundlesTab);
         m_tabBundles.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 m_deviceBundlesTab.refresh();
-                GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_BUNDLES);
             }
         });
         m_tabsPanel.add(m_tabBundles);
@@ -238,10 +219,9 @@ public class DeviceTabs extends LayoutContainer
         m_tabConfiguration.setLayout(new FitLayout());
         m_tabConfiguration.add(m_deviceConfigTab);
         m_tabConfiguration.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 m_deviceConfigTab.refresh();
-                GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_CONFIGURATION);
             }
         });
         m_tabsPanel.add(m_tabConfiguration);
@@ -252,10 +232,9 @@ public class DeviceTabs extends LayoutContainer
         m_tabCommand.setLayout(new FitLayout());
         m_tabCommand.add(m_deviceCommandTab);
         m_tabCommand.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 m_deviceCommandTab.refresh();
-                GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_COMMAND);
             }
         });
         m_tabsPanel.add(m_tabCommand);

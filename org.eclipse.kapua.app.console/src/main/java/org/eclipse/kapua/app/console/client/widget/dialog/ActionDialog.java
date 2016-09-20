@@ -31,7 +31,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public abstract class ActionDialog extends EdcDialog
+public abstract class ActionDialog extends KapuaDialog
 {
     protected static final ConsoleMessages       MSGS             = GWT.create(ConsoleMessages.class);
     protected final GwtSecurityTokenServiceAsync gwtXSRFService   = GWT.create(GwtSecurityTokenService.class);

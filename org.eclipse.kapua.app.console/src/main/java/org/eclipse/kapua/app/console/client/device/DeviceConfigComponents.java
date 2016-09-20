@@ -17,10 +17,9 @@ import java.util.List;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
-import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
+import org.eclipse.kapua.app.console.client.util.KapuaLoadListener;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.client.util.ScaledAbstractImagePrototype;
-import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
@@ -65,59 +64,56 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
-public class DeviceConfigComponents extends LayoutContainer
-{
-    private static final ConsoleMessages       MSGS             = GWT.create(ConsoleMessages.class);
+public class DeviceConfigComponents extends LayoutContainer {
 
-    private final GwtDeviceServiceAsync        gwtDeviceService = GWT.create(GwtDeviceService.class);
-    private final GwtSecurityTokenServiceAsync gwtXSRFService   = GWT.create(GwtSecurityTokenService.class);
+    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
+
+    private final GwtDeviceServiceAsync gwtDeviceService = GWT.create(GwtDeviceService.class);
+    private final GwtSecurityTokenServiceAsync gwtXSRFService = GWT.create(GwtSecurityTokenService.class);
 
     @SuppressWarnings("unused")
-    private GwtSession                         m_currentSession;
+    private GwtSession m_currentSession;
 
-    private boolean                            m_dirty;
-    private boolean                            m_initialized;
-    private GwtDevice                          m_selectedDevice;
-    private DeviceTabConfiguration             m_tabConfig;
+    private boolean m_dirty;
+    private boolean m_initialized;
+    private GwtDevice m_selectedDevice;
+    private DeviceTabConfiguration m_tabConfig;
 
-    private ToolBar                            m_toolBar;
+    private ToolBar m_toolBar;
 
-    private Button                             m_refreshButton;
-    private boolean                            refreshProcess;
+    private Button m_refreshButton;
+    private boolean refreshProcess;
 
-    private Button                             m_apply;
-    private Button                             m_reset;
+    private Button m_apply;
+    private Button m_reset;
 
-    private ContentPanel                       m_configPanel;
-    private DeviceConfigPanel                  m_devConfPanel;
-    private BorderLayoutData                   m_centerData;
+    private ContentPanel m_configPanel;
+    private DeviceConfigPanel m_devConfPanel;
+    private BorderLayoutData m_centerData;
 
     @SuppressWarnings("rawtypes")
-    private BaseTreeLoader                     m_loader;
-    private TreeStore<ModelData>               m_treeStore;
-    private TreePanel<ModelData>               m_tree;
+    private BaseTreeLoader m_loader;
+    private TreeStore<ModelData> m_treeStore;
+    private TreePanel<ModelData> m_tree;
 
-    protected boolean                          resetProcess;
+    protected boolean resetProcess;
 
-    protected boolean                          applyProcess;
+    protected boolean applyProcess;
 
     public DeviceConfigComponents(GwtSession currentSession,
-                                  DeviceTabConfiguration tabConfig)
-    {
+            DeviceTabConfiguration tabConfig) {
         m_currentSession = currentSession;
         m_tabConfig = tabConfig;
         m_dirty = false;
         m_initialized = false;
     }
 
-    public void setDevice(GwtDevice selectedDevice)
-    {
+    public void setDevice(GwtDevice selectedDevice) {
         m_dirty = true;
         m_selectedDevice = selectedDevice;
     }
 
-    protected void onRender(Element parent, int index)
-    {
+    protected void onRender(Element parent, int index) {
         super.onRender(parent, index);
         setLayout(new FitLayout());
         setBorders(false);
@@ -139,74 +135,70 @@ public class DeviceConfigComponents extends LayoutContainer
         m_initialized = true;
     }
 
-    private void initToolBar()
-    {
+    private void initToolBar() {
         m_toolBar = new ToolBar();
         m_toolBar.setBorders(false);
 
         //
         // Refresh Button
         m_refreshButton = new Button(MSGS.refreshButton(),
-                                     AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
-                                     new SelectionListener<ButtonEvent>() {
-                                         @Override
-                                         public void componentSelected(ButtonEvent ce)
-                                         {
-                                             if (!refreshProcess) {
-                                                 refreshProcess = true;
-                                                 m_refreshButton.setEnabled(false);
+                AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
+                new SelectionListener<ButtonEvent>() {
 
-                                                 m_dirty = true;
-                                                 refresh();
+                    @Override
+                    public void componentSelected(ButtonEvent ce) {
+                        if (!refreshProcess) {
+                            refreshProcess = true;
+                            m_refreshButton.setEnabled(false);
 
-                                                 m_refreshButton.setEnabled(true);
-                                                 refreshProcess = false;
-                                             }
-                                             GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_CONFIGURATION_SERVICES_REFRESH);
-                                         }
-                                     });
+                            m_dirty = true;
+                            refresh();
+
+                            m_refreshButton.setEnabled(true);
+                            refreshProcess = false;
+                        }
+                    }
+                });
 
         m_refreshButton.setEnabled(true);
         m_toolBar.add(m_refreshButton);
         m_toolBar.add(new SeparatorToolItem());
 
         m_apply = new Button(MSGS.apply(),
-                             AbstractImagePrototype.create(Resources.INSTANCE.accept16()),
-                             new SelectionListener<ButtonEvent>() {
-                                 @Override
-                                 public void componentSelected(ButtonEvent ce)
-                                 {
-                                     if (!applyProcess) {
-                                         applyProcess = true;
-                                         m_apply.setEnabled(false);
+                AbstractImagePrototype.create(Resources.INSTANCE.accept16()),
+                new SelectionListener<ButtonEvent>() {
 
-                                         apply();
+                    @Override
+                    public void componentSelected(ButtonEvent ce) {
+                        if (!applyProcess) {
+                            applyProcess = true;
+                            m_apply.setEnabled(false);
 
-                                         m_apply.setEnabled(true);
-                                         applyProcess = false;
-                                         GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_CONFIGURATION_SERVICES_APPLY);
-                                     }
-                                 }
-                             });
+                            apply();
+
+                            m_apply.setEnabled(true);
+                            applyProcess = false;
+                        }
+                    }
+                });
 
         m_reset = new Button(MSGS.reset(),
-                             AbstractImagePrototype.create(Resources.INSTANCE.cancel16()),
-                             new SelectionListener<ButtonEvent>() {
-                                 @Override
-                                 public void componentSelected(ButtonEvent ce)
-                                 {
-                                     if (!resetProcess) {
-                                         resetProcess = true;
-                                         m_reset.setEnabled(false);
+                AbstractImagePrototype.create(Resources.INSTANCE.cancel16()),
+                new SelectionListener<ButtonEvent>() {
 
-                                         reset();
+                    @Override
+                    public void componentSelected(ButtonEvent ce) {
+                        if (!resetProcess) {
+                            resetProcess = true;
+                            m_reset.setEnabled(false);
 
-                                         m_reset.setEnabled(true);
-                                         resetProcess = false;
-                                         GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_CONFIGURATION_SERVICES_RESET);
-                                     }
-                                 }
-                             });
+                            reset();
+
+                            m_reset.setEnabled(true);
+                            resetProcess = false;
+                        }
+                    }
+                });
 
         m_apply.setEnabled(false);
         m_reset.setEnabled(false);
@@ -217,8 +209,7 @@ public class DeviceConfigComponents extends LayoutContainer
     }
 
     @SuppressWarnings("unchecked")
-    private void initConfigPanel()
-    {
+    private void initConfigPanel() {
         m_configPanel = new ContentPanel();
         m_configPanel.setBorders(false);
         m_configPanel.setBodyBorder(false);
@@ -241,15 +232,14 @@ public class DeviceConfigComponents extends LayoutContainer
 
         // loader and store
         RpcProxy<List<GwtConfigComponent>> proxy = new RpcProxy<List<GwtConfigComponent>>() {
+
             @Override
-            protected void load(Object loadConfig, AsyncCallback<List<GwtConfigComponent>> callback)
-            {
+            protected void load(Object loadConfig, AsyncCallback<List<GwtConfigComponent>> callback) {
                 if (m_selectedDevice != null && m_dirty && m_initialized) {
                     if (m_selectedDevice.isOnline()) {
                         m_tree.mask(MSGS.loading());
                         gwtDeviceService.findDeviceConfigurations(m_selectedDevice, callback);
-                    }
-                    else {
+                    } else {
                         List<GwtConfigComponent> comps = new ArrayList<GwtConfigComponent>();
                         GwtConfigComponent comp = new GwtConfigComponent();
                         comp.setId(MSGS.deviceNoDeviceSelected());
@@ -258,8 +248,7 @@ public class DeviceConfigComponents extends LayoutContainer
                         comps.add(comp);
                         callback.onSuccess(comps);
                     }
-                }
-                else {
+                } else {
                     List<GwtConfigComponent> comps = new ArrayList<GwtConfigComponent>();
                     GwtConfigComponent comp = new GwtConfigComponent();
                     comp.setId(MSGS.deviceNoDeviceSelected());
@@ -289,10 +278,10 @@ public class DeviceConfigComponents extends LayoutContainer
         // Selection Listener for the component
         // make sure the form is not dirty before switching.
         m_tree.getSelectionModel().addListener(Events.BeforeSelect, new Listener<BaseEvent>() {
+
             @SuppressWarnings("rawtypes")
             @Override
-            public void handleEvent(BaseEvent be)
-            {
+            public void handleEvent(BaseEvent be) {
 
                 final BaseEvent theEvent = be;
                 SelectionEvent<ModelData> se = (SelectionEvent<ModelData>) be;
@@ -313,21 +302,20 @@ public class DeviceConfigComponents extends LayoutContainer
 
                     // ask for confirmation before switching
                     MessageBox.confirm(MSGS.confirm(),
-                                       MSGS.deviceConfigDirty(),
-                                       new Listener<MessageBoxEvent>() {
-                                           public void handleEvent(MessageBoxEvent ce)
-                                           {
-                                               // if confirmed, delete
-                                               Dialog dialog = ce.getDialog();
-                                               if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
-                                                   m_devConfPanel.removeFromParent();
-                                                   m_devConfPanel = null;
-                                                   m_tree.getSelectionModel().select(false, componentToSwitchTo);
-                                               }
-                                           }
-                                       });
-                }
-                else {
+                            MSGS.deviceConfigDirty(),
+                            new Listener<MessageBoxEvent>() {
+
+                                public void handleEvent(MessageBoxEvent ce) {
+                                    // if confirmed, delete
+                                    Dialog dialog = ce.getDialog();
+                                    if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
+                                        m_devConfPanel.removeFromParent();
+                                        m_devConfPanel = null;
+                                        m_tree.getSelectionModel().select(false, componentToSwitchTo);
+                                    }
+                                }
+                            });
+                } else {
                     refreshConfigPanel(componentToSwitchTo);
 
                     // this is needed to select the item in the Tree
@@ -344,59 +332,45 @@ public class DeviceConfigComponents extends LayoutContainer
         });
 
         m_tree.setIconProvider(new ModelIconProvider<ModelData>() {
-            public AbstractImagePrototype getIcon(ModelData model)
-            {
+
+            public AbstractImagePrototype getIcon(ModelData model) {
                 if (model instanceof GwtConfigComponent) {
                     String icon = ((GwtConfigComponent) model).getComponentIcon();
                     if ("CloudService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.cloud16());
-                    }
-                    else if ("ClockService".equals(icon)) {
+                    } else if ("ClockService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.clock16());
-                    }
-                    else if ("DataService".equals(icon)) {
+                    } else if ("DataService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.databaseConnect());
-                    }
-                    else if ("DiagnosticsService".equals(icon)) {
+                    } else if ("DiagnosticsService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.diagnostics());
-                    }
-                    else if ("MqttDataTransport".equals(icon)) {
+                    } else if ("MqttDataTransport".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.mqtt());
-                    }
-                    else if ("PositionService".equals(icon)) {
+                    } else if ("PositionService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.gps16());
-                    }
-                    else if ("SslManagerService".equals(icon)) {
+                    } else if ("SslManagerService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.lock16());
-                    }
-                    else if ("WatchdogService".equals(icon)) {
+                    } else if ("WatchdogService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.dog16());
-                    }
-                    else if ("CommandPasswordService".equals(icon)) {
+                    } else if ("CommandPasswordService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.terminal());
-                    }
-                    else if ("VpnService".equals(icon)) {
+                    } else if ("VpnService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.vpn());
-                    }
-                    else if ("ProvisioningService".equals(icon)) {
+                    } else if ("ProvisioningService".equals(icon)) {
                         return AbstractImagePrototype.create(Resources.INSTANCE.provisioning16());
-                    }
-                    else if ("DenaliService".equals(icon)) {
+                    } else if ("DenaliService".equals(icon)) {
                         // WebConsole: DenaliService
                         return AbstractImagePrototype.create(Resources.INSTANCE.monitorDenali());
-                    }
-                    else if ("BluetoothService".equals(icon)) {
+                    } else if ("BluetoothService".equals(icon)) {
                         // Bluetooth: BluetoothService
                         return AbstractImagePrototype.create(Resources.INSTANCE.bluetooth());
-                    }
-                    else if (icon != null &&
-                             icon.toLowerCase().startsWith("img://")) {
+                    } else if (icon != null &&
+                            icon.toLowerCase().startsWith("img://")) {
                         // Replace the base fake protocol with the console base URL
                         // that was not available on the server side.
                         icon = icon.replaceFirst("img://", GWT.getHostPageBaseURL());
                         return new ScaledAbstractImagePrototype(IconHelper.createPath(icon, 16, 16));
-                    }
-                    else {
+                    } else {
                         return AbstractImagePrototype.create(Resources.INSTANCE.plugin16());
                     }
                 }
@@ -411,49 +385,46 @@ public class DeviceConfigComponents extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    public void refreshWhenOnline()
-    {
+    public void refreshWhenOnline() {
         final int PERIOD_MILLIS = 1000;
 
         Timer timer = new Timer() {
-            private int TIMEOUT_MILLIS  = 30000;
+
+            private int TIMEOUT_MILLIS = 30000;
             private int countdownMillis = TIMEOUT_MILLIS;
 
-            public void run()
-            {
+            public void run() {
                 if (m_selectedDevice != null) {
                     countdownMillis -= PERIOD_MILLIS;
 
                     //
                     // Poll the current status of the device until is online again or timeout.
                     gwtDeviceService.findDevice(m_selectedDevice.getScopeId(),
-                                                m_selectedDevice.getUnescapedClientId(),
-                                                new AsyncCallback<GwtDevice>() {
-                                                    @Override
-                                                    public void onFailure(Throwable t)
-                                                    {
-                                                        done();
-                                                    }
+                            m_selectedDevice.getUnescapedClientId(),
+                            new AsyncCallback<GwtDevice>() {
 
-                                                    @Override
-                                                    public void onSuccess(GwtDevice gwtDevice)
-                                                    {
-                                                        if (countdownMillis <= 0 ||
-                                                        // Allow the device to disconnect before checking if it's online again.
-                                                            ((TIMEOUT_MILLIS - countdownMillis) > 5000 && gwtDevice.isOnline())) {
-                                                            done();
-                                                        }
-                                                    }
+                                @Override
+                                public void onFailure(Throwable t) {
+                                    done();
+                                }
 
-                                                    private void done()
-                                                    {
-                                                        cancel();
-                                                        refresh();
-                                                        if (m_devConfPanel != null) {
-                                                            m_devConfPanel.unmask();
-                                                        }
-                                                    }
-                                                });
+                                @Override
+                                public void onSuccess(GwtDevice gwtDevice) {
+                                    if (countdownMillis <= 0 ||
+                                    // Allow the device to disconnect before checking if it's online again.
+                                            ((TIMEOUT_MILLIS - countdownMillis) > 5000 && gwtDevice.isOnline())) {
+                                        done();
+                                    }
+                                }
+
+                                private void done() {
+                                    cancel();
+                                    refresh();
+                                    if (m_devConfPanel != null) {
+                                        m_devConfPanel.unmask();
+                                    }
+                                }
+                            });
                 }
             }
         };
@@ -461,8 +432,7 @@ public class DeviceConfigComponents extends LayoutContainer
         timer.scheduleRepeating(PERIOD_MILLIS);
     }
 
-    public void refresh()
-    {
+    public void refresh() {
         if (m_dirty && m_initialized) {
 
             // clear the tree and disable the toolbar
@@ -484,8 +454,7 @@ public class DeviceConfigComponents extends LayoutContainer
         }
     }
 
-    public void refreshConfigPanel(GwtConfigComponent configComponent)
-    {
+    public void refreshConfigPanel(GwtConfigComponent configComponent) {
         m_apply.setEnabled(false);
         m_reset.setEnabled(false);
 
@@ -496,9 +465,9 @@ public class DeviceConfigComponents extends LayoutContainer
 
             m_devConfPanel = new DeviceConfigPanel(configComponent);
             m_devConfPanel.addListener(Events.Change, new Listener<BaseEvent>() {
+
                 @Override
-                public void handleEvent(BaseEvent be)
-                {
+                public void handleEvent(BaseEvent be) {
                     m_apply.setEnabled(true);
                     m_reset.setEnabled(true);
                 }
@@ -508,8 +477,7 @@ public class DeviceConfigComponents extends LayoutContainer
         }
     }
 
-    public void apply()
-    {
+    public void apply() {
         if (!m_devConfPanel.isValid()) {
             MessageBox mb = new MessageBox();
             mb.setIcon(MessageBox.ERROR);
@@ -527,84 +495,80 @@ public class DeviceConfigComponents extends LayoutContainer
         }
 
         MessageBox.confirm(MSGS.confirm(),
-                           message,
-                           new Listener<MessageBoxEvent>() {
-                               public void handleEvent(MessageBoxEvent ce)
-                               {
+                message,
+                new Listener<MessageBoxEvent>() {
 
-                                   // if confirmed, push the update
-                                   // if confirmed, delete
-                                   Dialog dialog = ce.getDialog();
-                                   if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
+                    public void handleEvent(MessageBoxEvent ce) {
 
-                                       // mark the whole config panel dirty and for reload
-                                       m_tabConfig.setDevice(m_selectedDevice);
+                        // if confirmed, push the update
+                        // if confirmed, delete
+                        Dialog dialog = ce.getDialog();
+                        if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
 
-                                       m_devConfPanel.mask(MSGS.applying());
-                                       m_tree.mask();
-                                       m_apply.setEnabled(false);
-                                       m_reset.setEnabled(false);
-                                       m_refreshButton.setEnabled(false);
+                            // mark the whole config panel dirty and for reload
+                            m_tabConfig.setDevice(m_selectedDevice);
 
-                                       //
-                                       // Getting XSRF token
-                                       gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
-                                           @Override
-                                           public void onFailure(Throwable ex)
-                                           {
-                                               FailureHandler.handle(ex);
-                                           }
+                            m_devConfPanel.mask(MSGS.applying());
+                            m_tree.mask();
+                            m_apply.setEnabled(false);
+                            m_reset.setEnabled(false);
+                            m_refreshButton.setEnabled(false);
 
-                                           @Override
-                                           public void onSuccess(GwtXSRFToken token)
-                                           {
-                                               final GwtConfigComponent configComponent = m_devConfPanel.getUpdatedConfiguration();
-                                               gwtDeviceService.updateComponentConfiguration(token,
-                                                                                             m_selectedDevice,
-                                                                                             configComponent,
-                                                                                             new AsyncCallback<Void>() {
-                                                                                                 public void onFailure(Throwable caught)
-                                                                                                 {
-                                                                                                     FailureHandler.handle(caught);
-                                                                                                     m_dirty = true;
-                                                                                                 }
+                            //
+                            // Getting XSRF token
+                            gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
 
-                                                                                                 public void onSuccess(Void arg0)
-                                                                                                 {
-                                                                                                     m_dirty = true;
-                                                                                                     if (isCloudUpdate) {
-                                                                                                         refreshWhenOnline();
-                                                                                                     }
-                                                                                                     else {
-                                                                                                         refresh();
-                                                                                                     }
-                                                                                                 }
-                                                                                             });
-                                           }
-                                       });
+                                @Override
+                                public void onFailure(Throwable ex) {
+                                    FailureHandler.handle(ex);
+                                }
 
-                                       // start the configuration update
-                                   }
-                               }
-                           });
+                                @Override
+                                public void onSuccess(GwtXSRFToken token) {
+                                    final GwtConfigComponent configComponent = m_devConfPanel.getUpdatedConfiguration();
+                                    gwtDeviceService.updateComponentConfiguration(token,
+                                            m_selectedDevice,
+                                            configComponent,
+                                            new AsyncCallback<Void>() {
+
+                                                public void onFailure(Throwable caught) {
+                                                    FailureHandler.handle(caught);
+                                                    m_dirty = true;
+                                                }
+
+                                                public void onSuccess(Void arg0) {
+                                                    m_dirty = true;
+                                                    if (isCloudUpdate) {
+                                                        refreshWhenOnline();
+                                                    } else {
+                                                        refresh();
+                                                    }
+                                                }
+                                            });
+                                }
+                            });
+
+                            // start the configuration update
+                        }
+                    }
+                });
     }
 
-    public void reset()
-    {
+    public void reset() {
         final GwtConfigComponent comp = (GwtConfigComponent) m_tree.getSelectionModel().getSelectedItem();
         if (m_devConfPanel != null && comp != null && m_devConfPanel.isDirty()) {
             MessageBox.confirm(MSGS.confirm(),
-                               MSGS.deviceConfigDirty(),
-                               new Listener<MessageBoxEvent>() {
-                                   public void handleEvent(MessageBoxEvent ce)
-                                   {
-                                       // if confirmed, delete
-                                       Dialog dialog = ce.getDialog();
-                                       if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
-                                           refreshConfigPanel(comp);
-                                       }
-                                   }
-                               });
+                    MSGS.deviceConfigDirty(),
+                    new Listener<MessageBoxEvent>() {
+
+                        public void handleEvent(MessageBoxEvent ce) {
+                            // if confirmed, delete
+                            Dialog dialog = ce.getDialog();
+                            if (dialog.yesText.equals(ce.getButtonClicked().getText())) {
+                                refreshConfigPanel(comp);
+                            }
+                        }
+                    });
         }
     }
 
@@ -614,14 +578,12 @@ public class DeviceConfigComponents extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    private class DataLoadListener extends EdcLoadListener
-    {
-        public DataLoadListener()
-        {
+    private class DataLoadListener extends KapuaLoadListener {
+
+        public DataLoadListener() {
         }
 
-        public void loaderLoad(LoadEvent le)
-        {
+        public void loaderLoad(LoadEvent le) {
             if (le.exception != null) {
                 FailureHandler.handle(le.exception);
             }
@@ -629,8 +591,7 @@ public class DeviceConfigComponents extends LayoutContainer
             m_refreshButton.setEnabled(true);
         }
 
-        public void loaderLoadException(LoadEvent le)
-        {
+        public void loaderLoadException(LoadEvent le) {
 
             if (le.exception != null) {
                 FailureHandler.handle(le.exception);

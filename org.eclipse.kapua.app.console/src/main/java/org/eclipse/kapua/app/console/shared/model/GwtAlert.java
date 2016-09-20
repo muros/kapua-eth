@@ -19,7 +19,7 @@ import org.eclipse.kapua.app.console.client.util.DateUtils;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GwtAlert extends EdcBaseModel implements Serializable {
+public class GwtAlert extends KapuaBaseModel implements Serializable {
 
     private static final long serialVersionUID = 3970841019638997878L;
 

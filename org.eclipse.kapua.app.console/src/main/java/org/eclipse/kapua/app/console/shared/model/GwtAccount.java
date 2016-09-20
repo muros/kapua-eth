@@ -19,258 +19,203 @@ import org.eclipse.kapua.app.console.client.util.DateUtils;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class GwtAccount extends EdcBaseModel implements Serializable
-{
+public class GwtAccount extends KapuaBaseModel implements Serializable {
 
-    private static final long serialVersionUID       = -5999185569672904770L;
+    private static final long serialVersionUID = -5999185569672904770L;
 
     //
-    // Refer to com.eurotech.cloud.commons.model.AccountServicePlan
     // Defines value for service plan
-    public static final int   EUROTECH_ACCOUNT_ID    = 1;
-    public static final int   SERVICE_PLAN_UNLIMITED = -1;
-    public static final int   SERVICE_PLAN_DISABLED  = 0;
+    public static final int ADMIN_ACCOUNT_ID = 1;
+    public static final int SERVICE_PLAN_UNLIMITED = -1;
+    public static final int SERVICE_PLAN_DISABLED = 0;
 
-    public enum GwtAccountStatus implements IsSerializable
-    {
-        BEING_PROVISIONED,
-        ENABLED,
-        DISABLED,
-        BEING_DELETED;
-        GwtAccountStatus()
-        {
+    public enum GwtAccountStatus implements IsSerializable {
+        BEING_PROVISIONED, ENABLED, DISABLED, BEING_DELETED;
+
+        GwtAccountStatus() {
         };
     }
 
-    public enum GwtAccountProvisioningStatus implements IsSerializable
-    {
-        WAITING_TO_START,
-        IN_PROGRESS,
-        FAILED,
-        COMPLETED;
-        GwtAccountProvisioningStatus()
-        {
+    public enum GwtAccountProvisioningStatus implements IsSerializable {
+        WAITING_TO_START, IN_PROGRESS, FAILED, COMPLETED;
+
+        GwtAccountProvisioningStatus() {
         }
     }
 
-    public enum GwtAccountDataIndexBy implements IsSerializable
-    {
-        SERVER_TIMESTAMP,
-        DEVICE_TIMESTAMP;
-        GwtAccountDataIndexBy()
-        {
+    public enum GwtAccountDataIndexBy implements IsSerializable {
+        SERVER_TIMESTAMP, DEVICE_TIMESTAMP;
+
+        GwtAccountDataIndexBy() {
         }
     }
 
-    public enum GwtAccountMetricsIndexBy implements IsSerializable
-    {
-        TIMESTAMP,
-        VALUE,
-        NONE;
-        GwtAccountMetricsIndexBy()
-        {
+    public enum GwtAccountMetricsIndexBy implements IsSerializable {
+        TIMESTAMP, VALUE, NONE;
+
+        GwtAccountMetricsIndexBy() {
         }
     }
 
-    private String          brokerUrl;
+    private String brokerUrl;
     private GwtOrganization gwtOrganization;
 
-    public GwtAccount()
-    {
+    public GwtAccount() {
     }
 
-    public String getId()
-    {
+    public String getId() {
         return (String) get("id");
     }
 
-    public void setId(String id)
-    {
+    public void setId(String id) {
         set("id", id);
     }
 
     @Override
     @SuppressWarnings({ "unchecked" })
-    public <X> X get(String property)
-    {
+    public <X> X get(String property) {
         if ("createdOnFormatted".equals(property)) {
             return (X) (DateUtils.formatDateTime(getCreatedOn()));
-        }
-        else if ("modifiedOnFormatted".equals(property)) {
+        } else if ("modifiedOnFormatted".equals(property)) {
             return (X) (DateUtils.formatDateTime(getModifiedOn()));
-        }
-        else {
+        } else {
             return super.get(property);
         }
     }
 
-    public Date getCreatedOn()
-    {
+    public Date getCreatedOn() {
         return (Date) get("createdOn");
     }
 
-    public String getCreatedOnFormatted()
-    {
+    public String getCreatedOnFormatted() {
         return get("createdOnFormatted");
     }
 
-    public void setCreatedOn(Date createdOn)
-    {
+    public void setCreatedOn(Date createdOn) {
         set("createdOn", createdOn);
     }
 
-    public String getCreatedBy()
-    {
+    public String getCreatedBy() {
         return (String) get("createdBy");
     }
 
-    public void setCreatedBy(String createdBy)
-    {
+    public void setCreatedBy(String createdBy) {
         set("createdBy", createdBy);
     }
 
-    public String getCreatedByFormatted()
-    {
+    public String getCreatedByFormatted() {
         return (String) get("createdByFormatted");
     }
 
-    public void setCreatedByFormatted(String createdByFormatted)
-    {
+    public void setCreatedByFormatted(String createdByFormatted) {
         set("createdByFormatted", createdByFormatted);
     }
 
-    public Date getModifiedOn()
-    {
+    public Date getModifiedOn() {
         return (Date) get("modifiedOn");
     }
 
-    public String getModifiedOnFormatted()
-    {
+    public String getModifiedOnFormatted() {
         return DateUtils.formatDateTime((Date) get("modifiedOn"));
     }
 
-    public void setModifiedOn(Date modifiedOn)
-    {
+    public void setModifiedOn(Date modifiedOn) {
         set("modifiedOn", modifiedOn);
     }
 
-    public String getModifiedBy()
-    {
+    public String getModifiedBy() {
         return (String) get("modifiedBy");
     }
 
-    public void setModifiedBy(String modifiedBy)
-    {
+    public void setModifiedBy(String modifiedBy) {
         set("modifiedBy", modifiedBy);
     }
 
-    public String getModifiedByFormatted()
-    {
+    public String getModifiedByFormatted() {
         return (String) get("modifiedByFormatted");
     }
 
-    public void setModifiedByFormatted(String modifiedByFormatted)
-    {
+    public void setModifiedByFormatted(String modifiedByFormatted) {
         set("modifiedByFormatted", modifiedByFormatted);
     }
 
-    public String getName()
-    {
+    public String getName() {
         return (String) get("name");
     }
 
-    public String getUnescapedName()
-    {
+    public String getUnescapedName() {
         return (String) getUnescaped("name");
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         set("name", name);
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return (String) get("password");
     }
 
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         set("password", password);
     }
 
-    public GwtOrganization getGwtOrganization()
-    {
+    public GwtOrganization getGwtOrganization() {
         return gwtOrganization;
     }
 
-    public void setGwtOrganization(GwtOrganization gwtOrganization)
-    {
+    public void setGwtOrganization(GwtOrganization gwtOrganization) {
         this.gwtOrganization = gwtOrganization;
     }
 
-    public String getBrokerURL()
-    {
+    public String getBrokerURL() {
         return brokerUrl;
     }
 
-    public void setBrokerURL(String brokerUrl)
-    {
+    public void setBrokerURL(String brokerUrl) {
         this.brokerUrl = brokerUrl;
     }
 
-    public void setParentAccountId(String parentAccountId)
-    {
+    public void setParentAccountId(String parentAccountId) {
         set("parentAccountId", parentAccountId);
     }
 
-    public String getParentAccountId()
-    {
+    public String getParentAccountId() {
         return (String) get("parentAccountId");
     }
 
-    public void setDashboardPreferredTopic(String dashboardPreferredTopic)
-    {
+    public void setDashboardPreferredTopic(String dashboardPreferredTopic) {
         set("dashboardPreferredTopic", dashboardPreferredTopic);
     }
 
-    public String getDashboardPreferredTopic()
-    {
+    public String getDashboardPreferredTopic() {
         return (String) get("dashboardPreferredTopic");
     }
 
-    public String getUnescapedDashboardPreferredTopic()
-    {
+    public String getUnescapedDashboardPreferredTopic() {
         return (String) getUnescaped("dashboardPreferredTopic");
     }
 
-    public void setDashboardPreferredMetric(String dashboardPreferredMetric)
-    {
+    public void setDashboardPreferredMetric(String dashboardPreferredMetric) {
         set("dashboardPreferredMetric", dashboardPreferredMetric);
     }
 
-    public String getDashboardPreferredMetric()
-    {
+    public String getDashboardPreferredMetric() {
         return (String) get("dashboardPreferredMetric");
     }
 
-    public String getUnescapedDashboardPreferredMetric()
-    {
+    public String getUnescapedDashboardPreferredMetric() {
         return (String) getUnescaped("dashboardPreferredMetric");
     }
 
-    public String toString()
-    {
+    public String toString() {
         return getName();
     }
 
-    public void setOptlock(int optlock)
-    {
+    public void setOptlock(int optlock) {
         set("optlock", optlock);
     }
 
-    public int getOptlock()
-    {
+    public int getOptlock() {
         return (Integer) get("optlock");
     }
 }

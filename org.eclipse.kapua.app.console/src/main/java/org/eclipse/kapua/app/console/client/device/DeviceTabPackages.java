@@ -20,7 +20,6 @@ import org.eclipse.kapua.app.console.client.widget.dialog.SimpleDialog;
 import org.eclipse.kapua.app.console.client.widget.dialog.SyncPackageInstallDialog;
 import org.eclipse.kapua.app.console.client.widget.dialog.SyncPackageUninstallDialog;
 import org.eclipse.kapua.app.console.client.widget.dialog.TabbedDialog;
-import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtDeploymentPackage;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice.GwtDeviceApplication;
@@ -45,36 +44,34 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
-public class DeviceTabPackages extends LayoutContainer
-{
-    private static final ConsoleMessages  MSGS          = GWT.create(ConsoleMessages.class);
+public class DeviceTabPackages extends LayoutContainer {
 
-    private final static String           SERVLET_URL   = "console/file/deploy";
+    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
+
+    private final static String SERVLET_URL = "console/file/deploy";
 
     @SuppressWarnings("unused")
-    private GwtSession                    m_currentSession;
-    private DeviceTabs                    m_deviceTabs;
+    private GwtSession m_currentSession;
+    private DeviceTabs m_deviceTabs;
 
-    private boolean                       m_initialized = false;
-    private GwtDevice                     m_selectedDevice;
+    private boolean m_initialized = false;
+    private GwtDevice m_selectedDevice;
 
-    private ToolBar                       m_toolBar;
-    private Button                        m_refreshButton;
-    private Button                        m_installButton;
-    private Button                        m_uninstallButton;
+    private ToolBar m_toolBar;
+    private Button m_refreshButton;
+    private Button m_installButton;
+    private Button m_uninstallButton;
 
-    private TabPanel                      m_tabsPanel;
+    private TabPanel m_tabsPanel;
     private DeviceTabPackagesTabInstalled m_installedPackageTab;
 
     public DeviceTabPackages(GwtSession currentSession,
-                             DeviceTabs deviceTabs)
-    {
+            DeviceTabs deviceTabs) {
         m_currentSession = currentSession;
         m_deviceTabs = deviceTabs;
     }
 
-    public void setDevice(GwtDevice selectedDevice)
-    {
+    public void setDevice(GwtDevice selectedDevice) {
         setDirty();
         m_selectedDevice = selectedDevice;
 
@@ -83,8 +80,7 @@ public class DeviceTabPackages extends LayoutContainer
         }
     }
 
-    protected void onRender(Element parent, int index)
-    {
+    protected void onRender(Element parent, int index) {
         super.onRender(parent, index);
         setLayout(new FitLayout());
         setBorders(false);
@@ -115,58 +111,52 @@ public class DeviceTabPackages extends LayoutContainer
     // INITIALIZERS
     //
 
-    private void initToolBar()
-    {
+    private void initToolBar() {
         m_toolBar = new ToolBar();
 
         m_refreshButton = new Button(MSGS.refreshButton(),
-                                     AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
-                                     new SelectionListener<ButtonEvent>() {
-                                         @Override
-                                         public void componentSelected(ButtonEvent ce)
-                                         {
-                                             if (m_selectedDevice.isOnline()) {
+                AbstractImagePrototype.create(Resources.INSTANCE.refresh()),
+                new SelectionListener<ButtonEvent>() {
 
-                                                 setDirty();
-                                                 refresh();
-                                             }
-                                             else {
-                                                 openDeviceOfflineAlertDialog();
-                                             }
-                                         }
-                                     });
+                    @Override
+                    public void componentSelected(ButtonEvent ce) {
+                        if (m_selectedDevice.isOnline()) {
+
+                            setDirty();
+                            refresh();
+                        } else {
+                            openDeviceOfflineAlertDialog();
+                        }
+                    }
+                });
 
         m_installButton = new Button(MSGS.packageAddButton(),
-                                     AbstractImagePrototype.create(Resources.INSTANCE.packageAdd()),
-                                     new SelectionListener<ButtonEvent>() {
-                                         @Override
-                                         public void componentSelected(ButtonEvent ce)
-                                         {
-                                             GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_PACKAGES_INSTALL_UPGRADE);
-                                             if (m_selectedDevice.isOnline()) {
-                                                 openInstallDialog();
-                                             }
-                                             else {
-                                                 openDeviceOfflineAlertDialog();
-                                             }
-                                         }
-                                     });
+                AbstractImagePrototype.create(Resources.INSTANCE.packageAdd()),
+                new SelectionListener<ButtonEvent>() {
+
+                    @Override
+                    public void componentSelected(ButtonEvent ce) {
+                        if (m_selectedDevice.isOnline()) {
+                            openInstallDialog();
+                        } else {
+                            openDeviceOfflineAlertDialog();
+                        }
+                    }
+                });
 
         m_uninstallButton = new Button(MSGS.packageDeleteButton(),
-                                       AbstractImagePrototype.create(Resources.INSTANCE.packageDelete()),
-                                       new SelectionListener<ButtonEvent>() {
-                                           @Override
-                                           public void componentSelected(ButtonEvent ce)
-                                           {
-                                               GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_PACKAGES_UNINSTALL);
-                                               if (m_selectedDevice.isOnline()) {
-                                                   openUninstallDialog();
-                                               }
-                                               else {
-                                                   openDeviceOfflineAlertDialog();
-                                               }
-                                           }
-                                       });
+                AbstractImagePrototype.create(Resources.INSTANCE.packageDelete()),
+                new SelectionListener<ButtonEvent>() {
+
+                    @Override
+                    public void componentSelected(ButtonEvent ce) {
+                        if (m_selectedDevice.isOnline()) {
+                            openUninstallDialog();
+                        } else {
+                            openDeviceOfflineAlertDialog();
+                        }
+                    }
+                });
 
         m_toolBar.add(m_refreshButton);
         m_toolBar.add(new SeparatorToolItem());
@@ -177,8 +167,7 @@ public class DeviceTabPackages extends LayoutContainer
         m_toolBar.disable();
     }
 
-    private void initPackagesTabs()
-    {
+    private void initPackagesTabs() {
         m_tabsPanel = new TabPanel();
         m_tabsPanel.setPlain(true);
         m_tabsPanel.setBorders(false);
@@ -193,8 +182,8 @@ public class DeviceTabPackages extends LayoutContainer
         m_installedPackageTab.setLayout(new FitLayout());
 
         m_installedPackageTab.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 refresh();
             }
         });
@@ -206,48 +195,44 @@ public class DeviceTabPackages extends LayoutContainer
     //
     // ACTIONS DIALOGS
     //
-    private void openInstallDialog()
-    {
+    private void openInstallDialog() {
         m_toolBar.disable();
 
         final TabbedDialog packageInstallDialog;
         if (m_selectedDevice.hasApplication(GwtDeviceApplication.APP_DEPLOY_V1)) {
             packageInstallDialog = new SyncPackageInstallDialog(SERVLET_URL,
-                                                                m_selectedDevice.getScopeId(),
-                                                                m_selectedDevice.getUnescapedClientId());
+                    m_selectedDevice.getScopeId(),
+                    m_selectedDevice.getUnescapedClientId());
 
-        }
-        else {
+        } else {
             packageInstallDialog = null;
         }
 
         if (packageInstallDialog != null) {
             packageInstallDialog.addListener(Events.Hide, new Listener<BaseEvent>() {
+
                 @Override
-                public void handleEvent(BaseEvent be)
-                {
+                public void handleEvent(BaseEvent be) {
                     m_toolBar.enable();
 
                     Boolean exitStatus = packageInstallDialog.getExitStatus();
                     if (exitStatus == null) { // Operation Aborted
                         return;
-                    }
-                    else {
+                    } else {
 
                         InfoDialogType exitDialogType;
                         String exitMessage = packageInstallDialog.getExitMessage();
 
                         if (exitStatus == true) { // Operation Success
                             exitDialogType = InfoDialogType.INFO;
-                        }
-                        else { // Operaton Failed
+                        } else { // Operaton Failed
                             exitDialogType = InfoDialogType.ERROR;
                         }
 
                         //
                         // Exit dialog
                         InfoDialog exitDialog = new InfoDialog(exitDialogType,
-                                                               exitMessage);
+                                exitMessage);
 
                         exitDialog.show();
 
@@ -261,8 +246,7 @@ public class DeviceTabPackages extends LayoutContainer
         }
     }
 
-    private void openUninstallDialog()
-    {
+    private void openUninstallDialog() {
         final GwtDeploymentPackage selectedDeploymentPackage = m_installedPackageTab.getSelectedDeploymentPackage();
 
         if (selectedDeploymentPackage != null) {
@@ -271,40 +255,37 @@ public class DeviceTabPackages extends LayoutContainer
             final SimpleDialog packageUninstallDialog;
             if (m_selectedDevice.hasApplication(GwtDeviceApplication.APP_DEPLOY_V1)) {
                 packageUninstallDialog = new SyncPackageUninstallDialog(m_selectedDevice,
-                                                                        selectedDeploymentPackage);
+                        selectedDeploymentPackage);
 
-            }
-            else {
+            } else {
                 packageUninstallDialog = null;
             }
 
             if (packageUninstallDialog != null) {
                 packageUninstallDialog.addListener(Events.Hide, new Listener<BaseEvent>() {
+
                     @Override
-                    public void handleEvent(BaseEvent be)
-                    {
+                    public void handleEvent(BaseEvent be) {
                         m_toolBar.enable();
 
                         Boolean exitStatus = packageUninstallDialog.getExitStatus();
                         if (exitStatus == null) { // Operation Aborted
                             return;
-                        }
-                        else {
+                        } else {
 
                             InfoDialogType exitDialogType;
                             String exitMessage = packageUninstallDialog.getExitMessage();
 
                             if (exitStatus == true) { // Operation Success
                                 exitDialogType = InfoDialogType.INFO;
-                            }
-                            else { // Operaton Failed
+                            } else { // Operaton Failed
                                 exitDialogType = InfoDialogType.ERROR;
                             }
 
                             //
                             // Exit dialog
                             InfoDialog exitDialog = new InfoDialog(exitDialogType,
-                                                                   exitMessage);
+                                    exitMessage);
 
                             exitDialog.show();
 
@@ -319,18 +300,16 @@ public class DeviceTabPackages extends LayoutContainer
         }
     }
 
-    public void openDeviceOfflineAlertDialog()
-    {
+    public void openDeviceOfflineAlertDialog() {
         InfoDialog errorDialog = new InfoDialog(InfoDialogType.INFO,
-                                                MSGS.deviceOffline());
+                MSGS.deviceOffline());
         errorDialog.show();
     }
 
     //
     // REFRESHER
     //
-    public void refresh()
-    {
+    public void refresh() {
         //
         // Refresh the installed tab if selected
         m_installedPackageTab.refresh();
@@ -340,8 +319,7 @@ public class DeviceTabPackages extends LayoutContainer
         if (m_selectedDevice != null && m_selectedDevice.isOnline()) {
             m_toolBar.enable();
             m_uninstallButton.disable();
-        }
-        else {
+        } else {
             m_toolBar.disable();
         }
 
@@ -351,20 +329,17 @@ public class DeviceTabPackages extends LayoutContainer
     // ACCESSORS
     //
 
-    public GwtDevice getSelectedDevice()
-    {
+    public GwtDevice getSelectedDevice() {
         return m_selectedDevice;
     }
 
-    public void setDirty()
-    {
+    public void setDirty() {
         if (m_initialized) {
             m_installedPackageTab.setDirty(true);
         }
     }
 
-    public Button getUninstallButton()
-    {
+    public Button getUninstallButton() {
         return m_uninstallButton;
     }
 
