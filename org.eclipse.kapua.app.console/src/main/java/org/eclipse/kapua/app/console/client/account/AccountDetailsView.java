@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
-import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
+import org.eclipse.kapua.app.console.client.util.KapuaLoadListener;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
@@ -237,7 +237,7 @@ public class AccountDetailsView extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    private class DataLoadListener extends EdcLoadListener
+    private class DataLoadListener extends KapuaLoadListener
     {
         public DataLoadListener()
         {

@@ -17,7 +17,7 @@ import java.util.Date;
 
 import org.eclipse.kapua.app.console.client.util.DateUtils;
 
-public class GwtDeviceEvent extends EdcBaseModel implements Serializable
+public class GwtDeviceEvent extends KapuaBaseModel implements Serializable
 {
 
     private static final long serialVersionUID = 8453754536105261520L;

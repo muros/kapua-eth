@@ -314,7 +314,7 @@
     </dependencies>
 
     <build>
-        <finalName>edc-console</finalName>
+        <finalName>console</finalName>
         <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
 
         <plugins>

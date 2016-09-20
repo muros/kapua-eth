@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.messages.ValidationMessages;
-import org.eclipse.kapua.app.console.shared.GwtEdcErrorCode;
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.shared.GwtKapuaErrorCode;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.extjs.gxt.ui.client.widget.form.CheckBoxGroup;
@@ -39,10 +39,10 @@ public class FailureHandler
 
     public static void handle(Throwable caught)
     {
-        if (caught instanceof GwtEdcException) {
+        if (caught instanceof GwtKapuaException) {
 
-            GwtEdcException gee = (GwtEdcException) caught;
-            GwtEdcErrorCode code = gee.getCode();
+            GwtKapuaException gee = (GwtKapuaException) caught;
+            GwtKapuaErrorCode code = gee.getCode();
             switch (code) {
 
                 case UNAUTHENTICATED:
@@ -75,11 +75,11 @@ public class FailureHandler
     {
 
         boolean isWarning = false;
-        if (caught instanceof GwtEdcException) {
+        if (caught instanceof GwtKapuaException) {
 
             List<Field<?>> fields = form.getFields();
-            GwtEdcException gee = (GwtEdcException) caught;
-            GwtEdcErrorCode code = gee.getCode();
+            GwtKapuaException gee = (GwtKapuaException) caught;
+            GwtKapuaErrorCode code = gee.getCode();
             switch (code) {
 
                 case INVALID_XSRF_TOKEN:

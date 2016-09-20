@@ -45,34 +45,31 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * Two-step verification - First step: username and password / cookies verification
  *
  */
-public class LoginDialog extends Dialog
-{
-    private static final ConsoleMessages       MSGS                    = GWT.create(ConsoleMessages.class);
+public class LoginDialog extends Dialog {
+
+    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
     private final GwtAuthorizationServiceAsync gwtAuthorizationService = GWT.create(GwtAuthorizationService.class);
 
-    public GwtSession                          currentSession;
-    public TextField<String>                   username;
-    public TextField<String>                   password;
+    public GwtSession currentSession;
+    public TextField<String> username;
+    public TextField<String> password;
 
-    public Button                              reset;
-    public Button                              login;
-    public Status                              status;
+    public Button reset;
+    public Button login;
+    public Status status;
 
-    private boolean                            allowMainScreen;
+    private boolean allowMainScreen;
 
-    public void setAllowMainScreen(boolean main)
-    {
+    public void setAllowMainScreen(boolean main) {
         this.allowMainScreen = main;
     }
 
-    public boolean isAllowMainScreen()
-    {
+    public boolean isAllowMainScreen() {
         return this.allowMainScreen;
     }
 
-    public LoginDialog()
-    {
+    public LoginDialog() {
         FormLayout layout = new FormLayout();
 
         layout.setLabelWidth(90);
@@ -91,12 +88,12 @@ public class LoginDialog extends Dialog
         setClosable(false);
 
         KeyListener keyListener = new KeyListener() {
-            public void componentKeyUp(ComponentEvent event)
-            {
+
+            public void componentKeyUp(ComponentEvent event) {
                 validate();
                 if (event.getKeyCode() == 13) {
                     if (username.getValue() != null && username.getValue().trim().length() > 0 &&
-                        password.getValue() != null && password.getValue().trim().length() > 0) {
+                            password.getValue() != null && password.getValue().trim().length() > 0) {
                         onSubmit();
                     }
                 }
@@ -104,9 +101,9 @@ public class LoginDialog extends Dialog
         };
 
         Listener<BaseEvent> changeListener = new Listener<BaseEvent>() {
+
             @Override
-            public void handleEvent(BaseEvent be)
-            {
+            public void handleEvent(BaseEvent be) {
                 validate();
             }
         };
@@ -128,20 +125,14 @@ public class LoginDialog extends Dialog
 
         setFocusWidget(username);
 
-        //
-        username.setValue("kapua-sys");
-        password.setValue("We!come12345");
-
     }
 
-    public GwtSession getCurrentSession()
-    {
+    public GwtSession getCurrentSession() {
         return currentSession;
     }
 
     @Override
-    protected void createButtons()
-    {
+    protected void createButtons() {
         super.createButtons();
 
         status = new Status();
@@ -154,8 +145,8 @@ public class LoginDialog extends Dialog
 
         reset = new Button(MSGS.loginReset());
         reset.addSelectionListener(new SelectionListener<ButtonEvent>() {
-            public void componentSelected(ButtonEvent ce)
-            {
+
+            public void componentSelected(ButtonEvent ce) {
                 username.reset();
                 password.reset();
                 validate();
@@ -166,8 +157,8 @@ public class LoginDialog extends Dialog
         login = new Button(MSGS.loginLogin());
         login.disable();
         login.addSelectionListener(new SelectionListener<ButtonEvent>() {
-            public void componentSelected(ButtonEvent ce)
-            {
+
+            public void componentSelected(ButtonEvent ce) {
                 onSubmit();
             }
         });
@@ -184,8 +175,7 @@ public class LoginDialog extends Dialog
      * Login submit
      *
      */
-    protected void onSubmit()
-    {
+    protected void onSubmit() {
         status.show();
         getButtonBar().disable();
 
@@ -193,42 +183,38 @@ public class LoginDialog extends Dialog
     }
 
     // Login
-    public void performLogin()
-    {
+    public void performLogin() {
 
         final GwtUser tmpUser = new GwtUser(username.getValue(),
-                                            password.getValue());
+                password.getValue());
 
         // FIXME: use some Credentials object instead of using GwtUser!
         gwtAuthorizationService.login(tmpUser, new AsyncCallback<GwtSession>() {
+
             @Override
-            public void onFailure(Throwable caught)
-            {
+            public void onFailure(Throwable caught) {
                 ConsoleInfo.display(MSGS.loginError(), caught.getLocalizedMessage());
                 reset();
             }
 
             @Override
-            public void onSuccess(final GwtSession gwtSession)
-            {
+            public void onSuccess(final GwtSession gwtSession) {
                 currentSession = gwtSession;
                 callMainScreen();
             }
         });
     }
 
-    public void performLogout()
-    {
+    public void performLogout() {
         gwtAuthorizationService.logout(new AsyncCallback<Void>() {
+
             @Override
-            public void onFailure(Throwable caught)
-            {
+            public void onFailure(Throwable caught) {
                 FailureHandler.handle(caught);
             }
 
             @Override
-            public void onSuccess(Void arg0)
-            {
+            public void onSuccess(Void arg0) {
                 ConsoleInfo.display("Info", "Logged out!");
                 reset();
                 show();
@@ -236,27 +222,23 @@ public class LoginDialog extends Dialog
         });
     }
 
-    public void callMainScreen()
-    {
+    public void callMainScreen() {
         setAllowMainScreen(true);
         hide();
     }
 
-    protected boolean hasValue(TextField<String> field)
-    {
+    protected boolean hasValue(TextField<String> field) {
         return field.getValue() != null &&
-               !field.getValue().isEmpty();
+                !field.getValue().isEmpty();
     }
 
-    protected void validate()
-    {
+    protected void validate() {
         login.setEnabled(hasValue(username) &&
-                         username.isValid() &&
-                         hasValue(password));
+                username.isValid() &&
+                hasValue(password));
     }
 
-    public void reset()
-    {
+    public void reset() {
         username.reset();
         password.reset();
 

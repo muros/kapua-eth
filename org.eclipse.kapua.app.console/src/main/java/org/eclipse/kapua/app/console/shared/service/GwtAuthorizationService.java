@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.shared.service;
 
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtUser;
 
@@ -27,13 +27,13 @@ public interface GwtAuthorizationService extends RemoteService
 {
 
     public GwtSession login(GwtUser gwtUser)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Return the currently authenticated user or null if no session has been established.
      */
     public GwtSession getCurrentSession()
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Checks whether the current Subject is granted the supplied permission;
@@ -42,12 +42,12 @@ public interface GwtAuthorizationService extends RemoteService
      *
      * @param permission
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public Boolean hasAccess(String gwtPermission)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     public void logout()
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
 }

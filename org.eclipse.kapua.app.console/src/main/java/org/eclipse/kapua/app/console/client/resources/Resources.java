@@ -17,95 +17,94 @@ import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.TextResource;
 
-public interface Resources extends ClientBundleWithLookup
-{
+public interface Resources extends ClientBundleWithLookup {
 
     Resources INSTANCE = GWT.create(Resources.class);
 
     @Source("icons/16x16/server_cluster_upgrade.png")
     ImageResource serverClusterUpgrade16();
-    
+
     @Source("icons/32x32/server_cluster_upgrade.png")
     ImageResource serverClusterUpgrade32();
-   
+
     @Source("icons/16x16/server_cluster.png")
     ImageResource serverCluster16();
-    
+
     @Source("icons/32x32/server_cluster.png")
     ImageResource serverCluster32();
-    
+
     @Source("icons/16x16/firefox.png")
     ImageResource browserFirefox16();
-    
+
     @Source("icons/32x32/firefox.png")
     ImageResource browserFirefox32();
-    
+
     @Source("icons/16x16/safari_browser.png")
     ImageResource browserSafari16();
-    
+
     @Source("icons/32x32/safari_browser.png")
     ImageResource browserSafari32();
-    
+
     @Source("icons/16x16/internet_explorer.png")
     ImageResource browserIE16();
-    
+
     @Source("icons/32x32/internet_explorer.png")
     ImageResource browserIE32();
-    
+
     @Source("icons/16x16/chrome.png")
     ImageResource browserChrome16();
-    
+
     @Source("icons/16x16/flag_united_kingdom.png")
     ImageResource flagUnitedKingdom16();
-    
+
     @Source("icons/32x32/flag_united_kingdom.png")
     ImageResource flagUnitedKingdom32();
-    
+
     @Source("icons/16x16/flag_italy.png")
     ImageResource flagItaly16();
-    
+
     @Source("icons/32x32/flag_italy.png")
     ImageResource flagItaly32();
-    
+
     @Source("icons/16x16/locate.png")
-    ImageResource locate16(); 
-    
+    ImageResource locate16();
+
     @Source("icons/32x32/locate.png")
-    ImageResource locate32();     
-    
+    ImageResource locate32();
+
     @Source("icons/16x16/group_go.png")
-    ImageResource switchToAccount16(); 
-    
-	@Source("icons/16x16/server.png")
+    ImageResource switchToAccount16();
+
+    @Source("icons/16x16/server.png")
     ImageResource server16();
-    
+
     @Source("icons/32x32/group_go.png")
     ImageResource switchToAccount32();
 
     @Source("icons/16x16/door_out.png")
-    ImageResource userLogout16(); 
-    
+    ImageResource userLogout16();
+
     @Source("icons/32x32/door_out.png")
     ImageResource userLogout32();
-    
+
     @Source("icons/16x16/user_edit.png")
-    ImageResource userEdit16(); 
-    
+    ImageResource userEdit16();
+
     @Source("icons/32x32/user_edit.png")
     ImageResource userEdit32();
-    
-    @Source("icons/others/iabarcode.png")
-    ImageResource instantActivationBarCode();      
 
-	@Source("icons/16x16/connect.png")
-    ImageResource wrench(); 
+    @Source("icons/others/iabarcode.png")
+    ImageResource instantActivationBarCode();
+
+    @Source("icons/16x16/connect.png")
+    ImageResource wrench();
 
     @Source("icons/16x16/magnifier.png")
     ImageResource magnifier16();
 
     @Source("icons/32x32/magnifier.png")
     ImageResource magnifier32();
-    
+
     @Source("icons/16x16/preferences-desktop-remote-desktop.png")
     ImageResource provisioning16();
 
@@ -125,17 +124,17 @@ public interface Resources extends ClientBundleWithLookup
     ImageResource downloadWindows16();
 
     @Source("icons/16x16/key_go.png")
-    ImageResource keyGo();    
-    
+    ImageResource keyGo();
+
     @Source("icons/16x16/key_delete.png")
-    ImageResource keyRemove();  
-    
+    ImageResource keyRemove();
+
     @Source("icons/16x16/server_key.png")
     ImageResource serverKey();
-    
+
     @Source("icons/16x16/computer_key.png")
     ImageResource computerKey();
-    
+
     @Source("icons/16x16/cross.png")
     ImageResource cross16();
 
@@ -174,7 +173,7 @@ public interface Resources extends ClientBundleWithLookup
 
     @Source("icons/16x16/script_go.png")
     ImageResource scriptGo16();
-    
+
     @Source("icons/16x16/script_tic.png")
     ImageResource scriptTic16();
 
@@ -360,10 +359,10 @@ public interface Resources extends ClientBundleWithLookup
 
     @Source("icons/32x32/error.png")
     ImageResource warn32();
-    
+
     @Source("icons/16x16/error.png")
     ImageResource warn16();
-    
+
     @Source("icons/32x32/exclamation.png")
     ImageResource error32();
 
@@ -388,52 +387,33 @@ public interface Resources extends ClientBundleWithLookup
     @Source("icons/16x16/group.png")
     ImageResource users16();
 
-    /*
-     * @Source("icons/16x16/sim.png")
-     * ImageResource sim16();
-     */
     @Source("icons/16x16/card_chip_gold.png")
     ImageResource sim16();
 
     @Source("icons/16x16/three_tags.png")
     ImageResource simGroups16();
 
-    /*
-     * @Source("icons/16x16/simprovider.png")
-     * ImageResource simprovider16();
-     */
     @Source("icons/16x16/card_chip_gold.png")
     ImageResource simprovider16();
 
-    /*
-     * @Source("icons/32x32/sim.png")
-     * ImageResource sim32();
-     */
-    @Source("icons/32x32/card_chip_gold.png")
-    ImageResource sim32();
-
-    /*
-     * @Source("icons/32x32/simprovider.png")
-     * ImageResource simprovider32();
-     */
     @Source("icons/32x32/card_chip_gold.png")
     ImageResource simprovider32();
-    
+
     @Source("icons/16x16/document_signature.png")
     ImageResource pki16();
-    
+
     @Source("icons/32x32/document_signature.png")
     ImageResource pki32();
 
     @Source("icons/16x16/document_signature_refuse.png")
     ImageResource pki16Refuse();
-    
+
     @Source("icons/32x32/document_signature_refuse.png")
     ImageResource pki32Refuse();
-    
+
     @Source("icons/16x16/document_signature_accept.png")
     ImageResource pki16Accept();
-    
+
     @Source("icons/32x32/document_signature_accept.png")
     ImageResource pki32Accept();
 
@@ -445,7 +425,7 @@ public interface Resources extends ClientBundleWithLookup
 
     @Source("icons/16x16/note_go.png")
     ImageResource rebootSMS();
-    
+
     @Source("icons/16x16/bullet_green.png")
     ImageResource enabled16();
 
@@ -493,9 +473,9 @@ public interface Resources extends ClientBundleWithLookup
 
     @Source("icons/16x16/arrow_rotate_clockwise.png")
     ImageResource reprovision();
-    
-	@Source("icons/16x16/arrow_inout.png")
-	ImageResource sync();
+
+    @Source("icons/16x16/arrow_inout.png")
+    ImageResource sync();
 
     @Source("icons/32x32/phone.png")
     ImageResource phone32();
@@ -560,12 +540,11 @@ public interface Resources extends ClientBundleWithLookup
     @Source("icons/32x32/mail_server_setting.png")
     ImageResource mail_server_setting32();
 
-
     @Source("icons/16x16/bluetooth.png")
-    ImageResource bluetooth();    
-    
+    ImageResource bluetooth();
+
     @Source("icons/16x16/monitor.png")
-    ImageResource monitorDenali();   
+    ImageResource monitorDenali();
 
     @Source("icons/16x16/control_repeat_blue.png")
     ImageResource redo();
@@ -593,7 +572,7 @@ public interface Resources extends ClientBundleWithLookup
 
     @Source("icons/16x16/package_green.png")
     ImageResource packageGreen16();
-    
+
     @Source("icons/16x16/package_go.png")
     ImageResource packageGo16();
 
@@ -632,10 +611,10 @@ public interface Resources extends ClientBundleWithLookup
 
     @Source("icons/16x16/accept.png")
     ImageResource accept();
-    
+
     @Source("icons/16x16/accept.png")
     ImageResource accept16();
-    
+
     @Source("icons/32x32/accept.png")
     ImageResource accept32();
 
@@ -675,44 +654,38 @@ public interface Resources extends ClientBundleWithLookup
     @Source("icons/16x16/brick_delete.png")
     ImageResource bundleStop();
 
-    @Source("icons/others/eurotech_32x32.png")
-    ImageResource eurotech32();
-
-    @Source("icons/others/eurotech_16x16.png")
-    ImageResource eurotech16();
-
     @Source("icons/16x16/database_connect.png")
     ImageResource databaseConnect();
 
     @Source("icons/16x16/lock.png")
     ImageResource lock16();
-    
+
     @Source("icons/16x16/lock_green.png")
-    ImageResource lockGreen16();    
-    
+    ImageResource lockGreen16();
+
     @Source("icons/16x16/lock_break.png")
     ImageResource unlock16();
-    
+
     // DM Device Management Icons
     @Source("icons/16x16/lock.png")
     ImageResource dmLock16();
 
     @Source("icons/16x16/lock_open.png")
     ImageResource dmUnlock16();
-    
+
     @Source("icons/16x16/lock_break.png")
     ImageResource dmLockBreak16();
 
-    // alternative dmLockBreakRed16 = lock_delete / exclamation.png    
+    // alternative dmLockBreakRed16 = lock_delete / exclamation.png
     @Source("icons/16x16/exclamation.png")
-    ImageResource dmLockBreakRed16();    
-    
+    ImageResource dmLockBreakRed16();
+
     @Source("icons/16x16/help.png")
     ImageResource help16();
-        
+
     @Source("icons/32x32/help.png")
     ImageResource help32();
-    
+
     @Source("icons/others/vpn16.png")
     ImageResource vpn();
 
@@ -737,25 +710,10 @@ public interface Resources extends ClientBundleWithLookup
     @Source("icons/others/stethoscope32.png")
     ImageResource diagnostics32();
 
-    // @Source("html/welcome-sbx.html")
-    // TextResource welcomeSbxHtml();
-    //
-    // @Source("html/welcome-server.html")
-    // TextResource welcomeServerHtml();
-    //
-    // @Source("html/welcome-prod.html")
-    // TextResource welcomeProdHtml();
-
     @Source("html/documentation.html")
     TextResource documentationHtml();
 
-    @Source("html/sample-code.html")
-    TextResource sampleCodeHtml();
-
     @Source("html/devices.html")
     TextResource devicesHtml();
-
-    @Source("html/eula.html")
-    TextResource eulaHtml();
 
 }

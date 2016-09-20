@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
-public class GwtAccountUsageEvent extends EdcBaseModel implements Serializable {
+public class GwtAccountUsageEvent extends KapuaBaseModel implements Serializable {
 
 
     private static final long serialVersionUID = 2626693661272183644L;

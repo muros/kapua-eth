@@ -50,12 +50,7 @@
         <url-pattern>/console/simJob/*</url-pattern>
         <url-pattern>/console/simProvider/*</url-pattern>
         <url-pattern>/console/pkiDeviceMgmt/*</url-pattern>
-        <url-pattern>/console/pkiBlockedCertificate/*</url-pattern>
-        <url-pattern>/console/pkiAllowedCertificate/*</url-pattern>
-        <url-pattern>/console/pkiDnssecCertificate/*</url-pattern>
-        <url-pattern>/console/pkiexp/*</url-pattern>        
         <url-pattern>/console/device_snapshots/*</url-pattern>
-        <url-pattern>/console/provisionRequest/*</url-pattern>
         <url-pattern>/console/mqtt/*</url-pattern>
         <url-pattern>/console/rule/*</url-pattern>
         <url-pattern>/console/healthCheckReport/*</url-pattern>
@@ -104,9 +99,6 @@
         <url-pattern>/console/simJob/*</url-pattern>
         <url-pattern>/console/simProvider/*</url-pattern>
         <url-pattern>/console/pkiDeviceMgmt/*</url-pattern>
-        <url-pattern>/console/pkiBlockedCertificate/*</url-pattern>
-        <url-pattern>/console/pkiAllowedCertificate/*</url-pattern>
-        <url-pattern>/console/pkiDnssecCertificate/*</url-pattern>
         <url-pattern>/console/device_snapshots/*</url-pattern>
         <url-pattern>/console/provisionRequest/*</url-pattern>
         <url-pattern>/console/mqtt/*</url-pattern>
@@ -151,12 +143,12 @@
 
 	<!-- XSRF servlet support -->
 	<servlet>
-      <servlet-name>EdcErrorHandlerServlet</servlet-name>
-      <servlet-class>org.eclipse.kapua.app.console.servlet.EdcErrorHandlerServlet
+      <servlet-name>KapuaErrorHandlerServlet</servlet-name>
+      <servlet-class>org.eclipse.kapua.app.console.servlet.KapuaErrorHandlerServlet
       </servlet-class>
    	</servlet>
    	<servlet-mapping>
-      <servlet-name>EdcErrorHandlerServlet</servlet-name>
+      <servlet-name>KapuaErrorHandlerServlet</servlet-name>
       <url-pattern>/console/errorHandler/*</url-pattern>
    	</servlet-mapping>
    

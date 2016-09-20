@@ -42,8 +42,8 @@ org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationMan
 org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory
 org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService
 org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentFactory
-org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotFactory
-org.eclipse.kapua.service.device.management.snapshots.DeviceSnapshotManagementService
+org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory
+org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService
 org.eclipse.kapua.service.generator.id.IdGeneratorService
 org.eclipse.kapua.service.datastore.DatastoreObjectFactory
 org.eclipse.kapua.service.datastore.MessageStoreService

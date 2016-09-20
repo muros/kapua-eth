@@ -98,7 +98,7 @@ public class NorthView extends LayoutContainer
         panel.setLayout(layout);
 
         // Logo
-        panel.add(getEurotechHeader(),
+        panel.add(getKapuaHeader(),
                   new TableData(Style.HorizontalAlignment.LEFT,
                                 Style.VerticalAlignment.MIDDLE));
 
@@ -110,7 +110,7 @@ public class NorthView extends LayoutContainer
         add(panel);
     }
 
-    private Widget getEurotechHeader()
+    private Widget getKapuaHeader()
     {
         SimplePanel logo = new SimplePanel();
 

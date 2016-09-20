@@ -14,9 +14,8 @@ package org.eclipse.kapua.app.console.client.device;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.util.Constants;
-import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
+import org.eclipse.kapua.app.console.client.util.KapuaSafeHtmlUtils;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
-import org.eclipse.kapua.app.console.shared.analytics.GoogleAnalytics;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
@@ -53,58 +52,55 @@ import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-public class DeviceTabCommand extends LayoutContainer
-{
-    private static final ConsoleMessages       MSGS                 = GWT.create(ConsoleMessages.class);
+public class DeviceTabCommand extends LayoutContainer {
 
-    private final static String                SERVLET_URL          = "console/file/command";
+    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
-    private final static int                   COMMAND_TIMEOUT_SECS = 60;
+    private final static String SERVLET_URL = "console/file/command";
+
+    private final static int COMMAND_TIMEOUT_SECS = 60;
 
     // XSRF
-    private final GwtSecurityTokenServiceAsync gwtXSRFService       = GWT.create(GwtSecurityTokenService.class);
-    private HiddenField<String>                xsrfTokenField;
+    private final GwtSecurityTokenServiceAsync gwtXSRFService = GWT.create(GwtSecurityTokenService.class);
+    private HiddenField<String> xsrfTokenField;
 
     /**
      * 
      */
-    private boolean                            m_dirty;
-    private boolean                            m_initialized;
-    private GwtDevice                          m_selectedDevice;
+    private boolean m_dirty;
+    private boolean m_initialized;
+    private GwtDevice m_selectedDevice;
 
-    private LayoutContainer                    m_commandInput;
-    private FormPanel                          m_formPanel;
-    private HiddenField<String>                m_accountField;
-    private HiddenField<String>                m_deviceIdField;
-    private HiddenField<Integer>               m_timeoutField;
+    private LayoutContainer m_commandInput;
+    private FormPanel m_formPanel;
+    private HiddenField<String> m_accountField;
+    private HiddenField<String> m_deviceIdField;
+    private HiddenField<Integer> m_timeoutField;
 
-    private FileUploadField                    m_fileUploadField;
-    private TextField<String>                  m_commandField;
-    private TextField<String>                  m_passwordField;
+    private FileUploadField m_fileUploadField;
+    private TextField<String> m_commandField;
+    private TextField<String> m_passwordField;
 
-    private ButtonBar                          m_buttonBar;
-    private Button                             m_executeButton;
-    private Button                             m_resetButton;
+    private ButtonBar m_buttonBar;
+    private Button m_executeButton;
+    private Button m_resetButton;
 
-    private LayoutContainer                    m_commandOutput;
-    private TextArea                           m_result;
+    private LayoutContainer m_commandOutput;
+    private TextArea m_result;
 
-    protected boolean                          resetProcess;
+    protected boolean resetProcess;
 
-    public DeviceTabCommand(GwtSession currentSession)
-    {
+    public DeviceTabCommand(GwtSession currentSession) {
         m_dirty = false;
         m_initialized = false;
     }
 
-    public void setDevice(GwtDevice selectedDevice)
-    {
+    public void setDevice(GwtDevice selectedDevice) {
         m_dirty = true;
         m_selectedDevice = selectedDevice;
     }
 
-    protected void onRender(Element parent, int index)
-    {
+    protected void onRender(Element parent, int index) {
         super.onRender(parent, index);
 
         setLayout(new FitLayout());
@@ -128,8 +124,7 @@ public class DeviceTabCommand extends LayoutContainer
         m_initialized = true;
     }
 
-    private void initCommandInput()
-    {
+    private void initCommandInput() {
         FormData formData = new FormData("-20");
 
         FormLayout layout = new FormLayout();
@@ -151,8 +146,8 @@ public class DeviceTabCommand extends LayoutContainer
         m_formPanel.setMethod(Method.POST);
         m_formPanel.add(fieldSet);
         m_formPanel.addListener(Events.Render, new Listener<BaseEvent>() {
-            public void handleEvent(BaseEvent be)
-            {
+
+            public void handleEvent(BaseEvent be) {
                 NodeList<com.google.gwt.dom.client.Element> nl = m_formPanel.getElement().getElementsByTagName("form");
                 if (nl.getLength() > 0) {
                     com.google.gwt.dom.client.Element elemForm = nl.getItem(0);
@@ -166,14 +161,14 @@ public class DeviceTabCommand extends LayoutContainer
         initButtonBar();
 
         m_formPanel.addListener(Events.BeforeSubmit, new Listener<BaseEvent>() {
+
             @Override
-            public void handleEvent(BaseEvent be)
-            {
+            public void handleEvent(BaseEvent be) {
                 if (!m_selectedDevice.isOnline()) {
                     MessageBox.alert(MSGS.alerts(), MSGS.deviceOffline(), new Listener<MessageBoxEvent>() {
+
                         @Override
-                        public void handleEvent(MessageBoxEvent be)
-                        {
+                        public void handleEvent(MessageBoxEvent be) {
                             m_commandInput.unmask();
                         }
                     });
@@ -183,9 +178,9 @@ public class DeviceTabCommand extends LayoutContainer
         });
 
         m_formPanel.addListener(Events.Submit, new Listener<FormEvent>() {
+
             @Override
-            public void handleEvent(FormEvent be)
-            {
+            public void handleEvent(FormEvent be) {
                 String htmlResult = be.getResultHtml();
 
                 //
@@ -201,15 +196,14 @@ public class DeviceTabCommand extends LayoutContainer
 
                     MessageBox.alert(MSGS.error(), MSGS.fileUploadFailure() + ":<br/>" + errorMessage, null);
                     m_commandInput.unmask();
-                }
-                else {
+                } else {
                     int outputMessageStartIndex = htmlResult.indexOf("<pre");
                     outputMessageStartIndex = htmlResult.indexOf(">", outputMessageStartIndex) + 1;
                     int outputMessageEndIndex = htmlResult.indexOf("</pre>");
 
                     String output = htmlResult.substring(outputMessageStartIndex, outputMessageEndIndex);
 
-                    m_result.setValue(EdcSafeHtmlUtils.htmlUnescape(output));
+                    m_result.setValue(KapuaSafeHtmlUtils.htmlUnescape(output));
                     m_commandInput.unmask();
                 }
             }
@@ -263,31 +257,28 @@ public class DeviceTabCommand extends LayoutContainer
         m_commandInput.mask(MSGS.deviceNoDeviceSelected());
     }
 
-    private void initButtonBar()
-    {
+    private void initButtonBar() {
         m_executeButton = new Button(MSGS.deviceCommandExecute());
         m_executeButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
             @Override
-            public void componentSelected(ButtonEvent ce)
-            {
+            public void componentSelected(ButtonEvent ce) {
                 if (m_formPanel.isValid()) {
                     m_result.clear();
                     m_commandInput.mask(MSGS.deviceCommandExecuting());
                     m_accountField.setValue(m_selectedDevice.getScopeId());
                     m_deviceIdField.setValue(m_selectedDevice.getId());
                     m_timeoutField.setValue(COMMAND_TIMEOUT_SECS);
-                    GoogleAnalytics.trackPageview(GoogleAnalytics.GA_DEVICES_COMMAND_EXECUTE);
 
                     gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
+
                         @Override
-                        public void onFailure(Throwable ex)
-                        {
+                        public void onFailure(Throwable ex) {
                             FailureHandler.handle(ex);
                         }
 
                         @Override
-                        public void onSuccess(GwtXSRFToken token)
-                        {
+                        public void onSuccess(GwtXSRFToken token) {
                             xsrfTokenField.setValue(token.getToken());
                             m_formPanel.submit();
                         }
@@ -298,9 +289,9 @@ public class DeviceTabCommand extends LayoutContainer
 
         m_resetButton = new Button(MSGS.reset());
         m_resetButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
             @Override
-            public void componentSelected(ButtonEvent ce)
-            {
+            public void componentSelected(ButtonEvent ce) {
                 if (!resetProcess) {
                     resetProcess = true;
                     m_resetButton.setEnabled(false);
@@ -317,8 +308,7 @@ public class DeviceTabCommand extends LayoutContainer
         m_buttonBar.add(m_executeButton);
     }
 
-    private void initCommandOutput()
-    {
+    private void initCommandOutput() {
         m_commandOutput = new LayoutContainer();
         m_commandOutput.setBorders(false);
         m_commandOutput.setWidth("99.5%");
@@ -338,8 +328,7 @@ public class DeviceTabCommand extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    public void refresh()
-    {
+    public void refresh() {
         if (m_dirty && m_initialized) {
             m_dirty = false;
 
@@ -355,8 +344,7 @@ public class DeviceTabCommand extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    public void onUnload()
-    {
+    public void onUnload() {
         super.onUnload();
     }
 

@@ -15,7 +15,7 @@ package org.eclipse.kapua.app.console.shared.model;
 import java.io.Serializable;
 
 
-public class GwtDownloadProtocol extends EdcBaseModel implements Serializable {
+public class GwtDownloadProtocol extends KapuaBaseModel implements Serializable {
 
 	/**
 	 * 

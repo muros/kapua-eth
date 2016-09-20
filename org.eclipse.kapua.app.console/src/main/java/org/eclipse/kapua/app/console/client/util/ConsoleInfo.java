@@ -33,7 +33,7 @@ public class ConsoleInfo extends Info {
         //
         // XSS escaping
         if (text != null)
-            text = EdcSafeHtmlUtils.htmlEscape(text);
+            text = KapuaSafeHtmlUtils.htmlEscape(text);
 
         int infoHeight = 25 + STEP_HEIGHT * (1 + ((text != null ? text.length() : 0) / CHAR_STEP));
 

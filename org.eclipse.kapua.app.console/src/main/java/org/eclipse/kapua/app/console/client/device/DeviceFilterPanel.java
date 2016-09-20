@@ -13,7 +13,7 @@
 package org.eclipse.kapua.app.console.client.device;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
-import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
+import org.eclipse.kapua.app.console.client.util.KapuaSafeHtmlUtils;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceQueryPredicates;
 import org.eclipse.kapua.app.console.shared.model.GwtSession;
 
@@ -326,6 +326,6 @@ public class DeviceFilterPanel extends LayoutContainer
 
     public String unescapeValue(String value)
     {
-        return EdcSafeHtmlUtils.htmlUnescape(value);
+        return KapuaSafeHtmlUtils.htmlUnescape(value);
     }
 }

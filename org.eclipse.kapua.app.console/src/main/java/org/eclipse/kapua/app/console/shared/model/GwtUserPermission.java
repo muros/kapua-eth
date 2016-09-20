@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GwtUserPermission extends EdcBaseModel implements Serializable
+public class GwtUserPermission extends KapuaBaseModel implements Serializable
 {
 
     private static final long serialVersionUID = 8760151213714238533L;

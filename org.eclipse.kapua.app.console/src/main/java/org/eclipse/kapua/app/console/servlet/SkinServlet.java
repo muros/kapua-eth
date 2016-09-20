@@ -41,8 +41,8 @@ public class SkinServlet extends HttpServlet
         try {
 
             // check to see if we have an external resource directory configured
-            ConsoleSetting edcConfig = ConsoleSetting.getInstance();
-            String resourceDir = edcConfig.getString(ConsoleSettingKeys.SKIN_RESOURCE_DIR);
+            ConsoleSetting consoleSettings = ConsoleSetting.getInstance();
+            String resourceDir = consoleSettings.getString(ConsoleSettingKeys.SKIN_RESOURCE_DIR);
             if (resourceDir != null && resourceDir.trim().length() != 0) {
 
                 File fResourceDir = new File(resourceDir);

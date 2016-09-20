@@ -13,7 +13,7 @@
 package org.eclipse.kapua.app.console.shared.service;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtAccountCreator;
 import org.eclipse.kapua.app.console.shared.model.GwtAccountStringListItem;
@@ -28,8 +28,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * The client side stub for the RPC service.
  */
 @RemoteServiceRelativePath("account")
-public interface GwtAccountService extends RemoteService
-{
+public interface GwtAccountService extends RemoteService {
 
     /**
      * Creates a new Account based on the information provided in the supplied GwtAccountCreator. Each new account results in the creation of an Organization, a set of Users, and a provisioning step
@@ -37,12 +36,12 @@ public interface GwtAccountService extends RemoteService
      * 
      * @param gwtAccountCreator
      * @return
-     * @throws GwtEdcDuplicateNameException
+     * @throws GwtKapuaDuplicateNameException
      *             if the operation could not be completed because a name conflict was detected
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public GwtAccount create(GwtXSRFToken xsfrToken, GwtAccountCreator gwtAccountCreator)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Returns a GwtAccount by its Id or null if an account with such Id does not exist.
@@ -51,7 +50,7 @@ public interface GwtAccountService extends RemoteService
      * @return
      */
     public GwtAccount find(String accountId)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Returns a GwtAccount by its acountName or null if an account with such acountName does not exist.
@@ -60,7 +59,7 @@ public interface GwtAccountService extends RemoteService
      * @return GwtAccount
      */
     public GwtAccount findByAccountName(String accountName)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Get account info ad name values pairs
@@ -70,7 +69,7 @@ public interface GwtAccountService extends RemoteService
      * @throws KapuaException
      */
     public ListLoadResult<GwtGroupedNVPair> getAccountInfo(String gwtAccountId)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Updates GwtAccount PROPERTIES ONLY in the database and returns the refreshed/reloaded entity instance.
@@ -80,7 +79,7 @@ public interface GwtAccountService extends RemoteService
      * @throws KapuaException
      */
     public GwtAccount updateAccountProperties(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Updates a GwtAccount in the database and returns the refreshed/reloaded entity instance.
@@ -90,47 +89,51 @@ public interface GwtAccountService extends RemoteService
      * @throws KapuaException
      */
     public GwtAccount update(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Deletes the supplied GwtAccount.
      * 
      * @param gwtAccount
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public void delete(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Lists GwtAccounts.
      * 
      * FIXME: Add query predicates, ordering and pagination.
      * 
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public ListLoadResult<GwtAccount> findAll(String scopeId)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Lists GwtAccounts child of the given accountId.
      * 
-     * @param accountId The account id for which to find children
-     * @param recoursive If true it list all child accounts. If false it list only the direct children
+     * @param accountId
+     *            The account id for which to find children
+     * @param recoursive
+     *            If true it list all child accounts. If false it list only the direct children
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     ListLoadResult<GwtAccount> findChildren(String accountId, boolean recoursive)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
     /**
      * Lists all child of the given account id as a list of strings
      * 
-     * @param scopeId The account id for which to find children
-     * @param recoursive If true it list all child accounts. If false it list only the direct children
+     * @param scopeId
+     *            The account id for which to find children
+     * @param recoursive
+     *            If true it list all child accounts. If false it list only the direct children
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     ListLoadResult<GwtAccountStringListItem> findChildrenAsStrings(String scopeId, boolean recoursive)
-        throws GwtEdcException;
+            throws GwtKapuaException;
 
 }

@@ -17,7 +17,7 @@ import java.util.Date;
 
 import org.eclipse.kapua.app.console.client.util.DateUtils;
 
-public class GwtTopic extends EdcBaseTreeModel implements Serializable {
+public class GwtTopic extends KapuaBaseTreeModel implements Serializable {
 
     private static final long serialVersionUID = 7519496938895060911L;
 
@@ -55,7 +55,7 @@ public class GwtTopic extends EdcBaseTreeModel implements Serializable {
         }
     }
 
-    public GwtTopic(String topicName, String baseTopic, String semanticTopic, Date timestamp, EdcBaseTreeModel[] children) {
+    public GwtTopic(String topicName, String baseTopic, String semanticTopic, Date timestamp, KapuaBaseTreeModel[] children) {
         this(topicName, baseTopic, semanticTopic, timestamp);
         for (int i = 0; i < children.length; i++) {
             add(children[i]);

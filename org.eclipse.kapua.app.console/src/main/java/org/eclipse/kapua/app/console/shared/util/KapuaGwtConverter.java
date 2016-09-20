@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 import java.util.Properties;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.app.console.client.util.EdcSafeHtmlUtils;
+import org.eclipse.kapua.app.console.client.util.KapuaSafeHtmlUtils;
 import org.eclipse.kapua.app.console.shared.model.GwtAccount;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceEvent;
@@ -181,7 +181,7 @@ public class KapuaGwtConverter
         gwtDeviceEvent.setReceivedOn(deviceEvent.getReceivedOn());
         gwtDeviceEvent.setEventType(deviceEvent.getResource());
 
-        String escapedMessage = EdcSafeHtmlUtils.htmlEscape(deviceEvent.getEventMessage());
+        String escapedMessage = KapuaSafeHtmlUtils.htmlEscape(deviceEvent.getEventMessage());
         gwtDeviceEvent.setEventMessage(escapedMessage);
 
         return gwtDeviceEvent;
