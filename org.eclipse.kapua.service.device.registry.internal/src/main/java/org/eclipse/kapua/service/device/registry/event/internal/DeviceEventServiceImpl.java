@@ -29,13 +29,21 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventListResult;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 import org.eclipse.kapua.service.device.registry.internal.DeviceEntityManagerFactory;
 
-public class DeviceEventServiceImpl implements DeviceEventService
-{
+public class DeviceEventServiceImpl implements DeviceEventService {
+
+    private final AuthorizationService authorizationService;
+
+    public DeviceEventServiceImpl(AuthorizationService authorizationService) {
+        this.authorizationService = authorizationService;
+    }
+
+    public DeviceEventServiceImpl() {
+        KapuaLocator locator = KapuaLocator.getInstance();
+        authorizationService = locator.getService(AuthorizationService.class);
+    }
 
     @Override
-    public DeviceEvent create(DeviceEventCreator deviceEventCreator)
-        throws KapuaException
-    {
+    public DeviceEvent create(DeviceEventCreator deviceEventCreator) throws KapuaException {
         //
         // Argument Validation
         ArgumentValidator.notNull(deviceEventCreator, "deviceEventCreator");
@@ -47,7 +55,6 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
-        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.DEVICE_EVENT, Actions.write, deviceEventCreator.getScopeId()));
 
@@ -86,7 +93,6 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
-        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.DEVICE_EVENT, Actions.read, scopeId));
 
@@ -119,7 +125,6 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
-        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.DEVICE_EVENT, Actions.read, query.getScopeId()));
 
@@ -152,7 +157,6 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
-        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.DEVICE_EVENT, Actions.read, query.getScopeId()));
 
@@ -183,7 +187,6 @@ public class DeviceEventServiceImpl implements DeviceEventService
         //
         // Check Access
         KapuaLocator locator = KapuaLocator.getInstance();
-        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
         PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.DEVICE_EVENT, Actions.delete, scopeId));
 
