@@ -14,7 +14,7 @@ package org.eclipse.kapua.commons.jpa;
 
 import org.eclipse.kapua.KapuaException;
 
-public interface EntityManagerCallback<T> {
+public interface EntityManagerResultCallback<T> {
 
     T onEntityManager(EntityManager entityManager) throws KapuaException;
 

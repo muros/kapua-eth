@@ -13,6 +13,7 @@ package org.eclipse.kapua.service.device.registry.internal;
 
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.jpa.EntityManagerSession;
 import org.eclipse.kapua.commons.model.query.predicate.AttributePredicate;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -37,11 +38,14 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
 
     private final DeviceEntityManagerFactory deviceEntityManagerFactory;
 
+    private final EntityManagerSession entityManagerSession;
+
     public DeviceRegistryServiceImpl(AuthorizationService authorizationService, PermissionFactory permissionFactory, DeviceEntityManagerFactory deviceEntityManagerFactory) {
         this.authorizationService = authorizationService;
         this.permissionFactory = permissionFactory;
         this.deviceValidation = new DeviceValidation(permissionFactory, authorizationService);
         this.deviceEntityManagerFactory = deviceEntityManagerFactory;
+        this.entityManagerSession = new EntityManagerSession(deviceEntityManagerFactory);
     }
 
     public DeviceRegistryServiceImpl() {
@@ -50,6 +54,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
         permissionFactory = locator.getFactory(PermissionFactory.class);
         this.deviceValidation = new DeviceValidation(permissionFactory, authorizationService);
         deviceEntityManagerFactory = DeviceEntityManagerFactory.instance();
+        this.entityManagerSession = new EntityManagerSession(deviceEntityManagerFactory);
     }
 
     // Operations implementation
@@ -133,7 +138,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
     @Override
     public void delete(KapuaId scopeId, KapuaId deviceId) throws KapuaException {
         deviceValidation.validateDeletePreconditions(scopeId, deviceId);
-        deviceEntityManagerFactory.onEntityManager(entityManager -> {
+        entityManagerSession.onEntityAction(entityManager -> {
             if (DeviceDAO.find(entityManager, deviceId) == null) {
                 throw new KapuaEntityNotFoundException(Device.TYPE, deviceId);
             }
@@ -141,7 +146,6 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
             entityManager.beginTransaction();
             DeviceDAO.delete(entityManager, deviceId);
             entityManager.commit();
-            return null;
         });
     }
 

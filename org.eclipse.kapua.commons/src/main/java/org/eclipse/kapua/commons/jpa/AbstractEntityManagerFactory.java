@@ -103,15 +103,11 @@ public abstract class AbstractEntityManagerFactory
         return new EntityManager(entityManagerFactory.createEntityManager());
     }
 
-    public void onEntityManager(EntityManagerCallback entityManagerCallback) throws KapuaException {
-        resultsFromEntityManager(entityManagerCallback);
-    }
-
-    public <T> T resultsFromEntityManager(EntityManagerCallback<T> entityManagerCallback) throws KapuaException {
+    public <T> T resultsFromEntityManager(EntityManagerResultCallback<T> entityManagerResultCallback) throws KapuaException {
         EntityManager manager = null;
         try {
             manager = createEntityManager();
-            return entityManagerCallback.onEntityManager(manager);
+            return entityManagerResultCallback.onEntityManager(manager);
         } catch (KapuaException e) {
             throw KapuaExceptionUtils.convertPersistenceException(e);
         } finally {
