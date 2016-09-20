@@ -20,7 +20,7 @@ public class EntityManagerSession {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public <T> void onEntityAction(EntityManagerActionCallback entityManagerActionCallback) throws KapuaException {
+    public <T> void onEntityManagerAction(EntityManagerActionCallback entityManagerActionCallback) throws KapuaException {
         EntityManager manager = null;
         try {
             manager = entityManagerFactory.createEntityManager();
@@ -34,7 +34,7 @@ public class EntityManagerSession {
         }
     }
 
-    public <T> T onEntityResult(EntityManagerResultCallback<T> entityManagerResultCallback) throws KapuaException {
+    public <T> T onEntityManagerResult(EntityManagerResultCallback<T> entityManagerResultCallback) throws KapuaException {
         EntityManager manager = null;
         try {
             manager = entityManagerFactory.createEntityManager();

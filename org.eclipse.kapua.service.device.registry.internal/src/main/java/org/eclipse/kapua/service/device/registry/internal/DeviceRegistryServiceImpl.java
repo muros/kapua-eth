@@ -63,7 +63,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
     public Device create(DeviceCreator deviceCreator) throws KapuaException {
         deviceValidation.validateCreatePreconditions(deviceCreator);
 
-        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> {
+        return entityManagerSession.onEntityManagerResult(entityManager -> {
             entityManager.beginTransaction();
             Device device = DeviceDAO.create(entityManager, deviceCreator);
             entityManager.commit();
@@ -75,7 +75,7 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
     @Override
     public Device update(Device device) throws KapuaException {
         deviceValidation.validateUpdatePreconditions(device);
-        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> {
+        return entityManagerSession.onEntityManagerResult(entityManager -> {
             Device currentDevice = DeviceDAO.find(entityManager, device.getId());
             if (currentDevice == null) {
                 throw new KapuaEntityNotFoundException(Device.TYPE, device.getId());
@@ -120,25 +120,25 @@ public class DeviceRegistryServiceImpl implements DeviceRegistryService {
     @Override
     public Device find(KapuaId scopeId, KapuaId entityId) throws KapuaException {
         deviceValidation.validateFindPreconditions(scopeId, entityId);
-        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> DeviceDAO.find(entityManager, entityId));
+        return entityManagerSession.onEntityManagerResult(entityManager -> DeviceDAO.find(entityManager, entityId));
     }
 
     @Override
     public DeviceListResult query(KapuaQuery<Device> query) throws KapuaException {
         deviceValidation.validateQueryPreconditions(query);
-        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> DeviceDAO.query(entityManager, query));
+        return entityManagerSession.onEntityManagerResult(entityManager -> DeviceDAO.query(entityManager, query));
     }
 
     @Override
     public long count(KapuaQuery<Device> query) throws KapuaException {
         deviceValidation.validateCountPreconditions(query);
-        return deviceEntityManagerFactory.resultsFromEntityManager(entityManager -> DeviceDAO.count(entityManager, query));
+        return entityManagerSession.onEntityManagerResult(entityManager -> DeviceDAO.count(entityManager, query));
     }
 
     @Override
     public void delete(KapuaId scopeId, KapuaId deviceId) throws KapuaException {
         deviceValidation.validateDeletePreconditions(scopeId, deviceId);
-        entityManagerSession.onEntityAction(entityManager -> {
+        entityManagerSession.onEntityManagerAction(entityManager -> {
             if (DeviceDAO.find(entityManager, deviceId) == null) {
                 throw new KapuaEntityNotFoundException(Device.TYPE, deviceId);
             }
