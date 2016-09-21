@@ -46,24 +46,25 @@ import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
 public class DeviceTabPackages extends LayoutContainer {
 
-    private static final ConsoleMessages  MSGS          = GWT.create(ConsoleMessages.class);
+    private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
-    private final static String           SERVLET_URL   = "console/file/deploy";
+    private final static String SERVLET_URL = "console/file/deploy";
 
     @SuppressWarnings("unused")
-    private GwtSession                    m_currentSession;
-    private DeviceTabs                    m_deviceTabs;
+    private GwtSession m_currentSession;
+    private DeviceTabs m_deviceTabs;
 
-    private boolean                       m_initialized = false;
-    private GwtDevice                     m_selectedDevice;
+    private boolean   m_initialized = false;
+    private GwtDevice m_selectedDevice;
 
-    private ToolBar                       m_toolBar;
-    private Button                        m_refreshButton;
-    private Button                        m_installButton;
-    private Button                        m_uninstallButton;
+    private ToolBar m_toolBar;
+    private Button  m_refreshButton;
+    private Button  m_installButton;
+    private Button  m_uninstallButton;
 
-    private TabPanel                      m_tabsPanel;
-    private DeviceTabPackagesTabInstalled m_installedPackageTab;
+    private TabPanel tabsPanel;
+    private DeviceTabPackagesInstalled installedPackageTab;
+    private DeviceTabPackagesInProgress inProgressPackageTab;
 
     public DeviceTabPackages(GwtSession currentSession,
             DeviceTabs deviceTabs) {
@@ -76,7 +77,7 @@ public class DeviceTabPackages extends LayoutContainer {
         m_selectedDevice = selectedDevice;
 
         if (m_initialized) {
-            m_tabsPanel.setSelection(m_installedPackageTab);
+            tabsPanel.setSelection(installedPackageTab);
         }
     }
 
@@ -100,7 +101,7 @@ public class DeviceTabPackages extends LayoutContainer {
         devicesConfigurationPanel.setLayout(new FitLayout());
         devicesConfigurationPanel.setScrollMode(Scroll.AUTO);
         devicesConfigurationPanel.setTopComponent(m_toolBar);
-        devicesConfigurationPanel.add(m_tabsPanel);
+        devicesConfigurationPanel.add(tabsPanel);
 
         add(devicesConfigurationPanel);
 
@@ -168,28 +169,44 @@ public class DeviceTabPackages extends LayoutContainer {
     }
 
     private void initPackagesTabs() {
-        m_tabsPanel = new TabPanel();
-        m_tabsPanel.setPlain(true);
-        m_tabsPanel.setBorders(false);
-        m_tabsPanel.setTabPosition(TabPosition.BOTTOM);
+        tabsPanel = new TabPanel();
+        tabsPanel.setPlain(true);
+        tabsPanel.setBorders(false);
+        tabsPanel.setTabPosition(TabPosition.BOTTOM);
 
         //
-        // Installed Package Tab
-        m_installedPackageTab = new DeviceTabPackagesTabInstalled(this);
-        m_installedPackageTab.setText(MSGS.deviceInstallTabInstalled());
-        m_installedPackageTab.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.packageGreen16()));
-        m_installedPackageTab.setBorders(false);
-        m_installedPackageTab.setLayout(new FitLayout());
+        // Packages installed tab
+        installedPackageTab = new DeviceTabPackagesInstalled(this);
+        installedPackageTab.setText(MSGS.deviceInstallTabInstalled());
+        installedPackageTab.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.packageGreen16()));
+        installedPackageTab.setBorders(false);
+        installedPackageTab.setLayout(new FitLayout());
 
-        m_installedPackageTab.addListener(Events.Select, new Listener<ComponentEvent>() {
+        installedPackageTab.addListener(Events.Select, new Listener<ComponentEvent>() {
 
             public void handleEvent(ComponentEvent be) {
                 refresh();
             }
         });
-        m_tabsPanel.add(m_installedPackageTab);
+        tabsPanel.add(installedPackageTab);
 
-        add(m_tabsPanel);
+        //
+        // In progress packages install tab
+        inProgressPackageTab = new DeviceTabPackagesInProgress(this);
+        inProgressPackageTab.setText(MSGS.deviceInstallTabInProgress());
+        inProgressPackageTab.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.packageGo16()));
+        inProgressPackageTab.setBorders(false);
+        inProgressPackageTab.setLayout(new FitLayout());
+
+        inProgressPackageTab.addListener(Events.Select, new Listener<ComponentEvent>() {
+
+            public void handleEvent(ComponentEvent be) {
+                refresh();
+    }
+        });
+        tabsPanel.add(inProgressPackageTab);
+
+        add(tabsPanel);
     }
 
     //
@@ -201,44 +218,44 @@ public class DeviceTabPackages extends LayoutContainer {
         final TabbedDialog packageInstallDialog = new PackageInstallDialog(m_selectedDevice.getScopeId(),
                                                                            m_selectedDevice.getId());
 
-            packageInstallDialog.addListener(Events.Hide, new Listener<BaseEvent>() {
+        packageInstallDialog.addListener(Events.Hide, new Listener<BaseEvent>() {
 
-                @Override
-                public void handleEvent(BaseEvent be) {
-                    m_toolBar.enable();
+            @Override
+            public void handleEvent(BaseEvent be) {
+                m_toolBar.enable();
 
-                    Boolean exitStatus = packageInstallDialog.getExitStatus();
-                    if (exitStatus == null) { // Operation Aborted
-                        return;
-                    } else {
+                Boolean exitStatus = packageInstallDialog.getExitStatus();
+                if (exitStatus == null) { // Operation Aborted
+                    return;
+                } else {
 
-                        InfoDialogType exitDialogType;
-                        String exitMessage = packageInstallDialog.getExitMessage();
+                    InfoDialogType exitDialogType;
+                    String exitMessage = packageInstallDialog.getExitMessage();
 
-                        if (exitStatus == true) { // Operation Success
-                            exitDialogType = InfoDialogType.INFO;
-                        } else { // Operaton Failed
-                            exitDialogType = InfoDialogType.ERROR;
-                        }
-
-                        //
-                        // Exit dialog
-                        InfoDialog exitDialog = new InfoDialog(exitDialogType,
-                                                               exitMessage);
-
-                        exitDialog.show();
-
-                        m_uninstallButton.disable();
-                        m_deviceTabs.setDevice(m_selectedDevice);
+                    if (exitStatus == true) { // Operation Success
+                        exitDialogType = InfoDialogType.INFO;
+                    } else { // Operaton Failed
+                        exitDialogType = InfoDialogType.ERROR;
                     }
-                }
-            });
 
-            packageInstallDialog.show();
-        }
+                    //
+                    // Exit dialog
+                    InfoDialog exitDialog = new InfoDialog(exitDialogType,
+                                                           exitMessage);
+
+                    exitDialog.show();
+
+                    m_uninstallButton.disable();
+                    m_deviceTabs.setDevice(m_selectedDevice);
+                }
+            }
+        });
+
+        packageInstallDialog.show();
+    }
 
     private void openUninstallDialog() {
-        final GwtDeploymentPackage selectedDeploymentPackage = m_installedPackageTab.getSelectedDeploymentPackage();
+        final GwtDeploymentPackage selectedDeploymentPackage = installedPackageTab.getSelectedDeploymentPackage();
 
         if (selectedDeploymentPackage != null) {
             m_toolBar.disable();
@@ -303,7 +320,7 @@ public class DeviceTabPackages extends LayoutContainer {
     public void refresh() {
         //
         // Refresh the installed tab if selected
-        m_installedPackageTab.refresh();
+        installedPackageTab.refresh();
 
         //
         // Manage buttons
@@ -326,7 +343,7 @@ public class DeviceTabPackages extends LayoutContainer {
 
     public void setDirty() {
         if (m_initialized) {
-            m_installedPackageTab.setDirty(true);
+            installedPackageTab.setDirty(true);
         }
     }
 

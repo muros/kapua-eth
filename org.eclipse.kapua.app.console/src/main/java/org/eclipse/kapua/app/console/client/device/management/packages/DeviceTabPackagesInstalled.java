@@ -38,7 +38,7 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
-public class DeviceTabPackagesTabInstalled extends TabItem
+public class DeviceTabPackagesInstalled extends TabItem
 {
     private static final ConsoleMessages          MSGS                       = GWT.create(ConsoleMessages.class);
     private final GwtDeviceManagementServiceAsync gwtDeviceManagementService = GWT.create(GwtDeviceManagementService.class);
@@ -50,7 +50,7 @@ public class DeviceTabPackagesTabInstalled extends TabItem
     private TreeGrid<ModelData>  m_treeGrid;
     private TreeStore<ModelData> m_treeStore = new TreeStore<ModelData>();
 
-    public DeviceTabPackagesTabInstalled(DeviceTabPackages rootTabPanel)
+    public DeviceTabPackagesInstalled(DeviceTabPackages rootTabPanel)
     {
         m_rootTabPanel = rootTabPanel;
     }
