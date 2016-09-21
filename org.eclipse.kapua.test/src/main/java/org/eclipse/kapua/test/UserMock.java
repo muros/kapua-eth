@@ -195,11 +195,5 @@ public class UserMock implements User
 		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override
-    public void setScopeId(KapuaId scopeId) {
-        // TODO Auto-generated method stub
-        
-    }
 
 }
