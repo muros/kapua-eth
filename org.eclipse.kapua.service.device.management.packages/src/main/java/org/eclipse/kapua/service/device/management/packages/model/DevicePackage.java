@@ -10,11 +10,25 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.management.packages;
+package org.eclipse.kapua.service.device.management.packages.model;
 
-import java.util.List;
+import java.util.Date;
 
-public interface DevicePackages
+//TODO: Needs annotation. First verify if possible with JAXB or EclipseLink MOXy
+public interface DevicePackage
 {
-    public <D extends DevicePackage> List<D> getPackages();
+
+    public String getName();
+
+    public void setName(String dpName);
+
+    public String getVersion();
+
+    public void setVersion(String dpVersion);
+
+    public <B extends DevicePackageBundleInfos> B getBundleInfos();
+
+    public Date getInstallDate();
+
+    public void setInstallDate(Date installDate);
 }

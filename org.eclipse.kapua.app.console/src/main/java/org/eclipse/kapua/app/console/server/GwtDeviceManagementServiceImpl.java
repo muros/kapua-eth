@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.MessageDigest;
@@ -34,10 +35,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.sanselan.ImageFormat;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
-import org.eclipse.kapua.app.console.server.util.EdcExceptionHandler;
+import org.eclipse.kapua.app.console.server.util.KapuaExceptionHandler;
 import org.eclipse.kapua.app.console.setting.ConsoleSetting;
 import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
 import org.eclipse.kapua.app.console.shared.model.GwtBundleInfo;
 import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
 import org.eclipse.kapua.app.console.shared.model.GwtConfigParameter;
@@ -49,6 +50,7 @@ import org.eclipse.kapua.app.console.shared.model.GwtDeviceCommandOutput;
 import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
 import org.eclipse.kapua.app.console.shared.model.GwtSnapshot;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
+import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageInstallRequest;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementService;
 import org.eclipse.kapua.commons.configuration.metatype.Password;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
@@ -69,11 +71,13 @@ import org.eclipse.kapua.service.device.management.configuration.DeviceComponent
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
-import org.eclipse.kapua.service.device.management.packages.DevicePackage;
-import org.eclipse.kapua.service.device.management.packages.DevicePackageBundleInfo;
-import org.eclipse.kapua.service.device.management.packages.DevicePackageBundleInfos;
+import org.eclipse.kapua.service.device.management.packages.DevicePackageFactory;
 import org.eclipse.kapua.service.device.management.packages.DevicePackageManagementService;
-import org.eclipse.kapua.service.device.management.packages.DevicePackages;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfo;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfos;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
+import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService;
 import org.slf4j.Logger;
@@ -89,16 +93,15 @@ import com.extjs.gxt.ui.client.data.ListLoadResult;
  */
 public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet implements GwtDeviceManagementService
 {
-    private static Logger logger = LoggerFactory.getLogger(GwtDeviceManagementServiceImpl.class);
-
+    private static Logger     logger           = LoggerFactory.getLogger(GwtDeviceManagementServiceImpl.class);
     private static final long serialVersionUID = -1391026997499175151L;
 
     //
     // Packages
     //
     @Override
-    public List<GwtDeploymentPackage> findDeviceDeploymentPackages(GwtDevice gwtDevice)
-        throws GwtEdcException
+    public List<GwtDeploymentPackage> findDevicePackages(String scopeShortId, String deviceShortId)
+        throws GwtKapuaException
     {
         List<GwtDeploymentPackage> gwtPkgs = new ArrayList<GwtDeploymentPackage>();
         try {
@@ -107,8 +110,8 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
             KapuaLocator locator = KapuaLocator.getInstance();
             DevicePackageManagementService deviceService = locator.getService(DevicePackageManagementService.class);
 
-            KapuaId scopeId = KapuaEid.parseShortId(gwtDevice.getScopeId());
-            KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
+            KapuaId scopeId = KapuaEid.parseShortId(scopeShortId);
+            KapuaId deviceId = KapuaEid.parseShortId(deviceShortId);
             DevicePackages deploymentPackages = deviceService.getInstalled(scopeId,
                                                                            deviceId,
                                                                            null);
@@ -137,33 +140,51 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
 
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
         return gwtPkgs;
     }
 
     @Override
-    public void uninstallDeploymentPackage(GwtXSRFToken xsrfToken, GwtDevice gwtDevice, String packageName)
-        throws GwtEdcException
+    public void installPackage(GwtXSRFToken xsrfToken, GwtPackageInstallRequest gwtPackageInstallRequest) throws GwtKapuaException
     {
         //
-        // Checking validity of the given XSRF Token
+        // Check token
         checkXSRFToken(xsrfToken);
 
-        // KapuaLocator locator = KapuaLocator.getInstance();
-        // DeviceDeployManagementService deviceDeployMangamentService = locator.getService(DeviceDeployManagementService.class);
         //
-        // try {
-        // KapuaId scopeId = KapuaEid.parseShortId(gwtDevice.getScopeId());
-        // KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
-        // deviceDeployMangamentService.uninstall(scopeId,
-        // deviceId,
-        // packageName,
-        // null);
-        // }
-        // catch (Throwable t) {
-        // EdcExceptionHandler.handle(t);
-        // }
+        // Do install
+        try {
+            KapuaId scopeId = KapuaEid.parseShortId(gwtPackageInstallRequest.getScopeId());
+            KapuaId deviceId = KapuaEid.parseShortId(gwtPackageInstallRequest.getDeviceId());
+
+            KapuaLocator locator = KapuaLocator.getInstance();
+            DevicePackageFactory devicePackageFactory = locator.getFactory(DevicePackageFactory.class);
+
+            DevicePackageDownloadRequest packageDownloadRequest = devicePackageFactory.newPackageDownloadRequest();
+            packageDownloadRequest.setURI(new URI(gwtPackageInstallRequest.getPackageURI()));
+            packageDownloadRequest.setName(gwtPackageInstallRequest.getPackageName());
+            packageDownloadRequest.setVersion(gwtPackageInstallRequest.getPackageVersion());
+            packageDownloadRequest.setInstall(true); // Always install
+            packageDownloadRequest.setReboot(gwtPackageInstallRequest.isReboot());
+            packageDownloadRequest.setRebootDelay(gwtPackageInstallRequest.getRebootDelay());
+
+            DevicePackageManagementService packageManagementService = locator.getService(DevicePackageManagementService.class);
+            packageManagementService.downloadExec(scopeId,
+                                                  deviceId,
+                                                  packageDownloadRequest,
+                                                  null);
+        }
+        catch (Throwable t) {
+            KapuaExceptionHandler.handle(t);
+        }
+    }
+
+    @Override
+    public void uninstallPackage(GwtXSRFToken xsfrToken, GwtPackageInstallRequest packageUninstallRequest) throws GwtKapuaException
+    {
+        // TODO Auto-generated method stub
+
     }
 
     //
@@ -171,7 +192,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
     //
     @Override
     public List<GwtConfigComponent> findDeviceConfigurations(GwtDevice device)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         List<GwtConfigComponent> gwtConfigs = new ArrayList<GwtConfigComponent>();
         try {
@@ -281,7 +302,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
             }
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
         return gwtConfigs;
     }
@@ -290,7 +311,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
     public void updateComponentConfiguration(GwtXSRFToken xsrfToken,
                                              GwtDevice gwtDevice,
                                              GwtConfigComponent gwtCompConfig)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -339,7 +360,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
             Thread.sleep(1000);
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
     }
 
@@ -348,7 +369,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
     //
     @Override
     public ListLoadResult<GwtSnapshot> findDeviceSnapshots(GwtDevice gwtDevice)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         List<GwtSnapshot> snapshots = new ArrayList<GwtSnapshot>();
         try {
@@ -384,7 +405,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
 
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return new BaseListLoadResult<GwtSnapshot>(snapshots);
@@ -392,7 +413,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
 
     @Override
     public void rollbackDeviceSnapshot(GwtXSRFToken xsrfToken, GwtDevice gwtDevice, GwtSnapshot snapshot)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -410,7 +431,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
                                    null);
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
     }
 
@@ -419,7 +440,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
     //
     @Override
     public ListLoadResult<GwtGroupedNVPair> findBundles(GwtDevice device)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         List<GwtGroupedNVPair> pairs = new ArrayList<GwtGroupedNVPair>();
 
@@ -446,7 +467,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
             }
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return new BaseListLoadResult<GwtGroupedNVPair>(pairs);
@@ -454,7 +475,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
 
     @Override
     public void startBundle(GwtXSRFToken xsrfToken, GwtDevice device, GwtGroupedNVPair pair)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -472,13 +493,13 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
                                                 null);
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
     }
 
     @Override
     public void stopBundle(GwtXSRFToken xsrfToken, GwtDevice device, GwtGroupedNVPair pair)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -496,7 +517,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
                                                null);
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
     }
 
@@ -505,7 +526,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
     //
     @Override
     public GwtDeviceCommandOutput executeCommand(GwtXSRFToken xsrfToken, GwtDevice gwtDevice, GwtDeviceCommandInput gwtCommandInput)
-        throws GwtEdcException
+        throws GwtKapuaException
     {
         //
         // Checking validity of the given XSRF Token
@@ -561,7 +582,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
             gwtCommandOutput.setTimedout(commandOutput.hasTimedout());
         }
         catch (Throwable t) {
-            EdcExceptionHandler.handle(t);
+            KapuaExceptionHandler.handle(t);
         }
 
         return gwtCommandOutput;
@@ -905,4 +926,5 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
         //
         // If not, all is fine.
     }
+
 }

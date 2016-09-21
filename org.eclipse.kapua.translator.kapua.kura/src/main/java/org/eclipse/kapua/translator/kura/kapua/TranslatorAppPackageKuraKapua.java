@@ -21,7 +21,7 @@ import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
-import org.eclipse.kapua.service.device.call.kura.app.DeployMetrics;
+import org.eclipse.kapua.service.device.call.kura.app.PackageMetrics;
 import org.eclipse.kapua.service.device.call.kura.app.ResponseMetrics;
 import org.eclipse.kapua.service.device.call.kura.model.deploy.KuraBundleInfo;
 import org.eclipse.kapua.service.device.call.kura.model.deploy.KuraDeploymentPackage;
@@ -34,29 +34,30 @@ import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSett
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
 import org.eclipse.kapua.service.device.management.packages.DevicePackageFactory;
-import org.eclipse.kapua.service.device.management.packages.DevicePackage;
-import org.eclipse.kapua.service.device.management.packages.DevicePackages;
-import org.eclipse.kapua.service.device.management.packages.internal.PackageAppProperties;
+import org.eclipse.kapua.service.device.management.packages.message.internal.PackageAppProperties;
 import org.eclipse.kapua.service.device.management.packages.message.internal.PackageResponseChannel;
 import org.eclipse.kapua.service.device.management.packages.message.internal.PackageResponseMessage;
 import org.eclipse.kapua.service.device.management.packages.message.internal.PackageResponsePayload;
-import org.eclipse.kapua.service.device.management.packages.DevicePackageBundleInfo;
-import org.eclipse.kapua.service.device.management.packages.DevicePackageBundleInfos;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfo;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfos;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
 
-public class TranslatorAppDeployKuraKapua extends Translator<KuraResponseMessage, PackageResponseMessage>
+public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessage, PackageResponseMessage>
 {
-    private static final String                            CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<DeployMetrics, PackageAppProperties> metricsDictionary;
+    private static final String                              CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
+    private static Map<PackageMetrics, PackageAppProperties> metricsDictionary;
 
-    public TranslatorAppDeployKuraKapua()
+    public TranslatorAppPackageKuraKapua()
     {
         metricsDictionary = new HashMap<>();
 
-        metricsDictionary.put(DeployMetrics.APP_ID, PackageAppProperties.APP_NAME);
-        metricsDictionary.put(DeployMetrics.APP_VERSION, PackageAppProperties.APP_VERSION);
+        metricsDictionary.put(PackageMetrics.APP_ID, PackageAppProperties.APP_NAME);
+        metricsDictionary.put(PackageMetrics.APP_VERSION, PackageAppProperties.APP_VERSION);
+
     }
 
     @Override
@@ -105,13 +106,13 @@ public class TranslatorAppDeployKuraKapua extends Translator<KuraResponseMessage
 
         String[] appIdTokens = kuraChannel.getAppId().split("-");
 
-        if (!DeployMetrics.APP_ID.getValue().equals(appIdTokens[0])) {
+        if (!PackageMetrics.APP_ID.getValue().equals(appIdTokens[0])) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_APP_NAME,
                                           null,
                                           appIdTokens[0]);
         }
 
-        if (!DeployMetrics.APP_VERSION.getValue().equals(appIdTokens[1])) {
+        if (!PackageMetrics.APP_VERSION.getValue().equals(appIdTokens[1])) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_APP_VERSION,
                                           null,
                                           appIdTokens[1]);
@@ -134,29 +135,31 @@ public class TranslatorAppDeployKuraKapua extends Translator<KuraResponseMessage
         responsePayload.setExceptionMessage((String) metrics.get(ResponseMetrics.RESP_METRIC_EXCEPTION_MESSAGE.getValue()));
         responsePayload.setExceptionStack((String) metrics.get(ResponseMetrics.RESP_METRIC_EXCEPTION_STACK.getValue()));
 
-        DeviceManagementSetting config = DeviceManagementSetting.getInstance();
-        String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
-        String body = null;
-        try {
-            body = new String(kuraResponsePayload.getBody(), charEncoding);
-        }
-        catch (Exception e) {
-            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
-                                          e,
-                                          kuraResponsePayload.getBody());
-        }
+        String body;
+        if (kuraResponsePayload.getBody() != null) {
+            DeviceManagementSetting config = DeviceManagementSetting.getInstance();
+            String charEncoding = config.getString(DeviceManagementSettingKey.CHAR_ENCODING);
 
-        KuraDeploymentPackages kuraDeploymentPackages = null;
-        try {
-            kuraDeploymentPackages = XmlUtil.unmarshal(body, KuraDeploymentPackages.class);
-        }
-        catch (Exception e) {
-            throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
-                                          e,
-                                          body);
-        }
+            try {
+                body = new String(kuraResponsePayload.getBody(), charEncoding);
+            }
+            catch (Exception e) {
+                throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD, //
+                                              e,// 
+                                              kuraResponsePayload.getBody());//
+            }
 
-        translate(responsePayload, charEncoding, kuraDeploymentPackages);
+            KuraDeploymentPackages kuraDeploymentPackages = null;
+            try {
+                kuraDeploymentPackages = XmlUtil.unmarshal(body, KuraDeploymentPackages.class);
+            }
+            catch (Exception e) {
+                throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
+                                              e,
+                                              body);
+            }
+            translate(responsePayload, charEncoding, kuraDeploymentPackages);
+        }
 
         //
         // Return Kapua Payload

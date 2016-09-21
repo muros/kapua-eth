@@ -10,7 +10,7 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.app.console.client.device;
+package org.eclipse.kapua.app.console.client.device.management.packages;
 
 import java.util.Arrays;
 import java.util.List;
@@ -137,12 +137,12 @@ public class DeviceTabPackagesTabInstalled extends TabItem
             else {
                 m_treeGrid.mask(MSGS.loading());
 
-                gwtDeviceManagementService.findDeviceDeploymentPackages(selectedDevice, new AsyncCallback<List<GwtDeploymentPackage>>() {
+                gwtDeviceManagementService.findDevicePackages(selectedDevice.getScopeId(), selectedDevice.getId(), new AsyncCallback<List<GwtDeploymentPackage>>() {
                     @Override
                     public void onSuccess(List<GwtDeploymentPackage> packages)
                     {
                         m_treeStore.removeAll();
-                        if (packages != null && packages.size() > 0) {
+                        if (packages != null && !packages.isEmpty()) {
                             for (GwtDeploymentPackage pkg : packages) {
                                 m_treeStore.add(pkg, false);
 

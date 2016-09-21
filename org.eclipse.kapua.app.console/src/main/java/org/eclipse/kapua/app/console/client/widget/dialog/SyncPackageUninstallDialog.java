@@ -19,7 +19,6 @@ import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementService;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementServiceAsync;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class SyncPackageUninstallDialog extends PackageUninstallDialog
 {
@@ -46,26 +45,26 @@ public class SyncPackageUninstallDialog extends PackageUninstallDialog
     @Override
     public void submit()
     {
-        gwtDeviceManagementService.uninstallDeploymentPackage(m_token,
-                                                              m_selectedDevice,
-                                                              m_selectedDeploymentPackage.getUnescapedName(),
-                                                              new AsyncCallback<Void>() {
-                                                                  @Override
-                                                                  public void onSuccess(Void arg0)
-                                                                  {
-                                                                      m_exitStatus = true;
-                                                                      m_exitMessage = MSGS.packageUninstallSyncSuccess();
-                                                                      hide();
-                                                                  }
-
-                                                                  @Override
-                                                                  public void onFailure(Throwable caught)
-                                                                  {
-                                                                      m_exitStatus = false;
-                                                                      m_exitMessage = MSGS.packageInstallSyncFailure(caught.getMessage());
-                                                                      hide();
-                                                                  }
-                                                              });
+        // gwtDeviceManagementService.uninstallPackage(token,
+        // m_selectedDevice,
+        // m_selectedDeploymentPackage.getUnescapedName(),
+        // new AsyncCallback<Void>() {
+        // @Override
+        // public void onSuccess(Void arg0)
+        // {
+        // m_exitStatus = true;
+        // m_exitMessage = MSGS.packageUninstallSyncSuccess();
+        // hide();
+        // }
+        //
+        // @Override
+        // public void onFailure(Throwable caught)
+        // {
+        // m_exitStatus = false;
+        // m_exitMessage = MSGS.packageInstallSyncFailure(caught.getMessage());
+        // hide();
+        // }
+        // });
     }
 
     @Override

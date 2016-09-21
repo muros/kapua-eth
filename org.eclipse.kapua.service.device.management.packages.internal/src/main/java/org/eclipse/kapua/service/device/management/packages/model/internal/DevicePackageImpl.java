@@ -1,4 +1,4 @@
-package org.eclipse.kapua.service.device.management.packages.internal;
+package org.eclipse.kapua.service.device.management.packages.model.internal;
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.kapua.service.device.management.packages.DevicePackage;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
 
 @XmlRootElement(name = "package")
 @XmlAccessorType(XmlAccessType.FIELD)

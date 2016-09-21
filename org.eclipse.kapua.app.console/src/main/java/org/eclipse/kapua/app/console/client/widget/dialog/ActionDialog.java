@@ -36,7 +36,7 @@ public abstract class ActionDialog extends KapuaDialog
     protected static final ConsoleMessages       MSGS             = GWT.create(ConsoleMessages.class);
     protected final GwtSecurityTokenServiceAsync gwtXSRFService   = GWT.create(GwtSecurityTokenService.class);
 
-    protected GwtXSRFToken                       m_token;
+    protected GwtXSRFToken                       token;
 
     protected static int                         FORM_LABEL_WIDTH = 150;
     protected FormPanel                          m_formPanel;
@@ -163,7 +163,7 @@ public abstract class ActionDialog extends KapuaDialog
 
     public void setXsrfToken(GwtXSRFToken xsrfToken)
     {
-        m_token = xsrfToken;
+        token = xsrfToken;
     }
 
     public abstract void submit();

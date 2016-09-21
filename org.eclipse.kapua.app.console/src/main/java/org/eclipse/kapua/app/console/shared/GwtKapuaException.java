@@ -32,8 +32,8 @@ public class GwtKapuaException extends Exception {
     private static final long serialVersionUID = -2843620194094802461L;
 
     protected GwtKapuaErrorCode m_errorCode;
-    protected String[] m_arguments;
-    protected Integer m_remainingLoginAttempts;
+    protected String[]        m_arguments;
+    protected Integer         m_remainingLoginAttempts;
 
     @SuppressWarnings("unused")
     private GwtKapuaException() {

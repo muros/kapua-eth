@@ -6,8 +6,8 @@ import org.eclipse.kapua.service.device.management.request.KapuaRequestChannel;
 
 public class PackageRequestChannel extends KapuaAppChannelImpl implements KapuaRequestChannel
 {
-    private KapuaMethod method;
-    private boolean     install;
+    private KapuaMethod     method;
+    private PackageResource packageResource;
 
     @Override
     public KapuaMethod getMethod()
@@ -21,13 +21,13 @@ public class PackageRequestChannel extends KapuaAppChannelImpl implements KapuaR
         this.method = method;
     }
 
-    public boolean isInstall()
+    public PackageResource getResource()
     {
-        return install;
+        return packageResource;
     }
 
-    public void setInstall(boolean install)
+    public void setPackageResource(PackageResource packageResource)
     {
-        this.install = install;
+        this.packageResource = packageResource;
     }
 }

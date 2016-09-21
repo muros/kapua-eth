@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.console.client.device;
 
+import org.eclipse.kapua.app.console.client.device.management.packages.DeviceTabPackages;
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
 import org.eclipse.kapua.app.console.client.resources.Resources;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;

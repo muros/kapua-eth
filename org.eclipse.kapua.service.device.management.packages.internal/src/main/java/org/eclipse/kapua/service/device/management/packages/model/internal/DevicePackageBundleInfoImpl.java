@@ -1,4 +1,4 @@
-package org.eclipse.kapua.service.device.management.packages.internal;
+package org.eclipse.kapua.service.device.management.packages.model.internal;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.kapua.service.device.management.packages.DevicePackageBundleInfo;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfo;
 
 @XmlRootElement(name = "bundleInfo")
 @XmlAccessorType(XmlAccessType.FIELD)

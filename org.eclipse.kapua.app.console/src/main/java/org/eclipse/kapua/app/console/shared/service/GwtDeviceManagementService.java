@@ -14,7 +14,7 @@ package org.eclipse.kapua.app.console.shared.service;
 
 import java.util.List;
 
-import org.eclipse.kapua.app.console.shared.GwtEdcException;
+import org.eclipse.kapua.app.console.shared.GwtKapuaException;
 import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
 import org.eclipse.kapua.app.console.shared.model.GwtDeploymentPackage;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
@@ -23,6 +23,7 @@ import org.eclipse.kapua.app.console.shared.model.GwtDeviceCommandOutput;
 import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
 import org.eclipse.kapua.app.console.shared.model.GwtSnapshot;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
+import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageInstallRequest;
 
 import com.extjs.gxt.ui.client.data.ListLoadResult;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -38,23 +39,45 @@ public interface GwtDeviceManagementService extends RemoteService
     // Packages
     //
     /**
-     * Returns the deployment packages installed on a Device.
+     * Returns the packages installed on a Device.
      * 
-     * @param device
-     * @return
+     * @param scopeShortId device scope id in short form
+     * @param deviceShortId device id in short form
+     * 
+     * @return list of installed packages installed on the selected device
+     * 
+     * @throws GwtKapuaException
+     * 
+     * @since 1.0.0
      */
-    public List<GwtDeploymentPackage> findDeviceDeploymentPackages(GwtDevice device)
-        throws GwtEdcException;
+    public List<GwtDeploymentPackage> findDevicePackages(String scopeShortId, String deviceShortId)
+        throws GwtKapuaException;
 
     /**
-     * Uninstalls a deployment package from a device.
+     * Install a package into a device.
      * 
-     * @param device
-     * @param packageName
-     * @throws GwtEdcException
+     * @param xsrfToken XARF token associated with the request
+     * @param gwtPackageInstallRequest the package install request
+     * 
+     * @throws GwtKapuaException
+     * 
+     * @since 1.0.0
      */
-    public void uninstallDeploymentPackage(GwtXSRFToken xsfrToken, GwtDevice device, String packageName)
-        throws GwtEdcException;
+    public void installPackage(GwtXSRFToken xsrfToken, GwtPackageInstallRequest gwtPackageInstallRequest)
+        throws GwtKapuaException;
+
+    /**
+     * Uninstalls a package from a device.
+     * 
+     * @param xsrfToken XARF token associated with the request
+     * @param gwtPackageUninstallRequest the package uninstall request
+     * 
+     * @throws GwtKapuaException
+     * 
+     * @since 1.0.0
+     */
+    public void uninstallPackage(GwtXSRFToken xsfrToken, GwtPackageInstallRequest gwtPackageUninstallRequest)
+        throws GwtKapuaException;
 
     //
     // Configurations
@@ -66,7 +89,7 @@ public interface GwtDeviceManagementService extends RemoteService
      * @return
      */
     public List<GwtConfigComponent> findDeviceConfigurations(GwtDevice device)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * Updates the configuration of the provided component.
@@ -75,7 +98,7 @@ public interface GwtDeviceManagementService extends RemoteService
      * @param configComponent
      */
     public void updateComponentConfiguration(GwtXSRFToken xsrfToken, GwtDevice device, GwtConfigComponent configComponent)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     //
     // Snapshots
@@ -84,31 +107,31 @@ public interface GwtDeviceManagementService extends RemoteService
      * 
      * @param device
      * @return
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public ListLoadResult<GwtSnapshot> findDeviceSnapshots(GwtDevice device)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     /**
      * 
      * @param device
      * @param snapshot
-     * @throws GwtEdcException
+     * @throws GwtKapuaException
      */
     public void rollbackDeviceSnapshot(GwtXSRFToken xsfrToken, GwtDevice device, GwtSnapshot snapshot)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     //
     // Bundles
     //
     public ListLoadResult<GwtGroupedNVPair> findBundles(GwtDevice device)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     public void startBundle(GwtXSRFToken xsfrToken, GwtDevice device, GwtGroupedNVPair pair)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     public void stopBundle(GwtXSRFToken xsfrToken, GwtDevice device, GwtGroupedNVPair pair)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
     //
     // Commands
@@ -121,6 +144,6 @@ public interface GwtDeviceManagementService extends RemoteService
      * @return
      */
     public GwtDeviceCommandOutput executeCommand(GwtXSRFToken xsfrToken, GwtDevice device, GwtDeviceCommandInput commandInput)
-        throws GwtEdcException;
+        throws GwtKapuaException;
 
 }

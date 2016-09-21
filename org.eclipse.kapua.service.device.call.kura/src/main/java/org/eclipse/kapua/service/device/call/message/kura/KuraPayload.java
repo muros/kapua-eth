@@ -32,7 +32,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 public class KuraPayload implements DevicePayload
 {
-    private static final Logger   s_logger = LoggerFactory.getLogger(KuraPayload.class);
+    private static final Logger s_logger = LoggerFactory.getLogger(KuraPayload.class);
 
     protected Date                timestamp;
     protected DevicePosition      position;
@@ -43,22 +43,6 @@ public class KuraPayload implements DevicePayload
     {
         metrics = new HashMap<>();
     }
-    
-//    public <P extends KuraPayload> KuraPayload(P kuraPayload)
-//    {
-//    	this();
-//        Iterator<String> hdrIterator = kuraPayload.getMetrics().keySet().iterator();
-//        while (hdrIterator.hasNext()) {
-//            String hdrName = hdrIterator.next();
-//            String hdrVal = (String) kuraPayload.getMetrics().get(hdrName);
-//
-//            getMetrics().put(hdrName, hdrVal);
-//        }
-//        
-//        setTimestamp(kuraPayload.getTimestamp());
-//        setBody(kuraPayload.getBody());
-//        setPosition(kuraPayload.getPosition());
-//    }
 
     public Date getTimestamp()
     {
@@ -321,17 +305,17 @@ public class KuraPayload implements DevicePayload
     private DevicePosition buildFromProtoBuf(KuraPayloadProto.KuraPayload.KuraPosition protoPosition)
     {
         DevicePosition position = getPosition();
-        
-        //for performance reason check the position before
-        if (position==null) {
-        	if (protoPosition.hasLatitude() || protoPosition.hasLatitude() || 
-        			protoPosition.hasLongitude() || protoPosition.hasAltitude() || 
-        			protoPosition.hasPrecision() || protoPosition.hasHeading() || 
-        			protoPosition.hasHeading() || protoPosition.hasSpeed() || 
-        			protoPosition.hasSatellites() || protoPosition.hasStatus() || 
-        			protoPosition.hasTimestamp()) {
-        		position = new KuraPosition();
-        	}
+
+        // for performance reason check the position before
+        if (position == null) {
+            if (protoPosition.hasLatitude() || protoPosition.hasLatitude() ||
+                protoPosition.hasLongitude() || protoPosition.hasAltitude() ||
+                protoPosition.hasPrecision() || protoPosition.hasHeading() ||
+                protoPosition.hasHeading() || protoPosition.hasSpeed() ||
+                protoPosition.hasSatellites() || protoPosition.hasStatus() ||
+                protoPosition.hasTimestamp()) {
+                position = new KuraPosition();
+            }
         }
 
         if (protoPosition.hasLatitude()) {

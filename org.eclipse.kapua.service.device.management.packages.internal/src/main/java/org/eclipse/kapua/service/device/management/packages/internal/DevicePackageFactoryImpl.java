@@ -1,9 +1,16 @@
 package org.eclipse.kapua.service.device.management.packages.internal;
 
 import org.eclipse.kapua.service.device.management.packages.DevicePackageFactory;
-import org.eclipse.kapua.service.device.management.packages.DevicePackage;
-import org.eclipse.kapua.service.device.management.packages.DevicePackages;
-import org.eclipse.kapua.service.device.management.packages.DevicePackageBundleInfo;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfo;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
+import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadOperation;
+import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
+import org.eclipse.kapua.service.device.management.packages.model.download.internal.DevicePackageDownloadOperationImpl;
+import org.eclipse.kapua.service.device.management.packages.model.download.internal.DevicePackageDownloadRequestImpl;
+import org.eclipse.kapua.service.device.management.packages.model.internal.DevicePackageBundleInfoImpl;
+import org.eclipse.kapua.service.device.management.packages.model.internal.DevicePackageImpl;
+import org.eclipse.kapua.service.device.management.packages.model.internal.DevicePackagesImpl;
 
 public class DevicePackageFactoryImpl implements DevicePackageFactory
 {
@@ -24,6 +31,21 @@ public class DevicePackageFactoryImpl implements DevicePackageFactory
     public DevicePackageBundleInfo newDevicePackageBundleInfo()
     {
         return new DevicePackageBundleInfoImpl();
+    }
+
+    //
+    // Download operation
+    //
+    @Override
+    public DevicePackageDownloadRequest newPackageDownloadRequest()
+    {
+        return new DevicePackageDownloadRequestImpl();
+    }
+
+    @Override
+    public DevicePackageDownloadOperation newPackageDownloadOperation()
+    {
+        return new DevicePackageDownloadOperationImpl();
     }
 
 }

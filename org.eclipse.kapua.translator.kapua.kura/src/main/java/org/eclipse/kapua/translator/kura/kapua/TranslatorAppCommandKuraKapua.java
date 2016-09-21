@@ -45,6 +45,7 @@ public class TranslatorAppCommandKuraKapua extends Translator<KuraResponseMessag
 
         metricsDictionary.put(CommandMetrics.APP_ID, CommandAppProperties.APP_NAME);
         metricsDictionary.put(CommandMetrics.APP_VERSION, CommandAppProperties.APP_VERSION);
+
         metricsDictionary.put(CommandMetrics.APP_METRIC_STDERR, CommandAppProperties.APP_PROPERTY_STDERR);
         metricsDictionary.put(CommandMetrics.APP_METRIC_STDOUT, CommandAppProperties.APP_PROPERTY_STDOUT);
         metricsDictionary.put(CommandMetrics.APP_METRIC_EXIT_CODE, CommandAppProperties.APP_PROPERTY_EXIT_CODE);

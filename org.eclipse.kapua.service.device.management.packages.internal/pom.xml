@@ -40,7 +40,6 @@
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service</artifactId>
-            <version>0.1-SNAPSHOT</version>
         </dependency>
         
         <!-- -->
@@ -48,6 +47,17 @@
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.device.management.commons</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        
+         <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.generator.id</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+         <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.generator.id.sequence</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

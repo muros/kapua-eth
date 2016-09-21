@@ -1,4 +1,4 @@
-package org.eclipse.kapua.service.device.management.packages;
+package org.eclipse.kapua.service.device.management.packages.model;
 
 public interface DevicePackageBundleInfo
 {

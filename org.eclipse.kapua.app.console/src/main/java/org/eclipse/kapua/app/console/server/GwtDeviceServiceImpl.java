@@ -315,6 +315,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             }
 
         } catch (Throwable t) {
+        }
+        catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }
 
@@ -354,7 +356,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             Device device = deviceRegistryService.create(deviceCreator);
 
             gwtDevice = KapuaGwtConverter.convert(device);
-        } catch (Throwable t) {
+        }
+        catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }
 
@@ -425,9 +428,11 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             Device d = drs.findByClientId(scopeId, clientId);
             drs.delete(d.getScopeId(), d.getId());
         } catch (Throwable t) {
+        }
+        catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }
-    }
+        }
 
     public PagingLoadResult<GwtDeviceEvent> findDeviceEvents(PagingLoadConfig loadConfig,
                                                              GwtDevice gwtDevice,

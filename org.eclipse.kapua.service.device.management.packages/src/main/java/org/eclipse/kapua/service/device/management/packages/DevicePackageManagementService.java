@@ -15,22 +15,37 @@ package org.eclipse.kapua.service.device.management.packages;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaService;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
+import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadOperation;
+import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
+import org.eclipse.kapua.service.device.management.packages.model.install.DevicePackageInstallRequest;
+import org.eclipse.kapua.service.device.management.packages.model.install.DevicePackageInstallOperation;
+import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallRequest;
+import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallOperation;
 
 public interface DevicePackageManagementService extends KapuaService
 {
     public DevicePackages getInstalled(KapuaId scopeId, KapuaId deviceId, Long timeout)
         throws KapuaException;
 
-    // public void download(KapuaId scopeId, KapuaId deviceId, DevicePackageDownloadRequest deployInstallRequest, Long timeout);
-    //
-    // public void downloadStatus(KapuaId scopeId, KapuaId deviceId, Long timeout);
-    //
-    // public void install(KapuaId scopeId, KapuaId deviceId, DevicePackageInstallRequest deployInstallRequest, Long timeout);
-    //
-    // public void installStatus(KapuaId scopeId, KapuaId deviceId, Long timeout);
-    //
-    // public void uninstall(KapuaId scopeId, KapuaId deviceId, DevicePackageUninstallRequest deployUninstallRequest, Long timeout)
-    // throws KapuaException;
-    //
-    // public void uninstallStatus(KapuaId scopeId, KapuaId deviceId, Long timeout);
+    public void downloadExec(KapuaId scopeId, KapuaId deviceId, DevicePackageDownloadRequest packageDownloadRequest, Long timeout)
+        throws KapuaException;
+
+    public void downloadStop(KapuaId scopeId, KapuaId deviceId, Long timeout)
+        throws KapuaException;
+
+    public DevicePackageDownloadOperation downloadStatus(KapuaId scopeId, KapuaId deviceId, Long timeout)
+        throws KapuaException;
+
+    public void installExec(KapuaId scopeId, KapuaId deviceId, DevicePackageInstallRequest packageInstallRequest, Long timeout)
+        throws KapuaException;
+
+    public DevicePackageInstallOperation installStatus(KapuaId scopeId, KapuaId deviceId, Long timeout)
+        throws KapuaException;
+
+    public void uninstallExec(KapuaId scopeId, KapuaId deviceId, DevicePackageUninstallRequest packageUninstallRequest, Long timeout)
+        throws KapuaException;
+
+    public DevicePackageUninstallOperation uninstallStatus(KapuaId scopeId, KapuaId deviceId, Long timeout)
+        throws KapuaException;
 }
