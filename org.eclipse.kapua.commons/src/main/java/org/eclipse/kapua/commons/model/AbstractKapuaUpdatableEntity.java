@@ -181,4 +181,12 @@ public abstract class AbstractKapuaUpdatableEntity extends AbstractKapuaEntity i
         this.modifiedBy = (KapuaEid) KapuaSecurityUtils.getSession().getUserId();
         this.modifiedOn = new Date();
     }
+    
+    public void setModifiedOn(Date modifiedOn) {
+        this.modifiedOn = modifiedOn;
+    }
+    
+    public void setModifiedBy(KapuaId modifiedBy) {
+        this.modifiedBy = (KapuaEid)modifiedBy;
+    }
 }
