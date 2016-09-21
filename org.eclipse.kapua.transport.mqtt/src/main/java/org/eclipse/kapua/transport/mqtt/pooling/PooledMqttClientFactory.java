@@ -36,8 +36,8 @@ public class PooledMqttClientFactory extends BasePooledObjectFactory<MqttClient>
         MqttClientPoolSetting mqttClientPoolSettings = MqttClientPoolSetting.getInstance();
 
         // FIXME: remove these credentials!
-        String username = "edcguest";
-        char[] password = "Welcome1".toCharArray();
+        String username = "kapua-sys";
+        char[] password = "kapua-password".toCharArray();
         String clientId = ClientIdGenerator.next(mqttClientPoolSettings.getString(MqttClientPoolSettingKeys.CLIENT_POOL_CLIENT_ID_PREFIX));
         URI brokerURI = SystemUtils.getBrokerURI();
 

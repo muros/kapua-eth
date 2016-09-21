@@ -25,8 +25,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class MqttFacadeTest extends Assert
-{
+public class MqttFacadeTest extends Assert {
 
     /**
      * Ignoring this test for a while. We should fix the build in the first place and then use embedded ActiveMQ
@@ -36,8 +35,7 @@ public class MqttFacadeTest extends Assert
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void testMqttClientSend()
-        throws Exception
-    {
+            throws Exception {
         //
         // Get facade
         KapuaLocator locator = KapuaLocator.getInstance();
@@ -48,20 +46,19 @@ public class MqttFacadeTest extends Assert
 
         //
         // Send
-        String sendTopic = "$EDC/edcguest/" + transportFacade.getClientId() + "/" + MqttClientTest.class.getSimpleName() + "/testTransportFacadeSend";
+        String sendTopic = "$EDC/kapua-sys/" + transportFacade.getClientId() + "/" + MqttClientTest.class.getSimpleName() + "/testTransportFacadeSend";
 
         MqttTopic mqttTopic = new MqttTopic(sendTopic);
         MqttPayload mqttPayload = new MqttPayload("testTransportFacadeSendPayload".getBytes());
 
         MqttMessage mqttMessage = new MqttMessage(mqttTopic,
-                                                  new Date(),
-                                                  mqttPayload);
+                new Date(),
+                mqttPayload);
 
         TransportMessage responseMessage = null;
         try {
             responseMessage = transportFacade.sendSync(mqttMessage, null);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
 
@@ -73,8 +70,7 @@ public class MqttFacadeTest extends Assert
         // Clean
         try {
             transportFacade.clean();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
     }

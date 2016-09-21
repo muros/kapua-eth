@@ -82,7 +82,7 @@ public class KapuaTestApp
     public static void main(String[] args)
     {
         String username = "kapua-sys";
-        String password = "We!come12345";
+        String password = "kapua-password";
 
         System.out.println("Hello World!");
         try {
@@ -135,7 +135,7 @@ public class KapuaTestApp
             CredentialCreator credentialCreator = credentialFactory.newCreator(user.getScopeId(),
                                                                                user.getId(),
                                                                                CredentialType.PASSWORD,
-                                                                               "We!come12345");
+                                                                               "kapua-password");
             credentialService.create(credentialCreator);
 
             //

@@ -26,8 +26,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class KuraCallTest extends Assert
-{
+public class KuraCallTest extends Assert {
 
     // Disabling this test until we have build fixed. Then we should register DeviceCallFactory to service locator
     // and enable the test again.
@@ -35,13 +34,12 @@ public class KuraCallTest extends Assert
     @SuppressWarnings("unchecked")
     @Test
     public void testKuraCall()
-        throws Exception
-    {
+            throws Exception {
         KapuaLocator locator = KapuaLocator.getInstance();
         DeviceCallFactory deviceCallFactory = locator.getFactory(DeviceCallFactory.class);
         DeviceCall deviceCall = deviceCallFactory.newDeviceCall();
 
-        KuraRequestChannel requestChannel = new KuraRequestChannel("$EDC", "edcguest", "00:60:0C:82:52:34");
+        KuraRequestChannel requestChannel = new KuraRequestChannel("$EDC", "kapua-sys", "00:60:0C:82:52:34");
         requestChannel.setAppId("CMD-V1");
         requestChannel.setMethod(KuraMethod.EXEC);
         requestChannel.setResources(new String[] { "command" });

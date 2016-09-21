@@ -59,33 +59,30 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 @Ignore
-public class DeviceCommandManagementServiceTest extends Assert
-{
-    protected static Random       random  = new Random();
+public class DeviceCommandManagementServiceTest extends Assert {
+
+    protected static Random random = new Random();
     protected static KapuaLocator locator = KapuaLocator.getInstance();
 
-    protected static KapuaId      adminUserId;
-    protected static KapuaId      adminScopeId;
+    protected static KapuaId adminUserId;
+    protected static KapuaId adminScopeId;
 
-    protected static Account      account;
-    protected static User         user;
+    protected static Account account;
+    protected static User user;
 
-    //@BeforeClass
-    public static void setUpClass()
-    {
+    // @BeforeClass
+    public static void setUpClass() {
         try {
             //
             // Login
             String username = "kapua-sys";
-            String password = "We!come12345";
+            String password = "kapua-password";
 
             AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
             UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);
@@ -110,22 +107,19 @@ public class DeviceCommandManagementServiceTest extends Assert
             accountCreator.setOrganizationName(accountName);
             accountCreator.setOrganizationEmail(accountName + "@m.com");
             account = accountService.create(accountCreator);
-        }
-        catch (KapuaException exc) {
+        } catch (KapuaException exc) {
             exc.printStackTrace();
         }
     }
 
-    //@AfterClass
-    public static void tearDownClass()
-    {
+    // @AfterClass
+    public static void tearDownClass() {
         try {
             KapuaLocator locator = KapuaLocator.getInstance();
             AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
 
             authenticationService.logout();
-        }
-        catch (KapuaException exc) {
+        } catch (KapuaException exc) {
             exc.printStackTrace();
         }
     }
@@ -133,8 +127,7 @@ public class DeviceCommandManagementServiceTest extends Assert
     @Ignore
     @Before
     public void setUpTest()
-        throws Exception
-    {
+            throws Exception {
         //
         // User creation
         String userName = String.format("test-usr-%d", (new Date()).getTime());
@@ -153,9 +146,9 @@ public class DeviceCommandManagementServiceTest extends Assert
 
         userPermissionCreator.setUserId(user.getId());
         userPermissionCreator.setPermission(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE,
-                                                                            Actions.connect,
-                                                                            account.getId()));
-          
+                Actions.connect,
+                account.getId()));
+
         userPermissionService.create(userPermissionCreator);
 
         //
@@ -163,9 +156,9 @@ public class DeviceCommandManagementServiceTest extends Assert
         CredentialService credentialService = locator.getService(CredentialService.class);
         CredentialFactory credentialFactory = locator.getFactory(CredentialFactory.class);
         CredentialCreator credentialCreator = credentialFactory.newCreator(account.getId(),
-                                                                           user.getId(),
-                                                                           CredentialType.PASSWORD,
-                                                                           "We!come12345");
+                user.getId(),
+                CredentialType.PASSWORD,
+                "kapua-password");
 
         credentialService.create(credentialCreator);
 
@@ -174,17 +167,16 @@ public class DeviceCommandManagementServiceTest extends Assert
     @Ignore
     @Test
     public void testCommandExecution()
-        throws Exception
-    {
+            throws Exception {
 
         //
         // Setup client and callback
         MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
         mqttConnectOptions.setUserName(user.getName());
-        mqttConnectOptions.setPassword("We!come12345".toCharArray());
+        mqttConnectOptions.setPassword("kapua-password".toCharArray());
 
         MqttClient mqttClient = new MqttClient(SystemUtils.getBrokerURI().toString(),
-                                               ClientIdGenerator.next("testCommandExecution"));
+                ClientIdGenerator.next("testCommandExecution"));
 
         mqttClient.connect(mqttConnectOptions);
 
@@ -198,7 +190,7 @@ public class DeviceCommandManagementServiceTest extends Assert
         DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
 
         Device targetDevice = deviceRegistryService.findByClientId(account.getId(),
-                                                                   mqttClient.getClientId());
+                mqttClient.getClientId());
 
         DeviceCommandManagementService deviceCommandManagementService = locator.getService(DeviceCommandManagementService.class);
         DeviceCommandFactory deviceCommandFactory = locator.getFactory(DeviceCommandFactory.class);
@@ -206,9 +198,9 @@ public class DeviceCommandManagementServiceTest extends Assert
         DeviceCommandInput commandInput = deviceCommandFactory.newCommandInput();
 
         DeviceCommandOutput commandOutput = deviceCommandManagementService.exec(account.getId(),
-                                                                                targetDevice.getId(),
-                                                                                commandInput,
-                                                                                15000L);
+                targetDevice.getId(),
+                commandInput,
+                15000L);
 
         //
         // Verify output
@@ -217,32 +209,29 @@ public class DeviceCommandManagementServiceTest extends Assert
 
     }
 
-    private class MqttClientCommandCallback implements MqttCallback
-    {
+    private class MqttClientCommandCallback implements MqttCallback {
+
         private MqttClient mqttClient;
 
-        public MqttClientCommandCallback(MqttClient mqttClient)
-        {
+        public MqttClientCommandCallback(MqttClient mqttClient) {
             this.mqttClient = mqttClient;
         }
 
         @Override
-        public void connectionLost(Throwable cause)
-        {
+        public void connectionLost(Throwable cause) {
 
         }
 
         @Override
         public void messageArrived(String topic, org.eclipse.paho.client.mqttv3.MqttMessage message)
-            throws Exception
-        {
+                throws Exception {
             //
             // Mqtt --> Kura
             Translator<MqttMessage, KuraRequestMessage> tMqttReqKura = Translator.getTranslatorFor(MqttMessage.class,
-                                                                                                   KuraRequestMessage.class);
+                    KuraRequestMessage.class);
             KuraRequestMessage kuraRequestMessage = tMqttReqKura.translate(new MqttMessage(new MqttTopic(topic),
-                                                                                           new Date(),
-                                                                                           new MqttPayload(message.getPayload())));
+                    new Date(),
+                    new MqttPayload(message.getPayload())));
 
             //
             // Kura --> Mqtt
@@ -250,8 +239,8 @@ public class DeviceCommandManagementServiceTest extends Assert
             KuraRequestPayload kuraRequestPayload = kuraRequestMessage.getPayload();
 
             KuraResponseChannel kuraResponseChannel = new KuraResponseChannel(kuraRequestChannel.getMessageClassification(),
-                                                                              kuraRequestChannel.getScope(),
-                                                                              kuraRequestPayload.getRequesterClientId());
+                    kuraRequestChannel.getScope(),
+                    kuraRequestPayload.getRequesterClientId());
             kuraResponseChannel.setAppId(kuraRequestChannel.getAppId());
             kuraResponseChannel.setReplyPart("REPLY");
             kuraResponseChannel.setRequestId(kuraRequestPayload.getRequestId());
@@ -261,21 +250,20 @@ public class DeviceCommandManagementServiceTest extends Assert
             kuraResponsePayload.getMetrics().put(CommandMetrics.APP_METRIC_STDOUT.getValue(), "ok");
 
             KuraResponseMessage kuraResponseMessage = new KuraResponseMessage(kuraResponseChannel,
-                                                                              new Date(),
-                                                                              kuraResponsePayload);
+                    new Date(),
+                    kuraResponsePayload);
 
             //
             // Send back answer
             Translator<KuraResponseMessage, MqttMessage> tKuraResMqtt = Translator.getTranslatorFor(KuraResponseMessage.class,
-                                                                                                    MqttMessage.class);
+                    MqttMessage.class);
             MqttMessage mqttMessage = tKuraResMqtt.translate(kuraResponseMessage);
             mqttClient.publish(mqttMessage.getRequestTopic().getTopic(),
-                               new org.eclipse.paho.client.mqttv3.MqttMessage(mqttMessage.getPayload().getBody()));
+                    new org.eclipse.paho.client.mqttv3.MqttMessage(mqttMessage.getPayload().getBody()));
         }
 
         @Override
-        public void deliveryComplete(IMqttDeliveryToken token)
-        {
+        public void deliveryComplete(IMqttDeliveryToken token) {
 
         }
 

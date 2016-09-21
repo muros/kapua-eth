@@ -53,7 +53,7 @@ public class KapuaTest extends Assert {
                 //
                 // Login
                 String username = "kapua-sys";
-                String password = "We!come12345";
+                String password = "kapua-password";
 
                 AuthenticationService authenticationService = locator.getService(AuthenticationService.class);
                 UsernamePasswordTokenFactory credentialsFactory = locator.getFactory(UsernamePasswordTokenFactory.class);

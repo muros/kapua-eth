@@ -27,11 +27,8 @@ import org.junit.Test;
 
 public class MqttClientTest extends Assert
 {
-    // private static String username = "kapua-sys";
-    // private static String password = "We!come12345";
-
-    private static String username = "edcguest";
-    private static String password = "Welcome1";
+    private static String username = "kapua-sys";
+    private static String password = "kapua-password";
 
     /**
      * Ignoring this test for a while. We should fix the build in the first place and then use embedded ActiveMQ

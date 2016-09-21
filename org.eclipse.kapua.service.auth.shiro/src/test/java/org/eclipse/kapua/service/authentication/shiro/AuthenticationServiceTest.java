@@ -37,7 +37,7 @@ public class AuthenticationServiceTest extends AbstractAuthenticationServiceTest
         throws Exception
     {
         String username = "kapua-sys";
-        char[] password = "We!come12345".toCharArray();
+        char[] password = "kapua-password".toCharArray();
 
         KapuaLocator locator = KapuaLocator.getInstance();
         UsernamePasswordTokenFactory usernamePasswordTokenFactory = locator.getFactory(UsernamePasswordTokenFactory.class);

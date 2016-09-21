@@ -133,7 +133,7 @@ public class KapuaRunnableWrapper implements Runnable
     private UsernamePasswordToken getAuthenticationCredentials()
     {
         String username = "kapua-sys";
-        String password = "We!come12345";
+        String password = "kapua-password";
         return credentialsFactory.newInstance(username, password.toCharArray());
     }
 
