@@ -6,9 +6,10 @@ import org.eclipse.kapua.service.device.management.packages.model.DevicePackageB
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
 import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadOperation;
 import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
+import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallRequest;
 
-public interface DevicePackageFactory extends KapuaObjectFactory
-{
+public interface DevicePackageFactory extends KapuaObjectFactory {
+
     public DevicePackages newDeviceDeploymentPackages();
 
     public DevicePackage newDeviceDeploymentPackage();
@@ -21,4 +22,9 @@ public interface DevicePackageFactory extends KapuaObjectFactory
     public DevicePackageDownloadRequest newPackageDownloadRequest();
 
     public DevicePackageDownloadOperation newPackageDownloadOperation();
+
+    //
+    // Uninstall operation
+    //
+    public DevicePackageUninstallRequest newPackageUninstallRequest();
 }

@@ -36,7 +36,7 @@ public abstract class ActionDialog extends KapuaDialog
     protected static final ConsoleMessages       MSGS             = GWT.create(ConsoleMessages.class);
     protected final GwtSecurityTokenServiceAsync gwtXSRFService   = GWT.create(GwtSecurityTokenService.class);
 
-    protected GwtXSRFToken                       token;
+    protected GwtXSRFToken xsrfToken;
 
     protected static int                         FORM_LABEL_WIDTH = 150;
     protected FormPanel                          m_formPanel;
@@ -48,14 +48,12 @@ public abstract class ActionDialog extends KapuaDialog
     protected Boolean                            m_exitStatus;
     protected String                             m_exitMessage;
 
-    public ActionDialog()
-    {
+    public ActionDialog() {
         super();
     }
 
     @Override
-    protected void onRender(Element parent, int pos)
-    {
+    protected void onRender(Element parent, int pos) {
         super.onRender(parent, pos);
 
         FormLayout formLayout = new FormLayout();
@@ -82,14 +80,13 @@ public abstract class ActionDialog extends KapuaDialog
 
     /**
      * 
-     * add the form listeners
+     * Add the form listeners
      * 
      */
     protected abstract void addListeners();
 
     @Override
-    public void createButtons()
-    {
+    public void createButtons() {
         super.createButtons();
 
         m_status = new Status();
@@ -104,9 +101,9 @@ public abstract class ActionDialog extends KapuaDialog
         m_submitButton.setSize(60, 25);
         m_submitButton.setStyleAttribute("margin-right", "2px");
         m_submitButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
             @Override
-            public void componentSelected(ButtonEvent ce)
-            {
+            public void componentSelected(ButtonEvent ce) {
                 preSubmit();
             }
         });
@@ -115,9 +112,9 @@ public abstract class ActionDialog extends KapuaDialog
         m_cancelButton.setSize(60, 25);
         m_cancelButton.setStyleAttribute("margin-left", "3px");
         m_cancelButton.addSelectionListener(new SelectionListener<ButtonEvent>() {
+
             @Override
-            public void componentSelected(ButtonEvent ce)
-            {
+            public void componentSelected(ButtonEvent ce) {
                 m_exitStatus = null;
                 hide();
             }
@@ -127,28 +124,24 @@ public abstract class ActionDialog extends KapuaDialog
         addButton(m_cancelButton);
     }
 
-    protected String getSubmitButtonText()
-    {
+    protected String getSubmitButtonText() {
         return MSGS.submitButton();
     }
 
-    protected String getCancelButtonText()
-    {
+    protected String getCancelButtonText() {
         return MSGS.cancelButton();
     }
 
-    protected void preSubmit()
-    {
+    protected void preSubmit() {
         gwtXSRFService.generateSecurityToken(new AsyncCallback<GwtXSRFToken>() {
+
             @Override
-            public void onFailure(Throwable ex)
-            {
+            public void onFailure(Throwable ex) {
                 FailureHandler.handle(ex);
             }
 
             @Override
-            public void onSuccess(GwtXSRFToken xsrfToken)
-            {
+            public void onSuccess(GwtXSRFToken xsrfToken) {
                 setXsrfToken(xsrfToken);
 
                 mask();
@@ -161,20 +154,17 @@ public abstract class ActionDialog extends KapuaDialog
         });
     }
 
-    public void setXsrfToken(GwtXSRFToken xsrfToken)
-    {
-        token = xsrfToken;
+    public void setXsrfToken(GwtXSRFToken xsrfToken) {
+        this.xsrfToken = xsrfToken;
     }
 
     public abstract void submit();
 
-    public Boolean getExitStatus()
-    {
+    public Boolean getExitStatus() {
         return m_exitStatus;
     }
 
-    public String getExitMessage()
-    {
+    public String getExitMessage() {
         return m_exitMessage;
     }
 }

@@ -6,6 +6,9 @@ import org.eclipse.kapua.app.console.shared.model.device.management.packages.Gwt
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementService;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementServiceAsync;
 
+import com.extjs.gxt.ui.client.event.BaseEvent;
+import com.extjs.gxt.ui.client.event.Events;
+import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.TabItem;
 import com.extjs.gxt.ui.client.widget.Text;
 import com.extjs.gxt.ui.client.widget.form.CheckBox;
@@ -19,8 +22,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 import com.google.gwt.user.client.ui.Image;
 
-public class PackageInstallDialog extends TabbedDialog
-{
+public class PackageInstallDialog extends TabbedDialog {
+
     private static final GwtDeviceManagementServiceAsync gwtDeviceManagementService = GWT.create(GwtDeviceManagementService.class);
 
     private String scopeId;
@@ -29,19 +32,18 @@ public class PackageInstallDialog extends TabbedDialog
     private TabItem packageInfoTab;
     private TabItem operationOptionsTab;
 
-    private FormPanel         packageInfoForm;
-    private Text              dpInfoText;
+    private FormPanel packageInfoForm;
+    private Text dpInfoText;
     private TextField<String> dpURIField;
     private TextField<String> dpNameField;
     private TextField<String> dpVersionField;
 
-    private FormPanel   operationOptionsForm;
-    private Text        operationInfoText;
-    private CheckBox    operationRebootField;
+    private FormPanel operationOptionsForm;
+    private Text operationInfoText;
+    private CheckBox operationRebootField;
     private NumberField operationRebootDelayField;
 
-    public PackageInstallDialog(String scopeId, String deviceId)
-    {
+    public PackageInstallDialog(String scopeId, String deviceId) {
         super();
 
         this.scopeId = scopeId;
@@ -51,14 +53,12 @@ public class PackageInstallDialog extends TabbedDialog
     }
 
     @Override
-    public String getInfoMessage()
-    {
+    public String getInfoMessage() {
         return null;
     }
 
     @Override
-    public void createTabItems()
-    {
+    public void createTabItems() {
         // Deployment package info tab content
         {
             FormData formData = new FormData("-15");
@@ -120,6 +120,19 @@ public class PackageInstallDialog extends TabbedDialog
             operationRebootField.setName("reboot");
             operationRebootField.setFieldLabel(MSGS.deviceInstallAsyncInstallTabReboot());
             operationRebootField.setBoxLabel("");
+
+            operationRebootField.addListener(Events.Change, new Listener<BaseEvent>() {
+
+                @Override
+                public void handleEvent(BaseEvent be) {
+                    if (operationRebootField.getValue()) {
+                        operationRebootDelayField.enable();
+                    } else {
+                        operationRebootDelayField.disable();
+                    }
+                }
+            });
+
             operationOptionsForm.add(operationRebootField, formData);
 
             operationRebootDelayField = new NumberField();
@@ -147,8 +160,7 @@ public class PackageInstallDialog extends TabbedDialog
     }
 
     @Override
-    public void preSubmit()
-    {
+    public void preSubmit() {
         if (!packageInfoForm.isValid()) {
             m_tabsPanel.setSelection(packageInfoTab);
             return;
@@ -163,15 +175,14 @@ public class PackageInstallDialog extends TabbedDialog
     }
 
     @Override
-    public void submit()
-    {
+    public void submit() {
         GwtPackageInstallRequest gwtPackageInstallRequest = new GwtPackageInstallRequest();
 
         // General info
         gwtPackageInstallRequest.setScopeId(scopeId);
         gwtPackageInstallRequest.setDeviceId(deviceId);
 
-        // Action configuration
+        // Operation configuration
         gwtPackageInstallRequest.setPackageURI(dpURIField.getValue());
         gwtPackageInstallRequest.setPackageName(dpNameField.getValue());
         gwtPackageInstallRequest.setPackageVersion(dpVersionField.getValue());
@@ -180,22 +191,20 @@ public class PackageInstallDialog extends TabbedDialog
 
         Number nValue = operationRebootDelayField.getValue();
         if (nValue != null) {
-            gwtPackageInstallRequest.setRebootDelay(nValue.intValue());
+            gwtPackageInstallRequest.setRebootDelay(nValue.intValue() * 1000);
         }
 
-        gwtDeviceManagementService.installPackage(token, gwtPackageInstallRequest, new AsyncCallback<Void>() {
+        gwtDeviceManagementService.installPackage(xsrfToken, gwtPackageInstallRequest, new AsyncCallback<Void>() {
 
             @Override
-            public void onSuccess(Void result)
-            {
+            public void onSuccess(Void result) {
                 m_exitStatus = true;
                 m_exitMessage = MSGS.packageInstallAsyncSuccess();
                 hide();
             }
 
             @Override
-            public void onFailure(Throwable caught)
-            {
+            public void onFailure(Throwable caught) {
                 m_exitStatus = false;
                 m_exitMessage = caught.getMessage();
                 hide();
@@ -204,27 +213,23 @@ public class PackageInstallDialog extends TabbedDialog
     }
 
     @Override
-    protected void addListeners()
-    {
+    protected void addListeners() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public AbstractImagePrototype getHeaderIcon()
-    {
+    public AbstractImagePrototype getHeaderIcon() {
         return null;
     }
 
     @Override
-    public String getHeaderMessage()
-    {
+    public String getHeaderMessage() {
         return MSGS.packageInstallNewPackage();
     }
 
     @Override
-    public Image getInfoIcon()
-    {
+    public Image getInfoIcon() {
         return null;
     }
 }

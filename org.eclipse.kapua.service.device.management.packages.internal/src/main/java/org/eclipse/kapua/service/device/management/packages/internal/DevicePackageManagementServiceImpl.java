@@ -359,8 +359,68 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
 
     @Override
     public void uninstallExec(KapuaId scopeId, KapuaId deviceId, DevicePackageUninstallRequest deployUninstallRequest, Long timeout) throws KapuaException {
-        // TODO Auto-generated method stub
+        //
+        // Argument Validation
+        ArgumentValidator.notNull(scopeId, "scopeId");
+        ArgumentValidator.notNull(deviceId, "deviceId");
+        ArgumentValidator.notNull(deployUninstallRequest, "deployUninstallRequest");
 
+        //
+        // Check Access
+        KapuaLocator locator = KapuaLocator.getInstance();
+        AuthorizationService authorizationService = locator.getService(AuthorizationService.class);
+        PermissionFactory permissionFactory = locator.getFactory(PermissionFactory.class);
+        authorizationService.checkPermission(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.write, scopeId));
+
+        //
+        // Generate requestId
+        IdGeneratorService idGeneratorService = locator.getService(IdGeneratorService.class);
+        KapuaId operationId = idGeneratorService.generate();
+
+        //
+        // Prepare the request
+        PackageRequestChannel packageRequestChannel = new PackageRequestChannel();
+        packageRequestChannel.setAppName(PackageAppProperties.APP_NAME);
+        packageRequestChannel.setVersion(PackageAppProperties.APP_VERSION);
+        packageRequestChannel.setMethod(KapuaMethod.EXECUTE);
+        packageRequestChannel.setPackageResource(PackageResource.UNINSTALL);
+
+        PackageRequestPayload packageRequestPayload = new PackageRequestPayload();
+        packageRequestPayload.setOperationId(operationId);
+        packageRequestPayload.setPackageUninstallName(deployUninstallRequest.getName());
+        packageRequestPayload.setPackageUninstallVersion(deployUninstallRequest.getVersion());
+        packageRequestPayload.setReboot(deployUninstallRequest.isReboot());
+        packageRequestPayload.setRebootDelay(deployUninstallRequest.getRebootDelay());
+
+        PackageRequestMessage packageRequestMessage = new PackageRequestMessage();
+        packageRequestMessage.setScopeId(scopeId);
+        packageRequestMessage.setDeviceId(deviceId);
+        packageRequestMessage.setCapturedOn(new Date());
+        packageRequestMessage.setPayload(packageRequestPayload);
+        packageRequestMessage.setChannel(packageRequestChannel);
+
+        //
+        // Do get
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        DeviceCallExecutor deviceApplicationCall = new DeviceCallExecutor(packageRequestMessage, timeout);
+        PackageResponseMessage responseMessage = (PackageResponseMessage) deviceApplicationCall.send();
+
+        //
+        // Create event
+        DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
+        DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
+
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
+        deviceEventCreator.setDeviceId(deviceId);
+        deviceEventCreator.setPosition(responseMessage.getPosition());
+        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
+        deviceEventCreator.setSentOn(responseMessage.getSentOn());
+        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
+        deviceEventCreator.setAction(KapuaMethod.EXECUTE);
+        deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
+        deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
+
+        deviceEventService.create(deviceEventCreator);
     }
 
     @Override

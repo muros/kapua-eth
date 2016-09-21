@@ -30,30 +30,29 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class DeviceTabPackagesInProgress extends TabItem {
 
     private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
-    private static final int DEVICE_PROCESS_PAGE_SIZE = 50;
 
-    private boolean m_initialized = false;
-    private boolean m_dirty = true;
+    private boolean componentInitialized = false;
+    private boolean contentDirty = true;
 
-    private DeviceTabPackages m_rootTabPanel;
-    private Grid<GwtPackageInstallOperation> m_grid;
-    private ListStore<GwtPackageInstallOperation> m_store = new ListStore<GwtPackageInstallOperation>();
-    private BaseListLoader<ListLoadResult<GwtPackageInstallOperation>> m_deviceJobTargetLoader;
+    private DeviceTabPackages parentTabPanel;
+    private Grid<GwtPackageInstallOperation> grid;
+    private ListStore<GwtPackageInstallOperation> gridStore = new ListStore<GwtPackageInstallOperation>();
+    private BaseListLoader<ListLoadResult<GwtPackageInstallOperation>> storeLoader;
 
-    public DeviceTabPackagesInProgress(DeviceTabPackages rootTabPanel) {
-        m_rootTabPanel = rootTabPanel;
+    public DeviceTabPackagesInProgress(DeviceTabPackages parentTabPanel) {
+        this.parentTabPanel = parentTabPanel;
     }
 
     public GwtPackageInstallOperation getSelectedOperation() {
-        return m_grid.getSelectionModel().getSelectedItem();
+        return grid.getSelectionModel().getSelectedItem();
     }
 
     private GwtDevice getSelectedDevice() {
-        return m_rootTabPanel.getSelectedDevice();
+        return parentTabPanel.getSelectedDevice();
     }
 
     public void setDirty(boolean isDirty) {
-        m_dirty = isDirty;
+        contentDirty = isDirty;
     }
 
     protected void onRender(Element parent, int index) {
@@ -138,22 +137,22 @@ public class DeviceTabPackagesInProgress extends TabItem {
 
         };
 
-        m_deviceJobTargetLoader = new BaseListLoader<ListLoadResult<GwtPackageInstallOperation>>(proxy);
+        storeLoader = new BaseListLoader<ListLoadResult<GwtPackageInstallOperation>>(proxy);
 
-        ListStore<GwtPackageInstallOperation> store = new ListStore<GwtPackageInstallOperation>(m_deviceJobTargetLoader);
+        ListStore<GwtPackageInstallOperation> store = new ListStore<GwtPackageInstallOperation>(storeLoader);
 
-        m_grid = new Grid<GwtPackageInstallOperation>(store, columnModel);
-        m_grid.setBorders(false);
-        m_grid.setStateful(false);
-        m_grid.setLoadMask(true);
-        m_grid.setStripeRows(true);
-        m_grid.setTrackMouseOver(false);
-        m_grid.disableTextSelection(false);
-        m_grid.setAutoExpandColumn("statusMessage");
-        m_grid.getView().setAutoFill(true);
-        m_grid.getView().setEmptyText(MSGS.deviceInstallTabInProgressTableEmpty());
+        grid = new Grid<GwtPackageInstallOperation>(store, columnModel);
+        grid.setBorders(false);
+        grid.setStateful(false);
+        grid.setLoadMask(true);
+        grid.setStripeRows(true);
+        grid.setTrackMouseOver(false);
+        grid.disableTextSelection(false);
+        grid.setAutoExpandColumn("statusMessage");
+        grid.getView().setAutoFill(true);
+        grid.getView().setEmptyText(MSGS.deviceInstallTabInProgressTableEmpty());
 
-        m_grid.getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<GwtPackageInstallOperation>() {
+        grid.getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<GwtPackageInstallOperation>() {
 
             @Override
             public void selectionChanged(SelectionChangedEvent<GwtPackageInstallOperation> se) {
@@ -167,27 +166,27 @@ public class DeviceTabPackagesInProgress extends TabItem {
         rootContentPanel.setBorders(false);
         rootContentPanel.setBodyBorder(false);
         rootContentPanel.setHeaderVisible(false);
-        rootContentPanel.add(m_grid);
+        rootContentPanel.add(grid);
 
         add(rootContentPanel);
 
-        m_initialized = true;
+        componentInitialized = true;
     }
 
     public void refresh() {
-        if (m_dirty && m_initialized) {
+        if (contentDirty && componentInitialized) {
 
             GwtDevice selectedDevice = getSelectedDevice();
             if (selectedDevice == null) {
-                m_store.removeAll();
-                m_grid.unmask();
-                m_grid.getView().setEmptyText(MSGS.deviceNoDeviceSelectedOrOffline());
+                gridStore.removeAll();
+                grid.unmask();
+                grid.getView().setEmptyText(MSGS.deviceNoDeviceSelectedOrOffline());
             } else {
-                m_grid.mask(MSGS.loading());
-                m_deviceJobTargetLoader.load();
+                grid.mask(MSGS.loading());
+                storeLoader.load();
             }
 
-            m_dirty = false;
+            contentDirty = false;
         }
     }
 }

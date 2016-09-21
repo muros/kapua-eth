@@ -11,25 +11,23 @@ import org.eclipse.kapua.service.device.management.packages.model.download.inter
 import org.eclipse.kapua.service.device.management.packages.model.internal.DevicePackageBundleInfoImpl;
 import org.eclipse.kapua.service.device.management.packages.model.internal.DevicePackageImpl;
 import org.eclipse.kapua.service.device.management.packages.model.internal.DevicePackagesImpl;
+import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallRequest;
+import org.eclipse.kapua.service.device.management.packages.model.uninstall.internal.DevicePackageUninstallRequestImpl;
 
-public class DevicePackageFactoryImpl implements DevicePackageFactory
-{
+public class DevicePackageFactoryImpl implements DevicePackageFactory {
 
     @Override
-    public DevicePackages newDeviceDeploymentPackages()
-    {
+    public DevicePackages newDeviceDeploymentPackages() {
         return new DevicePackagesImpl();
     }
 
     @Override
-    public DevicePackage newDeviceDeploymentPackage()
-    {
+    public DevicePackage newDeviceDeploymentPackage() {
         return new DevicePackageImpl();
     }
 
     @Override
-    public DevicePackageBundleInfo newDevicePackageBundleInfo()
-    {
+    public DevicePackageBundleInfo newDevicePackageBundleInfo() {
         return new DevicePackageBundleInfoImpl();
     }
 
@@ -37,15 +35,18 @@ public class DevicePackageFactoryImpl implements DevicePackageFactory
     // Download operation
     //
     @Override
-    public DevicePackageDownloadRequest newPackageDownloadRequest()
-    {
+    public DevicePackageDownloadRequest newPackageDownloadRequest() {
         return new DevicePackageDownloadRequestImpl();
     }
 
     @Override
-    public DevicePackageDownloadOperation newPackageDownloadOperation()
-    {
+    public DevicePackageDownloadOperation newPackageDownloadOperation() {
         return new DevicePackageDownloadOperationImpl();
+    }
+
+    @Override
+    public DevicePackageUninstallRequest newPackageUninstallRequest() {
+        return new DevicePackageUninstallRequestImpl();
     }
 
 }
