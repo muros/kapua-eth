@@ -132,7 +132,7 @@
 		
 	</dependencies>
 	<build>
-		<finalName>kapua</finalName>
+		<finalName>api</finalName>
 		<plugins>
 		</plugins>
 	</build>
