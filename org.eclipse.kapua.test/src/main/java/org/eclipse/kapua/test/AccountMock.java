@@ -167,5 +167,11 @@ public class AccountMock implements Account
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+    public void setScopeId(KapuaId scopeId) {
+        // TODO Auto-generated method stub
+        
+    }
 
 }
