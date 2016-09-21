@@ -7,7 +7,7 @@
 # you're doing.
 Vagrant.configure("2") do |config|
   #share the kapua directory with the vagrant machine to allow the activemq broker to access to the kapua code (jars)
-  config.vm.synced_folder "../../../../", "/kapua",
+  config.vm.synced_folder "../../../../../", "/kapua",
      owner: "vagrant",
      group: "vagrant",
      mount_options: ["dmode=775,fmode=664"]
@@ -94,77 +94,21 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
   export DEBIAN_FRONTEND=noninteractive
 	 
-	 #########################
-     ### H2 database setup ###
-	 #########################
-
-     # change the owner and the group to vagrant
-     sudo chown -R vagrant /usr/local/h2database/h2database-1.4.192
-
-	 # Create the db dir
-     sudo mkdir -p /home/vagrant/H2/kapua
-     sudo chown -R vagrant /home/vagrant/H2/kapua
-
-     # Run the database engine
-     su --login -c "java -cp /usr/local/h2database/h2database-1.4.192/h2*.jar org.h2.tools.Server -baseDir /home/vagrant/H2/kapua -webAllowOthers -tcpAllowOthers -tcpPort 3306 &" vagrant
-	 
-	 # Create the initial database
-	 java -cp /usr/local/h2database/h2database-1.4.192/h2*.jar org.h2.tools.Shell -url jdbc:h2:tcp://localhost:3306/kapuadb -user "root" -password "password" -sql "CREATE SCHEMA IF NOT EXISTS kapuadb; \
-	 	CREATE USER IF NOT EXISTS kapua PASSWORD 'kapua'; \
-	 	GRANT ALL ON SCHEMA kapuadb TO kapua;"
-
-	 ######################
-     ### ActiveMQ setup ###
-     ######################
-     
-     # change the owner and the group of activemq to vagrant
-     sudo chown -R vagrant /usr/local/activemq/apache-activemq-5.14.0
-     sudo chgrp -R vagrant /usr/local/activemq/apache-activemq-5.14.0
-
-     # Kapua jars and activemq.xml need to be added before starting the activemq instance...
-	   # config file
-	   cd /usr/local/activemq/apache-activemq-5.14.0
-	   rm conf/activemq.xml
-	   rm conf/log4j.properties
-	   ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/activemq.xml conf/activemq.xml
-	   ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/log4j.properties conf/log4j.properties
-     cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/*.sh .
-     chmod 555 update_kapua_jars.sh
-     chmod 555 start_broker.sh
-     echo 'remove old guava jars'
-     rm ./lib/optional/guava-*.*
-
-     # enable debug
-     sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
-
-     #database seeding (and create schema)
-     # echo 'seedind database'
-     # for name in $(find /kapua -name '*_drop.sql' | grep -Ev 'test|console|api'); do echo invoke drop sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
-     # for name in $(find /kapua -name '*_create.sql' | grep -Ev 'test|console|api'); do echo invoke create sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
-     # for name in $(find /kapua -name '*_seed.sql' | grep -Ev 'test|console|api'); do echo invoke seed sql script ${name}; mysql -u root -ppassword 'kapuadb' < ${name}; done;
+	 export ELASTICSEARCH_VERSION="2.3.4"
+	 export H2DB_VERSION="1.4.192"
+	 export ACTIVE_MQ_VERSION="5.14.0"
+	 export TOMCAT_VERSION="8.0.37"
 
 	 ###########################
-     ### Elasticsearch setup ###
-     ###########################
-     
-     sudo chown -R vagrant /usr/local/elasticsearch/elasticsearch-2.3.4
-     
-     cd /usr/local/elasticsearch/elasticsearch-2.3.4/config
-     echo "" >> elasticsearch.yml
-     echo "#---------------------------" >> elasticsearch.yml
-     echo "network.host: 0.0.0.0" >> elasticsearch.yml
-     echo "#---------------------------" >> elasticsearch.yml
-     echo "" >> elasticsearch.yml
-     
-     su --login -c "/usr/local/elasticsearch/elasticsearch-2.3.4/bin/elasticsearch -d --cluster.name kapua-datastore" vagrant
+     ### H2 database startup ###
+	 ###########################
+     # Run the database engine
+     su --login -c "java -cp /usr/local/h2database/h2database-${H2DB_VERSION}/h2*.jar org.h2.tools.Server -baseDir /home/vagrant/H2/kapua -webAllowOthers -tcpAllowOthers -tcpPort 3306 &" vagrant
 
-     ### tomcat 8.0.37 post install ###
-     
-     # change the owner and the group to vagrant
-     sudo chown -R vagrant /usr/local/tomcat/apache-tomcat-8.0.37
-     
-     su --login -c "/usr/local/tomcat/apache-tomcat-8.0.37/bin/startup.sh" vagrant
-     
+	 # Create the initial database
+	 java -cp /usr/local/h2database/h2database-${H2DB_VERSION}/h2*.jar org.h2.tools.Shell -url jdbc:h2:tcp://localhost:3306/kapuadb -user "root" -password "password" -sql "CREATE SCHEMA IF NOT EXISTS kapuadb; \
+		CREATE USER IF NOT EXISTS kapua PASSWORD 'kapua'; \
+		GRANT ALL ON SCHEMA kapuadb TO kapua;"
 
   SHELL
 end

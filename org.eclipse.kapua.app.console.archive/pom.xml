@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright (c) 2011, 2016 Eurotech and/or its affiliates
-   
-    All rights reserved. This program and the accompanying materials
-    are made available under the terms of the Eclipse Public License v1.0
-    which accompanies this distribution, and is available at
-    http://www.eclipse.org/legal/epl-v10.html
-   
-    Contributors:
-        Eurotech - initial API and implementation
-   
+    /*******************************************************************************
+     * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
+     *
+     * All rights reserved. This program and the accompanying materials
+     * are made available under the terms of the Eclipse Public License v1.0
+     * which accompanies this distribution, and is available at
+     * http://www.eclipse.org/legal/epl-v10.html
+     *
+     * Contributors:
+     *      Eurotech - initial API and implementation
+     *******************************************************************************/
  -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -22,11 +23,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>org.eclipse.kapua.broker.deployment</artifactId>
+    <artifactId>org.eclipse.kapua.app.console.archive</artifactId>
 
     <properties>
-        <camel.version>2.15.1</camel.version>
-        <activemq.version>5.14.0</activemq.version>
+    	<tomcat.version>8.0.37</tomcat.version>
         <commons.pool.version>2.3</commons.pool.version>
     </properties>
 
@@ -34,12 +34,10 @@
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.locator.guice</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>aopalliance</groupId>
@@ -49,12 +47,6 @@
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.commons</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.broker.core</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
@@ -79,12 +71,10 @@
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.device.registry</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
@@ -94,30 +84,18 @@
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.authentication</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.authorization</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>apache-activemq</artifactId>
-			<version>${activemq.version}</version>
-			<classifier>bin</classifier>
-			<type>tar.gz</type>
 		</dependency>
 
 		<dependency>
@@ -127,6 +105,10 @@
 			<version>2.1.1</version>
 		</dependency>
 		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
@@ -134,11 +116,6 @@
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 		</dependency>
-	    <dependency>
-	        <groupId>org.springframework.security</groupId>
-	        <artifactId>spring-security-core</artifactId>
-	        <version>4.1.3.RELEASE</version>
-	    </dependency>
 		<dependency>
 			<groupId>io.dropwizard.metrics</groupId>
 			<artifactId>metrics-core</artifactId>
@@ -149,57 +126,40 @@
 			<artifactId>metrics-annotation</artifactId>
 			<version>3.1.2</version>
 		</dependency>
+		
 	</dependencies>
 
     <build>
-   		<plugins>
-   			<plugin>
-   				<groupId>org.apache.maven.plugins</groupId>
-   				<artifactId>maven-dependency-plugin</artifactId>
-   				<executions>
-   					<execution>
-   						<id>unpack-unix</id>
-   						<phase>generate-resources</phase>
-   						<goals>
-   							<goal>unpack</goal>
-   						</goals>
-   						<configuration>
-   							<artifactItems>
-   								<artifactItem>
-   									<groupId>org.apache.activemq</groupId>
-   									<artifactId>apache-activemq</artifactId>
-   									<classifier>bin</classifier>
-   									<type>tar.gz</type>
-   									<outputDirectory>target/dependencies/unix</outputDirectory>
-   								</artifactItem>
-   							</artifactItems>
-   						</configuration>
-   					</execution>
-   				</executions>
-   			</plugin>
-   			<plugin>
-   				<groupId>org.apache.maven.plugins</groupId>
-   				<artifactId>maven-assembly-plugin</artifactId>
-   				<version>2.6</version>
-   				<executions>
-   					<execution>
-   						<id>unix-bin</id>
-   						<phase>package</phase>
-   						<goals>
-   							<goal>attached</goal>
-   						</goals>
-   						<configuration>
-   							<descriptors>
-   								<descriptor>src/main/descriptors/unix-bin.xml</descriptor>
-   							</descriptors>
-   							<finalName>kapua-broker-${project.version}</finalName>
-   							<appendAssemblyId>false</appendAssemblyId>
-   						</configuration>
-   					</execution>
-   				</executions>
-   			</plugin>
-   		</plugins>
    	</build>
-
-
+   	
+	<profiles>
+		<profile>
+			<id>deploy</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+	   				<plugin>
+		                <groupId>org.codehaus.mojo</groupId>
+		                <artifactId>exec-maven-plugin</artifactId>
+		                <version>1.1</version>
+		                <executions>
+		                    <execution>
+		                        <id>vagrant_console_deploy</id>
+		                        <phase>install</phase>
+		                        <goals>
+		                            <goal>exec</goal>
+		                        </goals>
+		                        <configuration>
+		                            <executable>./deployScript/deploy_console.sh</executable>
+		                            <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/demoMachine</workingDirectory>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+	            	</plugin>
+	     		</plugins>
+	     	</build>
+		</profile>
+	</profiles>
 </project>

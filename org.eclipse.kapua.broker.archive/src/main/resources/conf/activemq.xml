@@ -201,6 +201,7 @@
 	<util:list id="executorThreadFactoryMatcherList" list-class="java.util.ArrayList" value-type="java.lang.String" >
        <value>kapuaExecutorPool</value> <!-- listener for our pojo endpoint -->
        <value>JmsConsumer</value>   <!-- pool used by the camel route that subscribing kapua topics -->
+       <value>NIO Worker</value>
     </util:list>
     <bean id="kapuaExecutorThreadFactory" class="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadFactory" >
         <constructor-arg index="0" type="java.lang.String" value="kapuaExecutorThreadFactory" />
@@ -264,40 +265,40 @@
 			<from uri="activemq:queue:Consumer.eurotech:mainRoutelisteners:EXACTLY_ONCE.VirtualTopic.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=10&amp;maxConcurrentConsumers=10" />
             <choice id="choice">
             	<when id="systemMessageFilter">
-	            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\..*'</simple>
+	            	<simple>${header.originalTopic} regex '^\$EDC\..*'</simple>
             		<choice id="choice">
 		            	<when id="birthMessageFilter">
-			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.BIRTH'</simple>
+			            	<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.BIRTH'</simple>
 				            <bean ref="kapuaConverter" method="convertToBirth"/>
 			                <multicast>
 				                <to uri="bean:deviceMessageListener?method=processBirthMessage" />
 			                </multicast>
 			            </when>
 		            	<when id="disconnectMessageFilter">
-			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.DC'</simple>
+			            	<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.DC'</simple>
 				            <bean ref="kapuaConverter" method="convertToDisconnect"/>
 			                <to uri="bean:deviceMessageListener?method=processDisconnectMessage" />
 			            </when>
 			            <when id="appsMessageFilter">
-			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.APPS'</simple>
+			            	<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.APPS'</simple>
 				            <bean ref="kapuaConverter" method="convertToApps"/>
 			                <to uri="bean:deviceMessageListener?method=processAppsMessage" />
 			            </when>
 			            <when id="missingMessageFilter">
-			            	<simple>${header.JMSDestination} regex '^topic://VirtualTopic\.\$EDC\.(.*\.){2}MQTT\.MISSING'</simple>
+			            	<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.MISSING'</simple>
 				            <bean ref="kapuaConverter" method="convertToMissing"/>
 			                <to uri="bean:deviceMessageListener?method=processMissingMessage" />
 			            </when>
 		            	<otherwise>
 		            		<bean ref="kapuaConverter" method="convertToData"/>
-			  				<to uri="bean:errorMessageListener?method=processUnmatchedMessage" />
+			  				<to uri="bean:errorMessageListener?method=unmatchedMessage" />
 				  		</otherwise>
 		            </choice>
 	            </when>
 	            <!-- otherwise data messages -->
             	<otherwise>
             		<bean ref="kapuaConverter" method="convertToData"/>
-	  				<to uri="bean:errorMessageListener?method=processUnmatchedMessage" />
+	  				<to uri="bean:errorMessageListener?method=unmatchedMessage" />
 		  		</otherwise>
             </choice>
 	   </route>

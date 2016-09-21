@@ -31,6 +31,7 @@ import org.apache.activemq.broker.ProducerBrokerExchange;
 import org.apache.activemq.broker.TransportConnector;
 import org.apache.activemq.broker.region.Subscription;
 import org.apache.activemq.command.ActiveMQDestination;
+import org.apache.activemq.command.ActiveMQTopic;
 import org.apache.activemq.command.ConnectionId;
 import org.apache.activemq.command.ConnectionInfo;
 import org.apache.activemq.command.ConsumerInfo;
@@ -41,9 +42,11 @@ import org.apache.activemq.security.DefaultAuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.util.ThreadContext;
 import org.eclipse.kapua.KapuaErrorCode;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
+import org.eclipse.kapua.broker.core.listener.CamelConstants;
 import org.eclipse.kapua.broker.core.message.MessageConstants;
 import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
@@ -97,119 +100,120 @@ import com.google.common.util.concurrent.RateLimiter;
  */
 public class KapuaSecurityBrokerFilter extends BrokerFilter
 {
-    private static Logger                          logger                            = LoggerFactory.getLogger(KapuaSecurityBrokerFilter.class);
+    private static Logger logger = LoggerFactory.getLogger(KapuaSecurityBrokerFilter.class);
 
-    //rate limiter section
-    //TODO read these parameters from the configuration
-    private final static long                      UPDATER_RELOAD_PARAMETER_FREQUENCY  = 5 * 60 * 1000;
-    private static double                          connectionRateLimit                 = 10;
-    private static long                            connectionWaitForToken              = 15000;
-    private final static RateLimiter               CONNECTION_RATE_LIMITER             = RateLimiter.create(connectionRateLimit);
-    private Runnable                               configurationUpdaterTask;
-    
-    private Map<String, ConnectorDescriptor>       connectorsDescriptorMap;
-    
-    private final static Map<String, ConnectionId> connectionMap                       = new ConcurrentHashMap<String, ConnectionId>();
+    // rate limiter section
+    // TODO read these parameters from the configuration
+    private final static long        UPDATER_RELOAD_PARAMETER_FREQUENCY = 5 * 60 * 1000;
+    private static double            connectionRateLimit                = 10;
+    private static long              connectionWaitForToken             = 15000;
+    private final static RateLimiter CONNECTION_RATE_LIMITER            = RateLimiter.create(connectionRateLimit);
+    private Runnable                 configurationUpdaterTask;
 
-    //login
-    private Counter                                metricLoginSuccess;
-    private Counter                                metricLoginRateLimited;
-    private Counter                                metricLoginFailure;
-    private Counter                                metricLoginInvalidUserPassword;
-    private Counter                                metricLoginInvalidClientId;
-    private Counter                                metricLoginKapuasysTokenAttempt;
-    private Counter                                metricLoginNormalUserAttempt;
-    private Counter                                metricLoginStealingLinkConnect;
-    private Counter                                metricLoginStealingLinkDisconnect;
-    private Timer                                  metricLoginAddConnectionTime;
-    private Timer                                  metricLoginNormalUserTime;
-    private Timer                                  metricLoginPreCheckTime;
-    private Timer                                  metricLoginShiroLoginTime;
-    private Timer                                  metricLoginCheckAccessTime;
-    private Timer                                  metricLoginFindClientIdTime;
-    private Timer                                  metricLoginFindDevTime;
-    private Timer                                  metricLoginShiroLogoutTime;
-    private Timer                                  metricLoginSendLoginUpdateMsgTime;
-    private Timer                                  metricLoginRemoveConnectionTime;
-    //publish/subscibe
-    private Counter                                metricPublishAllowedMessages;
-    private Counter                                metricPublishNotAllowedMessages;
-    private Timer                                  metricPublishTime;
-    private Counter                                subscribeAllowedMessages;
-    private Counter                                subscribeNotAllowedMessages;
-    private Timer                                  subscribeTime;
-    //clients
-    private Counter                                metricClientConnectedClient;
-    private Counter                                metricClientConnectedKapuasys;
-    private Counter                                metricClientDisconnectionClient;
-    private Counter                                metricClientDisconnectionKapuasys;
-    //mesage size
-    private Histogram                              metricPublishMessageSizeAllowed;
-    private Histogram                              metricPublishMessageSizeNotAllowed;
-    
-    private AuthenticationService authenticationService = KapuaLocator.getInstance().getService(AuthenticationService.class);
-    private AuthorizationService authorizationService = KapuaLocator.getInstance().getService(AuthorizationService.class);
-    private PermissionFactory permissionFactory = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
-    private UsernamePasswordTokenFactory credentialsFactory = KapuaLocator.getInstance().getFactory(UsernamePasswordTokenFactory.class);
-    private AccountService accountService = KapuaLocator.getInstance().getService(AccountService.class);
-    private DeviceConnectionService deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
-    private DeviceConnectionFactory deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
-    private MetricsService metricsService = KapuaLocator.getInstance().getService(MetricsService.class);
-    
+    private Map<String, ConnectorDescriptor> connectorsDescriptorMap;
+
+    private final static Map<String, ConnectionId> connectionMap = new ConcurrentHashMap<String, ConnectionId>();
+
+    // login
+    private Counter metricLoginSuccess;
+    private Counter metricLoginRateLimited;
+    private Counter metricLoginFailure;
+    private Counter metricLoginInvalidUserPassword;
+    private Counter metricLoginInvalidClientId;
+    private Counter metricLoginKapuasysTokenAttempt;
+    private Counter metricLoginNormalUserAttempt;
+    private Counter metricLoginStealingLinkConnect;
+    private Counter metricLoginStealingLinkDisconnect;
+    private Timer   metricLoginAddConnectionTime;
+    private Timer   metricLoginNormalUserTime;
+    private Timer   metricLoginPreCheckTime;
+    private Timer   metricLoginShiroLoginTime;
+    private Timer   metricLoginCheckAccessTime;
+    private Timer   metricLoginFindClientIdTime;
+    private Timer   metricLoginFindDevTime;
+    private Timer   metricLoginShiroLogoutTime;
+    private Timer   metricLoginSendLoginUpdateMsgTime;
+    private Timer   metricLoginRemoveConnectionTime;
+    // publish/subscibe
+    private Counter metricPublishAllowedMessages;
+    private Counter metricPublishNotAllowedMessages;
+    private Timer   metricPublishTime;
+    private Counter subscribeAllowedMessages;
+    private Counter subscribeNotAllowedMessages;
+    private Timer   subscribeTime;
+    // clients
+    private Counter metricClientConnectedClient;
+    private Counter metricClientConnectedKapuasys;
+    private Counter metricClientDisconnectionClient;
+    private Counter metricClientDisconnectionKapuasys;
+    // mesage size
+    private Histogram metricPublishMessageSizeAllowed;
+    private Histogram metricPublishMessageSizeNotAllowed;
+
+    private AuthenticationService        authenticationService   = KapuaLocator.getInstance().getService(AuthenticationService.class);
+    private AuthorizationService         authorizationService    = KapuaLocator.getInstance().getService(AuthorizationService.class);
+    private PermissionFactory            permissionFactory       = KapuaLocator.getInstance().getFactory(PermissionFactory.class);
+    private UsernamePasswordTokenFactory credentialsFactory      = KapuaLocator.getInstance().getFactory(UsernamePasswordTokenFactory.class);
+    private AccountService               accountService          = KapuaLocator.getInstance().getService(AccountService.class);
+    private DeviceConnectionService      deviceConnectionService = KapuaLocator.getInstance().getService(DeviceConnectionService.class);
+    private DeviceConnectionFactory      deviceConnectionFactory = KapuaLocator.getInstance().getFactory(DeviceConnectionFactory.class);
+    private MetricsService               metricsService          = KapuaLocator.getInstance().getService(MetricsService.class);
+
     public KapuaSecurityBrokerFilter(Broker next) throws KapuaException
     {
         super(next);
 
         connectorsDescriptorMap = ConnectorDescriptorLoader.loadConnectorDescriptors();
-        
-        //login
-        metricLoginSuccess              = metricsService.getCounter("security", "login", "success", "count");
-        metricLoginRateLimited          = metricsService.getCounter("security", "login", "rate_limit", "count");
-        metricLoginFailure              = metricsService.getCounter("security", "login", "failure", "count");
-        metricLoginInvalidUserPassword  = metricsService.getCounter("security", "login", "failure_password", "count");
-        metricLoginInvalidClientId      = metricsService.getCounter("security", "login", "failure_client_id", "count");
-        metricLoginKapuasysTokenAttempt   = metricsService.getCounter("security", "login", "kapuasys", "count");
-        metricLoginNormalUserAttempt    = metricsService.getCounter("security", "login", "normal", "count");
-        metricLoginStealingLinkConnect  = metricsService.getCounter("security", "login", "stealing_link", "connect", "count");
+
+        // login
+        metricLoginSuccess = metricsService.getCounter("security", "login", "success", "count");
+        metricLoginRateLimited = metricsService.getCounter("security", "login", "rate_limit", "count");
+        metricLoginFailure = metricsService.getCounter("security", "login", "failure", "count");
+        metricLoginInvalidUserPassword = metricsService.getCounter("security", "login", "failure_password", "count");
+        metricLoginInvalidClientId = metricsService.getCounter("security", "login", "failure_client_id", "count");
+        metricLoginKapuasysTokenAttempt = metricsService.getCounter("security", "login", "kapuasys", "count");
+        metricLoginNormalUserAttempt = metricsService.getCounter("security", "login", "normal", "count");
+        metricLoginStealingLinkConnect = metricsService.getCounter("security", "login", "stealing_link", "connect", "count");
         metricLoginStealingLinkDisconnect = metricsService.getCounter("security", "login", "stealing_link", "disconnect", "count");
-        //login time
-        metricLoginAddConnectionTime    = metricsService.getTimer("security", "login", "add_connection", "time", "s");
-        metricLoginNormalUserTime       = metricsService.getTimer("security", "login", "user", "time", "s");
-        metricLoginPreCheckTime         = metricsService.getTimer("security", "login", "pre_check", "time", "s");
-        metricLoginShiroLoginTime       = metricsService.getTimer("security", "login", "shiro", "login", "time", "s");
-        metricLoginCheckAccessTime      = metricsService.getTimer("security", "login", "check_access", "time", "s");
-        metricLoginFindClientIdTime     = metricsService.getTimer("security", "login", "find_client_id", "time", "s");
-        metricLoginFindDevTime          = metricsService.getTimer("security", "login", "find_device", "time", "s");
-        metricLoginShiroLogoutTime      = metricsService.getTimer("security", "login", "shiro", "logout", "time", "s");
+        // login time
+        metricLoginAddConnectionTime = metricsService.getTimer("security", "login", "add_connection", "time", "s");
+        metricLoginNormalUserTime = metricsService.getTimer("security", "login", "user", "time", "s");
+        metricLoginPreCheckTime = metricsService.getTimer("security", "login", "pre_check", "time", "s");
+        metricLoginShiroLoginTime = metricsService.getTimer("security", "login", "shiro", "login", "time", "s");
+        metricLoginCheckAccessTime = metricsService.getTimer("security", "login", "check_access", "time", "s");
+        metricLoginFindClientIdTime = metricsService.getTimer("security", "login", "find_client_id", "time", "s");
+        metricLoginFindDevTime = metricsService.getTimer("security", "login", "find_device", "time", "s");
+        metricLoginShiroLogoutTime = metricsService.getTimer("security", "login", "shiro", "logout", "time", "s");
         metricLoginSendLoginUpdateMsgTime = metricsService.getTimer("security", "login", "send_login_update", "time", "s");
         metricLoginRemoveConnectionTime = metricsService.getTimer("security", "login", "remove_connection", "time", "s");
-        //publish/subscribe
-        metricPublishAllowedMessages      = metricsService.getCounter("security", "publish", "allowed", "count");
-        metricPublishNotAllowedMessages   = metricsService.getCounter("security", "publish", "not_allowed", "count");
-        metricPublishTime                 = metricsService.getTimer("security", "publish", "time", "s");
-        subscribeAllowedMessages          = metricsService.getCounter("security", "subscribe", "allowed", "count");
-        subscribeNotAllowedMessages       = metricsService.getCounter("security", "subscribe", "not_allowed", "count");
-        subscribeTime                     = metricsService.getTimer("security", "subscribe", "time", "s");
-        //clients connected
-        metricClientConnectedClient       = metricsService.getCounter("security", "login", "clients", "connected", "count");
-        metricClientConnectedKapuasys       = metricsService.getCounter("security", "login", "kapuasys", "connected", "count");
-        metricClientDisconnectionClient   = metricsService.getCounter("security", "login", "clients", "disconnected", "count");
-        metricClientDisconnectionKapuasys   = metricsService.getCounter("security", "login", "kapuasys", "disconnected", "count");
-        //message size
-        metricPublishMessageSizeAllowed   = metricsService.getHistogram("security", "publish", "messages", "allowed", "size", "bytes");
+        // publish/subscribe
+        metricPublishAllowedMessages = metricsService.getCounter("security", "publish", "allowed", "count");
+        metricPublishNotAllowedMessages = metricsService.getCounter("security", "publish", "not_allowed", "count");
+        metricPublishTime = metricsService.getTimer("security", "publish", "time", "s");
+        subscribeAllowedMessages = metricsService.getCounter("security", "subscribe", "allowed", "count");
+        subscribeNotAllowedMessages = metricsService.getCounter("security", "subscribe", "not_allowed", "count");
+        subscribeTime = metricsService.getTimer("security", "subscribe", "time", "s");
+        // clients connected
+        metricClientConnectedClient = metricsService.getCounter("security", "login", "clients", "connected", "count");
+        metricClientConnectedKapuasys = metricsService.getCounter("security", "login", "kapuasys", "connected", "count");
+        metricClientDisconnectionClient = metricsService.getCounter("security", "login", "clients", "disconnected", "count");
+        metricClientDisconnectionKapuasys = metricsService.getCounter("security", "login", "kapuasys", "disconnected", "count");
+        // message size
+        metricPublishMessageSizeAllowed = metricsService.getHistogram("security", "publish", "messages", "allowed", "size", "bytes");
         metricPublishMessageSizeNotAllowed = metricsService.getHistogram("security", "publish", "messages", "not_allowed", "size", "bytes");
-    
+
         configurationUpdaterTask = new Runnable() {
-			@Override
-			public void run() {
-			connectionRateLimit = 10;
-			connectionWaitForToken = 15000;
-			
-			logger.info("Configuration updater task: values loaded: ");
-			logger.info(" connection rate {} - wait for token {}", new Object[]{connectionRateLimit, connectionWaitForToken});
-			}
-		};
-		this.getBrokerService().getScheduler().executePeriodically(configurationUpdaterTask, UPDATER_RELOAD_PARAMETER_FREQUENCY);
+            @Override
+            public void run()
+            {
+                connectionRateLimit = 10;
+                connectionWaitForToken = 15000;
+
+                logger.info("Configuration updater task: values loaded: ");
+                logger.info(" connection rate {} - wait for token {}", new Object[] { connectionRateLimit, connectionWaitForToken });
+            }
+        };
+        this.getBrokerService().getScheduler().executePeriodically(configurationUpdaterTask, UPDATER_RELOAD_PARAMETER_FREQUENCY);
 
     }
 
@@ -224,16 +228,16 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     public void stop()
         throws Exception
     {
-    	logger.info(">>> Security broker filter: calling stop...");
-    	if (configurationUpdaterTask != null) {
-    		logger.info(">>> Security broker filter: stopping configuration updater...");
-    		try {
-    			this.getBrokerService().getScheduler().cancel(configurationUpdaterTask);
-    		}
-    		catch (Exception letsNotStopStop) {
-    			logger.warn(">>> Security broker filter: Failed to cancel configuration updater task", letsNotStopStop);
-    		}
-    	}
+        logger.info(">>> Security broker filter: calling stop...");
+        if (configurationUpdaterTask != null) {
+            logger.info(">>> Security broker filter: stopping configuration updater...");
+            try {
+                this.getBrokerService().getScheduler().cancel(configurationUpdaterTask);
+            }
+            catch (Exception letsNotStopStop) {
+                logger.warn(">>> Security broker filter: Failed to cancel configuration updater task", letsNotStopStop);
+            }
+        }
         super.stop();
     }
 
@@ -275,16 +279,13 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
      */
     private boolean isBrokerContext(ConnectionContext context)
     {
-        if (context == null)
-        {
+        if (context == null) {
             return false;
         }
-        else if (context.getSecurityContext() != null)
-        {
+        else if (context.getSecurityContext() != null) {
             return context.getSecurityContext().isBrokerContext();
         }
-        else
-        {
+        else {
             return isPassThroughConnection(context);
         }
     }
@@ -314,15 +315,15 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     public void addConnection(ConnectionContext context, ConnectionInfo info)
         throws Exception
     {
-    	if (!isPassThroughConnection(context)) {
-    		if (CONNECTION_RATE_LIMITER.tryAcquire(connectionWaitForToken, TimeUnit.MILLISECONDS)) {
-    			addExternalConnection(context, info);
-    			metricLoginSuccess.inc();
-    		}
-    		else {
-    			metricLoginRateLimited.inc();
-    			throw new KapuaConnectionRateLimitExceededException(info.getClientId(), info.getUserName(), connectionRateLimit);
-    		}
+        if (!isPassThroughConnection(context)) {
+            if (CONNECTION_RATE_LIMITER.tryAcquire(connectionWaitForToken, TimeUnit.MILLISECONDS)) {
+                addExternalConnection(context, info);
+                metricLoginSuccess.inc();
+            }
+            else {
+                metricLoginRateLimited.inc();
+                throw new KapuaConnectionRateLimitExceededException(info.getClientId(), info.getUserName(), connectionRateLimit);
+            }
         }
         super.addConnection(context, info);
     }
@@ -330,8 +331,11 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     public void addExternalConnection(ConnectionContext context, ConnectionInfo info)
         throws Exception
     {
-    	Context loginTotalContext = metricLoginAddConnectionTime.time();
-    	
+        // TODO FIXME: to be removed once we are able to avoid the thread splitting from an already logged thread for the activemq nio worker
+        ThreadContext.unbindSubject();
+
+        Context loginTotalContext = metricLoginAddConnectionTime.time();
+
         String username = info.getUserName();
         String password = info.getPassword();
         String clientId = info.getClientId();
@@ -344,16 +348,16 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
         try {
             // Build KapuaUsername
-//            User username = User.parse(username);//KapuaUserName
+            // User username = User.parse(username);//KapuaUserName
 
-            logger.info("User name {} - client id {}", new Object[]{username, clientId});
+            logger.info("User name {} - client id {}", new Object[] { username, clientId });
 
             Context loginPreCheckTimeContext = metricLoginPreCheckTime.time();
             // 1) validate client id
             // Check the device Mqtt ClientId
-            
-            //TODO move to deviceservice
-//            MqttUtils.checkDeviceClientId(clientId);
+
+            // TODO move to deviceservice
+            // MqttUtils.checkDeviceClientId(clientId);
             loginPreCheckTimeContext.stop();
 
             Context loginShiroLoginTimeContext = metricLoginShiroLoginTime.time();
@@ -362,11 +366,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
             KapuaId scopeId = accessToken.getScopeId();
             KapuaId userId = accessToken.getUserId();
-            
-            
+
             final Account account;
             try {
-            	account = KapuaSecurityUtils.doPriviledge(new Callable<Account>() {
+                account = KapuaSecurityUtils.doPriviledge(new Callable<Account>() {
 
                     @Override
                     public Account call()
@@ -377,15 +380,15 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 });
             }
             catch (Exception e) {
-            	//to preserve the original exception message (if possible)
-            	if (e instanceof AuthenticationException) {
-    				throw (AuthenticationException) e;
-    			}
-    			else {
-    				throw new ShiroException("Error while find account!", e);
-    			}
+                // to preserve the original exception message (if possible)
+                if (e instanceof AuthenticationException) {
+                    throw (AuthenticationException) e;
+                }
+                else {
+                    throw new ShiroException("Error while find account!", e);
+                }
             }
-			
+
             String accountName = account.getName();
             loginShiroLoginTimeContext.stop();
 
@@ -393,111 +396,111 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
             // get account id and name from kapua session methods that check for the run as
             //
-//            String accountName = kapuaSession.getSessionAccountName();
-//            long accountId = kapuaSession.getSessionAccountId();
+            // String accountName = kapuaSession.getSessionAccountName();
+            // long accountId = kapuaSession.getSessionAccountId();
 
             // multiple account stealing link fix
             String fullClientId = MessageFormat.format(AclConstants.MULTI_ACCOUNT_CLIENT_ID, scopeId.getId().longValue(), clientId);
 
             KapuaPrincipal principal = new KapuaPrincipalImpl(accessToken,
-            										username,
-                                                    clientId,
-                                                    clientIp);
+                                                              username,
+                                                              clientId,
+                                                              clientIp);
             DeviceConnection deviceConnection = null;
             // 3) check authorization
             DefaultAuthorizationMap authMap = null;
             if (isAdminUser(username)) {
-            	metricLoginKapuasysTokenAttempt.inc();
+                metricLoginKapuasysTokenAttempt.inc();
                 // 3-1) admin authMap
                 authMap = buildAdminAuthMap(authDestinations, principal, fullClientId);
                 metricClientConnectedKapuasys.inc();
             }
             else {
-                	Context loginNormalUserTimeContext = metricLoginNormalUserTime.time();
-                	metricLoginNormalUserAttempt.inc();
-                    // 3-3) check permissions
-                	
-                    Context loginCheckAccessTimeContext = metricLoginCheckAccessTime.time();
-                    boolean[] hasPermissions = new boolean[]{
-                    		//TODO check the permissions... move them to a constants class?
-                    		authorizationService.isPermitted(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.connect, scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.write, scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newPermission(DatastoreDomain.DATA_STORE, Actions.read, scopeId)),
-                    		authorizationService.isPermitted(permissionFactory.newPermission(DatastoreDomain.DATA_STORE, Actions.write, scopeId))
-                    };
-                    if (!hasPermissions[AclConstants.BROKER_CONNECT_IDX]) {
-                        throw new KapuaIllegalAccessException(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.connect, scopeId).toString());
-                    }
-                    loginCheckAccessTimeContext.stop();
+                Context loginNormalUserTimeContext = metricLoginNormalUserTime.time();
+                metricLoginNormalUserAttempt.inc();
+                // 3-3) check permissions
 
-                    // 3-4) build authMap
-                    authMap = buildAuthMap(authDestinations, principal, hasPermissions, accountName, clientId, fullClientId);
+                Context loginCheckAccessTimeContext = metricLoginCheckAccessTime.time();
+                boolean[] hasPermissions = new boolean[] {
+                                                           // TODO check the permissions... move them to a constants class?
+                                                           authorizationService.isPermitted(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.connect, scopeId)),
+                                                           authorizationService.isPermitted(permissionFactory.newPermission(DeviceManagementDomain.DEVICE_MANAGEMENT, Actions.write, scopeId)),
+                                                           authorizationService.isPermitted(permissionFactory.newPermission(DatastoreDomain.DATA_STORE, Actions.read, scopeId)),
+                                                           authorizationService.isPermitted(permissionFactory.newPermission(DatastoreDomain.DATA_STORE, Actions.write, scopeId))
+                };
+                if (!hasPermissions[AclConstants.BROKER_CONNECT_IDX]) {
+                    throw new KapuaIllegalAccessException(permissionFactory.newPermission(DeviceLifecycleDomain.DEVICE_LIFECYCLE, Actions.connect, scopeId).toString());
+                }
+                loginCheckAccessTimeContext.stop();
 
-                    // 4) find device
-                    Context loginFindClientIdTimeContext = metricLoginFindClientIdTime.time();
-                    deviceConnection = deviceConnectionService.findByClientId(scopeId, clientId);
-                    loginFindClientIdTimeContext.stop();
+                // 3-4) build authMap
+                authMap = buildAuthMap(authDestinations, principal, hasPermissions, accountName, clientId, fullClientId);
 
-                	Context loginFindDevTimeContext = metricLoginFindDevTime.time();
-                	
-                	// send connect message
-                    ConnectionId previousConnectionId = connectionMap.get(fullClientId);
-                    boolean stealingLinkDetected = (previousConnectionId != null);
-                    // Update map for stealing link detection on disconnect
-                    connectionMap.put(fullClientId, info.getConnectionId());
-                    if (deviceConnection==null) {
-                    	DeviceConnectionCreator deviceConnectionCreator = deviceConnectionFactory.newCreator(scopeId);
-                    	deviceConnectionCreator.setClientId(clientId);
-                    	deviceConnectionCreator.setClientIp(clientIp);
-                    	deviceConnectionCreator.setProtocol("MQTT");
-                    	deviceConnectionCreator.setServerIp(null);//TODO to be filled with the proper value
-                    	deviceConnectionCreator.setUserId(userId);
-                    	deviceConnection = deviceConnectionService.create(deviceConnectionCreator);
+                // 4) find device
+                Context loginFindClientIdTimeContext = metricLoginFindClientIdTime.time();
+                deviceConnection = deviceConnectionService.findByClientId(scopeId, clientId);
+                loginFindClientIdTimeContext.stop();
+
+                Context loginFindDevTimeContext = metricLoginFindDevTime.time();
+
+                // send connect message
+                ConnectionId previousConnectionId = connectionMap.get(fullClientId);
+                boolean stealingLinkDetected = (previousConnectionId != null);
+                // Update map for stealing link detection on disconnect
+                connectionMap.put(fullClientId, info.getConnectionId());
+                if (deviceConnection == null) {
+                    DeviceConnectionCreator deviceConnectionCreator = deviceConnectionFactory.newCreator(scopeId);
+                    deviceConnectionCreator.setClientId(clientId);
+                    deviceConnectionCreator.setClientIp(clientIp);
+                    deviceConnectionCreator.setProtocol("MQTT");
+                    deviceConnectionCreator.setServerIp(null);// TODO to be filled with the proper value
+                    deviceConnectionCreator.setUserId(userId);
+                    deviceConnection = deviceConnectionService.create(deviceConnectionCreator);
+                }
+                else {
+                    deviceConnection.setClientIp(clientIp);
+                    deviceConnection.setProtocol("MQTT");
+                    deviceConnection.setServerIp(null);// TODO to be filled with the proper value
+                    deviceConnection.setUserId(userId);
+                    deviceConnection.setStatus(DeviceConnectionStatus.CONNECTED);
+                    deviceConnectionService.update(deviceConnection);
+                    // TODO implement the banned status
+                    // if (DeviceStatus.DISABLED.equals(device.getStatus())) {
+                    // throw new KapuaIllegalAccessException("clientId - This client ID is disabled and cannot connect");
+                    // }
+                    // TODO manage the stealing link event (may be a good idea to use different connect status (connect -stealing)?
+                    if (stealingLinkDetected) {
+                        metricLoginStealingLinkConnect.inc();
+
+                        // stealing link detected, skip info
+                        logger.warn("Detected Stealing link for cliend id {} - account - last connection id was {} - current connection id is {} - IP: {} - No connection status changes!",
+                                    new Object[] { clientId, accountName, previousConnectionId, info.getConnectionId(), info.getClientIp() });
                     }
-                    else {
-                    	deviceConnection.setClientIp(clientIp);
-                    	deviceConnection.setProtocol("MQTT");
-                    	deviceConnection.setServerIp(null);//TODO to be filled with the proper value
-                    	deviceConnection.setUserId(userId);
-                    	deviceConnection.setStatus(DeviceConnectionStatus.CONNECTED);
-                    	deviceConnectionService.update(deviceConnection);
-                    	//TODO implement the banned status
-//                    	if (DeviceStatus.DISABLED.equals(device.getStatus())) {
-//                    		throw new KapuaIllegalAccessException("clientId - This client ID is disabled and cannot connect");
-//                    	}
-                    	//TODO manage the stealing link event (may be a good idea to use different connect status (connect -stealing)?
-                    	if (stealingLinkDetected) {
-                        	metricLoginStealingLinkConnect.inc();
-                        	
-                        	// stealing link detected, skip info
-                        	logger.warn("Detected Stealing link for cliend id {} - account - last connection id was {} - current connection id is {} - IP: {} - No connection status changes!",
-                        			new Object[] { clientId, accountName, previousConnectionId, info.getConnectionId(), info.getClientIp() });
-                        }
-                    }
-                    loginFindDevTimeContext.stop();
-                    
-                    //TODO should be removed the connect grant for the admin user?
-//                    // if user admin send alert
-//                    if (currentUser.hasAdministratorRole()) {
-//                        // send asynch alert
-//                        JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.KAPUA_SERVICE);
-//                        JmsAssistantProducerWrapper producer = null;
-//                        try {
-//                            // to do refresh change user on connect value
-//                            producer = pool.borrowObject();
-//                            producer.sendAlertMessage(accountName, 
-//                            		username, 
-//                            		clientId, 
-//                            		AlertCategories.SECURITY.name(), 
-//                            		Severity.WARNING,
-//                                    MessageFormat.format(AlertMessage.ADMIN_USER_DEVICE_ACCESS, new Object[] { clientId, username, kapuaSession.getSessionAccountName() }));
-//                        }
-//                        finally {
-//                            pool.returnObject(producer);
-//                        }
-//                    }
-                    loginNormalUserTimeContext.stop();
-//                }
+                }
+                loginFindDevTimeContext.stop();
+
+                // TODO should be removed the connect grant for the admin user?
+                // // if user admin send alert
+                // if (currentUser.hasAdministratorRole()) {
+                // // send asynch alert
+                // JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.KAPUA_SERVICE);
+                // JmsAssistantProducerWrapper producer = null;
+                // try {
+                // // to do refresh change user on connect value
+                // producer = pool.borrowObject();
+                // producer.sendAlertMessage(accountName,
+                // username,
+                // clientId,
+                // AlertCategories.SECURITY.name(),
+                // Severity.WARNING,
+                // MessageFormat.format(AlertMessage.ADMIN_USER_DEVICE_ACCESS, new Object[] { clientId, username, kapuaSession.getSessionAccountName() }));
+                // }
+                // finally {
+                // pool.returnObject(producer);
+                // }
+                // }
+                loginNormalUserTimeContext.stop();
+                // }
                 // 6) update device info (also for to provision devices)
                 Context loginSendLogingUpdateMsgTimeContex = metricLoginSendLoginUpdateMsgTime.time();
 
@@ -505,14 +508,14 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 metricClientConnectedClient.inc();
             }
             logAuthDestinationToLog(authDestinations);
-            
+
             ConnectorDescriptor connectorDescriptor = connectorsDescriptorMap.get((((TransportConnector) context.getConnector()).getName()));
             KapuaSecurityContext securityCtx = new KapuaSecurityContext(
-            		principal, 
-            		authMap, 
-            		(deviceConnection!=null ? deviceConnection.getId() : null), 
-            		connectionId,
-            		connectorDescriptor);
+                                                                        principal,
+                                                                        authMap,
+                                                                        (deviceConnection != null ? deviceConnection.getId() : null),
+                                                                        connectionId,
+                                                                        connectorDescriptor);
             context.setSecurityContext(securityCtx);
 
             // multiple account stealing link fix
@@ -520,32 +523,32 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             context.setClientId(fullClientId);
         }
         catch (Exception e) {
-        	metricLoginFailure.inc();
-        	
-        	// fix ENTMQ-731
+            metricLoginFailure.inc();
+
+            // fix ENTMQ-731
             if (e instanceof KapuaAuthenticationException) {
-            	KapuaAuthenticationException kapuaException = (KapuaAuthenticationException) e;
-            	KapuaErrorCode errorCode = kapuaException.getCode();
-            	if (errorCode.equals(KapuaAuthenticationErrorCodes.INVALID_USERNAME) ||
-            			errorCode.equals(KapuaAuthenticationErrorCodes.INVALID_CREDENTIALS) ||
-            			errorCode.equals(KapuaAuthenticationErrorCodes.INVALID_CREDENTIALS_TOKEN_PROVIDED)) {
-            		logger.warn("Invalid username or password for user {} ({})", username, e.getMessage());
+                KapuaAuthenticationException kapuaException = (KapuaAuthenticationException) e;
+                KapuaErrorCode errorCode = kapuaException.getCode();
+                if (errorCode.equals(KapuaAuthenticationErrorCodes.INVALID_USERNAME) ||
+                    errorCode.equals(KapuaAuthenticationErrorCodes.INVALID_CREDENTIALS) ||
+                    errorCode.equals(KapuaAuthenticationErrorCodes.INVALID_CREDENTIALS_TOKEN_PROVIDED)) {
+                    logger.warn("Invalid username or password for user {} ({})", username, e.getMessage());
                     // A-MQ will map CredentialException into a CONNECTION_REFUSED_BAD_USERNAME_OR_PASSWORD message (see javadoc on top of this method)
                     CredentialException ce = new CredentialException("Invalid username and/or password or disabled or expired account!");
                     ce.setStackTrace(e.getStackTrace());
                     metricLoginInvalidUserPassword.inc();
                     throw ce;
-            	}
-            	else if (errorCode.equals(KapuaAuthenticationErrorCodes.LOCKED_USERNAME) ||
-            			errorCode.equals(KapuaAuthenticationErrorCodes.DISABLED_USERNAME) ||
-    					errorCode.equals(KapuaAuthenticationErrorCodes.EXPIRED_CREDENTIALS)) {
-					logger.warn("User {} not authorized ({})", username, e.getMessage());
-	                // A-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc on top of this method)
-	                SecurityException se = new SecurityException("User not authorized!");
-	                se.setStackTrace(e.getStackTrace());
-	                throw se;
-            	}
-            	
+                }
+                else if (errorCode.equals(KapuaAuthenticationErrorCodes.LOCKED_USERNAME) ||
+                         errorCode.equals(KapuaAuthenticationErrorCodes.DISABLED_USERNAME) ||
+                         errorCode.equals(KapuaAuthenticationErrorCodes.EXPIRED_CREDENTIALS)) {
+                    logger.warn("User {} not authorized ({})", username, e.getMessage());
+                    // A-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc on top of this method)
+                    SecurityException se = new SecurityException("User not authorized!");
+                    se.setStackTrace(e.getStackTrace());
+                    throw se;
+                }
+
             }
             // Excluded CredentialException, InvalidClientIDException, SecurityException all others exceptions will be mapped by A-MQ to a CONNECTION_REFUSED_SERVER_UNAVAILABLE message (see
             // javadoc on top of this method)
@@ -554,50 +557,50 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             logger.info("@@ error", e);
             throw e;
 
-            
-//            // fix ENTMQ-731
-//            if (e instanceof KapuaAuthenticationException) {
-//                logger.warn("Invalid username or password for user {} ({})", username, e.getMessage());
-//                // A-MQ will map CredentialException into a CONNECTION_REFUSED_BAD_USERNAME_OR_PASSWORD message (see javadoc on top of this method)
-//                CredentialException ce = new CredentialException("Invalid username and/or password or disabled or expired account!");
-//                ce.setStackTrace(e.getStackTrace());
-//                metricLoginInvalidUserPassword.inc();
-//                throw ce;
-//            }
-//            else if (e instanceof KapuaInvalidDeviceClientIdException) {
-//                logger.warn("Invalid client id for user {} - client id {} ({})", new Object[] { username, clientId, e.getMessage() });
-//                // A-MQ will map InvalidClientIDException into a CONNECTION_REFUSED_IDENTIFIER_REJECTED message (see javadoc on top of this method)
-//                InvalidClientIDException icid = new InvalidClientIDException("Connection refused or identifier rejected!");
-//                icid.setStackTrace(e.getStackTrace());
-//                metricLoginInvalidClientId.inc();
-//                throw icid;
-//            }
-//            else if (e instanceof KapuaIllegalAccessException ||
-//                     e instanceof KapuaLockedUserException ||
-//                     e instanceof KapuaIllegalNullArgumentException ||
-//                     e instanceof SecurityException ||
-//                     e instanceof KapuaEntityNotFoundException ||
-//                     e instanceof KapuaServicePlanLimitException) {
-//                logger.warn("User {} not authorized ({})", username, e.getMessage());
-//                // A-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc on top of this method)
-//                SecurityException se = new SecurityException("User not authorized!");
-//                se.setStackTrace(e.getStackTrace());
-//                throw se;
-//            }
-//            else {
-//                // Excluded CredentialException, InvalidClientIDException, SecurityException all others exceptions will be mapped by A-MQ to a CONNECTION_REFUSED_SERVER_UNAVAILABLE message (see
-//                // javadoc on top of this method)
-//                // Not trapped exception now:
-//                // KapuaException
-//                logger.info("@@ error", e);
-//
-//                throw e;
-//            }
+            // // fix ENTMQ-731
+            // if (e instanceof KapuaAuthenticationException) {
+            // logger.warn("Invalid username or password for user {} ({})", username, e.getMessage());
+            // // A-MQ will map CredentialException into a CONNECTION_REFUSED_BAD_USERNAME_OR_PASSWORD message (see javadoc on top of this method)
+            // CredentialException ce = new CredentialException("Invalid username and/or password or disabled or expired account!");
+            // ce.setStackTrace(e.getStackTrace());
+            // metricLoginInvalidUserPassword.inc();
+            // throw ce;
+            // }
+            // else if (e instanceof KapuaInvalidDeviceClientIdException) {
+            // logger.warn("Invalid client id for user {} - client id {} ({})", new Object[] { username, clientId, e.getMessage() });
+            // // A-MQ will map InvalidClientIDException into a CONNECTION_REFUSED_IDENTIFIER_REJECTED message (see javadoc on top of this method)
+            // InvalidClientIDException icid = new InvalidClientIDException("Connection refused or identifier rejected!");
+            // icid.setStackTrace(e.getStackTrace());
+            // metricLoginInvalidClientId.inc();
+            // throw icid;
+            // }
+            // else if (e instanceof KapuaIllegalAccessException ||
+            // e instanceof KapuaLockedUserException ||
+            // e instanceof KapuaIllegalNullArgumentException ||
+            // e instanceof SecurityException ||
+            // e instanceof KapuaEntityNotFoundException ||
+            // e instanceof KapuaServicePlanLimitException) {
+            // logger.warn("User {} not authorized ({})", username, e.getMessage());
+            // // A-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc on top of this method)
+            // SecurityException se = new SecurityException("User not authorized!");
+            // se.setStackTrace(e.getStackTrace());
+            // throw se;
+            // }
+            // else {
+            // // Excluded CredentialException, InvalidClientIDException, SecurityException all others exceptions will be mapped by A-MQ to a CONNECTION_REFUSED_SERVER_UNAVAILABLE message (see
+            // // javadoc on top of this method)
+            // // Not trapped exception now:
+            // // KapuaException
+            // logger.info("@@ error", e);
+            //
+            // throw e;
+            // }
         }
         finally {
             // 7) logout
-        	Context loginShiroLogoutTimeContext = metricLoginShiroLogoutTime.time();
-        	authenticationService.logout();
+            Context loginShiroLogoutTimeContext = metricLoginShiroLogoutTime.time();
+            authenticationService.logout();
+            ThreadContext.unbindSubject();
             loginShiroLogoutTimeContext.stop();
             loginTotalContext.stop();
         }
@@ -608,130 +611,129 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         throws Exception
     {
         if (!isPassThroughConnection(context)) {
-        	Context loginRemoveConnectionTimeContext = metricLoginRemoveConnectionTime.time();
-        	try {
-        		
-        		KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
-        		
-        		//TODO fix the kapua session when run as feature will be implemented
-        		KapuaPrincipal kapuaPrincipal = ((KapuaPrincipal)kapuaSecurityContext.getMainPrincipal());
-        		KapuaSession kapuaSession = new KapuaSession(null,
-        				kapuaPrincipal.getAccountId(),
-        				kapuaPrincipal.getAccountId(),
-        				kapuaPrincipal.getUserId(),
-        				kapuaPrincipal.getName());
-        		KapuaSecurityUtils.setSession(kapuaSession);
-        		
-        		String clientId = kapuaPrincipal.getClientId();
-        		KapuaId accountId = kapuaPrincipal.getAccountId();
-        		String username = kapuaSecurityContext.getUserName();
-        		String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
+            Context loginRemoveConnectionTimeContext = metricLoginRemoveConnectionTime.time();
+            try {
 
-        		KapuaId scopeId = ((KapuaPrincipal)kapuaSecurityContext.getMainPrincipal()).getAccountId();
-        		
-        		// multiple account stealing link fix
-        		String fullClientId = MessageFormat.format(AclConstants.MULTI_ACCOUNT_CLIENT_ID, accountId, clientId);
-        		
-        		if (!isAdminUser(username)) {
-        			// Stealing link check
-        			ConnectionId connectionId = connectionMap.get(fullClientId);
-        			
-        			boolean stealingLinkDetected = false;
-        			if (connectionId != null) {
-        				stealingLinkDetected = !connectionId.equals(info.getConnectionId());
-        			}
-        			else {
-        				logger.error("Cannot find connection id for client id {} on connection map. Currect connection id is {} - IP: {}",
-        						new Object[] { clientId, info.getConnectionId(), info.getClientIp() });
-        			}
-        			if (stealingLinkDetected) {
-        				metricLoginStealingLinkDisconnect.inc();
-        				
-        				// stealing link detected, skip info
-        				logger.warn("Detected Stealing link for cliend id {} - account id {} - last connection id was {} - current connection id is {} - IP: {} - No disconnection info will be added!",
-        						new Object[] { clientId, accountId, connectionId, info.getConnectionId(), info.getClientIp() });
-        			}
-        			else {
-        				KapuaId deviceConnectionId = kapuaSecurityContext.getConnectionId();
-        				
-        				DeviceConnection deviceConnection = null;
-        				try {
-        					deviceConnection = KapuaSecurityUtils.doPriviledge(new Callable<DeviceConnection>() {
+                KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
 
-        		                @Override
-        		                public DeviceConnection call()
-        		                    throws Exception
-        		                {
-        		                    return deviceConnectionService.findByClientId(scopeId, clientId);
-        		                }
-        		            });
-        		        }
-        		        catch (Exception e) {
-        		            throw new ShiroException("Error while updating the device connection!", e);
-        		        }
-        				//the device connection must be not null
-        				
-        				// cleanup stealing link detection map
-        				connectionMap.remove(fullClientId);
-        				
-        				final DeviceConnection deviceConnectionToUpdate = deviceConnection;
-						if (error == null) {
-							// update device connection
-							deviceConnectionToUpdate.setStatus(DeviceConnectionStatus.DISCONNECTED);
-							
-							
-							try {
-	        					KapuaSecurityUtils.doPriviledge(new Callable<Void>() {
+                // TODO fix the kapua session when run as feature will be implemented
+                KapuaPrincipal kapuaPrincipal = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal());
+                KapuaSession kapuaSession = new KapuaSession(null,
+                                                             kapuaPrincipal.getAccountId(),
+                                                             kapuaPrincipal.getAccountId(),
+                                                             kapuaPrincipal.getUserId(),
+                                                             kapuaPrincipal.getName());
+                KapuaSecurityUtils.setSession(kapuaSession);
 
-	        		                @Override
-	        		                public Void call()
-	        		                    throws Exception
-	        		                {
-	        		                	deviceConnectionService.update(deviceConnectionToUpdate);
-	        		                	return (Void) null;
-	        		                }
-	        		            });
-	        		        }
-	        		        catch (Exception e) {
-	        		            throw new ShiroException("Error while updating the device connection status!", e);
-	        		        }
-						}
-						else {
-							// send missing message
-							// update device connection
-							deviceConnectionToUpdate.setStatus(DeviceConnectionStatus.MISSING);
-	        				
-							try {
-	        					KapuaSecurityUtils.doPriviledge(new Callable<Void>() {
+                String clientId = kapuaPrincipal.getClientId();
+                KapuaId accountId = kapuaPrincipal.getAccountId();
+                String username = kapuaSecurityContext.getUserName();
+                String remoteAddress = (context.getConnection() != null) ? context.getConnection().getRemoteAddress() : "";
 
-	        		                @Override
-	        		                public Void call()
-	        		                    throws Exception
-	        		                {
-	        		                	deviceConnectionService.update(deviceConnectionToUpdate);
-	        		                	return (Void) null;
-	        		                }
-	        		            });
-	        		        }
-	        		        catch (Exception e) {
-	        		            throw new ShiroException("Error while updating the device connection status!", e);
-	        		        }
-							
-						}
-        			}
-        			metricClientDisconnectionClient.inc();
-        		}
-        		else {
-        			metricClientDisconnectionKapuasys.inc();
-        		}
-        		// multiple account stealing link fix
-        		info.setClientId(fullClientId);
-        		context.setClientId(fullClientId);
-        	}
-        	finally {
-        		loginRemoveConnectionTimeContext.stop();
-        		authenticationService.logout();
-        	}
+                KapuaId scopeId = ((KapuaPrincipal) kapuaSecurityContext.getMainPrincipal()).getAccountId();
+
+                // multiple account stealing link fix
+                String fullClientId = MessageFormat.format(AclConstants.MULTI_ACCOUNT_CLIENT_ID, accountId, clientId);
+
+                if (!isAdminUser(username)) {
+                    // Stealing link check
+                    ConnectionId connectionId = connectionMap.get(fullClientId);
+
+                    boolean stealingLinkDetected = false;
+                    if (connectionId != null) {
+                        stealingLinkDetected = !connectionId.equals(info.getConnectionId());
+                    }
+                    else {
+                        logger.error("Cannot find connection id for client id {} on connection map. Currect connection id is {} - IP: {}",
+                                     new Object[] { clientId, info.getConnectionId(), info.getClientIp() });
+                    }
+                    if (stealingLinkDetected) {
+                        metricLoginStealingLinkDisconnect.inc();
+
+                        // stealing link detected, skip info
+                        logger.warn("Detected Stealing link for cliend id {} - account id {} - last connection id was {} - current connection id is {} - IP: {} - No disconnection info will be added!",
+                                    new Object[] { clientId, accountId, connectionId, info.getConnectionId(), info.getClientIp() });
+                    }
+                    else {
+                        KapuaId deviceConnectionId = kapuaSecurityContext.getConnectionId();
+
+                        DeviceConnection deviceConnection = null;
+                        try {
+                            deviceConnection = KapuaSecurityUtils.doPriviledge(new Callable<DeviceConnection>() {
+
+                                @Override
+                                public DeviceConnection call()
+                                    throws Exception
+                                {
+                                    return deviceConnectionService.findByClientId(scopeId, clientId);
+                                }
+                            });
+                        }
+                        catch (Exception e) {
+                            throw new ShiroException("Error while updating the device connection!", e);
+                        }
+                        // the device connection must be not null
+
+                        // cleanup stealing link detection map
+                        connectionMap.remove(fullClientId);
+
+                        final DeviceConnection deviceConnectionToUpdate = deviceConnection;
+                        if (error == null) {
+                            // update device connection
+                            deviceConnectionToUpdate.setStatus(DeviceConnectionStatus.DISCONNECTED);
+
+                            try {
+                                KapuaSecurityUtils.doPriviledge(new Callable<Void>() {
+
+                                    @Override
+                                    public Void call()
+                                        throws Exception
+                                    {
+                                        deviceConnectionService.update(deviceConnectionToUpdate);
+                                        return (Void) null;
+                                    }
+                                });
+                            }
+                            catch (Exception e) {
+                                throw new ShiroException("Error while updating the device connection status!", e);
+                            }
+                        }
+                        else {
+                            // send missing message
+                            // update device connection
+                            deviceConnectionToUpdate.setStatus(DeviceConnectionStatus.MISSING);
+
+                            try {
+                                KapuaSecurityUtils.doPriviledge(new Callable<Void>() {
+
+                                    @Override
+                                    public Void call()
+                                        throws Exception
+                                    {
+                                        deviceConnectionService.update(deviceConnectionToUpdate);
+                                        return (Void) null;
+                                    }
+                                });
+                            }
+                            catch (Exception e) {
+                                throw new ShiroException("Error while updating the device connection status!", e);
+                            }
+
+                        }
+                    }
+                    metricClientDisconnectionClient.inc();
+                }
+                else {
+                    metricClientDisconnectionKapuasys.inc();
+                }
+                // multiple account stealing link fix
+                info.setClientId(fullClientId);
+                context.setClientId(fullClientId);
+            }
+            finally {
+                loginRemoveConnectionTimeContext.stop();
+                authenticationService.logout();
+            }
         }
         super.removeConnection(context, info, error);
         context.setSecurityContext(null);
@@ -753,25 +755,23 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     public void send(ProducerBrokerExchange producerExchange, Message messageSend)
         throws Exception
     {
-		Context sendTimeContext = metricPublishTime.time();
-		try {
-			_send(producerExchange, messageSend);
-		}
-		finally {
-			sendTimeContext.stop();
-		}
+        Context sendTimeContext = metricPublishTime.time();
+        try {
+            _send(producerExchange, messageSend);
+        }
+        finally {
+            sendTimeContext.stop();
+        }
     }
-    
+
     public void _send(ProducerBrokerExchange producerExchange, Message messageSend)
         throws Exception
     {
-        if (!isBrokerContext(producerExchange.getConnectionContext()))
-        {
+        if (!isBrokerContext(producerExchange.getConnectionContext())) {
             KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(producerExchange.getConnectionContext());
             // if (!kapuaSecurityContext.getAuthorizedWriteDests().contains(messageSend.getDestination()))
             // {
-            if (!messageSend.getDestination().isTemporary())
-            {
+            if (!messageSend.getDestination().isTemporary()) {
                 Set<?> allowedACLs = kapuaSecurityContext.getAuthorizationMap().getWriteACLs(messageSend.getDestination());
                 if (allowedACLs != null && !kapuaSecurityContext.isInOneOf(allowedACLs)) {
                     String message = MessageFormat.format("User {0} ({1} - {2} - conn id {3}) is not authorized to write to: {4}",
@@ -797,11 +797,16 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
             messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTOR_DEVICE_PROTOCOL, kapuaSecurityContext.getConnectorDescriptor());
         }
-        if (messageSend.getContent()!=null) {
-        	metricPublishMessageSizeAllowed.update(messageSend.getContent().length);
+        if (messageSend.getContent() != null) {
+            metricPublishMessageSizeAllowed.update(messageSend.getContent().length);
         }
         else {
-        	logger.warn("Cannot update message size metric. Incoming message for topic {} has null content!", messageSend.getDestination());
+            logger.warn("Cannot update message size metric. Incoming message for topic {} has null content!", messageSend.getDestination());
+        }
+        ActiveMQDestination destination = messageSend.getDestination();
+        if (destination instanceof ActiveMQTopic) {
+            ActiveMQTopic destinationTopic = (ActiveMQTopic) destination;
+            messageSend.setProperty(MessageConstants.PROPERTY_ORIGINAL_TOPIC, destinationTopic.getTopicName().substring(AclConstants.VT_TOPIC_PREFIX.length()));
         }
         metricPublishAllowedMessages.inc();
         super.send(producerExchange, messageSend);
@@ -812,26 +817,25 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     // Consumer
     //
     // ------------------------------------------------------------------
-    
+
     @Override
     public Subscription addConsumer(ConnectionContext context, ConsumerInfo info)
         throws Exception
     {
-		Context subscribeTimeContext = subscribeTime.time();
-		try {
-			return _addConsumer(context, info);
-		}
-		finally {
-			subscribeTimeContext.stop();
-		}
+        Context subscribeTimeContext = subscribeTime.time();
+        try {
+            return _addConsumer(context, info);
+        }
+        finally {
+            subscribeTimeContext.stop();
+        }
     }
 
     public Subscription _addConsumer(ConnectionContext context, ConsumerInfo info)
         throws Exception
     {
         info.setClientId(context.getClientId());
-        if (!isBrokerContext(context))
-        {
+        if (!isBrokerContext(context)) {
             String[] destinationsPath = info.getDestination().getDestinationPaths();
             String destination = info.getDestination().getPhysicalName();
             KapuaSecurityContext kapuaSecurityContext = getKapuaSecurityContext(context);
@@ -855,8 +859,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             info.getDestination().setPhysicalName(destination);
             // if (!kapuaSecurityContext.getAuthorizedReadDests().contains(info.getDestination()))
             // {
-            if (!info.getDestination().isTemporary())
-            {
+            if (!info.getDestination().isTemporary()) {
                 Set<?> allowedACLs = null;
                 allowedACLs = kapuaSecurityContext.getAuthorizationMap().getReadACLs(info.getDestination());
                 if (allowedACLs != null && !kapuaSecurityContext.isInOneOf(allowedACLs)) {
@@ -1030,7 +1033,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                                               false,
                                               true,
                                               true)); // (topic, principal, read, write, admin)
-        
+
         // Write notify to any client Id and any application and operation
         dme.addAll(createAuthorizationEntries(authDestinations,
                                               MessageFormat.format(AclConstants.ACL_CTRL_ACC_NOTIFY, accountName, clientId),
@@ -1121,10 +1124,11 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             }
         }
     }
-    
-    private boolean isAdminUser(String user) {
-    	String adminAccount = SystemSetting.getInstance().getString(SystemSettingKey.SYS_ADMIN_ACCOUNT);
-    	return user.equals(adminAccount);
+
+    private boolean isAdminUser(String user)
+    {
+        String adminAccount = SystemSetting.getInstance().getString(SystemSettingKey.SYS_ADMIN_ACCOUNT);
+        return user.equals(adminAccount);
     }
 
 }
