@@ -18,10 +18,13 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.model.KapuaEntity;
 
+@XmlRootElement(name = "result")
 @XmlType(propOrder = {"limitExceeded", "size", "items"})
 public interface KapuaListResult<E extends KapuaEntity>
 {
@@ -29,8 +32,9 @@ public interface KapuaListResult<E extends KapuaEntity>
     public boolean isLimitExceeded();
 
     public void setLimitExceeded(boolean limitExceeded);
-    
-    @XmlElement(name = "items")
+
+    @XmlElementWrapper
+    @XmlElement(name = "item")
     public List<E> getItems();
     
     public E getItem(int i);
