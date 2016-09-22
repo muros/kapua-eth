@@ -29,7 +29,9 @@ import javax.persistence.metamodel.EntityType;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
+import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.KapuaUpdatableEntity;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -49,6 +51,7 @@ public class ServiceDAO
     {
         //
         // Creating entity
+        ((AbstractKapuaEntity)entity).setScopeId(KapuaSecurityUtils.getSession().getScopeId());
         em.persist(entity);
         em.flush();
 
@@ -65,7 +68,7 @@ public class ServiceDAO
         E entityToUpdate = em.find(clazz, entity.getId());
 
         //
-        // Deleting if not null
+        // Updating if not null
         if (entityToUpdate != null) {
             AbstractKapuaUpdatableEntity updatableEntity = (AbstractKapuaUpdatableEntity)entity;
             updatableEntity.setScopeId(entityToUpdate.getScopeId());
