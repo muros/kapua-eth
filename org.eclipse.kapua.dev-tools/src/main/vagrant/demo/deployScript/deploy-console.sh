@@ -21,7 +21,7 @@ tar -zcvf console.tar.gz console
 rm -rf apache-tomcat-8.0.37*
 rm -rf console
 echo 'deploy to vagrant machine'
-cd ../../org.eclipse.kapua.dev-tools/src/main/vagrant/demoMachine
+cd ../../org.eclipse.kapua.dev-tools/src/main/vagrant
 pwd
 vagrant ssh -c "echo \"sudo mkdir -p /usr/local/tomcat\"
 	sudo mkdir -p /usr/local/tomcat

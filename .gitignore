@@ -105,3 +105,9 @@ velocity.log
 # Os X index files
 #
 .DS_Store
+
+#
+# vagrant runtime environment
+#
+Vagrantfile
+.vagrant

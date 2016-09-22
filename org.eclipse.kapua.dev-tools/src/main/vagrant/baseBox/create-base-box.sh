@@ -23,7 +23,7 @@ vagrant box remove $KAPUA_BOX_NAME
 
 mkdir -p $KAPUA_BOX_TMP_DIR
 
-cp $BASEDIR/Kapua-Box-Vagrantfile $KAPUA_BOX_TMP_DIR/Vagrantfile
+cp $BASEDIR/baseBox-Vagrantfile $KAPUA_BOX_TMP_DIR/Vagrantfile
 
 cd $KAPUA_BOX_TMP_DIR
 

@@ -12,5 +12,5 @@
 #  *******************************************************************************/
 #*******************************************************************************
 # Kapua jars and activemq.xml need to be added before starting the activemq instance...
-./update_kapua_jars_cfg.sh
-bin/activemq start xbean:conf/activemq.xml
+./update-kapua-war.sh
+bin/startup.sh

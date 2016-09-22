@@ -286,8 +286,8 @@
 		                            <goal>exec</goal>
 		                        </goals>
 		                        <configuration>
-		                            <executable>./deployScript/deploy_broker.sh</executable>
-		                            <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/demoMachine</workingDirectory>
+		                            <executable>./deployScript/deploy-broker.sh</executable>
+		                            <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/demo</workingDirectory>
 		                        </configuration>
 		                    </execution>
 		                </executions>
