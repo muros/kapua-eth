@@ -135,8 +135,8 @@ public class Users extends AbstractKapuaResource
 	 * @return The newly created User object.
 	 */
 	@POST
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_XML)
+	@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public User postUser(UserCreator userCreator) {
 		User user = null;
 		try {
@@ -154,8 +154,8 @@ public class Users extends AbstractKapuaResource
 	 * @return The updated user.
 	 */
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_XML)
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
 	public User putUser(User user) {
 		User userUpdated = null;
 		try {
