@@ -13,12 +13,12 @@
 #*******************************************************************************
 vagrant ssh -c "echo \"sudo mkdir -p /usr/local/activemq\"
 	sudo mkdir -p /usr/local/activemq
-	echo \"sudo rm -rf /usr/local/activemq/apache-activemq-5.14.0\"
-	sudo rm -rf /usr/local/activemq/apache-activemq-5.14.0
+	echo \"sudo rm -rf /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}\"
+	sudo rm -rf /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}
 	sudo mkdir -p /usr/local/activemq
 	echo \"sudo rm -rf /usr/local/activemq/kapua-broker-*\"
 	sudo rm -rf /usr/local/activemq/kapua-broker-*
-	echo \"sudo tar xvzf /kapua/org.eclipse.kapua.broker.archive/target/kapua-broker-* -C /usr/local/activemq\"
-	sudo tar xvzf /kapua/org.eclipse.kapua.broker.archive/target/kapua-broker-* -C /usr/local/activemq
-	echo \"sudo chown -R vagrant:vagrant /usr/local/activemq/kapua-broker-*\"
-	sudo chown -R vagrant:vagrant /usr/local/activemq/kapua-broker-*"
+	echo \"sudo tar xvzf /kapua/org.eclipse.kapua.assembly/target/kapua-broker-${KAPUA_VERSION}.tar.gz -C /usr/local/activemq\"
+	sudo tar xvzf /kapua/org.eclipse.kapua.assembly/target/kapua-broker-${KAPUA_VERSION}.tar.gz -C /usr/local/activemq
+	echo \"sudo chown -R vagrant:vagrant /usr/local/activemq/kapua-broker-${KAPUA_VERSION}\"
+	sudo chown -R vagrant:vagrant /usr/local/activemq/kapua-broker-${KAPUA_VERSION}"

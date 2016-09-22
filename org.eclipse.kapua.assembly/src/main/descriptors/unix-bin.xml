@@ -28,7 +28,7 @@
 
         <fileSet>
             <outputDirectory>conf/</outputDirectory>
-            <directory>src/main/resources/conf</directory>
+            <directory>src/main/resources/conf/broker</directory>
         </fileSet>
 
     </fileSets>

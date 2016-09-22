@@ -27,6 +27,8 @@ cp $BASEDIR/baseBox-Vagrantfile $KAPUA_BOX_TMP_DIR/Vagrantfile
 
 cd $KAPUA_BOX_TMP_DIR
 
+echo '========================'
+pwd
 vagrant up
 
 vagrant package --output trusty64-kapua-dev-0.1.box
@@ -36,7 +38,7 @@ vagrant box add $KAPUA_BOX_NAME trusty64-kapua-dev-0.1.box
 vagrant destroy --force 
 
 # go up one level to allow the removal of the tmp dir
-cd ..
+cd ../..
 
 rm -rf $KAPUA_BOX_TMP_DIR
 

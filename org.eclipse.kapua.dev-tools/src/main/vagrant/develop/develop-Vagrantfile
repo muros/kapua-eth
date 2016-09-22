@@ -96,8 +96,9 @@ Vagrant.configure("2") do |config|
 	 
 	 export ELASTICSEARCH_VERSION="2.3.4"
 	 export H2DB_VERSION="1.4.192"
-	 export ACTIVE_MQ_VERSION="5.14.0"
+	 export ACTIVEMQ_VERSION="5.14.0"
 	 export TOMCAT_VERSION="8.0.37"
+	 export KAPUA_VERSION="0.2-SNAPSHOT"
 	 
 	 #########################
      ### H2 database setup ###
@@ -115,11 +116,11 @@ Vagrant.configure("2") do |config|
 	 #########################
 	 ### install activemq DEV PROFILE ###
      # activemq post-install setup
-  	 cd /usr/local/activemq/apache-activemq-${ACTIVE_MQ_VERSION}
+  	 cd /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}
 	 rm conf/activemq.xml
 	 rm conf/log4j.properties
-	 ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/broker/activemq.xml conf/activemq.xml
-	 ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/broker/log4j.properties conf/log4j.properties
+	 ln -s /kapua/org.eclipse.kapua.assembly/src/main/resources/conf/broker/activemq.xml conf/activemq.xml
+	 ln -s /kapua/org.eclipse.kapua.assembly/src/main/resources/conf/broker/log4j.properties conf/log4j.properties
 	 cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/script/broker/*.sh .
 	 chmod 555 update-kapua-jars-cfg.sh
 	 chmod 555 start-broker.sh
@@ -127,12 +128,12 @@ Vagrant.configure("2") do |config|
 	 rm ./lib/optional/guava-*.*
 	 # enable debug
      sudo sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
-	 sudo chown -R vagrant:vagrant /usr/local/activemq/apache-activemq-${ACTIVE_MQ_VERSION}
+     sudo sed -i 's/ACTIVEMQ_VERSION/'"$ACTIVEMQ_VERSION"'/g' update-kapua-jars-cfg.sh
+	 sudo chown -R vagrant:vagrant /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}
 
-	 #########################
-     ### tomcat setup      ###
-	 #########################
-     ### tomcat 8.0.37 post install ###
+	 ###########################
+     ### tomcat post install ###
+	 ###########################
      #allow remote manager application
      cd /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}
      sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/conf/tomcat/context.xml webapps/manager/META-INF/
@@ -141,6 +142,7 @@ Vagrant.configure("2") do |config|
      sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/script/tomcat/update-kapua-war.sh .
      chmod 555 start-tomcat.sh
      chmod 555 update-kapua-war.sh
+     sed -i 's/KAPUA_VERSION/'"$KAPUA_VERSION"'/g' update-kapua-war.sh
      # change the owner and the group to vagrant
      sudo chown -R vagrant /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}
 
