@@ -12,21 +12,38 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.user;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import org.eclipse.kapua.model.KapuaNamedEntityCreator;
 
 /**
  * UserCreator encapsulates all the information needed to create a new User in the system.
  */
+
+@XmlRootElement(name="userCreator")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = { "displayName",
+                       "email",
+                       "phoneNumber" },
+         factoryClass = UserXmlRegistry.class,
+         factoryMethod = "newUserCreator")
 public interface UserCreator extends KapuaNamedEntityCreator<User>
 {
+    @XmlElement(name = "displayName")
     public String getDisplayName();
 
     public void setDisplayName(String displayName);
 
+    @XmlElement(name = "email")
     public String getEmail();
 
     public void setEmail(String email);
 
+    @XmlElement(name = "phoneNumber")
     public String getPhoneNumber();
 
     public void setPhoneNumber(String phoneNumber);

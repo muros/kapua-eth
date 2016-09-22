@@ -26,25 +26,13 @@ import org.eclipse.kapua.service.user.UserCreator;
 /**
  * UserCreator encapsulates all the information needed to create a new User in the system.
  */
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "accountId",
-                       "name",
-                       "rawPassword",
-                       "displayName",
-                       "email",
-                       "phoneNumber" })
+
 public class UserCreatorImpl extends AbstractKapuaNamedEntityCreator<User> implements UserCreator
 {
     private static final long serialVersionUID = 4664940282892151008L;
 
-    @XmlElement(name = "displayName")
     private String            displayName;
-
-    @XmlElement(name = "email")
     private String            email;
-
-    @XmlElement(name = "phoneNumber")
     private String            phoneNumber;
 
     public UserCreatorImpl(KapuaId accountId, String name)

@@ -12,8 +12,23 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.user;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import org.eclipse.kapua.model.KapuaNamedEntity;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(propOrder = { "status",
+                       "displayName",
+                       "email",
+                       "phoneNumber"
+                     },
+         factoryClass = UserXmlRegistry.class, 
+         factoryMethod = "newUser")
 public interface User extends KapuaNamedEntity
 {
     public static final String TYPE = "user";
@@ -23,18 +38,22 @@ public interface User extends KapuaNamedEntity
         return TYPE;
     }
 
+    @XmlElement(name = "status")
     public UserStatus getStatus();
 
     public void setStatus(UserStatus status);
 
+    @XmlElement(name = "displayName")
     public String getDisplayName();
 
     public void setDisplayName(String displayName);
 
+    @XmlElement(name = "email")
     public String getEmail();
 
     public void setEmail(String email);
 
+    @XmlElement(name = "phoneNumber")
     public String getPhoneNumber();
 
     public void setPhoneNumber(String phoneNumber);
