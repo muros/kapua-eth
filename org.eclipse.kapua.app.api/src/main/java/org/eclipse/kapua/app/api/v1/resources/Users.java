@@ -107,6 +107,7 @@ public class Users extends AbstractKapuaResource
 	 *
 	 * @return The user unlocked.
 	 */
+//  FIXME see https://github.com/eurotech/kapua/issues/193 
 //	@POST
 //	@Path("{userId}/unlock")
 //	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
