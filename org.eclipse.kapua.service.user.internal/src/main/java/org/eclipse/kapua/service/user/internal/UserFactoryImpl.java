@@ -13,8 +13,12 @@
 package org.eclipse.kapua.service.user.internal;
 
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.account.Account;
+import org.eclipse.kapua.service.account.AccountListResult;
+import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserFactory;
+import org.eclipse.kapua.service.user.UserListResult;
 import org.eclipse.kapua.service.user.UserQuery;
 
 public class UserFactoryImpl implements UserFactory
@@ -24,11 +28,22 @@ public class UserFactoryImpl implements UserFactory
     {
         return new UserCreatorImpl(scopeId, name);
     }
+    
+    @Override
+    public User newUser() {
+        return new UserImpl();
+    }
 
     @Override
     public UserQuery newQuery(KapuaId scopeId)
     {
         return new UserQueryImpl(scopeId);
+    }
+
+    @Override
+    public UserListResult newUserListResult()
+    {
+        return new UserListResultImpl();
     }
 
 }

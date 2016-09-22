@@ -12,16 +12,28 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.user;
 
-import org.eclipse.kapua.model.KapuaObjectFactory;
-import org.eclipse.kapua.model.id.KapuaId;
+import javax.xml.bind.annotation.XmlRegistry;
 
-public interface UserFactory extends KapuaObjectFactory
-{
-    public UserCreator newCreator(KapuaId scopedId, String name);
-    
-    public User newUser();
+import org.eclipse.kapua.locator.KapuaLocator;
 
-    public UserQuery newQuery(KapuaId scopedId);
+@XmlRegistry
+public class UserXmlRegistry {
+
+    private final KapuaLocator locator = KapuaLocator.getInstance();
+    private final UserFactory factory = locator.getFactory(UserFactory.class);
     
-    public UserListResult newUserListResult();
+    public User newUser()
+    {
+        return factory.newUser();
+    }
+
+    public UserCreator newUserCreator()
+    {
+        return factory.newCreator(null, null);
+    }
+
+    public UserListResult newAccountListResult()
+    {
+        return factory.newUserListResult();
+    }
 }

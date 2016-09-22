@@ -26,7 +26,8 @@ import org.glassfish.jersey.server.filter.UriConnegFilter;
 public class RestApisApplication extends ResourceConfig {
 
 	public RestApisApplication() throws JAXBException {
-		packages("org.eclipse.kapua.app.api, org.eclipse.kapua.service.account, org.eclipse.kapua.service.account.internal");
+		packages("org.eclipse.kapua.app.api", "org.eclipse.kapua.service.account", "org.eclipse.kapua.service.account.internal",
+		         "org.eclipse.kapua.service.user", "org.eclipse.kapua.service.user.internal");
 
 		HashMap<String, MediaType> mappedMediaTypes = new HashMap<String, MediaType>();
 		mappedMediaTypes.put("xml", MediaType.APPLICATION_XML_TYPE);
