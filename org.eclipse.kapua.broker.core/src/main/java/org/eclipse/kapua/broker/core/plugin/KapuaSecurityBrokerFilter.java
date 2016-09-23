@@ -331,7 +331,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
     public void addExternalConnection(ConnectionContext context, ConnectionInfo info)
         throws Exception
     {
-        // TODO FIXME: to be removed once we are able to avoid the thread splitting from an already logged thread for the activemq nio worker
+        // Clean-up credentials associated with thread by previous connection.
         ThreadContext.unbindSubject();
 
         Context loginTotalContext = metricLoginAddConnectionTime.time();
