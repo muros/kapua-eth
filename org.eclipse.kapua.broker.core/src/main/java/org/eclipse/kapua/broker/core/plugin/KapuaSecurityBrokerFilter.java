@@ -344,7 +344,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
         List<String> authDestinations = null;
         if (logger.isDebugEnabled()) {
-            authDestinations = new ArrayList<String>();
+            authDestinations = new ArrayList<>();
         }
         try {
             // Build KapuaUsername
@@ -369,15 +369,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
             final Account account;
             try {
-                account = KapuaSecurityUtils.doPriviledge(new Callable<Account>() {
-
-                    @Override
-                    public Account call()
-                        throws Exception
-                    {
-                        return accountService.find(scopeId);
-                    }
-                });
+                account = KapuaSecurityUtils.doPriviledge(() -> accountService.find(scopeId));
             }
             catch (Exception e) {
                 // to preserve the original exception message (if possible)
@@ -683,15 +675,9 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                             deviceConnectionToUpdate.setStatus(DeviceConnectionStatus.DISCONNECTED);
 
                             try {
-                                KapuaSecurityUtils.doPriviledge(new Callable<Void>() {
-
-                                    @Override
-                                    public Void call()
-                                        throws Exception
-                                    {
-                                        deviceConnectionService.update(deviceConnectionToUpdate);
-                                        return (Void) null;
-                                    }
+                                KapuaSecurityUtils.doPriviledge(() -> {
+                                    deviceConnectionService.update(deviceConnectionToUpdate);
+                                    return null;
                                 });
                             }
                             catch (Exception e) {
@@ -704,15 +690,9 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                             deviceConnectionToUpdate.setStatus(DeviceConnectionStatus.MISSING);
 
                             try {
-                                KapuaSecurityUtils.doPriviledge(new Callable<Void>() {
-
-                                    @Override
-                                    public Void call()
-                                        throws Exception
-                                    {
-                                        deviceConnectionService.update(deviceConnectionToUpdate);
-                                        return (Void) null;
-                                    }
+                                KapuaSecurityUtils.doPriviledge(() -> {
+                                    deviceConnectionService.update(deviceConnectionToUpdate);
+                                    return null;
                                 });
                             }
                             catch (Exception e) {
