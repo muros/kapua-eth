@@ -277,8 +277,8 @@ public class Accounts extends AbstractKapuaResource
      * @return The newly created Account object.
      */
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Account postAccount(AccountCreator accountCreator) {
         
         Account account = null;
@@ -297,8 +297,8 @@ public class Accounts extends AbstractKapuaResource
      * @return The updated created Account object.
      */
     @PUT
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Account updateAccount(Account account) {
         try {
             account = accountService.update(account);
