@@ -20,6 +20,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -33,7 +34,7 @@ import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountService;
-
+import org.eclipse.kapua.service.account.internal.AccountImpl;
 
 @Path("/accounts")
 public class Accounts extends AbstractKapuaResource 
@@ -84,15 +85,15 @@ public class Accounts extends AbstractKapuaResource
     }
     
     /**
-     * Returns the Account specified by the "name" path parameter.
+     * Returns the Account specified by the "name" query parameter.
      *
      * @param accountName The name of the Account requested.
      * @return The requested Account object.
      */
     @GET
-    @Path("name/{accountName}")
+    @Path("findByName")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public Account getAccountByName(@PathParam("accountName") String accountName) {
+    public Account getAccountByName(@QueryParam("accountName") String accountName) {
 
         Account account = null;
         try {
@@ -280,9 +281,10 @@ public class Accounts extends AbstractKapuaResource
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Account postAccount(AccountCreator accountCreator) {
-        
+
         Account account = null;
         try {
+            accountCreator.setScopeId(KapuaSecurityUtils.getSession().getScopeId());
             account = accountService.create(accountCreator);
         } catch (Throwable t) {
             handleException(t);
@@ -301,6 +303,7 @@ public class Accounts extends AbstractKapuaResource
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Account updateAccount(Account account) {
         try {
+            ((AccountImpl)account).setScopeId(KapuaSecurityUtils.getSession().getScopeId());
             account = accountService.update(account);
         } catch (Throwable t) {
             handleException(t);
