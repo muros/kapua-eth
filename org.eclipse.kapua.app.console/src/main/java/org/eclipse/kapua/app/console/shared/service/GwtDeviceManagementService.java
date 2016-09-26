@@ -24,6 +24,7 @@ import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
 import org.eclipse.kapua.app.console.shared.model.GwtSnapshot;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageInstallRequest;
+import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageOperation;
 import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageUninstallRequest;
 
 import com.extjs.gxt.ui.client.data.ListLoadResult;
@@ -69,6 +70,22 @@ public interface GwtDeviceManagementService extends RemoteService {
      * @since 1.0.0
      */
     public void installPackage(GwtXSRFToken xsrfToken, GwtPackageInstallRequest gwtPackageInstallRequest)
+            throws GwtKapuaException;
+
+    /**
+     * Get the status of downloads operations running on the device
+     * 
+     * @param scopeShortId
+     *            device scope id in short form
+     * @param deviceShortId
+     *            device id in short form
+     * @return list of current running download operation on the device
+     * 
+     * @throws GwtKapuaException
+     * 
+     * @since 1.0.0
+     */
+    public ListLoadResult<GwtPackageOperation> getDownloadOperations(String scopeShortId, String deviceShortId)
             throws GwtKapuaException;
 
     /**

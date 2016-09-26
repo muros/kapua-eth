@@ -49,7 +49,7 @@ public class PackageInstallDialog extends TabbedDialog {
         this.scopeId = scopeId;
         this.deviceId = deviceId;
 
-        DialogUtils.resizeDialog(this, 490, 410);
+        DialogUtils.resizeDialog(this, 490, 250);
     }
 
     @Override
@@ -74,26 +74,26 @@ public class PackageInstallDialog extends TabbedDialog {
             packageInfoForm.setLayout(formLayout);
 
             dpInfoText = new Text();
-            dpInfoText.setText(MSGS.deviceInstallAsyncDpInfo());
-            dpInfoText.setStyleAttribute("margin-bottom", "5px");
+            dpInfoText.setText(MSGS.packageInstallDpInfo());
+            dpInfoText.setStyleAttribute("margin-bottom", "10px");
             packageInfoForm.add(dpInfoText);
 
             dpURIField = new TextField<String>();
             dpURIField.setName("dpUri");
             dpURIField.setAllowBlank(false);
-            dpURIField.setFieldLabel("* " + MSGS.deviceInstallAsyncDpTabUri());
+            dpURIField.setFieldLabel("* " + MSGS.packageInstallDpTabUri());
             packageInfoForm.add(dpURIField, formData);
 
             dpNameField = new TextField<String>();
             dpNameField.setName("dpName");
             dpNameField.setAllowBlank(false);
-            dpNameField.setFieldLabel("* " + MSGS.deviceInstallAsyncDpTabName());
+            dpNameField.setFieldLabel("* " + MSGS.packageInstallDpTabName());
             packageInfoForm.add(dpNameField, formData);
 
             dpVersionField = new TextField<String>();
             dpVersionField.setName("dpVersion");
             dpVersionField.setAllowBlank(false);
-            dpVersionField.setFieldLabel("* " + MSGS.deviceInstallAsyncDpTabVersion());
+            dpVersionField.setFieldLabel("* " + MSGS.packageInstallDpTabVersion());
             packageInfoForm.add(dpVersionField, formData);
         }
 
@@ -112,13 +112,13 @@ public class PackageInstallDialog extends TabbedDialog {
             operationOptionsForm.setLayout(formLayout);
 
             operationInfoText = new Text();
-            operationInfoText.setText(MSGS.deviceInstallAsyncOperationInfo());
+            operationInfoText.setText(MSGS.packageInstallOperationInfo());
             operationInfoText.setStyleAttribute("margin-bottom", "5px");
             operationOptionsForm.add(operationInfoText);
 
             operationRebootField = new CheckBox();
             operationRebootField.setName("reboot");
-            operationRebootField.setFieldLabel(MSGS.deviceInstallAsyncInstallTabReboot());
+            operationRebootField.setFieldLabel(MSGS.packageInstallOperationTabReboot());
             operationRebootField.setBoxLabel("");
 
             operationRebootField.addListener(Events.Change, new Listener<BaseEvent>() {
@@ -137,7 +137,7 @@ public class PackageInstallDialog extends TabbedDialog {
 
             operationRebootDelayField = new NumberField();
             operationRebootDelayField.setName("installRebootDelay");
-            operationRebootDelayField.setFieldLabel(MSGS.deviceInstallAsyncInstallTabRebootDelay());
+            operationRebootDelayField.setFieldLabel(MSGS.packageInstallOperationTabRebootDelay());
             operationRebootDelayField.setEmptyText("0");
             operationRebootDelayField.setAllowDecimals(false);
             operationRebootDelayField.setAllowNegative(false);
@@ -146,13 +146,13 @@ public class PackageInstallDialog extends TabbedDialog {
 
         //
         // Tabs setup
-        packageInfoTab = new TabItem(MSGS.deviceInstallAsyncDpTabTitle());
+        packageInfoTab = new TabItem(MSGS.packageInstallDpTabTitle());
         packageInfoTab.setBorders(false);
         packageInfoTab.setLayout(new FormLayout());
         packageInfoTab.add(packageInfoForm);
         m_tabsPanel.add(packageInfoTab);
 
-        operationOptionsTab = new TabItem(MSGS.deviceInstallAsyncOperationTabTitle());
+        operationOptionsTab = new TabItem(MSGS.packageInstallOperationTabTitle());
         operationOptionsTab.setBorders(false);
         operationOptionsTab.setLayout(new FormLayout());
         operationOptionsTab.add(operationOptionsForm);
@@ -199,7 +199,7 @@ public class PackageInstallDialog extends TabbedDialog {
             @Override
             public void onSuccess(Void result) {
                 m_exitStatus = true;
-                m_exitMessage = MSGS.packageInstallAsyncSuccess();
+                m_exitMessage = MSGS.packageInstallSuccess();
                 hide();
             }
 

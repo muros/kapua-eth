@@ -309,7 +309,11 @@ public class DeviceTabPackages extends LayoutContainer {
     public void refresh() {
         //
         // Refresh the installed tab if selected
-        installedPackageTab.refresh();
+        if (tabsPanel.getSelectedItem().equals(installedPackageTab)) {
+            installedPackageTab.refresh();
+        } else {
+            inProgressPackageTab.refresh();
+        }
 
         //
         // Manage buttons
@@ -332,6 +336,7 @@ public class DeviceTabPackages extends LayoutContainer {
     public void setDirty() {
         if (componentInitialized) {
             installedPackageTab.setDirty(true);
+            inProgressPackageTab.setDirty(true);
         }
     }
 

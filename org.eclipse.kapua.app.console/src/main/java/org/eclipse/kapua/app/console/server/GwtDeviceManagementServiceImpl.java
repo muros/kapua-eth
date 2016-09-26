@@ -50,7 +50,9 @@ import org.eclipse.kapua.app.console.shared.model.GwtDeviceCommandOutput;
 import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
 import org.eclipse.kapua.app.console.shared.model.GwtSnapshot;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
+import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageDownloadOperation;
 import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageInstallRequest;
+import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageOperation;
 import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageUninstallRequest;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementService;
 import org.eclipse.kapua.commons.configuration.metatype.Password;
@@ -78,6 +80,7 @@ import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfo;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfos;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
+import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadOperation;
 import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
 import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallRequest;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
@@ -106,14 +109,12 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
             throws GwtKapuaException {
         List<GwtDeploymentPackage> gwtPkgs = new ArrayList<GwtDeploymentPackage>();
         try {
-
-            // get the configuration
             KapuaLocator locator = KapuaLocator.getInstance();
-            DevicePackageManagementService deviceService = locator.getService(DevicePackageManagementService.class);
+            DevicePackageManagementService deviceManagementService = locator.getService(DevicePackageManagementService.class);
 
             KapuaId scopeId = KapuaEid.parseShortId(scopeShortId);
             KapuaId deviceId = KapuaEid.parseShortId(deviceShortId);
-            DevicePackages deploymentPackages = deviceService.getInstalled(scopeId,
+            DevicePackages deploymentPackages = deviceManagementService.getInstalled(scopeId,
                     deviceId,
                     null);
 
@@ -178,6 +179,34 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
         }
     }
 
+    public ListLoadResult<GwtPackageOperation> getDownloadOperations(String scopeShortId, String deviceShortId)
+            throws GwtKapuaException {
+        List<GwtPackageOperation> gwtDeviceOperations = new ArrayList<GwtPackageOperation>();
+        try {
+
+            KapuaLocator locator = KapuaLocator.getInstance();
+            DevicePackageManagementService deviceManagementService = locator.getService(DevicePackageManagementService.class);
+
+            KapuaId scopeId = KapuaEid.parseShortId(scopeShortId);
+            KapuaId deviceId = KapuaEid.parseShortId(deviceShortId);
+            DevicePackageDownloadOperation downloadOperation = deviceManagementService.downloadStatus(scopeId, deviceId, null);
+
+            GwtPackageDownloadOperation gwtDownloadOperation = new GwtPackageDownloadOperation();
+
+            gwtDownloadOperation.setId(downloadOperation.getId().getShortId());
+            gwtDownloadOperation.setStatus(downloadOperation.getStatus().name());
+            gwtDownloadOperation.setSize(downloadOperation.getSize());
+            gwtDownloadOperation.setProgress(downloadOperation.getProgress());
+
+            gwtDeviceOperations.add(gwtDownloadOperation);
+
+        } catch (Throwable t) {
+            KapuaExceptionHandler.handle(t);
+        }
+
+        return new BaseListLoadResult<>(gwtDeviceOperations);
+    }
+
     @Override
     public void uninstallPackage(GwtXSRFToken xsrfToken, GwtPackageUninstallRequest gwtPackageUninstallRequest) throws GwtKapuaException {
         //
@@ -230,6 +259,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
                     null,
                     null,
                     null);
+
             if (deviceConfigurations != null) {
 
                 // sort the list alphabetically by service name
@@ -237,10 +267,17 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
                 Collections.sort(configs, new Comparator<DeviceComponentConfiguration>() {
 
                     @Override
-                    public int compare(DeviceComponentConfiguration arg0,
-                            DeviceComponentConfiguration arg1) {
-                        String name0 = arg0.getId().substring(arg0.getId().lastIndexOf("."));
-                        String name1 = arg1.getId().substring(arg1.getId().lastIndexOf("."));
+                    public int compare(DeviceComponentConfiguration arg0, DeviceComponentConfiguration arg1) {
+                        String name0 = arg0.getId();
+                        String name1 = arg1.getId();
+
+                        if (name0.contains(".")) {
+                            name0 = name0.substring(name0.lastIndexOf('.'));
+                        }
+                        if (name1.contains(".")) {
+                            name1 = name1.substring(name1.lastIndexOf('.'));
+                        }
+
                         return name0.compareTo(name1);
                     }
                 });
@@ -612,25 +649,6 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
             return "bndUninstalled";
         } else {
             return "bndUnknown";
-        }
-    }
-
-    private String fromStateString(GwtGroupedNVPair pair) {
-        String state = pair.getStatus();
-        if (state.equals("bndInstalled")) {
-            return "INSTALLED";
-        } else if (state.equals("bndResolved")) {
-            return "RESOLVED";
-        } else if (state.equals("bndStarting")) {
-            return "STARTING";
-        } else if (state.equals("bndActive")) {
-            return "ACTIVE";
-        } else if (state.equals("bndStopping")) {
-            return "STOPPING";
-        } else if (state.equals("bndUninstalled")) {
-            return "UNINSTALLED";
-        } else {
-            return "UNKNOWN";
         }
     }
 

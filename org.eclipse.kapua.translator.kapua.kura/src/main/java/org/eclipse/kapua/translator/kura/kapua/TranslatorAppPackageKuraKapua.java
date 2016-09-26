@@ -13,10 +13,12 @@
 package org.eclipse.kapua.translator.kura.kapua;
 
 import java.io.StringWriter;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.service.account.Account;
@@ -42,17 +44,17 @@ import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfo;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfos;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
+import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadStatus;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
 
-public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessage, PackageResponseMessage>
-{
-    private static final String                              CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
+public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessage, PackageResponseMessage> {
+
+    private static final String CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<PackageMetrics, PackageAppProperties> metricsDictionary;
 
-    public TranslatorAppPackageKuraKapua()
-    {
+    public TranslatorAppPackageKuraKapua() {
         metricsDictionary = new HashMap<>();
 
         metricsDictionary.put(PackageMetrics.APP_ID, PackageAppProperties.APP_NAME);
@@ -62,8 +64,7 @@ public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessag
 
     @Override
     public PackageResponseMessage translate(KuraResponseMessage kuraMessage)
-        throws KapuaException
-    {
+            throws KapuaException {
         //
         // Kura channel
         KapuaLocator locator = KapuaLocator.getInstance();
@@ -93,13 +94,12 @@ public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessag
     }
 
     private PackageResponseChannel translate(KuraResponseChannel kuraChannel)
-        throws KapuaException
-    {
+            throws KapuaException {
 
         if (!CONTROL_MESSAGE_CLASSIFIER.equals(kuraChannel.getMessageClassification())) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_CLASSIFIER,
-                                          null,
-                                          kuraChannel.getMessageClassification());
+                    null,
+                    kuraChannel.getMessageClassification());
         }
 
         PackageResponseChannel responseChannel = new PackageResponseChannel();
@@ -108,14 +108,14 @@ public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessag
 
         if (!PackageMetrics.APP_ID.getValue().equals(appIdTokens[0])) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_APP_NAME,
-                                          null,
-                                          appIdTokens[0]);
+                    null,
+                    appIdTokens[0]);
         }
 
         if (!PackageMetrics.APP_VERSION.getValue().equals(appIdTokens[1])) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_CHANNEL_APP_VERSION,
-                                          null,
-                                          appIdTokens[1]);
+                    null,
+                    appIdTokens[1]);
         }
 
         responseChannel.setAppName(PackageAppProperties.APP_NAME);
@@ -127,13 +127,22 @@ public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessag
     }
 
     private PackageResponsePayload translate(KuraResponsePayload kuraResponsePayload)
-        throws KapuaException
-    {
+            throws KapuaException {
         PackageResponsePayload responsePayload = new PackageResponsePayload();
 
         Map<String, Object> metrics = kuraResponsePayload.getMetrics();
         responsePayload.setExceptionMessage((String) metrics.get(ResponseMetrics.RESP_METRIC_EXCEPTION_MESSAGE.getValue()));
         responsePayload.setExceptionStack((String) metrics.get(ResponseMetrics.RESP_METRIC_EXCEPTION_STACK.getValue()));
+
+        if (metrics.get(PackageMetrics.APP_METRIC_PACKAGE_OPERATION_ID.getValue()) != null) {
+            responsePayload.setPackageDownloadOperationId(new KapuaEid(new BigInteger(metrics.get(PackageMetrics.APP_METRIC_PACKAGE_OPERATION_ID.getValue()).toString())));
+        }
+
+        if (metrics.get(PackageMetrics.APP_METRIC_PACKAGE_DOWNLOAD_STATUS.getValue()) != null) {
+            responsePayload.setPackageDownloadOperationStatus(DevicePackageDownloadStatus.valueOf((String) metrics.get(PackageMetrics.APP_METRIC_PACKAGE_DOWNLOAD_STATUS.getValue())));
+        }
+        responsePayload.setPackageDownloadOperationSize((Integer) metrics.get(PackageMetrics.APP_METRIC_PACKAGE_DOWNLOAD_SIZE.getValue()));
+        responsePayload.setPackageDownloadOperationProgress((Integer) metrics.get(PackageMetrics.APP_METRIC_PACKAGE_DOWNLOAD_PROGRESS.getValue()));
 
         String body;
         if (kuraResponsePayload.getBody() != null) {
@@ -142,21 +151,19 @@ public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessag
 
             try {
                 body = new String(kuraResponsePayload.getBody(), charEncoding);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD, //
-                                              e,// 
-                                              kuraResponsePayload.getBody());//
+                        e,//
+                        kuraResponsePayload.getBody());//
             }
 
             KuraDeploymentPackages kuraDeploymentPackages = null;
             try {
                 kuraDeploymentPackages = XmlUtil.unmarshal(body, KuraDeploymentPackages.class);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new TranslatorException(TranslatorErrorCodes.INVALID_PAYLOAD,
-                                              e,
-                                              body);
+                        e,
+                        body);
             }
             translate(responsePayload, charEncoding, kuraDeploymentPackages);
         }
@@ -167,10 +174,9 @@ public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessag
     }
 
     private void translate(PackageResponsePayload packageResponsePayload,
-                           String charEncoding,
-                           KuraDeploymentPackages kuraDeploymentPackages)
-        throws KapuaException
-    {
+            String charEncoding,
+            KuraDeploymentPackages kuraDeploymentPackages)
+            throws KapuaException {
         try {
 
             KuraDeploymentPackage[] deploymentPackageArray = kuraDeploymentPackages.getDeploymentPackages();
@@ -205,23 +211,20 @@ public class TranslatorAppPackageKuraKapua extends Translator<KuraResponseMessag
 
                 packageResponsePayload.setBody(requestBody);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new TranslatorException(TranslatorErrorCodes.INVALID_BODY,
-                                          e,
-                                          kuraDeploymentPackages);
+                    e,
+                    kuraDeploymentPackages);
         }
     }
 
     @Override
-    public Class<KuraResponseMessage> getClassFrom()
-    {
+    public Class<KuraResponseMessage> getClassFrom() {
         return KuraResponseMessage.class;
     }
 
     @Override
-    public Class<PackageResponseMessage> getClassTo()
-    {
+    public Class<PackageResponseMessage> getClassTo() {
         return PackageResponseMessage.class;
     }
 }

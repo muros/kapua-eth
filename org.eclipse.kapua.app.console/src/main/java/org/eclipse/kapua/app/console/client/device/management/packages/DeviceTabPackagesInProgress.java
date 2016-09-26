@@ -4,12 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
+import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
+import org.eclipse.kapua.app.console.client.util.FailureHandler;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
-import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageInstallOperation;
+import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageDownloadOperation;
+import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageOperation;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementService;
+import org.eclipse.kapua.app.console.shared.service.GwtDeviceManagementServiceAsync;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.data.BaseListLoader;
 import com.extjs.gxt.ui.client.data.ListLoadResult;
+import com.extjs.gxt.ui.client.data.ListLoader;
+import com.extjs.gxt.ui.client.data.LoadEvent;
 import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
@@ -30,20 +37,20 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class DeviceTabPackagesInProgress extends TabItem {
 
     private static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
+    private final GwtDeviceManagementServiceAsync gwtDeviceManagementService = GWT.create(GwtDeviceManagementService.class);
 
     private boolean componentInitialized = false;
     private boolean contentDirty = true;
 
     private DeviceTabPackages parentTabPanel;
-    private Grid<GwtPackageInstallOperation> grid;
-    private ListStore<GwtPackageInstallOperation> gridStore = new ListStore<GwtPackageInstallOperation>();
-    private BaseListLoader<ListLoadResult<GwtPackageInstallOperation>> storeLoader;
+    private Grid<GwtPackageOperation> grid;
+    private ListLoader<ListLoadResult<GwtPackageOperation>> storeLoader;
 
     public DeviceTabPackagesInProgress(DeviceTabPackages parentTabPanel) {
         this.parentTabPanel = parentTabPanel;
     }
 
-    public GwtPackageInstallOperation getSelectedOperation() {
+    public GwtPackageOperation getSelectedOperation() {
         return grid.getSelectionModel().getSelectedItem();
     }
 
@@ -62,64 +69,74 @@ public class DeviceTabPackagesInProgress extends TabItem {
         // Column Configuration
         List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 
-        GridCellRenderer<GwtPackageInstallOperation> deviceJobTargetStatusIconRender = new GridCellRenderer<GwtPackageInstallOperation>() {
+        GridCellRenderer<GwtPackageOperation> renderer = new GridCellRenderer<GwtPackageOperation>() {
 
             @Override
-            public Object render(GwtPackageInstallOperation model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtPackageInstallOperation> store,
-                    Grid<GwtPackageInstallOperation> grid) {
-                // TODO Auto-generated method stub
-                return null;
+            public Object render(GwtPackageOperation model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtPackageOperation> store, Grid<GwtPackageOperation> grid) {
+
+                String operation;
+                if (model instanceof GwtPackageDownloadOperation) {
+                    operation = MSGS.deviceInstallTabInProgressTableOperationInstall();
+                } else {
+                    operation = MSGS.deviceInstallTabInProgressTableOperationUnknow();
+                }
+
+                return operation;
             }
 
         };
 
         ColumnConfig column = new ColumnConfig();
-        column.setId("deviceJobTargetStatus");
-        column.setWidth(20);
+        column.setId("operation");
+        column.setHeader(MSGS.deviceInstallTabInProgressTableOperation());
         column.setAlignment(HorizontalAlignment.CENTER);
-        column.setRenderer(deviceJobTargetStatusIconRender);
+        column.setWidth(60);
+        column.setRenderer(renderer);
         configs.add(column);
 
-        GridCellRenderer<GwtPackageInstallOperation> deviceJobTargetOperationRender = new GridCellRenderer<GwtPackageInstallOperation>() {
+        column.setId("id");
+        column.setHeader(MSGS.deviceInstallTabInProgressTableOperationId());
+        column.setAlignment(HorizontalAlignment.CENTER);
+        column.setWidth(60);
+        column.setRenderer(renderer);
+        configs.add(column);
+
+        renderer = new GridCellRenderer<GwtPackageOperation>() {
 
             @Override
-            public Object render(GwtPackageInstallOperation model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtPackageInstallOperation> store,
-                    Grid<GwtPackageInstallOperation> grid) {
-                // TODO Auto-generated method stub
-                return null;
+            public Object render(GwtPackageOperation model, String property, ColumnData config, int rowIndex, int colIndex, ListStore<GwtPackageOperation> store, Grid<GwtPackageOperation> grid) {
+
+                String sizeString;
+                if (model instanceof GwtPackageDownloadOperation) {
+                    Integer size = ((GwtPackageDownloadOperation) model).getSize();
+
+                    if (size > 1024) {
+                        size /= 1024;
+                        if (size > 1024) {
+                            sizeString = (size / 1024) + " MB";
+                        } else {
+                            sizeString = size.toString() + " KB";
+                        }
+                    } else {
+                        sizeString = size.toString() + " B";
+                    }
+                } else {
+                    sizeString = null;
+                }
+
+                return sizeString;
             }
         };
 
         column = new ColumnConfig();
-        column.setId("operation");
-        column.setHeader(MSGS.deviceInstallTabInProgressTableOperation());
-        column.setAlignment(HorizontalAlignment.CENTER);
-        column.setWidth(80);
-        column.setRenderer(deviceJobTargetOperationRender);
-        configs.add(column);
-
-        column = new ColumnConfig();
-        column.setId("name");
-        column.setHeader(MSGS.deviceInstallTabInProgressTableDpName());
-        column.setAlignment(HorizontalAlignment.CENTER);
-        column.setWidth(120);
-        configs.add(column);
-
-        column = new ColumnConfig();
-        column.setId("lastUpdateOnFormatted");
-        column.setHeader(MSGS.deviceInstallTabInProgressTableLastUpdateOn());
-        column.setAlignment(HorizontalAlignment.CENTER);
-        column.setWidth(120);
-        configs.add(column);
-
-        column = new ColumnConfig();
-        column.setId("statusMessage");
-        column.setHeader(MSGS.deviceInstallTabInProgressTableStatusMessage());
+        column.setId("size");
+        column.setHeader(MSGS.deviceInstallTabInProgressTableSize());
         column.setWidth(200);
+        column.setRenderer(renderer);
         configs.add(column);
 
         column = new ColumnConfig();
-        column.setId("progressPercentage");
+        column.setId("progress");
         column.setHeader(MSGS.deviceInstallTabInProgressTableProgressPercentage());
         column.setWidth(80);
         column.setAlignment(HorizontalAlignment.CENTER);
@@ -127,21 +144,22 @@ public class DeviceTabPackagesInProgress extends TabItem {
 
         ColumnModel columnModel = new ColumnModel(configs);
 
-        RpcProxy<ListLoadResult<GwtPackageInstallOperation>> proxy = new RpcProxy<ListLoadResult<GwtPackageInstallOperation>>() {
+        RpcProxy<ListLoadResult<GwtPackageOperation>> proxy = new RpcProxy<ListLoadResult<GwtPackageOperation>>() {
 
             @Override
-            protected void load(Object loadConfig, AsyncCallback<ListLoadResult<GwtPackageInstallOperation>> callback) {
-                // TODO Auto-generated method stub
-
+            protected void load(Object loadConfig, AsyncCallback<ListLoadResult<GwtPackageOperation>> callback) {
+                gwtDeviceManagementService.getDownloadOperations(getSelectedDevice().getScopeId(),
+                        getSelectedDevice().getId(),
+                        callback);
             }
-
         };
 
-        storeLoader = new BaseListLoader<ListLoadResult<GwtPackageInstallOperation>>(proxy);
+        storeLoader = new BaseListLoader<ListLoadResult<GwtPackageOperation>>(proxy);
+        storeLoader.addLoadListener(new InProgressDataLoadListener());
 
-        ListStore<GwtPackageInstallOperation> store = new ListStore<GwtPackageInstallOperation>(storeLoader);
+        ListStore<GwtPackageOperation> store = new ListStore<GwtPackageOperation>(storeLoader);
 
-        grid = new Grid<GwtPackageInstallOperation>(store, columnModel);
+        grid = new Grid<GwtPackageOperation>(store, columnModel);
         grid.setBorders(false);
         grid.setStateful(false);
         grid.setLoadMask(true);
@@ -152,10 +170,10 @@ public class DeviceTabPackagesInProgress extends TabItem {
         grid.getView().setAutoFill(true);
         grid.getView().setEmptyText(MSGS.deviceInstallTabInProgressTableEmpty());
 
-        grid.getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<GwtPackageInstallOperation>() {
+        grid.getSelectionModel().addSelectionChangedListener(new SelectionChangedListener<GwtPackageOperation>() {
 
             @Override
-            public void selectionChanged(SelectionChangedEvent<GwtPackageInstallOperation> se) {
+            public void selectionChanged(SelectionChangedEvent<GwtPackageOperation> se) {
                 ModelData selectedItem = se.getSelectedItem();
 
             }
@@ -176,17 +194,25 @@ public class DeviceTabPackagesInProgress extends TabItem {
     public void refresh() {
         if (contentDirty && componentInitialized) {
 
-            GwtDevice selectedDevice = getSelectedDevice();
-            if (selectedDevice == null) {
-                gridStore.removeAll();
-                grid.unmask();
+            if (getSelectedDevice() == null) {
                 grid.getView().setEmptyText(MSGS.deviceNoDeviceSelectedOrOffline());
             } else {
-                grid.mask(MSGS.loading());
                 storeLoader.load();
             }
 
             contentDirty = false;
+        }
+    }
+
+    private class InProgressDataLoadListener extends EdcLoadListener {
+
+        public void loaderLoadException(LoadEvent le) {
+            grid.unmask();
+
+            if (le.exception != null) {
+                FailureHandler.handle(le.exception);
+            }
+
         }
     }
 }

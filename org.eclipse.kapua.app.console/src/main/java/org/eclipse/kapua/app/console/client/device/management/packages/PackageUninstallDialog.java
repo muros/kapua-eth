@@ -40,7 +40,7 @@ public class PackageUninstallDialog extends SimpleDialog {
         this.deviceId = deviceId;
         this.selectedDeploymentPackage = selectedDeploymentPackage;
 
-        DialogUtils.resizeDialog(this, 400, 205);
+        DialogUtils.resizeDialog(this, 400, 210);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class PackageUninstallDialog extends SimpleDialog {
 
     @Override
     public String getHeaderMessage() {
-        return MSGS.deviceUninstallPackage();
+        return MSGS.packageUninstallPackage();
     }
 
     @Override
@@ -146,11 +146,11 @@ public class PackageUninstallDialog extends SimpleDialog {
 
     @Override
     public String getInfoMessage() {
-        return MSGS.deviceUninstallPackageInfo(selectedDeploymentPackage.getName());
+        return MSGS.packageUninstallPackageInfo(selectedDeploymentPackage.getName());
     }
 
     @Override
     public String getSubmitButtonText() {
-        return MSGS.deviceUninstallButton();
+        return MSGS.packageUninstallButton();
     }
 }

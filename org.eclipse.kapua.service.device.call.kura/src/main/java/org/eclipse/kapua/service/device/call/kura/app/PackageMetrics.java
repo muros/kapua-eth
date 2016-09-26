@@ -15,7 +15,7 @@ public enum PackageMetrics {
     APP_ID("DEPLOY"),//
     APP_VERSION("V2"), //
 
-    // Commons exec metrics
+    // Commons metrics
     APP_METRIC_PACKAGE_OPERATION_ID("job.id"), //
     APP_METRIC_PACKAGE_REBOOT("dp.reboot"), //
     APP_METRIC_PACKAGE_REBOOT_DELAY("dp.reboot.delay"), //
@@ -26,6 +26,12 @@ public enum PackageMetrics {
     APP_METRIC_PACKAGE_DOWNLOAD_PACKAGE_VERSION("dp.version"), //
     APP_METRIC_PACKAGE_DOWNLOAD_PROTOCOL("dp.download.protocol"), //
     APP_METRIC_PACKAGE_DOWNLOAD_INSTALL("dp.install"), //
+
+    // Response get download
+    APP_METRIC_PACKAGE_DOWNLOAD_SIZE("dp.download.size"), //
+    APP_METRIC_PACKAGE_DOWNLOAD_STATUS("dp.download.status"), //
+    APP_METRIC_PACKAGE_DOWNLOAD_PROGRESS("dp.download.progress"), //
+
     // Request exec install
     APP_METRIC_PACKAGE_INSTALL_PACKAGE_NAME("dp.name"), //
     APP_METRIC_PACKAGE_INSTALL_PACKAGE_VERSION("dp.version"), //

@@ -1,10 +1,16 @@
 package org.eclipse.kapua.service.device.management.packages.model.install;
 
-public interface DevicePackageInstallOperation
-{
+import org.eclipse.kapua.model.id.KapuaId;
+
+public interface DevicePackageInstallOperation {
+
+    public KapuaId getId();
+
+    public void setId(KapuaId id);
+
     public String getName();
 
-    public void setPName(String packageName);
+    public void setName(String packageName);
 
     public String getVersion();
 
