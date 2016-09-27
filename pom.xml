@@ -443,15 +443,16 @@
 
         <!-- -->
         <!-- Broker -->
-        <module>org.eclipse.kapua.broker.archive</module>
         <module>org.eclipse.kapua.broker.core</module>
 
         <!-- -->
         <!-- Applications -->
         <module>org.eclipse.kapua.app.test</module>
         <module>org.eclipse.kapua.app.console</module>
-        <module>org.eclipse.kapua.app.console.archive</module>
         <module>org.eclipse.kapua.app.api</module>
+        
+        <!-- assembly -->
+        <module>org.eclipse.kapua.assembly</module>
         
         <!-- License Check -->
         <module>org.eclipse.kapua.dev-tools</module>

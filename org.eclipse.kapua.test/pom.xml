@@ -75,7 +75,7 @@
                         <configuration>
                         	<skip>${maven.test.skip}</skip>
                             <executable>./startup.sh</executable>
-                            <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/testScript/</workingDirectory>
+                            <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/integrationTestScript/</workingDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -87,7 +87,7 @@
 	                    <configuration>
 	                    	<skip>${maven.test.skip}</skip>
 	                    	<executable>./shutdown.sh</executable>
-	                        <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/testScript/</workingDirectory>
+	                        <workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/integrationTestScript/</workingDirectory>
 	                    </configuration>
                  	</execution>
                 </executions>

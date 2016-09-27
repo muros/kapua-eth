@@ -312,7 +312,7 @@
     </dependencies>
 
     <build>
-        <finalName>console</finalName>
+        <finalName>console-${project.version}</finalName>
         <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
 
         <plugins>

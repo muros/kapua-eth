@@ -7,7 +7,7 @@
 # you're doing.
 Vagrant.configure("2") do |config|
   #share the kapua directory with the vagrant machine to allow the activemq broker to access to the kapua code (jars)
-  config.vm.synced_folder "../../../../../", "/kapua",
+  config.vm.synced_folder "../../../../", "/kapua",
      owner: "vagrant",
      group: "vagrant",
      mount_options: ["dmode=775,fmode=664"]
@@ -98,10 +98,10 @@ Vagrant.configure("2") do |config|
 	 export H2DB_VERSION="1.4.192"
 	 export ACTIVE_MQ_VERSION="5.14.0"
 	 export TOMCAT_VERSION="8.0.37"
-	 
-	 #########################
-     ### H2 database setup ###
-	 #########################
+
+	 ###########################
+     ### H2 database startup ###
+	 ###########################
      # Run the database engine
      su --login -c "java -cp /usr/local/h2database/h2database-${H2DB_VERSION}/h2*.jar org.h2.tools.Server -baseDir /home/vagrant/H2/kapua -webAllowOthers -tcpAllowOthers -tcpPort 3306 &" vagrant
 
@@ -109,40 +109,6 @@ Vagrant.configure("2") do |config|
 	 java -cp /usr/local/h2database/h2database-${H2DB_VERSION}/h2*.jar org.h2.tools.Shell -url jdbc:h2:tcp://localhost:3306/kapuadb -user "root" -password "password" -sql "CREATE SCHEMA IF NOT EXISTS kapuadb; \
 		CREATE USER IF NOT EXISTS kapua PASSWORD 'kapua'; \
 		GRANT ALL ON SCHEMA kapuadb TO kapua;"
-		
-	 #########################
-     ### ActiveMQ setup    ###
-	 #########################
-	 ### install activemq DEV PROFILE ###
-     # activemq post-install setup
-  	 cd /usr/local/activemq/apache-activemq-${ACTIVE_MQ_VERSION}
-	 rm conf/activemq.xml
-	 rm conf/log4j.properties
-	 ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/broker/activemq.xml conf/activemq.xml
-	 ln -s /kapua/org.eclipse.kapua.broker.deployment/src/main/resources/conf/broker/log4j.properties conf/log4j.properties
-	 cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/developMachine/script/broker/*.sh .
-	 chmod 555 update_kapua_jars_cfg.sh
-	 chmod 555 start_broker.sh
-	 echo 'remove old guava jars'
-	 rm ./lib/optional/guava-*.*
-	 # enable debug
-     sudo sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
-	 sudo chown -R vagrant:vagrant /usr/local/activemq/apache-activemq-${ACTIVE_MQ_VERSION}
-
-	 #########################
-     ### tomcat setup      ###
-	 #########################
-     ### tomcat 8.0.37 post install ###
-     #allow remote manager application
-     cd /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}
-     sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/developMachine/conf/tomcat/context.xml webapps/manager/META-INF/
-     sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/developMachine/conf/tomcat/tomcat-users.xml conf/
-     sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/developMachine/script/tomcat/start_tomcat.sh .
-     sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/developMachine/script/tomcat/update_kapua_war.sh .
-     chmod 555 start_tomcat.sh
-     chmod 555 update_kapua_war.sh
-     # change the owner and the group to vagrant
-     sudo chown -R vagrant /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}
 
   SHELL
 end

@@ -13,5 +13,9 @@
 #*******************************************************************************
 echo 'remove old symbolic link to console web application'
 rm webapps/console.war
+echo 'remove old symbolic link to api web application'
+rm webapps/api.war
 echo 'create symbolic link to console web application'
-ln -s /kapua/org.eclipse.kapua.app.console/target/console.war webapps/console.war
+ln -s /kapua/org.eclipse.kapua.app.console/target/console-KAPUA_VERSION.war webapps/console.war
+echo 'create symbolic link to api web application'
+ln -s /kapua/org.eclipse.kapua.app.api/target/kapua.war webapps/api.war

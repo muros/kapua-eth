@@ -10,7 +10,6 @@
 #     Eurotech - initial API and implementation
 #
 #*******************************************************************************
-export ACTIVE_MQ_VERSION="5.14.0"
 echo 'cleanup the symbolic links to Kapua jars'
 for name in $(find lib/extra -type l); do echo remove symbolic link from ./$name; rm ./$name; done;
 echo 'create the symbolic links to Kapua jars'
@@ -22,8 +21,8 @@ echo '===> copy kapua modules'
 for name in $(find /kapua -name 'org.eclipse.kapua*.jar' | grep target | grep -Ev 'test|console|api|dependency|mysql'); do jar_name=$(echo - $name - $name | awk -F"/" '{print $NF}'); echo create symbolic link from ./lib/extra/${jar_name} ${name}; ln -s $name ./lib/extra/$jar_name; done;
 echo 'create the symbolic links to Kapua jars DONE'
 echo 'remove old config links'
-rm /usr/local/activemq/apache-activemq-${ACTIVE_MQ_VERSION}/conf/log4j.properties
-rm /usr/local/activemq/apache-activemq-${ACTIVE_MQ_VERSION}/conf/activemq.xml
+rm /usr/local/activemq/apache-activemq-ACTIVEMQ_VERSION/conf/log4j.properties
+rm /usr/local/activemq/apache-activemq-ACTIVEMQ_VERSION/conf/activemq.xml
 echo 'create new config links'
-ln -s /kapua/org.eclipse.kapua.broker.archive/src/main/resources/conf/activemq.xml /usr/local/activemq/apache-activemq-${ACTIVE_MQ_VERSION}/conf/activemq.xml
-ln -s /kapua/org.eclipse.kapua.broker.archive/src/main/resources/conf/log4j.properties /usr/local/activemq/apache-activemq-${ACTIVE_MQ_VERSION}/conf/log4j.properties
+ln -s /kapua/org.eclipse.kapua.assembly/src/main/resources/conf/broker/activemq.xml /usr/local/activemq/apache-activemq-ACTIVEMQ_VERSION/conf/activemq.xml
+ln -s /kapua/org.eclipse.kapua.assembly/src/main/resources/conf/broker/log4j.properties /usr/local/activemq/apache-activemq-ACTIVEMQ_VERSION/conf/log4j.properties
