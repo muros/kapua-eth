@@ -19,14 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.kapua.app.console.server.util.KapuaExceptionHandler;
-import org.eclipse.kapua.app.console.setting.ConsoleSetting;
-import org.eclipse.kapua.app.console.setting.ConsoleSettingKeys;
 import org.eclipse.kapua.app.console.shared.GwtKapuaException;
-import org.eclipse.kapua.app.console.shared.model.GwtBundleInfo;
-import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
-import org.eclipse.kapua.app.console.shared.model.GwtConfigParameter;
-import org.eclipse.kapua.app.console.shared.model.GwtConfigParameter.GwtConfigParameterType;
-import org.eclipse.kapua.app.console.shared.model.GwtDeploymentPackage;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice.GwtDeviceCredentialsTight;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceCreator;
@@ -230,8 +223,8 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
     }
 
     public PagingLoadResult<GwtDevice> findDevices(PagingLoadConfig loadConfig,
-                                                   String scopeIdString,
-                                                   GwtDeviceQueryPredicates predicates)
+            String scopeIdString,
+            GwtDeviceQueryPredicates predicates)
             throws GwtKapuaException {
         KapuaLocator locator = KapuaLocator.getInstance();
         DeviceRegistryService deviceRegistryService = locator.getService(DeviceRegistryService.class);
@@ -292,7 +285,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
             for (Device d : devices.getItems()) {
                 DeviceConnection deviceConnection = deviceConnectionService.findByClientId(d.getScopeId(),
-                                                                                           d.getClientId());
+                        d.getClientId());
 
                 // Connection info
                 GwtDevice gwtDevice = KapuaGwtConverter.convert(d);
@@ -315,8 +308,6 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             }
 
         } catch (Throwable t) {
-        }
-        catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }
 
@@ -342,7 +333,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaId scopeId = KapuaEid.parseShortId(gwtDeviceCreator.getScopeId());
 
             DeviceCreator deviceCreator = deviceFactory.newCreator(scopeId,
-                                                                   gwtDeviceCreator.getClientId());
+                    gwtDeviceCreator.getClientId());
             deviceCreator.setDisplayName(gwtDeviceCreator.getDisplayName());
 
             deviceCreator.setCredentialsMode(DeviceCredentialsMode.valueOf(gwtDeviceCreator.getGwtCredentialsTight().name()));
@@ -356,8 +347,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             Device device = deviceRegistryService.create(deviceCreator);
 
             gwtDevice = KapuaGwtConverter.convert(device);
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }
 
@@ -428,16 +418,14 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             Device d = drs.findByClientId(scopeId, clientId);
             drs.delete(d.getScopeId(), d.getId());
         } catch (Throwable t) {
-        }
-        catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }
-        }
+    }
 
     public PagingLoadResult<GwtDeviceEvent> findDeviceEvents(PagingLoadConfig loadConfig,
-                                                             GwtDevice gwtDevice,
-                                                             Date startDate,
-                                                             Date endDate)
+            GwtDevice gwtDevice,
+            Date startDate,
+            Date endDate)
             throws GwtKapuaException {
         ArrayList<GwtDeviceEvent> gwtDeviceEvents = new ArrayList<GwtDeviceEvent>();
         BasePagingLoadResult<GwtDeviceEvent> gwtResults = null;

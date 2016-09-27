@@ -125,12 +125,9 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setAction(KapuaMethod.READ);
         deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
@@ -196,12 +193,9 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setAction(KapuaMethod.EXECUTE);
         deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
@@ -252,12 +246,9 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setAction(KapuaMethod.DELETE);
         deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
@@ -317,12 +308,9 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setAction(KapuaMethod.READ);
         deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
@@ -386,12 +374,9 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setAction(KapuaMethod.EXECUTE);
         deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
@@ -466,12 +451,9 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setAction(KapuaMethod.READ);
         deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
@@ -534,12 +516,9 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setAction(KapuaMethod.EXECUTE);
         deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());
@@ -613,12 +592,9 @@ public class DevicePackageManagementServiceImpl implements DevicePackageManageme
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId);
-        deviceEventCreator.setDeviceId(deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
-        deviceEventCreator.setReceivedOn(responseMessage.getReceivedOn());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
-        deviceEventCreator.setResource(PackageAppProperties.APP_NAME.getValue());
         deviceEventCreator.setAction(KapuaMethod.READ);
         deviceEventCreator.setResponseCode(responseMessage.getResponseCode());
         deviceEventCreator.setEventMessage(responseMessage.getPayload().toDisplayString());

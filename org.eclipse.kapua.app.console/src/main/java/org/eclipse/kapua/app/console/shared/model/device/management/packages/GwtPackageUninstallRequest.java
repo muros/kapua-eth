@@ -1,8 +1,8 @@
 package org.eclipse.kapua.app.console.shared.model.device.management.packages;
 
-import org.eclipse.kapua.app.console.shared.model.EdcBaseModel;
+import org.eclipse.kapua.app.console.shared.model.KapuaBaseModel;
 
-public class GwtPackageUninstallRequest extends EdcBaseModel {
+public class GwtPackageUninstallRequest extends KapuaBaseModel {
 
     private static final long serialVersionUID = 7021896328090446806L;
 

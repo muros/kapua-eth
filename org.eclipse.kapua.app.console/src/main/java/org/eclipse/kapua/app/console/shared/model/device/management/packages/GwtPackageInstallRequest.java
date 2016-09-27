@@ -1,78 +1,63 @@
 package org.eclipse.kapua.app.console.shared.model.device.management.packages;
 
-import org.eclipse.kapua.app.console.shared.model.EdcBaseModel;
+import org.eclipse.kapua.app.console.shared.model.KapuaBaseModel;
 
-public class GwtPackageInstallRequest extends EdcBaseModel
-{
+public class GwtPackageInstallRequest extends KapuaBaseModel {
 
-    public void setScopeId(String scopeId)
-    {
+    public void setScopeId(String scopeId) {
         set("scopeId", scopeId);
     }
 
-    public String getScopeId()
-    {
+    public String getScopeId() {
         return (String) get("scopeId");
     }
 
-    public void setDeviceId(String deviceId)
-    {
+    public void setDeviceId(String deviceId) {
         set("deviceId", deviceId);
     }
 
-    public String getDeviceId()
-    {
+    public String getDeviceId() {
         return (String) get("deviceId");
     }
 
-    public void setPackageURI(String packageURI)
-    {
+    public void setPackageURI(String packageURI) {
         set("packageURI", packageURI);
     }
 
-    public String getPackageURI()
-    {
+    public String getPackageURI() {
         return get("packageURI");
     }
 
-    public void setPackageName(String packageName)
-    {
+    public void setPackageName(String packageName) {
         set("packageName", packageName);
 
     }
 
-    public String getPackageName()
-    {
+    public String getPackageName() {
         return get("packageName");
     }
 
-    public void setPackageVersion(String packageVersion)
-    {
+    public void setPackageVersion(String packageVersion) {
         set("packageVersion", packageVersion);
     }
 
-    public String getPackageVersion()
-    {
+    public String getPackageVersion() {
         return get("packageVersion");
     }
 
-    public void setReboot(Boolean reboot)
-    {
+    public void setReboot(Boolean reboot) {
         set("reboot", reboot);
     }
 
-    public Boolean isReboot()
-    {
+    public Boolean isReboot() {
         return get("reboot");
     }
 
-    public void setRebootDelay(int rebootDelay)
-    {
+    public void setRebootDelay(int rebootDelay) {
         set("rebootDelay", rebootDelay);
     }
 
-    public Integer getRebootDelay()
-    {
+    public Integer getRebootDelay() {
         return get("rebootDelay");
     }
 

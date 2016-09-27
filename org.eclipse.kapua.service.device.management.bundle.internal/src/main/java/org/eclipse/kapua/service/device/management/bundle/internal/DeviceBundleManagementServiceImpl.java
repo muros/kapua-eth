@@ -40,14 +40,12 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 
-public class DeviceBundleManagementServiceImpl implements DeviceBundleManagementService
-{
+public class DeviceBundleManagementServiceImpl implements DeviceBundleManagementService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public DeviceBundles get(KapuaId scopeId, KapuaId deviceId, Long timeout)
-        throws KapuaException
-    {
+            throws KapuaException {
         //
         // Argument Validation
         ArgumentValidator.notNull(scopeId, "scopeId");
@@ -91,8 +89,7 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         String body = null;
         try {
             body = new String(responsePayload.getBody(), charEncoding);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION, e, responsePayload.getBody());
 
         }
@@ -100,11 +97,10 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         DeviceBundles deviceBundleList = null;
         try {
             deviceBundleList = XmlUtil.unmarshal(body, DeviceBundlesImpl.class);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION,
-                                                e,
-                                                body);
+                    e,
+                    body);
         }
 
         //
@@ -112,6 +108,7 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), DeviceBundleAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.READ);
@@ -126,8 +123,7 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void start(KapuaId scopeId, KapuaId deviceId, String bundleId, Long timeout)
-        throws KapuaException
-    {
+            throws KapuaException {
         //
         // Argument Validation
         ArgumentValidator.notNull(scopeId, "scopeId");
@@ -169,6 +165,7 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), DeviceBundleAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.EXECUTE);
@@ -181,8 +178,7 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public void stop(KapuaId scopeId, KapuaId deviceId, String bundleId, Long timeout)
-        throws KapuaException
-    {
+            throws KapuaException {
         //
         // Argument Validation
         ArgumentValidator.notNull(scopeId, "scopeId");
@@ -224,7 +220,7 @@ public class DeviceBundleManagementServiceImpl implements DeviceBundleManagement
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), BundleAppProperties.APP_NAME.getValue());
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), DeviceBundleAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.EXECUTE);

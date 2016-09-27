@@ -47,14 +47,13 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
-import org.eclipse.kapua.service.device.management.packages.DevicePackageManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class FileServlet extends KapuaHttpServlet {
 
     private static final long serialVersionUID = -5016170117606322129L;
-    private static Logger     s_logger         = LoggerFactory.getLogger(FileServlet.class);
+    private static Logger s_logger = LoggerFactory.getLogger(FileServlet.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -78,9 +77,7 @@ public class FileServlet extends KapuaHttpServlet {
         }
         // END XSRF security check
 
-        if (reqPathInfo.startsWith("/deploy")) {
-            doPostDeploy(req.getPathInfo(), kapuaFormFields, resp);
-        } else if (reqPathInfo.equals("/command")) {
+        if (reqPathInfo.equals("/command")) {
             doPostCommand(kapuaFormFields, resp);
         } else if (reqPathInfo.equals("/configuration/snapshot")) {
             doPostConfigurationSnapshot(kapuaFormFields, resp);
@@ -117,9 +114,9 @@ public class FileServlet extends KapuaHttpServlet {
             String xmlConfigurationString = new String(data, "UTF-8");
 
             deviceConfigurationManagementService.put(KapuaEid.parseShortId(scopeIdString),
-                                                     KapuaEid.parseShortId(deviceIdString),
-                                                     xmlConfigurationString,
-                                                     null);
+                    KapuaEid.parseShortId(deviceIdString),
+                    xmlConfigurationString,
+                    null);
 
         } catch (IllegalArgumentException iae) {
             resp.sendError(400, "Illegal value for query parameter: " + iae.getMessage());
@@ -135,86 +132,6 @@ public class FileServlet extends KapuaHttpServlet {
             return;
         } catch (Exception e) {
             s_logger.error("Error posting configuration", e);
-            throw new ServletException(e);
-        }
-    }
-
-    private void doPostDeploy(String reqPathInfo, KapuaFormFields kapuaFormFields, HttpServletResponse resp)
-            throws ServletException, IOException {
-        try {
-            KapuaLocator locator = KapuaLocator.getInstance();
-            DevicePackageManagementService devicePackageManagementService = locator.getService(DevicePackageManagementService.class);
-
-            String scopeIdString = kapuaFormFields.get("scopeIdString");
-            String deviceIdString = kapuaFormFields.get("deviceIdString");
-
-            if (scopeIdString == null || scopeIdString.isEmpty()) {
-                throw new IllegalArgumentException("scopeId");
-            }
-
-            if (deviceIdString == null || deviceIdString.isEmpty()) {
-                throw new IllegalArgumentException("deviceId");
-            }
-
-            if (reqPathInfo.endsWith("url")) {
-
-                String packageDownloadUrl = kapuaFormFields.get("packageUrl");
-
-                if (packageDownloadUrl == null ||
-                    packageDownloadUrl.isEmpty() ||
-                    !packageDownloadUrl.endsWith(".dp")) {
-                    throw new IllegalArgumentException("packageUrl");
-                }
-
-                s_logger.info("Installing deployment package at URL: {}", packageDownloadUrl);
-                // devicePackageManagementService.install(KapuaEid.parseShortId(scopeIdString),
-                // KapuaEid.parseShortId(deviceIdString),
-                // packageDownloadUrl,
-                // null);
-            } else if (reqPathInfo.endsWith("upload")) {
-
-                List<FileItem> fileItems = kapuaFormFields.getFileItems();
-
-                if (fileItems == null || fileItems.size() != 1) {
-                    throw new IllegalArgumentException("file");
-                }
-
-                FileItem item = fileItems.get(0);
-                String filename = item.getName();
-                byte[] data = item.get();
-
-                if (filename == null || !filename.endsWith(".dp")) {
-                    throw new IllegalArgumentException("packageUrl");
-                }
-
-                s_logger.info("Installing deployment package: {}", filename);
-                // devicePackageManagementService.install(KapuaEid.parseShortId(scopeIdString),
-                // KapuaEid.parseShortId(deviceIdString),
-                // filename,
-                // data,
-                // null);
-            } else {
-                resp.sendError(404);
-                return;
-            }
-        } catch (IllegalArgumentException iae) {
-            resp.sendError(400, "Illegal value for query parameter: " + iae.getMessage());
-            return;
-        }
-        // catch (KapuaEntityNotFoundException eenfe) {
-        // resp.sendError(400, eenfe.getMessage());
-        // return;
-        // }
-        // catch (KapuaUnauthenticatedException eiae) {
-        // resp.sendError(401, eiae.getMessage());
-        // return;
-        // }
-        // catch (KapuaIllegalAccessException eiae) {
-        // resp.sendError(403, eiae.getMessage());
-        // return;
-        // }
-        catch (Exception e) {
-            s_logger.error("Error posting deployment package", e);
             throw new ServletException(e);
         }
     }
@@ -282,20 +199,20 @@ public class FileServlet extends KapuaHttpServlet {
             commandInput.setBody(data);
 
             DeviceCommandOutput deviceCommandOutput = deviceService.exec(KapuaEid.parseShortId(scopeIdString),
-                                                                         KapuaEid.parseShortId(deviceIdString),
-                                                                         commandInput,
-                                                                         null);
+                    KapuaEid.parseShortId(deviceIdString),
+                    commandInput,
+                    null);
             resp.setContentType("text/plain");
             if (deviceCommandOutput.getStderr() != null &&
-                deviceCommandOutput.getStderr().length() > 0) {
+                    deviceCommandOutput.getStderr().length() > 0) {
                 resp.getWriter().println(deviceCommandOutput.getStderr());
             }
             if (deviceCommandOutput.getStdout() != null &&
-                deviceCommandOutput.getStdout().length() > 0) {
+                    deviceCommandOutput.getStdout().length() > 0) {
                 resp.getWriter().println(deviceCommandOutput.getStdout());
             }
             if (deviceCommandOutput.getExceptionMessage() != null &&
-                deviceCommandOutput.getExceptionMessage().length() > 0) {
+                    deviceCommandOutput.getExceptionMessage().length() > 0) {
                 resp.getWriter().println(deviceCommandOutput.getExceptionMessage());
             }
 
@@ -352,8 +269,8 @@ public class FileServlet extends KapuaHttpServlet {
         ConsoleSetting config = ConsoleSetting.getInstance();
 
         filePathSb.append(config.getString(ConsoleSettingKeys.DEVICE_CONFIGURATION_ICON_FOLDER))
-                  .append("/")
-                  .append(id);
+                .append("/")
+                .append(id);
 
         File requestedFile = new File(filePathSb.toString());
         if (!requestedFile.exists()) {
@@ -371,8 +288,8 @@ class UploadRequest extends ServletFileUpload {
 
     private static Logger s_logger = LoggerFactory.getLogger(UploadRequest.class);
 
-    Map<String, String>   formFields;
-    List<FileItem>        fileItems;
+    Map<String, String> formFields;
+    List<FileItem> fileItems;
 
     public UploadRequest(DiskFileItemFactory diskFileItemFactory) {
         super(diskFileItemFactory);
@@ -411,7 +328,7 @@ class UploadRequest extends ServletFileUpload {
                 long sizeInBytes = item.getSize();
 
                 s_logger.debug("File upload item name: {}, fileName: {}, contentType: {}, isInMemory: {}, size: {}",
-                               new Object[] { fieldName, fileName, contentType, isInMemory, sizeInBytes });
+                        new Object[] { fieldName, fileName, contentType, isInMemory, sizeInBytes });
 
                 fileItems.add(item);
             }

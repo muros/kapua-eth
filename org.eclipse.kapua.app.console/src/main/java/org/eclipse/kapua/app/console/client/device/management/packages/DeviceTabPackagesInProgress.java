@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.kapua.app.console.client.messages.ConsoleMessages;
-import org.eclipse.kapua.app.console.client.util.EdcLoadListener;
 import org.eclipse.kapua.app.console.client.util.FailureHandler;
+import org.eclipse.kapua.app.console.client.util.KapuaLoadListener;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
 import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageDownloadOperation;
 import org.eclipse.kapua.app.console.shared.model.device.management.packages.GwtPackageOperation;
@@ -204,7 +204,7 @@ public class DeviceTabPackagesInProgress extends TabItem {
         }
     }
 
-    private class InProgressDataLoadListener extends EdcLoadListener {
+    private class InProgressDataLoadListener extends KapuaLoadListener {
 
         public void loaderLoadException(LoadEvent le) {
             grid.unmask();

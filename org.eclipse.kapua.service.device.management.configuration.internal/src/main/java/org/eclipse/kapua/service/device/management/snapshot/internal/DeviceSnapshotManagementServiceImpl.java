@@ -41,14 +41,12 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
 
-public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManagementService
-{
+public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManagementService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public DeviceSnapshotIds get(KapuaId scopeId, KapuaId deviceId, Long timeout)
-        throws KapuaException
-    {
+            throws KapuaException {
         //
         // Argument Validation
         ArgumentValidator.notNull(scopeId, "scopeId");
@@ -90,21 +88,19 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         String body = null;
         try {
             body = new String(responsePayload.getBody(), charEncoding);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION,
-                                                e,
-                                                responsePayload.getBody());
+                    e,
+                    responsePayload.getBody());
         }
 
         DeviceSnapshotIds deviceSnapshots = null;
         try {
             deviceSnapshots = XmlUtil.unmarshal(body, DeviceSnapshotIdsImpl.class);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION,
-                                                e,
-                                                body);
+                    e,
+                    body);
         }
 
         //
@@ -112,7 +108,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), SnapshotAppProperties.APP_NAME.getValue());
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), DeviceSnapshotAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.READ);
@@ -127,8 +123,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public void rollback(KapuaId scopeId, KapuaId deviceId, String snapshotId, Long timeout)
-        throws KapuaException
-    {
+            throws KapuaException {
         //
         // Argument Validation
         ArgumentValidator.notNull(scopeId, "scopeId");
@@ -169,7 +164,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
 
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), SnapshotAppProperties.APP_NAME.getValue());
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, responseMessage.getReceivedOn(), DeviceSnapshotAppProperties.APP_NAME.getValue());
         deviceEventCreator.setPosition(responseMessage.getPosition());
         deviceEventCreator.setSentOn(responseMessage.getSentOn());
         deviceEventCreator.setAction(KapuaMethod.EXECUTE);
