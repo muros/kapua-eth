@@ -27,10 +27,7 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each
- * Java content interface and Java element interface
- * generated in the com.eurotech.framework.core.configuration.metatype package.
- * <p>An ObjectFactory allows you to programatically
+ * ObjectFactory allows you to programatically
  * construct new instances of the Java representation
  * for XML content. The Java representation of XML
  * content can consist of schema derived interfaces
@@ -46,7 +43,7 @@ public class ObjectFactoryImpl {
     private final static QName _MetaData_QNAME = new QName("http://www.osgi.org/xmlns/metatype/v1.2.0", "MetaData");
 
     /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.eurotech.framework.core.configuration.metatype
+     * Create a new ObjectFactory that can be used to create new instances of schema derived classes.
      *
      */
     public ObjectFactoryImpl() {

@@ -31,7 +31,10 @@ import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountService;
 
+import io.swagger.annotations.Api;
 
+
+@Api
 @Path("/accounts")
 public class Accounts extends AbstractKapuaResource 
 {
