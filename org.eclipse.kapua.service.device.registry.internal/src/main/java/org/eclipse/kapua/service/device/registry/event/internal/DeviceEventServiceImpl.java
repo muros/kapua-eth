@@ -14,6 +14,7 @@ package org.eclipse.kapua.service.device.registry.event.internal;
 
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.jpa.EntityManagerSession;
 import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
@@ -35,15 +36,21 @@ public class DeviceEventServiceImpl implements DeviceEventService {
 
     private final PermissionFactory permissionFactory;
 
+    private final EntityManagerSession entityManagerSession;
+
     public DeviceEventServiceImpl(AuthorizationService authorizationService, PermissionFactory permissionFactory) {
         this.authorizationService = authorizationService;
         this.permissionFactory = permissionFactory;
+
+        this.entityManagerSession = new EntityManagerSession(DeviceEntityManagerFactory.instance());
     }
 
     public DeviceEventServiceImpl() {
         KapuaLocator locator = KapuaLocator.getInstance();
         authorizationService = locator.getService(AuthorizationService.class);
         permissionFactory = locator.getFactory(PermissionFactory.class);
+
+        this.entityManagerSession = new EntityManagerSession(DeviceEntityManagerFactory.instance());
     }
 
     // Operations
@@ -58,31 +65,18 @@ public class DeviceEventServiceImpl implements DeviceEventService {
         ArgumentValidator.notNull(deviceEventCreator.getReceivedOn(), "deviceEventCreator.receivedOn");
         ArgumentValidator.notEmptyOrNull(deviceEventCreator.getResource(), "deviceEventCreator.eventType");
 
-        //
         // Check Access
         authorizationService.checkPermission(permissionFactory.newPermission(DeviceEventDomain.DEVICE_EVENT, Actions.write, deviceEventCreator.getScopeId()));
 
-        //
         // Create the event
-        DeviceEvent deviceEvent = null;
-        EntityManager em = DeviceEntityManagerFactory.getEntityManager();
-        try {
-            em.beginTransaction();
+        return entityManagerSession.onEntityManagerResult(entityManager -> {
+            entityManager.beginTransaction();
 
-            deviceEvent = DeviceEventDAO.create(em, deviceEventCreator);
-            em.commit();
+            DeviceEvent deviceEvent = DeviceEventDAO.create(entityManager, deviceEventCreator);
+            entityManager.commit();
 
-            deviceEvent = DeviceEventDAO.find(em, deviceEvent.getId());
-        }
-        catch (Exception e) {
-            em.rollback();
-            throw KapuaExceptionUtils.convertPersistenceException(e);
-        }
-        finally {
-            em.close();
-        }
-
-        return deviceEvent;
+            return DeviceEventDAO.find(entityManager, deviceEvent.getId());
+        });
     }
 
     @Override
