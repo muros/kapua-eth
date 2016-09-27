@@ -14,12 +14,21 @@ package org.eclipse.kapua.service.device.management.configuration;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.kapua.model.KapuaEntity;
 
 @XmlRootElement(name = "configurations")
-public interface DeviceConfiguration
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(propOrder = {
+        "configurations"
+}, factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newConfiguration")
+public interface DeviceConfiguration extends KapuaEntity
 {
-    @XmlElement(name = "configuration")
+    @XmlElementWrapper(name = "configurations")
     public <C extends DeviceComponentConfiguration> List<C> getComponentConfigurations();
 }

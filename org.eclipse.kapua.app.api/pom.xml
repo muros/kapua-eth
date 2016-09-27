@@ -151,8 +151,75 @@
         </dependency>
         <dependency>
         	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>org.eclipse.kapua.translator</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        	<type>java-source</type>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
         	<artifactId>
-        		org.eclipse.kapua.service.device.registry.internal
+        		org.eclipse.kapua.translator.kapua.kura
+        	</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>
+        		org.eclipse.kapua.translator.kura.jms
+        	</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>
+        		org.eclipse.kapua.translator.kura.mqtt
+        	</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>org.eclipse.kapua.transport</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>org.eclipse.kapua.transport.jms</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>org.eclipse.kapua.transport.mqtt</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>org.eclipse.kapua.transport.test</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>
+        		org.eclipse.kapua.service.device.management.command.internal
+        	</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>
+        		org.eclipse.kapua.service.device.management.command
+        	</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>
+        		org.eclipse.kapua.service.device.management.configuration
+        	</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>
+        		org.eclipse.kapua.service.device.management.configuration.internal
         	</artifactId>
         	<version>0.2-SNAPSHOT</version>
         </dependency>
@@ -230,4 +297,13 @@
 			</plugin>
 		</plugins>
 	</build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.eclipse.kapua</groupId>
+				<artifactId>org.eclipse.kapua.transport</artifactId>
+				<version>0.2-SNAPSHOT</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

@@ -13,11 +13,13 @@
 package org.eclipse.kapua.service.device.management.configuration.internal;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 
 @XmlRootElement(name = "configurations")
@@ -35,6 +37,42 @@ public class DeviceConfigurationImpl implements DeviceConfiguration
     public List<DeviceComponentConfigurationImpl> getComponentConfigurations()
     {
         return configurations;
+    }
+
+    @Override
+    public KapuaId getId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setId(KapuaId id) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public String getType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public KapuaId getScopeId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Date getCreatedOn() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public KapuaId getCreatedBy() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

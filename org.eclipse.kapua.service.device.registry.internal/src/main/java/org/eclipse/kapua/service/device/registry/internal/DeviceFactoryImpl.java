@@ -13,8 +13,10 @@
 package org.eclipse.kapua.service.device.registry.internal;
 
 import org.eclipse.kapua.model.id.KapuaId;
+import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.DeviceFactory;
+import org.eclipse.kapua.service.device.registry.DeviceListResult;
 import org.eclipse.kapua.service.device.registry.DeviceQuery;
 
 public class DeviceFactoryImpl implements DeviceFactory
@@ -29,9 +31,18 @@ public class DeviceFactoryImpl implements DeviceFactory
     }
 
     @Override
+    public Device newDevice() {
+        return new DeviceImpl();
+    }
+
+    @Override
     public DeviceQuery newQuery(KapuaId scopeId)
     {
         return new DeviceQueryImpl(scopeId);
     }
 
+    @Override
+    public DeviceListResult newDeviceListResult() {
+        return new DeviceListResultImpl();
+    }
 }
