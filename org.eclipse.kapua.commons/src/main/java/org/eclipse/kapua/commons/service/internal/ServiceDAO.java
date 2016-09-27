@@ -29,7 +29,11 @@ import javax.persistence.metamodel.EntityType;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
+import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
+import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.model.KapuaEntity;
+import org.eclipse.kapua.model.KapuaUpdatableEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.model.query.KapuaQuery;
@@ -56,15 +60,18 @@ public class ServiceDAO
     //
     // Update utility method
     //
-    public static <E extends KapuaEntity> E update(EntityManager em, Class<E> clazz, E entity)
+    public static <E extends KapuaUpdatableEntity> E update(EntityManager em, Class<E> clazz, E entity)
     {
         //
         // Checking existence
         E entityToUpdate = em.find(clazz, entity.getId());
 
         //
-        // Deleting if not null
+        // Updating if not null
         if (entityToUpdate != null) {
+            AbstractKapuaUpdatableEntity updatableEntity = (AbstractKapuaUpdatableEntity)entity;
+            updatableEntity.setCreatedOn(entityToUpdate.getCreatedOn());
+            updatableEntity.setCreatedBy(entityToUpdate.getCreatedBy());
             em.merge(entity);
             em.flush();
             em.refresh(entityToUpdate);
