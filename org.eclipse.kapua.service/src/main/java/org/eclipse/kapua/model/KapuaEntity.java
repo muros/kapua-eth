@@ -37,7 +37,7 @@ public interface KapuaEntity
 	@XmlElement(name="scopeId")
 	@XmlJavaTypeAdapter(KapuaIdAdapter.class)
     public KapuaId getScopeId();
-	
+
 	@XmlElement(name="createdOn")
     public Date getCreatedOn();
 

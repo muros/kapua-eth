@@ -18,55 +18,30 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.commons.model.AbstractKapuaNamedEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserStatus;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "scopeId",
-                       "id",
-                       "name",
-                       "createdOn",
-                       "createdBy",
-                       "modifiedOn",
-                       "modifiedBy",
-                       "optlock",
-                       "attributes",
-                       "status",
-                       "displayName",
-                       "email",
-                       "phoneNumber"
-})
 @Entity(name = "User")
 @Table(name = "usr_user")
 public class UserImpl extends AbstractKapuaNamedEntity implements User
 {
     private static final long serialVersionUID = 4029650117581681503L;
 
-    @XmlElement(name = "status")
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private UserStatus        status;
 
-    @XmlElement(name = "displayName")
     @Basic
     @Column(name = "display_name")
     private String            displayName;
 
-    @XmlElement(name = "email")
     @Basic
     @Column(name = "email")
     private String            email;
 
-    @XmlElement(name = "phoneNumber")
     @Basic
     @Column(name = "phone_number")
     private String            phoneNumber;

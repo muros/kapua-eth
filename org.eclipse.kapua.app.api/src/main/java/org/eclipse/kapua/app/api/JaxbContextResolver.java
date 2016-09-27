@@ -21,6 +21,10 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountXmlRegistry;
+import org.eclipse.kapua.service.user.User;
+import org.eclipse.kapua.service.user.UserCreator;
+import org.eclipse.kapua.service.user.UserListResult;
+import org.eclipse.kapua.service.user.UserXmlRegistry;
 import org.eclipse.persistence.jaxb.JAXBContextFactory;
 
 /**
@@ -39,7 +43,11 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
 					{Account.class, 
 					 AccountCreator.class, 
 					 AccountListResult.class,
-					 AccountXmlRegistry.class
+					 AccountXmlRegistry.class,
+					 User.class,
+					 UserCreator.class,
+					 UserListResult.class,
+					 UserXmlRegistry.class
 					 }, null);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
