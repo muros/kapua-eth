@@ -15,9 +15,11 @@ package org.eclipse.kapua.service.device.registry.event;
 import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
+import java.util.Date;
+
 public interface DeviceEventFactory extends KapuaObjectFactory
 {
-    DeviceEventCreator newCreator(KapuaId scopeId, KapuaId deviceId);
+    DeviceEventCreator newCreator(KapuaId scopeId, KapuaId deviceId, Date receivedOn, String resource);
 
     DeviceEventQuery newQuery(KapuaId scopeId);
 }

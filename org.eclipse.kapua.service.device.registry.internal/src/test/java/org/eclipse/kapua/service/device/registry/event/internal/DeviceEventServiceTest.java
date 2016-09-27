@@ -50,7 +50,7 @@ public class DeviceEventServiceTest extends KapuaTest {
 
     @Before
     public void before() {
-        deviceEventCreator = new DeviceEventFactoryImpl().newCreator(scope, new KapuaEid(ONE));
+        deviceEventCreator = new DeviceEventFactoryImpl().newCreator(scope, new KapuaEid(ONE), new Date(), "resource");
     }
 
     // Database fixtures
@@ -71,8 +71,6 @@ public class DeviceEventServiceTest extends KapuaTest {
     @Test
     public void shouldAssignIdAfterCreation() throws Exception {
         doPriviledge(() -> {
-            deviceEventCreator.setReceivedOn(new Date());
-            deviceEventCreator.setResource("resource");
             DeviceEvent deviceEvent = deviceEventService.create(deviceEventCreator);
             Assertions.assertThat(deviceEvent.getId()).isNotNull();
             return null;
@@ -83,8 +81,6 @@ public class DeviceEventServiceTest extends KapuaTest {
     public void shouldFindDeviceEventByID() throws Exception {
         doPriviledge(() -> {
             // Given
-            deviceEventCreator.setReceivedOn(new Date());
-            deviceEventCreator.setResource("resource");
             DeviceEvent device = deviceEventService.create(deviceEventCreator);
 
             // When
@@ -100,8 +96,6 @@ public class DeviceEventServiceTest extends KapuaTest {
     public void shouldDeleteDeviceEvent() throws Exception {
         doPriviledge(() -> {
             // Given
-            deviceEventCreator.setReceivedOn(new Date());
-            deviceEventCreator.setResource("resource");
             DeviceEvent device = deviceEventService.create(deviceEventCreator);
 
             // When

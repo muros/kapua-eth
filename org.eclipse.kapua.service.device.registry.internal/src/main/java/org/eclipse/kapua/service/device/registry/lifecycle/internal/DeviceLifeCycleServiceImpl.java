@@ -96,11 +96,9 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Event create
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId());
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId(), message.getReceivedOn(), "BIRTH");
 
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        deviceEventCreator.setResource("BIRTH");
-        deviceEventCreator.setReceivedOn(message.getReceivedOn());
         //TODO check this change
         deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getSentOn());
@@ -131,10 +129,8 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Event create
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId);
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, deviceId, message.getReceivedOn(), "DEATH");
 
-        deviceEventCreator.setEventMessage(payload.toDisplayString());
-        deviceEventCreator.setResource("DEATH");
         deviceEventCreator.setReceivedOn(message.getReceivedOn());
         //TODO check this change
         deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
@@ -166,11 +162,9 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Event create
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId());
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId(), message.getReceivedOn(), "MISSING");
 
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        deviceEventCreator.setResource("MISSING");
-        deviceEventCreator.setReceivedOn(message.getReceivedOn());
         //TODO check this change
         deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getReceivedOn());
@@ -202,11 +196,9 @@ public class DeviceLifeCycleServiceImpl implements DeviceLifeCycleService
         // Event create
         DeviceEventService deviceEventService = locator.getService(DeviceEventService.class);
         DeviceEventFactory deviceEventFactory = locator.getFactory(DeviceEventFactory.class);
-        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId());
+        DeviceEventCreator deviceEventCreator = deviceEventFactory.newCreator(scopeId, device.getId(), message.getReceivedOn(), "APPLICATION");
 
         deviceEventCreator.setEventMessage(payload.toDisplayString());
-        deviceEventCreator.setResource("APPLICATION");
-        deviceEventCreator.setReceivedOn(message.getReceivedOn());
         //TODO check this change
         deviceEventCreator.setResponseCode(KapuaResponseCode.ACCEPTED);
         deviceEventCreator.setSentOn(message.getReceivedOn());

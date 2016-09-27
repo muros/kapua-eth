@@ -18,14 +18,17 @@ import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventQuery;
 
+import java.util.Date;
+
 public class DeviceEventFactoryImpl implements DeviceEventFactory
 {
-    public DeviceEventCreator newCreator(KapuaId scopeId, KapuaId deviceId)
-    {
-    	DeviceEventCreatorImpl deviceEventCreatorImpl = new DeviceEventCreatorImpl(scopeId);
-        deviceEventCreatorImpl.setDeviceId(deviceId);
-    	deviceEventCreatorImpl.setAction(KapuaMethod.CREATE);
-        return deviceEventCreatorImpl;
+    public DeviceEventCreator newCreator(KapuaId scopeId, KapuaId deviceId, Date receivedOn, String resource) {
+    	DeviceEventCreatorImpl creator = new DeviceEventCreatorImpl(scopeId);
+        creator.setDeviceId(deviceId);
+    	creator.setAction(KapuaMethod.CREATE);
+        creator.setReceivedOn(new Date(receivedOn.getTime()));
+        creator.setResource(resource);
+        return creator;
     }
 
     @Override
