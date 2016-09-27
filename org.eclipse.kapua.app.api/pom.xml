@@ -86,63 +86,76 @@
 		<!-- -->
 		<!-- Same version of the Servlet APIs supported in Apache Tomcat 8.0.x -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
-			<scope>provided</scope>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.1.0</version>
+		    <scope>provided</scope>
 		</dependency>
+		
+        <!-- -->
+        <!-- Internal dependencies -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
+        </dependency>
 
-		<!-- -->
-		<!-- Internal dependencies -->
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.commons</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.locator.guice</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.account</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.account.internal</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.account</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.account.internal</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.user</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.user.internal</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.authentication</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.authorization</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.authentication</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.authorization</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
 
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>
+        		org.eclipse.kapua.service.device.registry
+        	</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.eclipse.kapua</groupId>
+        	<artifactId>
+        		org.eclipse.kapua.service.device.registry.internal
+        	</artifactId>
+        	<version>0.2-SNAPSHOT</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<finalName>api</finalName>
