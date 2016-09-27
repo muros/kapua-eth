@@ -28,6 +28,7 @@ import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.locator.KapuaLocator;
+import org.eclipse.kapua.model.KapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
@@ -145,6 +146,7 @@ public class Users extends AbstractKapuaResource {
     public User postUser(UserCreator userCreator) {
         User user = null;
         try {
+            ((KapuaEntityCreator<User>)userCreator).setScopeId(KapuaSecurityUtils.getSession().getScopeId());
             user = userService.create(userCreator);
         } catch (Throwable t) {
             handleException(t);
@@ -165,6 +167,7 @@ public class Users extends AbstractKapuaResource {
     public User putUser(User user) {
         User userUpdated = null;
         try {
+            ((AbstractKapuaUpdatableEntity)user).setScopeId(KapuaSecurityUtils.getSession().getScopeId());
             userUpdated = userService.update(user);
         } catch (Throwable t) {
             handleException(t);
