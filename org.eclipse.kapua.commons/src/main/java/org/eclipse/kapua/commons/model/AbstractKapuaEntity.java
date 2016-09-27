@@ -110,4 +110,12 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
         this.createdBy = new KapuaEid(KapuaSecurityUtils.getSession().getUserId().getId());
         this.createdOn = new Date();
     }
+    
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
+    
+    public void setCreatedBy(KapuaId createdBy) {
+        this.createdBy = (KapuaEid)createdBy;
+    }
 }
