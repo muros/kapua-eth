@@ -71,11 +71,8 @@ public class ServiceDAO
         // Updating if not null
         if (entityToUpdate != null) {
             AbstractKapuaUpdatableEntity updatableEntity = (AbstractKapuaUpdatableEntity)entity;
-            updatableEntity.setScopeId(entityToUpdate.getScopeId());
             updatableEntity.setCreatedOn(entityToUpdate.getCreatedOn());
             updatableEntity.setCreatedBy(entityToUpdate.getCreatedBy());
-            updatableEntity.setModifiedOn(entityToUpdate.getModifiedOn());
-            updatableEntity.setModifiedBy(entityToUpdate.getModifiedBy());
             em.merge(entity);
             em.flush();
             em.refresh(entityToUpdate);
