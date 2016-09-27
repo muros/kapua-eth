@@ -43,7 +43,9 @@ public class DeviceEventDAO extends ServiceDAO
         throws KapuaException
     {
         DeviceEventImpl deviceConnectionImpl = (DeviceEventImpl) deviceConnection;
-        return ServiceDAO.update(em, DeviceEventImpl.class, deviceConnectionImpl);
+        // return ServiceDAO.update(em, DeviceEventImpl.class, deviceConnectionImpl);
+        // see issue #190
+        return null;
     }
 
     public static DeviceEvent find(EntityManager em, KapuaId deviceEventId)
