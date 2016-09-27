@@ -51,7 +51,6 @@ public class ServiceDAO
     {
         //
         // Creating entity
-        ((AbstractKapuaEntity)entity).setScopeId(KapuaSecurityUtils.getSession().getScopeId());
         em.persist(entity);
         em.flush();
 
