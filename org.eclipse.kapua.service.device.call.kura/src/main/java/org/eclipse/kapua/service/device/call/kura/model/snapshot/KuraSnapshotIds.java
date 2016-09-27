@@ -9,23 +9,30 @@
  * Contributors:
  *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.service.device.call.kura.app;
+package org.eclipse.kapua.service.device.call.kura.model.snapshot;
 
-public enum BundleMetrics
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+/**
+ * Utility class to serialize a set of snapshot ids.
+ */
+@XmlRootElement(name = "snapshot-ids")
+public class KuraSnapshotIds
 {
-    APP_ID("DEPLOY"),
-    APP_VERSION("V2"),
-    ;
+    private List<Long> snapshotIds;
 
-    private String value;
+    public KuraSnapshotIds()
+    {}
 
-    BundleMetrics(String value)
+    public List<Long> getSnapshotIds()
     {
-        this.value = value;
+        return snapshotIds;
     }
 
-    public String getValue()
+    public void setSnapshotIds(List<Long> snapshotIds)
     {
-        return value;
+        this.snapshotIds = snapshotIds;
     }
 }

@@ -12,22 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.bundle;
 
-public interface DeviceBundle
+import java.util.List;
+
+public interface DeviceBundles
 {
-    public long getId();
-
-    public void setId(long id);
-
-    public String getName();
-
-    public void setName(String name);
-
-    public String getState();
-
-    public void setState(String state);
-
-    public String getVersion();
-
-    public void setVersion(String version);
-
+    public <B extends DeviceBundle> List<B> getBundles();
 }

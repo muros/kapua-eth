@@ -30,7 +30,6 @@ import org.eclipse.kapua.service.device.management.command.internal.CommandAppPr
 import org.eclipse.kapua.service.device.management.command.message.internal.CommandResponseChannel;
 import org.eclipse.kapua.service.device.management.command.message.internal.CommandResponseMessage;
 import org.eclipse.kapua.service.device.management.command.message.internal.CommandResponsePayload;
-import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
@@ -78,7 +77,7 @@ public class TranslatorAppCommandKuraKapua extends Translator<KuraResponseMessag
         kapuaMessage.setCapturedOn(kuraMessage.getPayload().getTimestamp());
         kapuaMessage.setSentOn(kuraMessage.getPayload().getTimestamp());
         kapuaMessage.setReceivedOn(kuraMessage.getTimestamp());
-        kapuaMessage.setResponseCode(translate((Integer) kuraMessage.getPayload().getMetrics().get(ResponseMetrics.RESP_METRIC_EXIT_CODE.getValue())));
+        kapuaMessage.setResponseCode(TranslatorKuraKapuaUtils.translate((Integer) kuraMessage.getPayload().getMetrics().get(ResponseMetrics.RESP_METRIC_EXIT_CODE.getValue())));
 
         //
         // Return Kapua Message
@@ -140,30 +139,6 @@ public class TranslatorAppCommandKuraKapua extends Translator<KuraResponseMessag
         //
         // Return Kapua Payload
         return commandResponsePayload;
-    }
-
-    private KapuaResponseCode translate(Integer kuraResponseCode)
-    {
-
-        KapuaResponseCode responseCode;
-        switch (kuraResponseCode) {
-            case 200:
-                responseCode = KapuaResponseCode.ACCEPTED;
-                break;
-
-            case 400:
-                responseCode = KapuaResponseCode.BAD_REQUEST;
-                break;
-
-            case 404:
-                responseCode = KapuaResponseCode.NOT_FOUND;
-                break;
-            case 500:
-            default:
-                responseCode = KapuaResponseCode.INTERNAL_ERROR;
-                break;
-        }
-        return responseCode;
     }
 
     @Override

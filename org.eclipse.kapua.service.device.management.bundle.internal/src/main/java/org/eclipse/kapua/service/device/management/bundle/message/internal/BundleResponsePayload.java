@@ -10,24 +10,12 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.management.bundle;
+package org.eclipse.kapua.service.device.management.bundle.message.internal;
 
-public interface DeviceBundle
+import org.eclipse.kapua.message.KapuaPayload;
+import org.eclipse.kapua.service.device.management.commons.message.response.KapuaResponsePayloadImpl;
+
+public class BundleResponsePayload extends KapuaResponsePayloadImpl implements KapuaPayload
 {
-    public long getId();
-
-    public void setId(long id);
-
-    public String getName();
-
-    public void setName(String name);
-
-    public String getState();
-
-    public void setState(String state);
-
-    public String getVersion();
-
-    public void setVersion(String version);
 
 }

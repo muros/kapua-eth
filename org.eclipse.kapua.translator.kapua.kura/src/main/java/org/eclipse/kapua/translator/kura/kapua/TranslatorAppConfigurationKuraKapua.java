@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import javax.xml.namespace.QName;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.kapua.commons.configuration.metatype.Password;
 import org.eclipse.kapua.commons.configuration.metatype.TadImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TiconImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
@@ -34,8 +35,9 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountService;
 import org.eclipse.kapua.service.device.call.kura.app.ConfigurationMetrics;
 import org.eclipse.kapua.service.device.call.kura.app.ResponseMetrics;
-import org.eclipse.kapua.service.device.call.kura.model.KuraDeviceComponentConfiguration;
-import org.eclipse.kapua.service.device.call.kura.model.KuraDeviceConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceComponentConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraPassword;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseChannel;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage;
 import org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponsePayload;
@@ -49,7 +51,6 @@ import org.eclipse.kapua.service.device.management.configuration.internal.Device
 import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseChannel;
 import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseMessage;
 import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponsePayload;
-import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
@@ -92,7 +93,7 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
         kapuaMessage.setCapturedOn(kuraMessage.getPayload().getTimestamp());
         kapuaMessage.setSentOn(kuraMessage.getPayload().getTimestamp());
         kapuaMessage.setReceivedOn(kuraMessage.getTimestamp());
-        kapuaMessage.setResponseCode(translate((Integer) kuraMessage.getPayload().getMetrics().get(ResponseMetrics.RESP_METRIC_EXIT_CODE.getValue())));
+        kapuaMessage.setResponseCode(TranslatorKuraKapuaUtils.translate((Integer) kuraMessage.getPayload().getMetrics().get(ResponseMetrics.RESP_METRIC_EXIT_CODE.getValue())));
 
         //
         // Return Kapua Message
@@ -183,12 +184,11 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
 
                 String componentId = kuraDeviceCompConf.getComponentId();
                 DeviceComponentConfigurationImpl deviceComponentConfiguration = new DeviceComponentConfigurationImpl(componentId);
-                deviceComponentConfiguration.setName(kuraDeviceCompConf.getComponentName());
-                deviceComponentConfiguration.setProperties(translateProperties(kuraDeviceCompConf.getProperties()));
+                deviceComponentConfiguration.setProperties(translate(kuraDeviceCompConf.getProperties()));
 
                 // Translate also definitions when they are available
                 if (kuraDeviceCompConf.getDefinition() != null) {
-                    deviceComponentConfiguration.setDefinition(translateDefinitions(kuraDeviceCompConf.getDefinition()));
+                    deviceComponentConfiguration.setDefinition(translate(kuraDeviceCompConf.getDefinition()));
                 }
 
                 // Add to kapua configuration
@@ -209,7 +209,7 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
         }
     }
 
-    private KapuaTocd translateDefinitions(KapuaTocd kuraDefinition)
+    private KapuaTocd translate(KapuaTocd kuraDefinition)
     {
         TocdImpl definition = new TocdImpl();
 
@@ -227,6 +227,7 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
             ad.setMin(kuraAd.getMin());
             ad.setName(kuraAd.getName());
             ad.setType(kuraAd.getType());
+            ad.setRequired(kuraAd.isRequired());
 
             for (KapuaToption kuraToption : kuraAd.getOption()) {
                 ToptionImpl kapuaToption = new ToptionImpl();
@@ -265,37 +266,36 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
         return definition;
     }
 
-    private Map<String, Object> translateProperties(Map<String, Object> kuraProperties)
+    private Map<String, Object> translate(Map<String, Object> kuraProperties)
     {
         Map<String, Object> properties = new HashMap<>();
         for (Entry<String, Object> entry : kuraProperties.entrySet()) {
+
+            Object value = entry.getValue();
+
+            //
+            // Special management of Password type field
+            if (value instanceof KuraPassword) {
+                value = new Password(((KuraPassword) value).getPassword());
+            }
+            else if (value instanceof KuraPassword[]) {
+                KuraPassword[] kuraPasswords = (KuraPassword[]) value;
+                Password[] passwords = new Password[kuraPasswords.length];
+
+                int i = 0;
+                for (KuraPassword p : kuraPasswords) {
+                    passwords[i++] = new Password(p.getPassword());
+                }
+
+                value = passwords;
+            }
+
+            //
+            // Set property
             properties.put(entry.getKey(),
-                           entry.getValue());
+                           value);
         }
         return properties;
-    }
-
-    private KapuaResponseCode translate(Integer kuraResponseCode)
-    {
-        KapuaResponseCode responseCode;
-        switch (kuraResponseCode) {
-            case 200:
-                responseCode = KapuaResponseCode.ACCEPTED;
-                break;
-
-            case 400:
-                responseCode = KapuaResponseCode.BAD_REQUEST;
-                break;
-
-            case 404:
-                responseCode = KapuaResponseCode.NOT_FOUND;
-                break;
-            case 500:
-            default:
-                responseCode = KapuaResponseCode.INTERNAL_ERROR;
-                break;
-        }
-        return responseCode;
     }
 
     @Override

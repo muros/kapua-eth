@@ -145,6 +145,7 @@
             <artifactId>org.eclipse.kapua.service.device.management.bundle.internal</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.device.management.command</artifactId>
@@ -155,6 +156,7 @@
             <artifactId>org.eclipse.kapua.service.device.management.command.internal</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.device.management.configuration</artifactId>
@@ -165,6 +167,7 @@
             <artifactId>org.eclipse.kapua.service.device.management.configuration.internal</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.device.management.deploy</artifactId>
@@ -195,6 +198,16 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.transport</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.transport.mqtt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <!-- -->
         <!-- External dependencies -->

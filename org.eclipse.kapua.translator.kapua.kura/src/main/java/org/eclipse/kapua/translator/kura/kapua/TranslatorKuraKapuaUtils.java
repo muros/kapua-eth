@@ -16,6 +16,7 @@ import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.message.KapuaMessageFactory;
 import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.service.device.call.message.DevicePosition;
+import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 
 public class TranslatorKuraKapuaUtils
 {
@@ -40,5 +41,33 @@ public class TranslatorKuraKapuaUtils
         }
 
         return kapuaPosition;
+    }
+
+    public static KapuaResponseCode translate(Integer kuraResponseCode)
+    {
+        KapuaResponseCode responseCode;
+        if (kuraResponseCode == null) {
+            responseCode = null;
+        }
+        else {
+            switch (kuraResponseCode) {
+                case 200:
+                    responseCode = KapuaResponseCode.ACCEPTED;
+                    break;
+                case 400:
+                    responseCode = KapuaResponseCode.BAD_REQUEST;
+                    break;
+                case 404:
+                    responseCode = KapuaResponseCode.NOT_FOUND;
+                    break;
+                case 500:
+                    responseCode = KapuaResponseCode.INTERNAL_ERROR;
+                    break;
+                default:
+                    responseCode = null;
+            }
+        }
+        return responseCode;
+
     }
 }

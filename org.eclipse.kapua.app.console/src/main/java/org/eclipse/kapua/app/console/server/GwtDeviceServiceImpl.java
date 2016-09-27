@@ -56,6 +56,7 @@ import org.eclipse.kapua.app.console.shared.model.GwtSnapshot;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 import org.eclipse.kapua.app.console.shared.service.GwtDeviceService;
 import org.eclipse.kapua.app.console.shared.util.KapuaGwtConverter;
+import org.eclipse.kapua.commons.configuration.metatype.Password;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.model.query.FieldSortCriteria;
 import org.eclipse.kapua.commons.model.query.FieldSortCriteria.SortOrder;
@@ -71,13 +72,12 @@ import org.eclipse.kapua.model.query.KapuaListResult;
 import org.eclipse.kapua.model.query.predicate.KapuaAndPredicate;
 import org.eclipse.kapua.model.query.predicate.KapuaAttributePredicate.Operator;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundle;
-import org.eclipse.kapua.service.device.management.bundle.DeviceBundleListResult;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundleManagementService;
+import org.eclipse.kapua.service.device.management.bundle.DeviceBundles;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
-import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfigParamPassword;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory;
@@ -528,15 +528,13 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
             KapuaLocator locator = KapuaLocator.getInstance();
             DeviceBundleManagementService deviceBundleManagementService = locator.getService(DeviceBundleManagementService.class);
 
-            DeviceBundleListResult bundles = null;
             KapuaId scopeId = KapuaEid.parseShortId(device.getScopeId());
             KapuaId id = KapuaEid.parseShortId(device.getId());
-            bundles = deviceBundleManagementService.get(scopeId,
+            DeviceBundles bundles = deviceBundleManagementService.get(scopeId,
                     id,
                     null);
 
-            for (DeviceBundle bundle : bundles) {
-
+            for (DeviceBundle bundle : bundles.getBundles()) {
                 GwtGroupedNVPair pair = new GwtGroupedNVPair();
                 pair.setId(String.valueOf(bundle.getId()));
                 pair.setName(bundle.getName());
@@ -749,6 +747,11 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                     compConfig,
                     null);
 
+            //
+            // Add an additional delay after the configuration update
+            // to give the time to the device to apply the received
+            // configuration
+            Thread.sleep(1000);
         } catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }
@@ -1029,7 +1032,7 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
                 objValue = Boolean.parseBoolean(strValue);
                 break;
             case PASSWORD:
-                objValue = new DeviceComponentConfigParamPassword(strValue);
+                objValue = new Password(strValue);
                 break;
             case CHAR:
                 objValue = Character.valueOf(strValue.charAt(0));
@@ -1096,9 +1099,9 @@ public class GwtDeviceServiceImpl extends KapuaRemoteServiceServlet implements G
 
         case PASSWORD:
             for (String value : defaultValues) {
-                values.add(new DeviceComponentConfigParamPassword(value));
+                values.add(new Password(value));
             }
-            return values.toArray(new DeviceComponentConfigParamPassword[] {});
+            return values.toArray(new Password[] {});
 
         case STRING:
         default:

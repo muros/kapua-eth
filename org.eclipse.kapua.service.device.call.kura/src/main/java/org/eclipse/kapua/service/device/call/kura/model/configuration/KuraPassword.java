@@ -7,27 +7,28 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- *     Eurotech - initial API and implementation
- *
+ *      Eurotech - initial API and implementation
  *******************************************************************************/
-package org.eclipse.kapua.service.device.management.bundle;
+package org.eclipse.kapua.service.device.call.kura.model.configuration;
 
-public interface DeviceBundle
+public class KuraPassword
 {
-    public long getId();
+    private String password;
 
-    public void setId(long id);
+    public KuraPassword(String password)
+    {
+        super();
+        this.password = password;
+    }
 
-    public String getName();
+    public String getPassword()
+    {
+        return password;
+    }
 
-    public void setName(String name);
-
-    public String getState();
-
-    public void setState(String state);
-
-    public String getVersion();
-
-    public void setVersion(String version);
-
+    @Override
+    public String toString()
+    {
+        return password;
+    }
 }
