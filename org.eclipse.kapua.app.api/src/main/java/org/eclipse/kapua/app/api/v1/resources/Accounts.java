@@ -13,12 +13,16 @@
 package org.eclipse.kapua.app.api.v1.resources;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
@@ -30,7 +34,7 @@ import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountFactory;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountService;
-
+import org.eclipse.kapua.service.account.internal.AccountImpl;
 
 @Path("/accounts")
 public class Accounts extends AbstractKapuaResource 
@@ -79,6 +83,26 @@ public class Accounts extends AbstractKapuaResource
         }
         return returnNotNullEntity(account);
     }
+    
+    /**
+     * Returns the Account specified by the "name" query parameter.
+     *
+     * @param accountName The name of the Account requested.
+     * @return The requested Account object.
+     */
+    @GET
+    @Path("findByName")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Account getAccountByName(@QueryParam("accountName") String accountName) {
+
+        Account account = null;
+        try {
+            account = accountService.findByName(accountName);
+        } catch (Throwable t) {
+            handleException(t);
+        }
+        return returnNotNullEntity(account);
+    }
 
     /**
      * Returns the list of all direct child accounts for the Account specified by the "id" path parameter.
@@ -86,20 +110,19 @@ public class Accounts extends AbstractKapuaResource
      * @param accountId The id of the Account requested.
      * @return The requested list of child accounts.
      */
-//    @GET
-//    @Path("{scopeId}/childAccounts")
-//    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-//    public AccountListResult getChildAccounts(@PathParam("scopeId") KapuaId scopeId,
-//                                           	  @QueryParam("recoursive") @DefaultValue("false") boolean recoursive) {
-//
-//        AccountListResult accountsResult = accountFactory.newAccountListResult();
-//        try {
-//        	accountsResult = accountService.findChildAccounts(scopeId, recoursive);
-//        } catch (Throwable t) {
-//            handleException(t);
-//        }
-//        return accountsResult;
-//    }
+    @GET
+    @Path("{scopeId}/childAccounts")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public AccountListResult getChildAccounts(@PathParam("scopeId") String scopeId) {
+        AccountListResult accountsResult = accountFactory.newAccountListResult();
+        try {
+            KapuaId id = KapuaEid.parseShortId(scopeId);
+        	accountsResult = (AccountListResult) accountService.findChildsRecursively(id);
+        } catch (Throwable t) {
+            handleException(t);
+        }
+        return accountsResult;
+    }
 
     /**
      * Returns the Service Plan for the Account specified by the "id" path parameter.
@@ -255,17 +278,57 @@ public class Accounts extends AbstractKapuaResource
      * @return The newly created Account object.
      */
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Account postAccount(AccountCreator accountCreator) {
 
         Account account = null;
         try {
+            accountCreator.setScopeId(KapuaSecurityUtils.getSession().getScopeId());
             account = accountService.create(accountCreator);
         } catch (Throwable t) {
             handleException(t);
         }
         return returnNotNullEntity(account);
+    }
+    
+    /**
+     * Updates an account based on the information provided in Account parameter.
+     *
+     * @param account Provides the information to update the account.
+     * @return The updated created Account object.
+     */
+    @PUT
+    @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Account updateAccount(Account account) {
+        try {
+            ((AccountImpl)account).setScopeId(KapuaSecurityUtils.getSession().getScopeId());
+            account = accountService.update(account);
+        } catch (Throwable t) {
+            handleException(t);
+        }
+        return returnNotNullEntity(account);
+    }
+    
+    /**
+     * Deletes an account based on the information provided in Account parameter.
+     *
+     * @param account Provides the information to update the account.
+     * @return The updated created Account object.
+     */
+    @DELETE
+    @Path("{accountId}")
+    @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+    public Response deleteAccount(@PathParam("accountId") String accountId) {
+        try {
+            KapuaId accountKapuaId = KapuaEid.parseShortId(accountId);
+            KapuaId scopeId = KapuaSecurityUtils.getSession().getScopeId();
+            accountService.delete(scopeId, accountKapuaId);
+        } catch (Throwable t) {
+            handleException(t);
+        }
+        return Response.ok().build();
     }
 
 }

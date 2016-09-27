@@ -17,6 +17,7 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 
+import org.eclipse.kapua.app.api.v1.resources.model.ErrorBean;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountListResult;
@@ -40,7 +41,8 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
 	public JaxbContextResolver() {
 		try {
 			jaxbContext = JAXBContextFactory.createContext(new Class[] 
-					{Account.class, 
+					{ErrorBean.class,
+					 Account.class, 
 					 AccountCreator.class, 
 					 AccountListResult.class,
 					 AccountXmlRegistry.class,
