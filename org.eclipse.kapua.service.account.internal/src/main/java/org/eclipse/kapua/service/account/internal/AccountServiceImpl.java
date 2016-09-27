@@ -181,8 +181,6 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
     /**
      * Account Delete.
      * 
-     * It's not allowed to delete the eurotech-provision and edcmonitor account for safety reasons.
-     * 
      */
     @Override
     public void delete(KapuaId scopeId, KapuaId accountId)
@@ -219,7 +217,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
                 throw new KapuaEntityNotFoundException(Account.TYPE, accountId);
             }
 
-            // do not allow deletion of the edc admin account
+            // do not allow deletion of the kapua admin account
             SystemSetting settings = SystemSetting.getInstance();
             if (settings.getString(SystemSettingKey.SYS_PROVISION_ACCOUNT_NAME).equals(accountx.getName())) {
                 throw new KapuaIllegalAccessException(action.name());

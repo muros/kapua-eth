@@ -88,10 +88,10 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
 
     private static final KapuaLocator locator = KapuaLocator.getInstance();
 
-    private static final long    DAY_SECS          = DAYS.toSeconds(1);
-    private static final long    DAY_MILLIS        = DAYS.toMillis(1);
-    private static final long    EUROTECH_TTL_DAYS = 30;
-    private static final long    EUROTECH_TTL_SECS = EUROTECH_TTL_DAYS * DAY_SECS;
+	private static final long DAY_SECS = DAYS.toSeconds(1);
+	private static final long DAY_MILLIS = DAYS.toMillis(1);
+	private static final long DATASTORE_TTL_DAYS = 30;
+	private static final long DATASTORE_TTL_SECS = DATASTORE_TTL_DAYS * DAY_SECS;
 
     private final AccountService accountService;
     private final AuthorizationService authorizationService;
@@ -170,7 +170,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
 
         // If eurotech set ttl equals to 1 month
         if (ttl < 0) {
-            ttl = EUROTECH_TTL_SECS;
+            ttl = DATASTORE_TTL_SECS;
         }
 
         // MessageDAO: prepare the store parameters
@@ -468,7 +468,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
 
         String indexName = schemaMetadata.getPublicIndexName();
         String messageTypeName = schemaMetadata.getMessageTypeName();
-        String edcIndexName = schemaMetadata.getPrivateIndexName();
+        String kapuaIndexName = schemaMetadata.getPrivateIndexName();
         String topicTypeName = schemaMetadata.getTopicTypeName();
         String metricTypeName = schemaMetadata.getMetricTypeName();
         String assetTypeName = schemaMetadata.getAssetTypeName();
@@ -491,9 +491,9 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
                     UpdateResponse response = null;
                     try {
                         response = EsTopicDAO.connection(EsClient.getcurrent())
-                                             .instance(edcIndexName, topicTypeName)
+                                             .instance(kapuaIndexName, topicTypeName)
                                              .upsert(docBuilder.getTopicId(), docBuilder.getTopicBuilder());
-                        logger.debug(String.format("Upsert on topic succesfully executed [%s.%s, %s]", edcIndexName, topicTypeName, response.getId()));
+                        logger.debug(String.format("Upsert on topic succesfully executed [%s.%s, %s]", kapuaIndexName, topicTypeName, response.getId()));
                     }
                     catch (DocumentAlreadyExistsException exc) {
                         logger.trace(String.format("Upsert failed because topic already exists [%s, %s]", docBuilder.getTopicId(), exc.getMessage()));
@@ -506,7 +506,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
 
         // Save topic metrics
         EsMetricDAO.connection(EsClient.getcurrent())
-                   .instance(edcIndexName, metricTypeName);
+                   .instance(kapuaIndexName, metricTypeName);
 
         BulkRequest bulkRequest = new BulkRequest();
         List<EsMetricDocumentBuilder> esTopicMetrics = docBuilder.getTopicMetrics();
@@ -516,7 +516,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
                     continue;
                 // this.esTopicMetricDAO.upsert(esTopicMetric);
                 bulkRequest.add(EsMetricDAO.connection(EsClient.getcurrent())
-                                           .instance(edcIndexName, metricTypeName)
+                                           .instance(kapuaIndexName, metricTypeName)
                                            .getUpsertRequest(esTopicMetric));
             }
         }
@@ -541,7 +541,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
                             continue;
                         }
 
-                        logger.debug(String.format("Upsert on topic metric succesfully executed [%s.%s, %s]", edcIndexName, topicTypeName, topicMetricId));
+                        logger.debug(String.format("Upsert on topic metric succesfully executed [%s.%s, %s]", kapuaIndexName, topicTypeName, topicMetricId));
 
                         if (DatastoreCacheManager.getInstance().getMetricsCache().get(topicMetricId))
                             continue;
@@ -565,9 +565,9 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
                     UpdateResponse response = null;
                     try {
                         response = EsAssetDAO.connection(EsClient.getcurrent())
-                                             .instance(edcIndexName, assetTypeName)
+                                             .instance(kapuaIndexName, assetTypeName)
                                              .upsert(docBuilder.getAssetId(), docBuilder.getAssetBuilder());
-                        logger.debug(String.format("Upsert on asset succesfully executed [%s.%s, %s]", edcIndexName, topicTypeName, response.getId()));
+                        logger.debug(String.format("Upsert on asset succesfully executed [%s.%s, %s]", kapuaIndexName, topicTypeName, response.getId()));
                     }
                     catch (DocumentAlreadyExistsException exc) {
                         logger.trace(String.format("Upsert failed because asset already exists [%s, %s]", docBuilder.getAssetId(), exc.getMessage()));

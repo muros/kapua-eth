@@ -128,7 +128,7 @@ public class EsSchema
         private String                metricTypeName;
         private String                assetTypeName;
         private String                indexName;
-        private String                edcIndexName;
+        private String                kapuaIndexName;
         //
 
         // Custom mappings can only increase within the same account
@@ -164,7 +164,7 @@ public class EsSchema
 
         public String getPrivateIndexName()
         {
-            return this.edcIndexName;
+            return this.kapuaIndexName;
         }
 
         public String getTopicTypeName()
@@ -714,7 +714,7 @@ public class EsSchema
 
             this.initMessageMappings(newIndex, enableAllField, enableSourceField);
 
-            // Check existence of the edc internal index
+            // Check existence of the kapua internal index
             String newEdcMetadataIdx = EsUtils.getActualEdcIndexName(accountName, time);
             existsResponse = esClient.admin().indices()
                                      .exists(new IndicesExistsRequest(newEdcMetadataIdx))
@@ -737,7 +737,7 @@ public class EsSchema
             }
 
             currentMetadata.indexName = newIndex;
-            currentMetadata.edcIndexName = newEdcMetadataIdx;
+            currentMetadata.kapuaIndexName = newEdcMetadataIdx;
             s_logger.info("Leaving updating metadata");
         }
 

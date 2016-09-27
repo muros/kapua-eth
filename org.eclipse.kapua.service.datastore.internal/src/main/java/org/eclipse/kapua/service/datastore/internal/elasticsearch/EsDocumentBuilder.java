@@ -172,22 +172,22 @@ public class EsDocumentBuilder
 
         messageBuilder.field(EsSchema.MESSAGE_COLLECTED_ON, payload.getCollectedOn());
 
-        Position edcPosition = payload.getPosition();
-        if (edcPosition != null) {
+        Position kapuaPosition = payload.getPosition();
+        if (kapuaPosition != null) {
 
             Map<String, Object> location = new HashMap<String, Object>();
-            location.put("lon", edcPosition.getLongitude());
-            location.put("lat", edcPosition.getLatitude());
+            location.put("lon", kapuaPosition.getLongitude());
+            location.put("lat", kapuaPosition.getLatitude());
 
             Map<String, Object> position = new HashMap<String, Object>();
             position.put(EsSchema.MESSAGE_POS_LOCATION, location);
-            position.put(EsSchema.MESSAGE_POS_ALT, edcPosition.getAltitude());
-            position.put(EsSchema.MESSAGE_POS_PRECISION, edcPosition.getPrecision());
-            position.put(EsSchema.MESSAGE_POS_HEADING, edcPosition.getHeading());
-            position.put(EsSchema.MESSAGE_POS_SPEED, edcPosition.getSpeed());
-            position.put(EsSchema.MESSAGE_POS_TIMESTAMP, edcPosition.getTimestamp());
-            position.put(EsSchema.MESSAGE_POS_SATELLITES, edcPosition.getSatellites());
-            position.put(EsSchema.MESSAGE_POS_STATUS, edcPosition.getStatus());
+            position.put(EsSchema.MESSAGE_POS_ALT, kapuaPosition.getAltitude());
+            position.put(EsSchema.MESSAGE_POS_PRECISION, kapuaPosition.getPrecision());
+            position.put(EsSchema.MESSAGE_POS_HEADING, kapuaPosition.getHeading());
+            position.put(EsSchema.MESSAGE_POS_SPEED, kapuaPosition.getSpeed());
+            position.put(EsSchema.MESSAGE_POS_TIMESTAMP, kapuaPosition.getTimestamp());
+            position.put(EsSchema.MESSAGE_POS_SATELLITES, kapuaPosition.getSatellites());
+            position.put(EsSchema.MESSAGE_POS_STATUS, kapuaPosition.getStatus());
             messageBuilder.field(EsSchema.MESSAGE_POS, position);
         }
 
@@ -196,17 +196,17 @@ public class EsDocumentBuilder
         Map<String, EsMetric> metricMappings = new HashMap<String, EsMetric>();
         List<EsMetricDocumentBuilder> metricBuilders = new ArrayList<EsMetricDocumentBuilder>();
 
-        Map<String, Object> edcMetrics = payload.getMetrics();
-        if (edcMetrics != null) {
+        Map<String, Object> kapuaMetrics = payload.getMetrics();
+        if (kapuaMetrics != null) {
 
             Map<String, Object> metrics = new HashMap<String, Object>();
-            String[] metricNames = edcMetrics.keySet().toArray(new String[] {});
-            for (String edcMetricName : metricNames) {
+            String[] metricNames = kapuaMetrics.keySet().toArray(new String[] {});
+            for (String kapuaMetricName : metricNames) {
 
-                Object metricValue = edcMetrics.get(edcMetricName);
+                Object metricValue = kapuaMetrics.get(kapuaMetricName);
                 //////////////////////
                 // Sanitize field names. '.' is not allowed
-                String esMetricName = EsUtils.normalizeMetricName(edcMetricName);
+                String esMetricName = EsUtils.normalizeMetricName(kapuaMetricName);
                 String esType = EsUtils.getEsTypeFromValue(metricValue);
                 String esTypeAcronim = EsUtils.getEsTypeAcronym(esType);
                 EsMetric esMetric = new EsMetric();
