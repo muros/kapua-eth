@@ -27,7 +27,8 @@ public class RestApisApplication extends ResourceConfig {
 
 	public RestApisApplication() throws JAXBException {
 		
-		packages("org.eclipse.kapua.app.api.v1.resources, io.swagger.jaxrs.listing");
+		packages("org.eclipse.kapua.app.api.v1.resources",
+				 "io.swagger.jaxrs.listing");
 
 		// Bind media type to resource extension
 		HashMap<String, MediaType> mappedMediaTypes = new HashMap<String, MediaType>();
@@ -36,6 +37,9 @@ public class RestApisApplication extends ResourceConfig {
 		
 		property(ServerProperties.MEDIA_TYPE_MAPPINGS, mappedMediaTypes);
 		register(UriConnegFilter.class);
+		register(JaxbContextResolver.class);
+		register(KapuaEntityBodyWriter.class);
+		register(KapuaListResultBodyWriter.class);
 		
 		// Hook the swagger-ui
 		registerClasses(ApiListingResource.class, 
