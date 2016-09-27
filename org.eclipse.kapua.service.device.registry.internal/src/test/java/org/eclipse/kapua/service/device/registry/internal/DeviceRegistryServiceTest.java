@@ -140,7 +140,7 @@ public class DeviceRegistryServiceTest extends KapuaTest {
     }
 
     @Test
-    public void shouldFindDeleteDevice() throws Exception {
+    public void shouldDeleteDevice() throws Exception {
         doPriviledge(() -> {
             // Given
             Device device = deviceRegistryService.create(deviceCreator);

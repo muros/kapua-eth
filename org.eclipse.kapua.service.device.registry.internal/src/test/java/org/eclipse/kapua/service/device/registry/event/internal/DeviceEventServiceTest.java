@@ -79,4 +79,39 @@ public class DeviceEventServiceTest extends KapuaTest {
         });
     }
 
+    @Test
+    public void shouldFindDeviceEventByID() throws Exception {
+        doPriviledge(() -> {
+            // Given
+            deviceEventCreator.setReceivedOn(new Date());
+            deviceEventCreator.setResource("resource");
+            DeviceEvent device = deviceEventService.create(deviceEventCreator);
+
+            // When
+            DeviceEvent deviceEventFound = deviceEventService.find(scope, device.getId());
+
+            // Then
+            Assertions.assertThat(deviceEventFound).isNotNull();
+            return null;
+        });
+    }
+
+    @Test
+    public void shouldDeleteDeviceEvent() throws Exception {
+        doPriviledge(() -> {
+            // Given
+            deviceEventCreator.setReceivedOn(new Date());
+            deviceEventCreator.setResource("resource");
+            DeviceEvent device = deviceEventService.create(deviceEventCreator);
+
+            // When
+            deviceEventService.delete(device.getScopeId(), device.getId());
+
+            // Then
+            DeviceEvent deviceEventFound = deviceEventService.find(scope, device.getId());
+            Assertions.assertThat(deviceEventFound).isNull();
+            return null;
+        });
+    }
+
 }
