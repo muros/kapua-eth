@@ -93,7 +93,7 @@ public abstract class AbstractKapuaEntity implements KapuaEntity, Serializable
     {
         this.scopeId = (KapuaEid)scopeId;
     }
-    
+
     public Date getCreatedOn()
     {
         return createdOn;
