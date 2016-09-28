@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.role.shiro;
 
-public class RolePredicates
-{
+public class RolePredicates {
+
     public static final String ROLE_NAME = "name";
 }

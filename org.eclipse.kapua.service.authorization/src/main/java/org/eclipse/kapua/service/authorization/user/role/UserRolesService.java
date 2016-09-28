@@ -19,23 +19,47 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.KapuaEntityService;
 
-public interface UserRolesService extends KapuaEntityService<UserRoles, UserRolesCreator>
-{
+public interface UserRolesService extends KapuaEntityService<UserRoles, UserRolesCreator> {
+
+    /**
+     * @since 1.0
+     */
     public UserRoles create(UserRolesCreator creator)
-        throws KapuaException;
+            throws KapuaException;
 
+    /**
+     * @since 1.0
+     */
     public UserRoles find(KapuaId accountId, KapuaId entityId)
-        throws KapuaException;
+            throws KapuaException;
 
+    /**
+     * @since 1.0
+     */
     public UserRolesListResult query(KapuaQuery<UserRoles> query)
-        throws KapuaException;
+            throws KapuaException;
 
+    /**
+     * @since 1.0
+     */
     public long count(KapuaQuery<UserRoles> query)
-        throws KapuaException;
+            throws KapuaException;
 
+    /**
+     * @since 1.0
+     */
     public void delete(UserRoles entity)
-        throws KapuaException;
+            throws KapuaException;
 
+    /**
+     * @since 1.0
+     */
+    public UserRoles findByUserId(KapuaId scopeId, KapuaId userId)
+            throws KapuaException;
+
+    /**
+     * @since 1.0
+     */
     public UserRolesListResult merge(Set<UserRolesCreator> newPermissions)
-        throws KapuaException;
+            throws KapuaException;
 }

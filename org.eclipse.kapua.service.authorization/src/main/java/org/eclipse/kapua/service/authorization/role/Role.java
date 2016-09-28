@@ -14,14 +14,13 @@ package org.eclipse.kapua.service.authorization.role;
 
 import java.util.Set;
 
-import org.eclipse.kapua.model.KapuaEntity;
+import org.eclipse.kapua.model.KapuaUpdatableEntity;
 
-public interface Role extends KapuaEntity
-{
+public interface Role extends KapuaUpdatableEntity {
+
     public static final String TYPE = "role";
 
-    default public String getType()
-    {
+    default public String getType() {
         return TYPE;
     }
 
