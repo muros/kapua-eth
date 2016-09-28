@@ -20,7 +20,7 @@ public class KapuaIllegalArgumentException extends KapuaException
     private static final long serialVersionUID = -7067191169730223113L;
 
     /**
-     * Constructor for EdcIllegalArgumentException.
+     * Constructor for KapuaIllegalArgumentException.
      * @param argumentName
      * @param details
      */

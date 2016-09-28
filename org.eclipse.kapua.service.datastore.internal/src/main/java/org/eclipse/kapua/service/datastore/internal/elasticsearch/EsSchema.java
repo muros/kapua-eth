@@ -128,7 +128,7 @@ public class EsSchema
         private String                metricTypeName;
         private String                assetTypeName;
         private String                indexName;
-        private String                edcIndexName;
+        private String                kapuaIndexName;
         //
 
         // Custom mappings can only increase within the same account
@@ -164,7 +164,7 @@ public class EsSchema
 
         public String getPrivateIndexName()
         {
-            return this.edcIndexName;
+            return this.kapuaIndexName;
         }
 
         public String getTopicTypeName()
@@ -714,30 +714,30 @@ public class EsSchema
 
             this.initMessageMappings(newIndex, enableAllField, enableSourceField);
 
-            // Check existence of the edc internal index
-            String newEdcMetadataIdx = EsUtils.getActualEdcIndexName(accountName, time);
+            // Check existence of the kapua internal index
+            String newKapuaMetadataIdx = EsUtils.getActualKapuaIndexName(accountName, time);
             existsResponse = esClient.admin().indices()
-                                     .exists(new IndicesExistsRequest(newEdcMetadataIdx))
+                                     .exists(new IndicesExistsRequest(newKapuaMetadataIdx))
                                      .actionGet();
 
             indexExists = existsResponse.isExists();
             if (!indexExists) {
                 esClient.admin()
                         .indices()
-                        .prepareCreate(newEdcMetadataIdx)
+                        .prepareCreate(newKapuaMetadataIdx)
                         .setSettings(this.getIndexSettings())
                         .execute()
                         .actionGet();
 
-                s_logger.info("Metadata index created: " + newEdcMetadataIdx);
+                s_logger.info("Metadata index created: " + newKapuaMetadataIdx);
 
-                this.initTopicMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
-                this.initMetricMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
-                this.initAssetMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
+                this.initTopicMappings(newKapuaMetadataIdx, enableAllField, enableSourceField);
+                this.initMetricMappings(newKapuaMetadataIdx, enableAllField, enableSourceField);
+                this.initAssetMappings(newKapuaMetadataIdx, enableAllField, enableSourceField);
             }
 
             currentMetadata.indexName = newIndex;
-            currentMetadata.edcIndexName = newEdcMetadataIdx;
+            currentMetadata.kapuaIndexName = newKapuaMetadataIdx;
             s_logger.info("Leaving updating metadata");
         }
 

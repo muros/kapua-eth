@@ -44,7 +44,7 @@ public class MessageBuilder
         tmpMessage.setTopic(kapuaTopic.getFullTopic());
 
         SearchHitField timestampObj = searchHit.getFields().get(EsSchema.MESSAGE_TIMESTAMP);
-        tmpMessage.setTimestamp((Date) (timestampObj == null ? null : EsUtils.convertToEdcObject("date", (String) timestampObj.getValue())));
+        tmpMessage.setTimestamp((Date) (timestampObj == null ? null : EsUtils.convertToKapuaObject("date", (String) timestampObj.getValue())));
         tmpMessage.setId(new StorableIdImpl(searchHit.getId()));
 
         if (fetchStyle.equals(MessageFetchStyle.METADATA)) {
@@ -94,12 +94,12 @@ public class MessageBuilder
 
             obj = positionMap.get(EsSchema.MESSAGE_POS_TIMESTAMP);
             if (obj != null)
-                position.setTimestamp((Date) EsUtils.convertToEdcObject("date", (String) obj));
+                position.setTimestamp((Date) EsUtils.convertToKapuaObject("date", (String) obj));
         }
 
         Object collectedOnFld = source.get(EsSchema.MESSAGE_COLLECTED_ON);
         if (collectedOnFld != null) {
-            payload.setCollectedOn((Date) (collectedOnFld == null ? null : EsUtils.convertToEdcObject("date", (String) collectedOnFld)));
+            payload.setCollectedOn((Date) (collectedOnFld == null ? null : EsUtils.convertToKapuaObject("date", (String) collectedOnFld)));
         }
 
         if (source.get(EsSchema.MESSAGE_MTR) != null) {

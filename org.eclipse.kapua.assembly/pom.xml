@@ -23,12 +23,12 @@
 
 	<artifactId>org.eclipse.kapua.assembly</artifactId>
 
-	<properties>
+    <properties>
 		<tomcat.version>8.0.37</tomcat.version>
-		<camel.version>2.16.3</camel.version>
-		<activemq.version>5.14.0</activemq.version>
-		<commons.pool.version>2.3</commons.pool.version>
-	</properties>
+        <camel.version>2.16.3</camel.version>
+        <activemq.version>5.14.0</activemq.version>
+        <commons.pool.version>2.3</commons.pool.version>
+    </properties>
 
 	<dependencies>
 		<!-- console and api dependency -->
@@ -186,11 +186,11 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<!-- Google protobuf for message encoding -->
-			<groupId>com.google.protobuf</groupId>
-			<artifactId>protobuf-java</artifactId>
-			<version>2.6.1</version>
-		</dependency>
+            <!-- Google protobuf for message encoding -->
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.6.1</version>
+        </dependency>
 
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
@@ -218,71 +218,71 @@
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>4.1.3.RELEASE</version>
-		</dependency>
+	    <dependency>
+	        <groupId>org.springframework.security</groupId>
+	        <artifactId>spring-security-core</artifactId>
+	        <version>4.1.3.RELEASE</version>
+	    </dependency>
 		<dependency>
 			<groupId>io.dropwizard.metrics</groupId>
 			<artifactId>metrics-core</artifactId>
 			<version>3.1.2</version>
 		</dependency>
 	</dependencies>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>unpack-unix</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.apache.activemq</groupId>
-									<artifactId>apache-activemq</artifactId>
-									<classifier>bin</classifier>
-									<type>tar.gz</type>
-									<outputDirectory>target/dependencies/unix</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.6</version>
-				<executions>
-					<execution>
-						<id>unix-bin</id>
-						<phase>package</phase>
-						<goals>
-							<goal>attached</goal>
-						</goals>
-						<configuration>
-							<descriptors>
-								<descriptor>src/main/descriptors/unix-bin.xml</descriptor>
-							</descriptors>
-							<!-- otherwise we got exception on some machine -->
-							<!-- group id 'xxxxxxxxxx' is too big ( > 2097151 ) -->
-							<tarLongFileMode>posix</tarLongFileMode>
-							<finalName>kapua-broker-${project.version}</finalName>
-							<appendAssemblyId>false</appendAssemblyId>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 
+    <build>
+   		<plugins>
+   			<plugin>
+   				<groupId>org.apache.maven.plugins</groupId>
+   				<artifactId>maven-dependency-plugin</artifactId>
+   				<executions>
+   					<execution>
+   						<id>unpack-unix</id>
+   						<phase>generate-resources</phase>
+   						<goals>
+   							<goal>unpack</goal>
+   						</goals>
+   						<configuration>
+   							<artifactItems>
+   								<artifactItem>
+   									<groupId>org.apache.activemq</groupId>
+   									<artifactId>apache-activemq</artifactId>
+   									<classifier>bin</classifier>
+   									<type>tar.gz</type>
+   									<outputDirectory>target/dependencies/unix</outputDirectory>
+   								</artifactItem>
+   							</artifactItems>
+   						</configuration>
+   					</execution>
+   				</executions>
+   			</plugin>
+   			<plugin>
+   				<groupId>org.apache.maven.plugins</groupId>
+   				<artifactId>maven-assembly-plugin</artifactId>
+   				<version>2.6</version>
+   				<executions>
+   					<execution>
+   						<id>unix-bin</id>
+   						<phase>package</phase>
+   						<goals>
+   							<goal>attached</goal>
+   						</goals>
+   						<configuration>
+   							<descriptors>
+   								<descriptor>src/main/descriptors/unix-bin.xml</descriptor>
+   							</descriptors>
+   							<!-- otherwise we got exception on some machine -->
+   							<!-- group id 'xxxxxxxxxx' is too big ( > 2097151 ) -->
+   							<tarLongFileMode>posix</tarLongFileMode>
+   							<finalName>kapua-broker-${project.version}</finalName>
+   							<appendAssemblyId>false</appendAssemblyId>
+   						</configuration>
+   					</execution>
+   				</executions>
+   			</plugin>
+   		</plugins>
+   	</build>
+   	
 	<profiles>
 		<profile>
 			<id>deploy</id>
@@ -291,10 +291,10 @@
 			</activation>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.1</version>
+	   				<plugin>
+		                <groupId>org.codehaus.mojo</groupId>
+		                <artifactId>exec-maven-plugin</artifactId>
+		                <version>1.1</version>
 						<configuration>
 							<environmentVariables>
 								<KAPUA_VERSION>${project.version}</KAPUA_VERSION>
@@ -302,8 +302,8 @@
 								<ACTIVEMQ_VERSION>${activemq.version}</ACTIVEMQ_VERSION>
 							</environmentVariables>
 						</configuration>
-						<executions>
-							<execution>
+		                <executions>
+		                    <execution>
 								<id>vagrant_console_deploy</id>
 								<phase>install</phase>
 								<goals>
@@ -315,20 +315,20 @@
 								</configuration>
 							</execution>
 							<execution>
-								<id>vagrant_broker_deploy</id>
-								<phase>install</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
+		                        <id>vagrant_broker_deploy</id>
+		                        <phase>install</phase>
+		                        <goals>
+		                            <goal>exec</goal>
+		                        </goals>
+		                        <configuration>
 									<executable>./deployScript/deploy-broker.sh</executable>
 									<workingDirectory>${basedir}/../org.eclipse.kapua.dev-tools/src/main/vagrant/demo</workingDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+	            	</plugin>
+	     		</plugins>
+	     	</build>
 		</profile>
 	</profiles>
 

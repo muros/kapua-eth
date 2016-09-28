@@ -45,7 +45,7 @@ function downloadCss(elementSrc, elementId) {
 //
 // Adds Openlayers script
 function downloadJsOpenlayers() {
-	downloadJs("js/openlayers/2.11/openlayers.js", "openlayersScript");
+	downloadJs("openlayers/2.13.1/OpenLayers.js", "openlayersScript");
 }
 
 //

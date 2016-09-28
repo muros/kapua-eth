@@ -34,38 +34,33 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.AbstractImagePrototype;
 
-public class DevicesView extends LayoutContainer
-{
+public class DevicesView extends LayoutContainer {
 
     private final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
-    private GwtSession            m_currentSession;
+    private GwtSession m_currentSession;
 
-    private TabPanel              m_tabsPanel;
-    private TabItem               m_tabTable;
-    private TabItem               m_tabMap;
-    private DeviceFilterPanel     m_deviceFilterPanel;
-    private DevicesTable          m_deviceTable;
-    private DevicesMap            m_deviceMap;
-    private DeviceTabs            m_deviceTabs;
+    private TabPanel m_tabsPanel;
+    private TabItem m_tabTable;
+    private TabItem m_tabMap;
+    private DeviceFilterPanel m_deviceFilterPanel;
+    private DevicesTable m_deviceTable;
+    private DevicesMap m_deviceMap;
+    private DeviceTabs m_deviceTabs;
 
-    public DevicesView(GwtSession currentSession)
-    {
+    public DevicesView(GwtSession currentSession) {
         m_currentSession = currentSession;
     }
 
-    public void setDevice(GwtDevice device)
-    {
+    public void setDevice(GwtDevice device) {
         m_deviceTabs.setDevice(device);
     }
 
-    public DeviceTabs getDeviceTabs()
-    {
+    public DeviceTabs getDeviceTabs() {
         return m_deviceTabs;
     }
 
-    protected void onRender(final Element parent, int index)
-    {
+    protected void onRender(final Element parent, int index) {
 
         super.onRender(parent, index);
 
@@ -118,8 +113,8 @@ public class DevicesView extends LayoutContainer
         m_tabTable.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.table()));
         m_tabTable.setBorders(false);
         m_tabTable.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 m_deviceTable.refresh(new GwtDeviceQueryPredicates());
             }
         });
@@ -131,8 +126,8 @@ public class DevicesView extends LayoutContainer
         m_tabMap.setIcon(AbstractImagePrototype.create(Resources.INSTANCE.deviceMap()));
         m_tabMap.setBorders(false);
         m_tabMap.addListener(Events.Select, new Listener<ComponentEvent>() {
-            public void handleEvent(ComponentEvent be)
-            {
+
+            public void handleEvent(ComponentEvent be) {
                 m_deviceMap.refresh(new GwtDeviceQueryPredicates());
             }
         });
@@ -167,8 +162,7 @@ public class DevicesView extends LayoutContainer
     //
     // --------------------------------------------------------------------------------------
 
-    public void onUnload()
-    {
+    public void onUnload() {
         super.onUnload();
     }
 

@@ -140,8 +140,8 @@
     <!--  -->
 	<!-- Servlets -->
 	<!--  -->
-
-	<!-- XSRF servlet support -->
+    
+	<!-- Http error handling servlet -->
 	<servlet>
       <servlet-name>KapuaErrorHandlerServlet</servlet-name>
       <servlet-class>org.eclipse.kapua.app.console.servlet.KapuaErrorHandlerServlet

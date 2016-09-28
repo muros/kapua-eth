@@ -83,7 +83,7 @@ public class Accounts extends AbstractKapuaResource
         }
         return returnNotNullEntity(account);
     }
-    
+
     /**
      * Returns the Account specified by the "name" query parameter.
      *
@@ -291,7 +291,7 @@ public class Accounts extends AbstractKapuaResource
         }
         return returnNotNullEntity(account);
     }
-    
+
     /**
      * Updates an account based on the information provided in Account parameter.
      *
