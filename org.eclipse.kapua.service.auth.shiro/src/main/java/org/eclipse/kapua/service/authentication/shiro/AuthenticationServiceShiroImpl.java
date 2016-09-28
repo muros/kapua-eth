@@ -99,19 +99,6 @@ public class AuthenticationServiceShiroImpl implements AuthenticationService, Ka
         else {
             logger.warn("Cannot disable Shiro session validator scheduler.");
         }
-
-        // TODO check this configuration!!!!
-        // defaultSecurityManager.subjectDAO.sessionStorageEvaluator.sessionStorageEnabled = false;
-        // # SessionListeners only works with in the native SessionMode
-        // # This is not the mode we use when running in Tomcat.
-        // #securityManager.sessionMode = native
-
-        // TODO cache manager settings
-        // kapuaCacheManager = com.eurotech.cloud.commons.service.security.EdcCacheManager
-        // #kapuaCacheManager = org.apache.shiro.cache.ehcache.EhCacheManager
-        // securityManager.cacheManager = $kapuaCacheManager
-        // defaultSecurityManager.setCacheManager(new EdcCacheManager());
-
     }
 
     @Override

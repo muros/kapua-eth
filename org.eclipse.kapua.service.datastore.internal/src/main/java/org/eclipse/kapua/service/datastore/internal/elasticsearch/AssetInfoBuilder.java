@@ -39,7 +39,7 @@ public class AssetInfoBuilder {
 		String scope = fields.get(EsSchema.ASSET_ACCOUNT).getValue();
 		this.assetInfo = new AssetInfoImpl(scope, new StorableIdImpl(idStr));
 		this.assetInfo.setAsset(assetName);
-        this.assetInfo.setLastMessageTimestamp((Date) EsUtils.convertToEdcObject("date", timestampStr));
+        this.assetInfo.setLastMessageTimestamp((Date) EsUtils.convertToKapuaObject("date", timestampStr));
         // TODO FIll the other fields
 		return this;
 	}

@@ -38,7 +38,7 @@ public class MetricInfoBuilder {
         String asset = fields.get(EsSchema.METRIC_ASSET).getValue();
         String semTopic = fields.get(EsSchema.METRIC_SEM_NAME).getValue();
 		
-        Date timestamp = (Date)EsUtils.convertToEdcObject("date", lastMsgTimestamp);
+        Date timestamp = (Date)EsUtils.convertToKapuaObject("date", lastMsgTimestamp);
         KapuaTopic topic = new KapuaTopic(scope, asset, semTopic);
         
 		String metricName = EsUtils.restoreMetricName(name);

@@ -41,7 +41,7 @@ public class TopicInfoBuilder {
 		String account = fields.get(EsSchema.TOPIC_ACCOUNT).getValue();
 		
 		KapuaTopic topic = new KapuaTopic(String.format("%s/%s/%s", account, asset, topicName));
-		Date timestamp = (Date)EsUtils.convertToEdcObject("date", lastMsgTimestampStr);
+		Date timestamp = (Date)EsUtils.convertToKapuaObject("date", lastMsgTimestampStr);
 		topicInfo = new TopicInfoImpl(account, new StorableIdImpl(id));
 		topicInfo.setFullTopicName(topic.getFullTopic());
 		topicInfo.setLastMessageId(new StorableIdImpl(lastMsgId));

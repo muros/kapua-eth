@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * EdcMetric represents an instance of a metric published as part of the message.
+ * KapuaMetric represents an instance of a metric published as part of the message.
  * The metric is defined by a name, a type and a value. The name is an alphanumeric string.
  * The type is expressed as a string and can be one of the following values: string, double, int, float, long boolean, base64Binary.
  * The value is the string representation of the corresponding value object.

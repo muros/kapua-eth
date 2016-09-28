@@ -204,42 +204,15 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
     protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo info)
         throws AuthenticationException
     {
-        // ServiceLocator locator = ServiceLocator.getInstance();
-        // AuthorizationService authServ = locator.getAuthorizationService();
-        //
-        // EdcSimpleAuthenticationInfo edcai = (EdcSimpleAuthenticationInfo) info;
-        // EdcSession edcSession = edcai.getEdcSession();
-        // User user = edcSession.getUser();
-        //
-        // EdcUsernamePasswordToken token = (EdcUsernamePasswordToken) authcToken;
-        //
-        // IncorrectCredentialsException ice = null;
-        //
-
         KapuaSimpleAuthenticationInfo kapuaInfo = (KapuaSimpleAuthenticationInfo) info;
 
         super.assertCredentialsMatch(authcToken, info);
 
-        //
-        // // updating session
-        // // Session should track from EdcSimpleAuthenticationInfo: User, AccountServicePlan, accountName
-        // // EdcSession: User, AccountServicePlan, accountName, runAsAccountId, runAsAccountName, runAsAccountServicePlan
-        // // EdcSession.getSessionAccountServicePlan() : runAsAccountServicePlan != null ? runAsAccountServicePlan : AccountServicePlan
-        // // EdcSession.getSessionAccountId() : runAsAccountId != null ? runAsAccountId : accountId
-        // // EdcSession.getSessionAccountName() : runAsAccountName != null ? runAsAccountName : accountName
-
         Subject currentSubject = SecurityUtils.getSubject();
-        // Storing raw password and user in session
-        // if (!LoginSourceType.MQTT_DEVICE.equals(token.getSourceType())) {
-        // user.setRawPassword(new String(token.getPassword()));
-        // }
         Session session = currentSubject.getSession();
         session.setAttribute("scopeId", kapuaInfo.getUser().getScopeId());
         session.setAttribute("userScopeId", kapuaInfo.getUser().getScopeId());
         session.setAttribute("userId", kapuaInfo.getUser().getId());
-
-        // session.setAttribute(AuthorizationServiceBean.EDC_SESSION, edcSession);
-
     }
 
     @Override

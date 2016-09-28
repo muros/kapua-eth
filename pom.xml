@@ -17,7 +17,7 @@
 
     <groupId>org.eclipse.kapua</groupId>
     <artifactId>kapua</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <name>kapua</name>
     <packaging>pom</packaging>
 
@@ -486,26 +486,6 @@
         <url>https://github.com/eurotech/kapua/issues/</url>
     </issueManagement>
 
-    <ciManagement>
-        <system>Jenkins</system>
-        <url>https://eurotech.ci.cloudbees.com/</url>
-    </ciManagement>
-
-    <mailingLists>
-        <mailingList>
-            <name>edcdev@eurotech.com</name>
-        </mailingList>
-    </mailingLists>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>cloudbees-private-snapshot-repository</id>
-            <url>dav:https://repository-eurotech.forge.cloudbees.com/private/</url>
-        </snapshotRepository>
-        <site>
-            <id>cloudbees-private-release-repository</id>
-            <url>dav:https://repository-eurotech.forge.cloudbees.com/private/edc/</url>
-        </site>
-    </distributionManagement>
-
+	<!-- TODO continuous integration info -->
+	 
 </project>

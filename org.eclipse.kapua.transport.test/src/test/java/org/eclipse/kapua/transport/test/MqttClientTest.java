@@ -100,7 +100,7 @@ public class MqttClientTest extends Assert
 
         //
         // Send
-        String sendTopic = "$EDC/edcguest/" + mqttClient.getClientId() + "/" + MqttClientTest.class.getSimpleName() + "/testMqttClientSendTopic";
+        String sendTopic = "$EDC/kapua-sys/" + mqttClient.getClientId() + "/" + MqttClientTest.class.getSimpleName() + "/testMqttClientSendTopic";
 
         MqttTopic mqttTopic = new MqttTopic(sendTopic);
         MqttPayload mqttPayload = new MqttPayload("testMqttClientSendPayload".getBytes());

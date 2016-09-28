@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Models a topic for messages posted to the EDC platform.
+ * Models a topic for messages posted to the Kapua platform.
  * Topic are expected to be in the form of "account/asset/<application_specific>";
  * system topic starts with the $EDC account. 
  */
@@ -194,7 +194,7 @@ public class KapuaTopic {
 			return false;
 		}
 		
-		EdcTopic other = (EdcTopic) obj;
+		KapuaTopic other = (KapuaTopic) obj;
 		if (m_fullTopic == null) {
 			if (other.m_fullTopic != null) {
 				return false;

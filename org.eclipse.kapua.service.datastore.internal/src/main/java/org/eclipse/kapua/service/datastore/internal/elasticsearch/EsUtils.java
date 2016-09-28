@@ -147,7 +147,7 @@ public class EsUtils {
 	
 	public static String getActualIndexName(String accountName, long timestamp) {
 		String actualName = EsUtils.normalizedIndexName(accountName);
-		Calendar cal = KapuaDateUtils.getEdcCalendar();
+		Calendar cal = KapuaDateUtils.getKapuaCalendar();
 		cal.setTimeInMillis(timestamp);
 		int year = cal.get(Calendar.YEAR);
 		int weekOfTheYear = cal.get(Calendar.WEEK_OF_YEAR);
@@ -155,7 +155,7 @@ public class EsUtils {
 		return actualName;
 	}
 
-	public static String getActualEdcIndexName(String accountName, long timestamp) {
+	public static String getActualKapuaIndexName(String accountName, long timestamp) {
 		String actualName = EsUtils.normalizedIndexName(accountName);
 		actualName = String.format(".%s", actualName);
 		return actualName;
@@ -272,34 +272,34 @@ public class EsUtils {
 		throw new IllegalArgumentException(String.format("Unknown type [%s]", aClass.getName()));
 	}
 	
-	public static String convertToEsType(String edcType) {
+	public static String convertToEsType(String kapuaType) {
 		
-		if (edcType.equals("string") || edcType.equals("String"))
+		if (kapuaType.equals("string") || kapuaType.equals("String"))
 			return ES_TYPE_STRING;
 		
-		if (edcType.equals("int") || edcType.equals("Integer"))
+		if (kapuaType.equals("int") || kapuaType.equals("Integer"))
 			return ES_TYPE_INTEGER;
 		
-		if (edcType.equals("long") || edcType.equals("Long"))
+		if (kapuaType.equals("long") || kapuaType.equals("Long"))
 			return ES_TYPE_LONG;
 		
-		if (edcType.equals("float") || edcType.equals("Float"))
+		if (kapuaType.equals("float") || kapuaType.equals("Float"))
 			return ES_TYPE_FLOAT;
 		
-		if (edcType.equals("double") || edcType.equals("Double"))
+		if (kapuaType.equals("double") || kapuaType.equals("Double"))
 			return ES_TYPE_DOUBLE;
 		
-		if (edcType.equals("boolean") || edcType.equals("Boolean"))
+		if (kapuaType.equals("boolean") || kapuaType.equals("Boolean"))
 			return ES_TYPE_BOOL;
 		
-		if (edcType.equals("date") || edcType.equals("Date")) 
+		if (kapuaType.equals("date") || kapuaType.equals("Date")) 
 			return ES_TYPE_DATE;
 		
-		if (edcType.equals("base64Binary")) {
+		if (kapuaType.equals("base64Binary")) {
 			return ES_TYPE_BINARY;
 		}
 		
-		throw new IllegalArgumentException(String.format("Unknown type [%s]", edcType));
+		throw new IllegalArgumentException(String.format("Unknown type [%s]", kapuaType));
 	}
     
     public static String convertToKapuaType(String esType) {
@@ -332,7 +332,7 @@ public class EsUtils {
         throw new IllegalArgumentException(String.format("Unknown type [%s]", esType));
     }
 
-	public static Object convertToEdcObject(String type, String value) throws ParseException {
+	public static Object convertToKapuaObject(String type, String value) throws ParseException {
 		
 		if (type.equals("string"))
 			return value;
@@ -354,9 +354,9 @@ public class EsUtils {
 		
 		if (type.equals("date")) {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-			simpleDateFormat.setTimeZone(KapuaDateUtils.getEdcTimeZone());
+			simpleDateFormat.setTimeZone(KapuaDateUtils.getKapuaTimeZone());
 			SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			simpleDateFormat2.setTimeZone(KapuaDateUtils.getEdcTimeZone());
+			simpleDateFormat2.setTimeZone(KapuaDateUtils.getKapuaTimeZone());
 			try {
 				return value == null ? null : simpleDateFormat.parse(value);
 			} catch (ParseException exc) {

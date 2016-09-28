@@ -37,7 +37,7 @@ public class ArgumentValidator
 	
 	
 	/**
-	 * Throws EdcIllegalArgumentException if the supplied argValue does not matches specified validation expression. 
+	 * Throws KapuaIllegalArgumentException if the supplied argValue does not matches specified validation expression. 
 	 * @param argValue
 	 */
 	public static void match(String argValue, String argRegExp, String argName) 
@@ -48,7 +48,7 @@ public class ArgumentValidator
 	}
 	
 	/**
-	 * Throws an EdcIllegalNullArgumentException if the value for the specified argument is null. 
+	 * Throws an KapuaIllegalNullArgumentException if the value for the specified argument is null. 
 	 * @param obj
 	 * @param argumentName
 	 * @throws KapuaIllegalNullArgumentException
@@ -61,7 +61,7 @@ public class ArgumentValidator
 	}
 					
 	/**
-	 * Throws an EdcIllegalNullArgumentException if the string value for the specified argument is empty or null. 
+	 * Throws an KapuaIllegalNullArgumentException if the string value for the specified argument is empty or null. 
 	 * @param obj
 	 * @param argumentName
 	 * @throws KapuaIllegalNullArgumentException
@@ -74,7 +74,7 @@ public class ArgumentValidator
 	}
 	
 	/**
-	 * Throws an EdcIllegalNullArgumentException if the array for the specified argument is empty or null.
+	 * Throws an KapuaIllegalNullArgumentException if the array for the specified argument is empty or null.
 	 * @param value
 	 * @param argumentName
 	 * @throws KapuaIllegalNullArgumentException
@@ -87,7 +87,7 @@ public class ArgumentValidator
 	}
 	
 	/**
-	 * Throws an EdcIllegalNullArgumentException if the collection for the specified argument is empty or null.
+	 * Throws an KapuaIllegalNullArgumentException if the collection for the specified argument is empty or null.
 	 * @param value
 	 * @param argumentName
 	 * @throws KapuaIllegalNullArgumentException
@@ -100,7 +100,7 @@ public class ArgumentValidator
 	}
 
 	/**
-	 * Throws an EdcIllegalNullArgumentException if the value for the specified argument is null. 
+	 * Throws an KapuaIllegalNullArgumentException if the value for the specified argument is null. 
 	 * @param obj
 	 * @param argumentName
 	 * @throws KapuaIllegalNullArgumentException
@@ -113,7 +113,7 @@ public class ArgumentValidator
 	}
 	
 	/**
-     * Throws an EdcIllegalNullArgumentException if StartDate comes after EndDate. 
+     * Throws an KapuaIllegalNullArgumentException if StartDate comes after EndDate. 
      * @param startDate
      * @param endDate
      * @throws KapuaIllegalArgumentException
@@ -124,7 +124,7 @@ public class ArgumentValidator
     }
 	
 	/**
-     * Throws an EdcIllegalNullArgumentException if StartDate comes after EndDate. 
+     * Throws an KapuaIllegalNullArgumentException if StartDate comes after EndDate. 
      * @param startDate
      * @param endDate
      * @throws KapuaIllegalArgumentException
@@ -138,7 +138,7 @@ public class ArgumentValidator
     }
 	
 	/**
-     * Throws an EdcIllegalArgumentException if the value for the specified argument is lower (<) than the minValue given or higher (>) than the maxValue given. Extremes included. 
+     * Throws an KapuaIllegalArgumentException if the value for the specified argument is lower (<) than the minValue given or higher (>) than the maxValue given. Extremes included. 
      *  
      * @param obj
      * @param argumentName
