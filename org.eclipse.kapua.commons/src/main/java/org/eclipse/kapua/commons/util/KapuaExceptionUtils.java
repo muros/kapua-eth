@@ -34,7 +34,7 @@ public class KapuaExceptionUtils
     {
         Exception e = he;
 
-        // Handle the case of an incoming EdcException
+        // Handle the case of an incoming KapuaException
         if (he instanceof KapuaException && he.getCause() != null && he.getCause() instanceof PersistenceException) {
             e = (Exception) he.getCause();
         }

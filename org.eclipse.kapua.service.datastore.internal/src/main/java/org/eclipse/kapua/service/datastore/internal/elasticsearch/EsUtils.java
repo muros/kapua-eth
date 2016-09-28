@@ -147,7 +147,7 @@ public class EsUtils {
 	
 	public static String getActualIndexName(String accountName, long timestamp) {
 		String actualName = EsUtils.normalizedIndexName(accountName);
-		Calendar cal = KapuaDateUtils.getEdcCalendar();
+		Calendar cal = KapuaDateUtils.getKapuaCalendar();
 		cal.setTimeInMillis(timestamp);
 		int year = cal.get(Calendar.YEAR);
 		int weekOfTheYear = cal.get(Calendar.WEEK_OF_YEAR);
@@ -155,7 +155,7 @@ public class EsUtils {
 		return actualName;
 	}
 
-	public static String getActualEdcIndexName(String accountName, long timestamp) {
+	public static String getActualKapuaIndexName(String accountName, long timestamp) {
 		String actualName = EsUtils.normalizedIndexName(accountName);
 		actualName = String.format(".%s", actualName);
 		return actualName;
@@ -332,7 +332,7 @@ public class EsUtils {
         throw new IllegalArgumentException(String.format("Unknown type [%s]", esType));
     }
 
-	public static Object convertToEdcObject(String type, String value) throws ParseException {
+	public static Object convertToKapuaObject(String type, String value) throws ParseException {
 		
 		if (type.equals("string"))
 			return value;
@@ -354,9 +354,9 @@ public class EsUtils {
 		
 		if (type.equals("date")) {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-			simpleDateFormat.setTimeZone(KapuaDateUtils.getEdcTimeZone());
+			simpleDateFormat.setTimeZone(KapuaDateUtils.getKapuaTimeZone());
 			SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-			simpleDateFormat2.setTimeZone(KapuaDateUtils.getEdcTimeZone());
+			simpleDateFormat2.setTimeZone(KapuaDateUtils.getKapuaTimeZone());
 			try {
 				return value == null ? null : simpleDateFormat.parse(value);
 			} catch (ParseException exc) {

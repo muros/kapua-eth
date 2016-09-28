@@ -18,24 +18,24 @@ import java.util.TimeZone;
 
 public class KapuaDateUtils {
 
-	public static Locale getEdcLocale() {
+	public static Locale getKapuaLocale() {
 		return Locale.US;
 	}
 
-	public static TimeZone getEdcTimeZone() {
+	public static TimeZone getKapuaTimeZone() {
 		return TimeZone.getTimeZone("UTC");
 	}
 	
-	public static Calendar getEdcCalendar() {
-		Calendar cal = Calendar.getInstance(getEdcTimeZone(), getEdcLocale());
+	public static Calendar getKapuaCalendar() {
+		Calendar cal = Calendar.getInstance(getKapuaTimeZone(), getKapuaLocale());
 		return cal;
 	}
 	
 	/**
 	 * @return current date GMT
 	 */
-	public static Date getEdcSysDate() {
-		Calendar cal = KapuaDateUtils.getEdcCalendar();
+	public static Date getKapuaSysDate() {
+		Calendar cal = KapuaDateUtils.getKapuaCalendar();
 		return cal.getTime();
 	}
 	
@@ -44,19 +44,19 @@ public class KapuaDateUtils {
 	 * @return date GMT
 	 */
 	public static Date getDateFromMillis(long millis) {
-		Calendar cal = KapuaDateUtils.getEdcCalendar();
+		Calendar cal = KapuaDateUtils.getKapuaCalendar();
 		cal.setTimeInMillis(millis);
 		return cal.getTime();
 	}
 	
 	public static int weekOfTheYear(Date date) {
-		Calendar cal = KapuaDateUtils.getEdcCalendar();
+		Calendar cal = KapuaDateUtils.getKapuaCalendar();
 		cal.setTime(date);
 		return cal.get(Calendar.WEEK_OF_YEAR);
 	}	
 	
 	public static Date weekByFirstDay(Date date) {
-		Calendar cal = KapuaDateUtils.getEdcCalendar();
+		Calendar cal = KapuaDateUtils.getKapuaCalendar();
 		cal.setTime(date);
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.clear(Calendar.MINUTE);
@@ -69,7 +69,7 @@ public class KapuaDateUtils {
 	}
 	
 	public static Date getStartOfWeek(int year, int weekOfYear) {
-		Calendar cal = KapuaDateUtils.getEdcCalendar();
+		Calendar cal = KapuaDateUtils.getKapuaCalendar();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.WEEK_OF_YEAR, weekOfYear);
 		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());

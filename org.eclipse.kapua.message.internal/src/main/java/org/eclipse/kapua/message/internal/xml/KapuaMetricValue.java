@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * EdcMetricValue represents an instance of a metric stored in metricsByValue or metricsByTimestamp column families.
+ * KapuaMetricValue represents an instance of a metric stored in metricsByValue or metricsByTimestamp column families.
  * The metric is defined by a timestamp, a value and the UUID of the message on which the metric was published. The timestamp is a long type.
  * The value is the string representation of the corresponding value object.?????
  * For the primitive types, the conversion is straight forward.

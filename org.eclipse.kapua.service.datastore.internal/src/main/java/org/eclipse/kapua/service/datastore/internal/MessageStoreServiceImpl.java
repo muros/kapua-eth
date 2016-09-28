@@ -179,7 +179,7 @@ public class MessageStoreServiceImpl extends AbstractKapuaConfigurableService im
             capturedOn = message.getPayload().getCollectedOn();
         }
 
-        long currentDate = KapuaDateUtils.getEdcSysDate().getTime();
+        long currentDate = KapuaDateUtils.getKapuaSysDate().getTime();
 
         long receivedOn = currentDate;
         if (message.getTimestamp() != null)

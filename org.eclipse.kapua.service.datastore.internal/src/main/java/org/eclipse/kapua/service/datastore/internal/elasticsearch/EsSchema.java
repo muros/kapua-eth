@@ -715,29 +715,29 @@ public class EsSchema
             this.initMessageMappings(newIndex, enableAllField, enableSourceField);
 
             // Check existence of the kapua internal index
-            String newEdcMetadataIdx = EsUtils.getActualEdcIndexName(accountName, time);
+            String newKapuaMetadataIdx = EsUtils.getActualKapuaIndexName(accountName, time);
             existsResponse = esClient.admin().indices()
-                                     .exists(new IndicesExistsRequest(newEdcMetadataIdx))
+                                     .exists(new IndicesExistsRequest(newKapuaMetadataIdx))
                                      .actionGet();
 
             indexExists = existsResponse.isExists();
             if (!indexExists) {
                 esClient.admin()
                         .indices()
-                        .prepareCreate(newEdcMetadataIdx)
+                        .prepareCreate(newKapuaMetadataIdx)
                         .setSettings(this.getIndexSettings())
                         .execute()
                         .actionGet();
 
-                s_logger.info("Metadata index created: " + newEdcMetadataIdx);
+                s_logger.info("Metadata index created: " + newKapuaMetadataIdx);
 
-                this.initTopicMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
-                this.initMetricMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
-                this.initAssetMappings(newEdcMetadataIdx, enableAllField, enableSourceField);
+                this.initTopicMappings(newKapuaMetadataIdx, enableAllField, enableSourceField);
+                this.initMetricMappings(newKapuaMetadataIdx, enableAllField, enableSourceField);
+                this.initAssetMappings(newKapuaMetadataIdx, enableAllField, enableSourceField);
             }
 
             currentMetadata.indexName = newIndex;
-            currentMetadata.kapuaIndexName = newEdcMetadataIdx;
+            currentMetadata.kapuaIndexName = newKapuaMetadataIdx;
             s_logger.info("Leaving updating metadata");
         }
 

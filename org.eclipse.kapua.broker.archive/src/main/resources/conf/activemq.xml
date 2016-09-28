@@ -239,7 +239,7 @@
         </errorHandler>
 
 		<!-- Executor thread pool
-		Please check the EdcExecutorThreadPoolFactory comments before modify the threadName attributes
+		Please check the KapuaExecutorThreadPoolFactory comments before modify the threadName attributes
 		-->
         <threadPool id="serviceThreads"
                 threadName="kapuaExecutorPoolServiceProcessor"
