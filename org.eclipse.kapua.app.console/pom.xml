@@ -5,14 +5,13 @@
     and is available at http://www.eclipse.org/legal/epl-v10.html Contributors: 
     Eurotech - initial API and implementation -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <!-- POM file generated with GWT webAppCreator -->
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.eclipse.kapua</groupId>
         <artifactId>kapua</artifactId>
-        <version>0.1.2-SNAPSHOT</version>
+        <version>0.1.2</version>
     </parent>
 
     <packaging>war</packaging>
@@ -372,10 +371,8 @@
                         <configuration>
                             <target>
                                 <echo>Openlayers: copy resources to webapp output folder</echo>
-                                <copy
-                                    todir="${project.build.directory}/${project.build.finalName}">
-                                    <fileset
-                                        dir="${project.build.directory}/tmp/openlayers-${openlayers.version}/META-INF/resources/webjars/">
+                                <copy todir="${project.build.directory}/${project.build.finalName}">
+                                    <fileset dir="${project.build.directory}/tmp/openlayers-${openlayers.version}/META-INF/resources/webjars/">
                                         <exclude name="**/OpenLayers.*.js" />
                                     </fileset>
                                 </copy>
@@ -391,10 +388,7 @@
                         <configuration>
                             <target>
                                 <echo>Openlayers: customize openlayers 'ImgPath' variable</echo>
-                                <replaceregexp byline="true"
-                                    file="${project.build.directory}/${project.build.finalName}/openlayers/${openlayers.version}/OpenLayers.js"
-                                    match='ImgPath:""'
-                                    replace='ImgPath:"openlayers/${openlayers.version}/img/"' />
+                                <replaceregexp byline="true" file="${project.build.directory}/${project.build.finalName}/openlayers/${openlayers.version}/OpenLayers.js" match="ImgPath:&quot;&quot;" replace="ImgPath:&quot;openlayers/${openlayers.version}/img/&quot;" />
                             </target>
                         </configuration>
                     </execution>

@@ -12,13 +12,12 @@
 
  -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.eclipse.kapua</groupId>
 		<artifactId>kapua</artifactId>
-		<version>0.1.2-SNAPSHOT</version>
+		<version>0.1.2</version>
 	</parent>
 
 	<artifactId>org.eclipse.kapua.app.api</artifactId>
@@ -185,8 +184,7 @@
 							<target>
 								<echo>Swagger-ui: create doc dir</echo>
 								<copy todir="${project.build.directory}/${project.build.finalName}/doc">
-									<fileset
-										dir="${project.build.directory}/tmp/swagger-ui-js-${swagger-ui.version}/META-INF/resources/webjars/swagger-ui/${swagger-ui.version}" />
+									<fileset dir="${project.build.directory}/tmp/swagger-ui-js-${swagger-ui.version}/META-INF/resources/webjars/swagger-ui/${swagger-ui.version}" />
 								</copy>
 								<echo>Copy the install init script</echo>
 							</target>
@@ -201,10 +199,7 @@
 						<configuration>
 							<target>
 								<echo>Swagger-ui: replace url in index.html</echo>
-								<replaceregexp byline="true"
-									file="${project.build.directory}/${project.build.finalName}/doc/index.html"
-									match="http://petstore.swagger.io/v2/swagger.json" 
-									replace="http://&quot; + window.location.host + &quot;/kapua/api/v1/swagger.json" />
+								<replaceregexp byline="true" file="${project.build.directory}/${project.build.finalName}/doc/index.html" match="http://petstore.swagger.io/v2/swagger.json" replace="http://&quot; + window.location.host + &quot;/kapua/api/v1/swagger.json" />
 							</target>
 						</configuration>
 					</execution>
