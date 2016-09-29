@@ -14,6 +14,12 @@ package org.eclipse.kapua.translator.exception;
 
 import org.eclipse.kapua.KapuaErrorCode;
 
+/**
+ * Translator error codes
+ * 
+ * @since 1.0
+ * 
+ */
 public enum TranslatorErrorCodes implements KapuaErrorCode
 {
     INVALID_MESSAGE,

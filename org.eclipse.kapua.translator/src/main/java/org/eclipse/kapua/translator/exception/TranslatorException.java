@@ -14,22 +14,46 @@ package org.eclipse.kapua.translator.exception;
 
 import org.eclipse.kapua.KapuaException;
 
+/**
+ * Translator Exception
+ * 
+ * @since 1.0
+ * 
+ */
 public class TranslatorException extends KapuaException
 {
     private static final long   serialVersionUID     = -6207605695086240243L;
 
     private static final String TRANSLATOR_ERROR_MESSAGES = "translator-error-messages";
 
+    /**
+     * Construct a TranslatorException
+     * 
+     * @param code error code
+     */
     public TranslatorException(TranslatorErrorCodes code)
     {
         super(code);
     }
 
+    /**
+     * Construct a TranslatorException
+     * 
+     * @param code error code
+     * @param arguments additional arguments
+     */
     public TranslatorException(TranslatorErrorCodes code, Object... arguments)
     {
         super(code, arguments);
     }
 
+    /**
+     * Construct a TranslatorException
+     * 
+     * @param code error code
+     * @param cause error cause
+     * @param arguments additional arguments
+     */
     public TranslatorException(TranslatorErrorCodes code, Throwable cause, Object... arguments)
     {
         super(code, cause, arguments);
