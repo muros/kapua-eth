@@ -25,6 +25,8 @@ import org.eclipse.kapua.broker.core.message.JmsUtil;
 /**
  * Broker assistant ({@link JmsProducerWrapper}) implementation.<BR>
  * This class provide methods to send messages for the device life cycle (to be send outside to a device specific topic) and alert/login info update messages (to be send to a specific queue)
+ * 
+ * @since 1.0
  */
 public class JmsAssistantProducerWrapper extends JmsProducerWrapper
 {
@@ -58,7 +60,6 @@ public class JmsAssistantProducerWrapper extends JmsProducerWrapper
      * @param messageNotStored
      * @param topic
      * @throws JMSException
-     * @throws KapuaInvalidTopicException
      */
     public void sendDataMessageNotStored(String topic, byte[] messageNotStored) throws JMSException
     {

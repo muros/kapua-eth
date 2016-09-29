@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Provide connection factory for embedded broker connection.
  *
+ * @since 1.0
  */
 public class JmsConnectionFactory
 {

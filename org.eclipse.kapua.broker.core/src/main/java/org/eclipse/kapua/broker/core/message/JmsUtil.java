@@ -41,6 +41,8 @@ import org.slf4j.LoggerFactory;
  * 
  * TODO add translator caching
  * 
+ * @since 1.0
+ * 
  */
 public class JmsUtil
 {
@@ -85,7 +87,6 @@ public class JmsUtil
      * @param jmsMessage
      * @throws JMSException
      * @throws KapuaException
-     * @throws KapuaInvalidTopicException
      */
     public static CamelKapuaMessage<?> convertToKapuaMessage(ConnectorDescriptor connectorDescriptor, MESSAGE_TYPE messageType, BytesMessage jmsMessage, KapuaId connectionId)
         throws JMSException, KapuaException
@@ -226,7 +227,7 @@ public class JmsUtil
      * function ActiveMQ MQTT
      * separator . /
      * element * +
-     * sub tree > #
+     * sub tree &gt; #
      * 
      * @param jmsTopic
      * @return
@@ -261,7 +262,7 @@ public class JmsUtil
      * function ActiveMQ MQTT
      * separator . /
      * element * +
-     * sub tree > #
+     * sub tree &gt; #
      * 
      * @param mqttTopic
      * @return

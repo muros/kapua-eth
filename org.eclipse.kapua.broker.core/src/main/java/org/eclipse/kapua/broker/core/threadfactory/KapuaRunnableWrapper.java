@@ -23,9 +23,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Runnable wrapper used to perform a new login once the new thread is created and started.<BR>
- * In that way it is possible to associate the Apache Shiro context ({@link Subject}) and the Kapua session to the new runnable in a clean way.<BR>
+ * In that way it is possible to associate the Apache Shiro context ({@link org.apache.shiro.subject.Subject}) and the Kapua session to the new runnable in a clean way.<BR>
  * TODO change the log level to debug for the bound/unbound context of logging line?
  *
+ * @since 1.0
  */
 public class KapuaRunnableWrapper implements Runnable
 {

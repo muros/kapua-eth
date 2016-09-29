@@ -38,6 +38,8 @@ import com.codahale.metrics.Counter;
 
 /**
  * Kapua message converter used to convert from Camel incoming messages ({@link JmsMessage}) to a platform specific message type.
+ * 
+ * @since 1.0
  */
 public class KapuaConverter
 {
@@ -69,7 +71,6 @@ public class KapuaConverter
         metricConverterErrorMessage = metricsService.getCounter(METRIC_COMPONENT_NAME, "kapua", "kapua_message", "messages", "error", "count");
     }
 
-    @Converter
     /**
      * Convert incoming message to a Kapua data message
      * 
@@ -78,13 +79,13 @@ public class KapuaConverter
      * @return Message container that contains data message
      * @throws KapuaException if incoming message does not contain a javax.jms.BytesMessage or an error during conversion occurred
      */
+    @Converter
     public CamelKapuaMessage<?> convertToData(Exchange exchange, Object value) throws KapuaException
     {
         metricConverterDataMessage.inc();
         return convertTo(exchange, value, MESSAGE_TYPE.data);
     }
 
-    @Converter
     /**
      * Convert incoming message to a Kapua application message
      * 
@@ -93,13 +94,13 @@ public class KapuaConverter
      * @return Message container that contains application message
      * @throws KapuaException if incoming message does not contain a javax.jms.BytesMessage or an error during conversion occurred
      */
+    @Converter
     public CamelKapuaMessage<?> convertToApps(Exchange exchange, Object value) throws KapuaException
     {
         metricConverterAppMessage.inc();
         return convertTo(exchange, value, MESSAGE_TYPE.app);
     }
 
-    @Converter
     /**
      * Convert incoming message to a Kapua birth message
      * 
@@ -108,13 +109,13 @@ public class KapuaConverter
      * @return Message container that contains birth message
      * @throws KapuaException if incoming message does not contain a javax.jms.BytesMessage or an error during conversion occurred
      */
+    @Converter
     public CamelKapuaMessage<?> convertToBirth(Exchange exchange, Object value) throws KapuaException
     {
         metricConverterBirthMessage.inc();
         return convertTo(exchange, value, MESSAGE_TYPE.birth);
     }
 
-    @Converter
     /**
      * Convert incoming message to a Kapua disconnect message
      * 
@@ -123,13 +124,13 @@ public class KapuaConverter
      * @return Message container that contains disconnect message
      * @throws KapuaException if incoming message does not contain a javax.jms.BytesMessage or an error during conversion occurred
      */
+    @Converter
     public CamelKapuaMessage<?> convertToDisconnect(Exchange exchange, Object value) throws KapuaException
     {
         metricConverterDcMessage.inc();
         return convertTo(exchange, value, MESSAGE_TYPE.disconnect);
     }
 
-    @Converter
     /**
      * Convert incoming message to a Kapua missing message
      * 
@@ -138,6 +139,7 @@ public class KapuaConverter
      * @return Message container that contains missing message
      * @throws KapuaException if incoming message does not contain a javax.jms.BytesMessage or an error during conversion occurred
      */
+    @Converter
     public CamelKapuaMessage<?> convertToMissing(Exchange exchange, Object value) throws KapuaException
     {
         metricConverterMissingMessage.inc();
@@ -174,7 +176,6 @@ public class KapuaConverter
         throw KapuaException.internalError("Cannot convert the message - Wrong instance type: " + exchange.getIn().getClass());
     }
 
-    @Converter
     /**
      * Convert incoming message to a javax.jms.Message
      * 
@@ -183,6 +184,7 @@ public class KapuaConverter
      * @return jms Message
      * @throws KapuaException if incoming message does not contain a javax.jms.BytesMessage
      */
+    @Converter
     public Message convertToJmsMessage(Exchange exchange, Object value) throws KapuaException
     {
         metricConverterJmsMessage.inc();

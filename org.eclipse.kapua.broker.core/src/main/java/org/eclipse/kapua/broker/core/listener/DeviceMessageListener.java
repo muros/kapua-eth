@@ -33,6 +33,7 @@ import com.codahale.metrics.Counter;
  * - Certificates updates<BR>
  * Republish of the lifecycle messages (once processed by the broker) isn't supported yet (see #136).
  *
+ * @since 1.0
  */
 @UriEndpoint(title = "device message processor", syntax = "bean:deviceMessageListener", scheme = "bean")
 public class DeviceMessageListener extends AbstractListener

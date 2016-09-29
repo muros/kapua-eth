@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
  * 
  * TODO to choose where place configuration and how to load it
  *
+ * @since 1.0
  */
 public class ConnectorDescriptorLoader
 {

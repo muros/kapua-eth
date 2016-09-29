@@ -21,6 +21,7 @@ import org.eclipse.kapua.service.authentication.KapuaPrincipal;
 /**
  * Kapua {@link Principal} implementation
  *
+ * @since 1.0
  */
 public class KapuaPrincipalImpl implements KapuaPrincipal
 {

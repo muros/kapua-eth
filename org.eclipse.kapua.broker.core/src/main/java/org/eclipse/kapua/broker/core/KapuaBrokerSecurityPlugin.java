@@ -28,11 +28,16 @@ import org.slf4j.LoggerFactory;
  * Install {@link KapuaSecurityBrokerFilter} into activeMQ filter chain plugin.<BR>
  * 
  * Is called by activeMQ broker by configuring plugin tag inside broker tag into activemq.xml.<BR>
+ * <BR>
+ * <BR>
  * 
- * <plugins>
- * <bean xmlns="http://www.springframework.org/schema/beans" id="kapuaFilter" class="org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter"/>
- * </plugins>
- *
+ * <pre>
+ * &lt;plugins&gt;
+ *     &lt;bean xmlns="http://www.springframework.org/schema/beans" id="kapuaFilter" class="org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter"/&gt;
+ * &lt;/plugins&gt;
+ * </pre>
+ * 
+ * @since 1.0
  */
 public class KapuaBrokerSecurityPlugin implements BrokerPlugin
 {

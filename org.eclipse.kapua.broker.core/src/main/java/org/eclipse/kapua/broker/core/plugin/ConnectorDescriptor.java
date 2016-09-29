@@ -24,6 +24,7 @@ import org.eclipse.kapua.service.device.call.message.DeviceMessage;
  * It's needed by the broker to translate the specific device protocol message domain to the kapua message domain.<BR>
  * Each broker connector can be bound with only one device level protocol.
  *
+ * @since 1.0
  */
 public class ConnectorDescriptor implements Serializable
 {

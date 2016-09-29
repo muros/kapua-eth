@@ -24,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Camel utility methods
+ * 
+ * @since 1.0
  */
 public class CamelUtil
 {

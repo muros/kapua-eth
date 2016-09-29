@@ -23,15 +23,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class is needed by {@link KapuaSecurityBrokerFilter} to handle a vm connection.<BR>
- * Indeed this bundle is instantiated during the broker startup then if {@link KapuaSecurityBrokerFilter} try to instantiate a connection receive an error from the broker. (the vm factory couldn't
+ * This class is needed by {@link org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter} to handle a vm connection.<BR>
+ * Indeed this bundle is instantiated during the broker startup then if {@link org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter} try to instantiate a connection receive an error from the
+ * broker. (the vm factory couldn't
  * reach the broker)<BR>
  * Then this class is needed to instantiate only a connection to be useful for the filter when it need
- * ({@link KapuaSecurityBrokerFilter#addConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo) add connection} and
- * {@link KapuaSecurityBrokerFilter#removeConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo, Throwable) remove connection}).<BR>
+ * ({@link org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter#addConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo) add connection} and
+ * {@link org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter#removeConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo, Throwable) remove
+ * connection}).<BR>
  *
  * NOTE:<BR>
  * with virtual topic support the destinations are removed! The message destination will be coded inside send method!
+ * 
+ * @since 1.0
  */
 public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProducerWrapper>
 {
@@ -68,6 +72,11 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
         s_logger.info("Create pools... done.");
     }
 
+    /**
+     * Create a JmsAssistantProducerPool from the given factory
+     * 
+     * @param factory
+     */
     protected JmsAssistantProducerPool(JmsAssistantProducerWrapperFactory factory)
     {
         super(factory);
@@ -93,11 +102,20 @@ public class JmsAssistantProducerPool extends GenericObjectPool<JmsAssistantProd
         setConfig(jmsPoolConfig);
     }
 
+    /**
+     * Return a JmsAssistantProducerPool for the given destination
+     * 
+     * @param destination
+     * @return
+     */
     public static JmsAssistantProducerPool getIOnstance(DESTINATIONS destination)
     {
         return pools.get(destination);
     }
 
+    /**
+     * Close all connection pools
+     */
     public static void closePools()
     {
         if (pools != null) {
