@@ -12,6 +12,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.configuration.metatype;
 
+/**
+ * Password
+ * 
+ * @since 1.0
+ */
 public class Password {
     private String password;
 

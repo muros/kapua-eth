@@ -21,8 +21,9 @@ import javax.xml.bind.annotation.XmlEnumValue;
 /**
  * Represents a typed property.
  * Various flags help in the interpretation and semantics of the property value.
- * For example, a property value might be an array or the property value might have been
- * encrypted.
+ * For example, a property value might be an array or the property value might have been encrypted.
+ * 
+ * @since 1.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlConfigPropertyAdapted

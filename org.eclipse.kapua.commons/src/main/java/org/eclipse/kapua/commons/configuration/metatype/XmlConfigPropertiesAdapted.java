@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlElement;
 
 /**
  * A container for XmlConfigPropertyAdapted organized into an array.
+ * 
+ * @since 1.0
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlConfigPropertiesAdapted

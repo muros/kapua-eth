@@ -29,6 +29,7 @@ import com.codahale.metrics.Timer;
  * Metric report exporter handler.
  * It provides methods for register/unregister metric in the context
  *
+ * @since 1.0
  */
 public class MetricsServiceImpl implements MetricsService {
 		
@@ -38,14 +39,19 @@ public class MetricsServiceImpl implements MetricsService {
 	
 	private final MetricRegistry metricRegistry;
 
+    /**
+     * Default metric service constructor
+     */
 	public MetricsServiceImpl() {
 		 metricRegistry = new MetricRegistry();
 	}
 	
+    @Override
 	public MetricRegistry getMetricRegistry() {
 		return metricRegistry;
 	}
 	
+    @Override
 	public Counter getCounter(String module, String component, String... names) {
 		String name = getMetricName(module, component, names);
 		Counter counter = metricRegistry.getCounters().get(name);
@@ -56,6 +62,7 @@ public class MetricsServiceImpl implements MetricsService {
 		return counter;
 	}
 	
+    @Override
 	public Histogram getHistogram(String module, String component, String... names) {
 		String name = getMetricName(module, component, names);
 		Histogram histogram = metricRegistry.getHistograms().get(name);
@@ -66,6 +73,7 @@ public class MetricsServiceImpl implements MetricsService {
 		return histogram;
 	}
 	
+    @Override
 	public Timer getTimer(String module, String component, String... names) {
 		String name = getMetricName(module, component, names);
 		Timer timer = metricRegistry.getTimers().get(name);
@@ -76,6 +84,7 @@ public class MetricsServiceImpl implements MetricsService {
 		return timer;
 	}
 	
+    @Override
 	public void registerGauge(Gauge<?> gauge, String module, String component, String... names) throws KapuaException {
 		String name = getMetricName(module, component, names);
 		if (metricRegistry.getGauges().get(name) != null) {
@@ -86,10 +95,24 @@ public class MetricsServiceImpl implements MetricsService {
 		}
 	}
 	
+    /**
+     * Build the metric name based on module, component and metric names
+     * 
+     * @param module
+     * @param component
+     * @param metricsName
+     * @return
+     */
 	private String getMetricName(String module, String component, String... metricsName) {
 		return MessageFormat.format(METRICS_NAME_FORMAT, new Object[]{module, component, convertToDotNotation(metricsName)});
 	}
 	
+    /**
+     * Convert the metric names to a concatenated dot separated string
+     * 
+     * @param metricsName
+     * @return
+     */
 	private String convertToDotNotation(String... metricsName) {
 		StringBuilder builder = new StringBuilder();
 		boolean firstMetricName = true;
