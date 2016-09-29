@@ -25,40 +25,49 @@ import org.slf4j.LoggerFactory;
  * {@link BasePooledObjectFactory} assistant broker wrapper factory implementation.
  *
  */
-public class JmsAssistantProducerWrapperFactory extends BasePooledObjectFactory<JmsAssistantProducerWrapper> {
+public class JmsAssistantProducerWrapperFactory extends BasePooledObjectFactory<JmsAssistantProducerWrapper>
+{
 
     private static Logger s_logger = LoggerFactory.getLogger(JmsAssistantProducerWrapperFactory.class);
 
     private String destination;
 
-    public JmsAssistantProducerWrapperFactory(String destination) {
+    public JmsAssistantProducerWrapperFactory(String destination)
+    {
         this.destination = destination;
     }
 
     @Override
-    public JmsAssistantProducerWrapper create() throws Exception {
+    public JmsAssistantProducerWrapper create() throws Exception
+    {
         return new JmsAssistantProducerWrapper(JmsConnectionFactory.vmConnFactory, destination, false, false);
     }
 
     @Override
-    public PooledObject<JmsAssistantProducerWrapper> wrap(JmsAssistantProducerWrapper producerWrapper) {
+    public PooledObject<JmsAssistantProducerWrapper> wrap(JmsAssistantProducerWrapper producerWrapper)
+    {
         return new DefaultPooledObject<JmsAssistantProducerWrapper>(producerWrapper);
-    }
-    
-    @Override
-    public boolean validateObject(PooledObject<JmsAssistantProducerWrapper> p) {
-    	Session session = p.getObject().session;
-    	if (session instanceof ActiveMQSession) {
-			return !((ActiveMQSession)session).isClosed();
-		}
-    	else {
-    		s_logger.warn("Wrong session object type {}", session.getClass());
-    		return true;
-    	}
     }
 
     @Override
-    public void destroyObject(PooledObject<JmsAssistantProducerWrapper> pooledProducerWrapper) throws Exception {
+    /**
+     * Check if the session is still active
+     */
+    public boolean validateObject(PooledObject<JmsAssistantProducerWrapper> p)
+    {
+        Session session = p.getObject().session;
+        if (session instanceof ActiveMQSession) {
+            return !((ActiveMQSession) session).isClosed();
+        }
+        else {
+            s_logger.warn("Wrong session object type {}", session.getClass());
+            return true;
+        }
+    }
+
+    @Override
+    public void destroyObject(PooledObject<JmsAssistantProducerWrapper> pooledProducerWrapper) throws Exception
+    {
         JmsAssistantProducerWrapper producerWrapper = pooledProducerWrapper.getObject();
         s_logger.info("Close jms broker assistant producer wrapper: {}", producerWrapper.toString());
         producerWrapper.close();

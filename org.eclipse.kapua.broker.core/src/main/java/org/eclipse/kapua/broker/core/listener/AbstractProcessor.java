@@ -15,16 +15,29 @@ package org.eclipse.kapua.broker.core.listener;
 import org.eclipse.kapua.KapuaException;
 
 /**
- * Default camel pojo endpoint processor
+ * Default camel pojo endpoint processor.
  *
  * @param <M> Message to process
  */
-public abstract class AbstractProcessor<M extends Object> extends AbstractListener {
-	
-	protected AbstractProcessor(String name) {
-		super("processor", name);
-	}
-	
-	public abstract void processMessage(M message) throws KapuaException;
-	
+public abstract class AbstractProcessor<M extends Object> extends AbstractListener
+{
+
+    /**
+     * Creates a processor with the specified name (used by component metrics name)
+     * 
+     * @param name
+     */
+    protected AbstractProcessor(String name)
+    {
+        super("processor", name);
+    }
+
+    /**
+     * Process the incoming message
+     * 
+     * @param message incoming message
+     * @throws KapuaException
+     */
+    public abstract void processMessage(M message) throws KapuaException;
+
 }
