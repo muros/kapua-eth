@@ -27,8 +27,7 @@ public class KapuaExceptionUtils
     /**
      * Converts a low-level PersistenceException/SQLException to a business-level KapuaException.
      * 
-     * @param e
-     * @throws KapuaException
+     * @param he
      */
     public static KapuaException convertPersistenceException(Exception he)
     {

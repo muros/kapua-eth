@@ -29,9 +29,7 @@ import javax.persistence.metamodel.EntityType;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.EntityManager;
-import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.AbstractKapuaUpdatableEntity;
-import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.KapuaUpdatableEntity;
 import org.eclipse.kapua.model.id.KapuaId;
@@ -42,11 +40,21 @@ import org.eclipse.kapua.model.query.predicate.KapuaAttributePredicate;
 import org.eclipse.kapua.model.query.predicate.KapuaOrPredicate;
 import org.eclipse.kapua.model.query.predicate.KapuaPredicate;
 
+/**
+ * Service DAO utility methods
+ * 
+ * @since 1.0
+ */
 public class ServiceDAO
 {
-    //
-    // Create utility method
-    //
+
+    /**
+     * Create entity utility method
+     * 
+     * @param em
+     * @param entity to be created
+     * @return
+     */
     public static <E extends KapuaEntity> E create(EntityManager em, E entity)
     {
         //
@@ -57,9 +65,14 @@ public class ServiceDAO
         return entity;
     }
 
-    //
-    // Update utility method
-    //
+    /**
+     * Update entity utility method
+     * 
+     * @param em
+     * @param clazz
+     * @param entity entity to be updated
+     * @return
+     */
     public static <E extends KapuaUpdatableEntity> E update(EntityManager em, Class<E> clazz, E entity)
     {
         //
@@ -80,9 +93,13 @@ public class ServiceDAO
         return entityToUpdate;
     }
 
-    //
-    // Delete utility method
-    //
+    /**
+     * Delete entity utility method
+     * 
+     * @param em
+     * @param clazz
+     * @param entityId entity id of the entity to be deleted
+     */
     public static <E extends KapuaEntity> void delete(EntityManager em, Class<E> clazz, KapuaId entityId)
     {
         //
@@ -97,9 +114,14 @@ public class ServiceDAO
         }
     }
 
-    //
-    // FindByName utility method
-    //
+    /**
+     * Find entity by name utility method
+     * 
+     * @param em
+     * @param clazz
+     * @param name name of the entity to find
+     * @return
+     */
     public static <E extends KapuaEntity> E findByName(EntityManager em, Class<E> clazz, String name)
     {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -131,9 +153,17 @@ public class ServiceDAO
         return user;
     }
 
-    //
-    // Query utility method
-    //
+    /**
+     * Query entity utility method
+     * 
+     * @param em
+     * @param interfaceClass result query interface class
+     * @param implementingClass result query implementation class
+     * @param resultContainer
+     * @param kapuaQuery
+     * @return
+     * @throws KapuaException
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static <I extends KapuaEntity, E extends I, L extends KapuaListResult<I>> L query(EntityManager em,
                                                                                              Class<I> interfaceClass,
@@ -207,9 +237,16 @@ public class ServiceDAO
         return resultContainer;
     }
 
-    //
-    // Count utility method
-    //
+    /**
+     * Count entity utility method
+     * 
+     * @param em
+     * @param interfaceClass result query interface class
+     * @param implementingClass result query implementation class
+     * @param kapuaQuery
+     * @return
+     * @throws KapuaException
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static <I extends KapuaEntity, E extends I> long count(EntityManager em,
                                                                   Class<I> interfaceClass,
@@ -260,9 +297,17 @@ public class ServiceDAO
         return query.getSingleResult();
     }
 
-    //
-    // Criteria utility methods
-    //
+    /**
+     * Criteria for query entity utility method
+     * 
+     * @param qp
+     * @param binds
+     * @param cb
+     * @param userPermissionRoot
+     * @param entityType
+     * @return
+     * @throws KapuaException
+     */
     @SuppressWarnings("rawtypes")
     protected static <E> Expression<Boolean> handleKapuaQueryPredicates(KapuaPredicate qp,
                                                                         Map<ParameterExpression, Object> binds,

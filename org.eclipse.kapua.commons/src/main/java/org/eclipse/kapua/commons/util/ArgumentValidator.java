@@ -37,9 +37,13 @@ public class ArgumentValidator
 	
 	
 	/**
-	 * Throws KapuaIllegalArgumentException if the supplied argValue does not matches specified validation expression. 
-	 * @param argValue
-	 */
+     * Throws KapuaIllegalArgumentException if the supplied argValue does not matches specified validation expression.
+     * 
+     * @param argValue
+     * @param argRegExp
+     * @param argName
+     * @throws KapuaIllegalArgumentException
+     */
 	public static void match(String argValue, String argRegExp, String argName) 
 		throws KapuaIllegalArgumentException {
 		if (argValue != null && !argValue.matches(argRegExp)) {
@@ -48,11 +52,12 @@ public class ArgumentValidator
 	}
 	
 	/**
-	 * Throws an KapuaIllegalNullArgumentException if the value for the specified argument is null. 
-	 * @param obj
-	 * @param argumentName
-	 * @throws KapuaIllegalNullArgumentException
-	 */
+     * Throws an KapuaIllegalNullArgumentException if the value for the specified argument is null.
+     * 
+     * @param value
+     * @param argumentName
+     * @throws KapuaIllegalNullArgumentException
+     */
 	public static void notNull(Object value, String argumentName) 
 		throws KapuaIllegalNullArgumentException {		
 		if (value == null) {
@@ -61,11 +66,12 @@ public class ArgumentValidator
 	}
 					
 	/**
-	 * Throws an KapuaIllegalNullArgumentException if the string value for the specified argument is empty or null. 
-	 * @param obj
-	 * @param argumentName
-	 * @throws KapuaIllegalNullArgumentException
-	 */
+     * Throws an KapuaIllegalNullArgumentException if the string value for the specified argument is empty or null.
+     * 
+     * @param value
+     * @param argumentName
+     * @throws KapuaIllegalNullArgumentException
+     */
 	public static void notEmptyOrNull(String value, String argumentName) 
 		throws KapuaIllegalNullArgumentException {		
 		if (value == null || value.trim().length() == 0) {
@@ -100,11 +106,12 @@ public class ArgumentValidator
 	}
 
 	/**
-	 * Throws an KapuaIllegalNullArgumentException if the value for the specified argument is null. 
-	 * @param obj
-	 * @param argumentName
-	 * @throws KapuaIllegalNullArgumentException
-	 */
+     * Throws an KapuaIllegalNullArgumentException if the value for the specified argument is null.
+     * 
+     * @param value
+     * @param argumentName
+     * @throws KapuaIllegalNullArgumentException
+     */
 	public static void notNegative(long value, String argumentName) 
 		throws KapuaIllegalNullArgumentException {		
 		if (value < 0) {
@@ -138,11 +145,13 @@ public class ArgumentValidator
     }
 	
 	/**
-     * Throws an KapuaIllegalArgumentException if the value for the specified argument is lower (<) than the minValue given or higher (>) than the maxValue given. Extremes included. 
-     *  
-     * @param obj
+     * Throws an KapuaIllegalArgumentException if the value for the specified argument is lower (&lt;) than the minValue given or higher (&gt;) than the maxValue given. Extremes included.
+     * 
+     * @param value
+     * @param minValue
+     * @param maxValue
      * @param argumentName
-     * @throws KapuaIllegalNullArgumentException
+     * @throws KapuaIllegalArgumentException
      */
     public static void numRange(long value, long minValue, long maxValue, String argumentName) 
         throws KapuaIllegalArgumentException {        

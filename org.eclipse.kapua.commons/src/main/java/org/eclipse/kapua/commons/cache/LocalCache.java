@@ -20,6 +20,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.cache.CacheBuilder;
 
+/**
+ * Default Kapua cache implementation
+ * 
+ * @param <K> keys type
+ * @param <V> values type
+ * 
+ * @since 1.0
+ */
 public class LocalCache<K, V> implements Cache<K, V>
 {
 
@@ -30,23 +38,32 @@ public class LocalCache<K, V> implements Cache<K, V>
     private com.google.common.cache.Cache<K, V> cache;
     private V                                   defaultValue;
 
+    /**
+     * 
+     * @param sizeMax max cache size
+     * @param expireAfter values ttl
+     * @param defaultValue default value (if no value is found for a specific key)
+     */
     public LocalCache(int sizeMax, int expireAfter, final V defaultValue)
     {
         this.defaultValue = defaultValue;
         cache = CacheBuilder.newBuilder().maximumSize(sizeMax).expireAfterWrite(expireAfter, TimeUnit.SECONDS).build();
     }
 
+    @Override
     public String getNamespace()
     {
         return namespace;
     }
 
+    @Override
     public void setNamespace(String namespace)
     {
         this.namespace = namespace;
 
     }
 
+    @Override
     public V get(K k)
     {
         if (cache != null) {
@@ -58,6 +75,11 @@ public class LocalCache<K, V> implements Cache<K, V>
         return defaultValue;
     }
 
+    /**
+     * Return the list of all the keys present in the cache
+     * 
+     * @return
+     */
     public List<K> getAllKeys()
     {
         ArrayList<K> keys = new ArrayList<K>();
@@ -67,6 +89,7 @@ public class LocalCache<K, V> implements Cache<K, V>
         return keys;
     }
 
+    @Override
     public void put(K k, V v)
     {
         if (cache != null) {
@@ -74,6 +97,7 @@ public class LocalCache<K, V> implements Cache<K, V>
         }
     }
 
+    @Override
     public void remove(K k)
     {
         if (cache != null) {
