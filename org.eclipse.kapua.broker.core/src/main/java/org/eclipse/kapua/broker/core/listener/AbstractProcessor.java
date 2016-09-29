@@ -18,6 +18,8 @@ import org.eclipse.kapua.KapuaException;
  * Default camel pojo endpoint processor.
  *
  * @param <M> Message to process
+ * 
+ * @since 1.0
  */
 public abstract class AbstractProcessor<M extends Object> extends AbstractListener
 {

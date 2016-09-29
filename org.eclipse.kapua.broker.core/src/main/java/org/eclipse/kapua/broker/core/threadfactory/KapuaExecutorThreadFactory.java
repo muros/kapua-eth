@@ -26,6 +26,7 @@ import com.codahale.metrics.Counter;
 /**
  * Kapua executor {@link ThreadFactory} implementation
  *
+ * @since 1.0
  */
 public class KapuaExecutorThreadFactory implements ThreadFactory
 {

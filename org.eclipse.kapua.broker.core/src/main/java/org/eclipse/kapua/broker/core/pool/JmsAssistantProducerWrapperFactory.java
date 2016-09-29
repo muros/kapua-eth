@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 /**
  * {@link BasePooledObjectFactory} assistant broker wrapper factory implementation.
  *
+ * @since 1.0
  */
 public class JmsAssistantProducerWrapperFactory extends BasePooledObjectFactory<JmsAssistantProducerWrapper>
 {
@@ -49,10 +50,10 @@ public class JmsAssistantProducerWrapperFactory extends BasePooledObjectFactory<
         return new DefaultPooledObject<JmsAssistantProducerWrapper>(producerWrapper);
     }
 
-    @Override
     /**
      * Check if the session is still active
      */
+    @Override
     public boolean validateObject(PooledObject<JmsAssistantProducerWrapper> p)
     {
         Session session = p.getObject().session;

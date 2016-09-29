@@ -21,6 +21,7 @@ import com.codahale.metrics.Timer;
 /**
  * Default camel pojo endpoint listener.
  *
+ * @since 1.0
  */
 public abstract class AbstractListener
 {

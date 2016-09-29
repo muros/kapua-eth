@@ -15,6 +15,7 @@ package org.eclipse.kapua.broker.core.listener;
 /**
  * Camel Header constants
  * 
+ * @since 1.0
  */
 public interface CamelConstants
 {

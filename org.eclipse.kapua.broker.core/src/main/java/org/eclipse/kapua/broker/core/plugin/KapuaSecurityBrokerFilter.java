@@ -88,8 +88,9 @@ import com.codahale.metrics.Timer.Context;
  * bundle.
  * Otherwise perform all kapua authorization/check action
  * 
- * This filter is added inside amq filter chain plugin by {@link KapuaBrokerSecurityPlugin}
+ * This filter is added inside activeMQ filter chain plugin by {@link org.eclipse.kapua.broker.core.KapuaBrokerSecurityPlugin}
  * 
+ * @since 1.0
  */
 public class KapuaSecurityBrokerFilter extends BrokerFilter
 {

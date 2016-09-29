@@ -29,6 +29,7 @@ import com.codahale.metrics.Timer.Context;
 /**
  * Data storage message listener
  *
+ * @since 1.0
  */
 @UriEndpoint(title = "Data storage message processor", syntax = "bean:dataStorageMessageListener", scheme = "bean")
 public class DataStorageMessageProcessor extends AbstractProcessor<CamelKapuaMessage<?>>
@@ -57,10 +58,10 @@ public class DataStorageMessageProcessor extends AbstractProcessor<CamelKapuaMes
         metricStorageDataSaveTime = registerTimer("listener", "storage", "store", "data", "time", "s");
     }
 
-    @Override
     /**
      * Process a data message.
      */
+    @Override
     public void processMessage(CamelKapuaMessage<?> message)
     {
         metricStorageMessage.inc();

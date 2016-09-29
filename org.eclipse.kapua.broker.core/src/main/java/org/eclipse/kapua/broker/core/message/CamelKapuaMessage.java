@@ -22,6 +22,8 @@ import org.eclipse.kapua.model.id.KapuaId;
  * Contains the message and additional information such as the connection id and the connector descriptor (useful for the message translation process)
  * 
  * @param <M> Contained message type
+ * 
+ * @since 1.0
  */
 public class CamelKapuaMessage<M extends KapuaMessage>
 {

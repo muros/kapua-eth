@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * - if the request for a thread pool is coming form a {@link ThreadFactory} of {@link CamelThreadFactory} and its name starts with the kapuaThreadPoolPatternName specified in the constructor the
  * {@link ThreadFactory} is replaced by the {@link KapuaExecutorThreadFactory}
  *
+ * @since 1.0
  */
 public class KapuaExecutorThreadPoolFactory extends DefaultThreadPoolFactory
 {
@@ -42,7 +43,7 @@ public class KapuaExecutorThreadPoolFactory extends DefaultThreadPoolFactory
     /**
      * Constructs a new thread pool factory
      * 
-     * @param kapuaThreadPoolPatternName the start name of the kapua thread pool.
+     * @param kapuaThreadFactory the Kapua executor thread factory instance.
      */
     public KapuaExecutorThreadPoolFactory(KapuaExecutorThreadFactory kapuaThreadFactory)
     {

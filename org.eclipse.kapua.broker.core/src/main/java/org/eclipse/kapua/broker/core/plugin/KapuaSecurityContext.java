@@ -25,6 +25,7 @@ import org.eclipse.kapua.service.authentication.KapuaPrincipal;
 /**
  * Kapua security context implementation of activeMQ broker {@link SecurityContext}
  *
+ * @since 1.0
  */
 public class KapuaSecurityContext extends SecurityContext
 {

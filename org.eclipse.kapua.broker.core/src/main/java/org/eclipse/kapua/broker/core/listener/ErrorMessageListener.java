@@ -23,7 +23,8 @@ import com.codahale.metrics.Counter;
 @UriEndpoint(title = "error message processor", syntax = "bean:errorMessageListener", scheme = "bean")
 /**
  * Error message listener endpoint.
- *
+ * 
+ * @since 1.0
  */
 public class ErrorMessageListener extends AbstractListener
 {
