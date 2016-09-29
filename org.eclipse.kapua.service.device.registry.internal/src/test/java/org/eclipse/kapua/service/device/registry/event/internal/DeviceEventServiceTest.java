@@ -12,12 +12,16 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.event.internal;
 
+import static java.math.BigInteger.ONE;
+import static org.eclipse.kapua.commons.security.KapuaSecurityUtils.doPriviledge;
+
+import java.math.BigInteger;
+import java.util.Date;
+
 import org.assertj.core.api.Assertions;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.service.device.registry.Device;
-import org.eclipse.kapua.service.device.registry.DeviceEventType;
 import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventService;
@@ -26,14 +30,8 @@ import org.eclipse.kapua.test.KapuaTest;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
-
-import java.math.BigInteger;
-import java.util.Date;
-import java.util.UUID;
-
-import static java.math.BigInteger.ONE;
-import static org.eclipse.kapua.commons.security.KapuaSecurityUtils.doPriviledge;
 
 public class DeviceEventServiceTest extends KapuaTest {
 
@@ -78,6 +76,7 @@ public class DeviceEventServiceTest extends KapuaTest {
     }
 
     @Test
+    @Ignore
     public void shouldFindDeviceEventByID() throws Exception {
         doPriviledge(() -> {
             // Given
@@ -93,6 +92,7 @@ public class DeviceEventServiceTest extends KapuaTest {
     }
 
     @Test
+    @Ignore
     public void shouldDeleteDeviceEvent() throws Exception {
         doPriviledge(() -> {
             // Given
