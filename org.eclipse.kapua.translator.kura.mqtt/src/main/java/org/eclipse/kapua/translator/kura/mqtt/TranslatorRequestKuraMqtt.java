@@ -26,6 +26,12 @@ import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
+/**
+ * Messages translator implementation from {@link org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestMessage} to {@link org.eclipse.kapua.transport.message.mqtt.MqttMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorRequestKuraMqtt extends Translator<KuraRequestMessage, MqttMessage>
 {
     @Override

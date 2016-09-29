@@ -25,6 +25,12 @@ import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
+/**
+ * Messages translator implementation from {@link org.eclipse.kapua.transport.message.mqtt.MqttMessage} to {@link org.eclipse.kapua.service.device.call.message.app.response.kura.KuraResponseMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorResponseMqttKura extends Translator<MqttMessage, KuraResponseMessage>
 {
     private static final String CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
