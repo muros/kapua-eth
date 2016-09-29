@@ -21,6 +21,11 @@ import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.transport.message.jms.JmsMessage;
 import org.eclipse.kapua.transport.message.jms.JmsTopic;
 
+/**
+ * Messages translator implementation from {@link org.eclipse.kapua.transport.message.jms.JmsMessage} to {@link org.eclipse.kapua.service.device.call.message.kura.lifecycle.KuraAppsMessage}
+ * 
+ * @since 1.0
+ */
 public class TranslatorLifeAppsJmsKura extends Translator<JmsMessage, KuraAppsMessage>
 {
     @Override

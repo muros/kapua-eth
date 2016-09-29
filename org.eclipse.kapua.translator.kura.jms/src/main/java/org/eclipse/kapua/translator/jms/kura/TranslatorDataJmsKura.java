@@ -23,40 +23,32 @@ import org.eclipse.kapua.transport.message.jms.JmsMessage;
 import org.eclipse.kapua.transport.message.jms.JmsPayload;
 import org.eclipse.kapua.transport.message.jms.JmsTopic;
 
+/**
+ * Messages translator implementation from {@link org.eclipse.kapua.transport.message.jms.JmsMessage} to {@link org.eclipse.kapua.service.device.call.message.kura.data.KuraDataMessage}
+ * 
+ * @since 1.0
+ */
 public class TranslatorDataJmsKura extends Translator<JmsMessage, KuraDataMessage>
 {
     @Override
     public KuraDataMessage translate(JmsMessage jmsMessage)
         throws KapuaException
     {
-        //
-        // Kura topic
         KuraDataChannel kuraChannel = translate(jmsMessage.getTopic());
-
-        //
-        // Kura payload
         KuraDataPayload kuraPayload = translate(jmsMessage.getPayload());
-
-        //
-        // Return Kura message
         return new KuraDataMessage(kuraChannel,
                                    jmsMessage.getReceivedOn(),
                                    kuraPayload);
-
     }
 
     private KuraDataChannel translate(JmsTopic jmsTopic)
         throws KapuaException
     {
         String[] mqttTopicTokens = jmsTopic.getSplittedTopic();
-
         KuraDataChannel kuraDataChannel = new KuraDataChannel();
         kuraDataChannel.setScope(mqttTopicTokens[0]);
         kuraDataChannel.setClientId(mqttTopicTokens[1]);
         kuraDataChannel.setSemanticChannelParts(Arrays.asList(mqttTopicTokens).subList(2, mqttTopicTokens.length));
-
-        //
-        // Return Kura Channel
         return kuraDataChannel;
     }
 
@@ -64,14 +56,10 @@ public class TranslatorDataJmsKura extends Translator<JmsMessage, KuraDataMessag
         throws KapuaException
     {
         KuraDataPayload kuraPayload = null;
-
         if (jmsPayload.getBody() != null) {
             kuraPayload = new KuraDataPayload();
             kuraPayload.readFromByteArray(jmsPayload.getBody());
         }
-
-        //
-        // Return Kura Payload
         return kuraPayload;
     }
 
