@@ -22,60 +22,74 @@ import org.eclipse.kapua.service.authentication.KapuaPrincipal;
  * Kapua {@link Principal} implementation
  *
  */
-public class KapuaPrincipalImpl implements KapuaPrincipal {
-	
+public class KapuaPrincipalImpl implements KapuaPrincipal
+{
+
     private static final long serialVersionUID = -3999313290528918167L;
 
-    private String       name;
+    private String  name;
     /**
      * Token Id coming from the KapuaSession. It's used to keep the KapuaPrincipal aligned with the KapuaSession
      */
-    private String       tokenId;
-    private KapuaId      userId;
-    private String       username;
-    private KapuaId      accountId;
-    private String       clientId;
-    private String       clientIp;
+    private String  tokenId;
+    private KapuaId userId;
+    private String  username;
+    private KapuaId accountId;
+    private String  clientId;
+    private String  clientIp;
 
     /**
      * Create a KapuaPrincipal with the supplied name.
+     * 
+     * @param accessToken
+     * @param username
+     * @param clientId
+     * @param clientIp
      */
-    public KapuaPrincipalImpl(AccessToken accessToken, String username, String clientId, String clientIp) {
-    	this.username     = username;
-    	this.tokenId      = accessToken.getTokenId();
-    	this.userId       = accessToken.getUserId();
-        this.accountId    = accessToken.getScopeId();
-        this.clientId     = clientId;
-        this.clientIp     = clientIp;
+    public KapuaPrincipalImpl(AccessToken accessToken, String username, String clientId, String clientIp)
+    {
+        this.username = username;
+        this.tokenId = accessToken.getTokenId();
+        this.userId = accessToken.getUserId();
+        this.accountId = accessToken.getScopeId();
+        this.clientId = clientId;
+        this.clientIp = clientIp;
         name = (new StringBuilder()).append(accountId != null ? accountId : "null").append(":").append(username).toString();
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
-    
-    public String getTokenId() {
-    	return tokenId;
-    }
-    
-    public KapuaId getUserId() {
-		return userId;
-	}
 
-    public KapuaId getAccountId() {
+    public String getTokenId()
+    {
+        return tokenId;
+    }
+
+    public KapuaId getUserId()
+    {
+        return userId;
+    }
+
+    public KapuaId getAccountId()
+    {
         return accountId;
     }
 
-    public String getClientIp() {
+    public String getClientIp()
+    {
         return clientIp;
     }
 
-    public String getClientId() {
+    public String getClientId()
+    {
         return clientId;
     }
 
-	@Override
-    public int hashCode() {
+    @Override
+    public int hashCode()
+    {
         final int prime = 31;
         int result = 1;
         result = prime * result
@@ -85,7 +99,8 @@ public class KapuaPrincipalImpl implements KapuaPrincipal {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj)
+    {
         if (this == obj)
             return true;
         if (obj == null)
@@ -96,12 +111,14 @@ public class KapuaPrincipalImpl implements KapuaPrincipal {
         if (accountId == null) {
             if (other.accountId != null)
                 return false;
-        } else if (!accountId.equals(other.accountId))
+        }
+        else if (!accountId.equals(other.accountId))
             return false;
         if (username == null) {
             if (other.username != null)
                 return false;
-        } else if (!username.equals(other.username))
+        }
+        else if (!username.equals(other.username))
             return false;
         return true;
     }

@@ -42,6 +42,13 @@ public class KapuaExecutorThreadFactory implements ThreadFactory
     private final String               name;
     private final List<String>         threadPoolNameMatcher;
 
+    /**
+     * Creates a new Kapua executor thread factory
+     * 
+     * @param name thread name prefix
+     * @param threadPoolNameMatcher List of starting thread names for which return the {@link KapuaExecutorThreadFactory} instead of the default {@link ThreadFactory}
+     * @param rootThreadGroup if true the new thread will be created in the root thread group
+     */
     public KapuaExecutorThreadFactory(String name, List<String> threadPoolNameMatcher, boolean rootThreadGroup)
     {
         this.name = name;
@@ -83,6 +90,9 @@ public class KapuaExecutorThreadFactory implements ThreadFactory
         metricThreadCreationRequest = metricsService.getCounter("kapua_executor_thread_factory", "thread_creation_request", "count");
     }
 
+    /**
+     * Creates a new thread with a {@link KapuaRunnableWrapper} that wraps the provided {@link Runnable}
+     */
     public Thread newThread(Runnable runnable)
     {
         metricThreadCreationRequest.inc();

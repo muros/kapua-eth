@@ -30,52 +30,55 @@ import com.codahale.metrics.Timer.Context;
  * Data storage message listener
  *
  */
-@UriEndpoint(
-		title="Data storage message processor", 
-		syntax="bean:dataStorageMessageListener",
-		scheme="bean") 
-public class DataStorageMessageProcessor extends AbstractProcessor<CamelKapuaMessage<?>> {
-	
-	private static final Logger logger = LoggerFactory.getLogger(DataStorageMessageProcessor.class);
-	
-	//metrics
-	private Counter metricStorageMessage;
-	//data message
-	private Counter metricStorageDataErrorMessage;
-	//store timers
-	private Timer   metricStorageDataSaveTime;
-	
-	private MessageStoreService messageStoreService = KapuaLocator.getInstance().getService(MessageStoreService.class);
-	private DatastoreObjectFactory datastoreObjectFactory = KapuaLocator.getInstance().getFactory(DatastoreObjectFactory.class);
-	
-	public DataStorageMessageProcessor() {
-		super("DataStorage");
-		
-		//data message
-		metricStorageMessage                 = registerCounter("listener", "storage", "messages", "count");
-		metricStorageDataErrorMessage        = registerCounter("listener", "storage", "messages", "data", "error", "count");
-		//store timers
-		metricStorageDataSaveTime            = registerTimer("listener", "storage", "store", "data", "time", "s");
-	}
-	
-	@Override
-	public void processMessage(CamelKapuaMessage<?> message) {
-		metricStorageMessage.inc();
-		
-		//TODO filter alert topic???
-		//
-		
-		//data messages
-		try {
-			Context metricStorageDataSaveTimeContext = metricStorageDataSaveTime.time();
-			MessageCreator mc = datastoreObjectFactory.newMessageCreator();
-			messageStoreService.store(message.getMessage().getScopeId(), mc);
-			metricStorageDataSaveTimeContext.stop();
-		} 
-    	catch (KapuaException e) {
-    		metricStorageDataErrorMessage.inc();
-    		logger.error("An error occurred while storing message: {}", e.getCode().toString());
-    	}
-	}
+@UriEndpoint(title = "Data storage message processor", syntax = "bean:dataStorageMessageListener", scheme = "bean")
+public class DataStorageMessageProcessor extends AbstractProcessor<CamelKapuaMessage<?>>
+{
+
+    private static final Logger logger = LoggerFactory.getLogger(DataStorageMessageProcessor.class);
+
+    // metrics
+    private Counter metricStorageMessage;
+    // data message
+    private Counter metricStorageDataErrorMessage;
+    // store timers
+    private Timer metricStorageDataSaveTime;
+
+    private MessageStoreService    messageStoreService    = KapuaLocator.getInstance().getService(MessageStoreService.class);
+    private DatastoreObjectFactory datastoreObjectFactory = KapuaLocator.getInstance().getFactory(DatastoreObjectFactory.class);
+
+    public DataStorageMessageProcessor()
+    {
+        super("DataStorage");
+
+        // data message
+        metricStorageMessage = registerCounter("listener", "storage", "messages", "count");
+        metricStorageDataErrorMessage = registerCounter("listener", "storage", "messages", "data", "error", "count");
+        // store timers
+        metricStorageDataSaveTime = registerTimer("listener", "storage", "store", "data", "time", "s");
+    }
+
+    @Override
+    /**
+     * Process a data message.
+     */
+    public void processMessage(CamelKapuaMessage<?> message)
+    {
+        metricStorageMessage.inc();
+
+        // TODO filter alert topic???
+        //
+
+        // data messages
+        try {
+            Context metricStorageDataSaveTimeContext = metricStorageDataSaveTime.time();
+            MessageCreator mc = datastoreObjectFactory.newMessageCreator();
+            messageStoreService.store(message.getMessage().getScopeId(), mc);
+            metricStorageDataSaveTimeContext.stop();
+        }
+        catch (KapuaException e) {
+            metricStorageDataErrorMessage.inc();
+            logger.error("An error occurred while storing message: {}", e.getCode().toString());
+        }
+    }
 
 }

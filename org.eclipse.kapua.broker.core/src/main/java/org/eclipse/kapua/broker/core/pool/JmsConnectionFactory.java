@@ -20,30 +20,30 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Provide connection factory for embedded broker connection.
- * The connection string depends on osgi.context configuration parameter
  *
  */
-public class JmsConnectionFactory {
+public class JmsConnectionFactory
+{
 
     private static Logger s_logger = LoggerFactory.getLogger(JmsConnectionFactory.class);
 
     public static ActiveMQConnectionFactory vmConnFactory;
 
-    //the workers used the same string connection without asynch=true
-    //TODO modify class to allow connection to an external broker
+    // the workers used the same string connection without asynch=true
     static {
         try {
             s_logger.info("Instantiate amq embedded connection factory...");
             String connectionFactoryUri = null;
 
-            // By default, the embedded broker operates in asynchronous mode, so that calls to a send method return immediately (in other words, messages are dispatched to consumers in a separate thread). If you turn off asynchronous mode, however, you can reduce the amount of context switching. For example, you can disable asynchronous mode on a VM endpoint as follows:
+            // By default, the embedded broker operates in asynchronous mode, so that calls to a send method return immediately (in other words, messages are dispatched to consumers in a separate
+            // thread). If you turn off asynchronous mode, however, you can reduce the amount of context switching. For example, you can disable asynchronous mode on a VM endpoint as follows:
             // https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/GenTuning-Colocate.html
-            //TODO parameter to be added to configuration
-//            connectionFactoryUri = "vm://" + KapuaEnvironmentConfig.getInstance().getString(KapuaEnvironmentConfigKeys.BROKER_NAME) + "?create=false&waitForStart=3600000&async=true";
+            // TODO parameter to be added to configuration
+            // connectionFactoryUri = "vm://" + KapuaEnvironmentConfig.getInstance().getString(KapuaEnvironmentConfigKeys.BROKER_NAME) + "?create=false&waitForStart=3600000&async=true";
             connectionFactoryUri = "vm://kapua?create=false&waitForStart=3600000&async=true";
             s_logger.info("Using connection factory url: " + connectionFactoryUri);
 
-            //connection factory
+            // connection factory
             vmConnFactory = new ActiveMQConnectionFactory(connectionFactoryUri);
 
             // In this case, it is possible to optimize away the session threading layer and the MessageConsumer threads can then pull messages directly from the transport layer.
@@ -54,15 +54,18 @@ public class JmsConnectionFactory {
             // http://activemq.apache.org/connection-configuration-uri.html
             vmConnFactory.setAlwaysSyncSend(false);
 
-            // Should a JMS message be copied to a new JMS Message object as part of the send() method in JMS. This is enabled by default to be compliant with the JMS specification. You can disable it if you do not mutate JMS messages after they are sent for a performance boost.
+            // Should a JMS message be copied to a new JMS Message object as part of the send() method in JMS. This is enabled by default to be compliant with the JMS specification. You can disable it
+            // if you do not mutate JMS messages after they are sent for a performance boost.
             // http://activemq.apache.org/connection-configuration-uri.html
             vmConnFactory.setCopyMessageOnSend(false);
 
-            // If you are sure that your consumers are always fast, however, you could achieve better performance by disabling asynchronous dispatch on the broker (thereby avoiding the cost of unnecessary context switching).
+            // If you are sure that your consumers are always fast, however, you could achieve better performance by disabling asynchronous dispatch on the broker (thereby avoiding the cost of
+            // unnecessary context switching).
             // https://access.redhat.com/documentation/en-US/Fuse_ESB_Enterprise/7.1/html/ActiveMQ_Tuning_Guide/files/GenTuning-Consumer-ContextSwitch.html
             vmConnFactory.setDispatchAsync(false);
 
-            // Enables an optimised acknowledgement mode where messages are acknowledged in batches rather than individually. Alternatively, you could use Session.DUPS_OK_ACKNOWLEDGE acknowledgement mode for the consumers which can often be faster. WARNING enabling this issue could cause some issues with auto-acknowledgement on reconnection
+            // Enables an optimised acknowledgement mode where messages are acknowledged in batches rather than individually. Alternatively, you could use Session.DUPS_OK_ACKNOWLEDGE acknowledgement
+            // mode for the consumers which can often be faster. WARNING enabling this issue could cause some issues with auto-acknowledgement on reconnection
             // http://activemq.apache.org/connection-configuration-uri.html
             vmConnFactory.setOptimizeAcknowledge(false);
 
@@ -70,12 +73,14 @@ public class JmsConnectionFactory {
             // http://activemq.apache.org/connection-configuration-uri.html
             vmConnFactory.setOptimizedMessageDispatch(true);
 
-            // Forces the use of Async Sends which adds a massive performance boost; but means that the send() method will return immediately whether the message has been sent or not which could lead to message loss.
+            // Forces the use of Async Sends which adds a massive performance boost; but means that the send() method will return immediately whether the message has been sent or not which could lead
+            // to message loss.
             // http://activemq.apache.org/connection-configuration-uri.html
             vmConnFactory.setUseAsyncSend(true);
 
             s_logger.info("Instantiate activemq embedded connection factory... done");
-        } catch (Throwable t) {
+        }
+        catch (Throwable t) {
             s_logger.error("Initialization vm connection factory exception {} ", t.getMessage(), t);
         }
     }
