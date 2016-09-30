@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!-- 
 
-	Copyright (c) 2011, 2016 Eurotech and/or its affiliates All rights reserved. 
+	Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others All rights reserved. 
 
 	This program and the accompanying materials are made available under the 
 	terms of the Eclipse Public License v1.0 which accompanies this distribution, 
@@ -17,7 +17,7 @@
 	<parent>
 		<groupId>org.eclipse.kapua</groupId>
 		<artifactId>kapua</artifactId>
-		<version>0.1.2</version>
+		<version>0.1.3</version>
 	</parent>
 
 	<artifactId>org.eclipse.kapua.app.api</artifactId>
@@ -27,9 +27,21 @@
 	<properties>
 		<jersey.version>2.23.2</jersey.version>
 		<swagger.version>1.5.10</swagger.version>
-		<swagger-ui.version>2.2.2</swagger-ui.version>
+		<swagger-ui.version>2.1.4</swagger-ui.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
+    <repositories>
+        <repository>
+            <id>kapua_addons</id>
+            <name>Kapua Addons Maven Repository</name>
+            <url>https://raw.github.com/eurotech/kapua_addons/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
 	<dependencies>
 
@@ -50,9 +62,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.webjars</groupId>
+			<groupId>io.swagger</groupId>
 			<artifactId>swagger-ui</artifactId>
-			<version>${swagger-ui.version}</version>
+			<version>${swagger-ui.version}-CQ-10792</version>
 		</dependency>
 
 		<!-- -->
@@ -155,8 +167,8 @@
 						<configuration>
 							<artifactItems>
 								<artifactItem>
-									<groupId>org.webjars</groupId>
-									<artifactId>swagger-ui</artifactId>
+									<groupId>io.swagger</groupId>
+									<artifactId>swagger-ui-CQ-10792</artifactId>
 									<version>${swagger-ui.version}</version>
 
 									<overWrite>true</overWrite>
@@ -184,7 +196,7 @@
 							<target>
 								<echo>Swagger-ui: create doc dir</echo>
 								<copy todir="${project.build.directory}/${project.build.finalName}/doc">
-									<fileset dir="${project.build.directory}/tmp/swagger-ui-js-${swagger-ui.version}/META-INF/resources/webjars/swagger-ui/${swagger-ui.version}" />
+									<fileset dir="${project.build.directory}/tmp/swagger-ui-js-${swagger-ui.version}/swagger-ui/" />
 								</copy>
 								<echo>Copy the install init script</echo>
 							</target>
@@ -199,7 +211,11 @@
 						<configuration>
 							<target>
 								<echo>Swagger-ui: replace url in index.html</echo>
-								<replaceregexp byline="true" file="${project.build.directory}/${project.build.finalName}/doc/index.html" match="http://petstore.swagger.io/v2/swagger.json" replace="http://&quot; + window.location.host + &quot;/kapua/api/v1/swagger.json" />
+								<replaceregexp byline="true" 
+                                               file="${project.build.directory}/${project.build.finalName}/doc/index.html" 
+                                               match="/api/docs/swagger.json" 
+                                               replace="/kapua/api/v1/swagger.json" />
+                                
 							</target>
 						</configuration>
 					</execution>
