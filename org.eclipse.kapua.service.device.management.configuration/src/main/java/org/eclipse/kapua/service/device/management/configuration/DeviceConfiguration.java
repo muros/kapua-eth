@@ -22,13 +22,13 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.model.KapuaEntity;
 
-@XmlRootElement(name = "configurations")
+@XmlRootElement(name = "componentConfigurations")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(propOrder = {
-        "configurations"
+        "componentConfigurations"
 }, factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newConfiguration")
 public interface DeviceConfiguration extends KapuaEntity
 {
-    @XmlElementWrapper(name = "configurations")
+    @XmlElementWrapper(name = "componentConfigurations")
     public <C extends DeviceComponentConfiguration> List<C> getComponentConfigurations();
 }

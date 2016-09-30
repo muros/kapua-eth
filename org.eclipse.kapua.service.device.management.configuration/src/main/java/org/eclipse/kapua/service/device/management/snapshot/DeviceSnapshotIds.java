@@ -14,10 +14,21 @@ package org.eclipse.kapua.service.device.management.snapshot;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-@XmlRootElement(name = "snapshotIds")
+import org.eclipse.kapua.model.KapuaEntity;
+
+@XmlRootElement(name = "snapshotsIds")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(propOrder = { "snapshotsIds" },
+        factoryClass = DeviceSnapshotXmlRegistry.class, 
+        factoryMethod = "newSnapshotIds")
 public interface DeviceSnapshotIds
 {
+    @XmlElement(name="snapshotId")
     public List<Long> getSnapshotsIds();
 }

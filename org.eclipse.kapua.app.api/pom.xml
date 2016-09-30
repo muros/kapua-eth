@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
-<!-- 
+<!--
 
-	Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others All rights reserved. 
+	Copyright (c) 2011, 2016 Eurotech and/or its affiliates and others All rights reserved.
 
 	This program and the accompanying materials are made available under the 
 	terms of the Eclipse Public License v1.0 which accompanies this distribution, 
 	and is available at http://www.eclipse.org/legal/epl-v10.html 
 
-	Contributors: 
-		Eurotech - initial API and implementation 
+	Contributors:
+		Eurotech - initial API and implementation
 
  -->
 
@@ -44,6 +44,8 @@
     </repositories>
 
 	<dependencies>
+		<!-- -->
+		<!-- Jersey -->
 
 		<!-- -->
 		<!-- Jersey -->
@@ -52,13 +54,17 @@
 			<artifactId>jersey-container-servlet-core</artifactId>
 			<version>${jersey.version}</version>
 		</dependency>
-
 		<!-- -->
 		<!-- Swagger for apidoc -->
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-jersey2-jaxrs</artifactId>
 			<version>${swagger.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-ui</artifactId>
+			<version>${swagger-ui.version}-CQ-10792</version>
 		</dependency>
 
 		<!-- -->
@@ -86,143 +92,117 @@
 		<!-- -->
 		<!-- Same version of the Servlet APIs supported in Apache Tomcat 8.0.x -->
 		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
-		    <scope>provided</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+			<scope>provided</scope>
 		</dependency>
-		
-        <!-- -->
-        <!-- Internal dependencies -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.commons</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account.internal</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authentication</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>
-        		org.eclipse.kapua.service.device.registry
-        	</artifactId>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>org.eclipse.kapua.translator</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        	<type>java-source</type>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>
-        		org.eclipse.kapua.translator.kapua.kura
-        	</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>
-        		org.eclipse.kapua.translator.kura.jms
-        	</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>
-        		org.eclipse.kapua.translator.kura.mqtt
-        	</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>org.eclipse.kapua.transport</artifactId>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>org.eclipse.kapua.transport.jms</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>org.eclipse.kapua.transport.mqtt</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>org.eclipse.kapua.transport.test</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>
-        		org.eclipse.kapua.service.device.management.command.internal
-        	</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>
-        		org.eclipse.kapua.service.device.management.command
-        	</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>
-        		org.eclipse.kapua.service.device.management.configuration
-        	</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-        	<groupId>org.eclipse.kapua</groupId>
-        	<artifactId>
-        		org.eclipse.kapua.service.device.management.configuration.internal
-        	</artifactId>
-        	<version>0.2-SNAPSHOT</version>
-        </dependency>
+		<!-- -->
+		<!-- Internal dependencies -->
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.locator.guice</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.account</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.account.internal</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.user</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.authentication</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.authorization</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.registry</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.translator</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.translator.kapua.kura</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.translator.kura.jms</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.translator.kura.mqtt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.transport</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.transport.jms</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.transport.mqtt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.transport.test</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.management.command.internal</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.management.command</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.management.configuration</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.kapua</groupId>
+			<artifactId>org.eclipse.kapua.service.device.management.configuration.internal</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>api</finalName>
@@ -244,11 +224,8 @@
 									<groupId>io.swagger</groupId>
 									<artifactId>swagger-ui</artifactId>
 									<version>${swagger-ui.version}-CQ-10792</version>
-
 									<overWrite>true</overWrite>
-
 									<outputDirectory>${project.build.directory}/tmp/swagger-ui-js-${swagger-ui.version}</outputDirectory>
-
 								</artifactItem>
 							</artifactItems>
 						</configuration>
@@ -285,11 +262,11 @@
 						<configuration>
 							<target>
 								<echo>Swagger-ui: replace url in index.html</echo>
-								<replaceregexp byline="true" 
-                                               file="${project.build.directory}/${project.build.finalName}/doc/index.html" 
-                                               match="/api/docs/swagger.json" 
+								<replaceregexp byline="true"
+                                               file="${project.build.directory}/${project.build.finalName}/doc/index.html"
+                                               match="/api/docs/swagger.json"
                                                replace="/kapua/api/v1/swagger.json" />
-                                
+
 							</target>
 						</configuration>
 					</execution>
@@ -302,7 +279,7 @@
 			<dependency>
 				<groupId>org.eclipse.kapua</groupId>
 				<artifactId>org.eclipse.kapua.transport</artifactId>
-				<version>0.2-SNAPSHOT</version>
+				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

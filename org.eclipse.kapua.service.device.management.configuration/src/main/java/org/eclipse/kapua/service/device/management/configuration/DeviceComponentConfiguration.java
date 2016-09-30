@@ -28,6 +28,7 @@ import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 @XmlType(propOrder = {
         "pid",
         "name",
+        "definition",
         "properties"
 }, factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newComponentConfiguration")
 public interface DeviceComponentConfiguration
@@ -42,7 +43,7 @@ public interface DeviceComponentConfiguration
 
     public String getName();
 
-    @XmlAttribute(name = "definition")
+    @XmlElement(name = "definition")
     public KapuaTocd getDefinition();
 
     @XmlElement(name = "properties")
