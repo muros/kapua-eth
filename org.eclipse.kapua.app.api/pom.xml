@@ -61,12 +61,6 @@
 			<version>${swagger.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-ui</artifactId>
-			<version>${swagger-ui.version}-CQ-10792</version>
-		</dependency>
-
 		<!-- -->
 		<!-- Moxy for object marshalling unmarshalling -->
 		<dependency>
@@ -168,8 +162,8 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>io.swagger</groupId>
-									<artifactId>swagger-ui-CQ-10792</artifactId>
-									<version>${swagger-ui.version}</version>
+									<artifactId>swagger-ui</artifactId>
+									<version>${swagger-ui.version}-CQ-10792</version>
 
 									<overWrite>true</overWrite>
 
