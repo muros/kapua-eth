@@ -42,6 +42,9 @@
 				<exclude>lib/activemq-jaas-*</exclude>
                 <exclude>lib/activemq-openwire-legacy*</exclude>
                 <exclude>lib/activemq-web-*</exclude>
+                <exclude>lib/activemq-rar.txt</exclude>
+                <exclude>lib/geronimo-jta_1.0.1B_spec*</exclude>
+                <exclude>lib/optional/activeio-core-*</exclude>
                 <exclude>lib/optional/activemq-amqp-*</exclude>
                 <exclude>lib/optional/activemq-http*</exclude>
                 <exclude>lib/optional/activemq-jdbc-store*</exclude>
@@ -53,8 +56,11 @@
                 <exclude>lib/optional/activemq-pool*</exclude>
                 <exclude>lib/optional/activemq-runtime-config*</exclude>
                 <exclude>lib/optional/activemq-stomp*</exclude>
+                <exclude>lib/optional/commons-codec-*</exclude>
+                <exclude>lib/optional/commons-collections-*</exclude>
                 <exclude>lib/optional/commons-dbcp*</exclude>
                 <exclude>lib/optional/commons-net*</exclude>
+                <exclude>lib/optional/commons-pool2*</exclude>
                 <exclude>lib/optional/geronimo-j2ee-connector*</exclude>
                 <exclude>lib/optional/guava*</exclude>
                 <exclude>lib/optional/hawt*</exclude>
@@ -72,11 +78,22 @@
                 <exclude>lib/optional/scala-library*</exclude>
                 <exclude>lib/optional/shiro*</exclude>
                 <exclude>lib/optional/snappy-*</exclude>
+                <exclude>lib/optional/spring-oxm-*</exclude>
                 <exclude>lib/optional/velocity*</exclude>
                 <exclude>lib/optional/xpp3-*</exclude>
                 <exclude>lib/optional/xstream-*</exclude>
                 <exclude>lib/optional/zookeeper-*</exclude>
-                <exclude>lib/web/*</exclude>
+                <exclude>lib/web/</exclude>
+
+                <exclude>bin/wrapper.jar</exclude>
+                <exclude>bin/macosx/</exclude>
+                <exclude>bin/linux-x86-32/</exclude>
+                <exclude>bin/linux-x86-64/</exclude>
+
+                <exclude>examples/</exclude>
+                <exclude>docs/</exclude>
+                <exclude>webapps/</exclude>
+                <exclude>webapps-demo/</exclude>
             </excludes>
         </fileSet>
 
