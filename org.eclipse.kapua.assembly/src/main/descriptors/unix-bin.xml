@@ -130,7 +130,6 @@
                 <include>${pom.groupId}:org.eclipse.kapua.broker.core</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message.internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.authentication</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.authorization</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.auth.shiro</include>
@@ -156,8 +155,6 @@
                 <include>${pom.groupId}:org.eclipse.kapua.service.datastore.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.translator</include>
                 <include>${pom.groupId}:org.eclipse.kapua.translator.kapua.kura</include>
                 <include>${pom.groupId}:org.eclipse.kapua.translator.kura.jms</include>
@@ -168,5 +165,4 @@
             </includes>
         </dependencySet>
     </dependencySets>
-
 </assembly>

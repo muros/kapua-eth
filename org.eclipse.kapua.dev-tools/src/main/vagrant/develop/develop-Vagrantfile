@@ -142,6 +142,8 @@ Vagrant.configure("2") do |config|
 	 # enable debug
      sudo sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
      sudo sed -i 's/ACTIVEMQ_VERSION/'"$ACTIVEMQ_VERSION"'/g' update-kapua-jars-cfg.sh
+     sudo rm /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}/lib/optional/guava-*
+	 sudo rm /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}/lib/optional/shiro-*
 	 sudo chown -R vagrant:vagrant /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}
 
 	 ###########################
