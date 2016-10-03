@@ -34,7 +34,7 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private static Logger s_logger = LoggerFactory.getLogger(KapuaGwtConverter.class);
+    private static Logger     s_logger         = LoggerFactory.getLogger(KapuaGwtConverter.class);
 
     /**
      *
@@ -69,8 +69,8 @@ public class KapuaRemoteServiceServlet extends RemoteServiceServlet {
                 s_logger.debug("\tSender Host: {}", req.getRemoteHost());
                 s_logger.debug("\tSender Port: {}", req.getRemotePort());
                 s_logger.debug("\tFull Request URL\n {}?{}\n\n",
-                        req.getRequestURL().toString(),
-                        req.getQueryString());
+                               req.getRequestURL().toString(),
+                               req.getQueryString());
             }
 
             // forcing the console log out

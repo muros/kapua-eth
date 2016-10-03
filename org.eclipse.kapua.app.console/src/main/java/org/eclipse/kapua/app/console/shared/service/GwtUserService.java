@@ -35,7 +35,7 @@ public interface GwtUserService extends RemoteService {
      * @throws GwtKapuaException
      */
     public GwtUser create(GwtXSRFToken xsfrToken, GwtUserCreator gwtUserCreator)
-            throws GwtKapuaException;
+        throws GwtKapuaException;
 
     /**
      * Updates an User in the database and returns the refreshed/reloaded entity instance.
@@ -45,7 +45,7 @@ public interface GwtUserService extends RemoteService {
      * @throws GwtKapuaException
      */
     public GwtUser update(GwtXSRFToken xsfrToken, GwtUser gwtUser)
-            throws GwtKapuaException;
+        throws GwtKapuaException;
 
     /**
      * Delete the supplied User.
@@ -55,7 +55,7 @@ public interface GwtUserService extends RemoteService {
      * @throws GwtKapuaException
      */
     public void delete(GwtXSRFToken xsfrToken, String accountId, GwtUser gwtUser)
-            throws GwtKapuaException;
+        throws GwtKapuaException;
 
     /**
      * Returns an User by its Id or null if an account with such Id does not exist.
@@ -66,7 +66,7 @@ public interface GwtUserService extends RemoteService {
      * 
      */
     public GwtUser find(String accountId, String userId)
-            throws GwtKapuaException;
+        throws GwtKapuaException;
 
     /**
      * Returns the list of all User which belong to an account.
@@ -77,6 +77,6 @@ public interface GwtUserService extends RemoteService {
      * 
      */
     public ListLoadResult<GwtUser> findAll(String scopeIdStirng)
-            throws GwtKapuaException;
+        throws GwtKapuaException;
 
 }

@@ -32,7 +32,6 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.poi.util.IOUtils;
-//import org.apache.commons.io.IOUtils;
 import org.eclipse.kapua.KapuaEntityNotFoundException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
 import org.eclipse.kapua.KapuaUnauthenticatedException;
@@ -48,7 +47,6 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
-import org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,9 +77,7 @@ public class FileServlet extends KapuaHttpServlet {
         }
         // END XSRF security check
 
-        if (reqPathInfo.startsWith("/deploy")) {
-            doPostDeploy(req.getPathInfo(), kapuaFormFields, resp);
-        } else if (reqPathInfo.equals("/command")) {
+        if (reqPathInfo.equals("/command")) {
             doPostCommand(kapuaFormFields, resp);
         } else if (reqPathInfo.equals("/configuration/snapshot")) {
             doPostConfigurationSnapshot(kapuaFormFields, resp);
@@ -136,82 +132,6 @@ public class FileServlet extends KapuaHttpServlet {
             return;
         } catch (Exception e) {
             s_logger.error("Error posting configuration", e);
-            throw new ServletException(e);
-        }
-    }
-
-    private void doPostDeploy(String reqPathInfo, KapuaFormFields kapuaFormFields, HttpServletResponse resp)
-            throws ServletException, IOException {
-        try {
-            KapuaLocator locator = KapuaLocator.getInstance();
-            DeviceDeployManagementService deviceDeployManagementService = locator.getService(DeviceDeployManagementService.class);
-
-            String scopeIdString = kapuaFormFields.get("scopeIdString");
-            String deviceIdString = kapuaFormFields.get("deviceIdString");
-
-            if (scopeIdString == null || scopeIdString.isEmpty()) {
-                throw new IllegalArgumentException("scopeId");
-            }
-
-            if (deviceIdString == null || deviceIdString.isEmpty()) {
-                throw new IllegalArgumentException("deviceId");
-            }
-
-            if (reqPathInfo.endsWith("url")) {
-
-                String packageDownloadUrl = kapuaFormFields.get("packageUrl");
-
-                if (packageDownloadUrl == null ||
-                        packageDownloadUrl.isEmpty() ||
-                        !packageDownloadUrl.endsWith(".dp")) {
-                    throw new IllegalArgumentException("packageUrl");
-                }
-
-                s_logger.info("Installing deployment package at URL: {}", packageDownloadUrl);
-                deviceDeployManagementService.install(KapuaEid.parseShortId(scopeIdString),
-                        KapuaEid.parseShortId(deviceIdString),
-                        packageDownloadUrl,
-                        null);
-            } else if (reqPathInfo.endsWith("upload")) {
-
-                List<FileItem> fileItems = kapuaFormFields.getFileItems();
-
-                if (fileItems == null || fileItems.size() != 1) {
-                    throw new IllegalArgumentException("file");
-                }
-
-                FileItem item = fileItems.get(0);
-                String filename = item.getName();
-                byte[] data = item.get();
-
-                if (filename == null || !filename.endsWith(".dp")) {
-                    throw new IllegalArgumentException("packageUrl");
-                }
-
-                s_logger.info("Installing deployment package: {}", filename);
-                deviceDeployManagementService.install(KapuaEid.parseShortId(scopeIdString),
-                        KapuaEid.parseShortId(deviceIdString),
-                        filename,
-                        data,
-                        null);
-            } else {
-                resp.sendError(404);
-                return;
-            }
-        } catch (IllegalArgumentException iae) {
-            resp.sendError(400, "Illegal value for query parameter: " + iae.getMessage());
-            return;
-        } catch (KapuaEntityNotFoundException eenfe) {
-            resp.sendError(400, eenfe.getMessage());
-            return;
-        } catch (KapuaUnauthenticatedException eiae) {
-            resp.sendError(401, eiae.getMessage());
-            return;
-        } catch (KapuaIllegalAccessException eiae) {
-            resp.sendError(403, eiae.getMessage());
-            return;
-        } catch (Exception e) {
-            s_logger.error("Error posting deployment package", e);
             throw new ServletException(e);
         }
     }

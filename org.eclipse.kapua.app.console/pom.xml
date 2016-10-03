@@ -5,7 +5,8 @@
     and is available at http://www.eclipse.org/legal/epl-v10.html Contributors: 
     Eurotech - initial API and implementation -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <!-- POM file generated with GWT webAppCreator -->
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -170,12 +171,12 @@
         
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.deploy</artifactId>
+            <artifactId>org.eclipse.kapua.service.device.management.packages</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.deploy.internal</artifactId>
+            <artifactId>org.eclipse.kapua.service.device.management.packages.internal</artifactId>
             <version>${project.version}</version>
         </dependency>
 

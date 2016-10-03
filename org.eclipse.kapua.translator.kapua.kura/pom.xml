@@ -107,7 +107,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.deploy.internal</artifactId>
+            <artifactId>org.eclipse.kapua.service.device.management.packages.internal</artifactId>
             <version>${project.version}</version>
         </dependency>
 		<dependency>

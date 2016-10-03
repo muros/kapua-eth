@@ -13,20 +13,14 @@
 package org.eclipse.kapua.app.console.shared.service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.kapua.app.console.shared.GwtKapuaException;
-import org.eclipse.kapua.app.console.shared.model.GwtConfigComponent;
-import org.eclipse.kapua.app.console.shared.model.GwtDeploymentPackage;
 import org.eclipse.kapua.app.console.shared.model.GwtDevice;
-import org.eclipse.kapua.app.console.shared.model.GwtDeviceCommandInput;
-import org.eclipse.kapua.app.console.shared.model.GwtDeviceCommandOutput;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceCreator;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceEvent;
 import org.eclipse.kapua.app.console.shared.model.GwtDeviceQueryPredicates;
 import org.eclipse.kapua.app.console.shared.model.GwtGroupedNVPair;
-import org.eclipse.kapua.app.console.shared.model.GwtSnapshot;
 import org.eclipse.kapua.app.console.shared.model.GwtXSRFToken;
 
 import com.extjs.gxt.ui.client.data.ListLoadResult;
@@ -104,18 +98,6 @@ public interface GwtDeviceService extends RemoteService
         throws GwtKapuaException;
 
     /**
-     * Deletes a device
-     * 
-     * @param accountId
-     * @param clientId
-     */
-    public void deleteDevice(GwtXSRFToken xsfrToken, String scopeIdString, String clientId)
-        throws GwtKapuaException;
-
-    //
-    // Device Management Methods
-    //
-    /**
      * Returns a list of device history events for a specified device within a specified date range.
      * 
      * @param gwtDevice the device to return the history of
@@ -127,81 +109,16 @@ public interface GwtDeviceService extends RemoteService
     public PagingLoadResult<GwtDeviceEvent> findDeviceEvents(PagingLoadConfig loadConfig, GwtDevice gwtDevice, Date startDate, Date endDate)
         throws GwtKapuaException;
 
-    /**
-     * Returns the configuration of a Device as the list of all the configurable components.
-     * 
-     * @param device
-     * @return
-     */
-    public List<GwtConfigComponent> findDeviceConfigurations(GwtDevice device)
-        throws GwtKapuaException;
-
-    /**
-     * Updates the configuration of the provided component.
-     * 
-     * @param device
-     * @param configComponent
-     */
-    public void updateComponentConfiguration(GwtXSRFToken xsrfToken, GwtDevice device, GwtConfigComponent configComponent)
-        throws GwtKapuaException;
-
-    /**
-     * Returns the deployment packages installed on a Device.
-     * 
-     * @param device
-     * @return
-     */
-    public List<GwtDeploymentPackage> findDeviceDeploymentPackages(GwtDevice device)
-        throws GwtKapuaException;
-
-    /**
-     * Uninstalls a deployment package from a device.
-     * 
-     * @param device
-     * @param packageName
-     * @throws GwtKapuaException
-     */
-    public void uninstallDeploymentPackage(GwtXSRFToken xsfrToken, GwtDevice device, String packageName)
-        throws GwtKapuaException;
-
-    /**
-     * Executes a command on a remote Device.
-     * 
-     * @param device
-     * @param command
-     * @return
-     */
-    public GwtDeviceCommandOutput executeCommand(GwtXSRFToken xsfrToken, GwtDevice device, GwtDeviceCommandInput commandInput)
-        throws GwtKapuaException;
-
-    /**
-     * 
-     * @param device
-     * @return
-     * @throws GwtKapuaException
-     */
-    public ListLoadResult<GwtSnapshot> findDeviceSnapshots(GwtDevice device)
-        throws GwtKapuaException;
-
-    /**
-     * 
-     * @param device
-     * @param snapshot
-     * @throws GwtKapuaException
-     */
-    public void rollbackDeviceSnapshot(GwtXSRFToken xsfrToken, GwtDevice device, GwtSnapshot snapshot)
-        throws GwtKapuaException;
-
     public ListLoadResult<GwtGroupedNVPair> findDeviceProfile(String scopeIdString, String clientId)
         throws GwtKapuaException;
 
-    public ListLoadResult<GwtGroupedNVPair> findBundles(GwtDevice device)
-        throws GwtKapuaException;
-
-    public void startBundle(GwtXSRFToken xsfrToken, GwtDevice device, GwtGroupedNVPair pair)
-        throws GwtKapuaException;
-
-    public void stopBundle(GwtXSRFToken xsfrToken, GwtDevice device, GwtGroupedNVPair pair)
+    /**
+     * Deletes a device
+     * 
+     * @param accountId
+     * @param clientId
+     */
+    public void deleteDevice(GwtXSRFToken xsfrToken, String scopeIdString, String clientId)
         throws GwtKapuaException;
 
 }

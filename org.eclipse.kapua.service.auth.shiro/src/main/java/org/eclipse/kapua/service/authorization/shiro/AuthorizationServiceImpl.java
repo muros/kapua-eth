@@ -47,6 +47,7 @@ public class AuthorizationServiceImpl implements AuthorizationService
     {
         KapuaSession session = KapuaSecurityUtils.getSession();
 
+        // FIXME: this should throw something like unauthenticated exception
         if (session == null) {
             throw new KapuaIllegalStateException("null KapuaSession");
         }

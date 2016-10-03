@@ -45,7 +45,7 @@ import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSett
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSetting;
 import org.eclipse.kapua.service.device.management.commons.setting.DeviceManagementSettingKey;
-import org.eclipse.kapua.service.device.management.configuration.internal.ConfigurationAppProperties;
+import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationAppProperties;
 import org.eclipse.kapua.service.device.management.configuration.internal.DeviceComponentConfigurationImpl;
 import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationImpl;
 import org.eclipse.kapua.service.device.management.configuration.message.internal.ConfigurationResponseChannel;
@@ -58,14 +58,14 @@ import org.eclipse.kapua.translator.exception.TranslatorException;
 public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponseMessage, ConfigurationResponseMessage>
 {
     private static final String                                          CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<ConfigurationMetrics, ConfigurationAppProperties> metricsDictionary;
+    private static Map<ConfigurationMetrics, DeviceConfigurationAppProperties> metricsDictionary;
 
     public TranslatorAppConfigurationKuraKapua()
     {
         metricsDictionary = new HashMap<>();
 
-        metricsDictionary.put(ConfigurationMetrics.APP_ID, ConfigurationAppProperties.APP_NAME);
-        metricsDictionary.put(ConfigurationMetrics.APP_VERSION, ConfigurationAppProperties.APP_VERSION);
+        metricsDictionary.put(ConfigurationMetrics.APP_ID, DeviceConfigurationAppProperties.APP_NAME);
+        metricsDictionary.put(ConfigurationMetrics.APP_VERSION, DeviceConfigurationAppProperties.APP_VERSION);
     }
 
     @Override
@@ -126,8 +126,8 @@ public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponse
                                           appIdTokens[1]);
         }
 
-        configurationResponseChannel.setAppName(ConfigurationAppProperties.APP_NAME);
-        configurationResponseChannel.setVersion(ConfigurationAppProperties.APP_VERSION);
+        configurationResponseChannel.setAppName(DeviceConfigurationAppProperties.APP_NAME);
+        configurationResponseChannel.setVersion(DeviceConfigurationAppProperties.APP_VERSION);
 
         //
         // Return Kapua Channel

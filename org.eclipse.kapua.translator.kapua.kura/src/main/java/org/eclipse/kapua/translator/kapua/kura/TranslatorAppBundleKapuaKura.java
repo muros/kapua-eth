@@ -27,7 +27,7 @@ import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraReques
 import org.eclipse.kapua.service.device.call.message.app.request.kura.KuraRequestPayload;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSetting;
 import org.eclipse.kapua.service.device.call.message.kura.setting.DeviceCallSettingKeys;
-import org.eclipse.kapua.service.device.management.bundle.internal.BundleAppProperties;
+import org.eclipse.kapua.service.device.management.bundle.internal.DeviceBundleAppProperties;
 import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestChannel;
 import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestMessage;
 import org.eclipse.kapua.service.device.management.bundle.message.internal.BundleRequestPayload;
@@ -38,14 +38,14 @@ import org.eclipse.kapua.translator.Translator;
 public class TranslatorAppBundleKapuaKura extends Translator<BundleRequestMessage, KuraRequestMessage>
 {
     private static final String                            CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
-    private static Map<BundleAppProperties, BundleMetrics> propertiesDictionary;
+    private static Map<DeviceBundleAppProperties, BundleMetrics> propertiesDictionary;
 
     public TranslatorAppBundleKapuaKura()
     {
         propertiesDictionary = new HashMap<>();
 
-        propertiesDictionary.put(BundleAppProperties.APP_NAME, BundleMetrics.APP_ID);
-        propertiesDictionary.put(BundleAppProperties.APP_VERSION, BundleMetrics.APP_VERSION);
+        propertiesDictionary.put(DeviceBundleAppProperties.APP_NAME, BundleMetrics.APP_ID);
+        propertiesDictionary.put(DeviceBundleAppProperties.APP_VERSION, BundleMetrics.APP_VERSION);
     }
 
     @Override
@@ -86,9 +86,9 @@ public class TranslatorAppBundleKapuaKura extends Translator<BundleRequestMessag
 
         // Build appId
         StringBuilder appIdSb = new StringBuilder();
-        appIdSb.append(propertiesDictionary.get(BundleAppProperties.APP_NAME).getValue())
+        appIdSb.append(propertiesDictionary.get(DeviceBundleAppProperties.APP_NAME).getValue())
                .append("-")
-               .append(propertiesDictionary.get(BundleAppProperties.APP_VERSION).getValue());
+               .append(propertiesDictionary.get(DeviceBundleAppProperties.APP_VERSION).getValue());
 
         kuraRequestChannel.setAppId(appIdSb.toString());
         kuraRequestChannel.setMethod(MethodDictionaryKapuaKura.get(kapuaChannel.getMethod()));

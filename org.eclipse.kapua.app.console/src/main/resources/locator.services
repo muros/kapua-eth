@@ -45,8 +45,8 @@ org.eclipse.kapua.service.device.management.command.DeviceCommandManagementServi
 org.eclipse.kapua.service.device.management.command.DeviceCommandFactory
 org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService
 org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationFactory
-org.eclipse.kapua.service.device.management.deploy.DeviceDeployManagementService
-org.eclipse.kapua.service.device.management.deploy.DeviceDeploymentFactory
+org.eclipse.kapua.service.device.management.packages.DevicePackageManagementService
+org.eclipse.kapua.service.device.management.packages.DevicePackageFactory
 org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService
 org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory
 

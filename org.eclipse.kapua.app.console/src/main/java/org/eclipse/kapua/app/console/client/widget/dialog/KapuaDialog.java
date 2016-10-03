@@ -33,7 +33,7 @@ public abstract class KapuaDialog extends Dialog {
 
     protected static final ConsoleMessages MSGS = GWT.create(ConsoleMessages.class);
 
-    private ContentPanel m_infoPanel;
+    private ContentPanel infoPanel;
 
     public KapuaDialog() {
         super();
@@ -59,14 +59,14 @@ public abstract class KapuaDialog extends Dialog {
 
         //
         // Info setup
-        m_infoPanel = new ContentPanel();
-        m_infoPanel.setBorders(false);
-        m_infoPanel.setBodyBorder(false);
-        m_infoPanel.setHeaderVisible(false);
-        m_infoPanel.setLayout(new TableLayout(2));
-        m_infoPanel.setStyleAttribute("background-color", "#F0F0F0");
-        m_infoPanel.setBodyStyle("background-color:transparent");
-        add(m_infoPanel);
+        infoPanel = new ContentPanel();
+        infoPanel.setBorders(false);
+        infoPanel.setBodyBorder(false);
+        infoPanel.setHeaderVisible(false);
+        infoPanel.setLayout(new TableLayout(2));
+        infoPanel.setStyleAttribute("background-color", "#F0F0F0");
+        infoPanel.setBodyStyle("background-color:transparent");
+        add(infoPanel);
 
         // Heading Icon (if implementation needs one
         AbstractImagePrototype headerIcon = getHeaderIcon();
@@ -90,7 +90,7 @@ public abstract class KapuaDialog extends Dialog {
             tableData.setVerticalAlign(VerticalAlignment.MIDDLE);
             tableData.setPadding(5);
 
-            m_infoPanel.add(infoIcon, tableData);
+            infoPanel.add(infoIcon, tableData);
         }
 
         // Message (if implementation needs one)
@@ -104,7 +104,7 @@ public abstract class KapuaDialog extends Dialog {
             dialogTextInfo.setStyleName("kapua-info-text");
             dialogTextInfo.setStyleAttribute("padding", "5px");
 
-            m_infoPanel.add(dialogTextInfo, tableData);
+            infoPanel.add(dialogTextInfo, tableData);
         }
 
         //
