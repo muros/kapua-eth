@@ -622,7 +622,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
                 gwtCommandOutput.setStderr(commandOutput.getStderr().replace("\n", "<br>"));
             }
             gwtCommandOutput.setStdout(commandOutput.getStdout());
-            gwtCommandOutput.setTimedout(commandOutput.hasTimedout());
+            gwtCommandOutput.setTimedout(commandOutput.getHasTimedout());
         } catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }

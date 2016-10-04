@@ -24,11 +24,8 @@ import org.eclipse.kapua.model.KapuaEntity;
 
 @XmlRootElement(name = "componentConfigurations")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@XmlType(propOrder = {
-        "componentConfigurations"
-}, factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newConfiguration")
-public interface DeviceConfiguration extends KapuaEntity
+@XmlType(factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newConfiguration")
+public interface DeviceConfiguration
 {
-    @XmlElementWrapper(name = "componentConfigurations")
     public <C extends DeviceComponentConfiguration> List<C> getComponentConfigurations();
 }

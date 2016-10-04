@@ -39,40 +39,4 @@ public class DeviceConfigurationImpl implements DeviceConfiguration
         return configurations;
     }
 
-    @Override
-    public KapuaId getId() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setId(KapuaId id) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public String getType() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KapuaId getScopeId() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Date getCreatedOn() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KapuaId getCreatedBy() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

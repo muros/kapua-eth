@@ -43,24 +43,20 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
 {
     private static final long serialVersionUID = 7142819355352738950L;
 
-    @XmlElement(name = "deviceId")
     @Embedded
     @AttributeOverrides({
                           @AttributeOverride(name = "eid", column = @Column(name = "device_id", nullable = false, updatable = false))
     })
     private KapuaEid          deviceId;
 
-    @XmlElement(name = "receivedOn")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "received_on", updatable = false, nullable = false)
     private Date              receivedOn;
 
-    @XmlElement(name = "sentOn")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "sent_on", updatable = false)
     private Date              sentOn;
 
-    @XmlElement(name = "position")
     @Embedded
     @AttributeOverrides({
                           @AttributeOverride(name = "longitude", column = @Column(name = "pos_longitude", updatable = false)),
@@ -75,22 +71,18 @@ public class DeviceEventImpl extends AbstractKapuaEntity implements DeviceEvent
     })
     private KapuaPositionImpl position;
 
-    @XmlElement(name = "resource")
     @Basic
     @Column(name = "resource", updatable = false, nullable = false)
     private String            resource;
 
-    @XmlElement(name = "action")
     @Enumerated(EnumType.STRING)
     @Column(name = "action", updatable = false, nullable = false)
     private KapuaMethod       action;
 
-    @XmlElement(name = "response_code")
     @Enumerated(EnumType.STRING)
     @Column(name = "response_code", updatable = false, nullable = false)
     private KapuaResponseCode responseCode;
 
-    @XmlElement(name = "eventMessage")
     @Lob
     @Column(name = "event_message", updatable = false, nullable = false)
     private String            eventMessage;
