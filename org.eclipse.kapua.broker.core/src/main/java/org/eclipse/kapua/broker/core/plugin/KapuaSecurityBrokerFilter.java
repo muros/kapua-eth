@@ -39,6 +39,7 @@ import org.apache.activemq.filter.DestinationMapEntry;
 import org.apache.activemq.security.AuthorizationEntry;
 import org.apache.activemq.security.DefaultAuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.util.ThreadContext;
@@ -438,6 +439,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             ConnectorDescriptor connectorDescriptor = connectorsDescriptorMap.get((((TransportConnector) context.getConnector()).getName()));
             KapuaSecurityContext securityCtx = new KapuaSecurityContext(
                                                                         principal,
+                                                                        ThreadContext.unbindSubject(),
                                                                         authMap,
                                                                         (deviceConnection != null ? deviceConnection.getId() : null),
                                                                         connectionId,
@@ -667,6 +669,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             // }
             messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
             messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTOR_DEVICE_PROTOCOL, kapuaSecurityContext.getConnectorDescriptor());
+            messageSend.setProperty(MessageConstants.HEADER_KAPUA_SHIRO_SUBJECT, kapuaSecurityContext.getSubject());
         }
         if (messageSend.getContent() != null) {
             metricPublishMessageSizeAllowed.update(messageSend.getContent().length);

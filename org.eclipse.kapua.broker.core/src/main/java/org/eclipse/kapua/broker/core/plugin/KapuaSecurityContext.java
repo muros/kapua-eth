@@ -19,6 +19,7 @@ import java.util.Set;
 import org.apache.activemq.command.ConnectionId;
 import org.apache.activemq.security.AuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
+import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.KapuaPrincipal;
 
@@ -42,24 +43,10 @@ public class KapuaSecurityContext extends SecurityContext
     private boolean          hasDeviceView;
     private boolean          hasDeviceManage;
 
-    /**
-     * Construct a specific security context
-     * 
-     * @param principal
-     * @param authMap
-     * @param connectionId
-     * @param brokerConnectionId
-     * @param connectorDescriptor
-     */
-    public KapuaSecurityContext(KapuaPrincipal principal,
-                                AuthorizationMap authMap,
-                                KapuaId connectionId,
-                                ConnectionId brokerConnectionId,
-                                ConnectorDescriptor connectorDescriptor)
-    {
         super(principal.getName());
 
         this.principal = principal;
+        this.subject = subject;
         principals = new HashSet<Principal>();
         principals.add(principal);
 
@@ -119,4 +106,8 @@ public class KapuaSecurityContext extends SecurityContext
         return hasDeviceManage;
     }
 
+    public Subject getSubject()
+    {
+        return subject;
+    }
 }
