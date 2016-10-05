@@ -17,4 +17,4 @@ rm webapps/api.war
 echo 'create symbolic link to console web application'
 ln -s /kapua/org.eclipse.kapua.app.console/target/console-KAPUA_VERSION.war webapps/console.war
 echo 'create symbolic link to api web application'
-ln -s /kapua/org.eclipse.kapua.app.api/target/kapua.war webapps/api.war
+ln -s /kapua/org.eclipse.kapua.app.api/target/api.war webapps/api.war

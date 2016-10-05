@@ -137,8 +137,6 @@ Vagrant.configure("2") do |config|
 	 cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/script/broker/*.sh .
 	 chmod 555 update-kapua-jars-cfg.sh
 	 chmod 555 start-broker.sh
-	 echo 'remove old guava jars'
-	 rm ./lib/optional/guava-*.*
 	 # enable debug
      sudo sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
      sudo sed -i 's/ACTIVEMQ_VERSION/'"$ACTIVEMQ_VERSION"'/g' update-kapua-jars-cfg.sh
