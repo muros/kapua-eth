@@ -21,8 +21,6 @@ echo '===> copy kapua modules'
 for name in $(find /kapua -name 'org.eclipse.kapua*.jar' | grep target | grep -Ev 'test|console|api|dependency|mysql'); do jar_name=$(echo - $name - $name | awk -F"/" '{print $NF}'); echo create symbolic link from ./lib/extra/${jar_name} ${name}; ln -s $name ./lib/extra/$jar_name; done;
 echo 'create the symbolic links to Kapua jars DONE'
 echo 'remove old config links'
-rm /usr/local/activemq/apache-activemq-ACTIVEMQ_VERSION/conf/log4j.properties
 rm /usr/local/activemq/apache-activemq-ACTIVEMQ_VERSION/conf/activemq.xml
 echo 'create new config links'
 ln -s /kapua/org.eclipse.kapua.assembly/src/main/resources/conf/broker/activemq.xml /usr/local/activemq/apache-activemq-ACTIVEMQ_VERSION/conf/activemq.xml
-ln -s /kapua/org.eclipse.kapua.assembly/src/main/resources/conf/broker/log4j.properties /usr/local/activemq/apache-activemq-ACTIVEMQ_VERSION/conf/log4j.properties

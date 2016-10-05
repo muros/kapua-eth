@@ -131,15 +131,19 @@ Vagrant.configure("2") do |config|
      # activemq post-install setup
   	 cd /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}
 	 rm conf/activemq.xml
-	 rm conf/log4j.properties
 	 ln -s /kapua/org.eclipse.kapua.assembly/src/main/resources/conf/broker/activemq.xml conf/activemq.xml
-	 ln -s /kapua/org.eclipse.kapua.assembly/src/main/resources/conf/broker/log4j.properties conf/log4j.properties
+	 echo 'configuring conf/log4j.properties'
+	 sudo sed -i 's/log4j.appender.logfile.layout.ConversionPattern=%d | %-5p | %m | %c | %t%n/log4j.appender.logfile.layout.ConversionPattern=%d | %-5p | %t | %c | %m%n/g' conf/log4j.properties
+	 sudo sed -i 's/log4j.appender.audit.layout.ConversionPattern=%-5p | %m | %t%n/log4j.appender.audit.layout.ConversionPattern=%-5p | %t%n | %m/g' conf/log4j.properties
+
 	 cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/script/broker/*.sh .
 	 chmod 555 update-kapua-jars-cfg.sh
 	 chmod 555 start-broker.sh
 	 # enable debug
      sudo sed -i 's/\#ACTIVEMQ_DEBUG_OPTS=/ACTIVEMQ_DEBUG_OPTS=/g' bin/env
      sudo sed -i 's/ACTIVEMQ_VERSION/'"$ACTIVEMQ_VERSION"'/g' update-kapua-jars-cfg.sh
+     sudo rm /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}/lib/optional/guava-*
+	 sudo rm /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}/lib/optional/shiro-*
 	 sudo chown -R vagrant:vagrant /usr/local/activemq/apache-activemq-${ACTIVEMQ_VERSION}
 
 	 ###########################
@@ -147,13 +151,26 @@ Vagrant.configure("2") do |config|
 	 ###########################
      #allow remote manager application
      cd /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}
-     sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/conf/tomcat/context.xml webapps/manager/META-INF/
-     sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/conf/tomcat/tomcat-users.xml conf/
+     echo 'configuring webapps/manager/META-INF/context.xml'
+     MANAGER_CONTEXT_LN=$(sudo wc -l < /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/webapps/manager/META-INF/context.xml) 
+     TOMCAT_CONTEXT_L1='<Valve className=\"org.apache.catalina.valves.RemoteAddrValve\"'
+     TOMCAT_CONTEXT_L2='allow="\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\\\.\\\\d+\\|::1\\|0:0:0:0:0:0:0:1" />'
+     sudo sed -i "$((MANAGER_CONTEXT_LN))i \\ \\ $TOMCAT_CONTEXT_L1" /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/webapps/manager/META-INF/context.xml
+     sudo sed -i "$((MANAGER_CONTEXT_LN+1))i \\ \\ \\ \\ \\ \\ $TOMCAT_CONTEXT_L2" /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/webapps/manager/META-INF/context.xml
+
+	 echo 'configuring conf/tomcat-users.xml'
+     TOMCAT_USER_LN=$(sudo wc -l < /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml)
+     sudo sed -i "$((TOMCAT_USER_LN))i \\ \\ <role rolename=\"manager-gui\"/>" /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
+     sudo sed -i "$((TOMCAT_USER_LN+1))i \\ \\ <role rolename=\"manager-script\"/>" /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
+     sudo sed -i "$((TOMCAT_USER_LN+2))i \\ \\ <role rolename=\"manager-jmx\"/>" /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
+     sudo sed -i "$((TOMCAT_USER_LN+3))i \\ \\ <role rolename=\"manager-status\"/>" /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
+     sudo sed -i "$((TOMCAT_USER_LN+4))i \\ \\ <user username=\"tomcat\" password=\"tomcat\" roles=\"manager-gui,manager-script,manager-jmx,manager-status\"/>" /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
+
      sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/script/tomcat/start-tomcat.sh .
      sudo cp /kapua/org.eclipse.kapua.dev-tools/src/main/vagrant/develop/script/tomcat/update-kapua-war.sh .
      chmod 555 start-tomcat.sh
      chmod 555 update-kapua-war.sh
-     sed -i 's/KAPUA_VERSION/'"$KAPUA_VERSION"'/g' update-kapua-war.sh
+     sudo sed -i 's/KAPUA_VERSION/'"$KAPUA_VERSION"'/g' update-kapua-war.sh
      # change the owner and the group to vagrant
      sudo chown -R vagrant /usr/local/tomcat/apache-tomcat-${TOMCAT_VERSION}
 

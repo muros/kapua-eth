@@ -228,6 +228,7 @@
 		</dependency>
 	</dependencies>
 
+<!-- 
     <build>
    		<plugins>
    			<plugin>
@@ -269,8 +270,8 @@
    							<descriptors>
    								<descriptor>src/main/descriptors/unix-bin.xml</descriptor>
    							</descriptors>
-   							<!-- otherwise we got exception on some machine -->
-   							<!-- group id 'xxxxxxxxxx' is too big ( > 2097151 ) -->
+   							otherwise we got exception on some machine
+   							group id 'xxxxxxxxxx' is too big ( > 2097151 ) 
    							<tarLongFileMode>posix</tarLongFileMode>
    							<finalName>kapua-broker-${project.version}</finalName>
    							<appendAssemblyId>false</appendAssemblyId>
@@ -280,7 +281,116 @@
    			</plugin>
    		</plugins>
    	</build>
-   	
+ -->
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.10</version>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.google.guava</groupId>
+									<artifactId>guava</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.google.inject</groupId>
+									<artifactId>guice</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>javax.inject</groupId>
+									<artifactId>javax.inject</artifactId>
+									<version>1</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>aopalliance</groupId>
+									<artifactId>aopalliance</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.eclipse.persistence</groupId>
+									<artifactId>javax.persistence</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.eclipse.persistence</groupId>
+									<artifactId>eclipselink</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>commons-configuration</groupId>
+									<artifactId>commons-configuration</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.springframework.security</groupId>
+									<artifactId>spring-security-core</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>io.dropwizard.metrics</groupId>
+									<artifactId>metrics-core</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.h2database</groupId>
+									<artifactId>h2</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.google.protobuf</groupId>
+									<artifactId>protobuf-java</artifactId>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.apache.shiro</groupId>
+									<artifactId>shiro-core</artifactId>
+									<version>${shiro.version}</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>target/broker_dependency</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 	<profiles>
 		<profile>
 			<id>deploy</id>
