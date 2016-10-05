@@ -13,6 +13,10 @@ package org.eclipse.kapua.commons.configuration;
 
 import org.eclipse.kapua.KapuaException;
 
+/**
+ * Kapua configuration exception
+ *
+ */
 public class KapuaConfigurationException extends KapuaException 
 {
     private static final long serialVersionUID = -5191015333552703367L;
@@ -23,8 +27,6 @@ public class KapuaConfigurationException extends KapuaException
      * Builds a new KapuaException instance based on the supplied KapuaErrorCode.
      * 
      * @param code
-     * @param t
-     * @param arguments
      */
     public KapuaConfigurationException(KapuaConfigurationErrorCodes code) {
         super(code);
@@ -42,11 +44,11 @@ public class KapuaConfigurationException extends KapuaException
     }
 
     /**
-     * Builds a new KapuaAccountException instance based on the supplied KapuaAccountErrorCode, 
+     * Builds a new KapuaAccountException instance based on the supplied KapuaAccountErrorCode,
      * an Throwable cause, and optional arguments for the associated exception message.
      * 
      * @param code
-     * @param t
+     * @param cause
      * @param arguments
      */
     public KapuaConfigurationException(KapuaConfigurationErrorCodes code, Throwable cause, Object... arguments) {
@@ -57,7 +59,6 @@ public class KapuaConfigurationException extends KapuaException
      * Factory method to build an KapuaAccountException with the KapuaAccountErrorCode.INTERNAL_ERROR, 
      * and optional arguments for the associated exception message.
      * 
-     * @param cause
      * @param message
      * @return
      */

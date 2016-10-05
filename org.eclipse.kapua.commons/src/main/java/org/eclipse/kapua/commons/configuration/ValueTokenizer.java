@@ -20,8 +20,10 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * The implementation of this class is inspired from the org.eclipse.equinox.metatype.impl.ValueTokenizer class 
+ * The implementation of this class is inspired from the org.eclipse.equinox.metatype.impl.ValueTokenizer class
  * in the Eclipse Equinox project.
+ * 
+ * @since 1.0
  */
 public class ValueTokenizer {
     
@@ -39,8 +41,10 @@ public class ValueTokenizer {
 
     private final List<String> values = new ArrayList<String>();
 
-    /*
-     * Constructor of class ValueTokenizer
+    /**
+     * Constructs a tokenizer for a string
+     * 
+     * @param values_str
      */
     public ValueTokenizer(String values_str) {
 
@@ -127,15 +131,19 @@ public class ValueTokenizer {
         values.add(buffer.toString());
     }
 
-    /*
-     * Method to return values as Vector.
+    /**
+     * Return values as Vector.
+     * 
+     * @return
      */
     public Collection<String> getValues() {
         return Collections.unmodifiableList(values);
     }
 
-    /*
-     * Method to return values as String[] or null.
+    /**
+     * Return values as String[] or null.
+     * 
+     * @return
      */
     public String[] getValuesAsArray() {
         if (values.isEmpty()) {
@@ -144,6 +152,11 @@ public class ValueTokenizer {
         return values.toArray(new String[values.size()]);
     }
 
+    /**
+     * Return values as String
+     * 
+     * @return
+     */
     public String getValuesAsString() {
         if (values.isEmpty()) {
             return null;
@@ -159,6 +172,12 @@ public class ValueTokenizer {
         return buffer.toString();
     }
 
+    /**
+     * Validate Tad
+     * 
+     * @param ad
+     * @return
+     */
     public String validate(KapuaTad ad) {
         // An empty list means the original value was null. Null is never valid.
         if (values.isEmpty()) {            

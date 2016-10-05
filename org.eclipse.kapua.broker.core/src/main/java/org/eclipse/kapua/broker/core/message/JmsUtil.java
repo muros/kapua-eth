@@ -36,6 +36,14 @@ import org.eclipse.kapua.transport.message.jms.JmsTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Jms message utility class
+ * 
+ * TODO add translator caching
+ * 
+ * @since 1.0
+ * 
+ */
 public class JmsUtil
 {
 
@@ -74,12 +82,11 @@ public class JmsUtil
     }
 
     /**
-     * Convert a jms byte message to CamelKapuaMessage
+     * Convert a {@link BytesMessage} to {@link CamelKapuaMessage}
      * 
      * @param jmsMessage
      * @throws JMSException
      * @throws KapuaException
-     * @throws KapuaInvalidTopicException
      */
     public static CamelKapuaMessage<?> convertToKapuaMessage(ConnectorDescriptor connectorDescriptor, MESSAGE_TYPE messageType, BytesMessage jmsMessage, KapuaId connectionId)
         throws JMSException, KapuaException
@@ -90,7 +97,7 @@ public class JmsUtil
     }
 
     /**
-     * Convert a jms byte message to KapuaMessage
+     * Convert a {@link BytesMessage} to {@link KapuaMessage}
      * 
      * this code
      * if (jmsMessage.getBodyLength() > 0) {
@@ -126,6 +133,18 @@ public class JmsUtil
         return new CamelKapuaMessage(kapuaMessage, connectionId, connectorDescriptor);
     }
 
+    /**
+     * Convert raw byte[] message to {@link CamelKapuaMessage}
+     * 
+     * @param connectorDescriptor
+     * @param messageType
+     * @param messageBody
+     * @param jmsTopic
+     * @param queuedOn
+     * @param connectionId
+     * @return
+     * @throws KapuaException
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static CamelKapuaMessage<?> convertToCamelKapuaMessage(ConnectorDescriptor connectorDescriptor, MESSAGE_TYPE messageType, byte[] messageBody, String jmsTopic, Date queuedOn, KapuaId connectionId)
         throws KapuaException
@@ -134,6 +153,18 @@ public class JmsUtil
         return new CamelKapuaMessage(kapuaMessage, connectionId, connectorDescriptor);
     }
 
+    /**
+     * Convert raw byte[] message to {@link KapuaMessage}
+     * 
+     * @param deviceMessageType
+     * @param kapuaMessageType
+     * @param messageBody
+     * @param jmsTopic
+     * @param queuedOn
+     * @param connectionId
+     * @return
+     * @throws KapuaException
+     */
     @SuppressWarnings("rawtypes")
     private static KapuaMessage convertToKapuaMessage(Class<DeviceMessage<?, ?>> deviceMessageType, Class<KapuaMessage<?, ?>> kapuaMessageType, byte[] messageBody, String jmsTopic, Date queuedOn, KapuaId connectionId)
         throws KapuaException
@@ -156,25 +187,35 @@ public class JmsUtil
         return translatorToKapua.translate(deviceMessage);
     }
 
+    /**
+     * Convert a {@link KapuaMessage} message to a {@link JmsMessage}
+     * 
+     * @param connectorDescriptor
+     * @param messageType
+     * @param kapuaMessage
+     * @return
+     * @throws KapuaException
+     * @throws ClassNotFoundException
+     */
     @SuppressWarnings("rawtypes")
     public static JmsMessage convertToJmsMessage(ConnectorDescriptor connectorDescriptor, MESSAGE_TYPE messageType, KapuaMessage kapuaMessage) throws KapuaException, ClassNotFoundException
     {
         // first step... from Kapua to device level
         Translator<KapuaMessage<?, ?>, DeviceMessage<?, ?>> translatorFromKapua = null; // translatorFromKapuaMap.get(protocol);
-        // if (translatorFromKapua==null) {
-        // lookup
-        translatorFromKapua = Translator.getTranslatorFor(connectorDescriptor.getKapuaClass(messageType), connectorDescriptor.getDeviceClass(messageType));
-        // translatorFromKapuaMap.put(protocol, translatorFromKapua);
-        // }
+        if (translatorFromKapua == null) {
+            // lookup
+            translatorFromKapua = Translator.getTranslatorFor(connectorDescriptor.getKapuaClass(messageType), connectorDescriptor.getDeviceClass(messageType));
+            // translatorFromKapuaMap.put(protocol, translatorFromKapua);
+        }
         DeviceMessage deviceMessage = translatorFromKapua.translate(kapuaMessage);
 
         // second step.... from device level to jms
         Translator<DeviceMessage<?, ?>, JmsMessage> translatorToJms = null; // translatorToJmsMap.get(protocol);
-        // if (translatorToJms==null) {
-        // lookup
-        translatorToJms = Translator.getTranslatorFor(connectorDescriptor.getDeviceClass(messageType), JmsMessage.class);
-        // translatorToJmsMap.put(protocol, translatorToJms);
-        // }
+        if (translatorToJms == null) {
+            // lookup
+            translatorToJms = Translator.getTranslatorFor(connectorDescriptor.getDeviceClass(messageType), JmsMessage.class);
+            // translatorToJmsMap.put(protocol, translatorToJms);
+        }
         return translatorToJms.translate(deviceMessage);
     }
 
@@ -182,11 +223,11 @@ public class JmsUtil
     // wildcards conversion
     // =========================================
     /**
-     * A-MQ translate wildcards from jms to mqtt
+     * ActiveMQ translate wildcards from jms to mqtt
      * function ActiveMQ MQTT
      * separator . /
      * element * +
-     * sub tree > #
+     * sub tree &gt; #
      * 
      * @param jmsTopic
      * @return
@@ -217,11 +258,11 @@ public class JmsUtil
     }
 
     /**
-     * A-MQ translate wildcards from jms to mqtt
+     * ActiveMQ translate wildcards from jms to mqtt
      * function ActiveMQ MQTT
      * separator . /
      * element * +
-     * sub tree > #
+     * sub tree &gt; #
      * 
      * @param mqttTopic
      * @return

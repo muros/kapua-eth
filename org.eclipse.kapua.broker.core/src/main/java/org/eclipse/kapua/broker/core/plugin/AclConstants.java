@@ -12,6 +12,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.broker.core.plugin;
 
+/**
+ * ACL constants
+ * 
+ * @since 1.0
+ */
 public class AclConstants {
 
 	public static final String VT_TOPIC_PREFIX_TEMPLATE    = "VirtualTopic.{0}";

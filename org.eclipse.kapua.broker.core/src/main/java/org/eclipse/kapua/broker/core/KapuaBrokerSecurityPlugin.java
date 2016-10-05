@@ -25,43 +25,48 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Install {@link KapuaSecurityBrokerFilter} into amq filter chain plugin
+ * Install {@link KapuaSecurityBrokerFilter} into activeMQ filter chain plugin.<BR>
  * 
- * Is called by amq broker by configuring plugin tag inside broker tag into activemq.xml
+ * Is called by activeMQ broker by configuring plugin tag inside broker tag into activemq.xml.<BR>
+ * <BR>
+ * <BR>
  * 
- * <plugins>
- *     <bean xmlns="http://www.springframework.org/schema/beans" id="kapuaFilter" class="org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter"/>  
- * </plugins>
- *
+ * <pre>
+ * &lt;plugins&gt;
+ *     &lt;bean xmlns="http://www.springframework.org/schema/beans" id="kapuaFilter" class="org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter"/&gt;
+ * &lt;/plugins&gt;
+ * </pre>
+ * 
+ * @since 1.0
  */
-public class KapuaBrokerSecurityPlugin implements BrokerPlugin 
-{	        
-	private static Logger logger = LoggerFactory.getLogger(KapuaBrokerSecurityPlugin.class);
-	
-	public KapuaBrokerSecurityPlugin() {
-	}
-	
-    public Broker installPlugin(Broker broker) throws Exception 
+public class KapuaBrokerSecurityPlugin implements BrokerPlugin
+{
+    private static Logger logger = LoggerFactory.getLogger(KapuaBrokerSecurityPlugin.class);
+
+    public KapuaBrokerSecurityPlugin()
+    {}
+
+    public Broker installPlugin(Broker broker) throws Exception
     {
-    	logger.info(">> installPlugin {}", KapuaBrokerSecurityPlugin.class.getName());
+        logger.info(">> installPlugin {}", KapuaBrokerSecurityPlugin.class.getName());
         try {
-        	//initialize shiro context for broker plugin from shiro ini file
+            // initialize shiro context for broker plugin from shiro ini file
             URL shiroIniUrl = getClass().getResource("/shiro.ini");
             String shiroIniStr = ResourceUtils.readResource(shiroIniUrl);
             Ini shiroIni = new Ini();
             shiroIni.load(shiroIniStr);
 
             IniSecurityManagerFactory factory = new IniSecurityManagerFactory(shiroIni);
-  	      	org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();
-  	      	SecurityUtils.setSecurityManager(securityManager);
-  	      	
-      		// install the filters
-      		broker = new KapuaSecurityBrokerFilter(broker);
+            org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();
+            SecurityUtils.setSecurityManager(securityManager);
+
+            // install the filters
+            broker = new KapuaSecurityBrokerFilter(broker);
             return broker;
         }
         catch (Throwable t) {
-        	logger.error("Error in plugin installation.", t);
-        	throw (SecurityException) new SecurityException(t);
+            logger.error("Error in plugin installation.", t);
+            throw (SecurityException) new SecurityException(t);
         }
     }
 

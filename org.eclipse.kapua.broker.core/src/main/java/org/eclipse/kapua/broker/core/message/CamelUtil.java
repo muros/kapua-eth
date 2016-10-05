@@ -16,16 +16,29 @@ import javax.jms.JMSException;
 
 import org.apache.activemq.command.ActiveMQDestination;
 import org.apache.activemq.command.ActiveMQTopic;
+import org.apache.camel.Message;
 import org.eclipse.kapua.broker.core.listener.CamelConstants;
 import org.eclipse.kapua.broker.core.plugin.AclConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Camel utility methods
+ * 
+ * @since 1.0
+ */
 public class CamelUtil
 {
 
     public static final Logger logger = LoggerFactory.getLogger(CamelUtil.class);
 
+    /**
+     * Extract the topic from the {@link Message} looking for Kapua header property that handles this value and inspecting Camel header properties)
+     * 
+     * @param message
+     * @return
+     * @throws JMSException
+     */
     public static String getTopic(org.apache.camel.Message message) throws JMSException
     {
         String topicOrig = message.getHeader(MessageConstants.PROPERTY_ORIGINAL_TOPIC, String.class);

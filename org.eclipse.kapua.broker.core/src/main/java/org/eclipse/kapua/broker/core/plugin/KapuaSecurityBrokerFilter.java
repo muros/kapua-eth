@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import javax.security.auth.login.CredentialException;
 
@@ -46,9 +45,7 @@ import org.apache.shiro.util.ThreadContext;
 import org.eclipse.kapua.KapuaErrorCode;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.KapuaIllegalAccessException;
-import org.eclipse.kapua.broker.core.listener.CamelConstants;
 import org.eclipse.kapua.broker.core.message.MessageConstants;
-import org.eclipse.kapua.broker.core.ratelimit.KapuaConnectionRateLimitExceededException;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
@@ -83,32 +80,21 @@ import com.codahale.metrics.Counter;
 import com.codahale.metrics.Histogram;
 import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
-import com.google.common.util.concurrent.RateLimiter;
 
 /**
- * A-MQ broker filter plugin implementation (security filter)
+ * activeMQ broker filter plugin implementation (security filter)
  * 
  * Filter allow unfiltered connection/disconnection and publishing/subscribe action for pass through connection (embedded broker and filter also). This connection type is used by broker assistant
  * bundle.
  * Otherwise perform all kapua authorization/check action
  * 
- * This filter is added inside amq filter chain plugin by {@link KapuaBrokerSecurityPlugin}
+ * This filter is added inside activeMQ filter chain plugin by {@link org.eclipse.kapua.broker.core.KapuaBrokerSecurityPlugin}
  * 
- * Patched version.
- * Switch ACLs from org.apache.activemq.security.SimpleAuthorizationMap to org.apache.activemq.security.AuthorizationEntry and org.apache.activemq.security.DefaultAuthorizationMap as suggested by
- * Dejan (RedHat engineer)
+ * @since 1.0
  */
 public class KapuaSecurityBrokerFilter extends BrokerFilter
 {
     private static Logger logger = LoggerFactory.getLogger(KapuaSecurityBrokerFilter.class);
-
-    // rate limiter section
-    // TODO read these parameters from the configuration
-    private final static long        UPDATER_RELOAD_PARAMETER_FREQUENCY = 5 * 60 * 1000;
-    private static double            connectionRateLimit                = 10;
-    private static long              connectionWaitForToken             = 15000;
-    private final static RateLimiter CONNECTION_RATE_LIMITER            = RateLimiter.create(connectionRateLimit);
-    private Runnable                 configurationUpdaterTask;
 
     private Map<String, ConnectorDescriptor> connectorsDescriptorMap;
 
@@ -116,7 +102,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
     // login
     private Counter metricLoginSuccess;
-    private Counter metricLoginRateLimited;
     private Counter metricLoginFailure;
     private Counter metricLoginInvalidUserPassword;
     private Counter metricLoginInvalidClientId;
@@ -167,7 +152,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
 
         // login
         metricLoginSuccess = metricsService.getCounter("security", "login", "success", "count");
-        metricLoginRateLimited = metricsService.getCounter("security", "login", "rate_limit", "count");
         metricLoginFailure = metricsService.getCounter("security", "login", "failure", "count");
         metricLoginInvalidUserPassword = metricsService.getCounter("security", "login", "failure_password", "count");
         metricLoginInvalidClientId = metricsService.getCounter("security", "login", "failure_client_id", "count");
@@ -202,19 +186,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         metricPublishMessageSizeAllowed = metricsService.getHistogram("security", "publish", "messages", "allowed", "size", "bytes");
         metricPublishMessageSizeNotAllowed = metricsService.getHistogram("security", "publish", "messages", "not_allowed", "size", "bytes");
 
-        configurationUpdaterTask = new Runnable() {
-            @Override
-            public void run()
-            {
-                connectionRateLimit = 10;
-                connectionWaitForToken = 15000;
-
-                logger.info("Configuration updater task: values loaded: ");
-                logger.info(" connection rate {} - wait for token {}", new Object[] { connectionRateLimit, connectionWaitForToken });
-            }
-        };
-        this.getBrokerService().getScheduler().executePeriodically(configurationUpdaterTask, UPDATER_RELOAD_PARAMETER_FREQUENCY);
-
     }
 
     @Override
@@ -229,15 +200,6 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         throws Exception
     {
         logger.info(">>> Security broker filter: calling stop...");
-        if (configurationUpdaterTask != null) {
-            logger.info(">>> Security broker filter: stopping configuration updater...");
-            try {
-                this.getBrokerService().getScheduler().cancel(configurationUpdaterTask);
-            }
-            catch (Exception letsNotStopStop) {
-                logger.warn(">>> Security broker filter: Failed to cancel configuration updater task", letsNotStopStop);
-            }
-        }
         super.stop();
     }
 
@@ -316,14 +278,8 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         throws Exception
     {
         if (!isPassThroughConnection(context)) {
-            if (CONNECTION_RATE_LIMITER.tryAcquire(connectionWaitForToken, TimeUnit.MILLISECONDS)) {
-                addExternalConnection(context, info);
-                metricLoginSuccess.inc();
-            }
-            else {
-                metricLoginRateLimited.inc();
-                throw new KapuaConnectionRateLimitExceededException(info.getClientId(), info.getUserName(), connectionRateLimit);
-            }
+            addExternalConnection(context, info);
+            metricLoginSuccess.inc();
         }
         super.addConnection(context, info);
     }
@@ -471,29 +427,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                 }
                 loginFindDevTimeContext.stop();
 
-                // TODO should be removed the connect grant for the admin user?
-                // // if user admin send alert
-                // if (currentUser.hasAdministratorRole()) {
-                // // send asynch alert
-                // JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.KAPUA_SERVICE);
-                // JmsAssistantProducerWrapper producer = null;
-                // try {
-                // // to do refresh change user on connect value
-                // producer = pool.borrowObject();
-                // producer.sendAlertMessage(accountName,
-                // username,
-                // clientId,
-                // AlertCategories.SECURITY.name(),
-                // Severity.WARNING,
-                // MessageFormat.format(AlertMessage.ADMIN_USER_DEVICE_ACCESS, new Object[] { clientId, username, kapuaSession.getSessionAccountName() }));
-                // }
-                // finally {
-                // pool.returnObject(producer);
-                // }
-                // }
                 loginNormalUserTimeContext.stop();
-                // }
-                // 6) update device info (also for to provision devices)
                 Context loginSendLogingUpdateMsgTimeContex = metricLoginSendLoginUpdateMsgTime.time();
 
                 loginSendLogingUpdateMsgTimeContex.stop();
@@ -525,7 +459,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                     errorCode.equals(KapuaAuthenticationErrorCodes.INVALID_CREDENTIALS) ||
                     errorCode.equals(KapuaAuthenticationErrorCodes.INVALID_CREDENTIALS_TOKEN_PROVIDED)) {
                     logger.warn("Invalid username or password for user {} ({})", username, e.getMessage());
-                    // A-MQ will map CredentialException into a CONNECTION_REFUSED_BAD_USERNAME_OR_PASSWORD message (see javadoc on top of this method)
+                    // activeMQ will map CredentialException into a CONNECTION_REFUSED_BAD_USERNAME_OR_PASSWORD message (see javadoc on top of this method)
                     CredentialException ce = new CredentialException("Invalid username and/or password or disabled or expired account!");
                     ce.setStackTrace(e.getStackTrace());
                     metricLoginInvalidUserPassword.inc();
@@ -535,58 +469,19 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                          errorCode.equals(KapuaAuthenticationErrorCodes.DISABLED_USERNAME) ||
                          errorCode.equals(KapuaAuthenticationErrorCodes.EXPIRED_CREDENTIALS)) {
                     logger.warn("User {} not authorized ({})", username, e.getMessage());
-                    // A-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc on top of this method)
+                    // activeMQ-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc on top of this method)
                     SecurityException se = new SecurityException("User not authorized!");
                     se.setStackTrace(e.getStackTrace());
                     throw se;
                 }
 
             }
-            // Excluded CredentialException, InvalidClientIDException, SecurityException all others exceptions will be mapped by A-MQ to a CONNECTION_REFUSED_SERVER_UNAVAILABLE message (see
+            // Excluded CredentialException, InvalidClientIDException, SecurityException all others exceptions will be mapped by activeMQ to a CONNECTION_REFUSED_SERVER_UNAVAILABLE message (see
             // javadoc on top of this method)
             // Not trapped exception now:
             // KapuaException
             logger.info("@@ error", e);
             throw e;
-
-            // // fix ENTMQ-731
-            // if (e instanceof KapuaAuthenticationException) {
-            // logger.warn("Invalid username or password for user {} ({})", username, e.getMessage());
-            // // A-MQ will map CredentialException into a CONNECTION_REFUSED_BAD_USERNAME_OR_PASSWORD message (see javadoc on top of this method)
-            // CredentialException ce = new CredentialException("Invalid username and/or password or disabled or expired account!");
-            // ce.setStackTrace(e.getStackTrace());
-            // metricLoginInvalidUserPassword.inc();
-            // throw ce;
-            // }
-            // else if (e instanceof KapuaInvalidDeviceClientIdException) {
-            // logger.warn("Invalid client id for user {} - client id {} ({})", new Object[] { username, clientId, e.getMessage() });
-            // // A-MQ will map InvalidClientIDException into a CONNECTION_REFUSED_IDENTIFIER_REJECTED message (see javadoc on top of this method)
-            // InvalidClientIDException icid = new InvalidClientIDException("Connection refused or identifier rejected!");
-            // icid.setStackTrace(e.getStackTrace());
-            // metricLoginInvalidClientId.inc();
-            // throw icid;
-            // }
-            // else if (e instanceof KapuaIllegalAccessException ||
-            // e instanceof KapuaLockedUserException ||
-            // e instanceof KapuaIllegalNullArgumentException ||
-            // e instanceof SecurityException ||
-            // e instanceof KapuaEntityNotFoundException ||
-            // e instanceof KapuaServicePlanLimitException) {
-            // logger.warn("User {} not authorized ({})", username, e.getMessage());
-            // // A-MQ will map SecurityException into a CONNECTION_REFUSED_NOT_AUTHORIZED message (see javadoc on top of this method)
-            // SecurityException se = new SecurityException("User not authorized!");
-            // se.setStackTrace(e.getStackTrace());
-            // throw se;
-            // }
-            // else {
-            // // Excluded CredentialException, InvalidClientIDException, SecurityException all others exceptions will be mapped by A-MQ to a CONNECTION_REFUSED_SERVER_UNAVAILABLE message (see
-            // // javadoc on top of this method)
-            // // Not trapped exception now:
-            // // KapuaException
-            // logger.info("@@ error", e);
-            //
-            // throw e;
-            // }
         }
         finally {
             // 7) logout
@@ -764,11 +659,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                     metricPublishMessageSizeNotAllowed.update(messageSend.getSize());
                     metricPublishNotAllowedMessages.inc();
                     // IMPORTANT
-                    // restored the throw exception because otherwise we got acl's issues (Dejan said that in his opinion we can just return (without super call) in order to block the send operation
-                    // but from my test is not true
-                    // so we maintain the throw exception code
-                    // to prevent ACLs bug on retained message send 01376647
-                    // (retained messages sent to not allowed ACLs are received by a client if it subscribes that topic after message send operation)
+                    // restored the throw exception because otherwise we got acl's issues
                     throw new SecurityException(message);
                 }
                 // kapuaSecurityContext.getAuthorizedWriteDests().put(messageSend.getDestination(), messageSend.getDestination());
@@ -852,10 +743,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
                     logger.warn(message);
                     subscribeNotAllowedMessages.inc();
                     // IMPORTANT
-                    // restored the throw exception because otherwise we got acl's issues (Dejan said that in his opinion we can just return (without super call) in order to block the send operation
-                    // but from my test is not true
-                    // so we maintain the throw exception code
-                    // to prevent ACLs bug on # subscribe allowed regardless ACLs 01374321
+                    // restored the throw exception because otherwise we got acl's issues
                     throw new SecurityException(message);
                 }
                 // kapuaSecurityContext.getAuthorizedReadDests().put(info.getDestination(), info.getDestination());

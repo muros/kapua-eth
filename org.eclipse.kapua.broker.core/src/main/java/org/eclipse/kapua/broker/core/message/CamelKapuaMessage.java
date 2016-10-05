@@ -17,40 +17,63 @@ import org.eclipse.kapua.message.KapuaMessage;
 import org.eclipse.kapua.model.id.KapuaId;
 
 @SuppressWarnings("rawtypes")
-public class CamelKapuaMessage<M extends KapuaMessage> {
-	
-	private M message;
-	private KapuaId connectionId;
-	private ConnectorDescriptor connectorDescriptor;
-	
-	public CamelKapuaMessage(M message, KapuaId connectionId, ConnectorDescriptor connectorDescriptor) {
-		this.connectionId = connectionId;
-		this.message = message;
-		this.connectorDescriptor = connectorDescriptor;
-	}
+/**
+ * Platform message container.<BR>
+ * Contains the message and additional information such as the connection id and the connector descriptor (useful for the message translation process)
+ * 
+ * @param <M> Contained message type
+ * 
+ * @since 1.0
+ */
+public class CamelKapuaMessage<M extends KapuaMessage>
+{
 
-	public M getMessage() {
-		return message;
-	}
+    private M                   message;
+    private KapuaId             connectionId;
+    private ConnectorDescriptor connectorDescriptor;
 
-	public void setMessage(M message) {
-		this.message = message;
-	}
+    /**
+     * Constructs a new Camel Kapua message
+     * 
+     * @param message message
+     * @param connectionId connection id
+     * @param connectorDescriptor connector descriptor
+     */
+    public CamelKapuaMessage(M message, KapuaId connectionId, ConnectorDescriptor connectorDescriptor)
+    {
+        this.connectionId = connectionId;
+        this.message = message;
+        this.connectorDescriptor = connectorDescriptor;
+    }
 
-	public KapuaId getConnectionId() {
-		return connectionId;
-	}
+    public M getMessage()
+    {
+        return message;
+    }
 
-	public void setConnectionId(KapuaId connectionId) {
-		this.connectionId = connectionId;
-	}
+    public void setMessage(M message)
+    {
+        this.message = message;
+    }
 
-	public ConnectorDescriptor getConnectorDescriptor() {
-		return connectorDescriptor;
-	}
+    public KapuaId getConnectionId()
+    {
+        return connectionId;
+    }
 
-	public void setConnectorDescriptor(ConnectorDescriptor connectorDescriptor) {
-		this.connectorDescriptor = connectorDescriptor;
-	}
+    public void setConnectionId(KapuaId connectionId)
+    {
+        this.connectionId = connectionId;
+    }
+
+    public ConnectorDescriptor getConnectorDescriptor()
+    {
+        return connectorDescriptor;
+    }
+
+    public void setConnectorDescriptor(ConnectorDescriptor connectorDescriptor)
+    {
+        this.connectorDescriptor = connectorDescriptor;
+    }
 
 }

@@ -21,6 +21,11 @@ import org.slf4j.LoggerFactory;
 import com.codahale.metrics.Counter;
 
 @UriEndpoint(title = "error message processor", syntax = "bean:errorMessageListener", scheme = "bean")
+/**
+ * Error message listener endpoint.
+ * 
+ * @since 1.0
+ */
 public class ErrorMessageListener extends AbstractListener
 {
 
@@ -36,18 +41,39 @@ public class ErrorMessageListener extends AbstractListener
         metricErrorLifeCycleMessage = registerCounter("messages", "life_cycle", "count");
     }
 
+    /**
+     * Process an error condition for an elaboration of a generic message
+     * 
+     * @param exchange
+     * @param message
+     * @throws KapuaException
+     */
     public void processMessage(Exchange exchange, Object message) throws KapuaException
     {
         metricError.inc();
         logError(exchange, message, "generic");
     }
 
+    /**
+     * Process an error condition for an elaboration of a life cycle message
+     * 
+     * @param exchange
+     * @param message
+     * @throws KapuaException
+     */
     public void lifeCycleMessage(Exchange exchange, Object message) throws KapuaException
     {
         metricErrorLifeCycleMessage.inc();
         logError(exchange, message, "LifeCycle");
     }
 
+    /**
+     * Process an error condition for an elaboration of a camel routing unmatched message
+     * 
+     * @param exchange
+     * @param message
+     * @throws KapuaException
+     */
     public void unmatchedMessage(Exchange exchange, Object message) throws KapuaException
     {
         metricErrorLifeCycleMessage.inc();

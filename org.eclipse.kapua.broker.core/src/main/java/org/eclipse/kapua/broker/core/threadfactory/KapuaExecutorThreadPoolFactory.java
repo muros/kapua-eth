@@ -25,39 +25,46 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Kapua thread pool factory implementation.
- * The behavior of this thread pool factory is transparent so
- *  - it uses the {@link DefaultThreadPoolFactory} for instantiating {@link ExecutorService} for camel internal use) if 
- *  - if the request for a thread pool is coming form a {@link ThreadFactory} of {@link CamelThreadFactory} and its name starts with the kapuaThreadPoolPatternName specified in the constructor the {@link ThreadFactory} is replaced by the {@link KapuaExecutorThreadFactory}
+ * Kapua thread pool factory implementation.<BR>
+ * The behavior of this thread pool factory is transparent so<BR>
+ * - it uses the {@link DefaultThreadPoolFactory} for instantiating {@link ExecutorService} for camel internal use<BR>
+ * - if the request for a thread pool is coming form a {@link ThreadFactory} of {@link CamelThreadFactory} and its name starts with the kapuaThreadPoolPatternName specified in the constructor the
+ * {@link ThreadFactory} is replaced by the {@link KapuaExecutorThreadFactory}
  *
+ * @since 1.0
  */
-public class KapuaExecutorThreadPoolFactory extends DefaultThreadPoolFactory {
-	
-	private static final Logger s_logger = LoggerFactory.getLogger(KapuaExecutorThreadFactory.class);
-	
-	private KapuaExecutorThreadFactory kapuaThreadFactory;
-	
-	/**
-	 * 
-	 * @param kapuaThreadPoolPatternName the start name of the kapua thread pool. 
-	 */
-	public KapuaExecutorThreadPoolFactory(KapuaExecutorThreadFactory kapuaThreadFactory) {
-		super();
-		this.kapuaThreadFactory = kapuaThreadFactory;
-	}
-	
-	@Override
-	public ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
-		s_logger.info("Creating ExecutorService for thread factory {}", threadFactory);
-		return super.newCachedThreadPool(replaceThreadFactoryIfNeeed(threadFactory));
-	}
-	
-	@Override
-    public ExecutorService newThreadPool(ThreadPoolProfile profile, ThreadFactory factory) {
+public class KapuaExecutorThreadPoolFactory extends DefaultThreadPoolFactory
+{
+
+    private static final Logger s_logger = LoggerFactory.getLogger(KapuaExecutorThreadFactory.class);
+
+    private KapuaExecutorThreadFactory kapuaThreadFactory;
+
+    /**
+     * Constructs a new thread pool factory
+     * 
+     * @param kapuaThreadFactory the Kapua executor thread factory instance.
+     */
+    public KapuaExecutorThreadPoolFactory(KapuaExecutorThreadFactory kapuaThreadFactory)
+    {
+        super();
+        this.kapuaThreadFactory = kapuaThreadFactory;
+    }
+
+    @Override
+    public ExecutorService newCachedThreadPool(ThreadFactory threadFactory)
+    {
+        s_logger.info("Creating ExecutorService for thread factory {}", threadFactory);
+        return super.newCachedThreadPool(replaceThreadFactoryIfNeeed(threadFactory));
+    }
+
+    @Override
+    public ExecutorService newThreadPool(ThreadPoolProfile profile, ThreadFactory factory)
+    {
         // allow core thread timeout is default false if not configured
         boolean allow = profile.getAllowCoreThreadTimeOut() != null ? profile.getAllowCoreThreadTimeOut() : false;
-        return newThreadPool(profile.getPoolSize(), 
-                             profile.getMaxPoolSize(), 
+        return newThreadPool(profile.getPoolSize(),
+                             profile.getMaxPoolSize(),
                              profile.getKeepAliveTime(),
                              profile.getTimeUnit(),
                              profile.getMaxQueueSize(),
@@ -67,35 +74,39 @@ public class KapuaExecutorThreadPoolFactory extends DefaultThreadPoolFactory {
     }
 
     public ExecutorService newThreadPool(int corePoolSize, int maxPoolSize, long keepAliveTime, TimeUnit timeUnit, int maxQueueSize, boolean allowCoreThreadTimeOut,
-                                         RejectedExecutionHandler rejectedExecutionHandler, ThreadFactory threadFactory) throws IllegalArgumentException {
-    	s_logger.info("Creating ExecutorService for thread factory {}", threadFactory);
-    	return super.newThreadPool(corePoolSize, maxPoolSize, keepAliveTime, timeUnit, maxQueueSize, allowCoreThreadTimeOut, rejectedExecutionHandler, replaceThreadFactoryIfNeeed(threadFactory));
+                                         RejectedExecutionHandler rejectedExecutionHandler, ThreadFactory threadFactory)
+        throws IllegalArgumentException
+    {
+        s_logger.info("Creating ExecutorService for thread factory {}", threadFactory);
+        return super.newThreadPool(corePoolSize, maxPoolSize, keepAliveTime, timeUnit, maxQueueSize, allowCoreThreadTimeOut, rejectedExecutionHandler, replaceThreadFactoryIfNeeed(threadFactory));
     }
-    
+
     @Override
-    public ScheduledExecutorService newScheduledThreadPool(ThreadPoolProfile profile, ThreadFactory threadFactory) {
-    	s_logger.info("Creating ScheduledExecutorService for thread factory {}", threadFactory);
-    	return super.newScheduledThreadPool(profile, replaceThreadFactoryIfNeeed(threadFactory));
+    public ScheduledExecutorService newScheduledThreadPool(ThreadPoolProfile profile, ThreadFactory threadFactory)
+    {
+        s_logger.info("Creating ScheduledExecutorService for thread factory {}", threadFactory);
+        return super.newScheduledThreadPool(profile, replaceThreadFactoryIfNeeed(threadFactory));
     }
-    
-    private ThreadFactory replaceThreadFactoryIfNeeed(ThreadFactory threadFactory) {
-    	s_logger.info("Creating ExecutorService... Override thread factory {} with {}", new Object[]{threadFactory, kapuaThreadFactory});
-    	if (threadFactory instanceof CamelThreadFactory) {
-			CamelThreadFactory camelThreadFactory = (CamelThreadFactory) threadFactory;
-			String name = camelThreadFactory.getName();
-			if (kapuaThreadFactory.threadPoolIsMatchingPattern(name)) {
-				s_logger.info("Replace thread factory for thread factory name {} with KapuaThreadFactory implementation", name);
-				return kapuaThreadFactory;
-			}
-			else {
-				s_logger.info("Leave thread factory for thread factory name {} to its original implementation (CamelThreadFactory)", name);
-				return threadFactory;
-			}
-		}
-    	else {
-    		s_logger.warn("Requested thread pool for a NOT CamelThreadFactory instance ({})! Leave the thread factory to its original implementation", threadFactory);
-    		return threadFactory;
-    	}
+
+    private ThreadFactory replaceThreadFactoryIfNeeed(ThreadFactory threadFactory)
+    {
+        s_logger.info("Creating ExecutorService... Override thread factory {} with {}", new Object[] { threadFactory, kapuaThreadFactory });
+        if (threadFactory instanceof CamelThreadFactory) {
+            CamelThreadFactory camelThreadFactory = (CamelThreadFactory) threadFactory;
+            String name = camelThreadFactory.getName();
+            if (kapuaThreadFactory.threadPoolIsMatchingPattern(name)) {
+                s_logger.info("Replace thread factory for thread factory name {} with KapuaThreadFactory implementation", name);
+                return kapuaThreadFactory;
+            }
+            else {
+                s_logger.info("Leave thread factory for thread factory name {} to its original implementation (CamelThreadFactory)", name);
+                return threadFactory;
+            }
+        }
+        else {
+            s_logger.warn("Requested thread pool for a NOT CamelThreadFactory instance ({})! Leave the thread factory to its original implementation", threadFactory);
+            return threadFactory;
+        }
     }
 
 }

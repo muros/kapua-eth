@@ -22,6 +22,12 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import org.eclipse.kapua.commons.configuration.metatype.XmlConfigPropertyAdapted.ConfigPropertyType;
 import org.eclipse.kapua.commons.util.CryptoUtil;
 
+/**
+ * Xml configuration properties adapter
+ * 
+ * @since 1.0
+ *
+ */
 public class XmlConfigPropertiesAdapter extends XmlAdapter<XmlConfigPropertiesAdapted, Map<String, Object>>
 {
 

@@ -23,16 +23,18 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.KapuaPrincipal;
 
 /**
- * Kapua security context implementation of amq broker {@link SecurityContext}
+ * Kapua security context implementation of activeMQ broker {@link SecurityContext}
  *
+ * @since 1.0
  */
-public class KapuaSecurityContext extends SecurityContext {
-	
-    private KapuaPrincipal   principal;
-    private KapuaId          connectionId;
-    private Set<Principal>   principals;
+public class KapuaSecurityContext extends SecurityContext
+{
+
+    private KapuaPrincipal      principal;
+    private KapuaId             connectionId;
+    private Set<Principal>      principals;
     private ConnectorDescriptor connectorDescriptor;
-    private ConnectionId     brokerConnectionId;
+    private ConnectionId        brokerConnectionId;
 
     private AuthorizationMap authMap;
     private boolean          hasDataView;
@@ -40,14 +42,24 @@ public class KapuaSecurityContext extends SecurityContext {
     private boolean          hasDeviceView;
     private boolean          hasDeviceManage;
 
-    public KapuaSecurityContext(KapuaPrincipal     principal,
-                              AuthorizationMap authMap,
-                              KapuaId connectionId,
-                              ConnectionId brokerConnectionId,
-                              ConnectorDescriptor connectorDescriptor) {
+    /**
+     * Construct a specific security context
+     * 
+     * @param principal
+     * @param authMap
+     * @param connectionId
+     * @param brokerConnectionId
+     * @param connectorDescriptor
+     */
+    public KapuaSecurityContext(KapuaPrincipal principal,
+                                AuthorizationMap authMap,
+                                KapuaId connectionId,
+                                ConnectionId brokerConnectionId,
+                                ConnectorDescriptor connectorDescriptor)
+    {
         super(principal.getName());
 
-        this.principal  = principal;
+        this.principal = principal;
         principals = new HashSet<Principal>();
         principals.add(principal);
 
@@ -57,43 +69,53 @@ public class KapuaSecurityContext extends SecurityContext {
         this.brokerConnectionId = brokerConnectionId;
     }
 
-    public Principal getMainPrincipal() {
+    public Principal getMainPrincipal()
+    {
         return principal;
     }
 
-    public Set<Principal> getPrincipals() {
+    public Set<Principal> getPrincipals()
+    {
         return principals;
     }
 
-    public AuthorizationMap getAuthorizationMap() {
+    public AuthorizationMap getAuthorizationMap()
+    {
         return authMap;
     }
 
-    public KapuaId getConnectionId() {
-		return connectionId;
-	}
-    
-    public ConnectionId getBrokerConnectionId() {
-		return brokerConnectionId;
-	}
-    
-    public ConnectorDescriptor getConnectorDescriptor() {
-		return connectorDescriptor;
-	}
+    public KapuaId getConnectionId()
+    {
+        return connectionId;
+    }
 
-	public boolean hasDataView() {
+    public ConnectionId getBrokerConnectionId()
+    {
+        return brokerConnectionId;
+    }
+
+    public ConnectorDescriptor getConnectorDescriptor()
+    {
+        return connectorDescriptor;
+    }
+
+    public boolean hasDataView()
+    {
         return hasDataView;
     }
 
-    public boolean hasDataManage() {
+    public boolean hasDataManage()
+    {
         return hasDataManage;
     }
 
-    public boolean hasDeviceView() {
+    public boolean hasDeviceView()
+    {
         return hasDeviceView;
     }
 
-    public boolean hasDeviceManage() {
+    public boolean hasDeviceManage()
+    {
         return hasDeviceManage;
     }
 

@@ -27,120 +27,137 @@ import org.slf4j.LoggerFactory;
 import com.codahale.metrics.Counter;
 
 /**
- * Device messages listener (device life cycle). Manage:
- * - BIRTH/DC/LWT/APPS/CONNECT/DISCONNECT device messages
- * - Certificates updates
- * Republish of the lifecycle messages (once processed by the broker) isn't supported yet (see #136)
+ * Device messages listener (device life cycle).<BR>
+ * Manage:<BR>
+ * - BIRTH/DC/LWT/APPS/CONNECT/DISCONNECT device messages<BR>
+ * - Certificates updates<BR>
+ * Republish of the lifecycle messages (once processed by the broker) isn't supported yet (see #136).
  *
+ * @since 1.0
  */
-@UriEndpoint(
-		title="device message processor", 
-		syntax="bean:deviceMessageListener",
-		scheme="bean") 
-public class DeviceMessageListener extends AbstractListener {
+@UriEndpoint(title = "device message processor", syntax = "bean:deviceMessageListener", scheme = "bean")
+public class DeviceMessageListener extends AbstractListener
+{
 
-	private static final Logger logger = LoggerFactory.getLogger(DeviceMessageListener.class);
-	
-//	private static final String[] BIRTH_SEMANTIC_TOPIC 	    = new String[]{"MQTT", "BIRTH"};
-//	private static final String[] DC_SEMANTIC_TOPIC         = new String[]{"MQTT", "DC"};
-//	private static final String[] LWT_SEMANTIC_TOPIC 	    = new String[]{"MQTT", "LWT"};
-//	private static final String[] APPS_SEMANTIC_TOPIC       = new String[]{"MQTT", "APPS"};
-//	private static final String[] CONNECT_SEMANTIC_TOPIC    = new String[]{"MQTT", "CONNECT"};
-//	private static final String[] DISCONNECT_SEMANTIC_TOPIC = new String[]{"MQTT", "DISCONNECT"};
-//	private static final String[] PROVISION_SEMANTIC_TOPIC  = new String[]{"MQTT", "PROV"};
+    private static final Logger logger = LoggerFactory.getLogger(DeviceMessageListener.class);
 
-	private static DeviceLifeCycleService deviceLifeCycleService = KapuaLocator.getInstance().getService(DeviceLifeCycleService.class);
-	
-	//metrics
-	private Counter metricDeviceBirthMessage;
-	private Counter metricDeviceDisconnectMessage;
-	private Counter metricDeviceMissingMessage;
-	private Counter metricDeviceAppsMessage;
-	private Counter metricDeviceUnknownMessage;
-	private Counter metricDeviceErrorMessage;
-	
-	public DeviceMessageListener() {
-		super("deviceLifeCycle");
-		metricDeviceBirthMessage       = registerCounter("messages", "birth", "count");
-		metricDeviceDisconnectMessage  = registerCounter("messages", "dc", "count");
-		metricDeviceMissingMessage     = registerCounter("messages", "missing", "count");
-		metricDeviceAppsMessage        = registerCounter("messages", "apps", "count");
-		metricDeviceUnknownMessage     = registerCounter("messages", "unknown", "count");
-		metricDeviceErrorMessage       = registerCounter("messages", "error", "count");
-	}
-	
-	public void processBirthMessage(CamelKapuaMessage<KapuaBirthMessage> birthMessage) {
-		try {
-			deviceLifeCycleService.birth(birthMessage.getConnectionId(), birthMessage.getMessage());
-			metricDeviceBirthMessage.inc();
-//			//republish BA
-//			Date now = new Date();
-//			KapuaPayload kapuaPayload = birthMessage.getMessage().getPayload();
-//			kapuaPayload.getProperties().put("server_event_time", Long.toString(now.getTime()));
-//			
-//			birthMessage.getMessage().setSemanticChannel(BIRTH_SEMANTIC_TOPIC);
-//			try {
-//                logger.debug("MESSAGE: {}", kapuaPayload);
-//                JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.NO_DESTINATION);
-//                JmsAssistantProducerWrapper producer = null;
-//                try {
-//                    producer = pool.borrowObject();
-//                    producer.sendRawMessage(birthMessage);
-//                }
-//                finally {
-//                    pool.returnObject(producer);
-//                }
-//            } 
-//			catch (JMSException e) {
-//                logger.error("An error occurred while publishing device history event: {}", e.getMessage());
-//                return;
-//            }
-//            catch (Throwable t) {
-//                logger.warn("Cannot send birth life cycle message {}! {}", new Object[]{birthMessage.getMessage().getChannel().toString(), t.getMessage()}, t);
-//                return;
-//            }
-		}
-		catch (KapuaException e) {
-			metricDeviceErrorMessage.inc();
-			logger.error("Error while processing device birth life-cycle event", e);
-			return;			    
-		}
+    private static DeviceLifeCycleService deviceLifeCycleService = KapuaLocator.getInstance().getService(DeviceLifeCycleService.class);
+
+    // metrics
+    private Counter metricDeviceBirthMessage;
+    private Counter metricDeviceDisconnectMessage;
+    private Counter metricDeviceMissingMessage;
+    private Counter metricDeviceAppsMessage;
+    private Counter metricDeviceUnknownMessage;
+    private Counter metricDeviceErrorMessage;
+
+    public DeviceMessageListener()
+    {
+        super("deviceLifeCycle");
+        metricDeviceBirthMessage = registerCounter("messages", "birth", "count");
+        metricDeviceDisconnectMessage = registerCounter("messages", "dc", "count");
+        metricDeviceMissingMessage = registerCounter("messages", "missing", "count");
+        metricDeviceAppsMessage = registerCounter("messages", "apps", "count");
+        metricDeviceUnknownMessage = registerCounter("messages", "unknown", "count");
+        metricDeviceErrorMessage = registerCounter("messages", "error", "count");
     }
-	
-	public void processDisconnectMessage(CamelKapuaMessage<KapuaDisconnectMessage> disconnectMessage) {
-		try {
-			deviceLifeCycleService.death(disconnectMessage.getConnectionId(), disconnectMessage.getMessage());
-			metricDeviceDisconnectMessage.inc();
-		}
-		catch (KapuaException e) {
-			metricDeviceErrorMessage.inc();
-			logger.error("Error while processing device disconnect life-cycle event", e);
-			return;			    
-		}
+
+    /**
+     * Process a birth message.
+     * 
+     * @param birthMessage
+     */
+    public void processBirthMessage(CamelKapuaMessage<KapuaBirthMessage> birthMessage)
+    {
+        try {
+            deviceLifeCycleService.birth(birthMessage.getConnectionId(), birthMessage.getMessage());
+            metricDeviceBirthMessage.inc();
+            // //republish BA
+            // Date now = new Date();
+            // KapuaPayload kapuaPayload = birthMessage.getMessage().getPayload();
+            // kapuaPayload.getProperties().put("server_event_time", Long.toString(now.getTime()));
+            //
+            // birthMessage.getMessage().setSemanticChannel(BIRTH_SEMANTIC_TOPIC);
+            // try {
+            // logger.debug("MESSAGE: {}", kapuaPayload);
+            // JmsAssistantProducerPool pool = JmsAssistantProducerPool.getIOnstance(DESTINATIONS.NO_DESTINATION);
+            // JmsAssistantProducerWrapper producer = null;
+            // try {
+            // producer = pool.borrowObject();
+            // producer.sendRawMessage(birthMessage);
+            // }
+            // finally {
+            // pool.returnObject(producer);
+            // }
+            // }
+            // catch (JMSException e) {
+            // logger.error("An error occurred while publishing device history event: {}", e.getMessage());
+            // return;
+            // }
+            // catch (Throwable t) {
+            // logger.warn("Cannot send birth life cycle message {}! {}", new Object[]{birthMessage.getMessage().getChannel().toString(), t.getMessage()}, t);
+            // return;
+            // }
+        }
+        catch (KapuaException e) {
+            metricDeviceErrorMessage.inc();
+            logger.error("Error while processing device birth life-cycle event", e);
+            return;
+        }
     }
-	
-	public void processAppsMessage(CamelKapuaMessage<KapuaAppsMessage> appsMessage) {
-		try {
-			deviceLifeCycleService.applications(appsMessage.getConnectionId(), appsMessage.getMessage());
-			metricDeviceAppsMessage.inc();
-		}
-		catch (KapuaException e) {
-			metricDeviceErrorMessage.inc();
-			logger.error("Error while processing device apps life-cycle event", e);
-			return;			    
-		}
+
+    /**
+     * Process a disconnect message.
+     * 
+     * @param disconnectMessage
+     */
+    public void processDisconnectMessage(CamelKapuaMessage<KapuaDisconnectMessage> disconnectMessage)
+    {
+        try {
+            deviceLifeCycleService.death(disconnectMessage.getConnectionId(), disconnectMessage.getMessage());
+            metricDeviceDisconnectMessage.inc();
+        }
+        catch (KapuaException e) {
+            metricDeviceErrorMessage.inc();
+            logger.error("Error while processing device disconnect life-cycle event", e);
+            return;
+        }
     }
-	
-	public void processMissingMessage(CamelKapuaMessage<KapuaMissingMessage> missingMessage) {
-		try {
-			deviceLifeCycleService.missing(missingMessage.getConnectionId(), missingMessage.getMessage());
-			metricDeviceMissingMessage.inc();
-		}
-		catch (KapuaException e) {
-			metricDeviceErrorMessage.inc();
-			logger.error("Error while processing device missing life-cycle event", e);
-			return;			    
-		}
+
+    /**
+     * Process an application message.
+     * 
+     * @param appsMessage
+     */
+    public void processAppsMessage(CamelKapuaMessage<KapuaAppsMessage> appsMessage)
+    {
+        try {
+            deviceLifeCycleService.applications(appsMessage.getConnectionId(), appsMessage.getMessage());
+            metricDeviceAppsMessage.inc();
+        }
+        catch (KapuaException e) {
+            metricDeviceErrorMessage.inc();
+            logger.error("Error while processing device apps life-cycle event", e);
+            return;
+        }
     }
-	
+
+    /**
+     * Process a missing message.
+     * 
+     * @param missingMessage
+     */
+    public void processMissingMessage(CamelKapuaMessage<KapuaMissingMessage> missingMessage)
+    {
+        try {
+            deviceLifeCycleService.missing(missingMessage.getConnectionId(), missingMessage.getMessage());
+            metricDeviceMissingMessage.inc();
+        }
+        catch (KapuaException e) {
+            metricDeviceErrorMessage.inc();
+            logger.error("Error while processing device missing life-cycle event", e);
+            return;
+        }
+    }
+
 }

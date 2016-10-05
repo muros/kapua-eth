@@ -55,8 +55,7 @@ public class ResourceUtils
     /**
      * Reads a resource fully and returns it as a string.
      *
-     * @param ctx
-     * @param resourceName
+     * @param resourceUrl
      * @return
      * @throws IOException
      */

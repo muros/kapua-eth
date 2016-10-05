@@ -12,6 +12,11 @@
  *******************************************************************************/
 package org.eclipse.kapua.broker.core.message;
 
+/**
+ * Kapua message constants (metrics name and header keys)
+ *
+ * @since 1.0
+ */
 public class MessageConstants
 {
 
