@@ -12,12 +12,9 @@
  *******************************************************************************/
 package org.eclipse.kapua.broker.core.listener;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.spi.UriEndpoint;
-import org.apache.shiro.subject.Subject;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
-import org.eclipse.kapua.broker.core.message.MessageConstants;
 import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
 import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.locator.KapuaLocator;
@@ -103,6 +100,12 @@ public class DeviceMessageListener extends AbstractListener
             // logger.warn("Cannot send birth life cycle message {}! {}", new Object[]{birthMessage.getMessage().getChannel().toString(), t.getMessage()}, t);
             // return;
             // }
+        }
+        catch (KapuaException e) {
+            metricDeviceErrorMessage.inc();
+            logger.error("Error while processing device birth life-cycle event", e);
+            return;
+        }
     }
 
     /**

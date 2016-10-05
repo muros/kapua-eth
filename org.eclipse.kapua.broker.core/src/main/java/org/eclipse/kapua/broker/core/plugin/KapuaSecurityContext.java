@@ -19,7 +19,7 @@ import java.util.Set;
 import org.apache.activemq.command.ConnectionId;
 import org.apache.activemq.security.AuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
-import org.apache.shiro.subject.Subject;
+import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.KapuaPrincipal;
 
@@ -28,12 +28,12 @@ import org.eclipse.kapua.service.authentication.KapuaPrincipal;
  *
  * @since 1.0
  */
-public class KapuaSecurityContext extends SecurityContext
-{
-
-    private KapuaPrincipal      principal;
-    private KapuaId             connectionId;
-    private Set<Principal>      principals;
+public class KapuaSecurityContext extends SecurityContext {
+	
+    private KapuaPrincipal   principal;
+    private KapuaSession        kapuaSession;
+    private KapuaId          connectionId;
+    private Set<Principal>   principals;
     private ConnectorDescriptor connectorDescriptor;
     private ConnectionId        brokerConnectionId;
 
@@ -43,10 +43,15 @@ public class KapuaSecurityContext extends SecurityContext
     private boolean          hasDeviceView;
     private boolean          hasDeviceManage;
 
+    public KapuaSecurityContext(KapuaPrincipal     principal,
+                              AuthorizationMap authMap,
+                              KapuaId connectionId,
+                              ConnectionId brokerConnectionId,
+                              ConnectorDescriptor connectorDescriptor) {
         super(principal.getName());
 
         this.principal = principal;
-        this.subject = subject;
+        this.kapuaSession = KapuaSession.createFrom();
         principals = new HashSet<Principal>();
         principals.add(principal);
 
@@ -106,8 +111,8 @@ public class KapuaSecurityContext extends SecurityContext
         return hasDeviceManage;
     }
 
-    public Subject getSubject()
+    public KapuaSession getKapuaSession()
     {
-        return subject;
+        return kapuaSession;
     }
 }

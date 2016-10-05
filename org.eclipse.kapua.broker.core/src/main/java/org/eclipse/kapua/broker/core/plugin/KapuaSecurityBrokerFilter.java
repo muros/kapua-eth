@@ -437,9 +437,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             logAuthDestinationToLog(authDestinations);
 
             ConnectorDescriptor connectorDescriptor = connectorsDescriptorMap.get((((TransportConnector) context.getConnector()).getName()));
-            KapuaSecurityContext securityCtx = new KapuaSecurityContext(
-                                                                        principal,
-                                                                        ThreadContext.unbindSubject(),
+            KapuaSecurityContext securityCtx = new KapuaSecurityContext(principal,
                                                                         authMap,
                                                                         (deviceConnection != null ? deviceConnection.getId() : null),
                                                                         connectionId,
@@ -669,7 +667,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             // }
             messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
             messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTOR_DEVICE_PROTOCOL, kapuaSecurityContext.getConnectorDescriptor());
-            messageSend.setProperty(MessageConstants.HEADER_KAPUA_SHIRO_SUBJECT, kapuaSecurityContext.getSubject());
+            messageSend.setProperty(MessageConstants.HEADER_KAPUA_SESSION, kapuaSecurityContext.getKapuaSession());
         }
         if (messageSend.getContent() != null) {
             metricPublishMessageSizeAllowed.update(messageSend.getContent().length);
