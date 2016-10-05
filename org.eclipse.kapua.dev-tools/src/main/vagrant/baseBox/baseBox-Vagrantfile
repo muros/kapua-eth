@@ -106,6 +106,65 @@ Vagrant.configure(2) do |config|
      sudo curl -O http://archive.apache.org/dist/activemq/${ACTIVE_MQ_VERSION}/apache-activemq-${ACTIVE_MQ_VERSION}-bin.tar.gz
      sudo tar zxvf apache-activemq-${ACTIVE_MQ_VERSION}-bin.tar.gz
      sudo rm apache-activemq-${ACTIVE_MQ_VERSION}-bin.tar.gz
+     #remove unnecessary library
+     echo 'cleanup unnecessary libraries'
+     cd apache-activemq-${ACTIVE_MQ_VERSION}
+     sudo rm -rf activemq-all-*
+	 sudo rm -rf lib/activemq-jaas-*
+	 sudo rm -rf lib/activemq-openwire-legacy*
+	 sudo rm -rf lib/activemq-web-*
+	 sudo rm -rf lib/activemq-rar.txt
+	 sudo rm -rf lib/geronimo-jta_1.0.1B_spec*
+	 sudo rm -rf lib/optional/activeio-core-*
+	 sudo rm -rf lib/optional/activemq-amqp-*
+	 sudo rm -rf lib/optional/activemq-http*
+	 sudo rm -rf lib/optional/activemq-jdbc-store*
+	 sudo rm -rf lib/optional/activemq-jms-pool*
+	 sudo rm -rf lib/optional/activemq-leveldb-store*
+	 sudo rm -rf lib/optional/activemq-log4j-appender*
+	 sudo rm -rf lib/optional/activemq-shiro*
+	 sudo rm -rf lib/optional/activemq-partition*
+	 sudo rm -rf lib/optional/activemq-pool*
+	 sudo rm -rf lib/optional/activemq-runtime-config*
+	 sudo rm -rf lib/optional/activemq-stomp*
+	 sudo rm -rf lib/optional/commons-codec-*
+	 sudo rm -rf lib/optional/commons-collections-*
+	 sudo rm -rf lib/optional/commons-dbcp*
+	 sudo rm -rf lib/optional/commons-net*
+	 sudo rm -rf lib/optional/commons-pool2*
+	 sudo rm -rf lib/optional/geronimo-j2ee-connector*
+	 sudo rm -rf lib/optional/guava*
+	 sudo rm -rf lib/optional/hawt*
+	 sudo rm -rf lib/optional/http*
+	 sudo rm -rf lib/optional/insight-log*
+	 sudo rm -rf lib/optional/jackson-*
+	 sudo rm -rf lib/optional/jasypt-*
+	 sudo rm -rf lib/optional/jaxb2-*
+	 sudo rm -rf lib/optional/jettison-*
+	 sudo rm -rf lib/optional/jmdns-*
+	 sudo rm -rf lib/optional/leveldb*
+	 sudo rm -rf lib/optional/org.apache.servicemix.bundles*
+	 sudo rm -rf lib/optional/org.linkedin*
+	 sudo rm -rf lib/optional/proton-j*
+	 sudo rm -rf lib/optional/scala-library*
+	 sudo rm -rf lib/optional/shiro*
+	 sudo rm -rf lib/optional/snappy-*
+	 sudo rm -rf lib/optional/spring-oxm-*
+	 sudo rm -rf lib/optional/velocity*
+	 sudo rm -rf lib/optional/xpp3-*
+	 sudo rm -rf lib/optional/xstream-*
+	 sudo rm -rf lib/optional/zookeeper-*
+	 sudo rm -rf lib/web/
+	
+	 sudo rm -rf bin/wrapper.jar
+	 sudo rm -rf bin/macosx/
+	 sudo rm -rf bin/linux-x86-32/
+	 sudo rm -rf bin/linux-x86-64/
+	
+	 sudo rm -rf examples/
+	 sudo rm -rf docs/
+	 sudo rm -rf webapps/
+	 sudo rm -rf webapps-demo/
 
      ### Install H2 database ###
      sudo mkdir -p /usr/local/h2database/h2database-${H2DB_VERSION}
