@@ -18,21 +18,22 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshot;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
 
 @XmlRootElement(name = "snapshotIds")
-public class DeviceSnapshotIdsImpl implements DeviceSnapshotIds
+public class DeviceSnapshotsImpl implements DeviceSnapshots
 {
     @XmlElement(name = "snapshotId")
-    List<Long> snapshotIds;
+    List<DeviceSnapshot> snapshotIds;
 
-    public DeviceSnapshotIdsImpl()
+    public DeviceSnapshotsImpl()
     {
         super();
     }
 
     @Override
-    public List<Long> getSnapshotsIds()
+    public List<DeviceSnapshot> getSnapshots()
     {
         if (snapshotIds == null) {
             snapshotIds = new ArrayList<>();

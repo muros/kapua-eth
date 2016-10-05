@@ -12,9 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.command.internal;
 
-import java.util.Date;
-
-import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
 
 public class DeviceCommandOutputImpl implements DeviceCommandOutput
@@ -97,42 +94,6 @@ public class DeviceCommandOutputImpl implements DeviceCommandOutput
     public void setHasTimedout(Boolean hasTimedout)
     {
        this.timedOut= hasTimedout;
-    }
-
-    @Override
-    public KapuaId getId() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void setId(KapuaId id) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public String getType() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KapuaId getScopeId() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Date getCreatedOn() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public KapuaId getCreatedBy() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

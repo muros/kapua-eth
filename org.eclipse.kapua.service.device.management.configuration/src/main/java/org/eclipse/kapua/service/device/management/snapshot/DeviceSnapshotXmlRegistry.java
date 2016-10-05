@@ -9,7 +9,11 @@ public class DeviceSnapshotXmlRegistry {
     private final KapuaLocator locator = KapuaLocator.getInstance();
     private final DeviceSnapshotFactory factory = locator.getFactory(DeviceSnapshotFactory.class);
     
-    public DeviceSnapshotIds newSnapshotIds() {
-        return factory.newDeviceSnapshotIds();
+    public DeviceSnapshots newDeviceSnapshots() {
+        return factory.newDeviceSnapshots();
+    }
+    
+    public DeviceSnapshot newDeviceSnapshot() {
+        return factory.newDeviceSnapshot();
     }
 }

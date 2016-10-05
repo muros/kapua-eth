@@ -18,10 +18,12 @@ import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 
 import org.eclipse.kapua.app.api.v1.resources.model.ErrorBean;
+import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountXmlRegistry;
+import org.eclipse.kapua.service.device.call.kura.model.snapshot.KuraSnapshotIds;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandXmlRegistry;
@@ -36,7 +38,8 @@ import org.eclipse.kapua.service.device.management.packages.model.DevicePackages
 import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
 import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallRequest;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotXmlRegistry;
-import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshot;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
 import org.eclipse.kapua.service.device.registry.DeviceListResult;
@@ -62,7 +65,7 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
 
     public JaxbContextResolver() {
         try {
-            jaxbContext = JAXBContextFactory.createContext(new Class[] { 
+            jaxbContext = JAXBContextFactory.createContext(new Class[] {
                     ErrorBean.class,
                     Account.class,
                     AccountCreator.class,
@@ -82,7 +85,8 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
                     DeviceConfiguration.class,
                     DeviceComponentConfiguration.class,
                     DeviceConfigurationXmlRegistry.class,
-                    DeviceSnapshotIds.class,
+                    DeviceSnapshot.class,
+                    DeviceSnapshots.class,
                     DeviceSnapshotXmlRegistry.class,
                     DeviceEvent.class,
                     DeviceEventListResult.class,
@@ -93,7 +97,8 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
                     DevicePackageBundleInfos.class,
                     DevicePackageXmlRegistry.class,
                     DevicePackageDownloadRequest.class,
-                    DevicePackageUninstallRequest.class
+                    DevicePackageUninstallRequest.class,
+                    KuraSnapshotIds.class
             }, null);
         } catch (Exception e) {
             throw new RuntimeException(e);

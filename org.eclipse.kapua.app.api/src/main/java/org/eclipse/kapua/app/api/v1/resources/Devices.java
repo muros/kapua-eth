@@ -41,7 +41,7 @@ import org.eclipse.kapua.service.device.management.packages.model.DevicePackages
 import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
 import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallRequest;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory;
-import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService;
 import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceCreator;
@@ -225,8 +225,8 @@ public class Devices extends AbstractKapuaResource {
     @GET
     @Path("{deviceId}/snapshots")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public DeviceSnapshotIds getSnapshots(@PathParam("deviceId") String deviceId) {
-        DeviceSnapshotIds deviceSnapshots = snapshotFactory.newDeviceSnapshotIds();
+    public DeviceSnapshots getSnapshots(@PathParam("deviceId") String deviceId) {
+        DeviceSnapshots deviceSnapshots = snapshotFactory.newDeviceSnapshots();
         try {
             KapuaId scopeId = KapuaSecurityUtils.getSession().getScopeId();
             KapuaId id = KapuaEid.parseShortId(deviceId);

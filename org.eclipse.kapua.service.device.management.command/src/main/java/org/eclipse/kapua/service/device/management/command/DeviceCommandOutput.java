@@ -30,7 +30,7 @@ import org.eclipse.kapua.model.KapuaEntity;
         "exitCode",
         "hasTimedout"
 }, factoryClass = DeviceCommandXmlRegistry.class, factoryMethod = "newCommandOutput")
-public interface DeviceCommandOutput extends KapuaEntity
+public interface DeviceCommandOutput
 {
     @XmlElement(name = "stderr")
     public String getStderr();
