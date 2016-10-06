@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.eclipse.kapua.KapuaSerializable;
 import org.eclipse.kapua.model.KapuaEntity;
 
 @XmlRootElement(name = "commandOutput")
@@ -30,7 +31,7 @@ import org.eclipse.kapua.model.KapuaEntity;
         "exitCode",
         "hasTimedout"
 }, factoryClass = DeviceCommandXmlRegistry.class, factoryMethod = "newCommandOutput")
-public interface DeviceCommandOutput
+public interface DeviceCommandOutput extends KapuaSerializable
 {
     @XmlElement(name = "stderr")
     public String getStderr();

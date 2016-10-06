@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.eclipse.kapua.KapuaSerializable;
 import org.eclipse.kapua.model.KapuaEntity;
 
 @XmlRootElement(name = "snapshots")
@@ -27,7 +28,7 @@ import org.eclipse.kapua.model.KapuaEntity;
 @XmlType(propOrder = { "snapshots" },
         factoryClass = DeviceSnapshotXmlRegistry.class, 
         factoryMethod = "newDeviceSnapshots")
-public interface DeviceSnapshots
+public interface DeviceSnapshots extends KapuaSerializable
 {
     @XmlElement(name="snapshotId")
     public List<DeviceSnapshot> getSnapshots();
