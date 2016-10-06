@@ -36,6 +36,8 @@
         <mockito.version>1.10.19</mockito.version>
         <slf4j.version>1.7.2</slf4j.version>
         <shiro.version>1.2.3</shiro.version>
+		<jacoco.version>0.7.7.201606060606</jacoco.version>
+		<surefire.version>2.12.4</surefire.version>
         
         <!-- -->
         <!-- Database configuration for local installs and tests -->
@@ -47,6 +49,8 @@
 		<db.conn.url>jdbc:h2:tcp://${db.host}:3306/${db.name};${db.conn.properties}</db.conn.url>
         <db.username>kapua</db.username>
         <db.password>kapua</db.password>
+		
+		<argLine>-Xmx1024m</argLine>
         
     </properties>
 
@@ -163,7 +167,8 @@
                                         <ignore />
                                     </action>
                                 </pluginExecution>
-                                <pluginExecution>
+                                <!--
+								<pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>org.jacoco</groupId>
                                         <artifactId>jacoco-maven-plugin</artifactId>
@@ -176,6 +181,7 @@
                                         <ignore />
                                     </action>
                                 </pluginExecution>
+								-->
                                 <pluginExecution>
                                 	<pluginExecutionFilter>
                                 		<groupId>
@@ -201,6 +207,36 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+		<plugins>
+			<plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+					<executions>
+                        <execution>
+                            <id>default-prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>default-report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+				<plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire.version}</version>
+                    <configuration>
+                        <!-- no argLine here -->
+                    </configuration>
+                </plugin>
+		</plugins>
     </build>
 
     <dependencyManagement>
