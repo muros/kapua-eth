@@ -34,6 +34,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.sax.SAXSource;
 
+import org.eclipse.kapua.KapuaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -52,6 +53,13 @@ public class XmlUtil
     @SuppressWarnings("rawtypes")
     private static Map<Class, JAXBContext> contexts = new HashMap<>();
 
+    private static JAXBContextProvider jaxbContextProvider;
+    
+    public static void setContextProvider(JAXBContextProvider provider)
+    {
+    	jaxbContextProvider = provider;
+    }
+    
     public static String marshal(Object object)
         throws JAXBException
     {
@@ -65,11 +73,7 @@ public class XmlUtil
         throws JAXBException
     {
         Class clazz = object.getClass();
-        JAXBContext context = contexts.get(clazz);
-        if (context == null) {
-            context = JAXBContext.newInstance(clazz);
-            contexts.put(clazz, context);
-        }
+        JAXBContext context = get(clazz);
 
         ValidationEventCollector valEventHndlr = new ValidationEventCollector();
         Marshaller marshaller = context.createMarshaller();
@@ -115,6 +119,7 @@ public class XmlUtil
     /**
      * Unmarshall method which injects the namespace URI provided
      * in all the elements before attempting the parsing.
+     * @throws KapuaException 
      */
     public static <T> T unmarshal(String s, Class<T> clazz, String nsUri)
         throws JAXBException, XMLStreamException, FactoryConfigurationError, SAXException
@@ -126,16 +131,13 @@ public class XmlUtil
     /**
      * Unmarshall method which injects the namespace URI provided
      * in all the elements before attempting the parsing.
+     * @throws KapuaException 
      */
     public static <T> T unmarshal(Reader r, Class<T> clazz, String nsUri)
         throws JAXBException, XMLStreamException, FactoryConfigurationError, SAXException
     {
-        JAXBContext context = contexts.get(clazz);
-        if (context == null) {
-            context = JAXBContext.newInstance(clazz);
-            contexts.put(clazz, context);
-        }
-
+    	JAXBContext context = get(clazz);
+    	
         ValidationEventCollector valEventHndlr = new ValidationEventCollector();
         Unmarshaller unmarshaller = context.createUnmarshaller();
         unmarshaller.setSchema(null);
@@ -196,5 +198,18 @@ public class XmlUtil
             }
         }
         return null;
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private static JAXBContext get(Class clazz) throws JAXBException
+    {
+        JAXBContext context = contexts.get(clazz);
+        if (context == null) {
+            context = JAXBContext.newInstance(clazz);
+            contexts.put(clazz, context);
+        }
+    	
+//    	JAXBContext context = jaxbContextProvider.getJAXBContext();
+        return context;
     }
 }

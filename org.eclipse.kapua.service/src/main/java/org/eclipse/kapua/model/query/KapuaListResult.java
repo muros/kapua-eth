@@ -22,11 +22,12 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.eclipse.kapua.KapuaSerializable;
 import org.eclipse.kapua.model.KapuaEntity;
 
 @XmlRootElement(name = "result")
 @XmlType(propOrder = {"limitExceeded", "size", "items"})
-public interface KapuaListResult<E extends KapuaEntity>
+public interface KapuaListResult<E extends KapuaEntity> extends KapuaSerializable
 {
 	@XmlElement(name = "limitExceeded")
     public boolean isLimitExceeded();

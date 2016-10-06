@@ -19,11 +19,12 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.eclipse.kapua.KapuaSerializable;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.id.KapuaIdAdapter;
 
 @XmlType(propOrder = {"id", "type", "scopeId", "createdOn", "createdBy" })
-public interface KapuaEntity
+public interface KapuaEntity extends KapuaSerializable
 {
 	@XmlElement(name="id")
 	@XmlJavaTypeAdapter(KapuaIdAdapter.class)
