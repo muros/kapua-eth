@@ -39,6 +39,7 @@ import org.apache.activemq.filter.DestinationMapEntry;
 import org.apache.activemq.security.AuthorizationEntry;
 import org.apache.activemq.security.DefaultAuthorizationMap;
 import org.apache.activemq.security.SecurityContext;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.ShiroException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.util.ThreadContext;
@@ -284,10 +285,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         super.addConnection(context, info);
     }
 
-    public void addExternalConnection(ConnectionContext context, ConnectionInfo info)
+    private void addExternalConnection(ConnectionContext context, ConnectionInfo info)
         throws Exception
     {
-        // Clean-up credentials associated with thread by previous connection.
+        // Clean-up credentials possibly associated with the current thread by previous connection.
         ThreadContext.unbindSubject();
 
         Context loginTotalContext = metricLoginAddConnectionTime.time();
@@ -436,8 +437,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             logAuthDestinationToLog(authDestinations);
 
             ConnectorDescriptor connectorDescriptor = connectorsDescriptorMap.get((((TransportConnector) context.getConnector()).getName()));
-            KapuaSecurityContext securityCtx = new KapuaSecurityContext(
-                                                                        principal,
+            KapuaSecurityContext securityCtx = new KapuaSecurityContext(principal,
                                                                         authMap,
                                                                         (deviceConnection != null ? deviceConnection.getId() : null),
                                                                         connectionId,
@@ -639,7 +639,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
     }
 
-    public void _send(ProducerBrokerExchange producerExchange, Message messageSend)
+    private void _send(ProducerBrokerExchange producerExchange, Message messageSend)
         throws Exception
     {
         if (!isBrokerContext(producerExchange.getConnectionContext())) {
@@ -667,6 +667,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
             // }
             messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTION_ID, kapuaSecurityContext.getConnectionId());
             messageSend.setProperty(MessageConstants.HEADER_KAPUA_CONNECTOR_DEVICE_PROTOCOL, kapuaSecurityContext.getConnectorDescriptor());
+            messageSend.setProperty(MessageConstants.HEADER_KAPUA_SESSION, kapuaSecurityContext.getKapuaSession());
         }
         if (messageSend.getContent() != null) {
             metricPublishMessageSizeAllowed.update(messageSend.getContent().length);
@@ -702,7 +703,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
     }
 
-    public Subscription _addConsumer(ConnectionContext context, ConsumerInfo info)
+    private Subscription _addConsumer(ConnectionContext context, ConsumerInfo info)
         throws Exception
     {
         info.setClientId(context.getClientId());

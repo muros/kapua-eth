@@ -15,6 +15,8 @@ package org.eclipse.kapua.broker.core.listener;
 import org.apache.camel.spi.UriEndpoint;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.broker.core.message.CamelKapuaMessage;
+import org.eclipse.kapua.commons.security.KapuaSecurityUtils;
+import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.locator.KapuaLocator;
 import org.eclipse.kapua.message.device.lifecycle.KapuaAppsMessage;
 import org.eclipse.kapua.message.device.lifecycle.KapuaBirthMessage;
