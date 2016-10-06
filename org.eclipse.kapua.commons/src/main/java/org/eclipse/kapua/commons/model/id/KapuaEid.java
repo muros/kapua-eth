@@ -42,7 +42,7 @@ public class KapuaEid implements KapuaId, Serializable
 
     public static KapuaEid parseShortId(String shortId)
     {
-        byte[] bytes = Base64.getDecoder().decode(shortId);
+        byte[] bytes = Base64.getUrlDecoder().decode(shortId);
         return new KapuaEid(new BigInteger(bytes));
     }
 

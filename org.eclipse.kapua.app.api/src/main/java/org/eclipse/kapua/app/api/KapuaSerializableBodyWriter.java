@@ -28,11 +28,11 @@ import javax.ws.rs.ext.Providers;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
-import org.eclipse.kapua.model.KapuaEntity;
+import org.eclipse.kapua.KapuaSerializable;
 
 @Provider
 @Produces(MediaType.APPLICATION_XML)
-public class KapuaEntityBodyWriter implements MessageBodyWriter<KapuaEntity> {
+public class KapuaSerializableBodyWriter implements MessageBodyWriter<KapuaSerializable> {
 
 	@Context
 	Providers providers;
@@ -45,13 +45,13 @@ public class KapuaEntityBodyWriter implements MessageBodyWriter<KapuaEntity> {
 	}
 
 	@Override
-	public long getSize(KapuaEntity t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) 
+	public long getSize(KapuaSerializable t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) 
 	{
 		return 0;
 	}
 
 	@Override
-	public void writeTo(KapuaEntity t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
+	public void writeTo(KapuaSerializable t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
 			MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
 			throws IOException, WebApplicationException 
 	{
