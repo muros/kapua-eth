@@ -285,10 +285,10 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         super.addConnection(context, info);
     }
 
-    public void addExternalConnection(ConnectionContext context, ConnectionInfo info)
+    private void addExternalConnection(ConnectionContext context, ConnectionInfo info)
         throws Exception
     {
-        // Clean-up credentials associated with thread by previous connection.
+        // Clean-up credentials possibly associated with the current thread by previous connection.
         ThreadContext.unbindSubject();
 
         Context loginTotalContext = metricLoginAddConnectionTime.time();
@@ -639,7 +639,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
     }
 
-    public void _send(ProducerBrokerExchange producerExchange, Message messageSend)
+    private void _send(ProducerBrokerExchange producerExchange, Message messageSend)
         throws Exception
     {
         if (!isBrokerContext(producerExchange.getConnectionContext())) {
@@ -703,7 +703,7 @@ public class KapuaSecurityBrokerFilter extends BrokerFilter
         }
     }
 
-    public Subscription _addConsumer(ConnectionContext context, ConsumerInfo info)
+    private Subscription _addConsumer(ConnectionContext context, ConsumerInfo info)
         throws Exception
     {
         info.setClientId(context.getClientId());
