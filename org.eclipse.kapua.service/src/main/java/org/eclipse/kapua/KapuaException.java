@@ -69,8 +69,6 @@ public class KapuaException extends Exception
      * Builds a new KapuaException instance based on the supplied KapuaErrorCode.
      * 
      * @param code
-     * @param t
-     * @param arguments
      */
     public KapuaException(KapuaErrorCode code)
     {
@@ -95,7 +93,7 @@ public class KapuaException extends Exception
      * an Throwable cause, and optional arguments for the associated exception message.
      * 
      * @param code
-     * @param t
+     * @param cause
      * @param arguments
      */
     public KapuaException(KapuaErrorCode code, Throwable cause, Object... arguments)
@@ -138,7 +136,6 @@ public class KapuaException extends Exception
      * Factory method to build an KapuaException with the KapuaErrorCode.INTERNAL_ERROR,
      * and optional arguments for the associated exception message.
      * 
-     * @param cause
      * @param message
      * @return
      */

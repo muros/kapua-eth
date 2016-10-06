@@ -60,8 +60,6 @@ public class KapuaRuntimeException extends RuntimeException
      * Builds a new KapuaRuntimeException instance based on the supplied KapuaErrorCode.
      * 
      * @param code
-     * @param t
-     * @param arguments
      */
     public KapuaRuntimeException(KapuaErrorCode code)
     {
@@ -85,7 +83,7 @@ public class KapuaRuntimeException extends RuntimeException
      * an Throwable cause, and optional arguments for the associated exception message.
      * 
      * @param code
-     * @param t
+     * @param cause
      * @param arguments
      */
     public KapuaRuntimeException(KapuaErrorCode code, Throwable cause, Object... arguments)
@@ -128,7 +126,6 @@ public class KapuaRuntimeException extends RuntimeException
      * Factory method to build an KapuaException with the KapuaErrorCode.INTERNAL_ERROR,
      * and optional arguments for the associated exception message.
      * 
-     * @param cause
      * @param message
      * @return
      */

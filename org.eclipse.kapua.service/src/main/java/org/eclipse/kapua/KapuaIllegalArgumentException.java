@@ -21,8 +21,9 @@ public class KapuaIllegalArgumentException extends KapuaException
 
     /**
      * Constructor for KapuaIllegalArgumentException.
-     * @param argumentName
-     * @param details
+     * 
+     * @param argName
+     * @param argValue
      */
     public KapuaIllegalArgumentException(String argName, String argValue) {
         super(KapuaErrorCodes.ILLEGAL_ARGUMENT, argName, argValue);
