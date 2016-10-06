@@ -18,7 +18,7 @@ import org.eclipse.kapua.service.KapuaService;
 
 public interface DeviceSnapshotManagementService extends KapuaService
 {
-    public DeviceSnapshotIds get(KapuaId scopeId, KapuaId deviceid, Long timeout)
+    public DeviceSnapshots get(KapuaId scopeId, KapuaId deviceid, Long timeout)
         throws KapuaException;
 
     public void rollback(KapuaId scopeId, KapuaId deviceid, String snapshotId, Long timeout)

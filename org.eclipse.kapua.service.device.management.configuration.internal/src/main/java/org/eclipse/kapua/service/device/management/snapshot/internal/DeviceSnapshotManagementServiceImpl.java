@@ -35,7 +35,7 @@ import org.eclipse.kapua.service.device.management.configuration.snapshot.intern
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotRequestPayload;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
-import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventCreator;
 import org.eclipse.kapua.service.device.registry.event.DeviceEventFactory;
@@ -45,7 +45,7 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public DeviceSnapshotIds get(KapuaId scopeId, KapuaId deviceId, Long timeout)
+    public DeviceSnapshots get(KapuaId scopeId, KapuaId deviceId, Long timeout)
             throws KapuaException {
         //
         // Argument Validation
@@ -94,9 +94,9 @@ public class DeviceSnapshotManagementServiceImpl implements DeviceSnapshotManage
                     responsePayload.getBody());
         }
 
-        DeviceSnapshotIds deviceSnapshots = null;
+        DeviceSnapshots deviceSnapshots = null;
         try {
-            deviceSnapshots = XmlUtil.unmarshal(body, DeviceSnapshotIdsImpl.class);
+            deviceSnapshots = XmlUtil.unmarshal(body, DeviceSnapshotsImpl.class);
         } catch (Exception e) {
             throw new DeviceManagementException(DeviceManagementErrorCodes.RESPONSE_PARSE_EXCEPTION,
                     e,

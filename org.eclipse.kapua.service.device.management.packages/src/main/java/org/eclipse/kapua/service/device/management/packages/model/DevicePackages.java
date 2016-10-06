@@ -14,7 +14,12 @@ package org.eclipse.kapua.service.device.management.packages.model;
 
 import java.util.List;
 
-public interface DevicePackages
-{
+import javax.xml.bind.annotation.*;
+
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(factoryClass = DevicePackageXmlRegistry.class, factoryMethod = "newDevicePackages")
+public interface DevicePackages {
+    @XmlElementWrapper(name = "devicePackages")
+    @XmlElement(name = "devicePackage")
     public <D extends DevicePackage> List<D> getPackages();
 }

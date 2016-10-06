@@ -19,5 +19,9 @@ public interface DeviceFactory extends KapuaObjectFactory
 {
     public DeviceCreator newCreator(KapuaId scopeId, String clientId);
 
+    public Device newDevice();
+    
     public DeviceQuery newQuery(KapuaId scopeId);
+    
+    public DeviceListResult newDeviceListResult();
 }
