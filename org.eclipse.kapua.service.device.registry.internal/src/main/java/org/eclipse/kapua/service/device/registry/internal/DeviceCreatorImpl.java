@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.registry.internal;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.registry.Device;
@@ -31,73 +29,29 @@ import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
 public class DeviceCreatorImpl extends AbstractKapuaEntityCreator<Device> implements DeviceCreator
 {
     private static final long     serialVersionUID = 8628137091890107296L;
-
-    @XmlElement(name = "clientId")
     private String                clientId;
-
-    @XmlElement(name = "displayName")
     private String                displayName;
-
-    @XmlElement(name = "serialNumber")
     private String                serialNumber;
-
-    @XmlElement(name = "modelId")
     private String                modelId;
-
-    @XmlElement(name = "imei")
     private String                imei;
-
-    @XmlElement(name = "imsi")
     private String                imsi;
-
-    @XmlElement(name = "iccid")
     private String                iccid;
-
-    @XmlElement(name = "biosVersion")
     private String                biosVersion;
-
-    @XmlElement(name = "firmwareVersion")
     private String                firmwareVersion;
-
-    @XmlElement(name = "osVersion")
     private String                osVersion;
-
-    @XmlElement(name = "jvmVersion")
     private String                jvmVersion;
-
-    @XmlElement(name = "osgiFramework")
     private String                osgiFrameworkVersion;
-
-    @XmlElement(name = "applicationFrameworkVersion")
     private String                applicationFrameworkVersion;
-
-    @XmlElement(name = "applicationIdentifiers")
     private String                applicationIdentifiers;
-
-    @XmlElement(name = "acceptEncoding")
     private String                acceptEncoding;
-
-    @XmlElement(name = "gpsLongitude")
     private Double                gpsLongitude;
-
-    @XmlElement(name = "gpsLatitude")
     private Double                gpsLatitude;
-
-    @XmlElement(name = "customAttribute1")
-    private String                customAttribute1;
-    @XmlElement(name = "customAttribute2")
+    private String                customAttribute1;    
     private String                customAttribute2;
-    @XmlElement(name = "customAttribute3")
     private String                customAttribute3;
-    @XmlElement(name = "customAttribute4")
     private String                customAttribute4;
-    @XmlElement(name = "customAttribute5")
     private String                customAttribute5;
-
-    @XmlElement(name = "deviceCredentialsMode")
     private DeviceCredentialsMode deviceCredentialsMode;
-
-    @XmlElement(name = "preferredUserId")
     private KapuaId               preferredUserId;
 
     protected DeviceCreatorImpl(KapuaId scopeId)

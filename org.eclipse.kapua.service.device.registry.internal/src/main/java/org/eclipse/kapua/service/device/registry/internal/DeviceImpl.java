@@ -37,193 +37,115 @@ import org.eclipse.kapua.service.device.registry.DeviceCredentialsMode;
 import org.eclipse.kapua.service.device.registry.DeviceEventType;
 import org.eclipse.kapua.service.device.registry.DeviceStatus;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "scopeId",
-                       "id",
-                       "createdOn",
-                       "createdBy",
-                       "modifiedOn",
-                       "modifiedBy",
-                       "optlock",
-                       "attributes",
-                       "clientId",
-                       "status",
-                       "displayName",
-                       "lastEventOn",
-                       "lastEventType",
-                       "serialNumber",
-                       "modelId",
-                       "imei",
-                       "imsi",
-                       "iccid",
-                       "biosVersion",
-                       "firmwareVersion",
-                       "osVersion",
-                       "jvmVersion",
-                       "osgiFrameworkVersion",
-                       "applicationFrameworkVersion",
-                       "applicationIdentifiers",
-                       "acceptEncoding",
-                       "gpsLatitude",
-                       "gpsLongitude",
-                       "customAttribute1",
-                       "customAttribute2",
-                       "customAttribute3",
-                       "customAttribute4",
-                       "customAttribute5",
-                       "credentialsMode",
-                       "preferredUserId",
-        // // derived attributes
-        // "uptime",
-        // "modelName",
-        // "partNumber",
-        // "availableProcessors",
-        // "totalMemory",
-        // "os",
-        // "osArch",
-        // "jvmName",
-        // "jvmProfile",
-        // "osgiFramework",
-        // "connectionInterface",
-        // "gpsAltitude"
-})
 @Entity(name = "Device")
 @Table(name = "dvc_device")
 public class DeviceImpl extends AbstractKapuaUpdatableEntity implements Device
 {
     private static final long     serialVersionUID = 7688047426522474413L;
 
-    @XmlElement(name = "clientId")
     @Basic
     @Column(name = "client_id", updatable = false)
     private String                clientId;
 
-    @XmlElement(name = "status")
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private DeviceStatus          status;
 
-    @XmlElement(name = "displayName")
     @Basic
     @Column(name = "display_name")
     private String                displayName;
 
-    @XmlElement(name = "lastEventOn")
     @Basic
     @Column(name = "last_event_on")
     private Date                  lastEventOn;
 
-    @XmlElement(name = "lastEventType")
     @Enumerated(EnumType.STRING)
     @Column(name = "last_event_type")
     private DeviceEventType       lastEventType;
 
-    @XmlElement(name = "serialNumber")
     @Basic
     @Column(name = "serial_number")
     private String                serialNumber;
 
-    @XmlElement(name = "modelId")
     @Basic
     @Column(name = "model_id")
     private String                modelId;
 
-    @XmlElement(name = "imei")
     @Basic
     @Column(name = "imei")
     private String                imei;
 
-    @XmlElement(name = "imsi")
     @Basic
     @Column(name = "imsi")
     private String                imsi;
 
-    @XmlElement(name = "iccid")
     @Basic
     @Column(name = "iccid")
     private String                iccid;
 
-    @XmlElement(name = "biosVersion")
     @Basic
     @Column(name = "bios_version")
     private String                biosVersion;
 
-    @XmlElement(name = "firmwareVersion")
     @Basic
     @Column(name = "firmware_version")
     private String                firmwareVersion;
 
-    @XmlElement(name = "osVersion")
     @Basic
     @Column(name = "os_version")
     private String                osVersion;
 
-    @XmlElement(name = "jvmVersion")
     @Basic
     @Column(name = "jvm_version")
     private String                jvmVersion;
 
-    @XmlElement(name = "osgiFrameworkVersion")
     @Basic
     @Column(name = "osgi_framework_version")
     private String                osgiFrameworkVersion;
 
-    @XmlElement(name = "applicationFrameworkVersion")
     @Basic
     @Column(name = "app_framework_version")
     private String                applicationFrameworkVersion;
 
-    @XmlElement(name = "applicationIdentifiers")
     @Basic
     @Column(name = "app_identifiers")
     private String                applicationIdentifiers;
 
-    @XmlElement(name = "acceptEncoding")
     @Basic
     @Column(name = "accept_encoding")
     private String                acceptEncoding;
 
-    @XmlElement(name = "gpsLongitude")
     @Basic
     @Column(name = "gps_longitude")
     private Double                gpsLongitude;
 
-    @XmlElement(name = "gpsLatitude")
     @Basic
     @Column(name = "gps_latitude")
     private Double                gpsLatitude;
 
-    @XmlElement(name = "customAttribute1")
     @Basic
     @Column(name = "custom_attribute_1")
     private String                customAttribute1;
 
-    @XmlElement(name = "customAttribute2")
     @Basic
     @Column(name = "custom_attribute_2")
     private String                customAttribute2;
 
-    @XmlElement(name = "customAttribute3")
     @Basic
     @Column(name = "custom_attribute_3")
     private String                customAttribute3;
 
-    @XmlElement(name = "customAttribute4")
     @Basic
     @Column(name = "custom_attribute_4")
     private String                customAttribute4;
 
-    @XmlElement(name = "customAttribute5")
     @Basic
     @Column(name = "custom_attribute_5")
     private String                customAttribute5;
 
-    @XmlElement(name = "devoceCredentialsMode")
     @Column(name = "credentials_mode")
     private String deviceCredentialsMode;
 
-    @XmlElement(name = "preferredUserId")
     @Embedded
     @AttributeOverrides({
                           @AttributeOverride(name = "eid", column = @Column(name = "preferred_user_id"))

@@ -22,4 +22,8 @@ public interface DeviceEventFactory extends KapuaObjectFactory
     DeviceEventCreator newCreator(KapuaId scopeId, KapuaId deviceId, Date receivedOn, String resource);
 
     DeviceEventQuery newQuery(KapuaId scopeId);
+
+    DeviceEvent newDeviceEvent();
+
+    DeviceEventListResult newDeviceListResult();
 }

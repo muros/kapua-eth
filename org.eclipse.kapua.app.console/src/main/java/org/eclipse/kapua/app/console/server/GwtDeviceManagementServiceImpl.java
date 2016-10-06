@@ -83,7 +83,8 @@ import org.eclipse.kapua.service.device.management.packages.model.DevicePackages
 import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadOperation;
 import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
 import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallRequest;
-import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshot;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -433,26 +434,27 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
 
             KapuaId scopeId = KapuaEid.parseShortId(gwtDevice.getScopeId());
             KapuaId deviceId = KapuaEid.parseShortId(gwtDevice.getId());
-            DeviceSnapshotIds snapshotIds = deviceSnapshotManagementService.get(scopeId,
+            DeviceSnapshots snapshotIds = deviceSnapshotManagementService.get(scopeId,
                     deviceId,
                     null);
             // sort them by most recent first
 
             // sort the list alphabetically by service name
-            Collections.sort(snapshotIds.getSnapshotsIds(), new Comparator<Long>() {
+            Collections.sort(snapshotIds.getSnapshots(), new Comparator<DeviceSnapshot>() {
 
                 @Override
-                public int compare(Long arg0,
-                        Long arg1) {
-                    Long snapshotId0 = arg0;
-                    Long snapshotId1 = arg1;
-                    return -1 * snapshotId0.compareTo(snapshotId1); // Descending order
+                public int compare(DeviceSnapshot arg0,
+                        DeviceSnapshot arg1) {
+                    DeviceSnapshot snapshotId0 = arg0;
+                    DeviceSnapshot snapshotId1 = arg1;
+                    return -1 * snapshotId0.getTimestamp().compareTo(snapshotId1.getTimestamp()); // Descending order
                 }
             });
 
-            for (Long snapshotId : snapshotIds.getSnapshotsIds()) {
+            for (DeviceSnapshot snapshot : snapshotIds.getSnapshots()) {
+                Long timestamp = snapshot.getTimestamp();
                 GwtSnapshot gwtSnapshot = new GwtSnapshot();
-                gwtSnapshot.setCreatedOn(new Date(snapshotId));
+                gwtSnapshot.setCreatedOn(new Date(timestamp));
                 snapshots.add(gwtSnapshot);
             }
 
@@ -622,7 +624,7 @@ public class GwtDeviceManagementServiceImpl extends KapuaRemoteServiceServlet im
                 gwtCommandOutput.setStderr(commandOutput.getStderr().replace("\n", "<br>"));
             }
             gwtCommandOutput.setStdout(commandOutput.getStdout());
-            gwtCommandOutput.setTimedout(commandOutput.hasTimedout());
+            gwtCommandOutput.setTimedout(commandOutput.getHasTimedout());
         } catch (Throwable t) {
             KapuaExceptionHandler.handle(t);
         }

@@ -85,7 +85,7 @@ public class DeviceCommandOutputImpl implements DeviceCommandOutput
     }
 
     @Override
-    public Boolean hasTimedout()
+    public Boolean getHasTimedout()
     {
         return timedOut;
     }

@@ -10,23 +10,33 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
+
 package org.eclipse.kapua.service.device.management.snapshot.internal;
 
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshot;
-import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory;
-import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
+import org.joda.time.DateTime;
 
-public class DeviceSnapshotFactoryImpl implements DeviceSnapshotFactory
-{
-
-    @Override public DeviceSnapshot newDeviceSnapshot() {
-        return new DeviceSnapshotImpl();
-    }
-
+public class DeviceSnapshotImpl implements DeviceSnapshot {
+    private String id;
+    private Long timestamp;
+    
     @Override
-    public DeviceSnapshots newDeviceSnapshots()
-    {
-        return new DeviceSnapshotsImpl();
+    public String getId() {
+        return id;
     }
-
+    
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    @Override
+    public Long getTimestamp() {
+        return timestamp;
+    }
+    
+    @Override
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
 }
