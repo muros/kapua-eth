@@ -126,7 +126,6 @@
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>kapua-commons</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
