@@ -25,8 +25,8 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class MqttClientTest extends Assert
-{
+public class MqttClientTest extends Assert {
+
     private static String username = "kapua-sys";
     private static String password = "kapua-password";
 
@@ -37,10 +37,9 @@ public class MqttClientTest extends Assert
     @Ignore
     @Test
     public void testMqttClientConnectDisconnect()
-        throws Exception
-    {
+            throws Exception {
         MqttClientConnectionOptions clientConnectOptions = new MqttClientConnectionOptions();
-        clientConnectOptions.setClientId(ClientIdGenerator.next(MqttClientTest.class.getSimpleName()));
+        clientConnectOptions.setClientId(ClientIdGenerator.getInstance().next(MqttClientTest.class.getSimpleName()));
         clientConnectOptions.setUsername(username);
         clientConnectOptions.setPassword(password.toCharArray());
         clientConnectOptions.setEndpointURI(SystemUtils.getBrokerURI());
@@ -50,8 +49,7 @@ public class MqttClientTest extends Assert
         MqttClient mqttClient = new MqttClient();
         try {
             mqttClient.connectClient(clientConnectOptions);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
 
@@ -64,8 +62,7 @@ public class MqttClientTest extends Assert
         // Disconnect
         try {
             mqttClient.disconnectClient();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
         assertFalse("client.connected", mqttClient.isConnected());
@@ -78,10 +75,9 @@ public class MqttClientTest extends Assert
     @Ignore
     @Test
     public void testMqttClientPublish()
-        throws Exception
-    {
+            throws Exception {
         MqttClientConnectionOptions clientConnectOptions = new MqttClientConnectionOptions();
-        clientConnectOptions.setClientId(ClientIdGenerator.next(MqttClientTest.class.getSimpleName()));
+        clientConnectOptions.setClientId(ClientIdGenerator.getInstance().next(MqttClientTest.class.getSimpleName()));
         clientConnectOptions.setUsername(username);
         clientConnectOptions.setPassword(password.toCharArray());
         clientConnectOptions.setEndpointURI(SystemUtils.getBrokerURI());
@@ -91,8 +87,7 @@ public class MqttClientTest extends Assert
         MqttClient mqttClient = new MqttClient();
         try {
             mqttClient.connectClient(clientConnectOptions);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
 
@@ -106,13 +101,12 @@ public class MqttClientTest extends Assert
         MqttPayload mqttPayload = new MqttPayload("testMqttClientSendPayload".getBytes());
 
         MqttMessage mqttMessage = new MqttMessage(mqttTopic,
-                                                  new Date(),
-                                                  mqttPayload);
+                new Date(),
+                mqttPayload);
 
         try {
             mqttClient.publish(mqttMessage);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
 
@@ -120,8 +114,7 @@ public class MqttClientTest extends Assert
         // Disconnect
         try {
             mqttClient.disconnectClient();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
         assertFalse("client.connected", mqttClient.isConnected());

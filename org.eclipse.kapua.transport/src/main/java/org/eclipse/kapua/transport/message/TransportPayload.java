@@ -14,7 +14,13 @@ package org.eclipse.kapua.transport.message;
 
 import org.eclipse.kapua.message.Payload;
 
-public interface TransportPayload extends Payload
-{
+/**
+ * Marker interface for all payload at the transport layer.
+ * 
+ * @author alberto.codutti
+ *
+ * @since 1.0.0
+ */
+public interface TransportPayload extends Payload {
 
 }
