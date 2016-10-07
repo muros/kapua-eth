@@ -58,16 +58,16 @@ public class JmsTopic implements TransportChannel {
     public JmsTopic(String[] topicParts) {
         //
         // Concatenate topic parts
-        StringBuilder sb = new StringBuilder();
         if (topicParts != null) {
+            StringBuilder sb = new StringBuilder();
             for (String s : topicParts) {
                 sb.append(s)
                         .append(topicSeparator);
             }
             sb.deleteCharAt(sb.length() - topicSeparator.length());
+            setTopic(sb.toString());
         }
 
-        setTopic(sb.toString());
     }
 
     /**
