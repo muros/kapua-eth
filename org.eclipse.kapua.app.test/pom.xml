@@ -94,8 +94,7 @@
 
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.datastore.internal</artifactId>
-			<version>${project.version}</version>
+			<artifactId>kapua-datastore-internal</artifactId>
 		</dependency>
 
 		<dependency>

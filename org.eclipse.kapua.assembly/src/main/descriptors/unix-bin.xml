@@ -152,7 +152,7 @@
                 <include>${pom.groupId}:org.eclipse.kapua.service.user</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.user.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.datastore</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.datastore.internal</include>
+                <include>${pom.groupId}:kapua-datastore-internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.translator</include>

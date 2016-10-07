@@ -17,15 +17,14 @@
 
     <parent>
         <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua</artifactId>
+        <artifactId>kapua-datastore</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.kapua.service.datastore.internal</artifactId>
-    <name>org.eclipse.kapua.service.datastore.internal</name>
+    <artifactId>kapua-datastore-internal</artifactId>
+    <name>${project.artifactId}</name>
 
     <dependencies>
-        <!-- -->
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -33,7 +32,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- -->
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

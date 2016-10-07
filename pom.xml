@@ -213,6 +213,16 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-datastore-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-datastore-internal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>org.eclipse.kapua.locator.guice</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -385,9 +395,6 @@
         <!-- Device registry, device events and device connection -->
         <module>org.eclipse.kapua.service.device.registry</module>
         <module>org.eclipse.kapua.service.device.registry.internal</module>
-
-        <!-- Datastore -->
-        <module>org.eclipse.kapua.service.datastore.internal</module>
 
         <!-- -->
         <!-- Message -->
