@@ -26,7 +26,7 @@ import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 @XmlRootElement(name = "configuration")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(propOrder = {
-        "pid",
+        "id",
         "name",
         "definition",
         "properties"

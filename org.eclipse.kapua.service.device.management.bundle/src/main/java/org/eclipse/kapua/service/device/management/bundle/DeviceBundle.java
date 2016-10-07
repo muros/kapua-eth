@@ -12,20 +12,30 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.bundle;
 
+import javax.xml.bind.annotation.*;
+
+@XmlRootElement(name = "bundle")
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(factoryClass = DeviceBundleXmlRegistry.class,
+         factoryMethod = "newDeviceBundle")
 public interface DeviceBundle
 {
+    @XmlElement(name = "id")
     public long getId();
 
     public void setId(long id);
 
+    @XmlElement(name = "name")
     public String getName();
 
     public void setName(String name);
 
+    @XmlElement(name = "state")
     public String getState();
 
     public void setState(String state);
 
+    @XmlElement(name = "version")
     public String getVersion();
 
     public void setVersion(String version);

@@ -8,20 +8,15 @@
  *
  * Contributors:
  *     Eurotech - initial API and implementation
- *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.management.bundle;
 
-import javax.xml.bind.annotation.*;
-import java.util.List;
+package org.eclipse.kapua.model.config.metatype;
 
+import org.eclipse.kapua.locator.KapuaLocator;
 
-@XmlType(propOrder = { "bundles" },
-        factoryClass = DeviceBundleXmlRegistry.class,
-        factoryMethod = "newBundleListResult")
-@XmlRootElement(name = "bundles")
-public interface DeviceBundles
-{
-    @XmlElement(name = "bundle", namespace = "http://eurotech.com/esf/2.0")
-    public <B extends DeviceBundle> List<B> getBundles();
+public class MetatypeXmlRegistry {
+    private KapuaLocator locator = KapuaLocator.getInstance();
+    private KapuaMetatypeFactory factory = locator.getFactory(KapuaMetatypeFactory.class);
+
+    public KapuaTocd newKapuaTocd() { return factory.newKapuaTocd(); }
 }

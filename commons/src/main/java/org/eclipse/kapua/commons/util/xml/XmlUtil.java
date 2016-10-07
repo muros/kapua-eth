@@ -217,13 +217,17 @@ public class XmlUtil
     @SuppressWarnings("rawtypes")
     private static JAXBContext get(Class clazz) throws JAXBException
     {
-        JAXBContext context = contexts.get(clazz);
-        if (context == null) {
-            context = JAXBContext.newInstance(clazz);
-            contexts.put(clazz, context);
+//        JAXBContext context = contexts.get(clazz);
+//        if (context == null) {
+//            context = JAXBContext.newInstance(clazz);
+//            contexts.put(clazz, context);
+//        }
+        JAXBContext context;
+    	try {
+            context = jaxbContextProvider.getJAXBContext();
+        } catch (KapuaException jex) {
+            return null;
         }
-    	
-//    	JAXBContext context = jaxbContextProvider.getJAXBContext();
         return context;
     }
 }

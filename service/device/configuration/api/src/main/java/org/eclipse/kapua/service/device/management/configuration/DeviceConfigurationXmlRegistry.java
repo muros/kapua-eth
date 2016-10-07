@@ -8,7 +8,7 @@ import org.eclipse.kapua.locator.KapuaLocator;
 public class DeviceConfigurationXmlRegistry {
     private final KapuaLocator locator = KapuaLocator.getInstance();
     private final DeviceConfigurationFactory factory = locator.getFactory(DeviceConfigurationFactory.class);
-    
+
     public DeviceConfiguration newConfiguration()
     {
         return factory.newConfigurationInstance();
