@@ -17,9 +17,9 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Models a topic for messages posted to the Kapua platform.
- * Topic are expected to be in the form of "account/asset/<application_specific>";
- * system topic starts with the $EDC account. 
+ * Models a topic for messages posted to the Kapua platform.<br>
+ * Topic are expected to be in the form of "account/asset/&lt;application_specific&gt;";<br>
+ * system topic starts with the $EDC account.
  */
 public class KapuaTopic {
 	

@@ -32,9 +32,7 @@ public interface DeviceConnectionService extends KapuaEntityService<DeviceConnec
      * if a device connection for the provided clientId is not found,
      * a new device connection is created and updated.
      * 
-     * @param accountName
-     * @param clientId
-     * @param message
+     * @param creator
      * @throws KapuaException
      */
     public void connect(DeviceConnectionCreator creator)
@@ -43,9 +41,8 @@ public interface DeviceConnectionService extends KapuaEntityService<DeviceConnec
     /**
      * Register a device message when a client disconnects from the broker
      * 
-     * @param accountName
+     * @param scopeId
      * @param clientId
-     * @param message
      * @throws KapuaException
      */
     public void disconnect(KapuaId scopeId, String clientId)

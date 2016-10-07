@@ -117,9 +117,16 @@ public class XmlUtil
     }
 
     /**
-     * Unmarshall method which injects the namespace URI provided
-     * in all the elements before attempting the parsing.
-     * @throws KapuaException 
+     * Unmarshall method which injects the namespace URI provided in all the elements before attempting the parsing.
+     * 
+     * @param s
+     * @param clazz
+     * @param nsUri
+     * @return
+     * @throws JAXBException
+     * @throws XMLStreamException
+     * @throws FactoryConfigurationError
+     * @throws SAXException
      */
     public static <T> T unmarshal(String s, Class<T> clazz, String nsUri)
         throws JAXBException, XMLStreamException, FactoryConfigurationError, SAXException
@@ -129,9 +136,16 @@ public class XmlUtil
     }
 
     /**
-     * Unmarshall method which injects the namespace URI provided
-     * in all the elements before attempting the parsing.
-     * @throws KapuaException 
+     * Unmarshall method which injects the namespace URI provided in all the elements before attempting the parsing.
+     * 
+     * @param r
+     * @param clazz
+     * @param nsUri
+     * @return
+     * @throws JAXBException
+     * @throws XMLStreamException
+     * @throws FactoryConfigurationError
+     * @throws SAXException
      */
     public static <T> T unmarshal(Reader r, Class<T> clazz, String nsUri)
         throws JAXBException, XMLStreamException, FactoryConfigurationError, SAXException

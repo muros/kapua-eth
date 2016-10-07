@@ -26,16 +26,16 @@ public enum DeviceCredentialsMode
 
     /**
      * Device can change login credentials between credentials and
-     * can use credentials that are used by another device.<br/>
-     * <br/>
+     * can use credentials that are used by another device.<br>
+     * <br>
      * This is the most insecure strategy.
      */
     LOOSE,
 
     /**
      * Device cannot change login credentials between logins and
-     * cannot use credentials that are used by another device.<br/>
-     * <br/>
+     * cannot use credentials that are used by another device.<br>
+     * <br>
      * This is the most secure strategy.
      */
     STRICT;
