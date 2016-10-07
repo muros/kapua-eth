@@ -19,7 +19,6 @@ public class KapuaUnauthenticatedException extends KapuaException
     /**
      * Constructor for the KapuaUnauthenticatedException.
      *
-     * @param duplicateFieldName
      */
     public KapuaUnauthenticatedException() {
         super(KapuaErrorCodes.UNAUTHENTICATED);

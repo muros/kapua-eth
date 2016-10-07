@@ -14,6 +14,14 @@ package org.eclipse.kapua.service.device.registry.event;
 
 import org.eclipse.kapua.model.query.KapuaListResult;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement(name = "accountListResult")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(factoryClass = DeviceEventXmlRegistry.class,factoryMethod = "newDeviceListResult")
 public interface DeviceEventListResult extends KapuaListResult<DeviceEvent>
 {
 

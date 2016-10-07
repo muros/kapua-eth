@@ -12,29 +12,54 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.command;
 
-public interface DeviceCommandOutput
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.kapua.KapuaSerializable;
+import org.eclipse.kapua.model.KapuaEntity;
+
+@XmlRootElement(name = "commandOutput")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(propOrder = {
+        "stderr",
+        "stdout",
+        "exceptionMessage",
+        "exceptionStack",
+        "exitCode",
+        "hasTimedout"
+}, factoryClass = DeviceCommandXmlRegistry.class, factoryMethod = "newCommandOutput")
+public interface DeviceCommandOutput extends KapuaSerializable
 {
+    @XmlElement(name = "stderr")
     public String getStderr();
 
     public void setStderr(String stderr);
 
+    @XmlElement(name = "stdout")
     public String getStdout();
 
     public void setStdout(String stdout);
 
+    @XmlElement(name = "exceptionMessage")
     public String getExceptionMessage();
 
     public void setExceptionMessage(String exceptionMessage);
 
+    @XmlElement(name = "exceptionStack")
     public String getExceptionStack();
 
     public void setExceptionStack(String exceptionStack);
 
+    @XmlElement(name = "exitCode")
     public Integer getExitCode();
 
     public void setExitCode(Integer exitCode);
 
-    public Boolean hasTimedout();
+    @XmlElement(name = "hasTimedout")
+    public Boolean getHasTimedout();
 
     public void setHasTimedout(Boolean hasTimedout);
 }

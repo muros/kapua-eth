@@ -12,41 +12,73 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.command;
 
-public interface DeviceCommandInput
-{
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.eclipse.kapua.model.KapuaEntity;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+
+@XmlRootElement(name = "commandInput")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(propOrder = {
+        "command",
+        "password",
+        "arguments",
+        "timeout",
+        "workingDir",
+        "body",
+        "environment",
+        "runAsynch",
+        "stdin"
+}, factoryClass = DeviceCommandXmlRegistry.class, factoryMethod = "newCommandInput")
+public interface DeviceCommandInput extends KapuaEntity {
+    @XmlElement(name = "command")
+    public String getCommand();
+    
     public void setCommand(String command);
 
-    public String getCommand();
-
-    public void setPassword(String password);
-
+    @XmlElement(name = "password")
     public String getPassword();
+    
+    public void setPassword(String password);    
 
-    public void setArguments(String[] arguments);
-
+    @XmlElementWrapper(name = "arguments")
+    @XmlElement(name = "argument")
     public String[] getArguments();
+    
+    public void setArguments(String[] arguments);    
 
+    @XmlElement(name = "timeout")
+    public Integer getTimeout();
+    
     public void setTimeout(Integer timeout);
 
-    public Integer getTimeout();
-
+    @XmlElement(name = "workingDir")
+    public String getWorkingDir();
+    
     public void setWorkingDir(String workingDir);
 
-    public String getWorkingDir();
-
-    public void setBody(byte[] bytes);
-
+    @XmlElement(name = "body")
     public byte[] getBody();
+    
+    public void setBody(byte[] bytes);    
 
-    public void setEnvironment(String[] environment);
-
+    @XmlElement(name = "environment")
     public String[] getEnvironment();
-
+    
+    public void setEnvironment(String[] environment);
+    
+    @XmlElement(name = "runAsynch")
+    public boolean isRunAsynch();
+    
     public void setRunAsynch(boolean runAsync);
 
-    public boolean isRunAsynch();
-
-    public void setStdin(String stdin);
-
+    @XmlElement(name = "stdin")
     public String getStdin();
+    
+    public void setStdin(String stdin);
 }

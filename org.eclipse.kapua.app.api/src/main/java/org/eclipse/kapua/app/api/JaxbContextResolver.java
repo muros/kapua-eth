@@ -18,10 +18,35 @@ import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 
 import org.eclipse.kapua.app.api.v1.resources.model.ErrorBean;
+import org.eclipse.kapua.commons.util.xml.XmlUtil;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountXmlRegistry;
+import org.eclipse.kapua.service.device.call.kura.model.snapshot.KuraSnapshotIds;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
+import org.eclipse.kapua.service.device.management.command.DeviceCommandXmlRegistry;
+import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
+import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationXmlRegistry;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfo;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfos;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackageXmlRegistry;
+import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
+import org.eclipse.kapua.service.device.management.packages.model.download.DevicePackageDownloadRequest;
+import org.eclipse.kapua.service.device.management.packages.model.uninstall.DevicePackageUninstallRequest;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotXmlRegistry;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshot;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
+import org.eclipse.kapua.service.device.registry.Device;
+import org.eclipse.kapua.service.device.registry.DeviceCreator;
+import org.eclipse.kapua.service.device.registry.DeviceListResult;
+import org.eclipse.kapua.service.device.registry.DeviceXmlRegistry;
+import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventListResult;
+import org.eclipse.kapua.service.device.registry.event.DeviceEventXmlRegistry;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserListResult;
@@ -36,29 +61,53 @@ import org.eclipse.persistence.jaxb.JAXBContextFactory;
 @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 public class JaxbContextResolver implements ContextResolver<JAXBContext> {
 
-	private JAXBContext jaxbContext;
+    private JAXBContext jaxbContext;
 
-	public JaxbContextResolver() {
-		try {
-			jaxbContext = JAXBContextFactory.createContext(new Class[] 
-					{ErrorBean.class,
-					 Account.class, 
-					 AccountCreator.class, 
-					 AccountListResult.class,
-					 AccountXmlRegistry.class,
-					 User.class,
-					 UserCreator.class,
-					 UserListResult.class,
-					 UserXmlRegistry.class
-					 }, null);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    public JaxbContextResolver() {
+        try {
+            jaxbContext = JAXBContextFactory.createContext(new Class[] {
+                    ErrorBean.class,
+                    Account.class,
+                    AccountCreator.class,
+                    AccountListResult.class,
+                    AccountXmlRegistry.class,
+                    User.class,
+                    UserCreator.class,
+                    UserListResult.class,
+                    UserXmlRegistry.class,
+                    Device.class,
+                    DeviceCreator.class,
+                    DeviceListResult.class,
+                    DeviceXmlRegistry.class,
+                    DeviceCommandInput.class,
+                    DeviceCommandXmlRegistry.class,
+                    DeviceCommandOutput.class,
+                    DeviceConfiguration.class,
+                    DeviceComponentConfiguration.class,
+                    DeviceConfigurationXmlRegistry.class,
+                    DeviceSnapshot.class,
+                    DeviceSnapshots.class,
+                    DeviceSnapshotXmlRegistry.class,
+                    DeviceEvent.class,
+                    DeviceEventListResult.class,
+                    DeviceEventXmlRegistry.class,
+                    DevicePackage.class,
+                    DevicePackages.class,
+                    DevicePackageBundleInfo.class,
+                    DevicePackageBundleInfos.class,
+                    DevicePackageXmlRegistry.class,
+                    DevicePackageDownloadRequest.class,
+                    DevicePackageUninstallRequest.class,
+                    KuraSnapshotIds.class
+            }, null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Override
-	public JAXBContext getContext(Class<?> type) {
-		return jaxbContext;
-	}
+    @Override
+    public JAXBContext getContext(Class<?> type) {
+        return jaxbContext;
+    }
 
 }

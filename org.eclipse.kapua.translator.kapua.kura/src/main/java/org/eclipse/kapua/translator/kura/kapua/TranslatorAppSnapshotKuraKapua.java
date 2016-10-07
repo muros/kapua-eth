@@ -36,12 +36,14 @@ import org.eclipse.kapua.service.device.management.configuration.internal.Device
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseChannel;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponseMessage;
 import org.eclipse.kapua.service.device.management.configuration.snapshot.internal.SnapshotResponsePayload;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshot;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotFactory;
-import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshotIds;
+import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
 import org.eclipse.kapua.service.device.management.snapshot.internal.DeviceSnapshotAppProperties;
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
+import org.joda.time.DateTime;
 
 public class TranslatorAppSnapshotKuraKapua extends Translator<KuraResponseMessage, SnapshotResponseMessage>
 {
@@ -168,11 +170,14 @@ public class TranslatorAppSnapshotKuraKapua extends Translator<KuraResponseMessa
             if (kuraSnapshotIdResult != null) {
                 KapuaLocator locator = KapuaLocator.getInstance();
                 DeviceSnapshotFactory deviceSnapshotFactory = locator.getFactory(DeviceSnapshotFactory.class);
-                DeviceSnapshotIds deviceSnapshots = deviceSnapshotFactory.newDeviceSnapshotIds();
+                DeviceSnapshots deviceSnapshots = deviceSnapshotFactory.newDeviceSnapshots();
 
                 List<Long> snapshotIds = kuraSnapshotIdResult.getSnapshotIds();
                 for (Long snapshotId : snapshotIds) {
-                    deviceSnapshots.getSnapshotsIds().add(snapshotId);
+                    DeviceSnapshot snapshot = deviceSnapshotFactory.newDeviceSnapshot();
+                    snapshot.setId(Long.toString(snapshotId));
+                    snapshot.setTimestamp(snapshotId);
+                    deviceSnapshots.getSnapshots().add(snapshot);
                 }
 
                 StringWriter sw = new StringWriter();

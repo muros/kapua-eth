@@ -24,7 +24,7 @@ public class KapuaOptimisticLockingException extends KapuaException
     /**
      * Constructor for the KapuaOptimisticLockingException.
      *
-     * @param duplicateFieldName
+     * @param e
      */
     public KapuaOptimisticLockingException(Exception e) {
         super(KapuaErrorCodes.OPTIMISTIC_LOCKING, e);

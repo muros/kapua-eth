@@ -185,6 +185,10 @@
 	</bean>
     <!--  create connection pooling!!! -->
 
+	<!-- session filers (to bind Kapua and Shiro thread context) -->
+	<bean id="kapuaCamelFilter" class="org.eclipse.kapua.broker.core.converter.KapuaCamelFilter" >
+	</bean>
+
 	<!-- Converter -->
 	<bean id="kapuaConverter" class="org.eclipse.kapua.broker.core.converter.KapuaConverter" />
 
@@ -195,22 +199,6 @@
 	<!-- ERROR -->
 	<bean id="errorMessageListener" class="org.eclipse.kapua.broker.core.listener.ErrorMessageListener" >
 	</bean>
-
-	<!-- THREADS POOL FACTORY -->
-	<!-- list of start pool name for which the ExecutorThreadFactory will replace the ThreadFactory with our implementation -->
-	<util:list id="executorThreadFactoryMatcherList" list-class="java.util.ArrayList" value-type="java.lang.String" >
-       <value>kapuaExecutorPool</value> <!-- listener for our pojo endpoint -->
-       <value>JmsConsumer</value>   <!-- pool used by the camel route that subscribing kapua topics -->
-       <value>NIO Worker</value>
-    </util:list>
-    <bean id="kapuaExecutorThreadFactory" class="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadFactory" >
-        <constructor-arg index="0" type="java.lang.String" value="kapuaExecutorThreadFactory" />
-        <constructor-arg index="1" type="java.util.List" ref="executorThreadFactoryMatcherList" />
-        <constructor-arg index="2" type="boolean" value="true" /> <!-- is rootThreadGroup -->
-    </bean>
-    <bean id="kapuaExecutorThreadPoolFactory" class="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadPoolFactory" >
-        <constructor-arg index="0" type="org.eclipse.kapua.broker.core.threadfactory.KapuaExecutorThreadFactory" ref="kapuaExecutorThreadFactory" />
-    </bean>
 
 	<camelContext id="camelContext" xmlns="http://camel.apache.org/schema/spring" >
 	    <!-- the beans are defined as spring bean so check if it's possible to remove the package scan at all. Remove also the endpoint annotation from the pojo endpoints and all should works. -->
@@ -249,7 +237,7 @@
         <!--
         For the transaction/acknowledge mode please follow http://stackoverflow.com/questions/13498652/camel-jms-client-acknowledge-mode
 
-        OK. After some some debugging and scanning through source code I've found out that Camel uses spring MessageListenerContainers.
+        Camel uses spring MessageListenerContainers.
         The AbstractMessageListenerContainer, in case of CLIENT_AKNOWLEDGE mode, invokes comitIfNecessary method acknowledging message.
         This happens only AFTER registered MessageListener processes message successfully (no exceptions)
 
@@ -263,44 +251,46 @@
         -->
 		<route errorHandlerRef="mainRouteMessageErrorHandler" >
 			<from uri="activemq:queue:Consumer.eurotech:mainRoutelisteners:EXACTLY_ONCE.VirtualTopic.>?asyncConsumer=false&amp;acknowledgementModeName=CLIENT_ACKNOWLEDGE&amp;transacted=false&amp;concurrentConsumers=10&amp;maxConcurrentConsumers=10" />
-            <choice id="choice">
-            	<when id="systemMessageFilter">
-	            	<simple>${header.originalTopic} regex '^\$EDC\..*'</simple>
-            		<choice id="choice">
-		            	<when id="birthMessageFilter">
-			            	<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.BIRTH'</simple>
-				            <bean ref="kapuaConverter" method="convertToBirth"/>
-			                <multicast>
-				                <to uri="bean:deviceMessageListener?method=processBirthMessage" />
-			                </multicast>
-			            </when>
-		            	<when id="disconnectMessageFilter">
-			            	<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.DC'</simple>
-				            <bean ref="kapuaConverter" method="convertToDisconnect"/>
-			                <to uri="bean:deviceMessageListener?method=processDisconnectMessage" />
-			            </when>
-			            <when id="appsMessageFilter">
-			            	<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.APPS'</simple>
-				            <bean ref="kapuaConverter" method="convertToApps"/>
-			                <to uri="bean:deviceMessageListener?method=processAppsMessage" />
-			            </when>
-			            <when id="missingMessageFilter">
-			            	<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.MISSING'</simple>
-				            <bean ref="kapuaConverter" method="convertToMissing"/>
-			                <to uri="bean:deviceMessageListener?method=processMissingMessage" />
-			            </when>
-		            	<otherwise>
-		            		<bean ref="kapuaConverter" method="convertToData"/>
-			  				<to uri="bean:errorMessageListener?method=unmatchedMessage" />
-				  		</otherwise>
-		            </choice>
-	            </when>
-	            <!-- otherwise data messages -->
-            	<otherwise>
-            		<bean ref="kapuaConverter" method="convertToData"/>
-	  				<to uri="bean:errorMessageListener?method=unmatchedMessage" />
-		  		</otherwise>
-            </choice>
+			<pipeline>
+				<bean ref="kapuaCamelFilter" method="bindSession" />
+	            <choice id="choice">
+					<when id="systemMessageFilter">
+						<simple>${header.originalTopic} regex '^\$EDC\..*'</simple>
+						<choice id="choice">
+							<when id="birthMessageFilter">
+								<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.BIRTH'</simple>
+								<bean ref="kapuaConverter" method="convertToBirth"/>
+								<to uri="bean:deviceMessageListener?method=processBirthMessage" />
+							</when>
+							<when id="disconnectMessageFilter">
+								<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.DC'</simple>
+								<bean ref="kapuaConverter" method="convertToDisconnect"/>
+								<to uri="bean:deviceMessageListener?method=processDisconnectMessage" />
+							</when>
+							<when id="appsMessageFilter">
+								<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.APPS'</simple>
+								<bean ref="kapuaConverter" method="convertToApps"/>
+								<to uri="bean:deviceMessageListener?method=processAppsMessage" />
+							</when>
+							<when id="missingMessageFilter">
+								<simple>${header.originalTopic} regex '^\$EDC\.(.*\.){2}MQTT\.MISSING'</simple>
+								<bean ref="kapuaConverter" method="convertToMissing"/>
+								<to uri="bean:deviceMessageListener?method=processMissingMessage" />
+							</when>
+							<otherwise>
+								<bean ref="kapuaConverter" method="convertToData"/>
+								<to uri="bean:errorMessageListener?method=unmatchedMessage" />
+							</otherwise>
+						</choice>
+					</when>
+		            <!-- otherwise data messages -->
+					<otherwise>
+						<bean ref="kapuaConverter" method="convertToData"/>
+						<to uri="bean:errorMessageListener?method=unmatchedMessage" />
+					</otherwise>
+	            </choice>
+	            <bean ref="kapuaCamelFilter" method="unbindSession" />
+            </pipeline>
 	   </route>
 	</camelContext>
 
