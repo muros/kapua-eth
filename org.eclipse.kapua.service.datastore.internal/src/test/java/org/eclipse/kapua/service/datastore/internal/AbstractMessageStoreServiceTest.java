@@ -26,7 +26,7 @@ public abstract class AbstractMessageStoreServiceTest extends KapuaTest
     @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(AbstractMessageStoreServiceTest.class);
 
-    public static String DEFAULT_COMMONS_PATH = "../org.eclipse.kapua.commons";
+    public static String DEFAULT_COMMONS_PATH = "../commons";
 
     @BeforeClass
     public static void tearUp()

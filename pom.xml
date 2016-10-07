@@ -350,7 +350,7 @@
     </dependencies>
 
     <modules>
-        <module>org.eclipse.kapua.commons</module>
+        <module>commons</module>
         <module>service</module>
 
         <!-- -->

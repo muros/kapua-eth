@@ -30,7 +30,7 @@ public abstract class AbstractUserServiceTest extends KapuaTest
     
     public static String DEFAULT_PATH = "./src/main/sql/H2/";
 
-    public static String DEFAULT_COMMONS_PATH = "../org.eclipse.kapua.commons";
+    public static String DEFAULT_COMMONS_PATH = "../commons";
     public static String DEFAULT_FILTER = "usr_*.sql";
     public static String DROP_FILTER = "usr_*_drop.sql";
 

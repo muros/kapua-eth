@@ -29,7 +29,7 @@ public abstract class AbstractAccountServiceTest extends KapuaTest
     private static final Logger logger = LoggerFactory.getLogger(AbstractAccountServiceTest.class);
     
     public static String DEFAULT_PATH = "src/main/sql/H2";
-    public static String DEFAULT_COMMONS_PATH = "../org.eclipse.kapua.commons";
+    public static String DEFAULT_COMMONS_PATH = "../commons";
     public static String DEFAULT_FILTER = "act_*.sql";
     public static String DROP_FILTER = "act_*_drop.sql";
 
