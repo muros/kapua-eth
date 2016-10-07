@@ -386,9 +386,7 @@
         <module>org.eclipse.kapua.service.device.registry</module>
         <module>org.eclipse.kapua.service.device.registry.internal</module>
 
-        <!-- -->
         <!-- Datastore -->
-        <module>org.eclipse.kapua.service.datastore</module>
         <module>org.eclipse.kapua.service.datastore.internal</module>
 
         <!-- -->
