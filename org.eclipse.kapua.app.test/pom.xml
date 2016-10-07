@@ -125,7 +125,7 @@
 
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.commons</artifactId>
+			<artifactId>kapua-commons</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
