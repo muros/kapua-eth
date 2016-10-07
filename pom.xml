@@ -350,10 +350,8 @@
     </dependencies>
 
     <modules>
-        <!-- -->
-        <!-- Commons libs -->
         <module>org.eclipse.kapua.commons</module>
-
+        <module>service</module>
 
         <!-- -->
         <!-- Service locator -->
