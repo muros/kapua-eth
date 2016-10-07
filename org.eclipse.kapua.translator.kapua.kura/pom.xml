@@ -56,8 +56,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.registry</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-registry-api</artifactId>
         </dependency>
 
         <!-- -->

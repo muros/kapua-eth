@@ -40,7 +40,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.registry</artifactId>
+            <artifactId>kapua-device-registry-api</artifactId>
         </dependency>
 
         <!-- Internal test dependencies -->
