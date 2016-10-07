@@ -26,7 +26,7 @@ public class JmsClientSetting extends AbstractKapuaSetting<JmsClientSettingKeys>
      * 
      * @since 1.0.0
      */
-    private static final String MQTT_CLIENT_CONFIG_RESOURCE = "jms-client-setting.properties";
+    private static final String JMS_CLIENT_CONFIG_RESOURCE = "jms-client-setting.properties";
 
     /**
      * Singleton instance of this {@link class}.
@@ -36,12 +36,12 @@ public class JmsClientSetting extends AbstractKapuaSetting<JmsClientSettingKeys>
     private static final JmsClientSetting instance = new JmsClientSetting();
 
     /**
-     * Initialize the {@link AbstractKapuaSetting} with the {@link JmsClientSetting#MQTT_CLIENT_CONFIG_RESOURCE} value.
+     * Initialize the {@link AbstractKapuaSetting} with the {@link JmsClientSetting#JMS_CLIENT_CONFIG_RESOURCE} value.
      * 
      * @since 1.0.0
      */
     private JmsClientSetting() {
-        super(MQTT_CLIENT_CONFIG_RESOURCE);
+        super(JMS_CLIENT_CONFIG_RESOURCE);
     }
 
     /**
