@@ -51,8 +51,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.commons</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-commons</artifactId>
             <scope>test</scope>
         </dependency>
         

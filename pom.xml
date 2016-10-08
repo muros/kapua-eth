@@ -244,7 +244,22 @@
             <!-- Internal dependencies -->
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.commons</artifactId>
+                <artifactId>kapua-commons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-datastore-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-datastore-internal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-registry-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -295,11 +310,6 @@
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
                 <artifactId>org.eclipse.kapua.service.device.management</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.service.device.registry</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -386,10 +396,8 @@
     </dependencies>
 
     <modules>
-        <!-- -->
-        <!-- Commons libs -->
-        <module>org.eclipse.kapua.commons</module>
-
+        <module>commons</module>
+        <module>service</module>
 
         <!-- -->
         <!-- Service locator -->
@@ -421,13 +429,7 @@
 
         <!-- -->
         <!-- Device registry, device events and device connection -->
-        <module>org.eclipse.kapua.service.device.registry</module>
         <module>org.eclipse.kapua.service.device.registry.internal</module>
-
-        <!-- -->
-        <!-- Datastore -->
-        <module>org.eclipse.kapua.service.datastore</module>
-        <module>org.eclipse.kapua.service.datastore.internal</module>
 
         <!-- -->
         <!-- Message -->

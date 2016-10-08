@@ -20,7 +20,7 @@ vagrant ssh -c "echo 'deploying the Kapua broker'
 	echo 'copying Kapua runtime dependency'
     sudo cp /kapua/org.eclipse.kapua.assembly/target/broker_dependency/* lib/extra
 	echo 'copying Kapua arctifact'
-	sudo cp /kapua/org.eclipse.kapua.commons/target/org.eclipse.kapua.commons*.jar lib/extra
+	sudo cp /kapua/commons/target/kapua-commons*.jar lib/extra
 	sudo cp /kapua/org.eclipse.kapua.service/target/org.eclipse.kapua.service*.jar lib/extra
 	sudo cp /kapua/org.eclipse.kapua.locator.guice/target/org.eclipse.kapua.locator.guice*.jar lib/extra
 	sudo cp /kapua/org.eclipse.kapua.broker.core/target/org.eclipse.kapua.broker.core*.jar lib/extra

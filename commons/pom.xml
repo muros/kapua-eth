@@ -10,7 +10,7 @@
         <version>0.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.kapua.commons</artifactId>
+    <artifactId>kapua-commons</artifactId>
     <name>${artifactId}</name>
 
     <dependencies>
