@@ -19,6 +19,10 @@ import javax.xml.bind.annotation.XmlElement;
 import org.eclipse.kapua.commons.model.AbstractKapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * Service configuration creator reference implementation
+ *
+ */
 public class ServiceConfigCreatorImpl extends AbstractKapuaEntityCreator<ServiceConfig>
                                       implements ServiceConfigCreator
 {

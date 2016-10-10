@@ -18,11 +18,21 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.configuration.metatype.Password;
 import org.eclipse.kapua.commons.configuration.metatype.TscalarImpl;
 
+/**
+ * Utilities to manipulate string
+ *
+ */
 public class StringUtil 
 {       
     private static final char DELIMITER = ',';
     private static final char ESCAPE    = '\\';
     
+    /**
+     * Split the string using the delimiter {@link StringUtil#DELIMITER}
+     * 
+     * @param strValues
+     * @return
+     */
     public static String[] splitValues(String strValues)    
     {
 //      List<String> defaultValues = new ArrayList<String>();
@@ -117,7 +127,14 @@ public class StringUtil
         return values.toArray( new String[]{});
     }
 
-
+    /**
+     * Convert the string to the appropriate Object based on type
+     * 
+     * @param type allowed values are {@link TscalarImpl}
+     * @param string
+     * @return
+     * @throws KapuaException
+     */
     public static Object stringToValue(String type, String string) throws KapuaException
     {
         if (string == null)
@@ -161,6 +178,13 @@ public class StringUtil
         throw KapuaException.internalError("Unknown type");
     }
     
+    /**
+     * Convert the value to a String.<br>
+     * It supports also arrays such as Integer[], Boolean[], ... Password[]). For the arrays the converted String will be a comma separated concatenation.
+     * 
+     * @param value
+     * @return
+     */
     public static String valueToString(Object value)    
     {   
         String result = null;
@@ -330,7 +354,13 @@ public class StringUtil
         return result;
     }
     
-    
+    /**
+     * Escape the String <br>
+     * Escaped values are '\' ',' and ' '
+     * 
+     * @param s
+     * @return
+     */
     public static String escapeString(String s)
     {
         String escaped = s;
@@ -340,7 +370,12 @@ public class StringUtil
         return escaped;
     }
 
-
+    /**
+     * Remove the escaped values from the string (remove escape prefix, if present, for ',' ' ' and the spaces at the beginning and the end of the String
+     * 
+     * @param s
+     * @return
+     */
     public static String unescapeString(String s)
     {
         String value = s;
