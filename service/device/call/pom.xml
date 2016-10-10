@@ -28,6 +28,7 @@
     <modules>
         <module>api</module>
         <module>kura</module>
+        <module>test</module>
     </modules>
 
 </project>
