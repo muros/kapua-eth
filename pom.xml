@@ -233,6 +233,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-call-kura</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>kapua-device-registry-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -269,11 +274,6 @@
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
                 <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -395,7 +395,6 @@
         <!-- Device registry, device events and device connection -->
         <module>org.eclipse.kapua.service.device.registry.internal</module>
 
-        <!-- -->
         <!-- Message -->
         <module>org.eclipse.kapua.message</module>
         <module>org.eclipse.kapua.message.internal</module>
@@ -407,7 +406,6 @@
         <module>org.eclipse.kapua.transport.test</module>
 
         <!-- Device management device layer -->
-        <module>org.eclipse.kapua.service.device.call.kura</module>
         <module>org.eclipse.kapua.service.device.call.test</module>
 
         <!-- Device management platform layer -->

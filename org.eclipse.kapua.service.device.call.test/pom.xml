@@ -36,8 +36,7 @@
         <!-- Tested service implementations -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-call-kura</artifactId>
         </dependency>
 
         <!-- Testing dependencies -->
