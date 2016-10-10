@@ -17,50 +17,42 @@
 
     <parent>
         <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua</artifactId>
+        <artifactId>kapua-device-call</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.kapua.service.device.call.test</artifactId>
-    <name>org.eclipse.kapua.service.device.call.test</name>
+    <artifactId>kapua-device-call-api</artifactId>
+    <name>${project.artifactId}</name>
 
     <dependencies>
-        <!-- -->
-        <!-- Tested service interfaces -->
+        <!-- Extended service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call</artifactId>
+            <artifactId>org.eclipse.kapua.service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Required service interfaces -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.message</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+         <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.transport</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- -->
-        <!-- Tested service implementations -->
+        <!-- External dependencies -->
         <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
-            <version>${project.version}</version>
+            <!-- Object pooling for Mqtt clients -->
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>2.3</version>
         </dependency>
 
-        <!-- Testing dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.transport.mqtt</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.translator.kura.mqtt</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 </project>

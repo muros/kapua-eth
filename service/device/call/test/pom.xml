@@ -17,40 +17,40 @@
 
     <parent>
         <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua</artifactId>
+        <artifactId>kapua-device-call</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.kapua.service.device.management.configuration.internal</artifactId>
-    <name>org.eclipse.kapua.service.device.management.configuration.internal</name>
+    <artifactId>kapua-device-call-test</artifactId>
+    <name>${project.artifactId}</name>
 
     <dependencies>
-        <!-- -->
-        <!-- Implemented service interfaces -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.configuration</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- Internal dependencies -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>kapua-commons</artifactId>
-        </dependency>
+        <!-- Tested service implementations -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>kapua-device-call-kura</artifactId>
         </dependency>
+
+        <!-- Testing dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.commons</artifactId>
+            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-        	<groupId>joda-time</groupId>
-        	<artifactId>joda-time</artifactId>
-        	<version>2.9.4</version>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.transport.mqtt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.translator.kura.mqtt</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

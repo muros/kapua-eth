@@ -24,7 +24,6 @@
     <name>org.eclipse.kapua.translator.kura.jms</name>
 
     <dependencies>
-        <!-- -->
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -32,12 +31,10 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-call-kura</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
