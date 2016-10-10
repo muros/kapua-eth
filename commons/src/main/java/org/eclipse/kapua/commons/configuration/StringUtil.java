@@ -20,6 +20,8 @@ import org.eclipse.kapua.commons.configuration.metatype.TscalarImpl;
 
 /**
  * Utilities to manipulate string
+ * 
+ * @since 1.0
  *
  */
 public class StringUtil 

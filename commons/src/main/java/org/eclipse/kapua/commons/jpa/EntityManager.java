@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
  * Kapua JPA entity manager wrapper
  * 
  * @since 1.0
+ * 
  */
 public class EntityManager
 {

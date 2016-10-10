@@ -17,6 +17,8 @@ import org.eclipse.kapua.model.id.KapuaId;
 
 /**
  * Access token reference implementation
+ * 
+ * @since 1.0
  *
  */
 public interface AccessToken extends KapuaEntity

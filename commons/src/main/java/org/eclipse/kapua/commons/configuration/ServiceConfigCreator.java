@@ -17,7 +17,9 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.model.KapuaUpdatableEntityCreator;
 
 /**
- * Service configuration creator definition
+ * Service configuration creator definition.
+ * 
+ * @since 1.0
  * 
  */
 public interface ServiceConfigCreator extends KapuaUpdatableEntityCreator<ServiceConfig>

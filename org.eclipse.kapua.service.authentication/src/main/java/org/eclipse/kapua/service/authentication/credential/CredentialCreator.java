@@ -17,6 +17,8 @@ import org.eclipse.kapua.model.id.KapuaId;
 
 /**
  * Credential creator service definition.
+ * 
+ * @since 1.0
  *
  */
 public interface CredentialCreator extends KapuaEntityCreator<Credential>

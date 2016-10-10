@@ -16,6 +16,9 @@ import org.eclipse.kapua.model.KapuaObjectFactory;
 
 /**
  * Username password {@link UsernamePasswordTokenFactory} factory implementation
+ * 
+ * @since 1.0
+ * 
  */
 public interface UsernamePasswordTokenFactory extends KapuaObjectFactory
 {

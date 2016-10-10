@@ -20,6 +20,8 @@ import org.eclipse.kapua.model.id.KapuaId;
  * Kapua {@link Principal} implementation.<br>
  * Uniquely identifies a user.
  * 
+ * @since 1.0
+ * 
  */
 // TODO it's an object used by both authorization and authentication... should leave it in authentication module?
 public interface KapuaPrincipal extends Principal, java.io.Serializable {

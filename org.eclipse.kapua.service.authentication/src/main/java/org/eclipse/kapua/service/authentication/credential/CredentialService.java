@@ -19,6 +19,8 @@ import org.eclipse.kapua.service.KapuaUpdatableEntityService;
 
 /**
  * Credential service definition.
+ * 
+ * @since 1.0
  *
  */
 public interface CredentialService extends KapuaEntityService<Credential, CredentialCreator>, KapuaUpdatableEntityService<Credential>

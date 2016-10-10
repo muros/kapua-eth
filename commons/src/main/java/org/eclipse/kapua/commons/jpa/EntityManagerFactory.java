@@ -15,6 +15,8 @@ import org.eclipse.kapua.KapuaException;
 
 /**
  * Entity manager factory definition
+ * 
+ * @since 1.0
  *
  */
 public interface EntityManagerFactory

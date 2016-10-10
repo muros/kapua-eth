@@ -15,7 +15,10 @@ import org.eclipse.kapua.commons.model.query.predicate.AbstractKapuaQuery;
 import org.eclipse.kapua.model.id.KapuaId;
 
 /**
- * Service configuration query reference implementation
+ * Service configuration query reference implementation.
+ * 
+ * @since 1.0
+ * 
  */
 public class ServiceConfigQueryImpl extends AbstractKapuaQuery<ServiceConfig> implements ServiceConfigQuery
 {

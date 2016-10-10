@@ -15,6 +15,8 @@ package org.eclipse.kapua.service.authentication;
 /**
  * Username and password {@link AuthenticationCredentials} implementation
  * 
+ * @since 1.0
+ * 
  */
 public interface UsernamePasswordToken extends AuthenticationCredentials
 {

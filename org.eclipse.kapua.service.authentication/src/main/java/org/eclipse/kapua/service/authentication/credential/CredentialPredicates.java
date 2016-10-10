@@ -14,6 +14,9 @@ package org.eclipse.kapua.service.authentication.credential;
 
 /**
  * Credential predicates used to build query predicates.
+ * 
+ * @since 1.0
+ * 
  */
 public class CredentialPredicates
 {

@@ -19,6 +19,9 @@ import org.eclipse.kapua.KapuaException;
  * Used to invoke actions that expect a result (ie query action).
  * 
  * @param <T> Execution result return type
+ * 
+ * @since 1.0
+ * 
  */
 public interface EntityManagerResultCallback<T> {
 

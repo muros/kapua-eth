@@ -18,6 +18,8 @@ import org.eclipse.kapua.model.id.KapuaId;
 /**
  * Credential Object.<br>
  * Used to handle credentials needed by the various authentication algorithms.
+ * 
+ * @since 1.0
  *
  */
 public interface Credential extends KapuaEntity

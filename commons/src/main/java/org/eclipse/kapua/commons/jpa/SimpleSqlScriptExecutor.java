@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Sql script executor bean. Used to invoke the execution of sql scripts to update database schema.
  *
+ * @since 1.0
+ * 
  */
 public class SimpleSqlScriptExecutor
 {

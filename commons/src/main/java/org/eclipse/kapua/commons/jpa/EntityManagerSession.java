@@ -15,6 +15,8 @@ import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 /**
  * Entity manager session reference implementation.
  * 
+ * @since 1.0
+ * 
  */
 public class EntityManagerSession {
 

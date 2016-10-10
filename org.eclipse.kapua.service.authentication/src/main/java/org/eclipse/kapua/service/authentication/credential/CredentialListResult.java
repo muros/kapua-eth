@@ -16,6 +16,9 @@ import org.eclipse.kapua.model.query.KapuaListResult;
 
 /**
  * Credential list result definition.
+ * 
+ * @since 1.0
+ * 
  */
 public interface CredentialListResult extends KapuaListResult<Credential>
 {

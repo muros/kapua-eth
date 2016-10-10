@@ -17,7 +17,9 @@ import java.util.Map;
 import org.eclipse.kapua.KapuaException;
 
 /**
- * Commons module entity manager reference service
+ * Commons module entity manager reference service.
+ * 
+ * @since 1.0
  *
  */
 public class CommonsEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory

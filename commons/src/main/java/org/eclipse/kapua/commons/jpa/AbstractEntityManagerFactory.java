@@ -26,7 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Utility class for JPA operations
+ * Utility class for JPA operations.
+ * 
+ * @since 1.0
+ * 
  */
 public abstract class AbstractEntityManagerFactory {
 

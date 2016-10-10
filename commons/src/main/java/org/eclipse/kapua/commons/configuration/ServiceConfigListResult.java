@@ -14,7 +14,9 @@ package org.eclipse.kapua.commons.configuration;
 import org.eclipse.kapua.model.query.KapuaListResult;
 
 /**
- * Service configuration result list definition
+ * Service configuration result list definition.
+ * 
+ * @since 1.0
  *
  */
 public interface ServiceConfigListResult extends KapuaListResult<ServiceConfig>

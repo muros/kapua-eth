@@ -22,7 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Configurable service database schema utilities
+ * Configurable service database schema utilities.
+ * 
+ * @since 1.0
  *
  */
 public class KapuaConfigurableServiceSchemaUtils {

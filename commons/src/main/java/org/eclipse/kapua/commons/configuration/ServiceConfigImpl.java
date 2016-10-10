@@ -38,7 +38,10 @@ import org.eclipse.kapua.model.id.KapuaId;
 @Entity(name = "ServiceConfig")
 @Table(name = "sys_configuration")
 /**
- * Service configuration reference implementation
+ * Service configuration reference implementation.
+ * 
+ * @since 1.0
+ * 
  */
 public class ServiceConfigImpl extends AbstractKapuaUpdatableEntity implements ServiceConfig
 {

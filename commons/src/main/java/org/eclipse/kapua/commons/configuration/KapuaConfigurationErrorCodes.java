@@ -14,7 +14,9 @@ package org.eclipse.kapua.commons.configuration;
 import org.eclipse.kapua.KapuaErrorCode;
 
 /**
- * Configuration error codes
+ * Configuration error codes.
+ * 
+ * @since 1.0
  *
  */
 public enum KapuaConfigurationErrorCodes implements KapuaErrorCode {

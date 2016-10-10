@@ -17,7 +17,9 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.model.KapuaUpdatableEntity;
 
 /**
- * Configuration service definition
+ * Configuration service definition.
+ * 
+ * @since 1.0
  *
  */
 public interface ServiceConfig extends KapuaUpdatableEntity
