@@ -14,13 +14,10 @@ package org.eclipse.kapua.service.device.management.configuration;
 
 import java.util.Map;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.eclipse.kapua.commons.configuration.metatype.XmlConfigPropertiesAdapter;
 import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 
 @XmlRootElement(name = "configuration")
@@ -33,7 +30,7 @@ import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 }, factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newComponentConfiguration")
 public interface DeviceComponentConfiguration
 {
-    @XmlAttribute(name = "pid")
+    @XmlElement(name = "id")
     public String getId();
 
     public void setId(String Id);
@@ -44,9 +41,13 @@ public interface DeviceComponentConfiguration
     public void setName(String unescapedComponentName);
 
     @XmlElement(name = "definition")
+    @XmlElementRef(type = KapuaTocd.class)
     public KapuaTocd getDefinition();
 
+    public void setDefinition(KapuaTocd definition);
+
     @XmlElement(name = "properties")
+    @XmlJavaTypeAdapter(XmlConfigPropertiesAdapter.class)
     public Map<String, Object> getProperties();
 
     public void setProperties(Map<String, Object> properties);

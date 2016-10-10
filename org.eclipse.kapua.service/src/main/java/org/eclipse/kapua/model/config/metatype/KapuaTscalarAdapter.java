@@ -9,22 +9,24 @@
  * Contributors:
  *     Eurotech - initial API and implementation
  *******************************************************************************/
-
 package org.eclipse.kapua.model.config.metatype;
 
 import org.eclipse.kapua.locator.KapuaLocator;
 
-public class MetatypeXmlRegistry {
-    private KapuaLocator locator = KapuaLocator.getInstance();
-    private KapuaMetatypeFactory factory = locator.getFactory(KapuaMetatypeFactory.class);
+import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-    public KapuaTocd newKapuaTocd() { return factory.newKapuaTocd(); }
+public class KapuaTscalarAdapter extends XmlAdapter<String, KapuaTscalar>{
 
-    public KapuaTad newKapuaTad() { return factory.newKapuaTad(); }
+	private final KapuaLocator locator = KapuaLocator.getInstance();
+	private final KapuaMetatypeFactory metatypeFactory = locator.getFactory(KapuaMetatypeFactory.class);
 
-    public KapuaTicon newKapuaTicon() { return factory.newKapuaTicon(); }
+	@Override
+	public KapuaTscalar unmarshal(String v) throws Exception {
+		return metatypeFactory.newKapuaTscalar();
+	}
 
-    public KapuaTscalar newKapuaTscalar() { return factory.newKapuaTscalar(); }
+	@Override public String marshal(KapuaTscalar v) throws Exception {
+		return v.value();
+	}
 
-    public KapuaToption newKapuaToption() { return factory.newKapuaToption(); }
 }

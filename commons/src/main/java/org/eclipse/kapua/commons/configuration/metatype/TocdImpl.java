@@ -66,34 +66,14 @@ import org.w3c.dom.Element;
  * 
  * @since 1.0
  */
-@XmlRootElement(name = "OCD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tocd", propOrder = {
-                                      "ad",
-                                      "icon",
-                                      "any"
-})
 public class TocdImpl implements KapuaTocd
 {
-    @XmlElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
     protected List<TadImpl>    ad;
-
-    @XmlElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
     protected List<TiconImpl>  icon;
-
-    @XmlAnyElement(lax = true)
     protected List<Object>     any;
-
-    @XmlAttribute(name = "name", required = true)
     protected String           name;
-
-    @XmlAttribute(name = "description")
     protected String           description;
-
-    @XmlAttribute(name = "id", required = true)
     protected String           id;
-
-    @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**

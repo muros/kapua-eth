@@ -12,8 +12,7 @@
 package org.eclipse.kapua.commons.configuration.metatype;
 
 import org.eclipse.kapua.locator.KapuaLocator;
-import org.eclipse.kapua.model.config.metatype.KapuaMetatypeFactory;
-import org.eclipse.kapua.model.config.metatype.KapuaTocd;
+import org.eclipse.kapua.model.config.metatype.*;
 
 public class KapuaMetatypeFactoryImpl implements KapuaMetatypeFactory {
 
@@ -21,4 +20,20 @@ public class KapuaMetatypeFactoryImpl implements KapuaMetatypeFactory {
     private KapuaMetatypeFactory factory = locator.getFactory(KapuaMetatypeFactory.class);
 
     @Override public KapuaTocd newKapuaTocd() { return new TocdImpl(); }
+
+    @Override public KapuaTad newKapuaTad() {
+        return new TadImpl();
+    }
+
+    @Override public KapuaTscalar newKapuaTscalar() {
+        return TscalarImpl.fromValue("String");
+    }
+
+    @Override public KapuaToption newKapuaToption() {
+        return new ToptionImpl();
+    }
+
+    @Override public KapuaTicon newKapuaTicon() {
+        return new TiconImpl();
+    }
 }

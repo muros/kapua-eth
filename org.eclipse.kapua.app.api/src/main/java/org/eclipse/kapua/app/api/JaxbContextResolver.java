@@ -35,8 +35,6 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandXmlRegis
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationXmlRegistry;
-import org.eclipse.kapua.service.device.management.configuration.internal.DeviceComponentConfigurationImpl;
-import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationImpl;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfo;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackageBundleInfos;
@@ -91,8 +89,6 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
                     DeviceCommandOutput.class,
                     DeviceConfiguration.class,
                     DeviceComponentConfiguration.class,
-                    DeviceConfigurationImpl.class,
-                    DeviceComponentConfigurationImpl.class,
                     DeviceConfigurationXmlRegistry.class,
                     DeviceSnapshot.class,
                     DeviceSnapshots.class,

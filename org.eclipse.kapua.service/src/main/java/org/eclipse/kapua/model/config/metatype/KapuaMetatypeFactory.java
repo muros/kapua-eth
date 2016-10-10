@@ -15,4 +15,12 @@ import org.eclipse.kapua.model.KapuaObjectFactory;
 
 public interface KapuaMetatypeFactory extends KapuaObjectFactory{
     public KapuaTocd newKapuaTocd();
+
+    public KapuaTad newKapuaTad();
+
+    public KapuaTscalar newKapuaTscalar();
+
+    public KapuaToption newKapuaToption();
+
+    public KapuaTicon newKapuaTicon();
 }

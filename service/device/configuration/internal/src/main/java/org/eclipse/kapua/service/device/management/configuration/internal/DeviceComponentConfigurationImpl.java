@@ -26,21 +26,11 @@ import org.eclipse.kapua.commons.configuration.metatype.XmlConfigPropertiesAdapt
 import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 
-@XmlRootElement(name = "configuration")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class DeviceComponentConfigurationImpl implements DeviceComponentConfiguration
 {
-    @XmlElement(name = "id")
     private String              id;
-
-    @XmlElement(name = "name")
     private String              name;
-
-    @XmlElementRef
     private TocdImpl            definition;
-
-    @XmlElement(name = "properties")
-    @XmlJavaTypeAdapter(XmlConfigPropertiesAdapter.class)
     private Map<String, Object> properties;
 
     public DeviceComponentConfigurationImpl()
@@ -76,6 +66,7 @@ public class DeviceComponentConfigurationImpl implements DeviceComponentConfigur
         this.name = name;
     }
 
+    @Override
     public void setDefinition(KapuaTocd definition)
     {
         this.definition = (TocdImpl) definition;
