@@ -17,16 +17,15 @@
 
     <parent>
         <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua</artifactId>
+        <artifactId>kapua-device</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.kapua.service.device.management</artifactId>
-    <name>org.eclipse.kapua.service.device.management</name>
+    <artifactId>kapua-device-api</artifactId>
+    <name>${project.artifactId}</name>
 
 
     <dependencies>
-        <!-- -->
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -34,7 +33,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

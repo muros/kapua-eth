@@ -46,8 +46,7 @@
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
