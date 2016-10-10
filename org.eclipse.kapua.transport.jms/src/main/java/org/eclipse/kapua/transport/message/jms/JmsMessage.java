@@ -64,14 +64,5 @@ public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload>
         this.payload = payload;
     }
 
-    public Map<String, String> getProperties()
-    {
-        return properties;
-    }
-
-    public void setProperties(Map<String, String> properties)
-    {
-        this.properties = properties;
-    }
 
 }

@@ -17,6 +17,8 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import org.w3c.dom.Element;
+
 /**
  * <p>
  * Java class for Toption complex type.
