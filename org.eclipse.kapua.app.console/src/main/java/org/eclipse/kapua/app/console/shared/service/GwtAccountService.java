@@ -36,8 +36,6 @@ public interface GwtAccountService extends RemoteService {
      * 
      * @param gwtAccountCreator
      * @return
-     * @throws GwtKapuaDuplicateNameException
-     *             if the operation could not be completed because a name conflict was detected
      * @throws GwtKapuaException
      */
     public GwtAccount create(GwtXSRFToken xsfrToken, GwtAccountCreator gwtAccountCreator)
@@ -46,7 +44,7 @@ public interface GwtAccountService extends RemoteService {
     /**
      * Returns a GwtAccount by its Id or null if an account with such Id does not exist.
      * 
-     * @param id
+     * @param accountId
      * @return
      */
     public GwtAccount find(String accountId)
@@ -55,7 +53,7 @@ public interface GwtAccountService extends RemoteService {
     /**
      * Returns a GwtAccount by its acountName or null if an account with such acountName does not exist.
      *
-     * @param acountName
+     * @param accountName
      * @return GwtAccount
      */
     public GwtAccount findByAccountName(String accountName)
@@ -64,9 +62,9 @@ public interface GwtAccountService extends RemoteService {
     /**
      * Get account info ad name values pairs
      * 
-     * @param gwtAccount
+     * @param gwtAccountId
      * @return
-     * @throws KapuaException
+     * @throws GwtKapuaException
      */
     public ListLoadResult<GwtGroupedNVPair> getAccountInfo(String gwtAccountId)
         throws GwtKapuaException;
@@ -74,9 +72,10 @@ public interface GwtAccountService extends RemoteService {
     /**
      * Updates GwtAccount PROPERTIES ONLY in the database and returns the refreshed/reloaded entity instance.
      * 
+     * @param xsfrToken
      * @param gwtAccount
      * @return
-     * @throws KapuaException
+     * @throws GwtKapuaException
      */
     public GwtAccount updateAccountProperties(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
         throws GwtKapuaException;
@@ -84,9 +83,10 @@ public interface GwtAccountService extends RemoteService {
     /**
      * Updates a GwtAccount in the database and returns the refreshed/reloaded entity instance.
      * 
+     * @param xsfrToken
      * @param gwtAccount
      * @return
-     * @throws KapuaException
+     * @throws GwtKapuaException
      */
     public GwtAccount update(GwtXSRFToken xsfrToken, GwtAccount gwtAccount)
         throws GwtKapuaException;
@@ -94,6 +94,7 @@ public interface GwtAccountService extends RemoteService {
     /**
      * Deletes the supplied GwtAccount.
      * 
+     * @param xsfrToken
      * @param gwtAccount
      * @throws GwtKapuaException
      */

@@ -58,7 +58,7 @@ public interface GwtDeviceService extends RemoteService
     /**
      * Finds device given its clientId
      * 
-     * @param accountId
+     * @param scopeIdString
      * @param clientId
      * @return
      */
@@ -69,7 +69,7 @@ public interface GwtDeviceService extends RemoteService
      * Finds devices in an account with query
      * 
      * @param loadConfig
-     * @param accountId
+     * @param scopeIdString
      * @param predicates
      * @return
      */
@@ -100,9 +100,10 @@ public interface GwtDeviceService extends RemoteService
     /**
      * Returns a list of device history events for a specified device within a specified date range.
      * 
+     * @param loadConfig
      * @param gwtDevice the device to return the history of
-     * @param startDateMillis the start of the date range in milliseconds since epoch (Date.getTime())
-     * @param endDateMillis the end of the date range in milliseconds since epoch (Date.getTime())
+     * @param startDate the start of the date range in milliseconds since epoch (Date.getTime())
+     * @param endDate the end of the date range in milliseconds since epoch (Date.getTime())
      * @return
      * @throws GwtKapuaException
      */
@@ -115,7 +116,8 @@ public interface GwtDeviceService extends RemoteService
     /**
      * Deletes a device
      * 
-     * @param accountId
+     * @param xsfrToken
+     * @param scopeIdString
      * @param clientId
      */
     public void deleteDevice(GwtXSRFToken xsfrToken, String scopeIdString, String clientId)

@@ -39,8 +39,7 @@ public interface GwtDataService extends RemoteService {
      * Return the Topics for a given account; the returned structure is ready to
      * be fed into the TreeGrid UI widget, so it contains all the topic children.
      *
-     * @param config
-     * @param accountId
+     * @param accountName
      * @return
      * @throws GwtKapuaException
      */
@@ -50,8 +49,7 @@ public interface GwtDataService extends RemoteService {
      * Return the Topics for a given account; the returned structure is a list
      * with all tree limb expanded.
      *
-     * @param config
-     * @param accountId
+     * @param accountName
      * @return
      * @throws GwtKapuaException
      */
@@ -73,7 +71,7 @@ public interface GwtDataService extends RemoteService {
      * The returned structure is ready to be fed into the Grid UI widget through a loader.
      *
      * @param config
-     * @param accountId
+     * @param accountName
      * @param topic
      * @return
      * @throws GwtKapuaException
@@ -81,15 +79,15 @@ public interface GwtDataService extends RemoteService {
     public ListLoadResult<GwtHeader> findHeaders(LoadConfig config, String accountName, GwtTopic topic) throws GwtKapuaException;
 
     /**
-    * Return the number Headers (int, long, float, double and so on. Not String, Boolean, Byte) for a given account/topic pair.
-    * The returned structure is ready to be fed into the Grid UI widget through a loader.
-    *
-    * @param config
-    * @param accountId
-    * @param topic
-    * @return
-    * @throws GwtKapuaException
-    */
+     * Return the number Headers (int, long, float, double and so on. Not String, Boolean, Byte) for a given account/topic pair.
+     * The returned structure is ready to be fed into the Grid UI widget through a loader.
+     *
+     * @param config
+     * @param accountName
+     * @param topic
+     * @return
+     * @throws GwtKapuaException
+     */
     public ListLoadResult<GwtHeader> findNumberHeaders(LoadConfig config, String accountName, GwtTopic topic) throws GwtKapuaException;
 
 
@@ -98,8 +96,8 @@ public interface GwtDataService extends RemoteService {
      * The returned structure is ready to be fed into the Grid UI widget through a loader.
      *
      * @param config
-     * @param accountId
-     * @param topic
+     * @param accountName
+     * @param asset
      * @return
      * @throws GwtKapuaException
      */
@@ -108,11 +106,13 @@ public interface GwtDataService extends RemoteService {
 
     /**
      * Return messages based on the specified parameters.
-     *
+     * 
      * @param loadConfig
-     * @param accountId
+     * @param accountName
      * @param topic
      * @param headers
+     * @param startDate
+     * @param endDate
      * @return
      * @throws GwtKapuaException
      */
