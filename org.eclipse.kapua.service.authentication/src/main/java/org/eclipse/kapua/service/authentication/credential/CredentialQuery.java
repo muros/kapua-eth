@@ -14,6 +14,9 @@ package org.eclipse.kapua.service.authentication.credential;
 
 import org.eclipse.kapua.model.query.KapuaQuery;
 
+/**
+ * Credential query definition.
+ */
 public interface CredentialQuery extends KapuaQuery<Credential>
 {
 

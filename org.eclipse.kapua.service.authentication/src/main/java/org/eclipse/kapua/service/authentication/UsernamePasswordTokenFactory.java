@@ -14,7 +14,18 @@ package org.eclipse.kapua.service.authentication;
 
 import org.eclipse.kapua.model.KapuaObjectFactory;
 
+/**
+ * Username password {@link UsernamePasswordTokenFactory} factory implementation
+ */
 public interface UsernamePasswordTokenFactory extends KapuaObjectFactory
 {
+
+    /**
+     * Creates a new {@link UsernamePasswordToken} instance based on provided username and password
+     * 
+     * @param username
+     * @param password
+     * @return
+     */
     public UsernamePasswordToken newInstance(String username, char[] password);
 }

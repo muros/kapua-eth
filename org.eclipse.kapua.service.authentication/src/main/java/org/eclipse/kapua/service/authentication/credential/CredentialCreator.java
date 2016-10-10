@@ -15,11 +15,32 @@ package org.eclipse.kapua.service.authentication.credential;
 import org.eclipse.kapua.model.KapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * Credential creator service definition.
+ *
+ */
 public interface CredentialCreator extends KapuaEntityCreator<Credential>
 {
+
+    /**
+     * Return the user identifier
+     * 
+     * @return
+     */
     public KapuaId getUserId();
 
+    /**
+     * Return the credential type.<br>
+     * The returned object will depend on the authentication algorithm.
+     * 
+     * @return
+     */
     public CredentialType getCredentialType();
 
+    /**
+     * Return the credential key as plain key.
+     * 
+     * @return
+     */
     public String getCredentialPlainKey();
 }

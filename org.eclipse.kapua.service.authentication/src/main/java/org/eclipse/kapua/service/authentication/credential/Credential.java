@@ -15,6 +15,11 @@ package org.eclipse.kapua.service.authentication.credential;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * Credential Object.<br>
+ * Used to handle credentials needed by the various authentication algorithms.
+ *
+ */
 public interface Credential extends KapuaEntity
 {
     public static final String TYPE = "credential";
@@ -24,9 +29,24 @@ public interface Credential extends KapuaEntity
         return TYPE;
     }
 
+    /**
+     * Return the user identifier
+     * 
+     * @return
+     */
     public KapuaId getUserId();
 
+    /**
+     * Return the credential type
+     * 
+     * @return
+     */
     public CredentialType getCredentialType();
 
+    /**
+     * Return the credential key
+     * 
+     * @return
+     */
     public String getCredentialKey();
 }

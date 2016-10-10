@@ -14,6 +14,10 @@ package org.eclipse.kapua.service.authentication;
 
 import org.eclipse.kapua.model.KapuaEntityCreator;
 
+/**
+ * Access token creator service definition
+ *
+ */
 public interface AccessTokenCreator extends KapuaEntityCreator<AccessToken>
 {
 }
