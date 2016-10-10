@@ -25,12 +25,10 @@
     <name>org.eclipse.kapua.service.device.management.commons</name>
 
     <dependencies>
-        <!-- -->
         <!-- Required service interface -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-call-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

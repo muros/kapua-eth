@@ -228,6 +228,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-call-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>kapua-device-registry-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -264,11 +269,6 @@
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
                 <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.service.device.call</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -400,16 +400,13 @@
         <module>org.eclipse.kapua.message</module>
         <module>org.eclipse.kapua.message.internal</module>
 
-        <!-- -->
         <!-- Device management transport layer -->
         <module>org.eclipse.kapua.transport</module>
         <module>org.eclipse.kapua.transport.jms</module>
         <module>org.eclipse.kapua.transport.mqtt</module>
         <module>org.eclipse.kapua.transport.test</module>
 
-        <!-- -->
         <!-- Device management device layer -->
-        <module>org.eclipse.kapua.service.device.call</module>
         <module>org.eclipse.kapua.service.device.call.kura</module>
         <module>org.eclipse.kapua.service.device.call.test</module>
 

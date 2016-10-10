@@ -65,7 +65,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.call</artifactId>
+			<artifactId>kapua-device-call-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

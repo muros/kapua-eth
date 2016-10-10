@@ -133,7 +133,7 @@
                 <include>${pom.groupId}:org.eclipse.kapua.service.authentication</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.authorization</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.auth.shiro</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.call</include>
+                <include>${pom.groupId}:kapua-device-call-api</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.call.kura</include>
                 <include>${pom.groupId}:kapua-device-api</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.bundle</include>

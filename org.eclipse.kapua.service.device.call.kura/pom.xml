@@ -25,15 +25,12 @@
     <name>org.eclipse.kapua.service.device.call.kura</name>
 
     <dependencies>
-        <!-- -->
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-call-api</artifactId>
         </dependency>
 
-        <!-- -->
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
