@@ -34,20 +34,20 @@ import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 public interface DeviceComponentConfiguration
 {
     @XmlAttribute(name = "pid")
-    public void setId(String Id);
-
     public String getId();
 
-    @XmlAttribute(name = "name")
-    public void setName(String unescapedComponentName);
+    public void setId(String Id);
 
+    @XmlAttribute(name = "name")
     public String getName();
+
+    public void setName(String unescapedComponentName);
 
     @XmlElement(name = "definition")
     public KapuaTocd getDefinition();
 
     @XmlElement(name = "properties")
-    public void setProperties(Map<String, Object> properties);
-
     public Map<String, Object> getProperties();
+
+    public void setProperties(Map<String, Object> properties);
 }

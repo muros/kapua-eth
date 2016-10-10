@@ -20,8 +20,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 
+@XmlRootElement(name = "configurations")
 public class DeviceConfigurationImpl implements DeviceConfiguration
 {
+    @XmlElement(name = "configuration")
     private List<DeviceComponentConfigurationImpl> configurations;
 
     public DeviceConfigurationImpl()

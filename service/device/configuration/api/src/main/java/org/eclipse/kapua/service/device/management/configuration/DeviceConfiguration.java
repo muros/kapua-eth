@@ -22,10 +22,10 @@ import javax.xml.bind.annotation.XmlElement
 
 import org.eclipse.kapua.KapuaSerializable;
 
-@XmlRootElement(name = "componentConfigurations")
+@XmlRootElement(name = "configurations")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newConfiguration")
 public interface DeviceConfiguration extends KapuaSerializable {
-    @XmlElement(name = "componentConfiguration")
+    @XmlElement(name = "configuration")
     public <C extends DeviceComponentConfiguration> List<C> getComponentConfigurations();
 }
