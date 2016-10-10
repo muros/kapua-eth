@@ -28,10 +28,6 @@
         <!-- Required service interface -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>kapua-device-call-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.account</artifactId>
             <version>${project.version}</version>
         </dependency>

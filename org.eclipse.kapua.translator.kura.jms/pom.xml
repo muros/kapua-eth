@@ -24,7 +24,6 @@
     <name>org.eclipse.kapua.translator.kura.jms</name>
 
     <dependencies>
-        <!-- -->
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -32,7 +31,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
