@@ -13,7 +13,18 @@ package org.eclipse.kapua.commons.jpa;
 
 import org.eclipse.kapua.KapuaException;
 
+/**
+ * Entity manager factory definition
+ *
+ */
 public interface EntityManagerFactory
 {
+
+    /**
+     * Creates an instance of {@link EntityManager}
+     * 
+     * @return
+     * @throws KapuaException
+     */
     public EntityManager createEntityManager() throws KapuaException;
 }

@@ -12,10 +12,19 @@ package org.eclipse.kapua.commons.jpa;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.util.KapuaExceptionUtils;
 
+/**
+ * Entity manager session reference implementation.
+ * 
+ */
 public class EntityManagerSession {
 
     private final AbstractEntityManagerFactory entityManagerFactory;
 
+    /**
+     * Contructor
+     * 
+     * @param entityManagerFactory
+     */
     public EntityManagerSession(AbstractEntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }

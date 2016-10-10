@@ -16,6 +16,10 @@ import java.util.Map;
 
 import org.eclipse.kapua.KapuaException;
 
+/**
+ * Commons module entity manager reference service
+ *
+ */
 public class CommonsEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory
 {
     private static final String                PERSISTENCE_UNIT_NAME = "kapua-commons";
@@ -31,12 +35,23 @@ public class CommonsEntityManagerFactory extends AbstractEntityManagerFactory im
               s_uniqueConstraints);
     }
 
+    /**
+     * Return the entity manager
+     * 
+     * @return
+     * @throws KapuaException
+     */
     public static EntityManager getEntityManager()
         throws KapuaException
     {
         return instance.createEntityManager();
     }
     
+    /**
+     * Return the {@link CommonsEntityManagerFactory} instance (singleton)
+     * 
+     * @return
+     */
     public static CommonsEntityManagerFactory getInstance()
     {
     	return instance;

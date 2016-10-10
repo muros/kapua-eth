@@ -35,8 +35,18 @@ public abstract class AbstractEntityManagerFactory {
     private static final Map<String, String> s_uniqueConstraints = new HashMap<>();
     private EntityManagerFactory entityManagerFactory;
 
+    /**
+     * Jdbc url connection resolver service
+     */
     private final JdbcConnectionUrlResolver jdbcConnectionUrlResolver;
 
+    /**
+     * Protected constructor
+     * 
+     * @param persistenceUnitName
+     * @param datasourceName
+     * @param uniqueConstraints
+     */
     protected AbstractEntityManagerFactory(String persistenceUnitName,
             String datasourceName,
             Map<String, String> uniqueConstraints) {
