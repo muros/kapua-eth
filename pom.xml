@@ -34,6 +34,7 @@
         <junit.version>4.11</junit.version>
         <mariadb.version>1.4.6</mariadb.version>
         <mockito.version>1.10.19</mockito.version>
+        <protobuf.version>2.6.1</protobuf.version>
         <slf4j.version>1.7.2</slf4j.version>
         <shiro.version>1.2.3</shiro.version>
 
@@ -306,6 +307,11 @@
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>${guice.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
