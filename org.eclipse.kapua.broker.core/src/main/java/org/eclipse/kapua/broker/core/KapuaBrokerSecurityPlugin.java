@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * 
  * <pre>
  * &lt;plugins&gt;
- *     &lt;bean xmlns="http://www.springframework.org/schema/beans" id="kapuaFilter" class="org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter"/&gt;
+ *     &lt;bean xmlns="http://www.springframework.org/schema/beans" id="kapuaFilter" class="org.eclipse.kapua.broker.core.KapuaSecurityBrokerFilter"/&gt;
  * &lt;/plugins&gt;
  * </pre>
  * 

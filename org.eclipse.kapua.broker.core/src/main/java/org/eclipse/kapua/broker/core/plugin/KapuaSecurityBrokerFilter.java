@@ -83,13 +83,15 @@ import com.codahale.metrics.Timer;
 import com.codahale.metrics.Timer.Context;
 
 /**
- * activeMQ broker filter plugin implementation (security filter)
+ * ActiveMQ broker filter plugin implementation (security filter).<br>
+ * <br>
  * 
  * Filter allow unfiltered connection/disconnection and publishing/subscribe action for pass through connection (embedded broker and filter also). This connection type is used by broker assistant
- * bundle.
- * Otherwise perform all kapua authorization/check action
+ * bundle.<br>
+ * Otherwise perform all kapua authorization/check action.<br>
+ * <br>
  * 
- * This filter is added inside activeMQ filter chain plugin by {@link org.eclipse.kapua.broker.core.KapuaBrokerSecurityPlugin}
+ * This filter is added inside ActiveMQ filter chain plugin by {@link org.eclipse.kapua.broker.core.KapuaBrokerSecurityPlugin}
  * 
  * @since 1.0
  */

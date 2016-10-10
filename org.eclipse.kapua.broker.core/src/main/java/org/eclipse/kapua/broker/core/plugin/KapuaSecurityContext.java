@@ -24,7 +24,7 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.KapuaPrincipal;
 
 /**
- * Kapua security context implementation of activeMQ broker {@link SecurityContext}
+ * Kapua security context implementation of ActiveMQ broker {@link SecurityContext}
  *
  * @since 1.0
  */

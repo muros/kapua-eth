@@ -31,9 +31,11 @@ import org.slf4j.LoggerFactory;
  * ({@link org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter#addConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo) add connection} and
  * {@link org.eclipse.kapua.broker.core.plugin.KapuaSecurityBrokerFilter#removeConnection(org.apache.activemq.broker.ConnectionContext, org.apache.activemq.command.ConnectionInfo, Throwable) remove
  * connection}).<BR>
+ * <BR>
  *
- * NOTE:<BR>
+ * <b>NOTE:<BR>
  * with virtual topic support the destinations are removed! The message destination will be coded inside send method!
+ * </b>
  * 
  * @since 1.0
  */

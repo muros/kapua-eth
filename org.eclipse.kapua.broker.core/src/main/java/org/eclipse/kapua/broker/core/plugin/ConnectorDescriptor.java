@@ -37,23 +37,23 @@ public class ConnectorDescriptor implements Serializable
     public enum MESSAGE_TYPE
     {
         /**
-         * Application
+         * Application message type
          */
         app,
         /**
-         * Birth
+         * Birth message type
          */
         birth,
         /**
-         * Disconnect
+         * Disconnect message type
          */
         disconnect,
         /**
-         * Missing
+         * Missing message type
          */
         missing,
         /**
-         * Data
+         * Data message type
          */
         data
     }
