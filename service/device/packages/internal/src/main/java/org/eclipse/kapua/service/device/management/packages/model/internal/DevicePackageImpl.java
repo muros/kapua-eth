@@ -10,21 +10,14 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
 
-@XmlRootElement(name = "package")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(propOrder = { "name", "version", "bundleInfos", "installDate" })
 public class DevicePackageImpl implements DevicePackage
 {
-    @XmlElement(name = "name")
     private String name;
 
-    @XmlElement(name = "version")
     private String version;
 
-    @XmlElement(name = "bundlesInfos")
     private DevicePackageBundleInfosImpl bundleInfos;
 
-    @XmlElement(name = "installDate")
     private Date installDate;
 
     public String getName()

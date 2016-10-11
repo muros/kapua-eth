@@ -66,34 +66,14 @@ import org.w3c.dom.Element;
  * 
  * @since 1.0
  */
-@XmlRootElement(name = "OCD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tocd", propOrder = {
-                                      "ad",
-                                      "icon",
-                                      "any"
-})
 public class TocdImpl implements KapuaTocd
 {
-    @XmlElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
     protected List<TadImpl>    ad;
-
-    @XmlElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
     protected List<TiconImpl>  icon;
-
-    @XmlAnyElement(lax = true)
     protected List<Object>     any;
-
-    @XmlAttribute(name = "name", required = true)
     protected String           name;
-
-    @XmlAttribute(name = "description")
     protected String           description;
-
-    @XmlAttribute(name = "id", required = true)
     protected String           id;
-
-    @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**
@@ -125,6 +105,16 @@ public class TocdImpl implements KapuaTocd
             ad = new ArrayList<>();
         }
         return new ArrayList<>(this.ad);
+    }
+
+    @Override
+    public void setAD(List<? extends KapuaTad> ad) {
+        if (this.ad == null) {
+            this.ad = new ArrayList<>();
+        }
+        for (KapuaTad adInList : ad) {
+            this.ad.add((TadImpl)adInList);
+        }
     }
 
     public void addAD(KapuaTad ad)
@@ -167,6 +157,16 @@ public class TocdImpl implements KapuaTocd
         return new ArrayList<>(this.icon);
     }
 
+    @Override
+    public void setIcon(List<? extends KapuaTicon> icon) {
+        if (this.icon == null) {
+            this.icon = new ArrayList<>();
+        }
+        for (KapuaTicon iconInList : icon) {
+            this.icon.add((TiconImpl)iconInList);
+        }
+    }
+
     public void addIcon(KapuaTicon icon)
     {
         if (this.icon == null) {
@@ -205,6 +205,11 @@ public class TocdImpl implements KapuaTocd
             any = new ArrayList<>();
         }
         return this.any;
+    }
+
+    @Override
+    public void setAny(List<Object> any) {
+        this.any = any;
     }
 
     public void addAny(Object object)
@@ -313,6 +318,11 @@ public class TocdImpl implements KapuaTocd
     {
         getOtherAttributes().put(key,
                                  value);
+    }
+
+    @Override
+    public void setOtherAttributes(Map<QName, String> otherAttributes) {
+        this.otherAttributes = otherAttributes;
     }
 
 }

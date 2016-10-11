@@ -12,16 +12,13 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.bundle;
 
-import javax.xml.bind.annotation.*;
-import java.util.List;
+import org.eclipse.kapua.locator.KapuaLocator;
 
+public class DeviceBundleXmlRegistry {
+    private final KapuaLocator locator = KapuaLocator.getInstance();
+    private final DeviceBundleFactory factory = locator.getFactory(DeviceBundleFactory.class);
 
-@XmlType(propOrder = { "bundles" },
-        factoryClass = DeviceBundleXmlRegistry.class,
-        factoryMethod = "newBundleListResult")
-@XmlRootElement(name = "bundles")
-public interface DeviceBundles
-{
-    @XmlElement(name = "bundle", namespace = "http://eurotech.com/esf/2.0")
-    public <B extends DeviceBundle> List<B> getBundles();
+    public DeviceBundles newBundleListResult() { return factory.newBundleListResult(); }
+
+    public DeviceBundle newDeviceBundle() { return factory.newDeviceBundle(); }
 }

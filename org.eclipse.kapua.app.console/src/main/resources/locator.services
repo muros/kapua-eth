@@ -59,3 +59,6 @@ org.eclipse.kapua.service.datastore.TopicInfoStoreService
 org.eclipse.kapua.service.datastore.MetricInfoStoreService
 
 org.eclipse.kapua.transport.TransportClientFactory
+
+org.eclipse.kapua.model.config.metatype.KapuaMetatypeFactory
+org.eclipse.kapua.model.id.KapuaIdFactory

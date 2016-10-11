@@ -15,6 +15,8 @@ package org.eclipse.kapua.model.config.metatype;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Element;
@@ -51,6 +53,14 @@ import org.w3c.dom.Element;
  *
  *
  */
+@XmlRootElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "Tad", propOrder = {
+        "option",
+        "any"
+},
+        factoryClass = MetatypeXmlRegistry.class,
+        factoryMethod = "newKapuaTad")
 public interface KapuaTad
 {
 
@@ -77,6 +87,7 @@ public interface KapuaTad
      *
      *
      */
+    @XmlElement(name = "Option", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
     public List<KapuaToption> getOption();
 
     /**
@@ -98,11 +109,11 @@ public interface KapuaTad
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
      * {@link Object }
      *
      *
      */
+    @XmlAnyElement(lax = true)
     public List<Object> getAny();
 
     /**
@@ -113,6 +124,7 @@ public interface KapuaTad
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "name")
     public String getName();
 
     /**
@@ -133,6 +145,7 @@ public interface KapuaTad
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "description")
     public String getDescription();
 
     /**
@@ -153,6 +166,7 @@ public interface KapuaTad
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "id", required = true)
     public String getId();
 
     /**
@@ -173,6 +187,8 @@ public interface KapuaTad
      *         {@link KapuaTscalar }
      *
      */
+    @XmlAttribute(name = "type", required = true)
+    @XmlJavaTypeAdapter(KapuaTscalarAdapter.class)
     public KapuaTscalar getType();
 
     /**
@@ -193,7 +209,8 @@ public interface KapuaTad
      *         {@link Integer }
      *
      */
-    public int getCardinality();
+    @XmlAttribute(name = "cardinality")
+    public Integer getCardinality();
 
     /**
      * Sets the value of the cardinality property.
@@ -213,6 +230,7 @@ public interface KapuaTad
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "min")
     public String getMin();
 
     /**
@@ -233,6 +251,7 @@ public interface KapuaTad
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "max")
     public String getMax();
 
     /**
@@ -253,6 +272,7 @@ public interface KapuaTad
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "default")
     public String getDefault();
 
     /**
@@ -273,7 +293,8 @@ public interface KapuaTad
      *         {@link Boolean }
      *
      */
-    public boolean isRequired();
+    @XmlAttribute(name = "required")
+    public Boolean isRequired();
 
     /**
      * Sets the value of the required property.
@@ -299,6 +320,7 @@ public interface KapuaTad
      * @return
      *         always non-null
      */
+    @XmlAnyAttribute
     public Map<QName, String> getOtherAttributes();
 
 }

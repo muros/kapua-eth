@@ -15,6 +15,7 @@ package org.eclipse.kapua.model.config.metatype;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Element;
@@ -43,6 +44,13 @@ import org.w3c.dom.Element;
  *
  *
  */
+@XmlRootElement(name = "Option", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "Toption", propOrder = {
+        "any"
+},
+        factoryClass = MetatypeXmlRegistry.class,
+        factoryMethod = "newKapuaToption")
 public interface KapuaToption
 {
 
@@ -65,11 +73,11 @@ public interface KapuaToption
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
      * {@link Object }
      *
      *
      */
+    @XmlAnyElement(lax = true)
     public List<Object> getAny();
 
     /**
@@ -80,6 +88,7 @@ public interface KapuaToption
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "label", required = true)
     public String getLabel();
 
     /**
@@ -100,6 +109,7 @@ public interface KapuaToption
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "value", required = true)
     public String getValue();
 
     /**
@@ -126,6 +136,7 @@ public interface KapuaToption
      * @return
      *         always non-null
      */
+    @XmlAnyAttribute
     public Map<QName, String> getOtherAttributes();
 
 }

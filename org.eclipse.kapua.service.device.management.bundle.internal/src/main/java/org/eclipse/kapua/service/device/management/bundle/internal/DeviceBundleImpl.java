@@ -7,20 +7,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundle;
 
-@XmlRootElement(name = "bundle")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class DeviceBundleImpl implements DeviceBundle
 {
-    @XmlElement(name = "id")
     public long id;
 
-    @XmlElement(name = "name")
     public String name;
 
-    @XmlElement(name = "version")
     public String version;
 
-    @XmlElement(name = "state")
     public String state;
 
     public DeviceBundleImpl()

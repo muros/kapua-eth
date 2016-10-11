@@ -33,6 +33,7 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
+import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
 import org.eclipse.kapua.service.device.management.packages.DevicePackageFactory;
@@ -204,7 +205,7 @@ public class Devices extends AbstractKapuaResource {
     @GET
     @Path("{deviceId}/configurations")
     @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-    public List<? extends DeviceConfiguration> getConfigurations(@PathParam("deviceId") String deviceId,
+    public DeviceConfiguration getConfigurations(@PathParam("deviceId") String deviceId,
             @QueryParam("componentId") String componentId) {
         DeviceConfiguration deviceConfiguration = null;
         try {
@@ -214,7 +215,7 @@ public class Devices extends AbstractKapuaResource {
         } catch (Throwable t) {
             handleException(t);
         }
-        return returnNotNullEntity(deviceConfiguration.getComponentConfigurations());
+        return returnNotNullEntity(deviceConfiguration);
     }
 
     /**

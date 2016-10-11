@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Element;
@@ -44,6 +45,12 @@ import org.w3c.dom.Element;
  *
  *
  */
+@XmlRootElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(name = "Icon",
+        namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0",
+        factoryClass = MetatypeXmlRegistry.class,
+        factoryMethod = "newKapuaTicon")
 public interface KapuaTicon
 {
 
@@ -71,6 +78,7 @@ public interface KapuaTicon
      *
      *
      */
+    @XmlAnyElement(lax = true)
     public List<Object> getAny();
 
     /**
@@ -81,6 +89,7 @@ public interface KapuaTicon
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "resource", required = true)
     public String getResource();
 
     /**
@@ -101,6 +110,8 @@ public interface KapuaTicon
      *         {@link BigInteger }
      *
      */
+    @XmlAttribute(name = "size", required = true)
+    @XmlSchemaType(name = "positiveInteger")
     public BigInteger getSize();
 
     /**
@@ -127,6 +138,7 @@ public interface KapuaTicon
      * @return
      *         always non-null
      */
+    @XmlAnyAttribute
     public Map<QName, String> getOtherAttributes();
 
 }

@@ -10,11 +10,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
 
-@XmlRootElement(name = "deploymentPackages")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class DevicePackagesImpl implements DevicePackages
 {
-    @XmlElement(name = "deploymentPackage")
     public List<DevicePackageImpl> deploymentPackages;
 
     @Override

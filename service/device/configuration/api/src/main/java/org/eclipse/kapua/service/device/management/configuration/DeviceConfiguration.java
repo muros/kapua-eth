@@ -18,11 +18,14 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlElement;
 
-@XmlRootElement(name = "componentConfigurations")
+import org.eclipse.kapua.KapuaSerializable;
+
+@XmlRootElement(name = "configurations")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newConfiguration")
-public interface DeviceConfiguration
-{
+public interface DeviceConfiguration extends KapuaSerializable {
+    @XmlElement(name = "configuration")
     public <C extends DeviceComponentConfiguration> List<C> getComponentConfigurations();
 }

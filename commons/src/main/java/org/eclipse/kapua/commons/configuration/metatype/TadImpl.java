@@ -71,48 +71,20 @@ import org.w3c.dom.Element;
  *
  * @since 1.0
  */
-@XmlRootElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Tad", propOrder = {
-                                     "option",
-                                     "any"
-})
+
 public class TadImpl implements KapuaTad
 {
-    @XmlElement(name = "Option", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
     protected List<ToptionImpl> option;
-
-    @XmlAnyElement(lax = true)
     protected List<Object>      any;
-
-    @XmlAttribute(name = "name")
     protected String            name;
-
-    @XmlAttribute(name = "description")
     protected String            description;
-
-    @XmlAttribute(name = "id", required = true)
     protected String            id;
-
-    @XmlAttribute(name = "type", required = true)
     protected TscalarImpl       type;
-
-    @XmlAttribute(name = "cardinality")
     protected Integer           cardinality;
-
-    @XmlAttribute(name = "min")
     protected String            min;
-
-    @XmlAttribute(name = "max")
     protected String            max;
-
-    @XmlAttribute(name = "default")
     protected String            _default;
-
-    @XmlAttribute(name = "required")
     protected Boolean           required;
-
-    @XmlAnyAttribute
     private Map<QName, String>  otherAttributes = new HashMap<>();
 
     /**
@@ -299,7 +271,7 @@ public class TadImpl implements KapuaTad
      *         {@link Integer }
      *
      */
-    public int getCardinality()
+    public Integer getCardinality()
     {
         if (cardinality == null) {
             return 0;
@@ -408,7 +380,7 @@ public class TadImpl implements KapuaTad
      *         {@link Boolean }
      *
      */
-    public boolean isRequired()
+    public Boolean isRequired()
     {
         if (required == null) {
             return true;

@@ -51,7 +51,7 @@ public class KuraDeviceComponentConfiguration
      * The raw ObjectClassDefinition as parsed from the MetaType
      * Information XML resource associated to this Component.
      */
-    @XmlElementRef
+    @XmlElementRef(type = KapuaTocd.class)
     private TocdImpl definition;
 
     /**

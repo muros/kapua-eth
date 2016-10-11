@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.device.management.packages.model;
 
+import org.eclipse.kapua.KapuaSerializable;
+
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -20,7 +22,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-//TODO: Needs annotation. First verify if possible with JAXB or EclipseLink MOXy
 @XmlRootElement(name = "devicePackage")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(propOrder = { "name",
