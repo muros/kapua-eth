@@ -151,7 +151,7 @@
                 <include>${pom.groupId}:org.eclipse.kapua.service.generator.id.sequence</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.user</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.user.internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.datastore</include>
+                <include>${pom.groupId}:kapua-datastore-api</include>
                 <include>${pom.groupId}:kapua-datastore-internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
