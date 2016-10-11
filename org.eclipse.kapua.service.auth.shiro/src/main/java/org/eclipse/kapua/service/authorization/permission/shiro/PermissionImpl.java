@@ -32,6 +32,12 @@ import org.eclipse.kapua.service.authorization.permission.Permission;
 
 @Embeddable
 @XmlAccessorType(XmlAccessType.FIELD)
+/**
+ * Permission implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class PermissionImpl implements Permission, Serializable
 {
     private static final long serialVersionUID = 1480557438886065675L;
@@ -55,6 +61,13 @@ public class PermissionImpl implements Permission, Serializable
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param domain
+     * @param action
+     * @param targetScopeId
+     */
     public PermissionImpl(String domain, Actions action, KapuaId targetScopeId)
     {
         this();

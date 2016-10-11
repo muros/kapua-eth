@@ -16,6 +16,12 @@ import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermission;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionListResult;
 
+/**
+ * User permission list result implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserPermissionListResultImpl extends KapuaListResultImpl<UserPermission> implements UserPermissionListResult
 {
     private static final long serialVersionUID = 2231053707705207563L;

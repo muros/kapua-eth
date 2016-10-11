@@ -17,6 +17,12 @@ import org.eclipse.kapua.service.authorization.role.RoleCreator;
 import org.eclipse.kapua.service.authorization.role.RoleFactory;
 import org.eclipse.kapua.service.authorization.role.RoleQuery;
 
+/**
+ * Role factory service implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class RoleFactoryImpl implements RoleFactory
 {
 

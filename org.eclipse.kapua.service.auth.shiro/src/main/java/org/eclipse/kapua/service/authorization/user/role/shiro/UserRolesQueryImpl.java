@@ -17,13 +17,28 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.user.role.UserRoles;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesQuery;
 
+/**
+ * User roles query implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserRolesQueryImpl extends AbstractKapuaQuery<UserRoles> implements UserRolesQuery
 {
+
+    /**
+     * Constructor
+     */
     public UserRolesQueryImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     */
     public UserRolesQueryImpl(KapuaId scopeId)
     {
         this();

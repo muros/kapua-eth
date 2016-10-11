@@ -27,10 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Kapua Shiro Authenticator
- * This authenticator provide more significantly exception message in a multi-realm configuratio
- * The code is derived from the original {@link ModularRealmAuthenticator}
+ * Kapua Shiro Authenticator.<br>
+ * This authenticator provide more significantly exception message in a multi-realm configuration.<br>
+ * The code is derived from the original {@link ModularRealmAuthenticator} because the <b>default Shiro implementation doesn't support detailed messages in a multirealm configuration.</b>
  *
+ * since 1.0
+ * 
  */
 public class KapuaAuthenticator extends ModularRealmAuthenticator {
 	

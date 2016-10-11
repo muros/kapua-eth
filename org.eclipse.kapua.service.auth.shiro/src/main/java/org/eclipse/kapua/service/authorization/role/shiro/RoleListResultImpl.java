@@ -16,6 +16,12 @@ import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.service.authorization.role.Role;
 import org.eclipse.kapua.service.authorization.role.RoleListResult;
 
+/**
+ * Role list result implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class RoleListResultImpl extends KapuaListResultImpl<Role> implements RoleListResult
 {
     private static final long serialVersionUID = 2231053707705207563L;

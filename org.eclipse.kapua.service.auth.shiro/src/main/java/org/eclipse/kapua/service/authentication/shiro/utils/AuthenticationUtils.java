@@ -21,8 +21,22 @@ import org.eclipse.kapua.commons.util.ArgumentValidator;
 import org.eclipse.kapua.service.authentication.shiro.KapuaAuthenticationErrorCodes;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+/**
+ * Authentication utilities.
+ * 
+ * @since 1.0
+ * 
+ */
 public class AuthenticationUtils
 {
+
+    /**
+     * Encrypts and return the plain credential value (unencrypted value).
+     * 
+     * @param plainValue
+     * @return
+     * @throws KapuaException
+     */
     public static String cryptCredential(String plainValue)
         throws KapuaException
     {

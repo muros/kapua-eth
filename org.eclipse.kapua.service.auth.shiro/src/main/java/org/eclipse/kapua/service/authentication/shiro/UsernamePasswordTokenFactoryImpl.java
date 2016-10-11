@@ -15,6 +15,12 @@ package org.eclipse.kapua.service.authentication.shiro;
 import org.eclipse.kapua.service.authentication.UsernamePasswordToken;
 import org.eclipse.kapua.service.authentication.UsernamePasswordTokenFactory;
 
+/**
+ * Username password {@link UsernamePasswordTokenFactory} factory implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UsernamePasswordTokenFactoryImpl implements UsernamePasswordTokenFactory
 {
     @Override

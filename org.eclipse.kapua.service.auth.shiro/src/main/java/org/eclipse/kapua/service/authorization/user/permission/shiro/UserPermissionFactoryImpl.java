@@ -17,6 +17,12 @@ import org.eclipse.kapua.service.authorization.user.permission.UserPermissionCre
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionFactory;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionQuery;
 
+/**
+ * User permission factory service implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserPermissionFactoryImpl implements UserPermissionFactory
 {
 

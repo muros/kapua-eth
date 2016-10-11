@@ -17,6 +17,12 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.authentication.credential.Credential;
 import org.eclipse.kapua.service.user.User;
 
+/**
+ * Kapua {@link SimpleAuthenticationInfo} implementation
+ * 
+ * @since 1.0
+ *
+ */
 public class KapuaSimpleAuthenticationInfo extends SimpleAuthenticationInfo
 {
     private static final long serialVersionUID = -8682457531010599453L;
@@ -25,6 +31,14 @@ public class KapuaSimpleAuthenticationInfo extends SimpleAuthenticationInfo
     private Credential        credential;
     private Account           account;
 
+    /**
+     * Constructor
+     * 
+     * @param user
+     * @param credential
+     * @param account
+     * @param realmName
+     */
     public KapuaSimpleAuthenticationInfo(User user,
                                          Credential credential,
                                          Account account,
@@ -38,11 +52,21 @@ public class KapuaSimpleAuthenticationInfo extends SimpleAuthenticationInfo
         this.account = account;
     }
 
+    /**
+     * Return the user
+     * 
+     * @return
+     */
     public User getUser()
     {
         return user;
     }
 
+    /**
+     * Return the account
+     * 
+     * @return
+     */
     public Account getAccount()
     {
         return account;

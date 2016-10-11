@@ -33,6 +33,12 @@ import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 
+/**
+ * Credential service implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class CredentialServiceImpl implements CredentialService
 {
 

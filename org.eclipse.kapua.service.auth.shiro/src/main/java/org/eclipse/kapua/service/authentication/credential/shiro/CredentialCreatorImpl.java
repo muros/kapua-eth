@@ -20,6 +20,12 @@ import org.eclipse.kapua.service.authentication.credential.Credential;
 import org.eclipse.kapua.service.authentication.credential.CredentialCreator;
 import org.eclipse.kapua.service.authentication.credential.CredentialType;
 
+/**
+ * Credential creator service implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class CredentialCreatorImpl extends AbstractKapuaEntityCreator<Credential> implements CredentialCreator
 {
     private static final long serialVersionUID = -5020680413729882095L;
@@ -33,6 +39,14 @@ public class CredentialCreatorImpl extends AbstractKapuaEntityCreator<Credential
     @XmlElement(name = "credentialKey")
     private String            credentialKey;
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId scope identifier
+     * @param userId user identifier
+     * @param credentialType credential type (see {@link CredentialType} for the allowed values)
+     * @param credentialKey credential key
+     */
     public CredentialCreatorImpl(KapuaId scopeId, KapuaId userId, CredentialType credentialType, String credentialKey)
     {
         super(scopeId);

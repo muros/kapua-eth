@@ -22,9 +22,23 @@ import org.eclipse.kapua.service.authentication.credential.CredentialCreator;
 import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
 import org.eclipse.kapua.service.authentication.shiro.utils.AuthenticationUtils;
 
+/**
+ * Credential DAO.
+ * 
+ * @since 1.0
+ *
+ */
 public class CredentialDAO extends ServiceDAO
 {
 
+    /**
+     * Creates and return new credential
+     * 
+     * @param em
+     * @param credentialCreator
+     * @return
+     * @throws KapuaException
+     */
     public static Credential create(EntityManager em, CredentialCreator credentialCreator)
         throws KapuaException
     {
@@ -38,6 +52,14 @@ public class CredentialDAO extends ServiceDAO
         return ServiceDAO.create(em, credentialImpl);
     }
 
+    /**
+     * Update the provided credential
+     * 
+     * @param em
+     * @param credential
+     * @return
+     * @throws KapuaException
+     */
     public static Credential update(EntityManager em, Credential credential)
         throws KapuaException
     {
@@ -48,22 +70,51 @@ public class CredentialDAO extends ServiceDAO
         return ServiceDAO.update(em, CredentialImpl.class, credentialImpl);
     }
 
+    /**
+     * Delete the credential by credential identifier
+     * 
+     * @param em
+     * @param credentialId
+     */
     public static void delete(EntityManager em, KapuaId credentialId)
     {
         ServiceDAO.delete(em, CredentialImpl.class, credentialId);
     }
 
+    /**
+     * Find the credential by credential identifier
+     * 
+     * @param em
+     * @param credentialId
+     * @return
+     */
     public static Credential find(EntityManager em, KapuaId credentialId)
     {
         return em.find(CredentialImpl.class, credentialId);
     }
 
+    /**
+     * Return the credential list matching the provided query
+     * 
+     * @param em
+     * @param credentialQuery
+     * @return
+     * @throws KapuaException
+     */
     public static CredentialListResult query(EntityManager em, KapuaQuery<Credential> credentialQuery)
         throws KapuaException
     {
         return ServiceDAO.query(em, Credential.class, CredentialImpl.class, new CredentialListResultImpl(), credentialQuery);
     }
 
+    /**
+     * Return the credential count matching the provided query
+     * 
+     * @param em
+     * @param credentialQuery
+     * @return
+     * @throws KapuaException
+     */
     public static long count(EntityManager em, KapuaQuery<Credential> credentialQuery)
         throws KapuaException
     {

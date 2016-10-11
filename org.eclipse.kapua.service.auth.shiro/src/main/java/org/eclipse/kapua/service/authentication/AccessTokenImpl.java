@@ -18,6 +18,12 @@ import org.eclipse.kapua.commons.model.AbstractKapuaEntity;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * Access token entity implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class AccessTokenImpl extends AbstractKapuaEntity implements AccessToken {
 	
 	private static final long serialVersionUID = -6003387376828196787L;
@@ -26,6 +32,14 @@ public class AccessTokenImpl extends AbstractKapuaEntity implements AccessToken 
 	private KapuaId userId;
 	private KapuaId userScopeId;
 	
+    /**
+     * Constructor
+     * 
+     * @param userId user identifier
+     * @param scopeId scope identifier
+     * @param userScopeId user acts on a different scope identifier (on which he has the right)
+     * @param tokenId token identifier
+     */
 	public AccessTokenImpl(KapuaEid userId, KapuaEid scopeId, KapuaEid userScopeId, String tokenId) {
 		super(null);
 		this.scopeId = scopeId;
@@ -61,10 +75,12 @@ public class AccessTokenImpl extends AbstractKapuaEntity implements AccessToken 
 		return tokenId;
 	}
 
+    @Override
 	public KapuaId getUserScopeId() {
 		return userScopeId;
 	}
 	
+    @Override
 	public KapuaId getUserId() {
 		return userId;
 	}

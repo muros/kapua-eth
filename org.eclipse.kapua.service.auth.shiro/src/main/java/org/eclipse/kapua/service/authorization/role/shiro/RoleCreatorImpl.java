@@ -22,6 +22,12 @@ import org.eclipse.kapua.service.authorization.role.Role;
 import org.eclipse.kapua.service.authorization.role.RoleCreator;
 import org.eclipse.kapua.service.authorization.role.RolePermission;
 
+/**
+ * Role creator service implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class RoleCreatorImpl extends AbstractKapuaEntityCreator<Role> implements RoleCreator
 {
     private static final long   serialVersionUID = 972154225756734130L;

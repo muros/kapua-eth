@@ -31,6 +31,12 @@ import org.eclipse.kapua.service.authorization.user.permission.UserPermissionCre
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionListResult;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionService;
 
+/**
+ * User permission service implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class UserPermissionServiceImpl implements UserPermissionService
 {
 
@@ -68,14 +74,6 @@ public class UserPermissionServiceImpl implements UserPermissionService
         }
 
         return permission;
-    }
-
-    @Override
-    public void delete(UserPermission permission)
-        throws KapuaException
-    {
-        ArgumentValidator.notNull(permission, "permission");
-        delete(permission.getScopeId(), permission.getId());
     }
 
     @Override

@@ -14,7 +14,16 @@ package org.eclipse.kapua.service.authorization.shiro;
 
 import org.eclipse.kapua.KapuaErrorCode;
 
+/**
+ * Authorization error codes
+ * 
+ * since 1.0
+ * 
+ */
 public enum KapuaAuthorizationErrorCodes implements KapuaErrorCode
 {
+    /**
+     * Invalid string permission representation
+     */
     INVALID_STRING_PERMISSION
 }

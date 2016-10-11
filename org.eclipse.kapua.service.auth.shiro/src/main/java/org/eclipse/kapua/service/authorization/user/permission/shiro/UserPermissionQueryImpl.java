@@ -17,14 +17,28 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermission;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionQuery;
 
+/**
+ * User permission query implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserPermissionQueryImpl extends AbstractKapuaQuery<UserPermission> implements UserPermissionQuery
 {
 
+    /**
+     * Constructor
+     */
     public UserPermissionQueryImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     */
     public UserPermissionQueryImpl(KapuaId scopeId)
     {
         this();

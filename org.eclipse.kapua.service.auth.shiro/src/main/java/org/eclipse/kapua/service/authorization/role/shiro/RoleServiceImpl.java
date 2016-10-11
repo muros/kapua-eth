@@ -31,6 +31,12 @@ import org.eclipse.kapua.service.authorization.role.RoleListResult;
 import org.eclipse.kapua.service.authorization.role.RoleService;
 import org.eclipse.kapua.service.authorization.shiro.AuthorizationEntityManagerFactory;
 
+/**
+ * Role service implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class RoleServiceImpl implements RoleService
 {
 
@@ -69,12 +75,6 @@ public class RoleServiceImpl implements RoleService
         }
 
         return role;
-    }
-
-    @Override
-    public void delete(Role role) throws KapuaException {
-        ArgumentValidator.notNull(role, "role");
-        delete(role.getScopeId(), role.getId());
     }
 
     @Override

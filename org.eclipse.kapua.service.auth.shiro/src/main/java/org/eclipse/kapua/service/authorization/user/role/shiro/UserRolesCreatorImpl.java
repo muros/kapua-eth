@@ -20,6 +20,12 @@ import org.eclipse.kapua.service.authorization.role.Role;
 import org.eclipse.kapua.service.authorization.user.role.UserRoles;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
 
+/**
+ * User roles creator service implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserRolesCreatorImpl extends AbstractKapuaEntityCreator<UserRoles> implements UserRolesCreator
 {
     private static final long serialVersionUID = 972154225756734130L;
@@ -27,6 +33,11 @@ public class UserRolesCreatorImpl extends AbstractKapuaEntityCreator<UserRoles> 
     private KapuaId           userId;
     private Set<Role>         roles;
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     */
     public UserRolesCreatorImpl(KapuaId scopeId)
     {
         super(scopeId);

@@ -36,6 +36,12 @@ import org.eclipse.kapua.service.authentication.credential.CredentialType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity(name = "Credential")
 @Table(name = "atht_credential")
+/**
+ * Credential implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Credential
 {
     private static final long serialVersionUID = -7921424688644169175L;
@@ -57,11 +63,22 @@ public class CredentialImpl extends AbstractKapuaUpdatableEntity implements Cred
     @Column(name = "credential_key", updatable = false, nullable = false)
     private String            credentialKey;
 
+    /**
+     * Constructor
+     */
     public CredentialImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     * @param userId
+     * @param credentialType
+     * @param credentialKey
+     */
     public CredentialImpl(KapuaId scopeId, KapuaId userId, CredentialType credentialType, String credentialKey)
     {
         super(scopeId);

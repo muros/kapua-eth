@@ -33,6 +33,12 @@ import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesListResult;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesService;
 
+/**
+ * User roles service implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class UserRolesServiceImpl implements UserRolesService {
 
     @Override
@@ -70,14 +76,6 @@ public class UserRolesServiceImpl implements UserRolesService {
         }
 
         return userRole;
-    }
-
-    @Override
-    public void delete(UserRoles userRole)
-        throws KapuaException
-    {
-        ArgumentValidator.notNull(userRole, "userRole");
-        delete(userRole.getScopeId(), userRole.getId());
     }
 
     @Override

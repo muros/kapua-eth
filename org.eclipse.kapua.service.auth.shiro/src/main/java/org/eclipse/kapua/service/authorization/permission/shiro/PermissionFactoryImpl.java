@@ -26,6 +26,12 @@ import org.eclipse.kapua.service.authorization.role.shiro.RolePermissionImpl;
 import org.eclipse.kapua.service.authorization.shiro.KapuaAuthorizationErrorCodes;
 import org.eclipse.kapua.service.authorization.shiro.KapuaAuthorizationException;
 
+/**
+ * Permission factory service implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class PermissionFactoryImpl implements PermissionFactory
 {
     @Override

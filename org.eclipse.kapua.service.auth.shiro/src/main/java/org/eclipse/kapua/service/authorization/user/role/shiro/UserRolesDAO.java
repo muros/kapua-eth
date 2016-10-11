@@ -21,8 +21,23 @@ import org.eclipse.kapua.service.authorization.user.role.UserRoles;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesListResult;
 
+/**
+ * User role DAO
+ * 
+ * @since 1.0
+ *
+ */
 public class UserRolesDAO extends ServiceDAO
 {
+
+    /**
+     * Creates and return new user roles
+     * 
+     * @param em
+     * @param creator
+     * @return
+     * @throws KapuaException
+     */
     public static UserRoles create(EntityManager em, UserRolesCreator creator)
         throws KapuaException
     {
@@ -34,22 +49,51 @@ public class UserRolesDAO extends ServiceDAO
         return ServiceDAO.create(em, userRole);
     }
 
+    /**
+     * Find the user roles by user role identifier
+     * 
+     * @param em
+     * @param userRoleId
+     * @return
+     */
     public static UserRoles find(EntityManager em, KapuaId userRoleId)
     {
         return em.find(UserRolesImpl.class, userRoleId);
     }
 
+    /**
+     * Delete the user roles by user role identifier
+     * 
+     * @param em
+     * @param userRoleId
+     */
     public static void delete(EntityManager em, KapuaId userRoleId)
     {
         ServiceDAO.delete(em, UserRolesImpl.class, userRoleId);
     }
 
+    /**
+     * Return the user roles list matching the provided query
+     * 
+     * @param em
+     * @param userRoleQuery
+     * @return
+     * @throws KapuaException
+     */
     public static UserRolesListResult query(EntityManager em, KapuaQuery<UserRoles> userRoleQuery)
         throws KapuaException
     {
         return ServiceDAO.query(em, UserRoles.class, UserRolesImpl.class, new UserRolesListResultImpl(), userRoleQuery);
     }
 
+    /**
+     * Return the user roles count matching the provided query
+     * 
+     * @param em
+     * @param userRoleQuery
+     * @return
+     * @throws KapuaException
+     */
     public static long count(EntityManager em, KapuaQuery<UserRoles> userRoleQuery)
         throws KapuaException
     {

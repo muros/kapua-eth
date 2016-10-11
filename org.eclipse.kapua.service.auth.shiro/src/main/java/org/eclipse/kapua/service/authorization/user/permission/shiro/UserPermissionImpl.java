@@ -29,6 +29,12 @@ import org.eclipse.kapua.service.authorization.user.permission.UserPermission;
 
 @Entity(name = "UserPermission")
 @Table(name = "athz_user_permission")
+/**
+ * User permission implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermission
 {
     private static final long serialVersionUID = -3760818776351242930L;
@@ -43,11 +49,19 @@ public class UserPermissionImpl extends AbstractKapuaEntity implements UserPermi
     @Embedded
     private PermissionImpl    permission;
 
+    /**
+     * Constructor
+     */
     public UserPermissionImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     */
     public UserPermissionImpl(KapuaId scopeId)
     {
         super(scopeId);

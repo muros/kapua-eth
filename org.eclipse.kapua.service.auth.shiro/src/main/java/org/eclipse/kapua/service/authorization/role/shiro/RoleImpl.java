@@ -35,6 +35,12 @@ import org.eclipse.kapua.service.authorization.user.role.shiro.UserRolesImpl;
 
 @Entity(name = "Role")
 @Table(name = "athz_role")
+/**
+ * Role implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class RoleImpl extends AbstractKapuaEntity implements Role
 {
     private static final long       serialVersionUID = -3760818776351242930L;
@@ -56,31 +62,45 @@ public class RoleImpl extends AbstractKapuaEntity implements Role
         super();
     }
 
+    /**
+     * Constructor.<br>
+     * Creates a soft clone.
+     * 
+     * @param role
+     */
     public RoleImpl(Role role)
     {
         super(role.getScopeId());
-        super.id = (KapuaEid) role.getId();
-        super.createdOn = role.getCreatedOn();
-        super.createdBy = (KapuaEid) role.getCreatedBy();
+        id = (KapuaEid) role.getId();
+        createdOn = role.getCreatedOn();
+        createdBy = (KapuaEid) role.getCreatedBy();
         setName(role.getName());
         setPermissions(role.getPermissions());
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     */
     public RoleImpl(KapuaId scopeId)
     {
         super(scopeId);
     }
 
+    @Override
     public void setName(String name)
     {
         this.name = name;
     }
 
+    @Override
     public String getName()
     {
         return name;
     }
 
+    @Override
     public void setPermissions(Set<RolePermission> permissions)
     {
         this.permissions = new HashSet<>();
