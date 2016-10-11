@@ -431,7 +431,7 @@
     <modules>
         <module>commons</module>
         <module>service</module>
-
+        
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
         <module>org.eclipse.kapua.locator.guice</module>
