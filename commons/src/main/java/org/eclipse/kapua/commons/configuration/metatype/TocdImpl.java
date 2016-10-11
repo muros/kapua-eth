@@ -107,6 +107,16 @@ public class TocdImpl implements KapuaTocd
         return new ArrayList<>(this.ad);
     }
 
+    @Override
+    public void setAD(List<? extends KapuaTad> ad) {
+        if (this.ad == null) {
+            this.ad = new ArrayList<>();
+        }
+        for (KapuaTad adInList : ad) {
+            this.ad.add((TadImpl)adInList);
+        }
+    }
+
     public void addAD(KapuaTad ad)
     {
         if (this.ad == null) {
@@ -147,6 +157,16 @@ public class TocdImpl implements KapuaTocd
         return new ArrayList<>(this.icon);
     }
 
+    @Override
+    public void setIcon(List<? extends KapuaTicon> icon) {
+        if (this.icon == null) {
+            this.icon = new ArrayList<>();
+        }
+        for (KapuaTicon iconInList : icon) {
+            this.icon.add((TiconImpl)iconInList);
+        }
+    }
+
     public void addIcon(KapuaTicon icon)
     {
         if (this.icon == null) {
@@ -185,6 +205,11 @@ public class TocdImpl implements KapuaTocd
             any = new ArrayList<>();
         }
         return this.any;
+    }
+
+    @Override
+    public void setAny(List<Object> any) {
+        this.any = any;
     }
 
     public void addAny(Object object)
@@ -293,6 +318,11 @@ public class TocdImpl implements KapuaTocd
     {
         getOtherAttributes().put(key,
                                  value);
+    }
+
+    @Override
+    public void setOtherAttributes(Map<QName, String> otherAttributes) {
+        this.otherAttributes = otherAttributes;
     }
 
 }

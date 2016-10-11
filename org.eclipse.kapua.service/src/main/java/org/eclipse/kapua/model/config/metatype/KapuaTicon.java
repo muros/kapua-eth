@@ -47,9 +47,8 @@ import org.w3c.dom.Element;
  */
 @XmlRootElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@XmlType(name = "Ticon", propOrder = {
-        "any"
-},
+@XmlType(name = "Icon",
+        namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0",
         factoryClass = MetatypeXmlRegistry.class,
         factoryMethod = "newKapuaTicon")
 public interface KapuaTicon

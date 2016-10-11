@@ -41,7 +41,6 @@ public interface DeviceComponentConfiguration
     public void setName(String unescapedComponentName);
 
     @XmlElement(name = "definition")
-    @XmlElementRef(type = KapuaTocd.class)
     public KapuaTocd getDefinition();
 
     public void setDefinition(KapuaTocd definition);

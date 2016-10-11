@@ -49,13 +49,9 @@ import org.w3c.dom.Element;
  */
 @XmlRootElement(name = "OCD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@XmlType(name = "Tocd", propOrder = {
-        "AD",
-        "icon",
-        "any"
-},
-factoryClass = MetatypeXmlRegistry.class,
-factoryMethod = "newKapuaTocd")
+@XmlType(
+        factoryClass = MetatypeXmlRegistry.class,
+        factoryMethod = "newKapuaTocd")
 public interface KapuaTocd
 {
 
@@ -85,6 +81,7 @@ public interface KapuaTocd
     @XmlElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
     public List<KapuaTad> getAD();
 
+    public void setAD(List<? extends KapuaTad> icon);
     /**
      * Gets the value of the icon property.
      *
@@ -110,6 +107,8 @@ public interface KapuaTocd
      */
     @XmlElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
     public List<KapuaTicon> getIcon();
+
+    public void setIcon(List<? extends KapuaTicon> icon);
 
     /**
      * Gets the value of the any property.
@@ -138,6 +137,7 @@ public interface KapuaTocd
     @XmlAnyElement(lax = true)
     public List<Object> getAny();
 
+    public void setAny(List<Object> any);
     /**
      * Gets the value of the name property.
      *
@@ -217,5 +217,7 @@ public interface KapuaTocd
      */
     @XmlAnyAttribute
     public Map<QName, String> getOtherAttributes();
+
+    public void setOtherAttributes(Map<QName, String> otherAttributes);
 
 }
