@@ -14,6 +14,12 @@ package org.eclipse.kapua.service.authorization.token;
 
 import org.eclipse.kapua.model.KapuaEntityCreator;
 
+/**
+ * Authorization token creator definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface AuthorizationTokenCreator extends KapuaEntityCreator<AuthorizationToken>
 {
 

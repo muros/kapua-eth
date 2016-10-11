@@ -15,9 +15,27 @@ package org.eclipse.kapua.service.authorization.role;
 import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * Role factory service definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface RoleFactory extends KapuaObjectFactory
 {
+    /**
+     * Creates a new {@link RoleCreator} for the specified scope identifier
+     * 
+     * @param scopeId
+     * @return
+     */
     public RoleCreator newCreator(KapuaId scopeId);
 
+    /**
+     * Create a new role query for the specified scope identifier
+     * 
+     * @param scopeId
+     * @return
+     */
     public RoleQuery newQuery(KapuaId scopeId);
 }

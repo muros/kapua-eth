@@ -18,11 +18,32 @@ import java.util.UUID;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * Authorization token entity definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface AuthorizationToken extends KapuaEntity
 {
+    /**
+     * Return the user identifier
+     * 
+     * @return
+     */
     public KapuaId getSubjectUserId();
 
+    /**
+     * Return the token expires on
+     * 
+     * @return
+     */
     public Date getExpiresOn();
 
+    /**
+     * Return the token identifier
+     * 
+     * @return
+     */
     public UUID getTokenId();
 }

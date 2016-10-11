@@ -19,23 +19,52 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.service.KapuaEntityService;
 
+/**
+ * User roles service definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserRolesService extends KapuaEntityService<UserRoles, UserRolesCreator>
 {
+    /**
+     * Create e new user role
+     */
     public UserRoles create(UserRolesCreator creator)
         throws KapuaException;
 
+    /**
+     * Find the user role by scope identifier and user identifier
+     */
     public UserRoles find(KapuaId accountId, KapuaId entityId)
         throws KapuaException;
 
+    /**
+     * Return the user role list matching the provided query
+     */
     public UserRolesListResult query(KapuaQuery<UserRoles> query)
         throws KapuaException;
 
+    /**
+     * Return the count of the user role matching the provided query
+     */
     public long count(KapuaQuery<UserRoles> query)
         throws KapuaException;
 
-    public void delete(UserRoles entity)
+    /**
+     * Delete the user role by scope identifier and entity identifier
+     */
+    public void delete(KapuaId scopeId, KapuaId entityId)
         throws KapuaException;
 
-    public UserRolesListResult merge(Set<UserRolesCreator> newPermissions)
+    /**
+     * Merge the new roles list with the already persisted roles.<br>
+     * In other word the newRoles list will replace all the roles for the user in the database.
+     * 
+     * @param newRoles
+     * @return
+     * @throws KapuaException
+     */
+    public UserRolesListResult merge(Set<UserRolesCreator> newRoles)
         throws KapuaException;
 }

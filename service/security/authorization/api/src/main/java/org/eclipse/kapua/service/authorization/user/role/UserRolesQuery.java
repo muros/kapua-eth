@@ -14,6 +14,12 @@ package org.eclipse.kapua.service.authorization.user.role;
 
 import org.eclipse.kapua.model.query.KapuaQuery;
 
+/**
+ * User roles query definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserRolesQuery extends KapuaQuery<UserRoles>
 {
 }
