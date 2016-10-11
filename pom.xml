@@ -253,6 +253,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-configuration-internal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>kapua-device-registry-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -410,9 +415,6 @@
         <module>org.eclipse.kapua.transport.jms</module>
         <module>org.eclipse.kapua.transport.mqtt</module>
         <module>org.eclipse.kapua.transport.test</module>
-
-        <!-- Configurations -->
-        <module>org.eclipse.kapua.service.device.management.configuration.internal</module>
 
         <!-- Deploy -->
         <module>org.eclipse.kapua.service.device.management.packages</module>
