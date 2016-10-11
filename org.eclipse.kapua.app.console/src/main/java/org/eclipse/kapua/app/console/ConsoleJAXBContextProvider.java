@@ -14,9 +14,6 @@
 package org.eclipse.kapua.app.console;
 
 import org.eclipse.kapua.KapuaException;
-import org.eclipse.kapua.commons.configuration.metatype.TadImpl;
-import org.eclipse.kapua.commons.configuration.metatype.TiconImpl;
-import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
 import org.eclipse.kapua.commons.configuration.metatype.TscalarImpl;
 import org.eclipse.kapua.commons.util.xml.JAXBContextProvider;
 import org.eclipse.kapua.model.config.metatype.*;
@@ -30,17 +27,10 @@ import org.eclipse.kapua.service.device.call.kura.model.deploy.KuraDeploymentPac
 import org.eclipse.kapua.service.device.call.kura.model.snapshot.KuraSnapshotIds;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundle;
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundles;
-import org.eclipse.kapua.service.device.management.bundle.internal.DeviceBundlesImpl;
 import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
-import org.eclipse.kapua.service.device.management.configuration.internal.DeviceComponentConfigurationImpl;
-import org.eclipse.kapua.service.device.management.configuration.internal.DeviceConfigurationImpl;
-import org.eclipse.kapua.service.device.management.packages.model.DevicePackage;
-import org.eclipse.kapua.service.device.management.packages.model.DevicePackageXmlRegistry;
 import org.eclipse.kapua.service.device.management.packages.model.DevicePackages;
-import org.eclipse.kapua.service.device.management.packages.model.internal.DevicePackagesImpl;
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshots;
-import org.eclipse.kapua.service.device.registry.event.DeviceEvent;
 import org.eclipse.persistence.jaxb.JAXBContextFactory;
 
 import javax.xml.bind.JAXBContext;

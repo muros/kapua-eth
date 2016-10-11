@@ -15,9 +15,6 @@ package org.eclipse.kapua.service.device.management.bundle.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.eclipse.kapua.service.device.management.bundle.DeviceBundles;
 
 public class DeviceBundlesImpl implements DeviceBundles
