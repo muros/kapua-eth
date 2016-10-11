@@ -324,8 +324,7 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
     /**
      * Returns a List of direct child account of an account
      * 
-     * @param accountId
-     *            the Id of the parent Account
+     * @param id the Id of the parent Account
      * @return List of direct child account of an account
      * @throws KapuaException
      */

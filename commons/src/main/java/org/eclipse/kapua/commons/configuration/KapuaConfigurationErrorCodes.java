@@ -13,11 +13,32 @@ package org.eclipse.kapua.commons.configuration;
 
 import org.eclipse.kapua.KapuaErrorCode;
 
+/**
+ * Configuration error codes.
+ * 
+ * @since 1.0
+ *
+ */
 public enum KapuaConfigurationErrorCodes implements KapuaErrorCode {
     
+    /**
+     * Internal error
+     */
     INTERNAL_ERROR,
+    /**
+     * Illegal argument
+     */
     ILLEGAL_ARGUMENT,
+    /**
+     * Operation not allowed
+     */
     OPERATION_NOT_ALLOWED,
+    /**
+     * Invalid attribute
+     */
     ATTRIBUTE_INVALID,
+    /**
+     * missing required attribute
+     */
     REQUIRED_ATTRIBUTE_MISSING;
 }

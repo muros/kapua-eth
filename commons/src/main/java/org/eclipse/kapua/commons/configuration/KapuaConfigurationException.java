@@ -14,7 +14,9 @@ package org.eclipse.kapua.commons.configuration;
 import org.eclipse.kapua.KapuaException;
 
 /**
- * Kapua configuration exception
+ * Configuration exception.
+ * 
+ * @since 1.0
  *
  */
 public class KapuaConfigurationException extends KapuaException 

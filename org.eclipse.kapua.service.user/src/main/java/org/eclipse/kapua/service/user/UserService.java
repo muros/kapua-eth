@@ -58,8 +58,7 @@ public interface UserService extends KapuaEntityService<User, UserCreator>,
     /**
      * Delete the supplied User.
      *
-     * @param userCreator
-     * @return
+     * @param user
      * @throws KapuaException
      */
     public void delete(User user)

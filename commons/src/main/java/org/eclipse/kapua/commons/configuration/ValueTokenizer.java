@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
  * in the Eclipse Equinox project.
  * 
  * @since 1.0
+ * 
  */
 public class ValueTokenizer {
     

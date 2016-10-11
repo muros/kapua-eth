@@ -17,22 +17,53 @@ import java.security.Principal;
 import org.eclipse.kapua.model.id.KapuaId;
 
 /**
- * Kapua {@link Principal} implementation
- * TODO it's an object used by both authorization and authentication... should leave it in authentication module?
- *
+ * Kapua {@link Principal} implementation.<br>
+ * Uniquely identifies a user.
+ * 
+ * @since 1.0
+ * 
  */
+// TODO it's an object used by both authorization and authentication... should leave it in authentication module?
 public interface KapuaPrincipal extends Principal, java.io.Serializable {
 
+    /**
+     * Return the user name
+     */
     public String getName();
     
+    /**
+     * Return the token identifier
+     * 
+     * @return
+     */
     public String getTokenId();
     
+    /**
+     * Return the user id
+     * 
+     * @return
+     */
     public KapuaId getUserId();
 
+    /**
+     * Retur the account it
+     * 
+     * @return
+     */
     public KapuaId getAccountId();
 
+    /**
+     * Return the remote client ip from which the user should be connected
+     * 
+     * @return
+     */
     public String getClientIp();
 
+    /**
+     * Return the client identifiers from which the user should be connected
+     * 
+     * @return
+     */
     public String getClientId();
 
 }

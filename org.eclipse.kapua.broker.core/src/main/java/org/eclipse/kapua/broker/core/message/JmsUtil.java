@@ -39,11 +39,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Jms message utility class
  * 
- * TODO add translator caching
- * 
  * @since 1.0
  * 
  */
+// TODO add translator caching
 public class JmsUtil
 {
 

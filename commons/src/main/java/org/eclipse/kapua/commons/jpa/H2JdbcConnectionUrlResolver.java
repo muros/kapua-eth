@@ -12,6 +12,12 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.jpa;
 
+/**
+ * H2 Jdbc url connection resolver implementation
+ * 
+ * @since 1.0
+ *
+ */
 public class H2JdbcConnectionUrlResolver implements JdbcConnectionUrlResolver {
 
     @Override

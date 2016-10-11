@@ -12,13 +12,39 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication;
 
+/**
+ * Username and password {@link AuthenticationCredentials} implementation
+ * 
+ * @since 1.0
+ * 
+ */
 public interface UsernamePasswordToken extends AuthenticationCredentials
 {
+    /**
+     * return the username
+     * 
+     * @return
+     */
     public String getUsername();
 
+    /**
+     * Set the username
+     * 
+     * @param username
+     */
     public void setUsername(String username);
 
+    /**
+     * return the password
+     * 
+     * @return
+     */
     public char[] getPassword();
 
+    /**
+     * Set the password
+     * 
+     * @param password
+     */
     public void setPassword(char[] password);
 }

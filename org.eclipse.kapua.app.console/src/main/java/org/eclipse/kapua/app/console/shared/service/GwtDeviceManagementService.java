@@ -163,8 +163,9 @@ public interface GwtDeviceManagementService extends RemoteService {
     /**
      * Executes a command on a remote Device.
      * 
+     * @param xsfrToken
      * @param device
-     * @param command
+     * @param commandInput
      * @return
      */
     public GwtDeviceCommandOutput executeCommand(GwtXSRFToken xsfrToken, GwtDevice device, GwtDeviceCommandInput commandInput)

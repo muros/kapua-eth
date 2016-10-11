@@ -17,8 +17,23 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.KapuaEntityService;
 import org.eclipse.kapua.service.KapuaUpdatableEntityService;
 
+/**
+ * Credential service definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface CredentialService extends KapuaEntityService<Credential, CredentialCreator>, KapuaUpdatableEntityService<Credential>
 {
+
+    /**
+     * Return the credential list result looking by user identifier (and also scope identifier)
+     * 
+     * @param scopeId
+     * @param userId
+     * @return
+     * @throws KapuaException
+     */
     public CredentialListResult findByUserId(KapuaId scopeId, KapuaId userId)
         throws KapuaException;
 }

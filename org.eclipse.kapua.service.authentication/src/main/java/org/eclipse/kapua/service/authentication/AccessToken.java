@@ -15,6 +15,12 @@ package org.eclipse.kapua.service.authentication;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * Access token reference implementation
+ * 
+ * @since 1.0
+ *
+ */
 public interface AccessToken extends KapuaEntity
 {
 	
@@ -25,10 +31,25 @@ public interface AccessToken extends KapuaEntity
         return TYPE;
     }
     
+    /**
+     * Return the token identifier
+     * 
+     * @return
+     */
     public String getTokenId();
     
+    /**
+     * Return the scope identifier
+     * 
+     * @return
+     */
     public KapuaId getUserScopeId();
 	
+    /**
+     * Return the user identifier
+     * 
+     * @return
+     */
 	public KapuaId getUserId();
 
 }

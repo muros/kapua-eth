@@ -57,9 +57,9 @@ public class GwtKapuaException extends Exception {
     /**
      * Builds a new GwtKapuaException instance based on the supplied GwtKapuaErrorCode, an optional Throwable cause.
      *
-     * @param code
-     * @param t
-     * @param arguments
+     * @param errorCode
+     * @param cause
+     * @param remainingLoginAttempts
      */
     public GwtKapuaException(GwtKapuaErrorCode errorCode, Throwable cause, Integer remainingLoginAttempts) {
         super(cause);
@@ -87,7 +87,6 @@ public class GwtKapuaException extends Exception {
     /**
      * Factory method to build an GwtKapuaException with the GwtKapuaErrorCode.INTERNAL_ERROR code providing only a message.
      *
-     * @param cause
      * @param message
      * @return
      */

@@ -18,11 +18,36 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.model.config.metatype.KapuaTocd;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * Configurable service definition
+ * 
+ */
 public interface KapuaConfigurableService
 {
+    /**
+     * Return the service configuration metadata
+     * 
+     * @return
+     * @throws KapuaException
+     */
 	public KapuaTocd getConfigMetadata() throws KapuaException;
 	
+    /**
+     * Return a map of configuration values associated with the provided scope id
+     * 
+     * @param scopeId
+     * @return
+     * @throws KapuaException
+     */
 	public Map<String, Object> getConfigValues(KapuaId scopeId) throws KapuaException;
 	
+    /**
+     * Set the configuration values for the specified scope id
+     * 
+     * @param scopeId
+     * @param values
+     * @throws KapuaException
+     */
 	public void setConfigValues(KapuaId scopeId, Map<String, Object> values) throws KapuaException;
+
 }

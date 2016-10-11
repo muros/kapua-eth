@@ -22,15 +22,23 @@ import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Sql script executor bean. Used to invoke the execution of sql scripts to update database schema.
+ *
+ * @since 1.0
+ * 
+ */
 public class SimpleSqlScriptExecutor
 {
-    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(SimpleSqlScriptExecutor.class);
 
     private static String WILDCAR_ANY = "*";
 
     private static String RUN_SCRIPT_CMD = "RUNSCRIPT FROM '%s'";
 
+    /**
+     * Default sql scripts path
+     */
     private static String DEFAULT_SCRIPTS_PATH = "src/main/sql/H2";
 
     // Members
@@ -38,17 +46,31 @@ public class SimpleSqlScriptExecutor
     private List<String> queryStrings = new ArrayList<>();
 
     // Operations
-
+    /**
+     * Clear the query string list
+     */
     public void clearQueries()
     {
         queryStrings.clear();
     }
     
+    /**
+     * Return the query list string
+     * 
+     * @return
+     */
     public List<String> getQueries()
     {
         return Collections.unmodifiableList(queryStrings);
     }
     
+    /**
+     * Creates and configure a {@link SimpleSqlScriptExecutor} adding all the sql scripts matching the filter in the specified path
+     * 
+     * @param scanPath path to be scanned
+     * @param filenameFilter name filter matching <b>(must be not null!)</b>
+     * @return
+     */
     public SimpleSqlScriptExecutor scanScripts(String scanPath, String filenameFilter) {
         
         String prefix = "";
@@ -103,16 +125,34 @@ public class SimpleSqlScriptExecutor
         return this;
     }
 
+    /**
+     * Creates and configure a {@link SimpleSqlScriptExecutor} adding all the sql scripts matching the filter in the default path {@link SimpleSqlScriptExecutor#DEFAULT_SCRIPTS_PATH}
+     * 
+     * @param filenameFilter
+     * @return
+     */
     public SimpleSqlScriptExecutor scanScripts(String filenameFilter) {
         return scanScripts(DEFAULT_SCRIPTS_PATH, filenameFilter);
     }
 
-        public SimpleSqlScriptExecutor addQuery(String sqlString)
+    /**
+     * Add a query to the query string list
+     * 
+     * @param sqlString
+     * @return
+     */
+    public SimpleSqlScriptExecutor addQuery(String sqlString)
     {
         this.queryStrings.add(sqlString);
         return this;
     }
     
+    /**
+     * Add a queries to the query string list
+     * 
+     * @param sqlStrings
+     * @return
+     */
     public SimpleSqlScriptExecutor addQueries(List<String> sqlStrings)
     {
         if (sqlStrings==null)
@@ -123,6 +163,12 @@ public class SimpleSqlScriptExecutor
         return this;
     }
     
+    /**
+     * Execute all the queries using the provided entity manager
+     * 
+     * @param entityManager
+     * @return
+     */
     public int executeUpdate(EntityManager entityManager)
     {
         int i=0;

@@ -21,15 +21,26 @@ import org.eclipse.kapua.commons.jpa.SimpleSqlScriptExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Configurable service database schema utilities.
+ * 
+ * @since 1.0
+ *
+ */
 public class KapuaConfigurableServiceSchemaUtils {
 	
-    @SuppressWarnings("unused")
     private static final Logger logger = LoggerFactory.getLogger(KapuaConfigurableServiceSchemaUtils.class);
     
     public static String DEFAULT_PATH = "src/main/sql/H2";
     public static String DEFAULT_FILTER = "sys_*.sql";
     public static String DROP_FILTER = "sys_*_drop.sql";
 
+    /**
+     * Executes the database scripts in the specified path matching the specified filter
+     * 
+     * @param path
+     * @param fileFilter file names pattern
+     */
     public static void scriptSession(String path, String fileFilter)
     {
         EntityManager em = null;

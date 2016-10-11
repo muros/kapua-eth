@@ -31,8 +31,7 @@ import com.codahale.metrics.Counter;
 /**
  * Device messages listener (device life cycle).<BR>
  * Manage:<BR>
- * - BIRTH/DC/LWT/APPS/CONNECT/DISCONNECT device messages<BR>
- * - Certificates updates<BR>
+ * - BIRTH/DC/LWT/APPS device messages<BR>
  * Republish of the lifecycle messages (once processed by the broker) isn't supported yet (see #136).
  *
  * @since 1.0

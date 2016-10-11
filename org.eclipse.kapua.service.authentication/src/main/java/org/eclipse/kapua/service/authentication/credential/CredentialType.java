@@ -12,8 +12,17 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.credential;
 
+/**
+ * Available credential types
+ * 
+ * @since 1.0
+ * 
+ */
 public enum CredentialType
 {
+    /**
+     * Password
+     */
     PASSWORD,
     // API_KEY
     ;

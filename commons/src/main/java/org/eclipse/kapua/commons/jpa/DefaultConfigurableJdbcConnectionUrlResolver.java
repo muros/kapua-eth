@@ -15,6 +15,12 @@ package org.eclipse.kapua.commons.jpa;
 import org.eclipse.kapua.commons.setting.system.SystemSetting;
 import org.eclipse.kapua.commons.setting.system.SystemSettingKey;
 
+/**
+ * Jdbc connection url resolver service reference implementation
+ * 
+ * @since 1.0
+ *
+ */
 public class DefaultConfigurableJdbcConnectionUrlResolver implements JdbcConnectionUrlResolver {
 
     @Override

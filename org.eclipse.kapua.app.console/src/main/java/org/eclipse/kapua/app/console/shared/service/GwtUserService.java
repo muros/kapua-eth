@@ -51,7 +51,6 @@ public interface GwtUserService extends RemoteService {
      * Delete the supplied User.
      * 
      * @param gwtUser
-     * @return
      * @throws GwtKapuaException
      */
     public void delete(GwtXSRFToken xsfrToken, String accountId, GwtUser gwtUser)
@@ -71,7 +70,7 @@ public interface GwtUserService extends RemoteService {
     /**
      * Returns the list of all User which belong to an account.
      * 
-     * @param accountId
+     * @param scopeIdStirng
      * @return
      * @throws GwtKapuaException
      * 

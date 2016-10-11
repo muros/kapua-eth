@@ -198,6 +198,13 @@ public abstract class AbstractKapuaConfigurableService implements KapuaConfigura
         }
     }
     
+    /**
+     * Protected constructor
+     * 
+     * @param pid
+     * @param domain
+     * @param entityFactory
+     */
     protected AbstractKapuaConfigurableService(String pid, String domain , EntityManagerFactory entityFactory)
     {
         this.pid = pid;

@@ -14,8 +14,21 @@ package org.eclipse.kapua.commons.jpa;
 
 import org.eclipse.kapua.KapuaException;
 
+/**
+ * Entity manager callback action service definition.<br>
+ * Used to invoke actions that don't expect a result (ie delete action).
+ * 
+ * @since 1.0
+ *
+ */
 public interface EntityManagerActionCallback {
 
+    /**
+     * Execute the action using the provided entity manager.
+     * 
+     * @param entityManager
+     * @throws KapuaException
+     */
     void actionOn(EntityManager entityManager) throws KapuaException;
 
 }

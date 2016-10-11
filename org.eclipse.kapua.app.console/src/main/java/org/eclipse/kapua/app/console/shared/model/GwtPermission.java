@@ -65,7 +65,6 @@ public class GwtPermission extends KapuaBaseModel implements Serializable {
      * Gwt Permission constructor.
      * 
      * @param domain
-     * @param action
      */
     public GwtPermission(Domain domain) {
         m_domain = domain;

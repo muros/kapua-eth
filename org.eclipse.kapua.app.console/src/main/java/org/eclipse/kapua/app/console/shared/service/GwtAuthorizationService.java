@@ -40,7 +40,7 @@ public interface GwtAuthorizationService extends RemoteService
      * returns true if access is granted, false otherwise.
      * <b>The API does not perform any access control check and it is meant for internal use.</b>
      *
-     * @param permission
+     * @param gwtPermission
      * @return
      * @throws GwtKapuaException
      */

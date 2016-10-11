@@ -13,6 +13,12 @@ package org.eclipse.kapua.commons.configuration;
 
 import org.eclipse.kapua.model.query.KapuaQuery;
 
+/**
+ * Service configuration query.
+ * 
+ * @since 1.0
+ *
+ */
 public interface ServiceConfigQuery extends KapuaQuery<ServiceConfig>
 {
 }

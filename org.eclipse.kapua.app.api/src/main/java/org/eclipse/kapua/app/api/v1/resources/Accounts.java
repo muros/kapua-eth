@@ -107,7 +107,7 @@ public class Accounts extends AbstractKapuaResource
     /**
      * Returns the list of all direct child accounts for the Account specified by the "id" path parameter.
      *
-     * @param accountId The id of the Account requested.
+     * @param scopeId The id of the Account requested.
      * @return The requested list of child accounts.
      */
     @GET
@@ -314,7 +314,7 @@ public class Accounts extends AbstractKapuaResource
     /**
      * Deletes an account based on the information provided in Account parameter.
      *
-     * @param account Provides the information to update the account.
+     * @param accountId Provides the information to update the account.
      * @return The updated created Account object.
      */
     @DELETE

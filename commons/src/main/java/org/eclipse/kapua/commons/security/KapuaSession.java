@@ -13,6 +13,7 @@
 package org.eclipse.kapua.commons.security;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class KapuaSession implements Serializable
     public final static String KAPUA_SESSION_KEY = "KapuaSession";
 
     private static List<String> trustedClasses = new ArrayList<String>();
+    private static final String TRUST_CLASS_METHOD_PATTERN = "{0}.{1}";
 
     // TODO to be moved inside configuration service or something like that "fully.qualified.classname.methodname" (<init> for the constructor)
     static {
@@ -54,9 +56,8 @@ public class KapuaSession implements Serializable
     }
     
     /**
-     * creates a {@link KapuaSession} copy with trusted mode flag set to true (to be used only from trusted classes)
+     * Creates a {@link KapuaSession} copy with trusted mode flag set to true (to be used only from trusted classes)
      * 
-     * @param kapuaSession
      * @return
      */
     public static KapuaSession createFrom()
@@ -87,7 +88,7 @@ public class KapuaSession implements Serializable
         // TODO we can make more secure this call checking also the method name
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if (stackTraceElements != null && stackTraceElements.length > 4) {
-            return trustedClasses.contains(stackTraceElements[3].getClassName() + "." + stackTraceElements[3].getMethodName());
+            return trustedClasses.contains(MessageFormat.format(TRUST_CLASS_METHOD_PATTERN, stackTraceElements[3].getClassName() + stackTraceElements[3].getMethodName()));
         }
         else {
             return false;

@@ -59,7 +59,6 @@ public interface MetricsService extends KapuaService {
 	 * @param module
 	 * @param component
 	 * @param names
-	 * @return
 	 * @throws KapuaException if the metric is already defined
 	 */
 	public void registerGauge(Gauge<?> gauge, String module, String component, String... names) throws KapuaException;

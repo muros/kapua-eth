@@ -28,6 +28,9 @@ public class JmsConnectionFactory
 
     private static Logger s_logger = LoggerFactory.getLogger(JmsConnectionFactory.class);
 
+    /**
+     * ActiveMQ vm connection factory instance
+     */
     public static ActiveMQConnectionFactory vmConnFactory;
 
     // the workers used the same string connection without asynch=true

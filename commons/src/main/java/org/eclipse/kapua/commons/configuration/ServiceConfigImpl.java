@@ -37,6 +37,12 @@ import org.eclipse.kapua.model.id.KapuaId;
 @XmlType(propOrder = { "pid", "scopeId", "id", "name", "createdOn", "createdBy", "modifiedOn", "modifiedBy", "optlock" })
 @Entity(name = "ServiceConfig")
 @Table(name = "sys_configuration")
+/**
+ * Service configuration reference implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class ServiceConfigImpl extends AbstractKapuaUpdatableEntity implements ServiceConfig
 {
     private static final long  serialVersionUID = 8699765898092343484L;

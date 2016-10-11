@@ -19,7 +19,6 @@ import org.eclipse.kapua.model.KapuaEntity;
  * Common interface for all KapuaService that are managing identifiable entities.
  *
  * @param <E> - Class of the KapuaEntity being managed by this Service
- * @param <C> - Creator Class of the KapuaEntity being managed by this Service
  */
 public interface KapuaUpdatableEntityService<E extends KapuaEntity> extends KapuaService
 {

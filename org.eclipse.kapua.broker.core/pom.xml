@@ -65,12 +65,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.call</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
+			<artifactId>kapua-device-call-kura</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -116,7 +111,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.management</artifactId>
+			<artifactId>kapua-device-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

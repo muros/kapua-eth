@@ -27,7 +27,7 @@
 
     <modules>
         <module>datastore</module>
-        <module>deviceregistry</module>
+        <module>device</module>
     </modules>
 
 </project>

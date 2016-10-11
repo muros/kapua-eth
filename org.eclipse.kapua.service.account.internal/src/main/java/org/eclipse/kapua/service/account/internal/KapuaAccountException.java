@@ -30,8 +30,6 @@ public class KapuaAccountException extends KapuaException
 	 * Builds a new KapuaException instance based on the supplied KapuaErrorCode.
 	 * 
 	 * @param code
-	 * @param t
-	 * @param arguments
 	 */
 	public KapuaAccountException(KapuaAccountErrorCodes code) {
 		super(code);
@@ -49,13 +47,13 @@ public class KapuaAccountException extends KapuaException
 	}
 
 	/**
-	 * Builds a new KapuaAccountException instance based on the supplied KapuaAccountErrorCode, 
-	 * an Throwable cause, and optional arguments for the associated exception message.
-	 * 
-	 * @param code
-	 * @param t
-	 * @param arguments
-	 */
+     * Builds a new KapuaAccountException instance based on the supplied KapuaAccountErrorCode,
+     * an Throwable cause, and optional arguments for the associated exception message.
+     * 
+     * @param code
+     * @param cause
+     * @param arguments
+     */
 	public KapuaAccountException(KapuaAccountErrorCodes code, Throwable cause, Object... arguments) {
 		super(code, cause, arguments);
 	}
@@ -64,7 +62,6 @@ public class KapuaAccountException extends KapuaException
 	 * Factory method to build an KapuaAccountException with the KapuaAccountErrorCode.INTERNAL_ERROR, 
 	 * and optional arguments for the associated exception message.
 	 * 
-	 * @param cause
 	 * @param message
 	 * @return
 	 */

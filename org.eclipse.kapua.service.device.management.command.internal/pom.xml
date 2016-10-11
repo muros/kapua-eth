@@ -25,7 +25,6 @@
   <name>org.eclipse.kapua.service.device.management.command.internal</name>
   
     <dependencies>
-        <!-- -->
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -33,15 +32,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- -->
-        <!-- Required service interfaces -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -49,8 +39,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.call.kura</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-call-kura</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
