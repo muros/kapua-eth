@@ -102,8 +102,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.packages.internal</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-packages-internal</artifactId>
         </dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
