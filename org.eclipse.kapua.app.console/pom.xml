@@ -155,6 +155,7 @@
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>kapua-datastore-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
