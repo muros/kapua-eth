@@ -142,8 +142,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.management.packages</artifactId>
-			<version>${project.version}</version>
+			<artifactId>kapua-device-packages-api</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

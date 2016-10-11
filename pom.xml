@@ -258,6 +258,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-packages-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>kapua-device-registry-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -417,7 +422,6 @@
         <module>org.eclipse.kapua.transport.test</module>
 
         <!-- Deploy -->
-        <module>org.eclipse.kapua.service.device.management.packages</module>
         <module>org.eclipse.kapua.service.device.management.packages.internal</module>
 
         <!-- Bundles -->

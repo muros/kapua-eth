@@ -27,15 +27,12 @@
     <name>org.eclipse.kapua.service.device.management.packages.internal</name>
 
     <dependencies>
-    	<!-- -->
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.packages</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-packages-api</artifactId>
         </dependency>
         
-        <!-- -->
         <!-- Extended service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
