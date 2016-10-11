@@ -13,7 +13,7 @@
 package org.eclipse.kapua.service.authentication;
 
 /**
- * Username and password {@link AuthenticationCredentials} implementation
+ * Username and password {@link AuthenticationCredentials} definition.
  * 
  * @since 1.0
  * 
