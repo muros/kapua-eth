@@ -43,7 +43,6 @@ import org.eclipse.kapua.service.device.management.snapshot.internal.DeviceSnaps
 import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
-import org.joda.time.DateTime;
 
 public class TranslatorAppSnapshotKuraKapua extends Translator<KuraResponseMessage, SnapshotResponseMessage>
 {

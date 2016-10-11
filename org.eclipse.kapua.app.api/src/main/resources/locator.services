@@ -56,3 +56,5 @@ org.eclipse.kapua.service.generator.id.IdGeneratorService
 org.eclipse.kapua.model.id.KapuaIdFactory
 
 org.eclipse.kapua.transport.TransportClientFactory
+
+org.eclipse.kapua.model.config.metatype.KapuaMetatypeFactory

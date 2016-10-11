@@ -15,6 +15,7 @@ package org.eclipse.kapua.model.config.metatype;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.*;
 import javax.xml.namespace.QName;
 
 import org.w3c.dom.Element;
@@ -46,6 +47,11 @@ import org.w3c.dom.Element;
  *
  *
  */
+@XmlRootElement(name = "OCD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
+@XmlAccessorType(XmlAccessType.PROPERTY)
+@XmlType(
+        factoryClass = MetatypeXmlRegistry.class,
+        factoryMethod = "newKapuaTocd")
 public interface KapuaTocd
 {
 
@@ -72,8 +78,10 @@ public interface KapuaTocd
      *
      *
      */
+    @XmlElement(name = "AD", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0", required = true)
     public List<KapuaTad> getAD();
 
+    public void setAD(List<? extends KapuaTad> icon);
     /**
      * Gets the value of the icon property.
      *
@@ -97,7 +105,10 @@ public interface KapuaTocd
      *
      *
      */
+    @XmlElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
     public List<KapuaTicon> getIcon();
+
+    public void setIcon(List<? extends KapuaTicon> icon);
 
     /**
      * Gets the value of the any property.
@@ -118,13 +129,15 @@ public interface KapuaTocd
      *
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Element }
+     *
      * {@link Object }
      *
      *
      */
+    @XmlAnyElement(lax = true)
     public List<Object> getAny();
 
+    public void setAny(List<Object> any);
     /**
      * Gets the value of the name property.
      *
@@ -133,6 +146,7 @@ public interface KapuaTocd
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "name", required = true)
     public String getName();
 
     /**
@@ -153,6 +167,7 @@ public interface KapuaTocd
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "description")
     public String getDescription();
 
     /**
@@ -173,6 +188,7 @@ public interface KapuaTocd
      *         {@link String }
      *
      */
+    @XmlAttribute(name = "id", required = true)
     public String getId();
 
     /**
@@ -199,6 +215,9 @@ public interface KapuaTocd
      * @return
      *         always non-null
      */
+    @XmlAnyAttribute
     public Map<QName, String> getOtherAttributes();
+
+    public void setOtherAttributes(Map<QName, String> otherAttributes);
 
 }

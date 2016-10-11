@@ -61,20 +61,11 @@ import org.w3c.dom.Element;
  * @since 1.0
  *
  */
-@XmlRootElement(name = "Option", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Toption", propOrder = {
-                                         "any"
-})
 public class ToptionImpl implements KapuaToption
 {
-    @XmlAnyElement(lax = true)
     protected List<Object>     any;
-    @XmlAttribute(name = "label", required = true)
     protected String           label;
-    @XmlAttribute(name = "value", required = true)
     protected String           value;
-    @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<QName, String>();
 
     /**

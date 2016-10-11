@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.constraints.Null;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -35,6 +36,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.sax.SAXSource;
 
 import org.eclipse.kapua.KapuaException;
+import org.eclipse.persistence.jaxb.JAXBContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -217,13 +219,22 @@ public class XmlUtil
     @SuppressWarnings("rawtypes")
     private static JAXBContext get(Class clazz) throws JAXBException
     {
-        JAXBContext context = contexts.get(clazz);
-        if (context == null) {
-            context = JAXBContext.newInstance(clazz);
-            contexts.put(clazz, context);
+//        JAXBContext context = contexts.get(clazz);
+//        if (context == null) {
+//            context = JAXBContext.newInstance(clazz);
+//            contexts.put(clazz, context);
+//        }
+        JAXBContext context;
+    	try {
+            context = jaxbContextProvider.getJAXBContext();
+            if (context == null) {
+                s_logger.warn("No JAXBContext found; using ");
+                context = JAXBContextFactory.createContext(new Class[]{}, null);
+            }
+        } catch (KapuaException | NullPointerException ex) {
+            context = JAXBContextFactory.createContext(new Class[]{}, null);
+            s_logger.warn("No JAXBContextProvider provided or error while getting one; using default JAXBContext");
         }
-    	
-//    	JAXBContext context = jaxbContextProvider.getJAXBContext();
         return context;
     }
 }

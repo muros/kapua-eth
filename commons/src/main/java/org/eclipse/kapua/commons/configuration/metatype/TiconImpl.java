@@ -62,24 +62,11 @@ import org.w3c.dom.Element;
  *
  * @since 1.0
  */
-@XmlRootElement(name = "Icon", namespace = "http://www.osgi.org/xmlns/metatype/v1.2.0")
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Ticon", propOrder = {
-                                       "any"
-})
 public class TiconImpl implements KapuaTicon
 {
-    @XmlAnyElement(lax = true)
     protected List<Object>     any;
-
-    @XmlAttribute(name = "resource", required = true)
     protected String           resource;
-
-    @XmlAttribute(name = "size", required = true)
-    @XmlSchemaType(name = "positiveInteger")
     protected BigInteger       size;
-
-    @XmlAnyAttribute
     private Map<QName, String> otherAttributes = new HashMap<>();
 
     /**

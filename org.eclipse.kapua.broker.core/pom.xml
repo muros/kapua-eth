@@ -59,8 +59,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.datastore</artifactId>
-			<version>${project.version}</version>
+			<artifactId>kapua-datastore-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -116,8 +115,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.management.commons</artifactId>
-			<version>${project.version}</version>
+			<artifactId>kapua-device-commons</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<!-- activemq -->

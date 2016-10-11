@@ -18,11 +18,19 @@ import javax.ws.rs.ext.Provider;
 import javax.xml.bind.JAXBContext;
 
 import org.eclipse.kapua.app.api.v1.resources.model.ErrorBean;
+import org.eclipse.kapua.commons.configuration.metatype.TocdImpl;
 import org.eclipse.kapua.commons.util.xml.XmlUtil;
+import org.eclipse.kapua.model.config.metatype.KapuaTad;
+import org.eclipse.kapua.model.config.metatype.KapuaTicon;
+import org.eclipse.kapua.model.config.metatype.KapuaTocd;
+import org.eclipse.kapua.model.config.metatype.KapuaToption;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountXmlRegistry;
+import org.eclipse.kapua.service.device.call.kura.model.configuration.KuraDeviceConfiguration;
+import org.eclipse.kapua.service.device.call.kura.model.deploy.KuraDeploymentPackage;
+import org.eclipse.kapua.service.device.call.kura.model.deploy.KuraDeploymentPackages;
 import org.eclipse.kapua.service.device.call.kura.model.snapshot.KuraSnapshotIds;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
@@ -98,7 +106,15 @@ public class JaxbContextResolver implements ContextResolver<JAXBContext> {
                     DevicePackageXmlRegistry.class,
                     DevicePackageDownloadRequest.class,
                     DevicePackageUninstallRequest.class,
-                    KuraSnapshotIds.class
+                    KuraSnapshotIds.class,
+                    KuraDeviceConfiguration.class,
+                    KuraDeploymentPackages.class,
+                    KuraDeploymentPackage.class,
+                    TocdImpl.class,
+                    KapuaTocd.class,
+                    KapuaTad.class,
+                    KapuaTicon.class,
+                    KapuaToption.class
             }, null);
         } catch (Exception e) {
             throw new RuntimeException(e);
