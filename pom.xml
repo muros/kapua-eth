@@ -238,6 +238,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-bundle-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>kapua-device-call-kura</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -427,7 +432,6 @@
         <module>org.eclipse.kapua.transport.test</module>
 
         <!-- Bundles -->
-        <module>org.eclipse.kapua.service.device.management.bundle</module>
         <module>org.eclipse.kapua.service.device.management.bundle.internal</module>
 
         <!-- Command -->
