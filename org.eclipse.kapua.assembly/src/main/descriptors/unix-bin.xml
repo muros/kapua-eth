@@ -140,7 +140,7 @@
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.bundle.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.command</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.command.internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.commons</include>
+                <include>${pom.groupId}:kapua-device-commons</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.configuration.internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.device.management.packages</include>

@@ -43,8 +43,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.commons</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-commons</artifactId>
         </dependency>
     </dependencies>
 </project>

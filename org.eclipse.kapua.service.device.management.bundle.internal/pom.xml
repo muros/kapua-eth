@@ -25,7 +25,6 @@
   <name>org.eclipse.kapua.service.device.management.bundle.internal</name>
   
     <dependencies>
-        <!-- -->
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -33,14 +32,12 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- -->
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>kapua-device-call-api</artifactId>
         </dependency>
 
-        <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -48,8 +45,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.commons</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-commons</artifactId>
         </dependency>
     </dependencies>
 </project>

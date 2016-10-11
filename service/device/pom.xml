@@ -27,6 +27,7 @@
 
     <modules>
         <module>api</module>
+        <module>commons</module>
         <module>call</module>
         <module>registry</module>
     </modules>
