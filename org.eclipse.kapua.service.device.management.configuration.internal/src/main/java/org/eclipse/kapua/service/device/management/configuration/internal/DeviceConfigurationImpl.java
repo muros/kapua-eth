@@ -13,13 +13,11 @@
 package org.eclipse.kapua.service.device.management.configuration.internal;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 
 @XmlRootElement(name = "configurations")

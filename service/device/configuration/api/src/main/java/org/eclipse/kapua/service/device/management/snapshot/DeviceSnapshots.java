@@ -10,33 +10,25 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-
 package org.eclipse.kapua.service.device.management.snapshot;
+
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import org.joda.time.DateTime;
+import org.eclipse.kapua.KapuaSerializable;
 
-@XmlRootElement(name = "snapshot")
+@XmlRootElement(name = "snapshots")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@XmlType(propOrder = { "id", 
-                      "timestamp" },
+@XmlType(propOrder = { "snapshots" },
         factoryClass = DeviceSnapshotXmlRegistry.class, 
-        factoryMethod = "newDeviceSnapshot")
-public interface DeviceSnapshot {
-    
-    @XmlElement(name = "id")
-    public String getId();
-    
-    public void setId(String id);
-
-    @XmlElement(name = "timestamp")
-    public Long getTimestamp();
-    
-    public void setTimestamp(Long timestamp);
+        factoryMethod = "newDeviceSnapshots")
+public interface DeviceSnapshots extends KapuaSerializable
+{
+    @XmlElement(name="snapshotId")
+    public List<DeviceSnapshot> getSnapshots();
 }

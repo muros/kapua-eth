@@ -14,7 +14,6 @@
 package org.eclipse.kapua.service.device.management.snapshot.internal;
 
 import org.eclipse.kapua.service.device.management.snapshot.DeviceSnapshot;
-import org.joda.time.DateTime;
 
 public class DeviceSnapshotImpl implements DeviceSnapshot {
     private String id;

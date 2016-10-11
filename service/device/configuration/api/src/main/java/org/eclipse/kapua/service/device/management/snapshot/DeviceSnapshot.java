@@ -10,22 +10,30 @@
  *     Eurotech - initial API and implementation
  *
  *******************************************************************************/
-package org.eclipse.kapua.service.device.management.configuration;
 
-import java.util.List;
+package org.eclipse.kapua.service.device.management.snapshot;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.eclipse.kapua.model.KapuaEntity;
-
-@XmlRootElement(name = "componentConfigurations")
+@XmlRootElement(name = "snapshot")
 @XmlAccessorType(XmlAccessType.PROPERTY)
-@XmlType(factoryClass = DeviceConfigurationXmlRegistry.class, factoryMethod = "newConfiguration")
-public interface DeviceConfiguration
-{
-    public <C extends DeviceComponentConfiguration> List<C> getComponentConfigurations();
+@XmlType(propOrder = { "id", 
+                      "timestamp" },
+        factoryClass = DeviceSnapshotXmlRegistry.class, 
+        factoryMethod = "newDeviceSnapshot")
+public interface DeviceSnapshot {
+    
+    @XmlElement(name = "id")
+    public String getId();
+    
+    public void setId(String id);
+
+    @XmlElement(name = "timestamp")
+    public Long getTimestamp();
+    
+    public void setTimestamp(Long timestamp);
 }
