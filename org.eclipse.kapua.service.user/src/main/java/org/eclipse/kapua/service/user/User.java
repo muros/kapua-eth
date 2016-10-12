@@ -20,6 +20,12 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.model.KapuaNamedEntity;
 
+/**
+ * User entity
+ * 
+ * @since 1.0
+ * 
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(propOrder = { "status",
@@ -38,23 +44,63 @@ public interface User extends KapuaNamedEntity
         return TYPE;
     }
 
+    /**
+     * Return the user status
+     * 
+     * @return
+     */
     @XmlElement(name = "status")
     public UserStatus getStatus();
 
+    /**
+     * Get the user status
+     * 
+     * @param status
+     */
     public void setStatus(UserStatus status);
 
+    /**
+     * Return the display name (may be a friendly username to show in the UI)
+     * 
+     * @return
+     */
     @XmlElement(name = "displayName")
     public String getDisplayName();
 
+    /**
+     * Set the display name
+     * 
+     * @param displayName
+     */
     public void setDisplayName(String displayName);
 
+    /**
+     * Get the user email
+     * 
+     * @return
+     */
     @XmlElement(name = "email")
     public String getEmail();
 
+    /**
+     * Set the user email
+     * 
+     * @param email
+     */
     public void setEmail(String email);
 
+    /**
+     * Get the phone number
+     * 
+     * @return
+     */
     @XmlElement(name = "phoneNumber")
     public String getPhoneNumber();
 
+    /**
+     * Set the phone number
+     * 
+     * @param phoneNumber
+     */
     public void setPhoneNumber(String phoneNumber);
 }

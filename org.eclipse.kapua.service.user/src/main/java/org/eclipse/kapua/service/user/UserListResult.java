@@ -14,6 +14,12 @@ package org.eclipse.kapua.service.user;
 
 import org.eclipse.kapua.model.query.KapuaListResult;
 
+/**
+ * User result list definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserListResult extends KapuaListResult<User>
 {
 }
