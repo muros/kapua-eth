@@ -31,6 +31,7 @@
         <guava.version>19.0</guava.version>
         <guice.version>4.1.0</guice.version>
         <h2.version>1.4.192</h2.version>
+        <joda.version>2.9.4</joda.version>
         <junit.version>4.11</junit.version>
         <mariadb.version>1.4.6</mariadb.version>
         <mockito.version>1.10.19</mockito.version>
@@ -290,6 +291,21 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-command-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-command-internal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-command-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>kapua-device-commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -316,6 +332,11 @@
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
                 <artifactId>kapua-device-registry-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-registry-internal</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -396,6 +417,11 @@
                 <version>${commons-configuration.version}</version>
             </dependency>
             <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
@@ -449,7 +475,6 @@
 
         <module>org.eclipse.kapua.service.auth.shiro</module>
 
-        <!-- -->
         <!-- User -->
         <module>org.eclipse.kapua.service.user</module>
         <module>org.eclipse.kapua.service.user.internal</module>
@@ -458,10 +483,6 @@
         <!-- Account -->
         <module>org.eclipse.kapua.service.account</module>
         <module>org.eclipse.kapua.service.account.internal</module>
-
-        <!-- -->
-        <!-- Device registry, device events and device connection -->
-        <module>org.eclipse.kapua.service.device.registry.internal</module>
 
         <!-- Message -->
         <module>org.eclipse.kapua.message</module>
@@ -472,11 +493,6 @@
         <module>org.eclipse.kapua.transport.jms</module>
         <module>org.eclipse.kapua.transport.mqtt</module>
         <module>org.eclipse.kapua.transport.test</module>
-
-        <!-- Command -->
-        <module>org.eclipse.kapua.service.device.management.command</module>
-        <module>org.eclipse.kapua.service.device.management.command.internal</module>
-        <module>org.eclipse.kapua.service.device.management.command.test</module>
 
         <!-- Device management translators -->
         <module>org.eclipse.kapua.translator</module>

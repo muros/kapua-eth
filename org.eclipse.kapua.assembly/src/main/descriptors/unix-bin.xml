@@ -138,15 +138,15 @@
                 <include>${pom.groupId}:kapua-device-api</include>
                 <include>${pom.groupId}:kapua-device-bundle-api</include>
                 <include>${pom.groupId}:kapua-device-bundle-internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.command</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.command.internal</include>
+                <include>${pom.groupId}:kapua-device-command-api</include>
+                <include>${pom.groupId}:kapua-device-command-internal</include>
                 <include>${pom.groupId}:kapua-device-commons</include>
                 <include>${pom.groupId}:kapua-device-configuration-api</include>
                 <include>${pom.groupId}:kapua-device-configuration-internal</include>
                 <include>${pom.groupId}:kapua-device-packages-api</include>
                 <include>${pom.groupId}:kapua-device-packages-internal</include>
                 <include>${pom.groupId}:kapua-device-registry-api</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.registry.internal</include>
+                <include>${pom.groupId}:kapua-device-registry-internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.generator.id</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.generator.id.sequence</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.user</include>

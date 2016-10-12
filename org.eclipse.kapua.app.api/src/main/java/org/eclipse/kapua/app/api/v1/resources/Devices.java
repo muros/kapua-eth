@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.app.api.v1.resources;
 
-import java.util.List;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -33,7 +31,6 @@ import org.eclipse.kapua.service.device.management.command.DeviceCommandFactory;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandInput;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandManagementService;
 import org.eclipse.kapua.service.device.management.command.DeviceCommandOutput;
-import org.eclipse.kapua.service.device.management.configuration.DeviceComponentConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfiguration;
 import org.eclipse.kapua.service.device.management.configuration.DeviceConfigurationManagementService;
 import org.eclipse.kapua.service.device.management.packages.DevicePackageFactory;

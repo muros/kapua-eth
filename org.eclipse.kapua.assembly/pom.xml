@@ -94,8 +94,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.registry.internal</artifactId>
-			<version>${project.version}</version>
+			<artifactId>kapua-device-registry-internal</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
@@ -128,14 +127,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.management.command</artifactId>
-			<version>${project.version}</version>
+			<artifactId>kapua-device-command-api</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.management.command.internal</artifactId>
-			<version>${project.version}</version>
+			<artifactId>kapua-device-command-internal</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

@@ -185,17 +185,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.management.command.internal</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.management.command</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>kapua-device-configuration-api</artifactId>
+			<artifactId>kapua-device-command-internal</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
@@ -208,7 +198,6 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
-			<version>2.9.4</version>
 		</dependency>
 	</dependencies>
 	<build>
