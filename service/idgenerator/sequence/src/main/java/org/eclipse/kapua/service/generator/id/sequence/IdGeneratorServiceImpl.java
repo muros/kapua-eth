@@ -13,20 +13,28 @@
 package org.eclipse.kapua.service.generator.id.sequence;
 
 import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.generator.id.IdGeneratorService;
 
+/**
+ * Id generator service implementation.<br>
+ * This implementation return a sequence.
+ * 
+ * @since 1.0
+ *
+ */
 public class IdGeneratorServiceImpl implements IdGeneratorService
 {
-    private static long seed = System.currentTimeMillis();
+    private static AtomicLong seed = new AtomicLong(System.currentTimeMillis());
 
     @Override
-    public synchronized KapuaId generate()
+    public KapuaId generate()
         throws KapuaException
     {
-        return new KapuaEid(BigInteger.valueOf(seed++));
+        return new KapuaEid(BigInteger.valueOf(seed.incrementAndGet()));
     }
 }
