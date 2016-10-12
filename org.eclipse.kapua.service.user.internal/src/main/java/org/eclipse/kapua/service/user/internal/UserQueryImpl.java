@@ -17,14 +17,28 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserQuery;
 
+/**
+ * User query implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserQueryImpl extends AbstractKapuaQuery<User> implements UserQuery
 {
 
+    /**
+     * Constructor
+     */
     private UserQueryImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     */
     public UserQueryImpl(KapuaId scopeId)
     {
         this();

@@ -14,6 +14,12 @@ package org.eclipse.kapua.service.user;
 
 import org.eclipse.kapua.model.query.KapuaQuery;
 
+/**
+ * User query definition.
+ * 
+ * @since 1.0
+ * 
+ */
 public interface UserQuery extends KapuaQuery<User>
 {
 }

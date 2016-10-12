@@ -16,10 +16,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
+import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Entity manager factory for the user module.
+ * 
+ * @since 1.0
+ *
+ */
 public class UserEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory
 {
     @SuppressWarnings("unused")
@@ -31,11 +38,19 @@ public class UserEntityManagerFactory extends AbstractEntityManagerFactory imple
 
     private static UserEntityManagerFactory  instance              = new UserEntityManagerFactory();
 
+    /**
+     * Constructs a new entity manager factory and configure it to use the user persistence unit.
+     */
     private UserEntityManagerFactory()
     {
         super(PERSISTENCE_UNIT_NAME, DATASOURCE_NAME, uniqueConstraints);
     }
 
+    /**
+     * Return the {@link EntityManager} singleton instance
+     * 
+     * @return
+     */
     public static EntityManagerFactory getInstance()
     {
         return instance;

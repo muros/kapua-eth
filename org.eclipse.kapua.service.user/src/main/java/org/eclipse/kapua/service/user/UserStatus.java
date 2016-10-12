@@ -16,7 +16,19 @@ import javax.xml.bind.annotation.XmlEnum;
 
 @XmlEnum
 
+/**
+ * User status
+ * 
+ * @since 1.0
+ *
+ */
 public enum UserStatus {
+    /**
+     * Enabled
+     */
     ENABLED,
+    /**
+     * Disabled
+     */
     DISABLED;
 }

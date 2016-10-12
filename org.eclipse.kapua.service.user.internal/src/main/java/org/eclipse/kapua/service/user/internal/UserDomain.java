@@ -12,6 +12,15 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.user.internal;
 
+import org.eclipse.kapua.service.authorization.permission.Permission;
+
+/**
+ * User permission domain.<br>
+ * Used to describe the user domain in the {@link Permission}
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserDomain {
 	
 	String USER = "user";

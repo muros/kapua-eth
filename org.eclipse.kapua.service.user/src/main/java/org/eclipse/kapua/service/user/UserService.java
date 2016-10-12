@@ -21,9 +21,12 @@ import org.eclipse.kapua.service.KapuaUpdatableEntityService;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 
 /**
- * UserService exposes APIs to manage User object under an Account.
- * It includes APIs to create, update, find, list and delete Users.
+ * UserService exposes APIs to manage User object under an Account.<br>
+ * It includes APIs to create, update, find, list and delete Users.<br>
  * Instances of the UserService can be acquired through the ServiceLocator.
+ * 
+ * @since 1.0
+ * 
  */
 public interface UserService extends KapuaEntityService<User, UserCreator>,
                              KapuaUpdatableEntityService<User>,
@@ -31,7 +34,7 @@ public interface UserService extends KapuaEntityService<User, UserCreator>,
                              KapuaConfigurableService
 {
     /**
-     * Creates a new user under the account specified in the UserCreator.
+     * Creates a new user under the account specified in the UserCreator.<br>
      * The returned User object does not have its access information, roles
      * and permissions, loaded.
      *
@@ -43,12 +46,11 @@ public interface UserService extends KapuaEntityService<User, UserCreator>,
         throws KapuaException;
 
     /**
-     * Updates an User in the database and returns the refreshed/reloaded entity instance.
+     * Updates an User in the database and returns the refreshed/reloaded entity instance.<br>
      * The returned User object does not have its access information, roles
      * and permissions, loaded.
      *
-     * @param user
-     *            to be update
+     * @param user to be update
      * @return
      * @throws KapuaException
      */
@@ -65,7 +67,7 @@ public interface UserService extends KapuaEntityService<User, UserCreator>,
         throws KapuaException;
 
     /**
-     * Returns the User with the specified Id; returns null if the user is not found.
+     * Returns the User with the specified Id; returns null if the user is not found.<br>
      * <b>The API does not perform any access control check and it is meant for internal use.</b>
      *
      * @param userId

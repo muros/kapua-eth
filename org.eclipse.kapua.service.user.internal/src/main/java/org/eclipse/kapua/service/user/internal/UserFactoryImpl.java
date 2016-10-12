@@ -19,6 +19,12 @@ import org.eclipse.kapua.service.user.UserFactory;
 import org.eclipse.kapua.service.user.UserListResult;
 import org.eclipse.kapua.service.user.UserQuery;
 
+/**
+ * User factory service implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class UserFactoryImpl implements UserFactory
 {
     @Override

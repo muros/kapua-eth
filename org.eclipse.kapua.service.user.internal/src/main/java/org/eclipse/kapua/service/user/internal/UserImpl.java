@@ -24,6 +24,12 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserStatus;
 
+/**
+ * User entity implementation.
+ * 
+ * @since 1.0
+ *
+ */
 @Entity(name = "User")
 @Table(name = "usr_user")
 public class UserImpl extends AbstractKapuaNamedEntity implements User
@@ -46,11 +52,20 @@ public class UserImpl extends AbstractKapuaNamedEntity implements User
     @Column(name = "phone_number")
     private String            phoneNumber;
 
+    /**
+     * Constructor
+     */
     public UserImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     * @param name
+     */
     public UserImpl(KapuaId scopeId,
                     String name)
     {
@@ -58,41 +73,49 @@ public class UserImpl extends AbstractKapuaNamedEntity implements User
         this.status = UserStatus.ENABLED;
     }
 
+    @Override
     public UserStatus getStatus()
     {
         return status;
     }
 
+    @Override
     public void setStatus(UserStatus status)
     {
         this.status = status;
     }
 
+    @Override
     public String getDisplayName()
     {
         return displayName;
     }
 
+    @Override
     public void setDisplayName(String displayName)
     {
         this.displayName = displayName;
     }
 
+    @Override
     public String getEmail()
     {
         return email;
     }
 
+    @Override
     public void setEmail(String email)
     {
         this.email = email;
     }
 
+    @Override
     public String getPhoneNumber()
     {
         return phoneNumber;
     }
 
+    @Override
     public void setPhoneNumber(String phoneNumber)
     {
         this.phoneNumber = phoneNumber;

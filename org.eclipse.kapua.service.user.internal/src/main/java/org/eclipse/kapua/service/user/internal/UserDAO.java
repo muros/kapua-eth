@@ -21,8 +21,23 @@ import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 import org.eclipse.kapua.service.user.UserListResult;
 
+/**
+ * User DAO
+ * 
+ * @since 1.0
+ *
+ */
 public class UserDAO extends ServiceDAO
 {
+
+    /**
+     * Creates and return new User
+     * 
+     * @param em
+     * @param userCreator
+     * @return
+     * @throws KapuaException
+     */
     public static User create(EntityManager em, UserCreator userCreator)
         throws KapuaException
     {
@@ -38,6 +53,14 @@ public class UserDAO extends ServiceDAO
         return ServiceDAO.create(em, userImpl);
     }
 
+    /**
+     * Updates the provided user
+     * 
+     * @param em
+     * @param user
+     * @return
+     * @throws KapuaException
+     */
     public static User update(EntityManager em, User user)
         throws KapuaException
     {
@@ -48,27 +71,63 @@ public class UserDAO extends ServiceDAO
         return ServiceDAO.update(em, UserImpl.class, userImpl);
     }
 
+    /**
+     * Deletes the user by user identifier
+     * 
+     * @param em
+     * @param userId
+     */
     public static void delete(EntityManager em, KapuaId userId)
     {
         ServiceDAO.delete(em, UserImpl.class, userId);
     }
 
+    /**
+     * Finds the user by user identifier
+     * 
+     * @param em
+     * @param userId
+     * @return
+     */
     public static User find(EntityManager em, KapuaId userId)
     {
         return em.find(UserImpl.class, userId);
     }
 
+    /**
+     * Finds the user by name
+     * 
+     * @param em
+     * @param name
+     * @return
+     */
     public static User findByName(EntityManager em, String name)
     {
         return ServiceDAO.findByName(em, UserImpl.class, name);
     }
 
+    /**
+     * Returns the user list matching the provided query
+     * 
+     * @param em
+     * @param userPermissionQuery
+     * @return
+     * @throws KapuaException
+     */
     public static UserListResult query(EntityManager em, KapuaQuery<User> userPermissionQuery)
         throws KapuaException
     {
         return ServiceDAO.query(em, User.class, UserImpl.class, new UserListResultImpl(), userPermissionQuery);
     }
 
+    /**
+     * Returns the user count matching the provided query
+     * 
+     * @param em
+     * @param userPermissionQuery
+     * @return
+     * @throws KapuaException
+     */
     public static long count(EntityManager em, KapuaQuery<User> userPermissionQuery)
         throws KapuaException
     {
