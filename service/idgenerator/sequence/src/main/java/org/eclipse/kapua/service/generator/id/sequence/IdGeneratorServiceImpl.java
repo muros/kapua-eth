@@ -19,6 +19,13 @@ import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.generator.id.IdGeneratorService;
 
+/**
+ * Id generator service implementation.<br>
+ * This implementation return a sequence.
+ * 
+ * @since 1.0
+ *
+ */
 public class IdGeneratorServiceImpl implements IdGeneratorService
 {
     private static long seed = System.currentTimeMillis();

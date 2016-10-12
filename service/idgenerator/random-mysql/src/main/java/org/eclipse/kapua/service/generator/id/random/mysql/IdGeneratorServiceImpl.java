@@ -25,6 +25,13 @@ import org.eclipse.kapua.commons.util.KapuaCommonsErrorCodes;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.generator.id.IdGeneratorService;
 
+/**
+ * Id generator service implementation.<br>
+ * This implementation returns a random sequence through a MySql database call.
+ * 
+ * @since 1.0
+ *
+ */
 public class IdGeneratorServiceImpl implements IdGeneratorService
 {
     private static final String QUERY_SELECT_UUID_SHORT = "SELECT UUID_SHORT() FROM DUAL";
