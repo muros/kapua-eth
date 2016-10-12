@@ -31,7 +31,10 @@ import org.eclipse.kapua.service.user.UserListResult;
 import org.eclipse.kapua.service.user.UserService;
 
 /**
- * UserServiceImpl implements the Kapua User Service.
+ * User service implementation.
+ * 
+ * @since 1.0
+ *
  */
 public class UserServiceImpl extends AbstractKapuaConfigurableService implements UserService
 {
@@ -39,6 +42,9 @@ public class UserServiceImpl extends AbstractKapuaConfigurableService implements
 
     private final KapuaLocator locator = KapuaLocator.getInstance();
 
+    /**
+     * Constructor
+     */
     public UserServiceImpl()
     {
         super(UserService.class.getName(), UserDomain.USER, UserEntityManagerFactory.getInstance());

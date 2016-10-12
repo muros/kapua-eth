@@ -12,21 +12,17 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.user.internal;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import org.eclipse.kapua.commons.model.AbstractKapuaNamedEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.user.User;
 import org.eclipse.kapua.service.user.UserCreator;
 
 /**
- * UserCreator encapsulates all the information needed to create a new User in the system.
+ * User creator service implementation.
+ * 
+ * @since 1.0
+ *
  */
-
 public class UserCreatorImpl extends AbstractKapuaNamedEntityCreator<User> implements UserCreator
 {
     private static final long serialVersionUID = 4664940282892151008L;
@@ -35,36 +31,48 @@ public class UserCreatorImpl extends AbstractKapuaNamedEntityCreator<User> imple
     private String            email;
     private String            phoneNumber;
 
+    /**
+     * Constructor
+     * 
+     * @param accountId
+     * @param name
+     */
     public UserCreatorImpl(KapuaId accountId, String name)
     {
         super(accountId, name);
     }
 
+    @Override
     public String getDisplayName()
     {
         return displayName;
     }
 
+    @Override
     public void setDisplayName(String displayName)
     {
         this.displayName = displayName;
     }
 
+    @Override
     public String getEmail()
     {
         return email;
     }
 
+    @Override
     public void setEmail(String email)
     {
         this.email = email;
     }
 
+    @Override
     public String getPhoneNumber()
     {
         return phoneNumber;
     }
 
+    @Override
     public void setPhoneNumber(String phoneNumber)
     {
         this.phoneNumber = phoneNumber;
