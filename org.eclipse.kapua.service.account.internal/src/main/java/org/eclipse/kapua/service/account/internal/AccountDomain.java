@@ -12,6 +12,15 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account.internal;
 
+import org.eclipse.kapua.service.authorization.permission.Permission;
+
+/**
+ * Account permission domain.<br>
+ * Account to describe the account domain in the {@link Permission}
+ * 
+ * @since 1.0
+ *
+ */
 public interface AccountDomain {
 	
     String ACCOUNT = "account";

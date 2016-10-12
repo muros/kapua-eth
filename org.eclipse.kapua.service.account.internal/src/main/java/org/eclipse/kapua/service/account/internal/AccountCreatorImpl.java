@@ -18,8 +18,10 @@ import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
 
 /**
- * AccountCreator encapsulates all the information needed to create a new Account in the system.
- * The data provided will be used to seed the new Account and its related information such as the associated organization and users.
+ * Account creator service implementation.
+ * 
+ * @since 1.0
+ * 
  */
 public class AccountCreatorImpl extends AbstractKapuaNamedEntityCreator<Account> implements AccountCreator
 {
@@ -49,126 +51,164 @@ public class AccountCreatorImpl extends AbstractKapuaNamedEntityCreator<Account>
 
 	private String organizationCountry;
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     * @param name account name
+     */
     public AccountCreatorImpl(KapuaId scopeId, String name)
     {
     	super(scopeId, name);
     }
 
+    /**
+     * Get the account name
+     * 
+     * @return
+     */
     public String getAccountName()
     {
         return accountName;
     }
 
+    /**
+     * Set the account name
+     * 
+     * @param accountName
+     */
     public void setAccountName(String accountName)
     {
         this.accountName = accountName;
     }
 
+    @Override
     public String getAccountPassword()
     {
         return accountPassword;
     }
 
+    @Override
     public void setAccountPassword(String accountPassword)
     {
         this.accountPassword = accountPassword;
     }
 
+    @Override
     public String getOrganizationName()
     {
         return organizationName;
     }
 
+    @Override
     public void setOrganizationName(String organizationName)
     {
         this.organizationName = organizationName;
     }
 
+    @Override
     public String getOrganizationPersonName()
     {
         return organizationPersonName;
     }
 
+    @Override
     public void setOrganizationPersonName(String organizationPersonName)
     {
         this.organizationPersonName = organizationPersonName;
     }
 
+    @Override
     public String getOrganizationEmail()
     {
         return organizationEmail;
     }
 
+    @Override
     public void setOrganizationEmail(String organizationEmail)
     {
         this.organizationEmail = organizationEmail;
     }
 
+    @Override
     public String getOrganizationPhoneNumber()
     {
         return organizationPhoneNumber;
     }
 
+    @Override
     public void setOrganizationPhoneNumber(String organizationPhoneNumber)
     {
         this.organizationPhoneNumber = organizationPhoneNumber;
     }
 
+    @Override
     public String getOrganizationAddressLine1()
     {
         return organizationAddressLine1;
     }
 
+    @Override
     public void setOrganizationAddressLine1(String organizationAddressLine1)
     {
         this.organizationAddressLine1 = organizationAddressLine1;
     }
 
+    @Override
     public String getOrganizationAddressLine2()
     {
         return organizationAddressLine2;
     }
 
+    @Override
     public void setOrganizationAddressLine2(String organizationAddressLine2)
     {
         this.organizationAddressLine2 = organizationAddressLine2;
     }
 
+    @Override
     public String getOrganizationCity()
     {
         return organizationCity;
     }
 
+    @Override
     public void setOrganizationCity(String organizationCity)
     {
         this.organizationCity = organizationCity;
     }
 
+    @Override
     public String getOrganizationZipPostCode()
     {
         return organizationZipPostCode;
     }
 
+    @Override
     public void setOrganizationZipPostCode(String organizationZipPostCode)
     {
         this.organizationZipPostCode = organizationZipPostCode;
     }
 
+    @Override
     public String getOrganizationStateProvinceCounty()
     {
         return organizationStateProvinceCounty;
     }
 
+    @Override
     public void setOrganizationStateProvinceCounty(String organizationStateProvinceCounty)
     {
         this.organizationStateProvinceCounty = organizationStateProvinceCounty;
     }
 
+    @Override
     public String getOrganizationCountry()
     {
         return organizationCountry;
     }
 
+    @Override
     public void setOrganizationCountry(String organizationCountry)
     {
         this.organizationCountry = organizationCountry;

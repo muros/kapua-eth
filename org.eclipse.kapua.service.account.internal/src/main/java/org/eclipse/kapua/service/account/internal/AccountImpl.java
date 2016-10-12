@@ -27,6 +27,12 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.Organization;
 
+/**
+ * Account entity implementation.
+ * 
+ * @since 1.0
+ *
+ */
 @Entity(name = "Account")
 @NamedQueries({
                 @NamedQuery(name = "Account.findChildAccounts", query = "SELECT a FROM Account a WHERE a.scopeId = :scopeId ORDER BY a.name"),
@@ -58,32 +64,45 @@ public class AccountImpl extends AbstractKapuaNamedEntity implements Account
     @Column(name = "parent_account_path", nullable = false)
     private String            parentAccountPath;
 
+    /**
+     * Constructor
+     */
     protected AccountImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     * @param name
+     */
     public AccountImpl(KapuaId scopeId, String name)
     {
         super(scopeId, name);
         this.parentAccountPath = "";
     }
 
+    @Override
     public Organization getOrganization()
     {
         return organization;
     }
 
+    @Override
     public void setOrganization(Organization organization)
     {
         this.organization = (OrganizationImpl) organization;
     }
 
+    @Override
     public String getParentAccountPath()
     {
         return parentAccountPath;
     }
 
+    @Override
     public void setParentAccountPath(String parentAccountPath)
     {
         this.parentAccountPath = parentAccountPath;
