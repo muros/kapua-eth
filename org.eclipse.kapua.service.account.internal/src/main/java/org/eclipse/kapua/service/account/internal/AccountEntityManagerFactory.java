@@ -16,8 +16,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
+import org.eclipse.kapua.commons.jpa.EntityManager;
 import org.eclipse.kapua.commons.jpa.EntityManagerFactory;
 
+/**
+ * Entity manager factory for the account module.
+ * 
+ * @since 1.0
+ *
+ */
 public class AccountEntityManagerFactory extends AbstractEntityManagerFactory implements EntityManagerFactory
 {
     private static final String                PERSISTENCE_UNIT_NAME = "kapua-account";
@@ -26,6 +33,9 @@ public class AccountEntityManagerFactory extends AbstractEntityManagerFactory im
 
     private static AccountEntityManagerFactory instance              = new AccountEntityManagerFactory();
 
+    /**
+     * Constructs a new entity manager factory and configure it to use the account persistence unit.
+     */
     private AccountEntityManagerFactory()
     {
         super(PERSISTENCE_UNIT_NAME,
@@ -33,6 +43,11 @@ public class AccountEntityManagerFactory extends AbstractEntityManagerFactory im
               s_uniqueConstraints);
     }
     
+    /**
+     * Return the {@link EntityManager} singleton instance
+     * 
+     * @return
+     */
     public static AccountEntityManagerFactory getInstance()
     {
         return instance;

@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.account.internal;
 
-import org.eclipse.kapua.commons.model.id.KapuaEid;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountCreator;
@@ -21,6 +20,12 @@ import org.eclipse.kapua.service.account.AccountListResult;
 import org.eclipse.kapua.service.account.AccountQuery;
 import org.eclipse.kapua.service.account.Organization;
 
+/**
+ * Account service factory implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class AccountFactoryImpl implements AccountFactory
 {
     @Override

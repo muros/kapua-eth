@@ -39,20 +39,23 @@ import org.eclipse.kapua.service.authorization.permission.Actions;
 import org.eclipse.kapua.service.authorization.permission.PermissionFactory;
 
 /**
- * Implementation class for the AccountService interface.
+ * Account service implementation.
+ * 
+ * @since 1.0
+ *
  */
 public class AccountServiceImpl extends AbstractKapuaConfigurableService implements AccountService
 {
     private static final long serialVersionUID = -312489270279852500L;
 
+    /**
+     * Constructor
+     */
     public AccountServiceImpl()
     {
         super(AccountService.class.getName(), AccountDomain.ACCOUNT, AccountEntityManagerFactory.getInstance());
     }
 
-    /**
-     * Account Create.
-     */
     @Override
     public Account create(AccountCreator accountCreator)
         throws KapuaException
@@ -115,9 +118,6 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         return find(account.getScopeId(), account.getId());
     }
 
-    /**
-     * Account Update.
-     */
     @Override
     public Account update(Account account)
         throws KapuaException
@@ -178,10 +178,6 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         return find(account.getScopeId(), account.getId());
     }
 
-    /**
-     * Account Delete.
-     * 
-     */
     @Override
     public void delete(KapuaId scopeId, KapuaId accountId)
         throws KapuaException
@@ -284,9 +280,6 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         return findById(id);
     }
 
-    /**
-     * Account Find.
-     */
     @Override
     public Account findByName(String name)
         throws KapuaException
@@ -321,13 +314,6 @@ public class AccountServiceImpl extends AbstractKapuaConfigurableService impleme
         return account;
     }
 
-    /**
-     * Returns a List of direct child account of an account
-     * 
-     * @param id the Id of the parent Account
-     * @return List of direct child account of an account
-     * @throws KapuaException
-     */
     @Override
     public AccountListResult findChildsRecursively(KapuaId id)
         throws KapuaException

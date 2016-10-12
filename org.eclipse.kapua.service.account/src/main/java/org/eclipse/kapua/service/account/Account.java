@@ -20,6 +20,12 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.model.KapuaNamedEntity;
 
+/**
+ * User account entity.
+ * 
+ * @since 1.0
+ *
+ */
 @XmlRootElement(name = "account")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(propOrder = { "organization", 
@@ -35,13 +41,35 @@ public interface Account extends KapuaNamedEntity
         return TYPE;
     }
 
+    /**
+     * Get the account's organization
+     * 
+     * @return
+     */
     @XmlElement(name = "organization")
     public Organization getOrganization();
 
+    /**
+     * Set the account's organization
+     * 
+     * @param organization
+     */
     public void setOrganization(Organization organization);
 
+    /**
+     * Return the parent account path.<br>
+     * The account path is a '/' separated list of the parents account identifiers in reverse order (so it should be read from right to left).<br>
+     * e.g. The parent account path 7/14/15 mens that the current account has 15 as parent, then 15 has 14 as parent and 14 has 7 as parent.
+     * 
+     * @return
+     */
     @XmlElement(name = "parentAccountPath")
     public String getParentAccountPath();
 
+    /**
+     * Set the parent account path.
+     * 
+     * @param parentAccountPath
+     */
     public void setParentAccountPath(String parentAccountPath);
 }

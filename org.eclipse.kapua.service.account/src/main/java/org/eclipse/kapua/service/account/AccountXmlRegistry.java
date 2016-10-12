@@ -16,27 +16,53 @@ import javax.xml.bind.annotation.XmlRegistry;
 
 import org.eclipse.kapua.locator.KapuaLocator;
 
+/**
+ * Account xml factory class
+ * 
+ * @since 1.0
+ *
+ */
 @XmlRegistry
 public class AccountXmlRegistry {
 
 	private final KapuaLocator locator = KapuaLocator.getInstance();
 	private final AccountFactory factory = locator.getFactory(AccountFactory.class);
 	
+    /**
+     * Creates a new account instance
+     * 
+     * @return
+     */
 	public Account newAccount()
 	{
 		return factory.newAccount();
 	}
 
+    /**
+     * Creates a new organization instance
+     * 
+     * @return
+     */
 	public Organization newOrganization()
 	{
 		return factory.newOrganization();
 	}
 
+    /**
+     * Creates a new account creator instance
+     * 
+     * @return
+     */
 	public AccountCreator newAccountCreator()
 	{
 		return factory.newAccountCreator(null, null);
 	}
 
+    /**
+     * Creates a new account list result instance
+     * 
+     * @return
+     */
 	public AccountListResult newAccountListResult()
 	{
 		return factory.newAccountListResult();

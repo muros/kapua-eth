@@ -17,13 +17,28 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.account.Account;
 import org.eclipse.kapua.service.account.AccountQuery;
 
+/**
+ * Account query implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class AccountQueryImpl extends AbstractKapuaQuery<Account> implements AccountQuery
 {
+
+    /**
+     * Constructor
+     */
     private AccountQueryImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     */
     public AccountQueryImpl(KapuaId scopeId)
     {
         this();
