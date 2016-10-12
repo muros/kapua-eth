@@ -46,7 +46,6 @@
             <artifactId>org.eclipse.kapua.service.account</artifactId>
         </dependency>
 
-        <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -58,8 +57,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.generator.id.sequence</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-idgenerator-sequence</artifactId>
         </dependency>
 
         <!-- -->

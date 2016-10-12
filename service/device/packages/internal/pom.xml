@@ -48,13 +48,11 @@
         
          <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.generator.id</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-idgenerator-api</artifactId>
         </dependency>
          <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.generator.id.sequence</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-idgenerator-sequence</artifactId>
         </dependency>
     </dependencies>
 </project>
