@@ -85,10 +85,9 @@ public class KapuaSession implements Serializable
         // 1 ---> KapuaSession -> isCallerClassTrusted()
         // 2 ---> KapuaSession -> createFrom()
         // 3 ---> "outside" caller class that should be checked
-        // TODO we can make more secure this call checking also the method name
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if (stackTraceElements != null && stackTraceElements.length > 4) {
-            return trustedClasses.contains(MessageFormat.format(TRUST_CLASS_METHOD_PATTERN, stackTraceElements[3].getClassName() + stackTraceElements[3].getMethodName()));
+            return trustedClasses.contains(MessageFormat.format(TRUST_CLASS_METHOD_PATTERN, stackTraceElements[3].getClassName(), stackTraceElements[3].getMethodName()));
         }
         else {
             return false;
