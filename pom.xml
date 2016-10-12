@@ -341,6 +341,16 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-idgenerator-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-idgenerator-sequence</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>org.eclipse.kapua.locator.guice</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -462,13 +472,6 @@
         <module>org.eclipse.kapua.service</module>
         <module>org.eclipse.kapua.locator.guice</module>
 
-        <!-- -->
-        <!-- Id generator service -->
-        <module>org.eclipse.kapua.service.generator.id</module>
-        <module>org.eclipse.kapua.service.generator.id.random.mysql</module>
-        <module>org.eclipse.kapua.service.generator.id.sequence</module>
-        
-        <!-- -->
         <!-- Authentication and Authorization -->
         <module>org.eclipse.kapua.service.authentication</module>
         <module>org.eclipse.kapua.service.authorization</module>
