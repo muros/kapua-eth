@@ -299,6 +299,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-registry-internal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>org.eclipse.kapua.locator.guice</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -433,7 +438,6 @@
 
         <module>org.eclipse.kapua.service.auth.shiro</module>
 
-        <!-- -->
         <!-- User -->
         <module>org.eclipse.kapua.service.user</module>
         <module>org.eclipse.kapua.service.user.internal</module>
@@ -442,10 +446,6 @@
         <!-- Account -->
         <module>org.eclipse.kapua.service.account</module>
         <module>org.eclipse.kapua.service.account.internal</module>
-
-        <!-- -->
-        <!-- Device registry, device events and device connection -->
-        <module>org.eclipse.kapua.service.device.registry.internal</module>
 
         <!-- Message -->
         <module>org.eclipse.kapua.message</module>

@@ -94,8 +94,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.device.registry.internal</artifactId>
-			<version>${project.version}</version>
+			<artifactId>kapua-device-registry-internal</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>

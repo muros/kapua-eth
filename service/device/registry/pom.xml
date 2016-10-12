@@ -22,11 +22,12 @@
     </parent>
     <packaging>pom</packaging>
 
-    <artifactId>kapua-deviceregistry</artifactId>
+    <artifactId>kapua-device-registry</artifactId>
     <name>${project.artifactId}</name>
 
     <modules>
         <module>api</module>
+        <module>internal</module>
     </modules>
 
 </project>
