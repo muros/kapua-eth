@@ -20,8 +20,11 @@ import org.eclipse.kapua.service.KapuaUpdatableEntityService;
 import org.eclipse.kapua.service.config.KapuaConfigurableService;
 
 /**
- * AccountService exposes APIs to manage Account objects. It includes APIs to create, update, find, list and delete Accounts.
+ * AccountService exposes APIs to manage Account objects.<br>
+ * It includes APIs to create, update, find, list and delete Accounts.<br>
  * Instances of the AccountService can be acquired through the ServiceLocator object.
+ * 
+ * @since 1.0
  * 
  */
 public interface AccountService extends KapuaEntityService<Account, AccountCreator>,
@@ -29,11 +32,23 @@ public interface AccountService extends KapuaEntityService<Account, AccountCreat
                                 KapuaNamedEntityService<Account>,
                                 KapuaConfigurableService
 {
-    // FIXME - Add java doc
+    /**
+     * Finds the account by account identifiers
+     * 
+     * @param id
+     * @return
+     * @throws KapuaException
+     */
     public Account find(KapuaId id)
         throws KapuaException;
 
-    // FIXME - Add java doc
+    /**
+     * Returns a List of direct child account of the provided account identifier
+     * 
+     * @param accountId the Id of the parent Account
+     * @return List of direct child account of an account
+     * @throws KapuaException
+     */
     public AccountListResult findChildsRecursively(KapuaId accountId)
         throws KapuaException;
 }

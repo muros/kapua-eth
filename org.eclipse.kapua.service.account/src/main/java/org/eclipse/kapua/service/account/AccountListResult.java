@@ -19,6 +19,12 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.model.query.KapuaListResult;
 
+/**
+ * Account result list definition.
+ * 
+ * @since 1.0
+ *
+ */
 @XmlRootElement(name = "accountListResult")
 @XmlAccessorType(XmlAccessType.PROPERTY)
 @XmlType(factoryClass = AccountXmlRegistry.class,factoryMethod = "newAccountListResult")
