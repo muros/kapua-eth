@@ -176,7 +176,7 @@ public class DeviceCommandManagementServiceTest extends Assert {
         mqttConnectOptions.setPassword("kapua-password".toCharArray());
 
         MqttClient mqttClient = new MqttClient(SystemUtils.getBrokerURI().toString(),
-                ClientIdGenerator.next("testCommandExecution"));
+                ClientIdGenerator.getInstance().next("testCommandExecution"));
 
         mqttClient.connect(mqttConnectOptions);
 

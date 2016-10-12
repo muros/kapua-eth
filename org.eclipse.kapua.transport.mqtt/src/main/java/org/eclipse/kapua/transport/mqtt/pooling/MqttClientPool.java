@@ -19,23 +19,43 @@ import org.eclipse.kapua.transport.mqtt.MqttClient;
 import org.eclipse.kapua.transport.mqtt.pooling.setting.MqttClientPoolSetting;
 import org.eclipse.kapua.transport.mqtt.pooling.setting.MqttClientPoolSettingKeys;
 
-public class MqttClientPool extends GenericObjectPool<MqttClient>
-{
+/**
+ * Client pool for {@link MqttClient} objects.
+ * <p>
+ * This serves to optimize communication at the transport level of Kapua.
+ * Client borrowed from this pool are already connected and ready to publish and subscribe.
+ * </p>
+ * 
+ * @since 1.0.0
+ *
+ */
+public class MqttClientPool extends GenericObjectPool<MqttClient> {
+
+    /**
+     * Singleton instance of {@link MqttClientPool}
+     */
     private static MqttClientPool mqttClientPoolInstance;
 
+    /**
+     * {@link MqttClientPool#mqttClientPoolInstance} initialization.
+     */
     static {
         mqttClientPoolInstance = new MqttClientPool(new PooledMqttClientFactory());
     }
 
-    public MqttClientPool(PooledMqttClientFactory factory)
-    {
+    /**
+     * Initialize a {@link MqttClientPool} with the according configuration sourced from {@link MqttClientPoolSetting}.
+     * 
+     * @since 1.0.0
+     */
+    private MqttClientPool(PooledMqttClientFactory factory) {
         super(factory);
 
         MqttClientPoolSetting config = MqttClientPoolSetting.getInstance();
         GenericObjectPoolConfig clientPoolConfig = new GenericObjectPoolConfig();
-        clientPoolConfig.setMinIdle(config.getInt(MqttClientPoolSettingKeys.CLIENT_POOL_SIZE_MINIDLE));
-        clientPoolConfig.setMaxIdle(config.getInt(MqttClientPoolSettingKeys.CLIENT_POOL_SIZE_MAXIDLE));
-        clientPoolConfig.setMaxTotal(config.getInt(MqttClientPoolSettingKeys.CLIENT_POOL_SIZE_MAXTOTAL));
+        clientPoolConfig.setMinIdle(config.getInt(MqttClientPoolSettingKeys.CLIENT_POOL_SIZE_IDLE_MIN));
+        clientPoolConfig.setMaxIdle(config.getInt(MqttClientPoolSettingKeys.CLIENT_POOL_SIZE_IDLE_MAX));
+        clientPoolConfig.setMaxTotal(config.getInt(MqttClientPoolSettingKeys.CLIENT_POOL_SIZE_TOTAL_MAX));
 
         clientPoolConfig.setMaxWaitMillis(config.getInt(MqttClientPoolSettingKeys.CLIENT_POOL_BORROW_WAIT_MAX));
 
@@ -50,14 +70,26 @@ public class MqttClientPool extends GenericObjectPool<MqttClient>
         setConfig(clientPoolConfig);
     }
 
-    public static MqttClientPool getInstance()
-    {
+    /**
+     * Gets the singleton instance of {@link MqttClientPool}.
+     * 
+     * @return The singleton instance of {@link MqttClientPool}.
+     * @since 1.0.0
+     */
+    public static MqttClientPool getInstance() {
         return mqttClientPoolInstance;
     }
 
+    /**
+     * Returns a borrowed object to the pool.
+     * <p>
+     * Before calling super implementation {@link GenericObjectPool#returnObject(Object)} the {@link MqttClient} is cleaned by invoking the {@link MqttClient#clean()}.
+     * </p>
+     * 
+     * @since 1.0.0
+     */
     @Override
-    public void returnObject(MqttClient kapuaClient)
-    {
+    public void returnObject(MqttClient kapuaClient) {
         //
         // Clean up callback
         try {
@@ -66,12 +98,10 @@ public class MqttClientPool extends GenericObjectPool<MqttClient>
             //
             // Return object to pool
             super.returnObject(kapuaClient);
-        }
-        catch (KapuaException e) {
+        } catch (KapuaException e) {
             try {
                 kapuaClient.terminateClient();
-            }
-            catch (KapuaException e1) {
+            } catch (KapuaException e1) {
                 // FIXME: Manage exception
             }
             // FIXME: Manage exception

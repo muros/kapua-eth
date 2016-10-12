@@ -14,69 +14,154 @@ package org.eclipse.kapua.transport.message.mqtt;
 
 import java.util.Date;
 
+import org.eclipse.kapua.transport.message.TransportMessage;
 import org.eclipse.kapua.transport.message.pubsub.PubSubTransportMessage;
 
-// FIXME: add QoS
-public class MqttMessage implements PubSubTransportMessage<MqttTopic, MqttPayload>
-{
-    private MqttTopic   requestTopic;
+/**
+ * Implementation of {@link TransportMessage} API for MQTT transport facade.
+ * 
+ * @since 1.0.0
+ */
+public class MqttMessage implements PubSubTransportMessage<MqttTopic, MqttPayload> {
 
-    private MqttTopic   responseTopic;
+    /**
+     * The request topic of this {@link MqttMessage}.
+     * 
+     * @since 1.0.0
+     */
+    private MqttTopic requestTopic;
 
-    private Date        timestamp;
+    /**
+     * The response topic of this {@link MqttMessage}.
+     * 
+     * @since 1.0.0
+     */
+    private MqttTopic responseTopic;
 
+    /**
+     * The timestamp of this {@link MqttMessage}.
+     * 
+     * @since 1.0.0
+     */
+    private Date timestamp;
+
+    /**
+     * The payload of this {@link MqttPayload}.
+     * 
+     * @since 1.0.0
+     */
     private MqttPayload payload;
 
-    public MqttMessage(MqttTopic requestTopic, MqttTopic responseTopic, MqttPayload mqttPayload)
-    {
-        this(requestTopic, (Date) null, mqttPayload);
+    /**
+     * Construct a {@link MqttMessage} with the given parameters.
+     * 
+     * @param requestTopic
+     *            The request {@link MqttTopic} to set for this {@link MqttMessage}.
+     * @param responseTopic
+     *            The response {@link MqttTopic} to set for this {@link MqttMessage}.
+     * @param requestPayload
+     *            The request {@link MqttPayload} to set for this {@link MqttMessage}.
+     * @since 1.0.0
+     */
+    public MqttMessage(MqttTopic requestTopic, MqttTopic responseTopic, MqttPayload requestPayload) {
+        this(requestTopic, (Date) null, requestPayload);
         this.responseTopic = responseTopic;
     }
 
-    public MqttMessage(MqttTopic requestTopic, Date receivedOn, MqttPayload payload)
-    {
+    /**
+     * Construct a {@link MqttMessage} with the given parameters.
+     * 
+     * @param requestTopic
+     *            The request {@link MqttTopic} to set for this {@link MqttMessage}.
+     * @param receivedOn
+     *            The timestamp to set for this {@link MqttMessage}.
+     * @param requestPayload
+     *            The request {@link MqttPayload} to set for this {@link MqttMessage}.
+     * @since 1.0.0
+     */
+    public MqttMessage(MqttTopic requestTopic, Date receivedOn, MqttPayload requestPayload) {
         this.requestTopic = requestTopic;
         this.timestamp = receivedOn;
-        this.payload = payload;
+        this.payload = requestPayload;
     }
 
-    public MqttTopic getRequestTopic()
-    {
+    /**
+     * Gets the request {@link MqttTopic} set for this {@link MqttMessage}.
+     * 
+     * @return The request {@link MqttTopic} set for this {@link MqttMessage}.
+     * @since 1.0.0
+     */
+    public MqttTopic getRequestTopic() {
         return requestTopic;
     }
 
-    public void setRequestTopic(MqttTopic requestTopic)
-    {
+    /**
+     * Sets the request {@link MqttTopic} set for this {@link MqttMessage}.
+     * 
+     * @param requestTopic
+     *            The request {@link MqttTopic} to set for this {@link MqttMessage}.
+     * @since 1.0.0
+     */
+    public void setRequestTopic(MqttTopic requestTopic) {
         this.requestTopic = requestTopic;
     }
 
-    public MqttTopic getResponseTopic()
-    {
+    /**
+     * Gets the response {@link MqttTopic} set for this {@link MqttMessage}.
+     * 
+     * @return The response {@link MqttTopic} set for this {@link MqttMessage}.
+     * @since 1.0.0
+     */
+    public MqttTopic getResponseTopic() {
         return responseTopic;
     }
 
-    public void setResponseTopic(MqttTopic responseTopic)
-    {
+    /**
+     * Sets the response {@link MqttTopic} set for this {@link MqttMessage}.
+     * 
+     * @param responseTopic
+     *            The response {@link MqttTopic} to set for this {@link MqttMessage}.
+     * @since 1.0.0
+     */
+    public void setResponseTopic(MqttTopic responseTopic) {
         this.responseTopic = responseTopic;
     }
 
-    public Date getTimestamp()
-    {
+    /**
+     * Gets the timestamp set for this {@link MqttMessage}.
+     * 
+     * @return The timestamp set for this {@link MqttMessage}.
+     */
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp)
-    {
+    /**
+     * Sets the timestamp set for this {@link MqttMessage}.
+     * 
+     * @param timestamp
+     *            The timestamp to set for this {@link MqttMessage}.
+     */
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
-    public MqttPayload getPayload()
-    {
+    /**
+     * Gets the {@link MqttPayload} set for this {@link MqttMessage}.
+     * 
+     * @return The {@link MqttPayload} set for this {@link MqttMessage}.
+     */
+    public MqttPayload getPayload() {
         return payload;
     }
 
-    public void setPayload(MqttPayload payload)
-    {
+    /**
+     * Sets the {@link MqttPayload} set for this {@link MqttMessage}.
+     * 
+     * @param payload
+     *            The {@link MqttPayload} to set for this {@link MqttMessage}.
+     */
+    public void setPayload(MqttPayload payload) {
         this.payload = payload;
     }
 }

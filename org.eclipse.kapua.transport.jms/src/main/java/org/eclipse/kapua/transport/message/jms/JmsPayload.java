@@ -14,22 +14,48 @@ package org.eclipse.kapua.transport.message.jms;
 
 import org.eclipse.kapua.transport.message.TransportPayload;
 
-public class JmsPayload implements TransportPayload
-{
+/**
+ * Implementation of {@link TransportPayload} API for JMS transport facade.
+ * 
+ * @since 1.0.0
+ *
+ */
+public class JmsPayload implements TransportPayload {
+
+    /**
+     * The raw body of this {@link JmsPayload}.
+     */
     private byte[] body;
 
-    public JmsPayload(byte[] body)
-    {
+    /**
+     * Construct a {@link JmsPayload} with the given parameter.
+     * 
+     * @param body
+     *            The raw body to set for this {@link JmsPayload}.
+     * @since 1.0.0
+     */
+    public JmsPayload(byte[] body) {
         this.body = body;
     }
 
-    public byte[] getBody()
-    {
+    /**
+     * Gets the raw body set for this {@link JmsPayload}.
+     * 
+     * @return The raw body set for this {@link JmsPayload}.
+     * @since 1.0.0
+     */
+    public byte[] getBody() {
         return body;
     }
 
-    public void setBody(byte[] body)
-    {
+    /**
+     * Sets the raw body set for this {@link JmsPayload}.
+     * 
+     * @param body
+     *            the raw body set for this {@link JmsPayload}.
+     * @since 1.0.0
+     */
+    public void setBody(byte[] body) {
         this.body = body;
     }
 }

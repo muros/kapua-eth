@@ -12,23 +12,28 @@
  *******************************************************************************/
 package org.eclipse.kapua.transport.mqtt;
 
+import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.transport.TransportClientFactory;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
 import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 
-public class MqttClientFactoryImpl implements TransportClientFactory<MqttTopic, MqttPayload, MqttMessage, MqttMessage, MqttFacade, MqttClientConnectionOptions>
-{
+/**
+ * Implementation of {@link TransportClientFactory} API for MQTT transport facade
+ * 
+ * @since 1.0.0
+ *
+ */
+public class MqttClientFactoryImpl implements TransportClientFactory<MqttTopic, MqttPayload, MqttMessage, MqttMessage, MqttFacade, MqttClientConnectionOptions> {
+
     @Override
     public MqttFacade getFacade()
-        throws Exception
-    {
+            throws KapuaException {
         return new MqttFacade();
     }
 
     @Override
-    public MqttClientConnectionOptions newConnectOptions()
-    {
+    public MqttClientConnectionOptions newConnectOptions() {
         return new MqttClientConnectionOptions();
     }
 
