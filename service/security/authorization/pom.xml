@@ -14,22 +14,19 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua</artifactId>
+        <artifactId>kapua-security</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
+    <packaging>pom</packaging>
 
-    <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-    <name>org.eclipse.kapua.service.authorization</name>
+    <artifactId>kapua-security-authorization</artifactId>
+    <name>${project.artifactId}</name>
 
-    <dependencies>
-    	<!--  -->
-        <!-- Extended service interfaces -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>api</module>
+    </modules>
+
 </project>

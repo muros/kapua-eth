@@ -314,6 +314,11 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-security-authorization-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>org.eclipse.kapua.locator.guice</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -340,11 +345,6 @@
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
                 <artifactId>org.eclipse.kapua.service.authentication</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.service.authorization</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -437,7 +437,6 @@
 
         <!-- Authentication and Authorization -->
         <module>org.eclipse.kapua.service.authentication</module>
-        <module>org.eclipse.kapua.service.authorization</module>
 
         <module>org.eclipse.kapua.service.auth.shiro</module>
 
@@ -445,7 +444,6 @@
         <module>org.eclipse.kapua.service.user</module>
         <module>org.eclipse.kapua.service.user.internal</module>
 
-        <!-- -->
         <!-- Account -->
         <module>org.eclipse.kapua.service.account</module>
         <module>org.eclipse.kapua.service.account.internal</module>

@@ -72,8 +72,7 @@
         
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-security-authorization-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

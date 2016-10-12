@@ -110,7 +110,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.authorization</artifactId>
+			<artifactId>kapua-security-authorization-api</artifactId>
 		</dependency>
 
 		<!-- dependencies added otherwise the unix assembly doesn't know the arctifact 

@@ -176,7 +176,6 @@
             <artifactId>org.eclipse.kapua.service</artifactId>
         </dependency>
 
-        <!-- -->
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -184,7 +183,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authorization</artifactId>
+            <artifactId>kapua-security-authorization-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

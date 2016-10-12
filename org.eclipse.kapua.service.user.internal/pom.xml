@@ -17,7 +17,6 @@
     <name>org.eclipse.kapua.service.user.internal</name>
 
     <dependencies>
-        <!-- -->
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -25,12 +24,10 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- -->
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-security-authorization-api</artifactId>
         </dependency>
 
         <!-- Internal dependencies -->
