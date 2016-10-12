@@ -139,7 +139,7 @@
                 <include>${pom.groupId}:kapua-device-bundle-api</include>
                 <include>${pom.groupId}:kapua-device-bundle-internal</include>
                 <include>${pom.groupId}:kapua-device-command-api</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.device.management.command.internal</include>
+                <include>${pom.groupId}:kapua-device-command-internal</include>
                 <include>${pom.groupId}:kapua-device-commons</include>
                 <include>${pom.groupId}:kapua-device-configuration-api</include>
                 <include>${pom.groupId}:kapua-device-configuration-internal</include>

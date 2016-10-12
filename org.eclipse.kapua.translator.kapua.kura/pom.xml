@@ -88,8 +88,7 @@
         
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.command.internal</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-command-internal</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
