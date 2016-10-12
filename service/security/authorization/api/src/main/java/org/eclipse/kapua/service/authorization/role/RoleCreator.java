@@ -16,13 +16,39 @@ import java.util.Set;
 
 import org.eclipse.kapua.model.KapuaEntityCreator;
 
+/**
+ * Role creator service definition.
+ * 
+ * @since 1.0
+ * 
+ */
 public interface RoleCreator extends KapuaEntityCreator<Role>
 {
+    /**
+     * Set the permission name
+     * 
+     * @param name
+     */
     public void setName(String name);
 
+    /**
+     * Return the permission name
+     * 
+     * @return
+     */
     public String getName();
 
+    /**
+     * Set the {@link RolePermission} set
+     * 
+     * @param permissions
+     */
     public void setRoles(Set<RolePermission> permissions);
 
+    /**
+     * Return the {@link RolePermission} set
+     * 
+     * @return
+     */
     public Set<RolePermission> getRoles();
 }

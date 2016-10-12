@@ -12,6 +12,15 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.role.shiro;
 
+import org.eclipse.kapua.service.authorization.permission.Permission;
+
+/**
+ * Role domain.<br>
+ * Used to describe the role domain in the {@link Permission}.
+ * 
+ * @since 1.0
+ *
+ */
 public interface RoleDomain
 {
     String ROLE = "role";

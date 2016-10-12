@@ -44,17 +44,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The JPA-based application's one and only configured Apache Shiro Realm.
+ * JPA-based Apache Shiro {@link AuthenticatingRealm} implementation.
+ * 
+ * since 1.0
+ * 
  */
 public class KapuaAuthenticatingRealm extends AuthenticatingRealm
 {
     @SuppressWarnings("unused")
     private static final Logger s_logger               = LoggerFactory.getLogger(KapuaAuthenticatingRealm.class);
 
+    /**
+     * Realm name
+     */
     public static final String  REALM_NAME             = "kapuaAuthenticatingRealm";
+
     public static final String  PRINCIPAL_USER_ID_KEY  = "userIdPrincipal";
     public static final String  PRINCIPAL_USERNAME_KEY = "usernamePrincipal";
 
+    /**
+     * Constructor
+     * 
+     * @throws KapuaException
+     */
     public KapuaAuthenticatingRealm() throws KapuaException
     {
         // This name must match the name in the User class's getPrincipals() method
@@ -64,9 +76,7 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
         setCredentialsMatcher(credentialsMather);
     }
 
-    /**
-     * Authentication
-     */
+    @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
         throws AuthenticationException
     {
@@ -198,9 +208,7 @@ public class KapuaAuthenticatingRealm extends AuthenticatingRealm
         return info;
     }
 
-    /**
-     * Keeps track of the number of login attempts.
-     */
+    @Override
     protected void assertCredentialsMatch(AuthenticationToken authcToken, AuthenticationInfo info)
         throws AuthenticationException
     {

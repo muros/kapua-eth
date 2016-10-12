@@ -35,6 +35,12 @@ import org.eclipse.kapua.service.authorization.user.role.UserRoles;
 
 @Entity(name = "UserRole")
 @Table(name = "athz_user_role")
+/**
+ * User role implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class UserRolesImpl extends AbstractKapuaEntity implements UserRoles
 {
     private static final long serialVersionUID = -3760818776351242930L;
@@ -49,16 +55,25 @@ public class UserRolesImpl extends AbstractKapuaEntity implements UserRoles
     @JoinTable(name = "athz_user_role_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<RoleImpl>     roles;
 
+    /**
+     * Constructor
+     */
     protected UserRolesImpl()
     {
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     */
     public UserRolesImpl(KapuaId scopeId)
     {
         super(scopeId);
     }
 
+    @Override
     public void setUserId(KapuaId userId)
     {
         if (userId.getId() != null) {
@@ -66,6 +81,7 @@ public class UserRolesImpl extends AbstractKapuaEntity implements UserRoles
         }
     }
 
+    @Override
     public KapuaId getUserId()
     {
         return userId;

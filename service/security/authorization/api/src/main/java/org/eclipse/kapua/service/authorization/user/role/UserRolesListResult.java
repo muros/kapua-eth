@@ -14,6 +14,12 @@ package org.eclipse.kapua.service.authorization.user.role;
 
 import org.eclipse.kapua.model.query.KapuaListResult;
 
+/**
+ * User roles list definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserRolesListResult extends KapuaListResult<UserRoles>
 {
 

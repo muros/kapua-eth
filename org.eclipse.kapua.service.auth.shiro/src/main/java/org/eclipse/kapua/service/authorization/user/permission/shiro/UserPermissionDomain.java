@@ -12,6 +12,15 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.user.permission.shiro;
 
+import org.eclipse.kapua.service.authorization.permission.Permission;
+
+/**
+ * User permission domain.<br>
+ * Used to describe the user permission domain in the {@link Permission}.
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserPermissionDomain {
 	
     String USER_PERMISSION = "user_permission";

@@ -15,9 +15,27 @@ package org.eclipse.kapua.service.authorization.user.role;
 import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * User roles factory
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserRolesFactory extends KapuaObjectFactory
 {
+    /**
+     * Creates a new user roles creator for the provided scope identifier
+     * 
+     * @param scopeId
+     * @return
+     */
     public UserRolesCreator newCreator(KapuaId scopeId);
 
+    /**
+     * Creates a new user roles query for the provided scope identifier
+     * 
+     * @param scopeId
+     * @return
+     */
     public UserRolesQuery newQuery(KapuaId scopeId);
 }

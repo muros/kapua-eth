@@ -15,7 +15,7 @@ package org.eclipse.kapua.service.authentication;
 import org.eclipse.kapua.model.KapuaObjectFactory;
 
 /**
- * Username password {@link UsernamePasswordTokenFactory} factory implementation
+ * Username password {@link UsernamePasswordTokenFactory} factory definition.
  * 
  * @since 1.0
  * 

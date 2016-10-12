@@ -14,6 +14,12 @@ package org.eclipse.kapua.service.authorization.user.permission;
 
 import org.eclipse.kapua.model.query.KapuaQuery;
 
+/**
+ * User permission query definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserPermissionQuery extends KapuaQuery<UserPermission>
 {
 }

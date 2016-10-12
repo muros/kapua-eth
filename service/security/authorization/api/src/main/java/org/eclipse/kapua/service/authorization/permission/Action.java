@@ -12,7 +12,18 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.permission;
 
+/**
+ * Action definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface Action
 {
+    /**
+     * Return the action name
+     * 
+     * @return
+     */
     public String name();
 }

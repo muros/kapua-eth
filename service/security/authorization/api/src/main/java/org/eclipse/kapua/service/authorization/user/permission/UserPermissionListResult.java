@@ -14,6 +14,12 @@ package org.eclipse.kapua.service.authorization.user.permission;
 
 import org.eclipse.kapua.model.query.KapuaListResult;
 
+/**
+ * User permission list definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserPermissionListResult extends KapuaListResult<UserPermission>
 {
 

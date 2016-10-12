@@ -16,6 +16,12 @@ import org.eclipse.kapua.commons.model.query.KapuaListResultImpl;
 import org.eclipse.kapua.service.authentication.credential.Credential;
 import org.eclipse.kapua.service.authentication.credential.CredentialListResult;
 
+/**
+ * Credential list result implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class CredentialListResultImpl extends KapuaListResultImpl<Credential> implements CredentialListResult
 {
 

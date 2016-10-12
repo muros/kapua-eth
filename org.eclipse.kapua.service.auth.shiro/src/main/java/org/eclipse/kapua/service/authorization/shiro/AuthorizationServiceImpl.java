@@ -22,6 +22,12 @@ import org.eclipse.kapua.commons.security.KapuaSession;
 import org.eclipse.kapua.service.authorization.AuthorizationService;
 import org.eclipse.kapua.service.authorization.permission.Permission;
 
+/**
+ * Authorization service implementation.
+ * 
+ * since 1.0
+ * 
+ */
 public class AuthorizationServiceImpl implements AuthorizationService
 {
 

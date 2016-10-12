@@ -15,9 +15,28 @@ package org.eclipse.kapua.service.authorization.user.permission;
 import org.eclipse.kapua.model.KapuaObjectFactory;
 import org.eclipse.kapua.model.id.KapuaId;
 
+/**
+ * User permission factory
+ * 
+ * @since 1.0
+ *
+ */
 public interface UserPermissionFactory extends KapuaObjectFactory
 {
+    /**
+     * Creates a new user permission creator for the provided scope identifier
+     * 
+     * @param scopeId
+     * @return
+     */
     public UserPermissionCreator newCreator(KapuaId scopeId);
 
+    /**
+     * Creates a new user permission query for the provided scope identifier
+     * 
+     * @param scopeId
+     * @return
+     */
     public UserPermissionQuery newQuery(KapuaId scopeId);
+
 }

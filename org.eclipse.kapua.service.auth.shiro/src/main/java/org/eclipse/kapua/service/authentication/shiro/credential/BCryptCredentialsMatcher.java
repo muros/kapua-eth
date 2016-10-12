@@ -19,6 +19,12 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+/**
+ * BCrypt credential matcher implementation
+ * 
+ * òsince 1.0
+ * 
+ */
 public class BCryptCredentialsMatcher implements CredentialsMatcher
 {
 

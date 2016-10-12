@@ -18,6 +18,13 @@ import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.role.Role;
 
+/**
+ * User role entity.<br>
+ * Describes a role associates to the user.
+ * 
+ * @since 1.0
+ * 
+ */
 public interface UserRoles extends KapuaEntity
 {
     public static final String TYPE = "userRole";
@@ -27,11 +34,31 @@ public interface UserRoles extends KapuaEntity
         return TYPE;
     }
 
+    /**
+     * Set the user identifiers
+     * 
+     * @param userId
+     */
     public void setUserId(KapuaId userId);
 
+    /**
+     * Get the user identifiers
+     * 
+     * @return
+     */
     public KapuaId getUserId();
 
+    /**
+     * Set the roles list
+     * 
+     * @param roles
+     */
     public void setRoles(Set<Role> roles);
 
+    /**
+     * Get the roles list
+     * 
+     * @return
+     */
     public Set<Role> getRoles();
 }

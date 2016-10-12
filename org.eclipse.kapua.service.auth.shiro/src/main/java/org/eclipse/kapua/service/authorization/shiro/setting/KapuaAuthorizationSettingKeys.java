@@ -14,6 +14,12 @@ package org.eclipse.kapua.service.authorization.shiro.setting;
 
 import org.eclipse.kapua.commons.setting.SettingKey;
 
+/**
+ * Authorization setting key
+ * 
+ * @since 1.0
+ *
+ */
 public enum KapuaAuthorizationSettingKeys implements SettingKey
 {
     AUTHORIZATION_KEY("authorization.key");

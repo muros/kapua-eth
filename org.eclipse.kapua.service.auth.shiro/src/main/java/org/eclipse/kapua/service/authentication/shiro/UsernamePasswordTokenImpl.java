@@ -12,8 +12,15 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.shiro;
 
+import org.eclipse.kapua.service.authentication.AuthenticationCredentials;
 import org.eclipse.kapua.service.authentication.UsernamePasswordToken;
 
+/**
+ * Username and password {@link AuthenticationCredentials} implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UsernamePasswordTokenImpl extends org.apache.shiro.authc.UsernamePasswordToken implements UsernamePasswordToken
 {
     private static final long serialVersionUID = -7549848672967689716L;
@@ -26,6 +33,12 @@ public class UsernamePasswordTokenImpl extends org.apache.shiro.authc.UsernamePa
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param username
+     * @param password
+     */
     public UsernamePasswordTokenImpl(String username, char[] password)
     {
         this();

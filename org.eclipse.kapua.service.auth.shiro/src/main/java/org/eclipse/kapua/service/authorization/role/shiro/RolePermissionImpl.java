@@ -29,6 +29,12 @@ import org.eclipse.kapua.service.authorization.role.RolePermission;
 
 @Entity(name = "RolePermission")
 @Table(name = "athz_role_permission")
+/**
+ * Role permission implementation.
+ * 
+ * @since 1.0
+ *
+ */
 public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermission
 {
     private static final long serialVersionUID = -4107313856966377197L;
@@ -47,6 +53,14 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
         super();
     }
 
+    /**
+     * Constructor
+     * 
+     * @param scopeId
+     * @param domain
+     * @param action
+     * @param targetScopeId
+     */
     public RolePermissionImpl(KapuaId scopeId, String domain, Actions action, KapuaId targetScopeId)
     {
         super(scopeId);
@@ -81,6 +95,7 @@ public class RolePermissionImpl extends AbstractKapuaEntity implements RolePermi
         return permission;
     }
 
+    @Override
     public String toString()
     {
         return permission.toString();

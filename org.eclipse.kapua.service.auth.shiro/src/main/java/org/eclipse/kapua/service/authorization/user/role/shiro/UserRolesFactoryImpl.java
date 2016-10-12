@@ -17,6 +17,12 @@ import org.eclipse.kapua.service.authorization.user.role.UserRolesCreator;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesFactory;
 import org.eclipse.kapua.service.authorization.user.role.UserRolesQuery;
 
+/**
+ * User roles factory service implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserRolesFactoryImpl implements UserRolesFactory
 {
 

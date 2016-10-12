@@ -12,13 +12,34 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.permission;
 
+/**
+ * Available actions.
+ * 
+ * @since 1.0
+ *
+ */
 public enum Actions implements Action
 {
+    /**
+     * Read
+     */
     read,
+    /**
+     * Write
+     */
     write,
+    /**
+     * Delete
+     */
     delete,
 
+    /**
+     * Connect
+     */
     connect,
+    /**
+     * Execute
+     */
     execute,
     ;
 }

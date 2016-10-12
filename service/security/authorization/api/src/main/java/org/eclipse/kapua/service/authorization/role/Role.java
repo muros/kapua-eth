@@ -16,6 +16,12 @@ import java.util.Set;
 
 import org.eclipse.kapua.model.KapuaEntity;
 
+/**
+ * Role entity definition.
+ * 
+ * @since 1.0
+ *
+ */
 public interface Role extends KapuaEntity
 {
     public static final String TYPE = "role";
@@ -25,11 +31,31 @@ public interface Role extends KapuaEntity
         return TYPE;
     }
 
+    /**
+     * Set the role name
+     * 
+     * @param name
+     */
     public void setName(String name);
 
+    /**
+     * Get the role name
+     * 
+     * @return
+     */
     public String getName();
 
+    /**
+     * Set the permissions set
+     * 
+     * @param permissions
+     */
     public void setPermissions(Set<RolePermission> permissions);
 
+    /**
+     * Get the permissions set
+     * 
+     * @return
+     */
     public Set<RolePermission> getPermissions();
 }

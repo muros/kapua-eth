@@ -21,8 +21,23 @@ import org.eclipse.kapua.service.authorization.role.Role;
 import org.eclipse.kapua.service.authorization.role.RoleCreator;
 import org.eclipse.kapua.service.authorization.role.RoleListResult;
 
+/**
+ * Role DAO
+ * 
+ * @since 1.0
+ *
+ */
 public class RoleDAO extends ServiceDAO
 {
+
+    /**
+     * Creates and return new role
+     * 
+     * @param em
+     * @param creator
+     * @return
+     * @throws KapuaException
+     */
     public static Role create(EntityManager em, RoleCreator creator)
         throws KapuaException
     {
@@ -34,22 +49,51 @@ public class RoleDAO extends ServiceDAO
         return ServiceDAO.create(em, role);
     }
 
+    /**
+     * Find the role by role identifier
+     * 
+     * @param em
+     * @param roleId
+     * @return
+     */
     public static Role find(EntityManager em, KapuaId roleId)
     {
         return em.find(RoleImpl.class, roleId);
     }
 
+    /**
+     * Delete the role by role identifier
+     * 
+     * @param em
+     * @param roleId
+     */
     public static void delete(EntityManager em, KapuaId roleId)
     {
         ServiceDAO.delete(em, RoleImpl.class, roleId);
     }
 
+    /**
+     * Return the role list matching the provided query
+     * 
+     * @param em
+     * @param roleQuery
+     * @return
+     * @throws KapuaException
+     */
     public static RoleListResult query(EntityManager em, KapuaQuery<Role> roleQuery)
         throws KapuaException
     {
         return ServiceDAO.query(em, Role.class, RoleImpl.class, new RoleListResultImpl(), roleQuery);
     }
 
+    /**
+     * Return the role count matching the provided query
+     * 
+     * @param em
+     * @param roleQuery
+     * @return
+     * @throws KapuaException
+     */
     public static long count(EntityManager em, KapuaQuery<Role> roleQuery)
         throws KapuaException
     {

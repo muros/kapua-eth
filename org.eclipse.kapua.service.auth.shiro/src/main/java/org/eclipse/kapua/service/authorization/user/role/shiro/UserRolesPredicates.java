@@ -12,7 +12,16 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.user.role.shiro;
 
+/**
+ * Query predicate attribute name for user roles entity.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserRolesPredicates
 {
+    /**
+     * Role name
+     */
     public static final String ROLE_NAME = "name";
 }

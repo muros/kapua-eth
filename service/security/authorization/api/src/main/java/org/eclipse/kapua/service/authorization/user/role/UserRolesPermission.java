@@ -16,6 +16,13 @@ import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.permission.Permission;
 
+/**
+ * User roles permission entity.<br>
+ * Describes the permission associated to a role.
+ * 
+ * @since 1.0
+ * 
+ */
 public interface UserRolesPermission extends KapuaEntity
 {
     public static final String TYPE = "rolePermission";
@@ -25,11 +32,31 @@ public interface UserRolesPermission extends KapuaEntity
         return TYPE;
     }
 
+    /**
+     * Set role identifier
+     * 
+     * @param roleId
+     */
     public void setRoleId(KapuaId roleId);
 
+    /**
+     * Get role identifier
+     * 
+     * @return
+     */
     public KapuaId getRoleId();
 
+    /**
+     * Set permission
+     * 
+     * @param permission
+     */
     public void setPermission(Permission permission);
 
+    /**
+     * Get permission
+     * 
+     * @return
+     */
     public Permission getPermission();
 }

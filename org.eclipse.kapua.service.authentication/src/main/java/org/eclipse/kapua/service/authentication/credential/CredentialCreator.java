@@ -40,7 +40,7 @@ public interface CredentialCreator extends KapuaEntityCreator<Credential>
     public CredentialType getCredentialType();
 
     /**
-     * Return the credential key as plain key.
+     * Return the plain credential (unencrypted value).
      * 
      * @return
      */

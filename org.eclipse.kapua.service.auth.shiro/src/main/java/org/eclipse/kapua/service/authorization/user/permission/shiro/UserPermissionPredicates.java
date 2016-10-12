@@ -12,7 +12,16 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authorization.user.permission.shiro;
 
+/**
+ * Query predicate attribute name for user permission entity.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserPermissionPredicates
 {
+    /**
+     * User id
+     */
     public static final String USER_ID = "userId";
 }

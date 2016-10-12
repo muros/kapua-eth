@@ -18,13 +18,39 @@ import org.eclipse.kapua.model.KapuaEntityCreator;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authorization.role.Role;
 
+/**
+ * User roles creator service definition
+ *
+ * @since 1.0
+ * 
+ */
 public interface UserRolesCreator extends KapuaEntityCreator<UserRoles>
 {
+    /**
+     * Set the user identifiers
+     * 
+     * @param userId
+     */
     public void setUserId(KapuaId userId);
 
+    /**
+     * Get the user identifiers
+     * 
+     * @return
+     */
     public KapuaId getUserId();
 
+    /**
+     * Set roles list
+     * 
+     * @param roles
+     */
     public void setRoles(Set<Role> roles);
 
+    /**
+     * Get roles list
+     * 
+     * @return
+     */
     public Set<Role> getRoles();
 }

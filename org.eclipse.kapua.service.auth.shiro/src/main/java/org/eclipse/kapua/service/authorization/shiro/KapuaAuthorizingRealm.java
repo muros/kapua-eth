@@ -43,22 +43,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The JPA-based application's one and only configured Apache Shiro Realm.
+ * JPA-based Apache Shiro {@link AuthorizingRealm} implementation.
+ * 
+ * @since 1.0
+ * 
  */
 public class KapuaAuthorizingRealm extends AuthorizingRealm
 {
     private static final Logger logger     = LoggerFactory.getLogger(KapuaAuthorizingRealm.class);
 
+    /**
+     * Realm name
+     */
     public static final String  REALM_NAME = "kapuaAuthorizingRealm";
 
+    /**
+     * Constructor
+     * 
+     * @throws KapuaException
+     */
     public KapuaAuthorizingRealm() throws KapuaException
     {
         setName(REALM_NAME);
     }
 
-    /**
-     * Authorization.
-     */
+    @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
         throws AuthenticationException
     {

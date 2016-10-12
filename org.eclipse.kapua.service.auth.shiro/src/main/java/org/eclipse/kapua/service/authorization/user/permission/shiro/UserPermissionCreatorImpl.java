@@ -20,6 +20,12 @@ import org.eclipse.kapua.service.authorization.permission.Permission;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermission;
 import org.eclipse.kapua.service.authorization.user.permission.UserPermissionCreator;
 
+/**
+ * User permission creator service implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class UserPermissionCreatorImpl extends AbstractKapuaEntityCreator<UserPermission> implements UserPermissionCreator
 {
     private static final long serialVersionUID = 972154225756734130L;
@@ -29,6 +35,11 @@ public class UserPermissionCreatorImpl extends AbstractKapuaEntityCreator<UserPe
 
     private Permission        permission;
 
+    /**
+     * Contructor
+     * 
+     * @param scopeId
+     */
     public UserPermissionCreatorImpl(KapuaId scopeId)
     {
         super(scopeId);

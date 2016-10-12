@@ -12,6 +12,15 @@
  *******************************************************************************/
 package org.eclipse.kapua.service.authentication.credential.shiro;
 
+import org.eclipse.kapua.service.authorization.permission.Permission;
+
+/**
+ * Credential permission domain.<br>
+ * Used to describe the credential domain in the {@link Permission}
+ * 
+ * @since 1.0
+ *
+ */
 public interface CredentialDomain {
 	
     String CREDENTIAL = "credential";

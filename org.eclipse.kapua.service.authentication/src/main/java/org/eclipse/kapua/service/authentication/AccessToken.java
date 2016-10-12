@@ -16,7 +16,7 @@ import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 
 /**
- * Access token reference implementation
+ * Access token entity.
  * 
  * @since 1.0
  *
@@ -39,7 +39,8 @@ public interface AccessToken extends KapuaEntity
     public String getTokenId();
     
     /**
-     * Return the scope identifier
+     * Return the user scope identifier.<br>
+     * It is not ull if the user acts on a different scope identifier (on which he has the right)
      * 
      * @return
      */

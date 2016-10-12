@@ -19,6 +19,12 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.commons.jpa.AbstractEntityManagerFactory;
 import org.eclipse.kapua.commons.jpa.EntityManager;
 
+/**
+ * Entity manager factory for the authentication module.
+ *
+ * @since 1.0
+ *
+ */
 public class AuthenticationEntityManagerFactory extends AbstractEntityManagerFactory
 {
     private static final String                       PERSISTENCE_UNIT_NAME = "kapua-authentication";
@@ -27,6 +33,9 @@ public class AuthenticationEntityManagerFactory extends AbstractEntityManagerFac
 
     private static AuthenticationEntityManagerFactory instance              = new AuthenticationEntityManagerFactory();
 
+    /**
+     * Constructs a new entity manager factory and configure it to use the authentication persistence unit.
+     */
     private AuthenticationEntityManagerFactory()
     {
         super(PERSISTENCE_UNIT_NAME,
@@ -34,6 +43,12 @@ public class AuthenticationEntityManagerFactory extends AbstractEntityManagerFac
               s_uniqueConstraints);
     }
 
+    /**
+     * Return the {@link EntityManager} singleton instance
+     * 
+     * @return
+     * @throws KapuaException
+     */
     public static EntityManager getEntityManager()
         throws KapuaException
     {

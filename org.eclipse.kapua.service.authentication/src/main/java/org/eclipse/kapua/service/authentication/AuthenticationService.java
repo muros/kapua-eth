@@ -16,8 +16,8 @@ import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.service.KapuaService;
 
 /**
- * AuthenticationService exposes APIs to manage User object under an Account.
- * It includes APIs to create, update, find, list and delete Users.
+ * AuthenticationService exposes APIs to manage User object under an Account.<br>
+ * It includes APIs to create, update, find, list and delete Users.<br>
  * Instances of the UserService can be acquired through the ServiceLocator.
  * 
  * @since 1.0

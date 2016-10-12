@@ -16,8 +16,16 @@ import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.service.authentication.credential.CredentialFactory;
 import org.eclipse.kapua.service.authentication.credential.CredentialType;
 
+/**
+ * Credential factory service implementation.
+ * 
+ * @since 1.0
+ * 
+ */
 public class CredentialFactoryImpl implements CredentialFactory
 {
+
+    @Override
     public CredentialCreatorImpl newCreator(KapuaId scopeId, KapuaId userId, CredentialType credentialType, String credentialKey)
     {
         return new CredentialCreatorImpl(scopeId, userId, credentialType, credentialKey);
