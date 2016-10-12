@@ -28,6 +28,11 @@ public enum JmsClientSettingKeys implements SettingKey {
     TRANSPORT_TOPIC_SEPARATOR("transport.topic.separator"),
     ;
 
+    /**
+     * The key value in the configuration resources.
+     * 
+     * @since 1.0.0
+     */
     private String key;
 
     /**

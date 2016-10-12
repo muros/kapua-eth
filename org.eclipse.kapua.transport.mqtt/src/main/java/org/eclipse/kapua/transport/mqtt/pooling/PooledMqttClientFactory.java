@@ -23,20 +23,39 @@ import org.eclipse.kapua.transport.mqtt.MqttClient;
 import org.eclipse.kapua.transport.mqtt.MqttClientConnectionOptions;
 import org.eclipse.kapua.transport.mqtt.pooling.setting.MqttClientPoolSetting;
 import org.eclipse.kapua.transport.mqtt.pooling.setting.MqttClientPoolSettingKeys;
+import org.eclipse.kapua.transport.mqtt.setting.MqttClientSetting;
+import org.eclipse.kapua.transport.mqtt.setting.MqttClientSettingKeys;
 import org.eclipse.kapua.transport.utils.ClientIdGenerator;
 
+/**
+ * Pooled object factory for {@link MqttClientPool}.
+ * 
+ * @since 1.0.0
+ *
+ */
 public class PooledMqttClientFactory extends BasePooledObjectFactory<MqttClient> {
 
+    /**
+     * Creates the {@link MqttClient} for the {@link MqttClientPool}.
+     * 
+     * <p>
+     * The client is initialized and connected. In case of any failure on connect operation, an exception is thrown and the the created client is destroyed.
+     * </p>
+     * 
+     * @throws Exception
+     *             FIXME [javadoc] document exception.
+     * @since 1.0.0
+     */
     @Override
     public MqttClient create()
             throws Exception {
         //
         // User pwd generation
+        MqttClientSetting mqttClientSettings = MqttClientSetting.getInstance();
         MqttClientPoolSetting mqttClientPoolSettings = MqttClientPoolSetting.getInstance();
 
-        // FIXME: remove these credentials!
-        String username = "kapua-sys";
-        char[] password = "kapua-password".toCharArray();
+        String username = mqttClientSettings.getString(MqttClientSettingKeys.TRANSPORT_CREDENTIAL_USERNAME);
+        char[] password = mqttClientSettings.getString(MqttClientSettingKeys.TRANSPORT_CREDENTIAL_PASSWORD).toCharArray();
         String clientId = ClientIdGenerator.getInstance().next(mqttClientPoolSettings.getString(MqttClientPoolSettingKeys.CLIENT_POOL_CLIENT_ID_PREFIX));
         URI brokerURI = SystemUtils.getBrokerURI();
 
@@ -61,28 +80,62 @@ public class PooledMqttClientFactory extends BasePooledObjectFactory<MqttClient>
         return kapuaClient;
     }
 
+    /**
+     * Wraps the given {@link MqttClient} into a {@link DefaultPooledObject}.
+     * 
+     * @param mqttClient
+     *            The object to wrap for {@link BasePooledObjectFactory}.
+     * @since 1.0.0
+     */
     @Override
     public PooledObject<MqttClient> wrap(MqttClient mqttClient) {
         return new DefaultPooledObject<>(mqttClient);
     }
 
+    /**
+     * Validates status of the given {@link MqttClient} pooled object.
+     * 
+     * <p>
+     * Check performed for the client to be marked as valid are:
+     * </p>
+     * <ul>
+     * <li>{@link MqttClient} {@code != null}</li>
+     * <li>{@link MqttClient#isConnected()} {@code == true}</li>
+     * </ul>
+     * 
+     * @param pooledMqttClient
+     *            The object to validate.
+     * 
+     * @since 1.0.0
+     */
     @Override
-    public boolean validateObject(PooledObject<MqttClient> pooledKapuaClient) {
-        MqttClient mqttClient = pooledKapuaClient.getObject();
+    public boolean validateObject(PooledObject<MqttClient> pooledMqttClient) {
+        MqttClient mqttClient = pooledMqttClient.getObject();
         return (mqttClient != null && mqttClient.isConnected());
     }
 
+    /**
+     * Destroys the given {@link MqttClient} pooled object.
+     * <p>
+     * Before calling super implementation {@link BasePooledObjectFactory#destroyObject(PooledObject)} it tries to clean up the {@link MqttClient}.
+     * </p>
+     * 
+     * @param pooledMqttClient
+     *            The pooled object to destroy.
+     * 
+     * @since 1.0.0.
+     */
     @Override
-    public void destroyObject(PooledObject<MqttClient> pooledKapuaClient)
+    public void destroyObject(PooledObject<MqttClient> pooledMqttClient)
             throws Exception {
-        MqttClient mqttClient = pooledKapuaClient.getObject();
+        MqttClient mqttClient = pooledMqttClient.getObject();
         if (mqttClient != null) {
             if (mqttClient.isConnected()) {
                 mqttClient.disconnectClient();
             }
             mqttClient.terminateClient();
         }
-        super.destroyObject(pooledKapuaClient);
+        super.destroyObject(pooledMqttClient);
     }
 
 }

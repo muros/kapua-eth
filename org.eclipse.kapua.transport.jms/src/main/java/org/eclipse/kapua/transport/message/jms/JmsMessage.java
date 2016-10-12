@@ -50,7 +50,7 @@ public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload> {
      * @param topic
      *            The {@link JmsTopic} to set for this {@link JmsMessage}.
      * @param receivedOn
-     *            The {@link Date} to set for this {@link JmsMessage}.
+     *            The received on to set for this {@link JmsMessage}.
      * @param payload
      *            The {@link JmsPayload} to set for this {@link JmsMessage}.
      * @since 1.0.0
@@ -65,6 +65,7 @@ public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload> {
      * Gets the {@link JmsTopic} set for this {@link JmsMessage}.
      * 
      * @return The {@link JmsTopic} set for this {@link JmsMessage}.
+     * @since 1.0.0
      */
     public JmsTopic getTopic() {
         return topic;
@@ -74,7 +75,8 @@ public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload> {
      * Sets the {@link JmsTopic} set for this {@link JmsMessage}.
      * 
      * @param topic
-     *            the {@link JmsTopic} to set for this {@link JmsMessage}.
+     *            The {@link JmsTopic} to set for this {@link JmsMessage}.
+     * @since 1.0.0
      */
     public void setTopic(JmsTopic topic) {
         this.topic = topic;
@@ -84,6 +86,7 @@ public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload> {
      * Gets the received on set for this {@link JmsMessage}.
      * 
      * @return The received on set for this {@link JmsMessage}.
+     * @since 1.0.0
      */
     public Date getReceivedOn() {
         return receivedOn;
@@ -93,7 +96,8 @@ public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload> {
      * Sets the received on set for this {@link JmsMessage}.
      * 
      * @param receivedOn
-     *            the received on to set for this {@link JmsMessage}.
+     *            The received on to set for this {@link JmsMessage}.
+     * @since 1.0.0
      */
     public void setReceivedOn(Date receivedOn) {
         this.receivedOn = receivedOn;
@@ -103,6 +107,7 @@ public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload> {
      * Gets the {@link JmsPayload} set for this {@link JmsMessage}.
      * 
      * @return The {@link JmsPayload} set for this {@link JmsMessage}.
+     * @since 1.0.0
      */
     public JmsPayload getPayload() {
         return payload;
@@ -112,7 +117,8 @@ public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload> {
      * Sets the {@link JmsPayload} set for this {@link JmsMessage}.
      * 
      * @param payload
-     *            the {@link JmsPayload} to set for this {@link JmsMessage}.
+     *            The {@link JmsPayload} to set for this {@link JmsMessage}.
+     * @since 1.0.0
      */
     public void setPayload(JmsPayload payload) {
         this.payload = payload;

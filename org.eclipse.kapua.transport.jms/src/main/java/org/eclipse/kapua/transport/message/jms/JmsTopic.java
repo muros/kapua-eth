@@ -25,11 +25,15 @@ public class JmsTopic implements TransportChannel {
 
     /**
      * The topic separator value for JMS topics returned from {@link JmsClientSetting}.{@link JmsClientSettingKeys#TRANSPORT_TOPIC_SEPARATOR}
+     * 
+     * @since 1.0.0
      */
     private final static String topicSeparator = JmsClientSetting.getInstance().getString(JmsClientSettingKeys.TRANSPORT_TOPIC_SEPARATOR);
 
     /**
      * The full topic.
+     * 
+     * @since 1.0.0
      */
     private String topic;
 
@@ -38,7 +42,7 @@ public class JmsTopic implements TransportChannel {
      * 
      * @param topic
      *            The topic to set for this {@link JmsTopic}
-     * 
+     * @since 1.0.0
      */
     public JmsTopic(String topic) {
         setTopic(topic);
@@ -53,7 +57,7 @@ public class JmsTopic implements TransportChannel {
      * 
      * @param topicParts
      *            The {@link String}[] from which build the full topic.
-     * 
+     * @since 1.0.0
      */
     public JmsTopic(String[] topicParts) {
         //
@@ -67,13 +71,13 @@ public class JmsTopic implements TransportChannel {
             sb.deleteCharAt(sb.length() - topicSeparator.length());
             setTopic(sb.toString());
         }
-
     }
 
     /**
      * Gets the full topic set for this {@link JmsTopic}
      * 
      * @return the full topic of this {@link JmsTopic}
+     * @since 1.0.0
      */
     public String getTopic() {
         return topic;
@@ -84,6 +88,7 @@ public class JmsTopic implements TransportChannel {
      * 
      * @param topic
      *            The full topic to set for this {@link JmsTopic}
+     * @since 1.0.0
      */
     public void setTopic(String topic) {
         this.topic = topic;
@@ -93,6 +98,7 @@ public class JmsTopic implements TransportChannel {
      * Gets the topic split-ed by the topic separator configured in {@link JmsClientSetting}.{@link JmsClientSettingKeys#TRANSPORT_TOPIC_SEPARATOR}
      * 
      * @return The topic tokens or {@code null} if full topic has been set to {@code null}
+     * @since 1.0.0
      */
     public String[] getSplittedTopic() {
         if (topic == null) {

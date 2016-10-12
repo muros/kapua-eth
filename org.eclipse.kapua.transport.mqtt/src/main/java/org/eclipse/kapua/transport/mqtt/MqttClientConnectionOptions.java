@@ -16,58 +16,129 @@ import java.net.URI;
 
 import org.eclipse.kapua.transport.TransportClientConnectOptions;
 
-public class MqttClientConnectionOptions implements TransportClientConnectOptions
-{
-    private String clientId;
-    private String username;
-    private char[] password;
-    private URI    endpointURI;
+/**
+ * Implementation of {@link TransportClientConnectOptions} API for Mqtt transport facade.
+ * 
+ * @since 1.0.0
+ */
+public class MqttClientConnectionOptions implements TransportClientConnectOptions {
 
+    /**
+     * The MQTT client id to use.
+     * 
+     * @since 1.0.0
+     */
+    private String clientId;
+
+    /**
+     * The MQTT username id to use.
+     * 
+     * @since 1.0.0
+     */
+    private String username;
+
+    /**
+     * The MQTT password id to use.
+     * 
+     * @since 1.0.0
+     */
+    private char[] password;
+
+    /**
+     * The MQTT broker URI id to use.
+     * 
+     * @since 1.0.0
+     */
+    private URI endpointURI;
+
+    /**
+     * Gets the clientID to use for the MQTT client connection.
+     * 
+     * @since 1.0.0
+     */
     @Override
-    public String getClientId()
-    {
+    public String getClientId() {
         return clientId;
     }
 
+    /**
+     * Sets the client ID to use for the MQTT client connection.
+     * <p>
+     * This client ID must follow the specification of MQTT v3.1.1
+     * </p>
+     * 
+     * @see <a href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csprd02/mqtt-v3.1.1-csprd02.html">MQTT v3.1.1 specification</a>
+     * 
+     * @since 1.0.0
+     */
     @Override
-    public void setClientId(String clientId)
-    {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
+    /**
+     * Gets the username to use for the MQTT client connection.
+     * 
+     * @since 1.0.0
+     */
     @Override
-    public String getUsername()
-    {
+    public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets the username to use for the MQTT client connection.
+     * <p>
+     * This username must follow the specification of MQTT v3.1.1
+     * </p>
+     * 
+     * @see <a href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csprd02/mqtt-v3.1.1-csprd02.html">MQTT v3.1.1 specification</a>
+     * 
+     * @since 1.0.0
+     */
     @Override
-    public void setUsername(String username)
-    {
+    public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Gets the password to use for the MQTT client connection.
+     * 
+     * @since 1.0.0
+     */
     @Override
-    public char[] getPassword()
-    {
+    public char[] getPassword() {
         return password;
     }
 
+    /**
+     * Sets the password to use for the MQTT client connection.
+     * <p>
+     * This password must follow the specification of MQTT v3.1.1
+     * </p>
+     * 
+     * @see <a href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csprd02/mqtt-v3.1.1-csprd02.html">MQTT v3.1.1 specification</a>
+     * 
+     * @since 1.0.0
+     */
     @Override
-    public void setPassword(char[] password)
-    {
+    public void setPassword(char[] password) {
         this.password = password;
     }
 
+    /**
+     * Gets the {@link URI} to use for the MQTT client connection.
+     */
     @Override
-    public URI getEndpointURI()
-    {
+    public URI getEndpointURI() {
         return endpointURI;
     }
 
+    /**
+     * Sets the {@link URI} to use for the MQTT client connection.
+     */
     @Override
-    public void setEndpointURI(URI endpointURI)
-    {
+    public void setEndpointURI(URI endpointURI) {
         this.endpointURI = endpointURI;
     }
 

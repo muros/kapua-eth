@@ -25,11 +25,33 @@ import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 import org.eclipse.kapua.transport.mqtt.pooling.MqttClientPool;
 
+/**
+ * Implementation of {@link TransportFacade} API for MQTT transport facade.
+ *
+ * @since 1.0.0
+ */
 public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttMessage, MqttMessage> {
 
+    /**
+     * The client to use to make requests.
+     * 
+     * @since 1.0.0
+     */
     private MqttClient borrowedClient;
+
+    /**
+     * The client callback for this set of requests.
+     * 
+     * @since 1.0.0
+     */
     private MqttClientCallback mqttClientCallback;
 
+    /**
+     * Initialize a transport facade to be used to send requests to devices.
+     * 
+     * @throws KapuaException
+     *             When MQTT client is not available.
+     */
     public MqttFacade() throws KapuaException {
         //
         // Get the client form the pool
@@ -44,6 +66,9 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
     //
     // Message management
     //
+    /**
+     * 
+     */
     @Override
     public void sendAsync(MqttMessage mqttMessage)
             throws KapuaException {
@@ -73,6 +98,25 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
         }
     }
 
+    /**
+     * Actual implementation of the send operations.
+     * <p>
+     * According to the parameters given, it will make a sync or async request.
+     * </p>
+     * 
+     * @param mqttMessage
+     *            The request to send.
+     * @param responses
+     *            The container in which load responses received from the device
+     * @param timeout
+     *            The timeout of waiting the response from the device.
+     *            If {@code null} request will be fired without waiting for the response.
+     *            If mqttMessage has no response message set, timeout will be ignore even if set.
+     * @throws KapuaException
+     *             FIXME [javadoc] document exception
+     * @see {@link MqttMessage#getResponseTopic()}
+     * @since 1.0.0.
+     */
     private void sendInternal(MqttMessage mqttMessage, List<MqttMessage> responses, Long timeout)
             throws KapuaException {
         try {
@@ -103,8 +147,8 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
 
             //
             // Wait if required
-            if (timeout != null &&
-                    mqttMessage.getResponseTopic() != null) {
+            if (mqttMessage.getResponseTopic() != null &&
+                    timeout != null) {
                 Timer timeoutTimer = new Timer(new StringBuilder().append(MqttFacade.class.getSimpleName())
                         .append("-TimeoutTimer-")
                         .append(borrowedClient.getClientId())
