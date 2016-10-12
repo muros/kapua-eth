@@ -130,12 +130,7 @@
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>kapua-device-bundle-internal</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.command</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>org.eclipse.kapua.service.device.management.command.internal</artifactId>

@@ -17,24 +17,16 @@
 
     <parent>
         <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua</artifactId>
+        <artifactId>kapua-device</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
+    <packaging>pom</packaging>
 
-    <artifactId>org.eclipse.kapua.service.device.management.command</artifactId>
-    <name>org.eclipse.kapua.service.device.management.command</name>
+    <artifactId>kapua-device-command</artifactId>
+    <name>${project.artifactId}</name>
 
-    <dependencies>
-        <!-- -->
-        <!-- Extended service interfaces -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>kapua-device-api</artifactId>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>api</module>
+    </modules>
+
 </project>

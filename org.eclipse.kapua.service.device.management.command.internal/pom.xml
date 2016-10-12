@@ -28,8 +28,7 @@
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.device.management.command</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-device-command-api</artifactId>
         </dependency>
 
         <!-- Internal dependencies -->

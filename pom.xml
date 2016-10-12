@@ -253,6 +253,21 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-command-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-command-internal</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-device-command-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
                 <artifactId>kapua-device-commons</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -437,7 +452,6 @@
         <module>org.eclipse.kapua.transport.test</module>
 
         <!-- Command -->
-        <module>org.eclipse.kapua.service.device.management.command</module>
         <module>org.eclipse.kapua.service.device.management.command.internal</module>
         <module>org.eclipse.kapua.service.device.management.command.test</module>
 

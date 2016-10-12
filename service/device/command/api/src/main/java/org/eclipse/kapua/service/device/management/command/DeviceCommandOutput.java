@@ -19,7 +19,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.eclipse.kapua.KapuaSerializable;
-import org.eclipse.kapua.model.KapuaEntity;
 
 @XmlRootElement(name = "commandOutput")
 @XmlAccessorType(XmlAccessType.PROPERTY)

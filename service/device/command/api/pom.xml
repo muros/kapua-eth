@@ -17,23 +17,23 @@
 
     <parent>
         <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua-service</artifactId>
+        <artifactId>kapua-device-command</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
-    <packaging>pom</packaging>
 
-    <artifactId>kapua-device</artifactId>
+    <artifactId>kapua-device-command-api</artifactId>
     <name>${project.artifactId}</name>
 
-    <modules>
-        <module>api</module>
-        <module>commons</module>
-        <module>call</module>
-        <module>configuration</module>
-        <module>packages</module>
-        <module>registry</module>
-        <module>bundle</module>
-        <module>command</module>
-    </modules>
-
+    <dependencies>
+        <!-- Extended service interfaces -->
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>org.eclipse.kapua.service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.kapua</groupId>
+            <artifactId>kapua-device-api</artifactId>
+        </dependency>
+    </dependencies>
 </project>
