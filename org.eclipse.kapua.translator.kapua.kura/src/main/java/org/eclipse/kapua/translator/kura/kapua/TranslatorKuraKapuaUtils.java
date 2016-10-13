@@ -18,8 +18,22 @@ import org.eclipse.kapua.message.KapuaPosition;
 import org.eclipse.kapua.service.device.call.message.DevicePosition;
 import org.eclipse.kapua.service.device.management.response.KapuaResponseCode;
 
+/**
+ * Messages translator utilities.<br>
+ * It provides helpful methods for translate position and response code.
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorKuraKapuaUtils
 {
+
+    /**
+     * Translate {@link DevicePosition} to {@link KapuaPosition}
+     * 
+     * @param kuraPosition
+     * @return
+     */
     public static KapuaPosition translate(DevicePosition kuraPosition)
     {
         KapuaPosition kapuaPosition = null;
@@ -43,6 +57,12 @@ public class TranslatorKuraKapuaUtils
         return kapuaPosition;
     }
 
+    /**
+     * Translate Kura response code to {@link KapuaResponseCode}
+     * 
+     * @param kuraResponseCode
+     * @return
+     */
     public static KapuaResponseCode translate(Integer kuraResponseCode)
     {
         KapuaResponseCode responseCode;

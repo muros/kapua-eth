@@ -55,11 +55,20 @@ import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
 
+/**
+ * Messages translator implementation from {@link KuraResponseMessage} to {@link ConfigurationResponseMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorAppConfigurationKuraKapua extends Translator<KuraResponseMessage, ConfigurationResponseMessage>
 {
     private static final String                                          CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<ConfigurationMetrics, DeviceConfigurationAppProperties> metricsDictionary;
 
+    /**
+     * Constructor
+     */
     public TranslatorAppConfigurationKuraKapua()
     {
         metricsDictionary = new HashMap<>();

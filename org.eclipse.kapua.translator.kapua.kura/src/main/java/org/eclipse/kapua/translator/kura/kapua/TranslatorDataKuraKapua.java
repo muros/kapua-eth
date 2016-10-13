@@ -31,6 +31,12 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
+/**
+ * Messages translator implementation from {@link KuraDataMessage} to {@link KapuaDataMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorDataKuraKapua extends Translator<KuraDataMessage, KapuaDataMessage>
 {
 
