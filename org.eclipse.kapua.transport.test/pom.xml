@@ -50,7 +50,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
+            <artifactId>kapua-guice</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

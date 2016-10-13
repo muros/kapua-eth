@@ -319,7 +319,7 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.locator.guice</artifactId>
+                <artifactId>kapua-guice</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -434,11 +434,11 @@
 
     <modules>
         <module>commons</module>
+        <module>locator</module>
         <module>service</module>
 
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
-        <module>org.eclipse.kapua.locator.guice</module>
 
         <!-- Message -->
         <module>org.eclipse.kapua.message</module>

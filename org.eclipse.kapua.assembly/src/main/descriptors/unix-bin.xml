@@ -126,7 +126,7 @@
 
                 <include>${pom.groupId}:org.eclipse.kapua.commons</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service</include>
-                <include>${pom.groupId}:org.eclipse.kapua.locator.guice</include>
+                <include>${pom.groupId}:kapua-guice</include>
                 <include>${pom.groupId}:org.eclipse.kapua.broker.core</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message.internal</include>

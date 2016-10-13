@@ -69,11 +69,9 @@
 
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-guice</artifactId>
         </dependency>
 		 
-        <!-- -->
         <!-- External dependencies -->
 		<dependency>
 			<groupId>org.elasticsearch</groupId>
