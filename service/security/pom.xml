@@ -28,6 +28,7 @@
     <modules>
         <module>authentication</module>
         <module>authorization</module>
+        <module>shiro</module>
     </modules>
 
 </project>

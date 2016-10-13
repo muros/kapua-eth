@@ -339,7 +339,7 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
+                <artifactId>kapua-security-shiro</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -434,8 +434,6 @@
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
         <module>org.eclipse.kapua.locator.guice</module>
-
-        <module>org.eclipse.kapua.service.auth.shiro</module>
 
         <!-- User -->
         <module>org.eclipse.kapua.service.user</module>

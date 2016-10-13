@@ -86,7 +86,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
+			<artifactId>kapua-security-shiro</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
@@ -103,14 +103,6 @@
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
 			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>kapua-security-authentication-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>kapua-security-authorization-api</artifactId>
 		</dependency>
 
 		<!-- dependencies added otherwise the unix assembly doesn't know the arctifact 

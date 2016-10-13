@@ -69,21 +69,9 @@
             <scope>test</scope>
         </dependency>
         
-        
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>kapua-security-authorization-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>kapua-security-authentication-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-security-shiro</artifactId>
             <scope>test</scope>
         </dependency>
         
