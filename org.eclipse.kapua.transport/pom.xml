@@ -25,11 +25,10 @@
     <name>org.eclipse.kapua.transport</name>
 
     <dependencies>
-        <!-- -->
         <!-- Extended service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
+            <artifactId>kapua-locator-service</artifactId>
         </dependency>
 
         <!-- -->

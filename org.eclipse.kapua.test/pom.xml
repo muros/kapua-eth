@@ -169,13 +169,6 @@
 	</build>
 	
     <dependencies>
-        <!-- -->
-        <!-- Implemented service interfaces -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
-        </dependency>
-
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

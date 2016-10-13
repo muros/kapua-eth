@@ -329,7 +329,7 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.service</artifactId>
+                <artifactId>kapua-locator-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -436,9 +436,6 @@
         <module>commons</module>
         <module>locator</module>
         <module>service</module>
-
-        <!-- Service locator -->
-        <module>org.eclipse.kapua.service</module>
 
         <!-- Message -->
         <module>org.eclipse.kapua.message</module>

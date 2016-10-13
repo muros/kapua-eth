@@ -35,7 +35,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service</artifactId>
+			<artifactId>kapua-locator-service</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

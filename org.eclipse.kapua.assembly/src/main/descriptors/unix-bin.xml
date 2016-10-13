@@ -124,8 +124,8 @@
                 <include>com.google.protobuf:protobuf-java</include>
                 <include>org.apache.shiro:shiro-core</include>
 
-                <include>${pom.groupId}:org.eclipse.kapua.commons</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service</include>
+                <include>${pom.groupId}:kapua-commons</include>
+                <include>${pom.groupId}:kapua-locator-service</include>
                 <include>${pom.groupId}:kapua-guice</include>
                 <include>${pom.groupId}:org.eclipse.kapua.broker.core</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message</include>
