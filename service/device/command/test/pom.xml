@@ -51,14 +51,12 @@
         
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-account-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account.internal</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-account-internal</artifactId>
             <scope>test</scope>
         </dependency>
         

@@ -334,7 +334,12 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.service.account</artifactId>
+                <artifactId>kapua-account-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-account-internal</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -434,10 +439,6 @@
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
         <module>org.eclipse.kapua.locator.guice</module>
-
-        <!-- Account -->
-        <module>org.eclipse.kapua.service.account</module>
-        <module>org.eclipse.kapua.service.account.internal</module>
 
         <!-- Message -->
         <module>org.eclipse.kapua.message</module>

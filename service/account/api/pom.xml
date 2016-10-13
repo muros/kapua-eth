@@ -9,15 +9,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.eclipse.kapua</groupId>
-		<artifactId>kapua</artifactId>
+		<artifactId>kapua-account</artifactId>
 		<version>0.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>org.eclipse.kapua.service.account</artifactId>
-	<name>org.eclipse.kapua.service.account</name>
+	<artifactId>kapua-account-api</artifactId>
+	<name>${project.artifactId}</name>
 
 	<dependencies>
-		<!-- -->
 		<!-- Extended service interfaces -->
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
