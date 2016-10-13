@@ -91,8 +91,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authentication</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-security-authentication-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

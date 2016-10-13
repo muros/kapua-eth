@@ -50,7 +50,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.authentication</artifactId>
+			<artifactId>kapua-security-authentication-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

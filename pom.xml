@@ -344,7 +344,7 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.service.authentication</artifactId>
+                <artifactId>kapua-security-authentication-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -434,9 +434,6 @@
         <!-- Service locator -->
         <module>org.eclipse.kapua.service</module>
         <module>org.eclipse.kapua.locator.guice</module>
-
-        <!-- Authentication and Authorization -->
-        <module>org.eclipse.kapua.service.authentication</module>
 
         <module>org.eclipse.kapua.service.auth.shiro</module>
 

@@ -130,7 +130,7 @@
                 <include>${pom.groupId}:org.eclipse.kapua.broker.core</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message.internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.authentication</include>
+                <include>${pom.groupId}:kapua-security-authentication-api</include>
                 <include>${pom.groupId}:kapua-security-authorization-api</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.auth.shiro</include>
                 <include>${pom.groupId}:kapua-device-call-api</include>
