@@ -29,6 +29,12 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
+/**
+ * Messages translator implementation from {@link KuraBirthMessage} to {@link KapuaBirthMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorLifeBirthKuraKapua extends Translator<KuraBirthMessage, KapuaBirthMessage>
 {
     @Override
@@ -104,6 +110,7 @@ public class TranslatorLifeBirthKuraKapua extends Translator<KuraBirthMessage, K
                                          kuraBirthPayload.getModemIccid());
     }
 
+    @Override
     public Class<KuraBirthMessage> getClassFrom()
     {
         return KuraBirthMessage.class;

@@ -30,6 +30,12 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
+/**
+ * Messages translator implementation from {@link KuraMissingMessage} to {@link KapuaMissingMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorLifeMissingKuraKapua extends Translator<KuraMissingMessage, KapuaMissingMessage>
 {
 
@@ -79,6 +85,7 @@ public class TranslatorLifeMissingKuraKapua extends Translator<KuraMissingMessag
         return kapuaMissingPayload;
     }
 
+    @Override
     public Class<KuraMissingMessage> getClassFrom()
     {
         return KuraMissingMessage.class;
