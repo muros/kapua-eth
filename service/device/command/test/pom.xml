@@ -45,14 +45,7 @@
         
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-user-internal</artifactId>
             <scope>test</scope>
         </dependency>
         

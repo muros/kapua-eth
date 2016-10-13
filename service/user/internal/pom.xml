@@ -9,19 +9,18 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.eclipse.kapua</groupId>
-        <artifactId>kapua</artifactId>
+        <artifactId>kapua-user</artifactId>
         <version>0.2.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-    <name>org.eclipse.kapua.service.user.internal</name>
+    <artifactId>kapua-user-internal</artifactId>
+    <name>${project.artifactId}</name>
 
     <dependencies>
         <!-- Implemented service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-user-api</artifactId>
         </dependency>
 
         <!-- Required service interfaces -->

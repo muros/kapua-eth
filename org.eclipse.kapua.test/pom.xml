@@ -191,7 +191,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user</artifactId>
+            <artifactId>kapua-user-api</artifactId>
         </dependency>
         
         <!-- Internal dependencies -->

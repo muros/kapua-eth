@@ -98,11 +98,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user</artifactId>
+			<artifactId>kapua-user-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.service.user.internal</artifactId>
+			<artifactId>kapua-user-internal</artifactId>
 		</dependency>
 
 		<!-- dependencies added otherwise the unix assembly doesn't know the arctifact 

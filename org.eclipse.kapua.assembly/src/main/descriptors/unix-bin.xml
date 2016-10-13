@@ -149,8 +149,8 @@
                 <include>${pom.groupId}:kapua-device-registry-internal</include>
                 <include>${pom.groupId}:kapua-idgenerator-api</include>
                 <include>${pom.groupId}:kapua-idgenerator-sequence</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.user</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.user.internal</include>
+                <include>${pom.groupId}:kapua-user-api</include>
+                <include>${pom.groupId}:kapua-user-internal</include>
                 <include>${pom.groupId}:kapua-datastore-api</include>
                 <include>${pom.groupId}:kapua-datastore-internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.service.account</include>
