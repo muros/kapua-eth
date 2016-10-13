@@ -14,21 +14,14 @@
     <name>${project.artifactId}</name>
 
     <dependencies>
-    
         <!-- Internal dependencies -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
-        </dependency>
-        
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
             <artifactId>kapua-idgenerator-api</artifactId>
         </dependency>
-        
-        <dependency> 
+        <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authentication</artifactId>
+            <artifactId>kapua-security-authentication-api</artifactId>
         </dependency>
 
         <!-- External dependencies -->

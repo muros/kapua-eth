@@ -14,19 +14,43 @@ package org.eclipse.kapua.transport.jms.setting;
 
 import org.eclipse.kapua.commons.setting.AbstractKapuaSetting;
 
-public class JmsClientSetting extends AbstractKapuaSetting<JmsClientSettingKeys>
-{
-    private static final String           MQTT_CLIENT_CONFIG_RESOURCE = "jms-client-setting.properties";
+/**
+ * Class that offers access to all setting of {@link org.eclipse.kapua.transport.jms}
+ *
+ * @since 1.0.0
+ */
+public class JmsClientSetting extends AbstractKapuaSetting<JmsClientSettingKeys> {
 
-    private static final JmsClientSetting instance                    = new JmsClientSetting();
+    /**
+     * Resource file from which source properties.
+     * 
+     * @since 1.0.0
+     */
+    private static final String JMS_CLIENT_CONFIG_RESOURCE = "jms-client-setting.properties";
 
-    private JmsClientSetting()
-    {
-        super(MQTT_CLIENT_CONFIG_RESOURCE);
+    /**
+     * Singleton instance of this {@link class}.
+     * 
+     * @since 1.0.0
+     */
+    private static final JmsClientSetting instance = new JmsClientSetting();
+
+    /**
+     * Initialize the {@link AbstractKapuaSetting} with the {@link JmsClientSetting#JMS_CLIENT_CONFIG_RESOURCE} value.
+     * 
+     * @since 1.0.0
+     */
+    private JmsClientSetting() {
+        super(JMS_CLIENT_CONFIG_RESOURCE);
     }
 
-    public static JmsClientSetting getInstance()
-    {
+    /**
+     * Gets a singleton instance of {@link JmsClientSetting}.
+     * 
+     * @return A singleton instance of JmsClientSetting.
+     * @since 1.0.0
+     */
+    public static JmsClientSetting getInstance() {
         return instance;
     }
 }

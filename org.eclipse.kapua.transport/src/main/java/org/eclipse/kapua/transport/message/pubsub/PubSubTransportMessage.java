@@ -16,6 +16,17 @@ import org.eclipse.kapua.transport.message.TransportChannel;
 import org.eclipse.kapua.transport.message.TransportMessage;
 import org.eclipse.kapua.transport.message.TransportPayload;
 
-public interface PubSubTransportMessage<C extends TransportChannel, P extends TransportPayload> extends TransportMessage<C, P>
-{
+/**
+ * Marker interface for all messages that uses publish/subscribe interaction in the transport layer.
+ * 
+ * @author alberto.codutti
+ *
+ * @param <C>
+ *            The {@link TransportChannel} for this {@link TransportMessage}
+ * @param <P>
+ *            The {@link TransportPayload} for this {@link TransportMessage}
+ * 
+ * @since 1.0.0
+ */
+public interface PubSubTransportMessage<C extends TransportChannel, P extends TransportPayload> extends TransportMessage<C, P> {
 }

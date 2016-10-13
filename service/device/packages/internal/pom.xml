@@ -33,13 +33,6 @@
             <artifactId>kapua-device-packages-api</artifactId>
         </dependency>
         
-        <!-- Extended service interfaces -->
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
-        </dependency>
-        
-        <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

@@ -33,8 +33,7 @@
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-guice</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -45,47 +44,24 @@
         
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.user.internal</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-user-internal</artifactId>
             <scope>test</scope>
         </dependency>
         
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-account-api</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account.internal</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-account-internal</artifactId>
             <scope>test</scope>
         </dependency>
         
-        
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authentication</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.auth.shiro</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-security-shiro</artifactId>
             <scope>test</scope>
         </dependency>
         

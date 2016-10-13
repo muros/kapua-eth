@@ -32,23 +32,14 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-security-authorization-api</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.authorization</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service.account</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-account-api</artifactId>
         </dependency>
 
         <dependency>
@@ -72,11 +63,9 @@
 
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-guice</artifactId>
         </dependency>
 		 
-        <!-- -->
         <!-- External dependencies -->
 		<dependency>
 			<groupId>org.elasticsearch</groupId>

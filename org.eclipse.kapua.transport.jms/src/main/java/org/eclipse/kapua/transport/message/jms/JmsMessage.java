@@ -13,56 +13,115 @@
 package org.eclipse.kapua.transport.message.jms;
 
 import java.util.Date;
-import java.util.Map;
 
 import org.eclipse.kapua.transport.message.TransportMessage;
 
-public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload>
-{
+/**
+ * Implementation of {@link TransportMessage} API for JMS transport facade.
+ * 
+ * @since 1.0.0
+ */
+public class JmsMessage implements TransportMessage<JmsTopic, JmsPayload> {
+
+    /**
+     * The topic of this {@link JmsMessage}.
+     * 
+     * @since 1.0.0
+     */
     private JmsTopic            topic;
 
+    /**
+     * The receivedOn of this {@link JmsMessage}.
+     * 
+     * @since 1.0.0
+     */
     private Date                receivedOn;
 
+    /**
+     * The payload of this {@link JmsMessage}.
+     * 
+     * @since 1.0.0
+     */
     private JmsPayload          payload;
 
-    private Map<String, String> properties;
-
-    public JmsMessage(JmsTopic topic, Date receivedOn, JmsPayload payload)
-    {
+    /**
+     * Construct a {@link JmsMessage} with the given parameters.
+     * 
+     * @param topic
+     *            The {@link JmsTopic} to set for this {@link JmsMessage}.
+     * @param receivedOn
+     *            The received on to set for this {@link JmsMessage}.
+     * @param payload
+     *            The {@link JmsPayload} to set for this {@link JmsMessage}.
+     * @since 1.0.0
+     */
+    public JmsMessage(JmsTopic topic, Date receivedOn, JmsPayload payload) {
         this.topic = topic;
         this.receivedOn = receivedOn;
         this.payload = payload;
     }
 
-    public JmsTopic getTopic()
-    {
+    /**
+     * Gets the {@link JmsTopic} set for this {@link JmsMessage}.
+     * 
+     * @return The {@link JmsTopic} set for this {@link JmsMessage}.
+     * @since 1.0.0
+     */
+    public JmsTopic getTopic() {
         return topic;
     }
 
-    public void setTopic(JmsTopic topic)
-    {
+    /**
+     * Sets the {@link JmsTopic} set for this {@link JmsMessage}.
+     * 
+     * @param topic
+     *            The {@link JmsTopic} to set for this {@link JmsMessage}.
+     * @since 1.0.0
+     */
+    public void setTopic(JmsTopic topic) {
         this.topic = topic;
     }
 
-    public Date getReceivedOn()
-    {
+    /**
+     * Gets the received on set for this {@link JmsMessage}.
+     * 
+     * @return The received on set for this {@link JmsMessage}.
+     * @since 1.0.0
+     */
+    public Date getReceivedOn() {
         return receivedOn;
     }
 
-    public void setReceivedOn(Date receivedOn)
-    {
+    /**
+     * Sets the received on set for this {@link JmsMessage}.
+     * 
+     * @param receivedOn
+     *            The received on to set for this {@link JmsMessage}.
+     * @since 1.0.0
+     */
+    public void setReceivedOn(Date receivedOn) {
         this.receivedOn = receivedOn;
     }
 
-    public JmsPayload getPayload()
-    {
+    /**
+     * Gets the {@link JmsPayload} set for this {@link JmsMessage}.
+     * 
+     * @return The {@link JmsPayload} set for this {@link JmsMessage}.
+     * @since 1.0.0
+     */
+    public JmsPayload getPayload() {
         return payload;
     }
 
-    public void setPayload(JmsPayload payload)
-    {
+    /**
+     * Sets the {@link JmsPayload} set for this {@link JmsMessage}.
+     * 
+     * @param payload
+     *            The {@link JmsPayload} to set for this {@link JmsMessage}.
+     * @since 1.0.0
+     */
+    public void setPayload(JmsPayload payload) {
         this.payload = payload;
     }
-
 
 }

@@ -25,15 +25,13 @@
     <name>org.eclipse.kapua.message</name>
 
     <dependencies>
-        <!-- -->
         <!-- Extended service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.service</artifactId>
+            <artifactId>kapua-locator-service</artifactId>
             <version>${project.version}</version>
         </dependency>
         
-        <!--  -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

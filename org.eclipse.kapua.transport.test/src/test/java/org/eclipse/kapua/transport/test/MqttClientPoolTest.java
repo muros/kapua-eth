@@ -19,15 +19,13 @@ import java.util.NoSuchElementException;
 
 import org.eclipse.kapua.transport.mqtt.MqttClient;
 import org.eclipse.kapua.transport.mqtt.pooling.MqttClientPool;
-import org.eclipse.kapua.transport.mqtt.pooling.PooledMqttClientFactory;
 import org.eclipse.kapua.transport.mqtt.pooling.setting.MqttClientPoolSetting;
 import org.eclipse.kapua.transport.mqtt.pooling.setting.MqttClientPoolSettingKeys;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class MqttClientPoolTest extends Assert
-{
+public class MqttClientPoolTest extends Assert {
 
     /**
      * Ignoring this test for a while. We should fix the build in the first place and then use embedded ActiveMQ
@@ -36,19 +34,17 @@ public class MqttClientPoolTest extends Assert
     @Ignore
     @Test
     public void testPoolBorrow()
-        throws Exception
-    {
+            throws Exception {
         //
         // Get pool
-        MqttClientPool transportPool = new MqttClientPool(new PooledMqttClientFactory());
+        MqttClientPool transportPool = MqttClientPool.getInstance();
 
         //
         // Borrow client
         MqttClient mqttClient = null;
         try {
             mqttClient = transportPool.borrowObject();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
 
@@ -61,8 +57,7 @@ public class MqttClientPoolTest extends Assert
         // Return client
         try {
             transportPool.returnObject(mqttClient);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail(e.getMessage());
         }
     }
@@ -74,16 +69,15 @@ public class MqttClientPoolTest extends Assert
     @Ignore
     @Test
     public void testPoolBorrowMax()
-        throws Exception
-    {
+            throws Exception {
         //
         // Get pool
-        MqttClientPool transportPool = new MqttClientPool(new PooledMqttClientFactory());
+        MqttClientPool transportPool = MqttClientPool.getInstance();
 
         //
         // Test max borrow clients
         MqttClientPoolSetting setting = MqttClientPoolSetting.getInstance();
-        long maxClients = setting.getLong(MqttClientPoolSettingKeys.CLIENT_POOL_SIZE_MAXTOTAL);
+        long maxClients = setting.getLong(MqttClientPoolSettingKeys.CLIENT_POOL_SIZE_TOTAL_MAX);
         List<MqttClient> mqttClients = new ArrayList<>();
         for (int i = 0; i < maxClients; i++) {
             mqttClients.add(transportPool.borrowObject());
@@ -102,11 +96,9 @@ public class MqttClientPoolTest extends Assert
         try {
             mqttClients.add(transportPool.borrowObject());
             fail("Should have thrown " + NoSuchElementException.class.getName() + " exception");
-        }
-        catch (NoSuchElementException nsee) {
+        } catch (NoSuchElementException nsee) {
             // All ok
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assertEquals("Should have thrown " + NoSuchElementException.class.getName() + " exception", NoSuchElementException.class, e.getClass());
         }
 

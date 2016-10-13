@@ -39,8 +39,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.locator.guice</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-guice</artifactId>
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>

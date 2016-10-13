@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.eclipse.kapua.KapuaErrorCodes;
 import org.eclipse.kapua.KapuaException;
 import org.eclipse.kapua.transport.TransportFacade;
 import org.eclipse.kapua.transport.message.mqtt.MqttMessage;
@@ -24,32 +25,59 @@ import org.eclipse.kapua.transport.message.mqtt.MqttPayload;
 import org.eclipse.kapua.transport.message.mqtt.MqttTopic;
 import org.eclipse.kapua.transport.mqtt.pooling.MqttClientPool;
 
-public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttMessage, MqttMessage>
-{
-    private MqttClient         borrowedClient;
+/**
+ * Implementation of {@link TransportFacade} API for MQTT transport facade.
+ *
+ * @since 1.0.0
+ */
+public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttMessage, MqttMessage> {
+
+    /**
+     * The client to use to make requests.
+     * 
+     * @since 1.0.0
+     */
+    private MqttClient borrowedClient;
+
+    /**
+     * The client callback for this set of requests.
+     * 
+     * @since 1.0.0
+     */
     private MqttClientCallback mqttClientCallback;
 
-    public MqttFacade() throws Exception
-    {
+    /**
+     * Initialize a transport facade to be used to send requests to devices.
+     * 
+     * @throws KapuaException
+     *             When MQTT client is not available.
+     */
+    public MqttFacade() throws KapuaException {
         //
         // Get the client form the pool
-        borrowedClient = MqttClientPool.getInstance().borrowObject();
+        try {
+            borrowedClient = MqttClientPool.getInstance().borrowObject();
+        } catch (Exception e) {
+            // FIXME use appropriate exception for this
+            throw new KapuaException(KapuaErrorCodes.INTERNAL_ERROR, e, (Object[]) null);
+        }
     }
 
     //
     // Message management
     //
+    /**
+     * 
+     */
     @Override
     public void sendAsync(MqttMessage mqttMessage)
-        throws KapuaException
-    {
+            throws KapuaException {
         sendSync(mqttMessage, null);
     }
 
     @Override
     public MqttMessage sendSync(MqttMessage mqttMessage, Long timeout)
-        throws KapuaException
-    {
+            throws KapuaException {
         List<MqttMessage> responses = new ArrayList<>();
 
         sendInternal(mqttMessage, responses, timeout);
@@ -57,23 +85,40 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
         if (timeout != null) {
             if (responses.isEmpty()) {
                 throw new MqttClientException(MqttClientErrorCodes.CLIENT_TIMEOUT_EXCEPTION,
-                                              null,
-                                              new Object[] {
-                                                             mqttMessage.getRequestTopic()
-                                              });
+                        null,
+                        new Object[] {
+                                mqttMessage.getRequestTopic()
+                        });
 
             }
 
             return responses.get(0);
-        }
-        else {
+        } else {
             return null;
         }
     }
 
+    /**
+     * Actual implementation of the send operations.
+     * <p>
+     * According to the parameters given, it will make a sync or async request.
+     * </p>
+     * 
+     * @param mqttMessage
+     *            The request to send.
+     * @param responses
+     *            The container in which load responses received from the device
+     * @param timeout
+     *            The timeout of waiting the response from the device.
+     *            If {@code null} request will be fired without waiting for the response.
+     *            If mqttMessage has no response message set, timeout will be ignore even if set.
+     * @throws KapuaException
+     *             FIXME [javadoc] document exception
+     * @see {@link MqttMessage#getResponseTopic()}
+     * @since 1.0.0.
+     */
     private void sendInternal(MqttMessage mqttMessage, List<MqttMessage> responses, Long timeout)
-        throws KapuaException
-    {
+            throws KapuaException {
         try {
             //
             // Subscribe if necessary
@@ -82,11 +127,10 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
                     mqttClientCallback = new MqttClientCallback(responses);
                     borrowedClient.setCallback(mqttClientCallback);
                     borrowedClient.subscribe(mqttMessage.getResponseTopic());
-                }
-                catch (KapuaException e) {
+                } catch (KapuaException e) {
                     throw new MqttClientException(MqttClientErrorCodes.CLIENT_SUBSCRIBE_ERROR,
-                                                  e,
-                                                  new Object[] { mqttMessage.getResponseTopic().getTopic() });
+                            e,
+                            new Object[] { mqttMessage.getResponseTopic().getTopic() });
                 }
             }
 
@@ -94,29 +138,27 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
             // Publish message
             try {
                 borrowedClient.publish(mqttMessage);
-            }
-            catch (KapuaException e) {
+            } catch (KapuaException e) {
                 throw new MqttClientException(MqttClientErrorCodes.CLIENT_PUBLISH_ERROR,
-                                              e,
-                                              new Object[] { mqttMessage.getRequestTopic().getTopic(),
-                                                             mqttMessage.getPayload().getBody() });
+                        e,
+                        new Object[] { mqttMessage.getRequestTopic().getTopic(),
+                                mqttMessage.getPayload().getBody() });
             }
 
             //
             // Wait if required
-            if (timeout != null &&
-                mqttMessage.getResponseTopic() != null) {
+            if (mqttMessage.getResponseTopic() != null &&
+                    timeout != null) {
                 Timer timeoutTimer = new Timer(new StringBuilder().append(MqttFacade.class.getSimpleName())
-                                                                  .append("-TimeoutTimer-")
-                                                                  .append(borrowedClient.getClientId())
-                                                                  .toString(),
-                                               true);
+                        .append("-TimeoutTimer-")
+                        .append(borrowedClient.getClientId())
+                        .toString(),
+                        true);
 
                 timeoutTimer.schedule(new TimerTask() {
 
                     @Override
-                    public void run()
-                    {
+                    public void run() {
                         if (mqttMessage.getResponseTopic() != null) {
                             synchronized (mqttClientCallback) {
                                 mqttClientCallback.notifyAll();
@@ -129,40 +171,34 @@ public class MqttFacade implements TransportFacade<MqttTopic, MqttPayload, MqttM
                     synchronized (mqttClientCallback) {
                         mqttClientCallback.wait();
                     }
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     Thread.interrupted();
                     throw new MqttClientException(MqttClientErrorCodes.CLIENT_CALLBACK_ERROR,
-                                                  e,
-                                                  (Object[]) null);
-                }
-                finally {
+                            e,
+                            (Object[]) null);
+                } finally {
                     timeoutTimer.cancel();
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new MqttClientException(MqttClientErrorCodes.SEND_ERROR,
-                                          e,
-                                          mqttMessage.getRequestTopic().getTopic());
+                    e,
+                    mqttMessage.getRequestTopic().getTopic());
         }
     }
 
     @Override
-    public String getClientId()
-    {
+    public String getClientId() {
         return borrowedClient.getClientId();
     }
 
     @Override
-    public Class<MqttMessage> getMessageClass()
-    {
+    public Class<MqttMessage> getMessageClass() {
         return MqttMessage.class;
     }
 
     @Override
-    public void clean()
-    {
+    public void clean() {
         //
         // Return the client form the pool
         MqttClientPool.getInstance().returnObject(borrowedClient);

@@ -14,22 +14,48 @@ package org.eclipse.kapua.transport.message.mqtt;
 
 import org.eclipse.kapua.transport.message.TransportPayload;
 
-public class MqttPayload implements TransportPayload
-{
+/**
+ * Implementation of {@link TransportPayload} API for MQTT transport facade.
+ * 
+ * @since 1.0.0
+ *
+ */
+public class MqttPayload implements TransportPayload {
+
+    /**
+     * The raw body of this {@link MqttPayload}.
+     */
     private byte[] body;
 
-    public MqttPayload(byte[] body)
-    {
+    /**
+     * Construct a {@link MqttPayload} with the given parameter.
+     * 
+     * @param body
+     *            The raw body to set for this {@link MqttPayload}.
+     * @since 1.0.0
+     */
+    public MqttPayload(byte[] body) {
         this.body = body;
     }
 
-    public byte[] getBody()
-    {
+    /**
+     * Gets the raw body set for this {@link MqttPayload}.
+     * 
+     * @return The raw body set for this {@link MqttPayload}.
+     * @since 1.0.0
+     */
+    public byte[] getBody() {
         return body;
     }
 
-    public void setBody(byte[] body)
-    {
+    /**
+     * Sets the raw body set for this {@link MqttPayload}.
+     * 
+     * @param body
+     *            the raw body set for this {@link MqttPayload}.
+     * @since 1.0.0
+     */
+    public void setBody(byte[] body) {
         this.body = body;
     }
 }

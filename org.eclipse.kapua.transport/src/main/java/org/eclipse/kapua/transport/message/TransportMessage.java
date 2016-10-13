@@ -14,8 +14,19 @@ package org.eclipse.kapua.transport.message;
 
 import org.eclipse.kapua.message.Message;
 
+/**
+ * Marker interface for all messages at the transport layer.
+ * 
+ * @author alberto.codutti
+ *
+ * @param <C>
+ *            The {@link TransportChannel} for this {@link TransportMessage}
+ * @param <P>
+ *            The {@link TransportPayload} for this {@link TransportMessage}
+ * 
+ * @since 1.0.0
+ */
 @SuppressWarnings("rawtypes")
-public interface TransportMessage<D extends TransportChannel, P extends TransportPayload> extends Message
-{
+public interface TransportMessage<C extends TransportChannel, P extends TransportPayload> extends Message {
 
 }

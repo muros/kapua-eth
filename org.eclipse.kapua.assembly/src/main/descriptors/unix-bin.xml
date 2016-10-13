@@ -124,15 +124,15 @@
                 <include>com.google.protobuf:protobuf-java</include>
                 <include>org.apache.shiro:shiro-core</include>
 
-                <include>${pom.groupId}:org.eclipse.kapua.commons</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service</include>
-                <include>${pom.groupId}:org.eclipse.kapua.locator.guice</include>
+                <include>${pom.groupId}:kapua-commons</include>
+                <include>${pom.groupId}:kapua-locator-service</include>
+                <include>${pom.groupId}:kapua-guice</include>
                 <include>${pom.groupId}:org.eclipse.kapua.broker.core</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message</include>
                 <include>${pom.groupId}:org.eclipse.kapua.message.internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.authentication</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.authorization</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.auth.shiro</include>
+                <include>${pom.groupId}:kapua-security-authentication-api</include>
+                <include>${pom.groupId}:kapua-security-authorization-api</include>
+                <include>${pom.groupId}:kapua-security-shiro</include>
                 <include>${pom.groupId}:kapua-device-call-api</include>
                 <include>${pom.groupId}:kapua-device-call-kura</include>
                 <include>${pom.groupId}:kapua-device-api</include>
@@ -149,12 +149,12 @@
                 <include>${pom.groupId}:kapua-device-registry-internal</include>
                 <include>${pom.groupId}:kapua-idgenerator-api</include>
                 <include>${pom.groupId}:kapua-idgenerator-sequence</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.user</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.user.internal</include>
+                <include>${pom.groupId}:kapua-user-api</include>
+                <include>${pom.groupId}:kapua-user-internal</include>
                 <include>${pom.groupId}:kapua-datastore-api</include>
                 <include>${pom.groupId}:kapua-datastore-internal</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.account</include>
-                <include>${pom.groupId}:org.eclipse.kapua.service.account.internal</include>
+                <include>${pom.groupId}:kapua-account-api</include>
+                <include>${pom.groupId}:kapua-account-internal</include>
                 <include>${pom.groupId}:org.eclipse.kapua.translator</include>
                 <include>${pom.groupId}:org.eclipse.kapua.translator.kapua.kura</include>
                 <include>${pom.groupId}:org.eclipse.kapua.translator.kura.jms</include>

@@ -27,8 +27,11 @@
 
     <modules>
         <module>idgenerator</module>
+        <module>security</module>
         <module>datastore</module>
         <module>device</module>
+        <module>user</module>
+        <module>account</module>
     </modules>
 
 </project>
