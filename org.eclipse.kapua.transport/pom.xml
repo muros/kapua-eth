@@ -31,14 +31,12 @@
             <artifactId>kapua-locator-service</artifactId>
         </dependency>
 
-        <!-- -->
         <!-- Required service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.message</artifactId>
+            <artifactId>kapua-message-api</artifactId>
         </dependency>
 
-        <!-- -->
         <!-- External dependencies -->
         <dependency>
             <!-- Object pooling for kapua clients -->

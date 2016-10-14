@@ -25,15 +25,9 @@
     <name>${project.artifactId}</name>
 
     <dependencies>
-        <!-- Extended service interfaces -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>kapua-locator-service</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.message</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-message-api</artifactId>
         </dependency>
     </dependencies>
 </project>

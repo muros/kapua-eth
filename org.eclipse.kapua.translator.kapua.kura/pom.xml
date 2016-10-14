@@ -57,7 +57,6 @@
             <artifactId>kapua-device-registry-api</artifactId>
         </dependency>
 
-        <!-- -->
         <!-- Internal dependencies -->
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
@@ -65,8 +64,7 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.message.internal</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-message-internal</artifactId>
         </dependency>
 
         <dependency>
