@@ -18,8 +18,18 @@ import java.util.Map;
 import org.eclipse.kapua.service.device.call.kura.KuraMethod;
 import org.eclipse.kapua.service.device.management.KapuaMethod;
 
+/**
+ * Dictionary class to define actions translations between Kura domain to Kapua domain.<br>
+ * For detail about action please refer to {@link KapuaMethod} and {@link KuraMethod}
+ * 
+ * @since 1.0
+ *
+ */
 public class MethodDictionaryKuraKapua
 {
+    /**
+     * Translations dictionary map
+     */
     private static Map<KuraMethod, KapuaMethod> dictionary;
 
     static {
@@ -32,8 +42,14 @@ public class MethodDictionaryKuraKapua
         dictionary.put(KuraMethod.EXEC, KapuaMethod.EXECUTE);
     }
 
-    public static KapuaMethod get(KuraMethod kapuaMethod)
+    /**
+     * Returns the action translation from Kura domain to Kapua domain
+     * 
+     * @param kuraMethod
+     * @return
+     */
+    public static KapuaMethod get(KuraMethod kuraMethod)
     {
-        return dictionary.get(kapuaMethod);
+        return dictionary.get(kuraMethod);
     }
 }

@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.kapua.commons.model.query.predicate;
 
+import org.eclipse.kapua.commons.model.query.FieldSortCriteria;
+import org.eclipse.kapua.commons.model.query.FieldSortCriteria.SortOrder;
 import org.eclipse.kapua.model.KapuaEntity;
 import org.eclipse.kapua.model.id.KapuaId;
 import org.eclipse.kapua.model.query.KapuaFetchStyle;
@@ -19,79 +21,67 @@ import org.eclipse.kapua.model.query.KapuaQuery;
 import org.eclipse.kapua.model.query.KapuaSortCriteria;
 import org.eclipse.kapua.model.query.predicate.KapuaPredicate;
 
-public abstract class AbstractKapuaQuery<E extends KapuaEntity> implements KapuaQuery<E>
-{
-    private KapuaId      scopeId;
+public abstract class AbstractKapuaQuery<E extends KapuaEntity> implements KapuaQuery<E> {
 
-    private KapuaPredicate    predicate;
+    private KapuaId scopeId;
+
+    private KapuaPredicate predicate;
     private KapuaSortCriteria sortCriteria;
-    private KapuaFetchStyle   fetchStyle;
+    private KapuaFetchStyle fetchStyle;
 
-    private Integer      offset;
-    private Integer      limit;
+    private Integer offset;
+    private Integer limit;
 
-    public AbstractKapuaQuery()
-    {
+    public AbstractKapuaQuery() {
+        sortCriteria = new FieldSortCriteria("id", SortOrder.DESCENDING);
     }
 
-    public void setScopeId(KapuaId scopeId)
-    {
+    public void setScopeId(KapuaId scopeId) {
         this.scopeId = scopeId;
     }
 
-    public KapuaId getScopeId()
-    {
+    public KapuaId getScopeId() {
         return scopeId;
     }
 
-    public void setPredicate(KapuaPredicate queryPredicate)
-    {
+    public void setPredicate(KapuaPredicate queryPredicate) {
         this.predicate = queryPredicate;
     }
 
-    public KapuaPredicate getPredicate()
-    {
+    public KapuaPredicate getPredicate() {
         return this.predicate;
     }
 
     // sort
-    public void setSortCriteria(KapuaSortCriteria sortCriteria)
-    {
+    public void setSortCriteria(KapuaSortCriteria sortCriteria) {
         this.sortCriteria = sortCriteria;
     }
 
-    public KapuaSortCriteria getSortCriteria()
-    {
+    public KapuaSortCriteria getSortCriteria() {
         return this.sortCriteria;
     }
 
-    public KapuaFetchStyle getFetchStyle()
-    {
+    public KapuaFetchStyle getFetchStyle() {
         return fetchStyle;
     }
 
-    public void setFetchStyle(KapuaFetchStyle fetchStyle)
-    {
+    public void setFetchStyle(KapuaFetchStyle fetchStyle) {
         this.fetchStyle = fetchStyle;
     }
 
-    public Integer getOffset()
-    {
+    public Integer getOffset() {
         return offset;
     }
 
-    public Integer getLimit()
-    {
+    public Integer getLimit() {
         return limit;
     }
 
-    public void setOffset(Integer offset)
-    {
+    public void setOffset(Integer offset) {
         this.offset = offset;
     }
 
-    public void setLimit(Integer limit)
-    {
+    public void setLimit(Integer limit) {
         this.limit = limit;
     }
 }

@@ -63,7 +63,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.message.internal</artifactId>
+			<artifactId>kapua-message-internal</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

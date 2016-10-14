@@ -30,6 +30,12 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
+/**
+ * Messages translator implementation from {@link KuraDisconnectMessage} to {@link KapuaDisconnectMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorLifeDisconnectKuraKapua extends Translator<KuraDisconnectMessage, KapuaDisconnectMessage>
 {
 
@@ -76,6 +82,7 @@ public class TranslatorLifeDisconnectKuraKapua extends Translator<KuraDisconnect
                                               kuraDisconnectPayload.getDisplayName());
     }
 
+    @Override
     public Class<KuraDisconnectMessage> getClassFrom()
     {
         return KuraDisconnectMessage.class;

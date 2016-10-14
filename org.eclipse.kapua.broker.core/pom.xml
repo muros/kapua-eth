@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.kapua</groupId>
-			<artifactId>org.eclipse.kapua.message</artifactId>
+			<artifactId>kapua-message-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

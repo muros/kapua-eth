@@ -361,7 +361,12 @@
             </dependency>
             <dependency>
                 <groupId>org.eclipse.kapua</groupId>
-                <artifactId>org.eclipse.kapua.message</artifactId>
+                <artifactId>kapua-message-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.kapua</groupId>
+                <artifactId>kapua-message-internal</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -473,10 +478,7 @@
         <module>commons</module>
         <module>locator</module>
         <module>service</module>
-
-        <!-- Message -->
-        <module>org.eclipse.kapua.message</module>
-        <module>org.eclipse.kapua.message.internal</module>
+        <module>message</module>
 
         <!-- Device management transport layer -->
         <module>org.eclipse.kapua.transport</module>

@@ -44,11 +44,20 @@ import org.eclipse.kapua.translator.Translator;
 import org.eclipse.kapua.translator.exception.TranslatorErrorCodes;
 import org.eclipse.kapua.translator.exception.TranslatorException;
 
+/**
+ * Messages translator implementation from {@link KuraResponseMessage} to {@link SnapshotResponseMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorAppSnapshotKuraKapua extends Translator<KuraResponseMessage, SnapshotResponseMessage>
 {
     private static final String                                CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<SnapshotMetrics, DeviceSnapshotAppProperties> metricsDictionary;
 
+    /**
+     * Constructor
+     */
     public TranslatorAppSnapshotKuraKapua()
     {
         metricsDictionary = new HashMap<>();

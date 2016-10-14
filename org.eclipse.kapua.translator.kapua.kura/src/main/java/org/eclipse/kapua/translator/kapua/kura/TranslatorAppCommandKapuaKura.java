@@ -33,11 +33,20 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
+/**
+ * Messages translator implementation from {@link CommandRequestMessage} to {@link KuraRequestMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorAppCommandKapuaKura extends Translator<CommandRequestMessage, KuraRequestMessage>
 {
     private static final String                              CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<CommandAppProperties, CommandMetrics> propertiesDictionary;
 
+    /**
+     * Constructor
+     */
     public TranslatorAppCommandKapuaKura()
     {
         propertiesDictionary = new HashMap<>();

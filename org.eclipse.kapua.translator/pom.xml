@@ -27,8 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>org.eclipse.kapua</groupId>
-            <artifactId>org.eclipse.kapua.message</artifactId>
-            <version>${project.version}</version>
+            <artifactId>kapua-message-api</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -35,11 +35,20 @@ import org.eclipse.kapua.service.device.registry.Device;
 import org.eclipse.kapua.service.device.registry.DeviceRegistryService;
 import org.eclipse.kapua.translator.Translator;
 
+/**
+ * Messages translator implementation from {@link SnapshotRequestMessage} to {@link KuraRequestMessage}
+ * 
+ * @since 1.0
+ *
+ */
 public class TranslatorAppSnapshotKapuaKura extends Translator<SnapshotRequestMessage, KuraRequestMessage>
 {
     private static final String                                CONTROL_MESSAGE_CLASSIFIER = DeviceCallSetting.getInstance().getString(DeviceCallSettingKeys.DESTINATION_MESSAGE_CLASSIFIER);
     private static Map<DeviceSnapshotAppProperties, SnapshotMetrics> propertiesDictionary;
 
+    /**
+     * Constructor
+     */
     public TranslatorAppSnapshotKapuaKura()
     {
         propertiesDictionary = new HashMap<>();
